@@ -1,0 +1,104 @@
+---
+/**
+ * Example Home Page using TemplateRenderer
+ * Demonstrates theme-driven architecture with dynamic component loading
+ */
+import TemplateRenderer from '../components/TemplateRenderer.astro';
+import '../styles/global.css';
+
+// Example theme configuration
+const template = {
+  name: "Home Page",
+  sections: [
+    { type: "AnnouncementBar1", order: 1, enabled: true },
+    { type: "Navbar1", order: 2, enabled: true },
+    { type: "Hero1", order: 3, enabled: true },
+    { type: "Category1", order: 4, enabled: true },
+    { type: "ProductCards1", order: 5, enabled: true },
+    { type: "StaticBanner1", order: 6, enabled: true },
+    { type: "SpecialOffersSlider1", order: 7, enabled: true },
+    { type: "Badges1", order: 8, enabled: true },
+    { type: "Reviews1", order: 9, enabled: true },
+    { type: "Brands1", order: 10, enabled: true },
+    { type: "Footers1", order: 11, enabled: true },
+  ]
+};
+
+// Example instance configuration (settings for each section)
+const instance = {
+  settings: {
+    AnnouncementBar1: {
+      message: "🎉 Black Friday Sale - Up to 50% OFF on all products!",
+      icon: "🔥",
+      bgGradientFrom: "#FF6B6B",
+      bgGradientTo: "#4ECDC4"
+    },
+    Navbar1: {
+      logoImage: "/assets/nav/nav1.png",
+      cartCount: 5,
+      navLinks: ["New Arrivals", "Collections", "Sale", "About", "Contact"],
+      searchPlaceholder: "Search for amazing products..."
+    },
+    Hero1: {
+      subtitle: "Exclusive Collection 2025",
+      title: "WINTER\nFASHION",
+      description: "Discover the latest trends",
+      buttonText: "Explore Now",
+      heroImage: "/assets/hero/young-girl.png"
+    },
+    ProductCards1: {
+      products: [
+        {
+          id: 1,
+          image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=282&h=220&fit=crop&q=80',
+          discount: '25% Off',
+          category: 'Watches',
+          title: 'New Smartwatch from Series 8',
+          subtitle: 'Black Sports Band - Regular.',
+          salePrice: '5,500',
+          originalPrice: '8,000'
+        },
+        {
+          id: 2,
+          image: 'https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=282&h=220&fit=crop&q=80',
+          discount: '30% Off',
+          category: 'Smartwatch',
+          title: 'Apple Watch Series 7',
+          subtitle: 'GPS + Cellular - Stainless Steel.',
+          salePrice: '12,500',
+          originalPrice: '18,000'
+        }
+      ]
+    },
+    Footers1: {
+      companyName: "Zatiq",
+      description: "Your trusted online marketplace for quality products",
+      email: "hello@zatiq.com",
+      phone: "+1-234-567-8900"
+    }
+  },
+  blocks: {
+    // Blocks can be used for repeatable content items
+  }
+};
+
+const pageData = {
+  title: "Home - Zatiq Storefront",
+  meta: {
+    description: "Shop the latest trends and exclusive deals"
+  }
+};
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{pageData.title}</title>
+  <meta name="description" content={pageData.meta.description}>
+</head>
+<body>
+  <TemplateRenderer template={template} instance={instance} pageData={pageData} />
+</body>
+</html>

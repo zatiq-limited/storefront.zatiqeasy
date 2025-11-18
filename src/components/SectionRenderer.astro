@@ -1,0 +1,168 @@
+---
+/**
+ * SectionRenderer.astro
+ * Dynamic section renderer that maps section types to their corresponding components
+ * 
+ * Usage:
+ * <SectionRenderer section={sectionData} pageData={pageData} />
+ * 
+ * Section structure:
+ * {
+ *   type: "AnnouncementBar1" | "Navbar1" | "Hero1" | etc.,
+ *   settings: { ... },
+ *   blocks?: [ ... ]
+ * }
+ */
+
+// Import all component wrappers
+import AnnouncementBar1 from './AnnouncementBar/AnnouncementBar1.astro';
+import AnnouncementBar2 from './AnnouncementBar/AnnouncementBar2.astro';
+import AnnouncementBar3 from './AnnouncementBar/AnnouncementBar3.astro';
+
+import Navbar1 from './Navbar/Navbar1.astro';
+import Navbar2 from './Navbar/Navbar2.astro';
+import Navbar3 from './Navbar/Navbar3.astro';
+import Navbar4 from './Navbar/Navbar4.astro';
+
+import Hero1 from './Hero/Hero1.astro';
+import Hero2 from './Hero/Hero2.astro';
+import Hero3 from './Hero/Hero3.astro';
+import Hero4 from './Hero/Hero4.astro';
+
+import StaticBanner1 from './StaticBanner/StaticBanner1.astro';
+import StaticBanner2 from './StaticBanner/StaticBanner2.astro';
+import StaticBanner3 from './StaticBanner/StaticBanner3.astro';
+import StaticBanner4 from './StaticBanner/StaticBanner4.astro';
+import StaticBanner5 from './StaticBanner/StaticBanner5.astro';
+
+import Category1 from './Category/Category1.astro';
+import Category2 from './Category/Category2.astro';
+import Category3 from './Category/Category3.astro';
+import Category4 from './Category/Category4.astro';
+import Category5 from './Category/Category5.astro';
+import Category6 from './Category/Category6.astro';
+
+import ProductCards1 from './ProductCards/ProductCards1.astro';
+import ProductCards2 from './ProductCards/ProductCards2.astro';
+import ProductCards3 from './ProductCards/ProductCards3.astro';
+import ProductCards4 from './ProductCards/ProductCards4.astro';
+import ProductCards5 from './ProductCards/ProductCards5.astro';
+import ProductCards6 from './ProductCards/ProductCards6.astro';
+import ProductCards7 from './ProductCards/ProductCards7.astro';
+import ProductCards8 from './ProductCards/ProductCards8.astro';
+
+import SpecialOffersSlider1 from './SpecialOffersSlider/SpecialOffersSlider1.astro';
+import SpecialOffersSlider2 from './SpecialOffersSlider/SpecialOffersSlider2.astro';
+import SpecialOffersSlider3 from './SpecialOffersSlider/SpecialOffersSlider3.astro';
+import SpecialOffersSlider4 from './SpecialOffersSlider/SpecialOffersSlider4.astro';
+import SpecialOffersSlider5 from './SpecialOffersSlider/SpecialOffersSlider5.astro';
+
+import Badges1 from './Badges/Badges1.astro';
+import Badges2 from './Badges/Badges2.astro';
+import Badges3 from './Badges/Badges3.astro';
+
+import Reviews1 from './Reviews/Reviews1.astro';
+import Reviews2 from './Reviews/Reviews2.astro';
+import Reviews3 from './Reviews/Reviews3.astro';
+
+import Brands1 from './Brands/Brands1.astro';
+import Brands2 from './Brands/Brands2.astro';
+import Brands3 from './Brands/Brands3.astro';
+
+import Footers1 from './Footers/Footers1.astro';
+import Footers2 from './Footers/Footers2.astro';
+
+interface Props {
+  section: {
+    type: string;
+    settings?: Record<string, any>;
+    blocks?: any[];
+  };
+  pageData?: any;
+}
+
+const { section, pageData } = Astro.props;
+const { type, settings = {}, blocks = [] } = section;
+
+// Component mapping
+const componentMap: Record<string, any> = {
+  // AnnouncementBar
+  AnnouncementBar1,
+  AnnouncementBar2,
+  AnnouncementBar3,
+  
+  // Navbar
+  Navbar1,
+  Navbar2,
+  Navbar3,
+  Navbar4,
+  
+  // Hero
+  Hero1,
+  Hero2,
+  Hero3,
+  Hero4,
+  
+  // StaticBanner
+  StaticBanner1,
+  StaticBanner2,
+  StaticBanner3,
+  StaticBanner4,
+  StaticBanner5,
+  
+  // Category
+  Category1,
+  Category2,
+  Category3,
+  Category4,
+  Category5,
+  Category6,
+  
+  // ProductCards
+  ProductCards1,
+  ProductCards2,
+  ProductCards3,
+  ProductCards4,
+  ProductCards5,
+  ProductCards6,
+  ProductCards7,
+  ProductCards8,
+  
+  // SpecialOffersSlider
+  SpecialOffersSlider1,
+  SpecialOffersSlider2,
+  SpecialOffersSlider3,
+  SpecialOffersSlider4,
+  SpecialOffersSlider5,
+  
+  // Badges
+  Badges1,
+  Badges2,
+  Badges3,
+  
+  // Reviews
+  Reviews1,
+  Reviews2,
+  Reviews3,
+  
+  // Brands
+  Brands1,
+  Brands2,
+  Brands3,
+  
+  // Footers
+  Footers1,
+  Footers2,
+};
+
+const Component = componentMap[type];
+---
+
+{Component ? (
+  <Component settings={settings} blocks={blocks} pageData={pageData} />
+) : (
+  <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+    <strong class="font-bold">Component Error:</strong>
+    <span class="block sm:inline"> Unknown section type: {type}</span>
+  </div>
+)}

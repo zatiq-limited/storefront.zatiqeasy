@@ -1,0 +1,13 @@
+---
+import SpecialOffersSlider4 from './SpecialOffersSlider4.tsx';
+
+interface Props {
+  settings?: Record<string, any>;
+  blocks?: any[];
+  pageData?: any;
+}
+
+const { settings, blocks, pageData } = Astro.props;
+---
+
+<SpecialOffersSlider4 settings={settings} blocks={blocks} pageData={pageData} client:load />

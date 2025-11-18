@@ -1,9 +1,22 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* Import Google Fonts for migrated components */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&family=Roboto:wght@400;500;700&family=Volkhov:wght@400;700&display=swap');
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  /* Font families for migrated components */
+  --font-family-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-family-montserrat: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  --font-family-poppins: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+  --font-family-roboto: 'Roboto', ui-sans-serif, system-ui, sans-serif;
+  --font-family-volkhov: 'Volkhov', Georgia, serif;
+  --font-family-segoe: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --font-family-caslon: 'Big Caslon', Georgia, 'Times New Roman', serif;
+  --font-family-avenir: 'Avenir Next', -apple-system, BlinkMacSystemFont, sans-serif;
+
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -116,5 +129,37 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-family-sans);
+  }
+}
+
+/* Custom font utility classes */
+@layer utilities {
+  .font-montserrat {
+    font-family: var(--font-family-montserrat);
+  }
+  
+  .font-poppins {
+    font-family: var(--font-family-poppins);
+  }
+  
+  .font-roboto {
+    font-family: var(--font-family-roboto);
+  }
+  
+  .font-volkhov {
+    font-family: var(--font-family-volkhov);
+  }
+  
+  .font-segoe {
+    font-family: var(--font-family-segoe);
+  }
+  
+  .font-caslon {
+    font-family: var(--font-family-caslon);
+  }
+  
+  .font-avenir {
+    font-family: var(--font-family-avenir);
   }
 }

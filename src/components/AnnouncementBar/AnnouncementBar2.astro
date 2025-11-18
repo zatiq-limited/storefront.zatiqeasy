@@ -1,0 +1,5 @@
+---
+import AnnouncementBar2 from "./AnnouncementBar2.tsx";
+const { settings, blocks, pageData } = Astro.props;
+---
+<AnnouncementBar2 settings={settings} blocks={blocks} pageData={pageData} client:load />

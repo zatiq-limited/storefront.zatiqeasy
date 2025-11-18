@@ -1,0 +1,13 @@
+---
+import Category3 from './Category3.tsx';
+
+interface Props {
+  settings?: Record<string, any>;
+  blocks?: any[];
+  pageData?: any;
+}
+
+const { settings, blocks, pageData } = Astro.props;
+---
+
+<Category3 settings={settings} blocks={blocks} pageData={pageData} client:load />

@@ -1,0 +1,13 @@
+---
+import StaticBanner5 from './StaticBanner5.tsx';
+
+interface Props {
+  settings?: Record<string, any>;
+  blocks?: any[];
+  pageData?: any;
+}
+
+const { settings, blocks, pageData } = Astro.props;
+---
+
+<StaticBanner5 settings={settings} blocks={blocks} pageData={pageData} client:load />

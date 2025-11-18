@@ -1,0 +1,157 @@
+---
+/**
+ * Component Showcase Page
+ * Displays all migrated components for testing and preview
+ */
+import '../styles/global.css';
+
+// Import all components directly for showcase
+import AnnouncementBar1 from '../components/AnnouncementBar/AnnouncementBar1.astro';
+import AnnouncementBar2 from '../components/AnnouncementBar/AnnouncementBar2.astro';
+import AnnouncementBar3 from '../components/AnnouncementBar/AnnouncementBar3.astro';
+
+import Navbar1 from '../components/Navbar/Navbar1.astro';
+import Navbar2 from '../components/Navbar/Navbar2.astro';
+import Navbar3 from '@/components/Navbar/Navbar3.astro';
+import Navbar4 from '@/components/Navbar/Navbar4.astro';
+
+import Hero1 from '../components/Hero/Hero1.astro';
+import Hero2 from '../components/Hero/Hero2.astro';
+
+import Category1 from '../components/Category/Category1.astro';
+
+import ProductCards1 from '../components/ProductCards/ProductCards1.astro';
+
+import Badges1 from '../components/Badges/Badges1.astro';
+
+import Reviews1 from '../components/Reviews/Reviews1.astro';
+
+import Brands1 from '../components/Brands/Brands1.astro';
+
+import Footers1 from '../components/Footers/Footers1.astro';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Component Showcase - Zatiq Storefront</title>
+</head>
+<body class="bg-gray-50">
+  <div class="max-w-7xl mx-auto py-12 px-4">
+    <h1 class="text-4xl font-bold text-center mb-12">Component Showcase</h1>
+    
+    <!-- AnnouncementBars -->
+    <section class="mb-16">
+      <h2 class="text-2xl font-semibold mb-6 border-b pb-2">Announcement Bars (3)</h2>
+      <div class="space-y-4">
+        <div>
+          <p class="text-sm text-gray-600 mb-2">AnnouncementBar1</p>
+          <AnnouncementBar1 />
+        </div>
+        <div>
+          <p class="text-sm text-gray-600 mb-2">AnnouncementBar2</p>
+          <AnnouncementBar2 />
+        </div>
+        <div>
+          <p class="text-sm text-gray-600 mb-2">AnnouncementBar3</p>
+          <AnnouncementBar3 />
+        </div>
+      </div>
+    </section>
+
+    <!-- Navbars -->
+    <section class="mb-16">
+      <h2 class="text-2xl font-semibold mb-6 border-b pb-2">Navigation Bars (4)</h2>
+      <div class="space-y-8">
+        <div>
+          <p class="text-sm text-gray-600 mb-2">Navbar1</p>
+          <Navbar1 />
+        </div>
+        <div>
+          <p class="text-sm text-gray-600 mb-2">Navbar2</p>
+          <Navbar2 />
+        </div>
+        <div>
+          <p class="text-sm text-gray-600 mb-2">Navbar2</p>
+          <Navbar3 />
+        </div>
+        <div>
+          <p class="text-sm text-gray-600 mb-2">Navbar2</p>
+          <Navbar4 />
+        </div>
+      </div>
+    </section>
+
+    <!-- Heroes -->
+    <section class="mb-16">
+      <h2 class="text-2xl font-semibold mb-6 border-b pb-2">Hero Sections (4)</h2>
+      <div class="space-y-8">
+        <div>
+          <p class="text-sm text-gray-600 mb-2">Hero1</p>
+          <Hero1 />
+        </div>
+        <div>
+          <p class="text-sm text-gray-600 mb-2">Hero2</p>
+          <Hero2 />
+        </div>
+      </div>
+    </section>
+
+    <!-- Categories -->
+    <section class="mb-16">
+      <h2 class="text-2xl font-semibold mb-6 border-b pb-2">Categories (6)</h2>
+      <div>
+        <p class="text-sm text-gray-600 mb-2">Category1</p>
+        <Category1 />
+      </div>
+    </section>
+
+    <!-- Product Cards -->
+    <section class="mb-16">
+      <h2 class="text-2xl font-semibold mb-6 border-b pb-2">Product Cards (8)</h2>
+      <div>
+        <p class="text-sm text-gray-600 mb-2">ProductCards1</p>
+        <ProductCards1 />
+      </div>
+    </section>
+
+    <!-- Badges -->
+    <section class="mb-16">
+      <h2 class="text-2xl font-semibold mb-6 border-b pb-2">Badges (3)</h2>
+      <div>
+        <p class="text-sm text-gray-600 mb-2">Badges1</p>
+        <Badges1 />
+      </div>
+    </section>
+
+    <!-- Reviews -->
+    <section class="mb-16">
+      <h2 class="text-2xl font-semibold mb-6 border-b pb-2">Reviews (3)</h2>
+      <div>
+        <p class="text-sm text-gray-600 mb-2">Reviews1</p>
+        <Reviews1 />
+      </div>
+    </section>
+
+    <!-- Brands -->
+    <section class="mb-16">
+      <h2 class="text-2xl font-semibold mb-6 border-b pb-2">Brands (3)</h2>
+      <div>
+        <p class="text-sm text-gray-600 mb-2">Brands1</p>
+        <Brands1 />
+      </div>
+    </section>
+
+    <!-- Footers -->
+    <section class="mb-16">
+      <h2 class="text-2xl font-semibold mb-6 border-b pb-2">Footers (2)</h2>
+      <div>
+        <p class="text-sm text-gray-600 mb-2">Footers1</p>
+        <Footers1 />
+      </div>
+    </section>
+  </div>
+</body>
+</html>

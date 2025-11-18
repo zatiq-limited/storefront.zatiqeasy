@@ -1,0 +1,81 @@
+---
+/**
+ * TemplateRenderer.astro
+ * Dynamic template renderer that orchestrates page composition from theme data
+ * 
+ * Usage:
+ * <TemplateRenderer template={templateData} instance={instanceData} pageData={pageData} />
+ * 
+ * Template structure:
+ * {
+ *   name: "Home Page",
+ *   sections: [
+ *     { type: "AnnouncementBar1", order: 1 },
+ *     { type: "Navbar1", order: 2 },
+ *     { type: "Hero1", order: 3 },
+ *     ...
+ *   ]
+ * }
+ * 
+ * Instance structure:
+ * {
+ *   settings: {
+ *     AnnouncementBar1: { message: "...", ... },
+ *     Navbar1: { logoImage: "...", ... },
+ *     ...
+ *   },
+ *   blocks: {
+ *     Hero1: [ ... ],
+ *     ...
+ *   }
+ * }
+ */
+
+import SectionRenderer from './SectionRenderer.astro';
+
+interface Props {
+  template?: {
+    name?: string;
+    sections: Array<{
+      type: string;
+      order?: number;
+      enabled?: boolean;
+    }>;
+  };
+  instance?: {
+    settings?: Record<string, Record<string, any>>;
+    blocks?: Record<string, any[]>;
+  };
+  pageData?: any;
+}
+
+const { template, instance, pageData } = Astro.props;
+
+// Default empty template if not provided
+const sections = template?.sections || [];
+const instanceSettings = instance?.settings || {};
+const instanceBlocks = instance?.blocks || {};
+
+// Sort sections by order and filter enabled sections
+const orderedSections = sections
+  .filter(section => section.enabled !== false)
+  .sort((a, b) => (a.order || 0) - (b.order || 0))
+  .map(section => ({
+    type: section.type,
+    settings: instanceSettings[section.type] || {},
+    blocks: instanceBlocks[section.type] || [],
+  }));
+---
+
+<div class="template-container">
+  {orderedSections.map((section) => (
+    <SectionRenderer section={section} pageData={pageData} />
+  ))}
+</div>
+
+{orderedSections.length === 0 && (
+  <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative max-w-4xl mx-auto my-8" role="alert">
+    <strong class="font-bold">Template Warning:</strong>
+    <span class="block sm:inline"> No sections configured for this template.</span>
+  </div>
+)}

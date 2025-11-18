@@ -1,0 +1,5 @@
+---
+import Hero4 from "./Hero4.tsx";
+const { settings, blocks, pageData } = Astro.props;
+---
+<Hero4 settings={settings} blocks={blocks} pageData={pageData} client:load />

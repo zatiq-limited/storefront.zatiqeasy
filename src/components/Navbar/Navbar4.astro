@@ -1,0 +1,5 @@
+---
+import Navbar4 from "./Navbar4.tsx";
+const { settings, blocks, pageData } = Astro.props;
+---
+<Navbar4 settings={settings} blocks={blocks} pageData={pageData} client:load />
