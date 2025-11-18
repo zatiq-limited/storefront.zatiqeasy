@@ -1,13 +1,5 @@
 ---
 import Reviews1Component from './Reviews1.tsx';
-
-interface Props {
-  settings?: Record<string, any>;
-  blocks?: any[];
-  pageData?: any;
-}
-
-const { settings, blocks, pageData } = Astro.props;
 ---
 
-<Reviews1Component settings={settings} blocks={blocks} pageData={pageData} client:load />
+<Reviews1Component client:load />

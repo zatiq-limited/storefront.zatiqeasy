@@ -1,5 +1,4 @@
 ---
-import Navbar1 from "./Navbar1.tsx";
-const { settings, blocks, pageData } = Astro.props;
+import Navbar1Component from "./Navbar1.tsx";
 ---
-<Navbar1 settings={settings} blocks={blocks} pageData={pageData} client:load />
+<Navbar1Component client:load />

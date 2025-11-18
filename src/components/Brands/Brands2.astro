@@ -1,13 +1,5 @@
 ---
-import Brands2 from './Brands2.tsx';
-
-interface Props {
-  settings?: Record<string, any>;
-  blocks?: any[];
-  pageData?: any;
-}
-
-const { settings, blocks, pageData } = Astro.props;
+import Brands2Component from './Brands2.tsx';
 ---
 
-<Brands2 settings={settings} blocks={blocks} pageData={pageData} client:load />
+<Brands2Component client:load />

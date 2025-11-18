@@ -1,13 +1,5 @@
 ---
-import ProductCards8 from './ProductCards8.tsx';
-
-interface Props {
-  settings?: Record<string, any>;
-  blocks?: any[];
-  pageData?: any;
-}
-
-const { settings, blocks, pageData } = Astro.props;
+import ProductCards8Component from './ProductCards8.tsx';
 ---
 
-<ProductCards8 settings={settings} blocks={blocks} pageData={pageData} client:load />
+<ProductCards8Component client:load />

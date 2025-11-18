@@ -1,13 +1,5 @@
 ---
-import Brands1 from './Brands1.tsx';
-
-interface Props {
-  settings?: Record<string, any>;
-  blocks?: any[];
-  pageData?: any;
-}
-
-const { settings, blocks, pageData } = Astro.props;
+import Brands1Component from './Brands1.tsx';
 ---
 
-<Brands1 settings={settings} blocks={blocks} pageData={pageData} client:load />
+<Brands1Component client:load />

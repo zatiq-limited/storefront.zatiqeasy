@@ -1,13 +1,5 @@
 ---
-import Badges3 from './Badges3.tsx';
-
-interface Props {
-  settings?: Record<string, any>;
-  blocks?: any[];
-  pageData?: any;
-}
-
-const { settings, blocks, pageData } = Astro.props;
+import Badges3Component from './Badges3.tsx';
 ---
 
-<Badges3 settings={settings} blocks={blocks} pageData={pageData} client:load />
+<Badges3Component client:load />

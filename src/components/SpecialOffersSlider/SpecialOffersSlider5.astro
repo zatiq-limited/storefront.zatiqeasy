@@ -1,13 +1,5 @@
 ---
-import SpecialOffersSlider5 from './SpecialOffersSlider5.tsx';
-
-interface Props {
-  settings?: Record<string, any>;
-  blocks?: any[];
-  pageData?: any;
-}
-
-const { settings, blocks, pageData } = Astro.props;
+import SpecialOffersSlider5Component from './SpecialOffersSlider5.tsx';
 ---
 
-<SpecialOffersSlider5 settings={settings} blocks={blocks} pageData={pageData} client:load />
+<SpecialOffersSlider5Component client:load />

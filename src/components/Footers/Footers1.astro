@@ -1,13 +1,5 @@
 ---
-import Footers1 from './Footers1.tsx';
-
-interface Props {
-  settings?: Record<string, any>;
-  blocks?: any[];
-  pageData?: any;
-}
-
-const { settings, blocks, pageData } = Astro.props;
+import Footers1Component from './Footers1.tsx';
 ---
 
-<Footers1 settings={settings} blocks={blocks} pageData={pageData} client:load />
+<Footers1Component client:load />

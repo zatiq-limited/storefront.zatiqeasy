@@ -1,13 +1,5 @@
 ---
-import Category2 from './Category2.tsx';
-
-interface Props {
-  settings?: Record<string, any>;
-  blocks?: any[];
-  pageData?: any;
-}
-
-const { settings, blocks, pageData } = Astro.props;
+import Category2Component from './Category2.tsx';
 ---
 
-<Category2 settings={settings} blocks={blocks} pageData={pageData} client:load />
+<Category2Component client:load />

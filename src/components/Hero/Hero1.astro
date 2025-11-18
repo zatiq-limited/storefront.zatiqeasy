@@ -1,5 +1,4 @@
 ---
-import Hero1 from "./Hero1.tsx";
-const { settings, blocks, pageData } = Astro.props;
+import Hero1Component from "./Hero1.tsx";
 ---
-<Hero1 settings={settings} blocks={blocks} pageData={pageData} client:load />
+<Hero1Component client:load />

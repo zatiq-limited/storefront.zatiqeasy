@@ -1,13 +1,5 @@
 ---
-import Category6 from './Category6.tsx';
-
-interface Props {
-  settings?: Record<string, any>;
-  blocks?: any[];
-  pageData?: any;
-}
-
-const { settings, blocks, pageData } = Astro.props;
+import Category6Component from './Category6.tsx';
 ---
 
-<Category6 settings={settings} blocks={blocks} pageData={pageData} client:load />
+<Category6Component client:load />
