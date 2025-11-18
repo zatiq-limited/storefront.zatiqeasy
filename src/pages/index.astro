@@ -4,41 +4,27 @@
  * HOMEPAGE
  * ========================================
  * 
- * Backend API Endpoint:
- * GET /api/storefront/v1/page/index
+ * Fetches data from API and renders sections dynamically
  * 
- * Response:
- * {
- *   template: Template,
- *   pageData: {
- *     featuredProducts: Product[],
- *     collections: Collection[],
- *     reviews: Review[]
- *   }
- * }
+ * Backend API Endpoint: GET /api/storefront/v1/page/home
  */
 
 import Layout from '../layouts/main.astro';
-import TemplateRenderer from '../components/TemplateRenderer';
-import { mockTheme } from '../data/mock-theme';
-import { mockProducts } from '../data/mock-products';
+import SectionRenderer from '../components/SectionRenderer';
+import { getHomepageData } from '../lib/api-client';
 
-// Get homepage template from theme
-const homepageTemplate = mockTheme.templates.index;
+// Fetch homepage data from API
+const homepageData = await getHomepageData();
 
-// In production, this data will come from API
-// const pageData = await fetch('/api/storefront/v1/page/index').then(r => r.json())
-const pageData = {
-	featuredProducts: mockProducts.slice(0, 8),
-	collections: [],
-	reviews: []
-};
+const { template, sections = [], seo = {} } = homepageData.data || homepageData;
 ---
 
 <Layout 
-	title={homepageTemplate.seo?.title}
-	description={homepageTemplate.seo?.description}
-	image={homepageTemplate.seo?.image}
+	title={seo?.title || 'Home'}
+	description={seo?.description}
+	image={seo?.og?.image}
 >
-	<TemplateRenderer template={homepageTemplate} client:load />
+	<main class="zatiq-homepage">
+		<SectionRenderer sections={sections} client:load />
+	</main>
 </Layout>

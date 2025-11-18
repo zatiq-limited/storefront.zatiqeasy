@@ -23,8 +23,8 @@ export default function ComponentRenderer({
   section,
   client = "load",
 }: ComponentRendererProps) {
-  // Check if section is enabled
-  if (!section.enabled) {
+  // Check if section is explicitly disabled
+  if (section.enabled === false) {
     return null;
   }
 

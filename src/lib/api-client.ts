@@ -17,10 +17,10 @@ import { mockProducts, mockCollections } from "../data/mock-products";
 import type { ZatiqTheme, ShopConfig, Product, Collection } from "./types";
 
 // Environment Configuration
-const API_BASE_URL = import.meta.env.PUBLIC_API_URL || "https://api.zatiq.com";
+const API_BASE_URL = import.meta.env.PUBLIC_API_URL || "http://localhost:3001";
 const SHOP_ID = import.meta.env.PUBLIC_SHOP_ID || "shop_demo_12345";
 const API_KEY = import.meta.env.PUBLIC_API_KEY || "";
-const USE_MOCK_DATA = import.meta.env.PUBLIC_USE_MOCK_DATA !== "false"; // Default: true
+const USE_MOCK_DATA = import.meta.env.PUBLIC_USE_MOCK_DATA === "true"; // Default: false (use real API)
 
 /**
  * Custom API Error Class
@@ -43,15 +43,19 @@ export class APIError extends Error {
 async function apiCall<T>(endpoint: string, options?: RequestInit): Promise<T> {
   const url = `${API_BASE_URL}${endpoint}`;
 
-  const headers: HeadersInit = {
+  const headers: Record<string, string> = {
     "X-Shop-Id": SHOP_ID,
     "Content-Type": "application/json",
-    ...options?.headers,
   };
 
   // Add API key if available
   if (API_KEY) {
     headers["X-API-Key"] = API_KEY;
+  }
+
+  // Merge with options headers
+  if (options?.headers) {
+    Object.assign(headers, options.headers);
   }
 
   try {
@@ -144,6 +148,35 @@ export async function getTheme(shopId: string = SHOP_ID): Promise<ZatiqTheme> {
   } catch (error) {
     console.warn("Failed to fetch theme, falling back to mock data");
     return mockTheme;
+  }
+}
+
+/**
+ * Get homepage data
+ *
+ * Backend API: GET /api/storefront/v1/page/home
+ * Response: { success: true, data: { template, sections, seo } }
+ */
+export async function getHomepageData(): Promise<any> {
+  if (USE_MOCK_DATA) {
+    console.log(`[Mock] Using mock homepage data`);
+    return {
+      template: "index",
+      sections: mockTheme.templates.index.sections,
+      seo: mockTheme.templates.index.seo,
+    };
+  }
+
+  try {
+    const response = await apiCall<any>(`/api/storefront/v1/page/home`);
+    return response;
+  } catch (error) {
+    console.warn(`Failed to fetch homepage data, using mock data`);
+    return {
+      template: "index",
+      sections: mockTheme.templates.index.sections,
+      seo: mockTheme.templates.index.seo,
+    };
   }
 }
 
@@ -391,7 +424,7 @@ export async function getCart(): Promise<any> {
  */
 export async function createCart(): Promise<any> {
   try {
-    const cart = await apiCall("/api/storefront/v1/cart", {
+    const cart: any = await apiCall("/api/storefront/v1/cart", {
       method: "POST",
     });
 
