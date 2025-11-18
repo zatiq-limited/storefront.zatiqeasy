@@ -1,0 +1,387 @@
+{
+  "success": true,
+  "data": {
+    "template": "index",
+    "sections": [
+      {
+        "id": "hero_main",
+        "type": "hero-1",
+        "settings": {
+          "image": "https://cdn.zatiq.com/heroes/winter-collection-hero.jpg",
+          "imageMobile": "https://cdn.zatiq.com/heroes/winter-collection-hero-mobile.jpg",
+          "smallText": "Winter Collection 2025",
+          "headline": "ELEGANCE MEETS COMFORT",
+          "description": "Discover our curated collection of winter essentials",
+          "buttonText": "Shop Now",
+          "buttonLink": "/collections/winter-2025",
+          "secondaryButtonText": "View Lookbook",
+          "secondaryButtonLink": "/pages/lookbook",
+          "gradientStart": "#E8D5F2",
+          "gradientEnd": "#FEE2E2",
+          "textColor": "#1F2937",
+          "buttonColor": "#2563EB",
+          "height": "large",
+          "textAlignment": "left",
+          "contentWidth": "50%"
+        }
+      },
+      {
+        "id": "trust_badges",
+        "type": "badges-1",
+        "settings": {
+          "backgroundColor": "#F9FAFB",
+          "columns": 4,
+          "columnsMobile": 2
+        },
+        "blocks": [
+          {
+            "icon": "truck",
+            "title": "Free Worldwide Shipping",
+            "description": "On orders over $100"
+          },
+          {
+            "icon": "shield-check",
+            "title": "Secure Payment",
+            "description": "100% secure transactions"
+          },
+          {
+            "icon": "refresh",
+            "title": "Easy Returns",
+            "description": "30 days return policy"
+          },
+          {
+            "icon": "headphones",
+            "title": "24/7 Support",
+            "description": "Dedicated support team"
+          }
+        ]
+      },
+      {
+        "id": "featured_categories",
+        "type": "category-1",
+        "settings": {
+          "title": "Shop by Category",
+          "subtitle": "Find what you're looking for",
+          "layout": "grid",
+          "columns": 3
+        },
+        "blocks": [
+          {
+            "image": "https://cdn.zatiq.com/categories/womens-cat.jpg",
+            "label": "New Collection",
+            "labelColor": "#ef4444",
+            "title": "Women's Fashion",
+            "subtitle": "2025 Spring/Summer",
+            "buttonText": "Shop Women",
+            "url": "/collections/womens",
+            "overlayOpacity": 20
+          },
+          {
+            "image": "https://cdn.zatiq.com/categories/mens-cat.jpg",
+            "label": "Trending Now",
+            "labelColor": "#3b82f6",
+            "title": "Men's Style",
+            "subtitle": "Latest Arrivals",
+            "buttonText": "Shop Men",
+            "url": "/collections/mens",
+            "overlayOpacity": 20
+          },
+          {
+            "image": "https://cdn.zatiq.com/categories/accessories-cat.jpg",
+            "label": "Up to 50% Off",
+            "labelColor": "#10b981",
+            "title": "Accessories",
+            "subtitle": "Complete Your Look",
+            "buttonText": "Shop Accessories",
+            "url": "/collections/accessories",
+            "overlayOpacity": 20
+          }
+        ]
+      },
+      {
+        "id": "featured_products",
+        "type": "special-offers-slider-1",
+        "settings": {
+          "title": "Featured Products",
+          "subtitle": "Hand-picked styles just for you",
+          "viewAllText": "View All",
+          "viewAllLink": "/collections/featured",
+          "columns": 4,
+          "columnsMobile": 2,
+          "enableCarousel": true,
+          "autoplay": false,
+          "showArrows": true,
+          "showDots": false
+        },
+        "products": [
+          {
+            "id": "prod_001",
+            "handle": "classic-white-shirt",
+            "title": "Classic White Shirt",
+            "vendor": "ZatiqStyle",
+            "price": 89.0,
+            "comparePrice": 129.0,
+            "currency": "USD",
+            "image": "https://cdn.zatiq.com/products/white-shirt-1.jpg",
+            "hoverImage": "https://cdn.zatiq.com/products/white-shirt-2.jpg",
+            "badge": "Sale",
+            "badgeColor": "#ef4444",
+            "rating": 4.5,
+            "reviewCount": 128,
+            "colors": ["white", "light-blue", "pink"],
+            "sizes": ["XS", "S", "M", "L", "XL"],
+            "quickAddEnabled": true
+          },
+          {
+            "id": "prod_002",
+            "handle": "elegant-black-dress",
+            "title": "Elegant Black Dress",
+            "vendor": "ZatiqStyle",
+            "price": 159.0,
+            "comparePrice": null,
+            "currency": "USD",
+            "image": "https://cdn.zatiq.com/products/black-dress-1.jpg",
+            "hoverImage": "https://cdn.zatiq.com/products/black-dress-2.jpg",
+            "badge": "New",
+            "badgeColor": "#3b82f6",
+            "rating": 4.8,
+            "reviewCount": 89,
+            "colors": ["black", "navy"],
+            "sizes": ["XS", "S", "M", "L"],
+            "quickAddEnabled": true
+          },
+          {
+            "id": "prod_003",
+            "handle": "casual-denim-jacket",
+            "title": "Casual Denim Jacket",
+            "vendor": "UrbanStyle",
+            "price": 119.0,
+            "comparePrice": 149.0,
+            "currency": "USD",
+            "image": "https://cdn.zatiq.com/products/denim-jacket-1.jpg",
+            "hoverImage": "https://cdn.zatiq.com/products/denim-jacket-2.jpg",
+            "badge": "20% Off",
+            "badgeColor": "#f59e0b",
+            "rating": 4.6,
+            "reviewCount": 156,
+            "colors": ["light-denim", "dark-denim"],
+            "sizes": ["S", "M", "L", "XL", "XXL"],
+            "quickAddEnabled": true
+          },
+          {
+            "id": "prod_004",
+            "handle": "leather-ankle-boots",
+            "title": "Leather Ankle Boots",
+            "vendor": "LuxurySteps",
+            "price": 189.0,
+            "comparePrice": null,
+            "currency": "USD",
+            "image": "https://cdn.zatiq.com/products/boots-1.jpg",
+            "hoverImage": "https://cdn.zatiq.com/products/boots-2.jpg",
+            "badge": "Bestseller",
+            "badgeColor": "#10b981",
+            "rating": 4.9,
+            "reviewCount": 234,
+            "colors": ["black", "brown", "tan"],
+            "sizes": ["36", "37", "38", "39", "40", "41"],
+            "quickAddEnabled": false
+          }
+        ]
+      },
+      {
+        "id": "promotional_banner",
+        "type": "static-banner-1",
+        "settings": {
+          "image": "https://cdn.zatiq.com/banners/mid-season-sale.jpg",
+          "imageMobile": "https://cdn.zatiq.com/banners/mid-season-sale-mobile.jpg",
+          "title": "MID-SEASON SALE",
+          "subtitle": "Up to 50% Off Selected Items",
+          "description": "Limited time offer. Shop your favorites before they're gone!",
+          "buttonText": "Shop Sale",
+          "buttonLink": "/collections/sale",
+          "secondaryButtonText": "View Terms",
+          "secondaryButtonLink": "/pages/sale-terms",
+          "textAlignment": "center",
+          "textColor": "#FFFFFF",
+          "overlayColor": "#000000",
+          "overlayOpacity": 40,
+          "height": "medium",
+          "countdown": {
+            "enabled": true,
+            "endDate": "2024-11-30T23:59:59Z",
+            "labels": {
+              "days": "Days",
+              "hours": "Hours",
+              "minutes": "Minutes",
+              "seconds": "Seconds"
+            }
+          }
+        }
+      },
+      {
+        "id": "product_tabs",
+        "type": "product-tabs-1",
+        "settings": {
+          "title": "Curated Collections",
+          "tabAlignment": "center"
+        },
+        "tabs": [
+          {
+            "id": "new_arrivals",
+            "label": "New Arrivals",
+            "products": []
+          },
+          {
+            "id": "best_sellers",
+            "label": "Best Sellers",
+            "products": []
+          },
+          {
+            "id": "on_sale",
+            "label": "On Sale",
+            "products": []
+          }
+        ]
+      },
+      {
+        "id": "customer_reviews",
+        "type": "reviews-1",
+        "settings": {
+          "title": "What Our Customers Say",
+          "subtitle": "Real reviews from real customers",
+          "layout": "carousel",
+          "autoplay": true,
+          "autoplaySpeed": 5000,
+          "showRating": true,
+          "showVerified": true
+        },
+        "reviews": [
+          {
+            "id": "review_001",
+            "author": "Sarah Johnson",
+            "avatar": "https://cdn.zatiq.com/avatars/sarah.jpg",
+            "rating": 5,
+            "date": "2024-11-10T10:00:00Z",
+            "title": "Amazing Quality!",
+            "comment": "The quality exceeded my expectations. The fabric is soft and the fit is perfect. Fast shipping and excellent customer service!",
+            "verified": true,
+            "helpful": 45,
+            "product": {
+              "title": "Classic White Shirt",
+              "image": "https://cdn.zatiq.com/products/white-shirt-thumb.jpg"
+            }
+          },
+          {
+            "id": "review_002",
+            "author": "Michael Chen",
+            "avatar": null,
+            "rating": 5,
+            "date": "2024-11-08T14:30:00Z",
+            "title": "Best Online Shopping Experience",
+            "comment": "Easy to navigate website, great product selection, and super fast delivery. Will definitely shop here again!",
+            "verified": true,
+            "helpful": 32
+          },
+          {
+            "id": "review_003",
+            "author": "Emma Wilson",
+            "avatar": "https://cdn.zatiq.com/avatars/emma.jpg",
+            "rating": 5,
+            "date": "2024-11-05T09:15:00Z",
+            "title": "Love the Sustainable Options",
+            "comment": "So happy to find a store that offers sustainable fashion without compromising on style. The eco-friendly packaging is a nice touch too!",
+            "verified": true,
+            "helpful": 67,
+            "product": {
+              "title": "Organic Cotton Tee",
+              "image": "https://cdn.zatiq.com/products/organic-tee-thumb.jpg"
+            }
+          }
+        ]
+      },
+      {
+        "id": "instagram_feed",
+        "type": "social-feed-1",
+        "settings": {
+          "title": "Follow Us @demofashion",
+          "subtitle": "Tag us to be featured",
+          "source": "instagram",
+          "username": "demofashion",
+          "limit": 8,
+          "columns": 4,
+          "columnsMobile": 2,
+          "showLikes": true
+        },
+        "posts": [
+          {
+            "id": "ig_001",
+            "image": "https://cdn.zatiq.com/instagram/post-1.jpg",
+            "caption": "New arrivals dropping tomorrow! 🔥",
+            "likes": 1234,
+            "link": "https://instagram.com/p/abc123"
+          }
+        ]
+      },
+      {
+        "id": "brand_logos",
+        "type": "brands-1",
+        "settings": {
+          "title": "Featured Brands",
+          "columns": 6,
+          "columnsMobile": 3,
+          "grayscale": true,
+          "hoverEffect": true
+        },
+        "brands": [
+          {
+            "name": "Nike",
+            "logo": "https://cdn.zatiq.com/brands/nike.svg",
+            "url": "/collections/nike"
+          },
+          {
+            "name": "Adidas",
+            "logo": "https://cdn.zatiq.com/brands/adidas.svg",
+            "url": "/collections/adidas"
+          },
+          {
+            "name": "Puma",
+            "logo": "https://cdn.zatiq.com/brands/puma.svg",
+            "url": "/collections/puma"
+          },
+          {
+            "name": "Levi's",
+            "logo": "https://cdn.zatiq.com/brands/levis.svg",
+            "url": "/collections/levis"
+          },
+          {
+            "name": "Calvin Klein",
+            "logo": "https://cdn.zatiq.com/brands/ck.svg",
+            "url": "/collections/calvin-klein"
+          },
+          {
+            "name": "Tommy Hilfiger",
+            "logo": "https://cdn.zatiq.com/brands/tommy.svg",
+            "url": "/collections/tommy-hilfiger"
+          }
+        ]
+      }
+    ],
+    "seo": {
+      "title": "Demo Fashion Store - Latest Fashion Trends & Styles",
+      "description": "Shop the latest fashion trends. Free shipping on orders over $100. New arrivals daily.",
+      "canonical": "https://demo-store.zatiq.com",
+      "og": {
+        "title": "Demo Fashion Store",
+        "description": "Your destination for the latest fashion",
+        "image": "https://cdn.zatiq.com/seo/homepage-og.jpg",
+        "type": "website"
+      },
+      "twitter": {
+        "card": "summary_large_image",
+        "title": "Demo Fashion Store",
+        "description": "Your destination for the latest fashion",
+        "image": "https://cdn.zatiq.com/seo/homepage-twitter.jpg"
+      }
+    }
+  }
+}

@@ -1,0 +1,149 @@
+{
+  "success": true,
+  "data": {
+    "collection": {
+      "id": "coll_001",
+      "handle": "womens",
+      "title": "Women's Collection",
+      "description": "Discover our curated selection of women's fashion, from everyday essentials to statement pieces.",
+      "image": {
+        "src": "https://cdn.zatiq.com/collections/womens-hero.jpg",
+        "alt": "Women's Collection"
+      },
+      "productsCount": 156,
+      "filters": [
+        {
+          "id": "product_type",
+          "label": "Category",
+          "type": "list",
+          "values": [
+            { "value": "dresses", "label": "Dresses", "count": 34 },
+            { "value": "tops", "label": "Tops", "count": 45 },
+            { "value": "bottoms", "label": "Bottoms", "count": 28 },
+            { "value": "outerwear", "label": "Outerwear", "count": 18 },
+            { "value": "accessories", "label": "Accessories", "count": 31 }
+          ]
+        },
+        {
+          "id": "size",
+          "label": "Size",
+          "type": "list",
+          "values": [
+            { "value": "xs", "label": "XS", "count": 89 },
+            { "value": "s", "label": "S", "count": 124 },
+            { "value": "m", "label": "M", "count": 145 },
+            { "value": "l", "label": "L", "count": 132 },
+            { "value": "xl", "label": "XL", "count": 98 }
+          ]
+        },
+        {
+          "id": "color",
+          "label": "Color",
+          "type": "swatch",
+          "values": [
+            {
+              "value": "black",
+              "label": "Black",
+              "hex": "#000000",
+              "count": 67
+            },
+            {
+              "value": "white",
+              "label": "White",
+              "hex": "#FFFFFF",
+              "count": 54
+            },
+            { "value": "navy", "label": "Navy", "hex": "#001F3F", "count": 43 },
+            { "value": "red", "label": "Red", "hex": "#FF0000", "count": 28 },
+            { "value": "blue", "label": "Blue", "hex": "#0074D9", "count": 35 }
+          ]
+        },
+        {
+          "id": "price",
+          "label": "Price",
+          "type": "range",
+          "min": 29,
+          "max": 599,
+          "values": [
+            { "value": "0-50", "label": "Under $50", "count": 23 },
+            { "value": "50-100", "label": "$50 - $100", "count": 45 },
+            { "value": "100-200", "label": "$100 - $200", "count": 56 },
+            { "value": "200-plus", "label": "Over $200", "count": 32 }
+          ]
+        },
+        {
+          "id": "brand",
+          "label": "Brand",
+          "type": "list",
+          "values": [
+            { "value": "zatiq", "label": "Zatiq", "count": 45 },
+            { "value": "urban", "label": "Urban Style", "count": 38 },
+            { "value": "luxury", "label": "Luxury Line", "count": 29 },
+            { "value": "eco", "label": "Eco Fashion", "count": 44 }
+          ]
+        }
+      ],
+      "sortOptions": [
+        { "value": "featured", "label": "Featured" },
+        { "value": "best-selling", "label": "Best Selling" },
+        { "value": "title-asc", "label": "Alphabetically, A-Z" },
+        { "value": "title-desc", "label": "Alphabetically, Z-A" },
+        { "value": "price-asc", "label": "Price, Low to High" },
+        { "value": "price-desc", "label": "Price, High to Low" },
+        { "value": "created-desc", "label": "Date, New to Old" },
+        { "value": "created-asc", "label": "Date, Old to New" }
+      ]
+    },
+    "products": {
+      "items": [],
+      "pagination": {
+        "currentPage": 1,
+        "totalPages": 7,
+        "perPage": 24,
+        "totalItems": 156,
+        "hasNext": true,
+        "hasPrev": false
+      }
+    },
+    "sections": [
+      {
+        "id": "collection_header",
+        "type": "collection-header-1",
+        "settings": {
+          "showImage": true,
+          "showDescription": true,
+          "showBreadcrumbs": true,
+          "showProductCount": true
+        }
+      },
+      {
+        "id": "collection_filters",
+        "type": "filters-sidebar-1",
+        "settings": {
+          "position": "left",
+          "sticky": true,
+          "collapsible": true,
+          "showClearAll": true,
+          "showActiveFilters": true
+        }
+      },
+      {
+        "id": "collection_products",
+        "type": "product-grid-2",
+        "settings": {
+          "columns": 3,
+          "columnsMobile": 2,
+          "showToolbar": true,
+          "showSort": true,
+          "showViewOptions": true,
+          "infiniteScroll": false
+        }
+      }
+    ],
+    "seo": {
+      "title": "Women's Collection | Demo Fashion Store",
+      "description": "Shop women's clothing at Demo Fashion Store. Free shipping on orders over $100.",
+      "canonical": "https://demo-store.zatiq.com/collections/womens"
+    }
+  }
+}
