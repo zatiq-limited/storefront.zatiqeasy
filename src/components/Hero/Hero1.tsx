@@ -1,58 +1,30 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
-interface Hero1Props {
-  settings?: Record<string, any>;
-  blocks?: any[];
-  pageData?: any;
-}
-
-export default function Hero1({ settings, blocks, pageData }: Hero1Props) {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const totalSlides = settings?.totalSlides || 3;
-  
-  const smallText = settings?.smallText || "The new stylish collection";
-  const titleLine1 = settings?.titleLine1 || "NEW FALL";
-  const titleLine2 = settings?.titleLine2 || "SEASON 2025";
-  const buttonText = settings?.buttonText || "Shop now";
-  const bgGradientFrom = settings?.bgGradientFrom || "#DAD4EC";
-  const bgGradientTo = settings?.bgGradientTo || "#F3E7E9";
-  const heroImage = settings?.heroImage || "/assets/hero/young-girl.png";
-  const buttonColor = settings?.buttonColor || "#F55266";
-  const buttonHoverColor = settings?.buttonHoverColor || "#E84258";
+const Hero1: React.FC = () => {
+  const [currentSlide] = useState(0);
+  const totalSlides = 3;
 
   return (
-    <div 
-      className="w-full max-w-[1440px] h-[480px] md:h-[600px] mx-auto relative bg-linear-to-r rounded-2xl overflow-hidden"
-      style={{
-        background: `linear-gradient(to right, ${bgGradientFrom}, ${bgGradientTo})`
-      }}
-    >
+    <div className="w-full max-w-[1440px] h-[480px] md:h-[600px] mx-auto relative bg-linear-to-r from-[#DAD4EC] to-[#F3E7E9] rounded-2xl overflow-hidden">
       {/* Content Container */}
       <div className="absolute inset-0">
         {/* Left Content Section - Responsive padding: mobile(24px), md(64px), lg(112px) */}
         <div className="absolute left-6 bottom-24 md:left-16 md:bottom-32 lg:left-28 lg:bottom-40 max-w-[280px] md:max-w-[400px] lg:max-w-[500px] z-10">
           {/* Small Text - Responsive text sizes */}
           <p className="text-[#4E5562] text-sm md:text-lg lg:text-xl font-normal leading-relaxed md:leading-7 lg:leading-[30px] mb-3 md:mb-5 lg:mb-6">
-            {smallText}
+            The new stylish collection
           </p>
 
           {/* Title - Responsive text sizes: mobile(32px), md(48px), lg(60px) */}
           <h1 className="text-[#181D25] text-[32px] md:text-5xl lg:text-6xl font-bold leading-tight md:leading-tight lg:leading-16 tracking-tight uppercase mb-6 md:mb-10 lg:mb-12">
-            {titleLine1}
+            NEW FALL
             <br />
-            {titleLine2}
+            SEASON 2025
           </h1>
 
           {/* Button - Responsive sizing */}
-          <button 
-            className="inline-flex items-center gap-2 text-white font-medium text-sm md:text-base leading-6 px-5 py-2.5 md:px-6 md:py-3 rounded-lg transition-all shadow-md hover:shadow-lg"
-            style={{
-              backgroundColor: buttonColor,
-            }}
-            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = buttonHoverColor}
-            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = buttonColor}
-          >
-            <span>{buttonText}</span>
+          <button className="inline-flex items-center gap-2 bg-[#F55266] hover:bg-[#E84258] text-white font-medium text-sm md:text-base leading-6 px-5 py-2.5 md:px-6 md:py-3 rounded-lg transition-all shadow-md hover:shadow-lg">
+            <span>Shop now</span>
             <svg
               width="16"
               height="16"
@@ -84,7 +56,7 @@ export default function Hero1({ settings, blocks, pageData }: Hero1Props) {
         {/* Right Image Section - Responsive positioning: mobile(right-0), md(right-8), lg(right-11) */}
         <div className="absolute -right-52 md:-right-60 lg:right-11 top-0 md:top-6 lg:top-8 bottom-0 flex items-end md:items-center">
           <img
-            src={heroImage}
+            src="/assets/hero/young-girl.png"
             alt="Model wearing white hoodie"
             className="h-[80%] md:h-[95%] lg:h-full w-auto object-cover object-center"
           />
@@ -92,4 +64,6 @@ export default function Hero1({ settings, blocks, pageData }: Hero1Props) {
       </div>
     </div>
   );
-}
+};
+
+export default Hero1;

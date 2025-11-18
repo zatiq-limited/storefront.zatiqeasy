@@ -1,221 +1,87 @@
-import React from 'react';
+import React from "react";
 
-interface ProductCards1Props {
-  settings?: Record<string, any>;
-  blocks?: any[];
-  pageData?: any;
-}
-
-const defaultProducts = [
-  {
-    id: 1,
-    image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=282&h=220&fit=crop&q=80',
-    discount: '25% Off',
-    category: 'Watches',
-    title: 'New Smartwatch from Series 8',
-    subtitle: 'Black Sports Band - Regular.',
-    salePrice: '5,500',
-    originalPrice: '8,000'
-  },
-  {
-    id: 2,
-    image: 'https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=282&h=220&fit=crop&q=80',
-    discount: '30% Off',
-    category: 'Smartwatch',
-    title: 'Apple Watch Series 7',
-    subtitle: 'GPS + Cellular - Stainless Steel.',
-    salePrice: '12,500',
-    originalPrice: '18,000'
-  },
-  {
-    id: 3,
-    image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=282&h=220&fit=crop&q=80',
-    discount: '20% Off',
-    category: 'Headphones',
-    title: 'Premium Wireless Headphones',
-    subtitle: 'Noise Cancelling - Black Edition.',
-    salePrice: '4,800',
-    originalPrice: '6,000'
-  },
-  {
-    id: 4,
-    image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=282&h=220&fit=crop&q=80',
-    discount: '15% Off',
-    category: 'Audio',
-    title: 'Bluetooth Speaker Pro',
-    subtitle: 'Portable - Waterproof Design.',
-    salePrice: '3,400',
-    originalPrice: '4,000'
-  }
-];
-
-export default function ProductCards1({ settings, blocks, pageData }: ProductCards1Props) {
-  const products = settings?.products || defaultProducts;
+const ProductCards1: React.FC = () => {
+  const product = {
+    image: "/assets/card/p-1.png",
+    discount: "25% Off",
+    category: "Watches",
+    title: "New Smartwatch from Series 8",
+    subtitle: "Black Sports Band - Regular.",
+    salePrice: "5,500",
+    originalPrice: "8,000",
+  };
 
   return (
-    <div 
-      style={{
-        width: '1440px',
-        margin: '0 auto',
-        padding: '40px 0'
-      }}
-    >
-      <div style={{ display: 'flex', gap: '24px', justifyContent: 'center' }}>
-        {products.map((product: any) => (
-          <div 
-            key={product.id}
-            style={{
-              width: '282px',
-              height: '441px',
-              backgroundColor: 'white',
-              borderRadius: '4px',
-              overflow: 'hidden',
-              position: 'relative',
-              cursor: 'pointer',
-              transition: 'all 0.3s',
-              boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
-            }}
-            className="hover:shadow-xl"
-          >
-            {/* Top Half - Image Container */}
-            <div 
-              style={{
-                width: '100%',
-                height: '220px',
-                position: 'relative',
-                backgroundColor: '#F5F5F5'
-              }}
-            >
-              <img 
-                src={product.image}
-                alt={product.title}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover'
-                }}
-              />
-              {/* Discount Badge */}
-              <div 
-                style={{
-                  position: 'absolute',
-                  top: '16px',
-                  left: '16px',
-                  backgroundColor: '#FF4757',
-                  color: 'white',
-                  padding: '4px 12px',
-                  borderRadius: '4px',
-                  fontSize: '12px',
-                  fontWeight: 600
-                }}
-              >
-                {product.discount}
-              </div>
-            </div>
-
-            {/* Bottom Half - Content Area */}
-            <div style={{ padding: '16px', height: '221px', display: 'flex', flexDirection: 'column' }}>
-              {/* Category */}
-              <div 
-                style={{
-                  fontSize: '14px',
-                  color: '#3B82F6',
-                  marginBottom: '8px',
-                  fontWeight: 500
-                }}
-              >
-                {product.category}
-              </div>
-
-              {/* Title */}
-              <h3 
-                style={{
-                  fontSize: '16px',
-                  fontWeight: 600,
-                  color: '#1F2937',
-                  marginBottom: '4px',
-                  lineHeight: '1.4',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  display: '-webkit-box',
-                  WebkitLineClamp: 2,
-                  WebkitBoxOrient: 'vertical'
-                }}
-              >
-                {product.title}
-              </h3>
-
-              {/* Subtitle */}
-              <p 
-                style={{
-                  fontSize: '13px',
-                  color: '#6B7280',
-                  marginBottom: '12px',
-                  lineHeight: '1.4'
-                }}
-              >
-                {product.subtitle}
-              </p>
-
-              {/* Prices */}
-              <div style={{ marginBottom: '16px' }}>
-                <span 
-                  style={{
-                    fontSize: '20px',
-                    fontWeight: 700,
-                    color: '#EF4444'
-                  }}
-                >
-                  {product.salePrice} BDT
-                </span>
-                <span 
-                  style={{
-                    fontSize: '14px',
-                    color: '#9CA3AF',
-                    textDecoration: 'line-through',
-                    marginLeft: '8px'
-                  }}
-                >
-                  {product.originalPrice} BDT
-                </span>
-              </div>
-
-              {/* Add to Cart Button */}
-              <button
-                style={{
-                  width: '100%',
-                  height: '44px',
-                  border: '1px solid #E5E7EB',
-                  borderRadius: '4px',
-                  backgroundColor: 'white',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  cursor: 'pointer',
-                  fontSize: '14px',
-                  fontWeight: 500,
-                  color: '#1F2937',
-                  gap: '8px',
-                  transition: 'all 0.3s',
-                  marginTop: 'auto'
-                }}
-                className="hover:bg-gray-50"
-              >
-                Add to Cart
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path 
-                    d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.70711 15.2929C4.07714 15.9229 4.52331 17 5.41421 17H17M17 17C15.8954 17 15 17.8954 15 19C15 20.1046 15.8954 21 17 21C18.1046 21 19 20.1046 19 19C19 17.8954 18.1046 17 17 17ZM9 19C9 20.1046 8.10457 21 7 21C5.89543 21 5 20.1046 5 19C5 17.8954 5.89543 17 7 17C8.10457 17 9 17.8954 9 19Z" 
-                    stroke="currentColor" 
-                    strokeWidth="2" 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </button>
-            </div>
+    <div className="flex gap-6 justify-center">
+      <div className="w-[282px] h-[441px] bg-white rounded overflow-hidden relative cursor-pointer transition-all duration-300 shadow-sm hover:shadow-xl">
+        {/* Top Half - Image Container */}
+        <div className="w-full h-[228px] relative">
+          <img
+            src={product.image}
+            alt={product.title}
+            className="w-full h-full object-cover"
+          />
+          {/* Discount Badge */}
+          <div className="absolute top-4 left-4 bg-[#F55157] text-white px-3 py-1 rounded text-sm font-normal">
+            {product.discount}
           </div>
-        ))}
+        </div>
+
+        {/* Bottom Half - Content Area */}
+        <div className="p-4 h-[213px] flex flex-col">
+          {/* Category */}
+          <div className="text-sm text-[#3465F0] font-normal">
+            {product.category}
+          </div>
+
+          {/* Title */}
+          <h3 className="text-base font-medium text-[#181D25] mb-1 leading-[1.4] overflow-hidden text-ellipsis line-clamp-2">
+            {product.title}
+          </h3>
+
+          {/* Subtitle */}
+          <p className="text-sm font-normal text-[#666666]">
+            {product.subtitle}
+          </p>
+
+          {/* Prices */}
+          <div className="mb-8">
+            <span className="text-lg font-medium text-[#F55157] leading-6">
+              {product.salePrice} BDT
+            </span>
+            <span className="text-sm font-normal leading-6 text-[#9CA3AF] line-through ml-2">
+              {product.originalPrice} BDT
+            </span>
+          </div>
+
+          {/* Add to Cart Button */}
+          <button className="w-full h-14 border border-[#EEEEEE] rounded bg-white flex items-center justify-center cursor-pointer text-base leading-6 font-normal text-[#1F2937] gap-2 transition-all duration-300 hover:bg-gray-50">
+            Add to Cart
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M3.54229 4.56385C3.53235 4.45383 3.54543 4.34295 3.58071 4.23827C3.61599 4.13359 3.67269 4.03741 3.74719 3.95585C3.82169 3.87429 3.91237 3.80915 4.01344 3.76457C4.11451 3.71999 4.22376 3.69696 4.33422 3.69693H13.976C14.0951 3.69698 14.2127 3.72377 14.32 3.77533C14.4274 3.82688 14.5218 3.90189 14.5962 3.9948C14.6707 4.08772 14.7234 4.19618 14.7504 4.31217C14.7773 4.42816 14.7779 4.54873 14.7521 4.66497L13.9374 8.33717C13.7972 8.96824 13.446 9.53263 12.9418 9.93711C12.4375 10.3416 11.8104 10.562 11.1639 10.5619H6.67934C5.97022 10.5619 5.28673 10.2967 4.76321 9.81839C4.2397 9.34007 3.91402 8.68324 3.8502 7.977L3.54229 4.56385ZM4.7069 4.83313L4.98186 7.87474C5.02017 8.29868 5.21573 8.69294 5.53008 8.97996C5.84443 9.26697 6.25481 9.42596 6.68048 9.42566H11.1651C11.5528 9.42556 11.929 9.29323 12.2314 9.0505C12.5338 8.80778 12.7444 8.46919 12.8285 8.09062L13.5522 4.83313H4.7069Z"
+                fill="#181D25"
+              />
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M1.19336 1.7901C1.19336 1.63943 1.25321 1.49493 1.35975 1.38839C1.46629 1.28185 1.61079 1.222 1.76146 1.222H3.75436C3.89332 1.22214 4.02741 1.27321 4.13126 1.36554C4.23511 1.45788 4.30151 1.58507 4.31791 1.72306L4.77466 5.58728C4.79229 5.73705 4.74971 5.88768 4.65627 6.00605C4.56283 6.12442 4.42621 6.20082 4.27644 6.21844C4.12668 6.23607 3.97604 6.19348 3.85768 6.10005C3.73931 6.00661 3.66291 5.86999 3.64528 5.72022L3.24875 2.35707H1.76146C1.61079 2.35707 1.46629 2.29721 1.35975 2.19067C1.25321 2.08413 1.19336 1.94077 1.19336 1.7901ZM6.30626 13.5305C6.45693 13.5305 6.60143 13.4706 6.70797 13.3641C6.81451 13.2575 6.87436 13.113 6.87436 12.9624C6.87436 12.8117 6.81451 12.6672 6.70797 12.5607C6.60143 12.4541 6.45693 12.3943 6.30626 12.3943C6.15559 12.3943 6.0111 12.4541 5.90456 12.5607C5.79802 12.6672 5.73816 12.8117 5.73816 12.9624C5.73816 13.113 5.79802 13.2575 5.90456 13.3641C6.0111 13.4706 6.15559 13.5305 6.30626 13.5305ZM6.30626 14.6667C6.53008 14.6667 6.7517 14.6226 6.95847 14.5369C7.16525 14.4513 7.35313 14.3257 7.51139 14.1675C7.66965 14.0092 7.79518 13.8213 7.88083 13.6146C7.96648 13.4078 8.01057 13.1862 8.01057 12.9624C8.01057 12.7386 7.96648 12.5169 7.88083 12.3102C7.79518 12.1034 7.66965 11.9155 7.51139 11.7572C7.35313 11.599 7.16525 11.4734 6.95847 11.3878C6.7517 11.3021 6.53008 11.2581 6.30626 11.2581C5.85426 11.2581 5.42076 11.4376 5.10114 11.7572C4.78152 12.0769 4.60196 12.5104 4.60196 12.9624C4.60196 13.4144 4.78152 13.8479 5.10114 14.1675C5.42076 14.4871 5.85426 14.6667 6.30626 14.6667ZM11.4896 13.5305C11.6403 13.5305 11.7848 13.4706 11.8913 13.3641C11.9979 13.2575 12.0577 13.113 12.0577 12.9624C12.0577 12.8117 11.9979 12.6672 11.8913 12.5607C11.7848 12.4541 11.6403 12.3943 11.4896 12.3943C11.3389 12.3943 11.1944 12.4541 11.0879 12.5607C10.9814 12.6672 10.9215 12.8117 10.9215 12.9624C10.9215 13.113 10.9814 13.2575 11.0879 13.3641C11.1944 13.4706 11.3389 13.5305 11.4896 13.5305ZM11.4896 14.6667C11.7134 14.6667 11.935 14.6226 12.1418 14.5369C12.3486 14.4513 12.5365 14.3257 12.6947 14.1675C12.853 14.0092 12.9785 13.8213 13.0642 13.6146C13.1498 13.4078 13.1939 13.1862 13.1939 12.9624C13.1939 12.7386 13.1498 12.5169 13.0642 12.3102C12.9785 12.1034 12.853 11.9155 12.6947 11.7572C12.5365 11.599 12.3486 11.4734 12.1418 11.3878C11.935 11.3021 11.7134 11.2581 11.4896 11.2581C11.0376 11.2581 10.6041 11.4376 10.2845 11.7572C9.96487 12.0769 9.78531 12.5104 9.78531 12.9624C9.78531 13.4144 9.96487 13.8479 10.2845 14.1675C10.6041 14.4871 11.0376 14.6667 11.4896 14.6667Z"
+                fill="#181D25"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   );
-}
+};
+
+export default ProductCards1;

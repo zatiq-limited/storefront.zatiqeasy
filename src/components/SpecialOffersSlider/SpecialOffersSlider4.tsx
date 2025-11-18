@@ -1,72 +1,48 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
 
-interface SpecialOffersSlider4Props {
-  settings?: Record<string, any>;
-  blocks?: any[];
-  pageData?: any;
-}
-
-const defaultSettings = {
-  leftCard: {
-    image: '/assets/spOffer/image-left.jpg',
-    saleText: 'Sale 20% off all store',
-    title: 'Smartphone\nBLU G91 Pro 2022',
-    buttonText: 'Shop Now',
-  },
-  rightCard: {
-    image: '/assets/spOffer/image-right.jpg',
-    title: 'HyperX Cloud II\nWireless',
-    saleText: 'Sale 35% off',
-    buttonText: 'Shop Now',
-  },
-};
-
-export default function SpecialOffersSlider4({ settings, blocks, pageData }: SpecialOffersSlider4Props) {
-  const config = { ...defaultSettings, ...settings };
-  const { leftCard, rightCard } = config;
-
+const SpecialOffersSlider4: React.FC = () => {
   return (
     <div className="w-full py-8 px-4 font-roboto">
-      <div className="max-w-[1296px] mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left Card - Smartphone - 2/3 width (856px) */}
-          <div className="lg:col-span-2 relative rounded-2xl overflow-hidden h-[260px] flex items-center">
+      <div className="w-full max-w-[1296px] mx-auto">
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* Left Card - Smartphone - 856px on desktop, full width on mobile */}
+          <div className="w-full lg:w-[856px] h-[260px] relative rounded-lg overflow-hidden flex items-center">
             {/* Background Image */}
             <img
-              src={leftCard.image}
-              alt={leftCard.title.replace('\n', ' ')}
+              src="/assets/spOffer/image-left.jpg"
+              alt="Smartphone BLU G91 Pro 2022"
               className="absolute inset-0 w-full h-full object-cover"
             />
             {/* Overlay Content */}
-            <div className="relative z-10 p-8 lg:p-12">
-              <p className="text-sm text-gray-700 mb-2">{leftCard.saleText}</p>
-              <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-6 leading-tight whitespace-pre-line">
-                {leftCard.title}
+            <div className="relative z-10 p-6 md:p-8 lg:p-14">
+              <p className="text-sm md:text-base text-[#010F1C] mb-1 font-normal leading-6">Sale 20% off all store</p>
+              <h2 className="text-xl md:text-2xl lg:text-3xl font-medium text-[#010F1C] mb-2 leading-tight md:leading-9">
+                Smartphone<br />BLU G91 Pro 2022
               </h2>
-              <button className="inline-flex items-center gap-2 text-gray-900 font-semibold hover:gap-3 transition-all">
-                {leftCard.buttonText}
+              <button className="inline-flex items-center gap-2 text-[#010F1C] font-medium text-sm leading-6 hover:gap-3 transition-all">
+                Shop Now
                 <ArrowRight className="w-5 h-5" />
               </button>
             </div>
           </div>
 
-          {/* Right Card - Headphones - 1/3 width (416px) */}
-          <div className="lg:col-span-1 relative rounded-2xl overflow-hidden h-[260px] flex items-center">
+          {/* Right Card - Headphones - 416px on desktop, full width on mobile */}
+          <div className="w-full lg:w-[416px] h-[260px] relative rounded-lg overflow-hidden flex items-center">
             {/* Background Image */}
             <img
-              src={rightCard.image}
-              alt={rightCard.title.replace('\n', ' ')}
+              src="/assets/spOffer/image-right.jpg"
+              alt="HyperX Cloud II Wireless"
               className="absolute inset-0 w-full h-full object-cover"
             />
             {/* Overlay Content */}
-            <div className="relative z-10 p-6 lg:p-8">
-              <h2 className="text-xl lg:text-2xl font-bold text-gray-900 mb-2 leading-tight whitespace-pre-line">
-                {rightCard.title}
+            <div className="relative z-10 p-6 md:p-8 lg:p-10">
+              <h2 className="text-lg md:text-xl font-medium text-[#010F1C] mb-1 leading-6">
+                HyperX Cloud II<br />Wireless
               </h2>
-              <p className="text-sm text-gray-800 font-semibold mb-4">{rightCard.saleText}</p>
-              <button className="inline-flex items-center gap-2 text-gray-900 font-semibold hover:gap-3 transition-all">
-                {rightCard.buttonText}
+              <p className="text-sm md:text-base text-[#010F1C] font-medium leading-6 mb-1">Sale 35% off</p>
+              <button className="inline-flex items-center gap-2 text-[#010F1C] font-medium text-sm leading-6 hover:gap-3 transition-all">
+                Shop Now
                 <ArrowRight className="w-5 h-5" />
               </button>
             </div>
@@ -75,4 +51,6 @@ export default function SpecialOffersSlider4({ settings, blocks, pageData }: Spe
       </div>
     </div>
   );
-}
+};
+
+export default SpecialOffersSlider4;

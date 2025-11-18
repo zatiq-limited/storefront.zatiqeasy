@@ -4,52 +4,43 @@ import { Navigation, Pagination } from 'swiper/modules';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import 'swiper/css';
 import 'swiper/css/navigation';
-import 'swiper/css/pagination';
 
-interface Reviews1Props {
-  settings?: Record<string, any>;
-  blocks?: any[];
-  pageData?: any;
-}
-
-const defaultReviews = [
-  {
-    name: 'Victoria Gardner',
-    rating: 5,
-    comment: 'Very satisfied with the bag! A wonderful shopper, not too big and not too small, but as it should be 👌 The bag looks more expensive than it costs.',
-    image: '/assets/Review/image.png'
-  },
-  {
-    name: 'Alexandra D.',
-    rating: 5,
-    comment: 'A wonderful compact bag, holds a lot of things, good tailoring, smooth seams, strong fittings, good quality.',
-    image: '/assets/Review/image2.png'
-  },
-  {
-    name: 'Jenny Wilson',
-    rating: 4,
-    comment: 'Elegant blouse and the color is very nice, the seams are neat. 🎁 Excellent quality fabric, for summer weather is very good because the fabric is light and does not stick to the body.',
-    image: '/assets/Review/image3.png'
-  },
-  {
-    name: 'Alexandra D.',
-    rating: 5,
-    comment: 'A wonderful compact bag, holds a lot of things, good tailoring, smooth seams, strong fittings, good quality.',
-    image: '/assets/Review/image2.png'
-  },
-  {
-    name: 'Jenny Wilson',
-    rating: 4,
-    comment: 'Elegant blouse and the color is very nice, the seams are neat. 🎁 Excellent quality fabric, for summer weather is very good because the fabric is light and does not stick to the body.',
-    image: '/assets/Review/image3.png'
-  },
-];
-
-export default function Reviews1({ settings, blocks, pageData }: Reviews1Props) {
+const Reviews1: React.FC = () => {
   const prevRef = useRef<HTMLButtonElement>(null);
   const nextRef = useRef<HTMLButtonElement>(null);
 
-  const reviews = settings?.reviews || defaultReviews;
+  const reviews = [
+    {
+      name: 'Victoria Gardner',
+      rating: 5,
+      comment: 'Very satisfied with the bag! A wonderful shopper, not too big and not too small, but as it should be 👌 The bag looks more expensive than it costs.',
+      image: '/assets/Review/image.png'
+    },
+    {
+      name: 'Alexandra D.',
+      rating: 5,
+      comment: 'A wonderful compact bag, holds a lot of things, good tailoring, smooth seams, strong fittings, good quality.',
+      image: '/assets/Review/image2.png'
+    },
+    {
+      name: 'Jenny Wilson',
+      rating: 4,
+      comment: 'Elegant blouse and the color is very nice, the seams are neat. 🎁 Excellent quality fabric, for summer weather is very good because the fabric is light and does not stick to the body.',
+      image: '/assets/Review/image3.png'
+    },
+    {
+      name: 'Alexandra D.',
+      rating: 5,
+      comment: 'A wonderful compact bag, holds a lot of things, good tailoring, smooth seams, strong fittings, good quality.',
+      image: '/assets/Review/image2.png'
+    },
+    {
+      name: 'Jenny Wilson',
+      rating: 4,
+      comment: 'Elegant blouse and the color is very nice, the seams are neat. 🎁 Excellent quality fabric, for summer weather is very good because the fabric is light and does not stick to the body.',
+      image: '/assets/Review/image3.png'
+    },
+  ];
 
   return (
     <div className="w-full bg-gray-50 py-8 md:py-12 lg:py-16 px-4 md:px-6 lg:px-8 overflow-hidden font-sans">
@@ -63,19 +54,19 @@ export default function Reviews1({ settings, blocks, pageData }: Reviews1Props) 
           {/* Left Navigation Button */}
           <button
             ref={prevRef}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 md:w-10 md:h-10 bg-white rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-110"
+            className="absolute left-7 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-transparent border border-gray-300 rounded-full flex items-center justify-center p-3 transition-all hover:border-gray-400"
             aria-label="Previous"
           >
-            <ChevronLeft className="w-5 h-5 md:w-6 md:h-6 text-gray-800" />
+            <ChevronLeft className="w-4 h-4 text-gray-800" />
           </button>
 
           {/* Right Navigation Button */}
           <button
             ref={nextRef}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 md:w-10 md:h-10 bg-white rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-110"
+            className="absolute right-7 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-transparent border border-gray-300 rounded-full flex items-center justify-center p-3 transition-all hover:border-gray-400"
             aria-label="Next"
           >
-            <ChevronRight className="w-5 h-5 md:w-6 md:h-6 text-gray-800" />
+            <ChevronRight className="w-4 h-4 text-gray-800" />
           </button>
 
           {/* Swiper */}
@@ -107,9 +98,9 @@ export default function Reviews1({ settings, blocks, pageData }: Reviews1Props) 
             }}
             className="reviews-swiper pb-12"
           >
-            {reviews.map((review: any, i: number) => (
+            {reviews.map((review, i) => (
               <SwiperSlide key={i} className="h-auto">
-                <div className="bg-white p-4 md:p-6 lg:p-8 rounded-xl md:rounded-2xl hover:shadow-xl transition-shadow h-full flex flex-col">
+                <div className="bg-white p-4 md:p-6 lg:p-8 rounded-xl md:rounded-2xl h-full flex flex-col">
                   <div className="flex gap-4 md:gap-6">
                     {/* Product Image */}
                     <div className="shrink-0">
@@ -173,4 +164,6 @@ export default function Reviews1({ settings, blocks, pageData }: Reviews1Props) 
       </div>
     </div>
   );
-}
+};
+
+export default Reviews1;

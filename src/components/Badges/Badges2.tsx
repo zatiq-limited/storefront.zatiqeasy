@@ -19,10 +19,11 @@ const FeatureBadge: React.FC<FeatureBadgeProps> = ({ icon, title, description })
       <div className="shrink-0 w-10 h-10 md:w-12 md:h-12">
         <img src={icon} alt={title} className="w-full h-full object-contain" />
       </div>
-      {/* Text Content */}
+      {/* //TODO: Need to change and check the font sizes compare with figma */}
+      {/* Text Content */} 
       <div className="flex flex-col min-w-0">
-        <h3 className="text-sm md:text-base lg:text-[20px] font-semibold text-gray-900 whitespace-nowrap">{title}</h3>
-        <p className="text-xs md:text-sm lg:text-[20px] text-gray-600 whitespace-nowrap">{description}</p>
+        <h3 className="text-sm md:text-base lg:text-[18px] font-semibold text-gray-900 whitespace-nowrap">{title}</h3>
+        <p className="text-xs md:text-sm lg:text-[14px] font-normal text-gray-600 whitespace-nowrap">{description}</p>
       </div>
     </div>
   );

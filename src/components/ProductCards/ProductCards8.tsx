@@ -1,228 +1,91 @@
-import React from 'react';
+import React from "react";
 
-interface ProductCards8Props {
-  settings?: Record<string, any>;
-  blocks?: any[];
-  pageData?: any;
-}
-
-const defaultProducts = [
-  {
-    id: 1,
-    image: 'https://images.unsplash.com/photo-1560493676-04071c5f467b?w=298&h=271&fit=crop&q=80',
-    category: 'Vegetables',
-    title: 'Fresh organic apple 1kg simla marming',
-    price: '170.00',
+const ProductCards8: React.FC = () => {
+  const product = {
+    image: "/assets/card/p-8.png",
+    category: "Vegetables",
+    title: "Fresh organic apple 1kg simla marming",
+    price: "170.00",
     rating: 3,
-    ratingCount: '4.0'
-  },
-  {
-    id: 2,
-    image: 'https://images.unsplash.com/photo-1619566636858-adf3ef46400b?w=298&h=271&fit=crop&q=80',
-    category: 'Fruits',
-    title: 'Premium organic oranges 1kg fresh',
-    price: '220.00',
-    rating: 4,
-    ratingCount: '4.5'
-  },
-  {
-    id: 3,
-    image: 'https://images.unsplash.com/photo-1464454709131-ffd692591ee5?w=298&h=271&fit=crop&q=80',
-    category: 'Fruits',
-    title: 'Natural strawberry pack 500g organic',
-    price: '280.00',
-    rating: 5,
-    ratingCount: '5.0'
-  },
-  {
-    id: 4,
-    image: 'https://images.unsplash.com/photo-1490885578174-acda8905c2c6?w=298&h=271&fit=crop&q=80',
-    category: 'Vegetables',
-    title: 'Organic tomatoes bundle 1kg fresh',
-    price: '150.00',
-    rating: 4,
-    ratingCount: '4.3'
-  }
-];
-
-export default function ProductCards8({ settings, blocks, pageData }: ProductCards8Props) {
-  const products = settings?.products || defaultProducts;
+    ratingCount: "4.0",
+  };
 
   return (
-    <div 
-      style={{
-        width: '1440px',
-        margin: '0 auto',
-        padding: '40px 0'
-      }}
-    >
-      <div style={{ display: 'flex', gap: '24px', justifyContent: 'center' }}>
-        {products.map((product: any) => (
-          <div 
-            key={product.id}
-            style={{
-              width: '298px',
-              height: '472px',
-              backgroundColor: 'white',
-              borderRadius: '8px',
-              overflow: 'hidden',
-              position: 'relative',
-              cursor: 'pointer',
-              transition: 'all 0.3s',
-              border: '1px solid #F3F4F6'
-            }}
-            className="hover:shadow-lg"
-          >
-            {/* Top - Image Container (271px) */}
-            <div 
-              style={{
-                width: '298px',
-                height: '271px',
-                position: 'relative',
-                backgroundColor: '#FAFAFA'
-              }}
-            >
-              <img 
-                src={product.image}
-                alt={product.title}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover'
-                }}
-              />
-            </div>
+    <div className="font-poppins flex gap-6 justify-center">
+      <div className="w-[298px] h-[472px] bg-white rounded-lg overflow-hidden relative cursor-pointer transition-all duration-300 border border-gray-100 hover:shadow-lg">
+        {/* Top - Image Container (271px) */}
+        <div className="w-[298px] h-[246px] relative bg-[#FAFAFA]">
+          <img
+            src={product.image}
+            alt={product.title}
+            className="w-full h-full object-cover"
+          />
+        </div>
 
-            {/* Bottom - Content Area (201px) */}
-            <div style={{ 
-              padding: '16px 20px 20px 20px',
-              height: '201px',
-              display: 'flex', 
-              flexDirection: 'column',
-              backgroundColor: 'white'
-            }}>
-              {/* Category */}
-              <div 
-                style={{
-                  fontSize: '12px',
-                  color: '#9CA3AF',
-                  fontWeight: 400,
-                  lineHeight: '16px',
-                  marginBottom: '8px'
-                }}
-              >
-                {product.category}
-              </div>
-
-              {/* Title */}
-              <h3 
-                style={{
-                  fontSize: '16px',
-                  fontWeight: 600,
-                  color: '#1F2937',
-                  lineHeight: '22px',
-                  marginBottom: '12px',
-                  minHeight: '44px',
-                  display: '-webkit-box',
-                  WebkitLineClamp: 2,
-                  WebkitBoxOrient: 'vertical',
-                  overflow: 'hidden'
-                }}
-              >
-                {product.title}
-              </h3>
-
-              {/* Rating */}
-              <div style={{ 
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                marginBottom: '16px'
-              }}>
-                {/* Star Rating */}
-                <div style={{ display: 'flex', gap: '2px' }}>
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <svg 
-                      key={star}
-                      width="16" 
-                      height="16" 
-                      viewBox="0 0 16 16" 
-                      fill={star <= product.rating ? '#FFA500' : '#E5E7EB'}
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path d="M8 0L9.79611 5.52786H15.6085L10.9062 8.94427L12.7023 14.4721L8 11.0557L3.29772 14.4721L5.09383 8.94427L0.391548 5.52786H6.20389L8 0Z" />
-                    </svg>
-                  ))}
-                </div>
-                {/* Rating Count */}
-                <span 
-                  style={{
-                    fontSize: '14px',
-                    fontWeight: 400,
-                    color: '#6B7280',
-                    lineHeight: '20px'
-                  }}
-                >
-                  ({product.ratingCount})
-                </span>
-              </div>
-
-              {/* Price and Button Row */}
-              <div style={{ 
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between'
-              }}>
-                {/* Price */}
-                <span 
-                  style={{
-                    fontSize: '20px',
-                    fontWeight: 700,
-                    color: '#10B981',
-                    lineHeight: '28px'
-                  }}
-                >
-                  BDT {product.price}
-                </span>
-
-                {/* Add Button */}
-                <button
-                  style={{
-                    width: '80px',
-                    height: '40px',
-                    border: 'none',
-                    borderRadius: '4px',
-                    backgroundColor: '#EF4444',
-                    color: 'white',
-                    fontSize: '14px',
-                    fontWeight: 500,
-                    lineHeight: '20px',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '4px'
-                  }}
-                  onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#DC2626'}
-                  onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#EF4444'}
-                >
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path 
-                      d="M2 2H3.33333L3.6 3.33333M4.66667 8.66667H11.3333L14 3.33333H3.6M4.66667 8.66667L3.6 3.33333M4.66667 8.66667L3.13809 10.1953C2.71809 10.6152 3.01554 11.3333 3.60947 11.3333H11.3333M11.3333 11.3333C10.597 11.3333 10 11.9303 10 12.6667C10 13.403 10.597 14 11.3333 14C12.0697 14 12.6667 13.403 12.6667 12.6667C12.6667 11.9303 12.0697 11.3333 11.3333 11.3333ZM6 12.6667C6 13.403 5.40305 14 4.66667 14C3.93029 14 3.33333 13.403 3.33333 12.6667C3.33333 11.9303 3.93029 11.3333 4.66667 11.3333C5.40305 11.3333 6 11.9303 6 12.6667Z" 
-                      stroke="white" 
-                      strokeWidth="1.33" 
-                      strokeLinecap="round" 
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                  Add
-                </button>
-              </div>
-            </div>
+        {/* Bottom - Content Area (201px) */}
+        <div className="px-5 pt-3 pb-6 h-[201px] flex flex-col bg-white">
+          {/* Category */}
+          <div className="text-xs text-[#ADADAD] font-normal leading-6 mb-3">
+            {product.category}
           </div>
-        ))}
+
+          {/* Title */}
+          <h3 className="text-base font-medium text-[#2B2B2D] leading-6 mb-3 min-h-12 overflow-hidden line-clamp-2">
+            {product.title}
+          </h3>
+
+          {/* Rating */}
+          <div className="flex items-center gap-1.5 mb-8">
+            {/* Star Rating */}
+            <div className="flex gap-0.5">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <svg
+                  width="18"
+                  height="17"
+                  viewBox="0 0 18 17"
+                  fill={star <= product.rating ? "#FFA500" : "#E5E7EB"}
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M8.55859 0L11.2036 5.35942L17.1181 6.21885L12.8383 10.3906L13.8487 16.2812L8.55859 13.5L3.26853 16.2812L4.27884 10.3906L-0.000914574 6.21885L5.91356 5.35942L8.55859 0Z"
+                  />
+                </svg>
+              ))}
+            </div>
+            {/* Rating Count */}
+            <span className="text-sm font-normal text-[#B6B6B6] leading-6 underline">
+              ({product.ratingCount})
+            </span>
+          </div>
+
+          {/* Price and Button Row */}
+          <div className="flex items-center justify-between">
+            {/* Price */}
+            <span className="text-xl font-bold text-[#10B981] leading-7">
+              BDT {product.price}
+            </span>
+
+            {/* Add Button */}
+            <button className="w-20 h-10 border-none rounded bg-[#F53E32] text-white text-sm font-bold leading-6 cursor-pointer transition-all duration-300 flex items-center justify-center gap-1 hover:bg-[#DC2626]">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 14 14"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M14 1.72667H2.47333V1.54C2.41111 1.10444 2.21667 0.738889 1.89 0.443334C1.56333 0.147778 1.16667 0 0.7 0H0V1.16667H0.7C0.855556 1.16667 0.987778 1.21333 1.09667 1.30667C1.20556 1.4 1.27556 1.52444 1.30667 1.68L2.24 9.52C2.27111 9.98667 2.45 10.36 2.77667 10.64C3.10333 10.92 3.5 11.0756 3.96667 11.1067H11.6667V9.89333H3.96667C3.81111 9.89333 3.67889 9.84667 3.57 9.75333C3.46111 9.66 3.39111 9.53556 3.36 9.38L3.31333 8.72667H12.74L14 1.72667ZM11.76 7.56H3.17333L2.61333 2.89333H12.6L11.76 7.56ZM2.94 12.8333C2.90889 13.1444 3.01 13.4167 3.24333 13.65C3.47667 13.8833 3.75667 14 4.08333 14C4.41 14 4.68222 13.8833 4.9 13.65C5.11778 13.4167 5.23444 13.1444 5.25 12.8333C5.26556 12.5222 5.15667 12.25 4.92333 12.0167C4.69 11.7833 4.41 11.6667 4.08333 11.6667C3.75667 11.6667 3.48444 11.7833 3.26667 12.0167C3.04889 12.25 2.94 12.5222 2.94 12.8333ZM8.77333 12.8333C8.74222 13.1444 8.84333 13.4167 9.07667 13.65C9.31 13.8833 9.59 14 9.91667 14C10.2433 14 10.5156 13.8833 10.7333 13.65C10.9511 13.4167 11.0678 13.1444 11.0833 12.8333C11.0989 12.5222 10.99 12.25 10.7567 12.0167C10.5233 11.7833 10.2433 11.6667 9.91667 11.6667C9.59 11.6667 9.31778 11.7833 9.1 12.0167C8.88222 12.25 8.77333 12.5222 8.77333 12.8333Z"
+                  fill="white"
+                />
+              </svg>
+              Add
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
-}
+};
+
+export default ProductCards8;
