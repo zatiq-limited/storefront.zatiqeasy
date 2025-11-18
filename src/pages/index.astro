@@ -1,24 +1,44 @@
 ---
-import '../styles/global.css';
-// Component Imports
-import { Button } from "@/components/ui/button";
-// Full Astro Component Syntax:
-// https://docs.astro.build/basics/astro-components/
+/**
+ * ========================================
+ * HOMEPAGE
+ * ========================================
+ * 
+ * Backend API Endpoint:
+ * GET /api/storefront/v1/page/index
+ * 
+ * Response:
+ * {
+ *   template: Template,
+ *   pageData: {
+ *     featuredProducts: Product[],
+ *     collections: Collection[],
+ *     reviews: Review[]
+ *   }
+ * }
+ */
+
+import Layout from '../layouts/main.astro';
+import TemplateRenderer from '../components/TemplateRenderer';
+import { mockTheme } from '../data/mock-theme';
+import { mockProducts } from '../data/mock-products';
+
+// Get homepage template from theme
+const homepageTemplate = mockTheme.templates.index;
+
+// In production, this data will come from API
+// const pageData = await fetch('/api/storefront/v1/page/index').then(r => r.json())
+const pageData = {
+	featuredProducts: mockProducts.slice(0, 8),
+	collections: [],
+	reviews: []
+};
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro + TailwindCSS</title>
-	</head>
-
-	<body>
-		<div class="grid place-items-center h-screen content-center">
-			<Button>Tailwind Button in Astro!</Button>
-			<a href="/markdown-page" class="p-4 underline">Markdown is also supported...</a>
-		</div>
-	</body>
-</html>
+<Layout 
+	title={homepageTemplate.seo?.title}
+	description={homepageTemplate.seo?.description}
+	image={homepageTemplate.seo?.image}
+>
+	<TemplateRenderer template={homepageTemplate} client:load />
+</Layout>

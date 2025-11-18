@@ -1,0 +1,78 @@
+---
+/**
+ * ========================================
+ * SEARCH PAGE
+ * ========================================
+ * 
+ * Backend API Endpoints:
+ * 
+ * GET /api/storefront/v1/search?q=:query
+ * - Returns: Search results (products, collections, pages)
+ * 
+ * GET /api/storefront/v1/search/suggestions?q=:query
+ * - Returns: Search suggestions
+ */
+
+import Layout from '../layouts/main.astro';
+import { mockTheme } from '../data/mock-theme';
+import { mockProducts } from '../data/mock-products';
+
+// Get search query from URL
+const searchQuery = Astro.url.searchParams.get('q') || '';
+
+// In production, fetch from API
+// const results = await fetch(`/api/storefront/v1/search?q=${searchQuery}`).then(r => r.json())
+const results = searchQuery 
+	? mockProducts.filter(p => 
+		p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+		p.description.toLowerCase().includes(searchQuery.toLowerCase())
+	)
+	: [];
+---
+
+<Layout 
+	title={`Search: ${searchQuery} | ${mockTheme.templates.index.seo?.title}`}
+	description={`Search results for "${searchQuery}"`}
+>
+	<div class="container mx-auto px-4 py-8">
+		<h1 class="text-3xl font-bold mb-4">Search Results</h1>
+		<p class="text-gray-600 mb-8">
+			{results.length} results found for "{searchQuery}"
+		</p>
+		
+		{results.length > 0 ? (
+			<div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+				{results.map(product => (
+					<div class="border rounded-lg overflow-hidden hover:shadow-lg transition">
+						<a href={`/products/${product.handle}`}>
+							<img 
+								src={product.images[0]} 
+								alt={product.title}
+								class="w-full h-64 object-cover"
+							/>
+							<div class="p-4">
+								<h3 class="font-semibold mb-2">{product.title}</h3>
+								<p class="text-gray-600 text-sm mb-2">{product.description.substring(0, 60)}...</p>
+								<div class="flex items-center gap-2">
+									{product.compareAtPrice && (
+										<span class="text-gray-400 line-through text-sm">
+											${product.compareAtPrice.toFixed(2)}
+										</span>
+									)}
+									<span class="font-bold text-blue-600">
+										${product.price.toFixed(2)}
+									</span>
+								</div>
+							</div>
+						</a>
+					</div>
+				))}
+			</div>
+		) : (
+			<div class="text-center py-12">
+				<p class="text-gray-600 mb-4">No results found</p>
+				<p class="text-gray-500">Try different keywords or browse our collections</p>
+			</div>
+		)}
+	</div>
+</Layout>

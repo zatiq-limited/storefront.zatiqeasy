@@ -1,13 +1,13 @@
-# Astro with Tailwind
+# ZATIQ Storefront - E-commerce Theme Rendering System
 
-```sh
-pnpm create astro@latest -- --template with-tailwindcss
-```
+> **বাংলায় বিস্তারিত:** এই প্রজেক্ট হলো একটি dynamic e-commerce storefront যা Zatiq Backend API থেকে theme configuration নিয়ে automatically UI render করে।
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/with-tailwindcss)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/with-tailwindcss)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/with-tailwindcss/devcontainer.json)
+## 🎯 Features
 
-Astro comes with [Tailwind](https://tailwindcss.com) support out of the box. This example showcases how to style your Astro project with Tailwind.
-
-For complete setup instructions, please see our [Tailwind Integration Guide](https://docs.astro.build/en/guides/integrations-guide/tailwind).
+- ✅ **Dynamic Component Rendering** - API response অনুযায়ী components dynamically render হয়
+- ✅ **70+ UI Components** - Headless components থেকে সব pre-built components
+- ✅ **Multi-Page Support** - Homepage, Product, Collection, Cart, Search pages
+- ✅ **Theme Customization** - Design system দিয়ে colors, fonts, spacing customize
+- ✅ **SEO Optimized** - Meta tags, Open Graph, Twitter cards
+- ✅ **Performance** - Astro SSR/SSG দিয়ে fast loading
+- ✅ **Type Safe** - TypeScript দিয়ে পুরো প্রজেক্ট

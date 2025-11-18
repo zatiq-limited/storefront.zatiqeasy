@@ -1,0 +1,162 @@
+/**
+ * ========================================
+ * ZATIQ COMPONENT REGISTRY
+ * ========================================
+ *
+ * এই file এ সব headless components কে register করা হয়েছে
+ * যাতে API response থেকে component-type দিয়ে dynamically render করা যায়
+ */
+
+import type { ComponentType } from "react";
+
+// Import all components from local zatiq components folder
+import { Hero1, Hero2, Hero3, Hero4 } from "../components/zatiq/Hero";
+import { Navbar1, Navbar2, Navbar3, Navbar4 } from "../components/zatiq/Navbar";
+import {
+  Category1,
+  Category2,
+  Category3,
+  Category4,
+} from "../components/zatiq/Category";
+// Category5 and Category6 are default exports
+import Category5 from "../components/zatiq/Category/Category5";
+import Category6 from "../components/zatiq/Category/Category6";
+import {
+  ProductCards1,
+  ProductCards2,
+  ProductCards3,
+  ProductCards4,
+  ProductCards5,
+  ProductCards6,
+  ProductCards7,
+  ProductCards8,
+} from "../components/zatiq/ProductCards";
+import { Footers1, Footers2 } from "../components/zatiq/Footers";
+import { Reviews1, Reviews2, Reviews3 } from "../components/zatiq/Reviews";
+import { Brands1, Brands2, Brands3 } from "../components/zatiq/Brands";
+import {
+  SpecialOffersSlider1,
+  SpecialOffersSlider2,
+  SpecialOffersSlider3,
+  SpecialOffersSlider4,
+  SpecialOffersSlider5,
+} from "../components/zatiq/SpecialOffersSlider";
+import { Badges1, Badges2, Badges3 } from "../components/zatiq/Badges";
+import {
+  AnnouncementBar1,
+  AnnouncementBar2,
+  AnnouncementBar3,
+} from "../components/zatiq/AnnouncementBar";
+import {
+  StaticBanner1,
+  StaticBanner2,
+  StaticBanner3,
+  StaticBanner4,
+} from "../components/zatiq/StaticBanner";
+// StaticBanner5 might be a default export, import separately if exists
+import StaticBanner5 from "../components/zatiq/StaticBanner/StaticBanner5";
+import {
+  PaymentStatus1,
+  PaymentStatus2,
+} from "../components/zatiq/PaymentStatus";
+
+/**
+ * Component Registry
+ * API থেকে যে component-type আসবে সেই অনুযায়ী component render করার জন্য
+ */
+export const ZATIQ_COMPONENTS: Record<string, ComponentType<any>> = {
+  // Announcement Bars (3 variants)
+  "announcement-bar-1": AnnouncementBar1,
+  "announcement-bar-2": AnnouncementBar2,
+  "announcement-bar-3": AnnouncementBar3,
+
+  // Navbars (4 variants)
+  "navbar-1": Navbar1,
+  "navbar-2": Navbar2,
+  "navbar-3": Navbar3,
+  "navbar-4": Navbar4,
+
+  // Heroes (4 variants)
+  "hero-1": Hero1,
+  "hero-2": Hero2,
+  "hero-3": Hero3,
+  "hero-4": Hero4,
+
+  // Static Banners (5 variants)
+  "static-banner-1": StaticBanner1,
+  "static-banner-2": StaticBanner2,
+  "static-banner-3": StaticBanner3,
+  "static-banner-4": StaticBanner4,
+  "static-banner-5": StaticBanner5,
+
+  // Categories (6 variants)
+  "category-1": Category1,
+  "category-2": Category2,
+  "category-3": Category3,
+  "category-4": Category4,
+  "category-5": Category5,
+  "category-6": Category6,
+
+  // Product Cards (8 variants)
+  "product-card-1": ProductCards1,
+  "product-card-2": ProductCards2,
+  "product-card-3": ProductCards3,
+  "product-card-4": ProductCards4,
+  "product-card-5": ProductCards5,
+  "product-card-6": ProductCards6,
+  "product-card-7": ProductCards7,
+  "product-card-8": ProductCards8,
+
+  // Special Offers Sliders (5 variants)
+  "special-offers-slider-1": SpecialOffersSlider1,
+  "special-offers-slider-2": SpecialOffersSlider2,
+  "special-offers-slider-3": SpecialOffersSlider3,
+  "special-offers-slider-4": SpecialOffersSlider4,
+  "special-offers-slider-5": SpecialOffersSlider5,
+
+  // Badges (3 variants)
+  "badges-1": Badges1,
+  "badges-2": Badges2,
+  "badges-3": Badges3,
+
+  // Reviews (3 variants)
+  "reviews-1": Reviews1,
+  "reviews-2": Reviews2,
+  "reviews-3": Reviews3,
+
+  // Brands (3 variants)
+  "brands-1": Brands1,
+  "brands-2": Brands2,
+  "brands-3": Brands3,
+
+  // Footers (2 variants)
+  "footer-1": Footers1,
+  "footer-2": Footers2,
+
+  // Payment Status (2 variants)
+  "payment-status-1": PaymentStatus1,
+  "payment-status-2": PaymentStatus2,
+};
+
+/**
+ * Get component by type
+ * @param componentType - Component type from API (e.g., 'hero-1', 'navbar-2')
+ * @returns React Component or null if not found
+ */
+export function getComponent(componentType: string): ComponentType<any> | null {
+  return ZATIQ_COMPONENTS[componentType] || null;
+}
+
+/**
+ * Check if component exists
+ */
+export function hasComponent(componentType: string): boolean {
+  return componentType in ZATIQ_COMPONENTS;
+}
+
+/**
+ * Get all available component types
+ */
+export function getAvailableComponents(): string[] {
+  return Object.keys(ZATIQ_COMPONENTS);
+}

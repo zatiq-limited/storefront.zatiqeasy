@@ -1,6 +1,31 @@
 ---
+/**
+ * ========================================
+ * MAIN LAYOUT
+ * ========================================
+ * 
+ * Global layout with header, footer, and announcement bar
+ */
+
 import '../styles/global.css';
-const { content } = Astro.props;
+import ComponentRenderer from '../components/ComponentRenderer';
+import { mockTheme, mockShopConfig } from '../data/mock-theme';
+
+interface Props {
+	title?: string;
+	description?: string;
+	image?: string;
+}
+
+const { title, description, image } = Astro.props;
+
+// Get global sections from theme
+const { announcement, header, footer } = mockTheme.globalSections;
+
+// SEO defaults
+const siteTitle = title || mockTheme.templates.index.seo?.title || mockShopConfig.name;
+const siteDescription = description || mockTheme.templates.index.seo?.description || '';
+const ogImage = image || mockTheme.templates.index.seo?.image || '';
 ---
 
 <html lang="en">
@@ -8,9 +33,68 @@ const { content } = Astro.props;
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<title>{content.title}</title>
+		<meta name="generator" content={Astro.generator} />
+		
+		<!-- SEO Meta Tags -->
+		<title>{siteTitle}</title>
+		<meta name="description" content={siteDescription} />
+		
+		<!-- Open Graph / Facebook -->
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content={siteTitle} />
+		<meta property="og:description" content={siteDescription} />
+		{ogImage && <meta property="og:image" content={ogImage} />}
+		
+		<!-- Twitter -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={siteTitle} />
+		<meta name="twitter:description" content={siteDescription} />
+		{ogImage && <meta name="twitter:image" content={ogImage} />}
+		
+		<!-- Design System CSS Variables -->
+		<style is:inline define:vars={{ 
+			primaryColor: mockTheme.designSystem.colors.primary,
+			secondaryColor: mockTheme.designSystem.colors.secondary,
+			accentColor: mockTheme.designSystem.colors.accent,
+			backgroundColor: mockTheme.designSystem.colors.background,
+			textColor: mockTheme.designSystem.colors.text,
+			headingFont: mockTheme.designSystem.fonts.heading,
+			bodyFont: mockTheme.designSystem.fonts.body
+		}}>
+			:root {
+				--color-primary: var(--primaryColor);
+				--color-secondary: var(--secondaryColor);
+				--color-accent: var(--accentColor);
+				--color-background: var(--backgroundColor);
+				--color-text: var(--textColor);
+				--font-heading: var(--headingFont);
+				--font-body: var(--bodyFont);
+			}
+			
+			body {
+				font-family: var(--font-body);
+				color: var(--color-text);
+				background-color: var(--color-background);
+			}
+			
+			h1, h2, h3, h4, h5, h6 {
+				font-family: var(--font-heading);
+			}
+		</style>
 	</head>
 	<body>
-		<slot />
+		<!-- Announcement Bar (Global) -->
+		{announcement && <ComponentRenderer section={announcement} client:load />}
+		
+		<!-- Header/Navbar (Global) -->
+		{header && <ComponentRenderer section={header} client:load />}
+		
+		<!-- Main Content -->
+		<div class="zatiq-main-content">
+			<slot />
+		</div>
+		
+		<!-- Footer (Global) -->
+		{footer && <ComponentRenderer section={footer} client:load />}
 	</body>
 </html>

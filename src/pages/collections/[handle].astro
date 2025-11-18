@@ -1,0 +1,42 @@
+---
+/**
+ * ========================================
+ * COLLECTION PAGE
+ * ========================================
+ * 
+ * Backend API Endpoints:
+ * 
+ * GET /api/storefront/v1/collections/:handle
+ * - Returns: Collection with products
+ * 
+ * GET /api/storefront/v1/collections/:handle/filters
+ * - Returns: Available filters for collection
+ */
+
+import Layout from '../../layouts/main.astro';
+import TemplateRenderer from '../../components/TemplateRenderer';
+import { mockTheme } from '../../data/mock-theme';
+import { mockCollections } from '../../data/mock-products';
+
+// Get handle from URL
+const { handle } = Astro.params;
+
+// Get collection template from theme
+const collectionTemplate = mockTheme.templates.collection;
+
+// In production, fetch from API
+// const collection = await fetch(`/api/storefront/v1/collections/${handle}`).then(r => r.json())
+const collection = mockCollections.find(c => c.handle === handle);
+
+if (!collection) {
+	return Astro.redirect('/404');
+}
+---
+
+<Layout 
+	title={`${collection.title} | ${mockTheme.templates.index.seo?.title}`}
+	description={collection.description}
+	image={collection.image}
+>
+	<TemplateRenderer template={collectionTemplate} client:load />
+</Layout>
