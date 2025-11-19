@@ -14,7 +14,7 @@ const Brands3: React.FC = () => {
   ];
 
   return (
-    <section className="w-full py-8 md:py-12 px-4 bg-white">
+    <section className="w-full pb-8 md:pb-14 px-4 bg-white">
       <div className="max-w-7xl mx-auto">
         {/* Title */}
         <h2 className="text-2xl md:text-3xl font-bold text-center mb-6 md:mb-8 text-gray-900">
