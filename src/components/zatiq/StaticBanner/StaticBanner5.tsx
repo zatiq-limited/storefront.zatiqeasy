@@ -1,6 +1,24 @@
 import React from 'react';
 
-const StaticBanner5: React.FC = () => {
+interface StaticBanner5Props {
+  image?: string;
+  imageMobile?: string;
+  title?: string;
+  subtitle?: string;
+  description?: string;
+  buttonText?: string;
+  buttonLink?: string;
+  secondaryButtonText?: string;
+  secondaryButtonLink?: string;
+  textAlignment?: "left" | "center" | "right";
+  textColor?: string;
+  overlayColor?: string;
+  overlayOpacity?: number;
+  height?: "small" | "medium" | "large";
+}
+
+const StaticBanner5: React.FC<StaticBanner5Props> = () => {
+  // This is a testimonial card layout - keeping the original design as a placeholder
   return (
     <div className="grid grid-cols-2 gap-6">
       {[1, 2].map(i => (
