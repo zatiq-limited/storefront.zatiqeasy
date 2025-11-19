@@ -29,7 +29,7 @@ const FeatureBadge: React.FC<FeatureBadgeProps> = ({ icon, title, description })
 
 const Badges2: React.FC = () => {
   return (
-    <div className="w-full py-6 md:py-8 px-4 font-poppins">
+    <div className="w-full pb-8 md:pb-14 px-4 font-poppins">
       <div className="max-w-[1440px] mx-auto md:px-12 lg:px-16">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-4 md:gap-x-8 lg:gap-x-12 gap-y-6 md:gap-y-8">
           <FeatureBadge

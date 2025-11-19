@@ -180,7 +180,7 @@
       },
       {
         "id": "trust_badges",
-        "type": "badges-1",
+        "type": "badges-2",
         "settings": {
           "backgroundColor": "#F9FAFB",
           "columns": 4,
@@ -253,7 +253,7 @@
       },
       {
         "id": "featured_products",
-        "type": "special-offers-slider-5",
+        "type": "special-offers-slider-3",
         "settings": {
           "title": "Featured Products",
           "subtitle": "Hand-picked styles just for you",
