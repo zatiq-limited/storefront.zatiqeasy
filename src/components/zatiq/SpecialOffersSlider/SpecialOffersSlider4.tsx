@@ -1,15 +1,44 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 const imageLeft = '/assets/spOffer/image-left.jpg';
 const imageRight = '/assets/spOffer/image-right.jpg';
 
 const SpecialOffersSlider4: React.FC = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      {
+        threshold: 0.2,
+        rootMargin: '100px 0px',
+      }
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => {
+      if (containerRef.current) {
+        observer.unobserve(containerRef.current);
+      }
+    };
+  }, []);
+
   return (
-    <div className="w-full py-8 px-4 font-roboto">
+    <div ref={containerRef} className="w-full pb-8 md:pb-14 px-4 font-roboto">
       <div className="w-full max-w-[1296px] mx-auto">
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Left Card - Smartphone - 856px on desktop, full width on mobile */}
-          <div className="w-full lg:w-[856px] h-[260px] relative rounded-lg overflow-hidden flex items-center">
+          <div className={`w-full lg:w-[856px] h-[260px] relative rounded-lg overflow-hidden flex items-center transition-all duration-500 ease-out ${
+            isVisible
+              ? 'opacity-100 translate-x-0'
+              : 'opacity-0 -translate-x-16'
+          }`}>
             {/* Background Image */}
             <img
               src={imageLeft}
@@ -30,7 +59,11 @@ const SpecialOffersSlider4: React.FC = () => {
           </div>
 
           {/* Right Card - Headphones - 416px on desktop, full width on mobile */}
-          <div className="w-full lg:w-[416px] h-[260px] relative rounded-lg overflow-hidden flex items-center">
+          <div className={`w-full lg:w-[416px] h-[260px] relative rounded-lg overflow-hidden flex items-center transition-all duration-500 ease-out ${
+            isVisible
+              ? 'opacity-100 translate-x-0'
+              : 'opacity-0 translate-x-16'
+          }`}>
             {/* Background Image */}
             <img
               src={imageRight}
