@@ -45,7 +45,7 @@ const Reviews3: React.FC = () => {
   const nextRef = useRef<HTMLButtonElement>(null);
 
   return (
-    <div className="w-full bg-gray-50 py-8 md:py-12 lg:py-16 overflow-hidden font-sans">
+    <div className="w-full bg-gray-50 pb-8 md:pb-14 px-4 overflow-hidden font-sans">
       <div className="container mx-auto md:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-6 md:mb-8 lg:mb-10 px-4">
@@ -122,7 +122,7 @@ const Reviews3: React.FC = () => {
             className="reviews-swiper w-full"
           >
             {reviews.map((review, index) => (
-              <SwiperSlide key={index} className="h-auto">
+              <SwiperSlide key={index} className="h-auto pb-4 px-2">
                 <div className="bg-white p-4 md:p-6 lg:p-8 rounded-xl md:rounded-2xl shadow-lg h-full flex flex-col w-full max-w-full">
                   {/* Quote Icon */}
                   <div className="mb-3 md:mb-4">

@@ -416,7 +416,7 @@
       },
       {
         "id": "customer_reviews",
-        "type": "reviews-1",
+        "type": "reviews-3",
         "settings": {
           "title": "What Our Customers Say",
           "subtitle": "Real reviews from real customers",

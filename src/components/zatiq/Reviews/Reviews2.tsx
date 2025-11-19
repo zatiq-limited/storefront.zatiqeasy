@@ -1,8 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, EffectCoverflow } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/effect-coverflow';
+import React, { useEffect, useState } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const testimonials = [
   {
@@ -38,57 +35,102 @@ const testimonials = [
 ];
 
 const Reviews2: React.FC = () => {
-  const swiperRef = useRef<any>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [isReversed, setIsReversed] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [cardsPerView, setCardsPerView] = useState(1);
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
 
-  const handleMouseEnter = () => {
-    setIsPaused(true);
-  };
-
-  const handleMouseLeave = () => {
-    setIsPaused(false);
-  };
-
-  // Handle slide change to track current position
-  const handleSlideChange = (swiper: any) => {
-    setCurrentIndex(swiper.activeIndex);
-  };
-
-  // Auto slide logic for ping-pong effect
+  // Update cards per view based on screen size
   useEffect(() => {
-    if (!isPaused && swiperRef.current?.swiper && testimonials.length > 1) {
-      const swiper = swiperRef.current.swiper;
+    const updateCardsPerView = () => {
+      if (window.innerWidth >= 1280) {
+        setCardsPerView(4);
+      } else if (window.innerWidth >= 1024) {
+        setCardsPerView(3);
+      } else if (window.innerWidth >= 768) {
+        setCardsPerView(2);
+      } else {
+        setCardsPerView(1);
+      }
+    };
 
+    updateCardsPerView();
+    window.addEventListener('resize', updateCardsPerView);
+    return () => window.removeEventListener('resize', updateCardsPerView);
+  }, []);
+
+  // Ping-pong auto-play effect
+  useEffect(() => {
+    if (!isPaused && testimonials.length > 1) {
       const interval = setInterval(() => {
-        const totalSlides = testimonials.length;
-        const nextIndex = isReversed ? currentIndex - 1 : currentIndex + 1;
+        setCurrentIndex((prevIndex) => {
+          const maxIndex = testimonials.length - cardsPerView;
 
-        // Check if we need to reverse direction
-        if (!isReversed && currentIndex >= totalSlides - 1) {
-          // At the last slide, start going backward
-          setIsReversed(true);
-          if (currentIndex > 0) {
-            swiper.slideTo(currentIndex - 1);
+          // At the end, reverse direction
+          if (!isReversed && prevIndex >= maxIndex) {
+            setIsReversed(true);
+            return Math.max(0, prevIndex - 1);
           }
-        } else if (isReversed && currentIndex <= 0) {
-          // At the first slide, start going forward
-          setIsReversed(false);
-          if (currentIndex < totalSlides - 1) {
-            swiper.slideTo(currentIndex + 1);
+
+          // At the beginning, go forward
+          if (isReversed && prevIndex <= 0) {
+            setIsReversed(false);
+            return Math.min(maxIndex, prevIndex + 1);
           }
-        } else {
-          // Normal sliding within bounds
-          if (nextIndex >= 0 && nextIndex < totalSlides) {
-            swiper.slideTo(nextIndex);
-          }
-        }
+
+          // Continue in current direction
+          return isReversed
+            ? Math.max(0, prevIndex - 1)
+            : Math.min(maxIndex, prevIndex + 1);
+        });
       }, 2000);
 
       return () => clearInterval(interval);
     }
-  }, [isReversed, isPaused, currentIndex]);
+  }, [isPaused, isReversed, cardsPerView]);
+
+  const handleNext = () => {
+    setCurrentIndex((prevIndex) => {
+      const maxIndex = testimonials.length - cardsPerView;
+      return prevIndex >= maxIndex ? 0 : prevIndex + 1;
+    });
+  };
+
+  const handlePrev = () => {
+    setCurrentIndex((prevIndex) => {
+      const maxIndex = testimonials.length - cardsPerView;
+      return prevIndex <= 0 ? maxIndex : prevIndex - 1;
+    });
+  };
+
+  // Touch handlers for swipe
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStart - touchEnd > 75) {
+      // Swipe left
+      handleNext();
+    }
+
+    if (touchStart - touchEnd < -75) {
+      // Swipe right
+      handlePrev();
+    }
+  };
+
+  // Calculate transform percentage
+  const getTransformValue = () => {
+    const cardWidth = 100 / cardsPerView;
+    return -(currentIndex * cardWidth);
+  };
 
   return (
     <div className="w-full py-8 md:py-12 lg:py-16 bg-gray-50 overflow-hidden font-volkhov">
@@ -103,48 +145,45 @@ const Reviews2: React.FC = () => {
           </p>
         </div>
 
-        {/* Testimonials Swiper */}
-        <div className="relative overflow-hidden" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-          <Swiper
-            ref={swiperRef}
-            loop={false}
-            centeredSlides={false}
-            grabCursor={true}
-            effect="coverflow"
-            coverflowEffect={{
-              rotate: 20,
-              stretch: 0,
-              depth: 100,
-              modifier: 1.5,
-              slideShadows: false,
-            }}
-            autoplay={false} // We'll handle autoplay manually
-            modules={[Autoplay, EffectCoverflow]}
-            onSlideChange={handleSlideChange}
-            breakpoints={{
-              0: {
-                slidesPerView: 1,
-                spaceBetween: 16,
-              },
-              768: {
-                slidesPerView: 2,
-                spaceBetween: 20,
-              },
-              1024: {
-                slidesPerView: 3,
-                spaceBetween: 24,
-              },
-              1280: {
-                slidesPerView: 4,
-                spaceBetween: 24,
-              },
-            }}
-            watchSlidesProgress={true}
-            className="testimonials-swiper"
+        {/* Testimonials Carousel */}
+        <div
+          className="relative"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
+          {/* Left Navigation Button - Hidden on Mobile */}
+          <button
+            onClick={handlePrev}
+            className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-5 z-10 w-10 h-10 bg-white border border-gray-300 rounded-full items-center justify-center p-3 transition-all hover:border-gray-400 hover:shadow-lg"
+            aria-label="Previous"
           >
-            {testimonials.map((testimonial, index) => (
-              <SwiperSlide key={index}>
-                <div className="w-full max-w-full transition-transform duration-300">
+            <ChevronLeft className="w-4 h-4 text-gray-800" />
+          </button>
+
+          {/* Right Navigation Button - Hidden on Mobile */}
+          <button
+            onClick={handleNext}
+            className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-5 z-10 w-10 h-10 bg-white border border-gray-300 rounded-full items-center justify-center p-3 transition-all hover:border-gray-400 hover:shadow-lg"
+            aria-label="Next"
+          >
+            <ChevronRight className="w-4 h-4 text-gray-800" />
+          </button>
+
+          <div className="overflow-hidden">
+            <div
+              className="flex transition-transform duration-500 ease-in-out gap-4 md:gap-5 lg:gap-6"
+              style={{
+                transform: `translateX(calc(${getTransformValue()}% - ${currentIndex * (cardsPerView === 1 ? 0 : cardsPerView === 2 ? 10 : cardsPerView === 3 ? 12 : 12)}px))`
+              }}
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+            >
+              {testimonials.map((testimonial, index) => (
+                <div
+                  key={index}
+                  className="shrink-0 w-full md:w-[calc(50%-10px)] lg:w-[calc(33.333%-16px)] xl:w-[calc(25%-18px)]"
+                >
                   <article className="rounded-xl md:rounded-2xl bg-white p-4 md:p-6 lg:p-8 shadow-lg h-full hover:shadow-xl transition-shadow w-full">
                     <div className="flex flex-col gap-4 md:gap-6 items-start h-full">
                       {/* Avatar Image */}
@@ -186,9 +225,9 @@ const Reviews2: React.FC = () => {
                     </div>
                   </article>
                 </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>
