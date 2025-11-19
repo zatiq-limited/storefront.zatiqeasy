@@ -54,6 +54,131 @@
         ]
       },
       {
+        "id": "hero_centered",
+        "type": "hero-2",
+        "settings": {
+          "autoplay": true,
+          "autoplaySpeed": 5000,
+          "showArrows": true,
+          "showIndicators": true
+        },
+        "blocks": [
+          {
+            "id": "hero2-slide-1",
+            "badge": "New Arrival",
+            "heading": "Maximum impact",
+            "description": "Shop our collection of glamorous swimsuits and mix-and-match bikinis.",
+            "buttonText": "Shop New Arrivals",
+            "buttonLink": "/collections/new-arrivals",
+            "imageUrl": "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1440&h=716&fit=crop&q=80",
+            "imageAlt": "Fashion collection showcase",
+            "overlayOpacity": "opacity-20"
+          },
+          {
+            "id": "hero2-slide-2",
+            "badge": "Summer Collection",
+            "heading": "Beach Ready Vibes",
+            "description": "Discover the perfect pieces for your summer getaway and beachside adventures.",
+            "buttonText": "Explore Collection",
+            "buttonLink": "/collections/summer",
+            "imageUrl": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1440&h=716&fit=crop&q=80",
+            "imageAlt": "Summer fashion collection",
+            "overlayOpacity": "opacity-30"
+          },
+          {
+            "id": "hero2-slide-3",
+            "badge": "Limited Edition",
+            "heading": "Exclusive Designer Wear",
+            "description": "Luxury fashion pieces curated for those who appreciate timeless elegance.",
+            "buttonText": "Shop Exclusive",
+            "buttonLink": "/collections/exclusive",
+            "imageUrl": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1440&h=716&fit=crop&q=80",
+            "imageAlt": "Exclusive designer fashion",
+            "overlayOpacity": "opacity-25"
+          }
+        ]
+      },
+      {
+        "id": "hero_with_side_arrows",
+        "type": "hero-3",
+        "settings": {
+          "autoplay": true,
+          "autoplaySpeed": 5000,
+          "showArrows": true,
+          "showIndicators": true
+        },
+        "blocks": [
+          {
+            "id": "hero3-slide-1",
+            "title": "Best Discounts 2025",
+            "description": "Salla Store provides you with everything you need, from electronics to home furniture, along with the best discounts on products. Shop now and enjoy all the discounts on products.",
+            "buttonText": "Discover more",
+            "buttonLink": "/collections/discounts",
+            "imageUrl": "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1440&h=558&fit=crop&q=80",
+            "imageAlt": "Shopping store with best discounts"
+          },
+          {
+            "id": "hero3-slide-2",
+            "title": "Electronics Mega Sale",
+            "description": "Upgrade your tech with our exclusive electronics collection. From smartphones to laptops, find cutting-edge technology at unbeatable prices. Limited time offers available.",
+            "buttonText": "Shop Electronics",
+            "buttonLink": "/collections/electronics",
+            "imageUrl": "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=1440&h=558&fit=crop&q=80",
+            "imageAlt": "Electronics collection on sale"
+          },
+          {
+            "id": "hero3-slide-3",
+            "title": "Home Furniture Deals",
+            "description": "Transform your living space with our premium furniture collection. Discover stylish and comfortable pieces that perfectly blend functionality with modern design aesthetics.",
+            "buttonText": "Browse Furniture",
+            "buttonLink": "/collections/furniture",
+            "imageUrl": "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1440&h=558&fit=crop&q=80",
+            "imageAlt": "Modern home furniture collection"
+          },
+          {
+            "id": "hero3-slide-4",
+            "title": "Fashion Essentials",
+            "description": "Elevate your wardrobe with our curated fashion collection. From casual wear to elegant outfits, find everything you need to express your unique style at amazing prices.",
+            "buttonText": "Explore Fashion",
+            "buttonLink": "/collections/fashion",
+            "imageUrl": "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1440&h=558&fit=crop&q=80",
+            "imageAlt": "Fashion clothing collection"
+          }
+        ]
+      },
+      {
+        "id": "hero_left_aligned",
+        "type": "hero-4",
+        "settings": {
+          "autoplay": true,
+          "autoplaySpeed": 5000,
+          "showArrows": true,
+          "showIndicators": true
+        },
+        "blocks": [
+          {
+            "id": "hero4-slide-1",
+            "tag": "SUMMER 2025",
+            "heading": "NEW COLLECTION",
+            "description": "We know how large objects will act,\nbut things on a small scale.",
+            "buttonText": "SHOP NOW",
+            "buttonLink": "/collections/summer-2025",
+            "imageUrl": "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1440&h=716&fit=crop&q=80",
+            "imageAlt": "Summer 2025 Collection"
+          },
+          {
+            "id": "hero4-slide-2",
+            "tag": "SPRING ARRIVALS",
+            "heading": "FRESH STYLES",
+            "description": "Discover the latest trends,\nPerfect for the new season.",
+            "buttonText": "EXPLORE NOW",
+            "buttonLink": "/collections/spring-arrivals",
+            "imageUrl": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1440&h=716&fit=crop&q=80",
+            "imageAlt": "Spring Arrivals Collection"
+          }
+        ]
+      },
+      {
         "id": "trust_badges",
         "type": "badges-1",
         "settings": {
