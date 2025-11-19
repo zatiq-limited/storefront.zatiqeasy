@@ -2,64 +2,40 @@ import React, { useState, useEffect, useCallback } from "react";
 
 // Carousel slide data structure
 interface HeroSlide {
-  id: number;
+  id: string | number;
   title: string;
   description: string;
   buttonText: string;
   buttonLink: string;
   imageUrl: string;
-  imageAlt: string;
+  imageAlt?: string;
 }
 
-// Hero slides data with online images (1440x558px)
-const heroSlides: HeroSlide[] = [
-  {
-    id: 1,
-    title: "Best Discounts 2025",
-    description:
-      "Salla Store provides you with everything you need, from electronics to home furniture, along with the best discounts on products. Shop now and enjoy all the discounts on products.",
-    buttonText: "Discover more",
-    buttonLink: "/collections/discounts",
-    imageUrl: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1440&h=558&fit=crop&q=80",
-    imageAlt: "Shopping store with best discounts",
-  },
-  {
-    id: 2,
-    title: "Electronics Mega Sale",
-    description:
-      "Upgrade your tech with our exclusive electronics collection. From smartphones to laptops, find cutting-edge technology at unbeatable prices. Limited time offers available.",
-    buttonText: "Shop Electronics",
-    buttonLink: "/collections/electronics",
-    imageUrl: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=1440&h=558&fit=crop&q=80",
-    imageAlt: "Electronics collection on sale",
-  },
-  {
-    id: 3,
-    title: "Home Furniture Deals",
-    description:
-      "Transform your living space with our premium furniture collection. Discover stylish and comfortable pieces that perfectly blend functionality with modern design aesthetics.",
-    buttonText: "Browse Furniture",
-    buttonLink: "/collections/furniture",
-    imageUrl: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1440&h=558&fit=crop&q=80",
-    imageAlt: "Modern home furniture collection",
-  },
-  {
-    id: 4,
-    title: "Fashion Essentials",
-    description:
-      "Elevate your wardrobe with our curated fashion collection. From casual wear to elegant outfits, find everything you need to express your unique style at amazing prices.",
-    buttonText: "Explore Fashion",
-    buttonLink: "/collections/fashion",
-    imageUrl: "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1440&h=558&fit=crop&q=80",
-    imageAlt: "Fashion clothing collection",
-  },
-];
+// Component props interface
+interface Hero3Props {
+  settings?: {
+    autoplay?: boolean;
+    autoplaySpeed?: number;
+    showArrows?: boolean;
+    showIndicators?: boolean;
+  };
+  blocks?: HeroSlide[];
+}
 
-const Hero3: React.FC = () => {
+const Hero3: React.FC<Hero3Props> = ({ settings = {}, blocks = [] }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+
+  // Use blocks from props or fallback to empty array
+  const heroSlides = blocks.length > 0 ? blocks : [];
   const totalSlides = heroSlides.length;
+
+  // Settings with defaults
+  const autoplay = settings.autoplay !== false; // Default: true
+  const autoplaySpeed = settings.autoplaySpeed || 5000; // Default: 5s
+  const showArrows = settings.showArrows !== false; // Default: true
+  const showIndicators = settings.showIndicators !== false; // Default: true
 
   // Handle next slide
   const handleNext = useCallback(() => {
@@ -90,14 +66,19 @@ const Hero3: React.FC = () => {
 
   // Auto-advance carousel
   useEffect(() => {
-    if (isPaused) return;
+    if (!autoplay || isPaused || totalSlides === 0) return;
 
     const interval = setInterval(() => {
       handleNext();
-    }, 5000); // Change slide every 5 seconds
+    }, autoplaySpeed);
 
     return () => clearInterval(interval);
-  }, [isPaused, handleNext]);
+  }, [isPaused, handleNext, autoplay, autoplaySpeed, totalSlides]);
+
+  // Return null if no slides
+  if (totalSlides === 0) {
+    return null;
+  }
 
   return (
     <div className="w-full px-4 pb-8 sm:pb-14 py-0 2xl:px-0">
@@ -118,7 +99,7 @@ const Hero3: React.FC = () => {
             <div className="absolute inset-0">
               <img
                 src={slide.imageUrl}
-                alt={slide.imageAlt}
+                alt={slide.imageAlt || slide.title}
                 className="w-full h-full object-cover"
                 loading={index === 0 ? "eager" : "lazy"}
               />
@@ -128,6 +109,7 @@ const Hero3: React.FC = () => {
               {/* Content Section with Navigation Arrows */}
               <div className="flex items-center justify-center gap-6 md:gap-10 lg:gap-24">
                 {/* Left Arrow */}
+                {showArrows && totalSlides > 1 && (
                 <button
                   onClick={handlePrev}
                   disabled={isTransitioning}
@@ -144,6 +126,7 @@ const Hero3: React.FC = () => {
                     <path d="M10 12L6 8l4-4" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </button>
+                )}
 
                 {/* Text Content */}
                 <div className="flex-1 max-w-[728px] flex flex-col items-center space-y-8">
@@ -186,6 +169,7 @@ const Hero3: React.FC = () => {
                 </div>
 
                 {/* Right Arrow */}
+                {showArrows && totalSlides > 1 && (
                 <button
                   onClick={handleNext}
                   disabled={isTransitioning}
@@ -202,12 +186,14 @@ const Hero3: React.FC = () => {
                     <path d="M6 12l4-4-4-4" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </button>
+                )}
               </div>
             </div>
           </div>
         ))}
 
         {/* Slider Indicators */}
+        {showIndicators && totalSlides > 1 && (
         <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex items-center justify-center gap-1.5 z-20">
           {heroSlides.map((slide, index) => (
             <button
@@ -227,6 +213,7 @@ const Hero3: React.FC = () => {
             </button>
           ))}
         </div>
+        )}
       </div>
     </div>
   );

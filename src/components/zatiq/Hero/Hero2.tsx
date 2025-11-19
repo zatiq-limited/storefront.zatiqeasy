@@ -2,59 +2,42 @@ import React, { useState, useEffect, useCallback } from "react";
 
 // Carousel slide data structure
 interface HeroSlide {
-  id: number;
+  id: string | number;
   badge: string;
   heading: string;
   description: string;
   buttonText: string;
   buttonLink: string;
   imageUrl: string;
-  imageAlt: string;
-  overlayOpacity: string;
+  imageAlt?: string;
+  overlayOpacity?: string;
 }
 
-// Hero slides data with online images (1440x716px)
-const heroSlides: HeroSlide[] = [
-  {
-    id: 1,
-    badge: "New Arrival",
-    heading: "Maximum impact",
-    description: "Shop our collection of glamorous swimsuits and mix-and-match bikinis.",
-    buttonText: "Shop New Arrivals",
-    buttonLink: "/collections/new-arrivals",
-    imageUrl: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1440&h=716&fit=crop&q=80",
-    imageAlt: "Fashion collection showcase",
-    overlayOpacity: "opacity-20",
-  },
-  {
-    id: 2,
-    badge: "Summer Collection",
-    heading: "Beach Ready Vibes",
-    description: "Discover the perfect pieces for your summer getaway and beachside adventures.",
-    buttonText: "Explore Collection",
-    buttonLink: "/collections/summer",
-    imageUrl: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1440&h=716&fit=crop&q=80",
-    imageAlt: "Summer fashion collection",
-    overlayOpacity: "opacity-30",
-  },
-  {
-    id: 3,
-    badge: "Limited Edition",
-    heading: "Exclusive Designer Wear",
-    description: "Luxury fashion pieces curated for those who appreciate timeless elegance.",
-    buttonText: "Shop Exclusive",
-    buttonLink: "/collections/exclusive",
-    imageUrl: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1440&h=716&fit=crop&q=80",
-    imageAlt: "Exclusive designer fashion",
-    overlayOpacity: "opacity-25",
-  }
-];
+// Component props interface
+interface Hero2Props {
+  settings?: {
+    autoplay?: boolean;
+    autoplaySpeed?: number;
+    showArrows?: boolean;
+    showIndicators?: boolean;
+  };
+  blocks?: HeroSlide[];
+}
 
-const Hero2: React.FC = () => {
+const Hero2: React.FC<Hero2Props> = ({ settings = {}, blocks = [] }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+
+  // Use blocks from props or fallback to empty array
+  const heroSlides = blocks.length > 0 ? blocks : [];
   const totalSlides = heroSlides.length;
+
+  // Settings with defaults
+  const autoplay = settings.autoplay !== false; // Default: true
+  const autoplaySpeed = settings.autoplaySpeed || 5000; // Default: 5s
+  const showArrows = settings.showArrows !== false; // Default: true
+  const showIndicators = settings.showIndicators !== false; // Default: true
 
   // Handle next slide
   const handleNext = useCallback(() => {
@@ -85,14 +68,19 @@ const Hero2: React.FC = () => {
 
   // Auto-advance carousel
   useEffect(() => {
-    if (isPaused) return;
+    if (!autoplay || isPaused || totalSlides === 0) return;
 
     const interval = setInterval(() => {
       handleNext();
-    }, 5000); // Change slide every 5 seconds
+    }, autoplaySpeed);
 
     return () => clearInterval(interval);
-  }, [isPaused, handleNext]);
+  }, [isPaused, handleNext, autoplay, autoplaySpeed, totalSlides]);
+
+  // Return null if no slides
+  if (totalSlides === 0) {
+    return null;
+  }
 
   return (
     <div className="w-full px-4 pb-8 sm:pb-14 py-0 2xl:px-0">
@@ -113,12 +101,12 @@ const Hero2: React.FC = () => {
             <div className="absolute inset-0">
               <img
                 src={slide.imageUrl}
-                alt={slide.imageAlt}
+                alt={slide.imageAlt || slide.heading}
                 className="w-full h-full object-cover"
                 loading={index === 0 ? "eager" : "lazy"}
               />
               {/* Dark Overlay */}
-              <div className={`absolute inset-0 bg-black ${slide.overlayOpacity}`}></div>
+              <div className={`absolute inset-0 bg-black ${slide.overlayOpacity || "opacity-20"}`}></div>
             </div>
 
             {/* Content Container */}
@@ -175,6 +163,7 @@ const Hero2: React.FC = () => {
         ))}
 
         {/* Navigation Arrows */}
+        {showArrows && totalSlides > 1 && (
         <div className="absolute inset-0 flex items-center justify-between px-4 md:px-8 lg:px-12 z-20 pointer-events-none">
           {/* Previous Button */}
           <button
@@ -226,8 +215,10 @@ const Hero2: React.FC = () => {
             </svg>
           </button>
         </div>
+        )}
 
         {/* Carousel Indicators - 32px from bottom */}
+        {showIndicators && totalSlides > 1 && (
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20">
           {heroSlides.map((slide, index) => (
             <button
@@ -247,6 +238,7 @@ const Hero2: React.FC = () => {
             </button>
           ))}
         </div>
+        )}
       </div>
     </div>
   );

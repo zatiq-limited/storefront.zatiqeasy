@@ -2,71 +2,48 @@ import React, { useState, useEffect, useCallback } from "react";
 
 // Carousel slide data structure
 interface HeroSlide {
-  id: number;
+  id: string | number;
   tagline: string;
   title: string;
   subtitle?: string;
   buttonText: string;
   buttonLink: string;
   imageUrl: string;
-  imageAlt: string;
+  imageAlt?: string;
   bgGradient: string;
   textColor: string;
   taglineColor: string;
 }
 
-// Hero slides data with online images
-const heroSlides: HeroSlide[] = [
-  {
-    id: 1,
-    tagline: "The new stylish collection",
-    title: "NEW FALL",
-    subtitle: "SEASON 2025",
-    buttonText: "Shop now",
-    buttonLink: "/collections/fall-2025",
-    imageUrl: "/assets/hero/hero-11.png",
-    imageAlt: "Fashion model in fall collection",
-    bgGradient: "from-[#DAD4EC] to-[#F3E7E9]",
-    textColor: "#181D25",
-    taglineColor: "#4E5562",
-  },
-  {
-    id: 2,
-    tagline: "Trending this winter",
-    title: "COZY",
-    subtitle: "WINTER VIBES",
-    buttonText: "Explore collection",
-    buttonLink: "/collections/winter-2025",
-    imageUrl: "/assets/hero/hero-12.png",
-    imageAlt: "Model in winter fashion collection",
-    bgGradient: "from-[#E5DDD5] to-[#E8DFE0]",
-    textColor: "#1A1A1A",
-    taglineColor: "#5A5A5A",
-  },
-  {
-    id: 3,
-    tagline: "Limited edition arrivals",
-    title: "EXCLUSIVE",
-    subtitle: "DESIGNER PICKS",
-    buttonText: "Shop exclusive",
-    buttonLink: "/collections/exclusive",
-    imageUrl: "/assets/hero/hero-13.png",
-    imageAlt: "Exclusive designer fashion collection",
-    bgGradient: "from-[#F5E6D3] to-[#E9DDD4]",
-    textColor: "#2C2C2C",
-    taglineColor: "#6B6B6B",
-  },
-];
+// Component props interface
+interface Hero1Props {
+  settings?: {
+    autoplay?: boolean;
+    autoplaySpeed?: number;
+    showArrows?: boolean;
+    showIndicators?: boolean;
+  };
+  blocks?: HeroSlide[];
+}
 
-const Hero1: React.FC = () => {
+const Hero1: React.FC<Hero1Props> = ({ settings = {}, blocks = [] }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+
+  // Use blocks from props or fallback to empty array
+  const heroSlides = blocks.length > 0 ? blocks : [];
   const totalSlides = heroSlides.length;
+
+  // Settings with defaults
+  const autoplay = settings.autoplay !== false; // Default: true
+  const autoplaySpeed = settings.autoplaySpeed || 5000; // Default: 5s
+  const showArrows = settings.showArrows !== false; // Default: true
+  const showIndicators = settings.showIndicators !== false; // Default: true
 
   // Handle next slide
   const handleNext = useCallback(() => {
-    if (isTransitioning) return;
+    if (isTransitioning || totalSlides === 0) return;
     setIsTransitioning(true);
     setCurrentSlide((prev) => (prev + 1) % totalSlides);
     setTimeout(() => setIsTransitioning(false), 500);
@@ -74,33 +51,27 @@ const Hero1: React.FC = () => {
 
   // Auto-advance carousel
   useEffect(() => {
-    if (isPaused) return;
+    if (!autoplay || isPaused || totalSlides === 0) return;
 
     const interval = setInterval(() => {
       handleNext();
-    }, 5000); // Change slide every 5 seconds
+    }, autoplaySpeed);
 
     return () => clearInterval(interval);
-  }, [isPaused, handleNext]);
+  }, [isPaused, handleNext, autoplay, autoplaySpeed, totalSlides]);
 
   // Handle previous slide
   const handlePrev = useCallback(() => {
-    if (isTransitioning) return;
+    if (isTransitioning || totalSlides === 0) return;
     setIsTransitioning(true);
     setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
     setTimeout(() => setIsTransitioning(false), 500);
   }, [isTransitioning, totalSlides]);
 
-  // Handle dot click
-  const handleDotClick = useCallback(
-    (index: number) => {
-      if (isTransitioning || index === currentSlide) return;
-      setIsTransitioning(true);
-      setCurrentSlide(index);
-      setTimeout(() => setIsTransitioning(false), 500);
-    },
-    [isTransitioning, currentSlide]
-  );
+  // Return null if no slides
+  if (totalSlides === 0) {
+    return null;
+  }
 
   return (
     <div className="w-full px-4 pb-8 sm:pb-14 py-0 2xl:px-0">
@@ -182,7 +153,7 @@ const Hero1: React.FC = () => {
             <div className="absolute right-4 md:right-8 lg:right-11 top-0 md:top-6 lg:top-8 bottom-0 flex items-end md:items-center">
               <img
                 src={slide.imageUrl}
-                alt={slide.imageAlt}
+                alt={slide.imageAlt || slide.title}
                 className={`h-[80%] md:h-[95%] lg:h-full w-auto object-cover object-center transition-all duration-700 ${
                   index === currentSlide
                     ? "translate-x-0 opacity-100 scale-100 delay-100"
@@ -196,9 +167,10 @@ const Hero1: React.FC = () => {
       </div>
 
       {/* Navigation Arrows */}
-      <div className="absolute inset-0 flex items-center justify-between px-4 md:px-8 lg:px-12 z-20 pointer-events-none">
-        {/* Previous Button */}
-        <button
+      {showArrows && totalSlides > 1 && (
+        <div className="absolute inset-0 flex items-center justify-between px-4 md:px-8 lg:px-12 z-20 pointer-events-none">
+          {/* Previous Button */}
+          <button
           onClick={handlePrev}
           disabled={isTransitioning}
           className="pointer-events-auto w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/80 hover:bg-white shadow-lg flex items-center justify-center transition-all hover:scale-110 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed lg:opacity-0 lg:group-hover:opacity-100"
@@ -247,9 +219,11 @@ const Hero1: React.FC = () => {
           </svg>
         </button>
       </div>
+      )}
 
       {/* Pagination Dots & Progress Bar */}
-      <div className="absolute left-6 right-6 md:left-16 md:right-16 lg:left-28 lg:right-28 bottom-10 md:bottom-12 lg:bottom-14 z-20">
+      {showIndicators && totalSlides > 1 && (
+        <div className="absolute left-6 right-6 md:left-16 md:right-16 lg:left-28 lg:right-28 bottom-10 md:bottom-12 lg:bottom-14 z-20">
         
         {/* Progress Bar */}
         <div className="relative h-0.5 md:h-0.5 lg:h-1 bg-white/20 rounded-full overflow-hidden">
@@ -261,6 +235,7 @@ const Hero1: React.FC = () => {
           />
         </div>
       </div>
+      )}
     </div>
     </div>
   );

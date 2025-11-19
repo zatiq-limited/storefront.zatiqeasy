@@ -2,45 +2,41 @@ import React, { useState, useEffect, useCallback } from "react";
 
 // Carousel slide data structure
 interface HeroSlide {
-  id: number;
+  id: string | number;
   tag: string;
   heading: string;
   description: string;
   buttonText: string;
   buttonLink: string;
   imageUrl: string;
-  imageAlt: string;
+  imageAlt?: string;
 }
 
-// Hero slides data with online images (1440x716px)
-const heroSlides: HeroSlide[] = [
-  {
-    id: 1,
-    tag: "SUMMER 2025",
-    heading: "NEW COLLECTION",
-    description: "We know how large objects will act,\nbut things on a small scale.",
-    buttonText: "SHOP NOW",
-    buttonLink: "/collections/summer-2025",
-    imageUrl: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1440&h=716&fit=crop&q=80",
-    imageAlt: "Summer 2025 Collection",
-  },
-  {
-    id: 2,
-    tag: "SPRING ARRIVALS",
-    heading: "FRESH STYLES",
-    description: "Discover the latest trends,\nPerfect for the new season.",
-    buttonText: "EXPLORE NOW",
-    buttonLink: "/collections/spring-arrivals",
-    imageUrl: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1440&h=716&fit=crop&q=80",
-    imageAlt: "Spring Arrivals Collection",
-  },
-];
+// Component props interface
+interface Hero4Props {
+  settings?: {
+    autoplay?: boolean;
+    autoplaySpeed?: number;
+    showArrows?: boolean;
+    showIndicators?: boolean;
+  };
+  blocks?: HeroSlide[];
+}
 
-const Hero4: React.FC = () => {
+const Hero4: React.FC<Hero4Props> = ({ settings = {}, blocks = [] }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+
+  // Use blocks from props or fallback to empty array
+  const heroSlides = blocks.length > 0 ? blocks : [];
   const totalSlides = heroSlides.length;
+
+  // Settings with defaults
+  const autoplay = settings.autoplay !== false; // Default: true
+  const autoplaySpeed = settings.autoplaySpeed || 5000; // Default: 5s
+  const showArrows = settings.showArrows !== false; // Default: true
+  const showIndicators = settings.showIndicators !== false; // Default: true
 
   // Handle next slide
   const handleNext = useCallback(() => {
@@ -71,14 +67,19 @@ const Hero4: React.FC = () => {
 
   // Auto-advance carousel
   useEffect(() => {
-    if (isPaused) return;
+    if (!autoplay || isPaused || totalSlides === 0) return;
 
     const interval = setInterval(() => {
       handleNext();
-    }, 5000); // Change slide every 5 seconds
+    }, autoplaySpeed);
 
     return () => clearInterval(interval);
-  }, [isPaused, handleNext]);
+  }, [isPaused, handleNext, autoplay, autoplaySpeed, totalSlides]);
+
+  // Return null if no slides
+  if (totalSlides === 0) {
+    return null;
+  }
 
   return (
     <div className="w-full px-4 pb-8 sm:pb-14 py-0 2xl:px-0">
@@ -99,7 +100,7 @@ const Hero4: React.FC = () => {
             <div className="absolute inset-0">
               <img
                 src={slide.imageUrl}
-                alt={slide.imageAlt}
+                alt={slide.imageAlt || slide.heading}
                 className="w-full h-full object-cover object-center"
                 loading={index === 0 ? "eager" : "lazy"}
               />
@@ -165,6 +166,7 @@ const Hero4: React.FC = () => {
         ))}
 
         {/* Left Arrow */}
+        {showArrows && totalSlides > 1 && (
         <button
           onClick={handlePrev}
           disabled={isTransitioning}
@@ -203,8 +205,10 @@ const Hero4: React.FC = () => {
             </defs>
           </svg>
         </button>
+        )}
 
         {/* Right Arrow */}
+        {showArrows && totalSlides > 1 && (
         <button
           onClick={handleNext}
           disabled={isTransitioning}
@@ -238,8 +242,10 @@ const Hero4: React.FC = () => {
             </defs>
           </svg>
         </button>
+        )}
 
         {/* Carousel Indicators */}
+        {showIndicators && totalSlides > 1 && (
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex z-20">
           {heroSlides.map((slide, index) => (
             <button
@@ -257,6 +263,7 @@ const Hero4: React.FC = () => {
             </button>
           ))}
         </div>
+        )}
       </div>
     </div>
   );

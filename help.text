@@ -1,0 +1,140 @@
+// Hero slides 1 data with online images
+const heroSlides: HeroSlide[] = [
+  {
+    id: 1,
+    tagline: "The new stylish collection",
+    title: "NEW FALL",
+    subtitle: "SEASON 2025",
+    buttonText: "Shop now",
+    buttonLink: "/collections/fall-2025",
+    imageUrl: "/assets/hero/hero-11.png",
+    imageAlt: "Fashion model in fall collection",
+    bgGradient: "from-[#DAD4EC] to-[#F3E7E9]",
+    textColor: "#181D25",
+    taglineColor: "#4E5562",
+  },
+  {
+    id: 2,
+    tagline: "Trending this winter",
+    title: "COZY",
+    subtitle: "WINTER VIBES",
+    buttonText: "Explore collection",
+    buttonLink: "/collections/winter-2025",
+    imageUrl: "/assets/hero/hero-12.png",
+    imageAlt: "Model in winter fashion collection",
+    bgGradient: "from-[#E5DDD5] to-[#E8DFE0]",
+    textColor: "#1A1A1A",
+    taglineColor: "#5A5A5A",
+  },
+  {
+    id: 3,
+    tagline: "Limited edition arrivals",
+    title: "EXCLUSIVE",
+    subtitle: "DESIGNER PICKS",
+    buttonText: "Shop exclusive",
+    buttonLink: "/collections/exclusive",
+    imageUrl: "/assets/hero/hero-13.png",
+    imageAlt: "Exclusive designer fashion collection",
+    bgGradient: "from-[#F5E6D3] to-[#E9DDD4]",
+    textColor: "#2C2C2C",
+    taglineColor: "#6B6B6B",
+  },
+];
+
+// Hero slides 2 data with online images (1440x716px)
+const heroSlides: HeroSlide[] = [
+  {
+    id: 1,
+    badge: "New Arrival",
+    heading: "Maximum impact",
+    description: "Shop our collection of glamorous swimsuits and mix-and-match bikinis.",
+    buttonText: "Shop New Arrivals",
+    buttonLink: "/collections/new-arrivals",
+    imageUrl: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1440&h=716&fit=crop&q=80",
+    imageAlt: "Fashion collection showcase",
+    overlayOpacity: "opacity-20",
+  },
+  {
+    id: 2,
+    badge: "Summer Collection",
+    heading: "Beach Ready Vibes",
+    description: "Discover the perfect pieces for your summer getaway and beachside adventures.",
+    buttonText: "Explore Collection",
+    buttonLink: "/collections/summer",
+    imageUrl: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1440&h=716&fit=crop&q=80",
+    imageAlt: "Summer fashion collection",
+    overlayOpacity: "opacity-30",
+  },
+  {
+    id: 3,
+    badge: "Limited Edition",
+    heading: "Exclusive Designer Wear",
+    description: "Luxury fashion pieces curated for those who appreciate timeless elegance.",
+    buttonText: "Shop Exclusive",
+    buttonLink: "/collections/exclusive",
+    imageUrl: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1440&h=716&fit=crop&q=80",
+    imageAlt: "Exclusive designer fashion",
+    overlayOpacity: "opacity-25",
+  }
+];
+
+// Hero slides 3 data with online images (1440x716px)
+const heroSlides: HeroSlide[] = [
+  {
+    id: 1,
+    badge: "New Arrival",
+    heading: "Maximum impact",
+    description: "Shop our collection of glamorous swimsuits and mix-and-match bikinis.",
+    buttonText: "Shop New Arrivals",
+    buttonLink: "/collections/new-arrivals",
+    imageUrl: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1440&h=716&fit=crop&q=80",
+    imageAlt: "Fashion collection showcase",
+    overlayOpacity: "opacity-20",
+  },
+  {
+    id: 2,
+    badge: "Summer Collection",
+    heading: "Beach Ready Vibes",
+    description: "Discover the perfect pieces for your summer getaway and beachside adventures.",
+    buttonText: "Explore Collection",
+    buttonLink: "/collections/summer",
+    imageUrl: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1440&h=716&fit=crop&q=80",
+    imageAlt: "Summer fashion collection",
+    overlayOpacity: "opacity-30",
+  },
+  {
+    id: 3,
+    badge: "Limited Edition",
+    heading: "Exclusive Designer Wear",
+    description: "Luxury fashion pieces curated for those who appreciate timeless elegance.",
+    buttonText: "Shop Exclusive",
+    buttonLink: "/collections/exclusive",
+    imageUrl: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1440&h=716&fit=crop&q=80",
+    imageAlt: "Exclusive designer fashion",
+    overlayOpacity: "opacity-25",
+  }
+];
+
+// Hero slides 4 data with online images (1440x716px)
+const heroSlides: HeroSlide[] = [
+  {
+    id: 1,
+    tag: "SUMMER 2025",
+    heading: "NEW COLLECTION",
+    description: "We know how large objects will act,\nbut things on a small scale.",
+    buttonText: "SHOP NOW",
+    buttonLink: "/collections/summer-2025",
+    imageUrl: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1440&h=716&fit=crop&q=80",
+    imageAlt: "Summer 2025 Collection",
+  },
+  {
+    id: 2,
+    tag: "SPRING ARRIVALS",
+    heading: "FRESH STYLES",
+    description: "Discover the latest trends,\nPerfect for the new season.",
+    buttonText: "EXPLORE NOW",
+    buttonLink: "/collections/spring-arrivals",
+    imageUrl: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1440&h=716&fit=crop&q=80",
+    imageAlt: "Spring Arrivals Collection",
+  },
+];

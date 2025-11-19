@@ -5,25 +5,53 @@
     "sections": [
       {
         "id": "hero_main",
-        "type": "hero-4",
+        "type": "hero-1",
         "settings": {
-          "image": "https://cdn.zatiq.com/heroes/winter-collection-hero.jpg",
-          "imageMobile": "https://cdn.zatiq.com/heroes/winter-collection-hero-mobile.jpg",
-          "smallText": "Winter Collection 2025",
-          "headline": "ELEGANCE MEETS COMFORT",
-          "description": "Discover our curated collection of winter essentials",
-          "buttonText": "Shop Now",
-          "buttonLink": "/collections/winter-2025",
-          "secondaryButtonText": "View Lookbook",
-          "secondaryButtonLink": "/pages/lookbook",
-          "gradientStart": "#E8D5F2",
-          "gradientEnd": "#FEE2E2",
-          "textColor": "#1F2937",
-          "buttonColor": "#2563EB",
-          "height": "large",
-          "textAlignment": "left",
-          "contentWidth": "50%"
-        }
+          "autoplay": true,
+          "autoplaySpeed": 5000,
+          "showArrows": true,
+          "showIndicators": true
+        },
+        "blocks": [
+          {
+            "id": "slide-1",
+            "tagline": "Winter Collection 2025",
+            "title": "ELEGANCE MEETS",
+            "subtitle": "COMFORT",
+            "buttonText": "Shop Now",
+            "buttonLink": "/collections/winter",
+            "imageUrl": "/assets/hero/hero-11.png",
+            "bgGradient": "from-purple-100 to-pink-100",
+            "textColor": "#1F2937",
+            "taglineColor": "#6B7280"
+          },
+          {
+            "id": "slide-2",
+            "tagline": "Trending this winter",
+            "title": "COZY",
+            "subtitle": "WINTER VIBES",
+            "buttonText": "Explore collection",
+            "buttonLink": "/collections/winter-2025",
+            "imageUrl": "/assets/hero/hero-12.png",
+            "imageAlt": "Model in winter fashion collection",
+            "bgGradient": "from-[#E5DDD5] to-[#E8DFE0]",
+            "textColor": "#1A1A1A",
+            "taglineColor": "#5A5A5A"
+          },
+          {
+            "id": "slide-3",
+            "tagline": "Limited edition arrivals",
+            "title": "EXCLUSIVE",
+            "subtitle": "DESIGNER PICKS",
+            "buttonText": "Shop exclusive",
+            "buttonLink": "/collections/exclusive",
+            "imageUrl": "/assets/hero/hero-13.png",
+            "imageAlt": "Exclusive designer fashion collection",
+            "bgGradient": "from-[#F5E6D3] to-[#E9DDD4]",
+            "textColor": "#2C2C2C",
+            "taglineColor": "#6B6B6B"
+          }
+        ]
       },
       {
         "id": "trust_badges",
