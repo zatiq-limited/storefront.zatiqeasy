@@ -46,7 +46,7 @@ const StaticBanner3: React.FC<StaticBanner3Props> = ({
     "justify-center text-center";
 
   return (
-    <div className={`relative w-full ${heightClass} bg-black overflow-hidden`}>
+    <div className={`relative w-full ${heightClass} bg-black overflow-hidden mb-8 sm:mb-14`}>
       {/* Background Image */}
       <div className="absolute inset-0">
         <img

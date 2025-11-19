@@ -40,7 +40,7 @@ const StaticBanner4: React.FC<StaticBanner4Props> = ({
     "h-[450px] md:h-[500px] lg:h-[550px] xl:h-[580px]"; // medium or undefined
 
   return (
-    <div className={`relative w-full ${heightClass} overflow-hidden`}>
+    <div className={`relative w-full ${heightClass} overflow-hidden mb-8 sm:mb-14`}>
       {/* Background Image */}
       <div className="absolute inset-0">
         <img

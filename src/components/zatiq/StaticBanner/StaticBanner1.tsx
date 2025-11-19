@@ -35,7 +35,7 @@ const StaticBanner1: React.FC<StaticBanner1Props> = ({
 }) => {
 
   return (
-    <div className="relative w-full h-[450px] lg:h-[500px] xl:h-[524px] bg-black overflow-hidden pb-8 sm:pb-14">
+    <div className="relative w-full h-[450px] lg:h-[500px] xl:h-[524px] bg-black overflow-hidden mb-8 sm:mb-14">
       {/* Background Image */}
       <div className="absolute inset-0">
         <img
