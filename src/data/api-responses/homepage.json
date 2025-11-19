@@ -516,7 +516,7 @@
       },
       {
         "id": "brand_logos",
-        "type": "brands-1",
+        "type": "brands-3",
         "settings": {
           "title": "Featured Brands",
           "columns": 6,
