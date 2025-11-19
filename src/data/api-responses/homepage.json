@@ -5,7 +5,7 @@
     "sections": [
       {
         "id": "hero_main",
-        "type": "hero-1",
+        "type": "hero-4",
         "settings": {
           "image": "https://cdn.zatiq.com/heroes/winter-collection-hero.jpg",
           "imageMobile": "https://cdn.zatiq.com/heroes/winter-collection-hero-mobile.jpg",

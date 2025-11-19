@@ -105,7 +105,7 @@ const Hero1: React.FC = () => {
   return (
     <div className="w-full px-4 pb-8 sm:pb-14 py-0 2xl:px-0">
       <div
-        className="w-full max-w-[1440px] h-[480px] md:h-[600px] mx-auto relative rounded-2xl overflow-hidden"
+        className="w-full max-w-[1440px] h-[480px] md:h-[600px] mx-auto relative rounded-2xl overflow-hidden group"
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
       >
@@ -201,7 +201,7 @@ const Hero1: React.FC = () => {
         <button
           onClick={handlePrev}
           disabled={isTransitioning}
-          className="pointer-events-auto w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/80 hover:bg-white shadow-lg flex items-center justify-center transition-all hover:scale-110 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed group"
+          className="pointer-events-auto w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/80 hover:bg-white shadow-lg flex items-center justify-center transition-all hover:scale-110 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed lg:opacity-0 lg:group-hover:opacity-100"
           aria-label="Previous slide"
         >
           <svg
@@ -226,7 +226,7 @@ const Hero1: React.FC = () => {
         <button
           onClick={handleNext}
           disabled={isTransitioning}
-          className="pointer-events-auto w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/80 hover:bg-white shadow-lg flex items-center justify-center transition-all hover:scale-110 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed group"
+          className="pointer-events-auto w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/80 hover:bg-white shadow-lg flex items-center justify-center transition-all hover:scale-110 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed lg:opacity-0 lg:group-hover:opacity-100"
           aria-label="Next slide"
         >
           <svg
