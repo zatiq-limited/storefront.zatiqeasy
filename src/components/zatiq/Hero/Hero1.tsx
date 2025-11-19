@@ -64,17 +64,6 @@ const Hero1: React.FC = () => {
   const [isPaused, setIsPaused] = useState(false);
   const totalSlides = heroSlides.length;
 
-  // Auto-advance carousel
-  useEffect(() => {
-    if (isPaused) return;
-
-    const interval = setInterval(() => {
-      handleNext();
-    }, 500); // Change slide every 5 seconds
-
-    return () => clearInterval(interval);
-  }, [currentSlide, isPaused]);
-
   // Handle next slide
   const handleNext = useCallback(() => {
     if (isTransitioning) return;
@@ -82,6 +71,17 @@ const Hero1: React.FC = () => {
     setCurrentSlide((prev) => (prev + 1) % totalSlides);
     setTimeout(() => setIsTransitioning(false), 500);
   }, [isTransitioning, totalSlides]);
+
+  // Auto-advance carousel
+  useEffect(() => {
+    if (isPaused) return;
+
+    const interval = setInterval(() => {
+      handleNext();
+    }, 5000); // Change slide every 5 seconds
+
+    return () => clearInterval(interval);
+  }, [isPaused, handleNext]);
 
   // Handle previous slide
   const handlePrev = useCallback(() => {
