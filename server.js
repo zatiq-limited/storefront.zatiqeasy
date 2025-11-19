@@ -26,7 +26,6 @@ const db = {
   homepage: loadJSON("homepage.json"),
   product: loadJSON("product.json"),
   category: loadJSON("category.json"),
-  cart: loadJSON("cart.json"),
 };
 
 // Custom API routes
