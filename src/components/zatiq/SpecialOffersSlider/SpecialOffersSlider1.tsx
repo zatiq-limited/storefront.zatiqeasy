@@ -197,9 +197,9 @@ const SpecialOffersSlider1: React.FC = () => {
                 key={`${product.id}-${index}`}
                 className="shrink-0 w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]"
               >
-                <div className="w-full min-h-[494px] bg-white rounded-[16px] overflow-hidden transition-shadow hover:shadow-xl flex flex-col">
+                <div className="w-full min-h-[494px] bg-white rounded-2xl overflow-hidden transition-shadow hover:shadow-xl flex flex-col">
                   {/* Image Container - Upper part of card */}
-                  <div className="w-full min-h-[288px] p-4 flex flex-col">
+                  <div className="w-full min-h-72 p-4 flex flex-col">
                     {/* Discount Badge */}
                     <span className="bg-red-500 text-white text-[12px] leading-4 font-medium tracking-[0%] py-2 px-4 rounded gap-1.5 inline-flex items-center justify-center self-start mb-4">
                       {product.discount}
