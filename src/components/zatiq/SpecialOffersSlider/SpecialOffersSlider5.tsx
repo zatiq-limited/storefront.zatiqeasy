@@ -1,9 +1,9 @@
 import React from 'react';
-const containerBg = '/assets/spOffer/container.png';
+const containerBg = '/assets/spOffer/Container.png';
 
 const SpecialOffersSlider5: React.FC = () => {
   return (
-    <div className="w-full py-8 px-4 font-roboto">
+    <div className="w-full pb-8 md:pb-14 px-4 font-roboto">
       <div className="max-w-[1296px] mx-auto">
         {/* Single Full-Width Banner */}
         <div className="relative rounded-lg overflow-hidden h-[500px]">
