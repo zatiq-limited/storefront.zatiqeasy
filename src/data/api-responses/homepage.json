@@ -27,7 +27,7 @@
       },
       {
         "id": "trust_badges",
-        "type": "badges-1",
+        "type": "badges-2",
         "settings": {
           "backgroundColor": "#F9FAFB",
           "columns": 4,
