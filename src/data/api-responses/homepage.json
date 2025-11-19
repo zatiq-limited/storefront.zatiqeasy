@@ -363,30 +363,80 @@
         "id": "promotional_banner",
         "type": "static-banner-1",
         "settings": {
-          "image": "https://cdn.zatiq.com/banners/mid-season-sale.jpg",
-          "imageMobile": "https://cdn.zatiq.com/banners/mid-season-sale-mobile.jpg",
-          "title": "MID-SEASON SALE",
-          "subtitle": "Up to 50% Off Selected Items",
-          "description": "Limited time offer. Shop your favorites before they're gone!",
-          "buttonText": "Shop Sale",
-          "buttonLink": "/collections/sale",
-          "secondaryButtonText": "View Terms",
-          "secondaryButtonLink": "/pages/sale-terms",
+          "image": "assets/banner/banner-1.png",
+          "imageMobile": "assets/banner/banner-1.png",
+          "title": "Best Discounts\n2025",
+          "subtitle": "",
+          "description": "Salla Store provides you with everything you need, from electronics to home furniture, along with the best discounts on products. Shop now and enjoy all the discounts on products.",
+          "buttonText": "Discover more",
+          "buttonLink": "#",
+          "secondaryButtonText": "",
+          "secondaryButtonLink": "",
+          "textAlignment": "center",
+          "textColor": "#FFFFFF",
+          "overlayColor": "#000000",
+          "overlayOpacity": 5,
+          "height": "medium"
+        }
+      },
+      {
+        "id": "promotional_banner_2",
+        "type": "static-banner-2",
+        "settings": {
+          "image": "assets/banner/banner-2.png",
+          "imageMobile": "assets/banner/banner-2.png",
+          "title": "Summer Sale\n2025",
+          "subtitle": "",
+          "description": "Get ready for summer with our exclusive collection. Amazing deals on fashion, accessories, and more. Limited time offers on trending styles.",
+          "buttonText": "Shop Summer Sale",
+          "buttonLink": "/collections/summer-sale",
+          "secondaryButtonText": "",
+          "secondaryButtonLink": "",
+          "textAlignment": "left",
+          "textColor": "#FFFFFF",
+          "overlayColor": "#000000",
+          "overlayOpacity": 5,
+          "height": "medium"
+        }
+      },
+      {
+        "id": "promotional_banner_3",
+        "type": "static-banner-3",
+        "settings": {
+          "image": "assets/banner/banner-3.png",
+          "imageMobile": "assets/banner/banner-3.png",
+          "title": "Best Discounts 2025",
+          "subtitle": "",
+          "description": "Salla Store provides you with everything you need, from electronics to home furniture, along with the best discounts on products. Shop now and enjoy all the discounts on products.",
+          "buttonText": "Discover more",
+          "buttonLink": "#",
+          "secondaryButtonText": "",
+          "secondaryButtonLink": "",
           "textAlignment": "center",
           "textColor": "#FFFFFF",
           "overlayColor": "#000000",
           "overlayOpacity": 40,
-          "height": "medium",
-          "countdown": {
-            "enabled": true,
-            "endDate": "2024-11-30T23:59:59Z",
-            "labels": {
-              "days": "Days",
-              "hours": "Hours",
-              "minutes": "Minutes",
-              "seconds": "Seconds"
-            }
-          }
+          "height": "medium"
+        }
+      },
+      {
+        "id": "promotional_banner_4",
+        "type": "static-banner-4",
+        "settings": {
+          "image": "assets/banner/banner-4.png",
+          "imageMobile": "assets/banner/banner-4.png",
+          "title": "To empower women globally to\ncelebrate summer with\nconfidence.",
+          "subtitle": "OUR VISION",
+          "description": "Luxurious high quality pieces that are designed to last.",
+          "buttonText": "",
+          "buttonLink": "",
+          "secondaryButtonText": "",
+          "secondaryButtonLink": "",
+          "textAlignment": "center",
+          "textColor": "#FFFFFF",
+          "overlayColor": "",
+          "overlayOpacity": 0,
+          "height": "medium"
         }
       },
       {
@@ -554,6 +604,37 @@
             "name": "Tommy Hilfiger",
             "logo": "https://cdn.zatiq.com/brands/tommy.svg",
             "url": "/collections/tommy-hilfiger"
+          }
+        ]
+      },
+      {
+        "id": "trust_badges",
+        "type": "badges-2",
+        "settings": {
+          "backgroundColor": "#F9FAFB",
+          "columns": 4,
+          "columnsMobile": 2
+        },
+        "blocks": [
+          {
+            "icon": "truck",
+            "title": "Free Worldwide Shipping",
+            "description": "On orders over $100"
+          },
+          {
+            "icon": "shield-check",
+            "title": "Secure Payment",
+            "description": "100% secure transactions"
+          },
+          {
+            "icon": "refresh",
+            "title": "Easy Returns",
+            "description": "30 days return policy"
+          },
+          {
+            "icon": "headphones",
+            "title": "24/7 Support",
+            "description": "Dedicated support team"
           }
         ]
       }
