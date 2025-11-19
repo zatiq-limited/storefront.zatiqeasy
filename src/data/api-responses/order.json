@@ -1,0 +1,74 @@
+{
+  "success": true,
+  "data": {
+    "order": {
+      "id": 1001,
+      "serial": 1001,
+      "customer_name": "John Doe",
+      "customer_phone": "+8801712345678",
+      "email": "john@example.com",
+      "customer_address": "House 123, Road 45, Dhanmondi, Dhaka",
+      "delivery": {
+        "id": 1,
+        "consignment_id": "BD123456789",
+        "tracking_code": "TRK123456",
+        "delivery_service": "Pathao",
+        "recipient_name": "John Doe",
+        "recipient_phone": "+8801712345678",
+        "recipient_address": "House 123, Road 45, Dhanmondi, Dhaka",
+        "recipient_area": "Dhanmondi",
+        "recipient_city": {
+          "id": 1,
+          "name": "Dhaka"
+        },
+        "recipient_zone": {
+          "id": 1,
+          "name": "Dhaka City"
+        },
+        "delivery_type": {
+          "code": "48_HOUR",
+          "name": "48 Hour Delivery"
+        },
+        "item_type": {
+          "code": "DOCUMENT",
+          "name": "Document"
+        },
+        "special_instruction": "Handle with care",
+        "item_description": "Fashion items",
+        "item_quantity": 2,
+        "item_weight": 0.5,
+        "amount_to_collect": 5060.0,
+        "delivery_fee": 60.0,
+        "last_status": "in_transit",
+        "created_at": "2024-11-17T16:30:00Z"
+      },
+      "transactions": [
+        {
+          "id": 1,
+          "transaction_id": "TXN123456",
+          "payment_id": "PAY123456",
+          "payment_gateway": "bKash",
+          "invoice_id": "INV1001",
+          "amount": 1000.0,
+          "status": "completed",
+          "self_mfs": false,
+          "created_at": "2024-11-17T16:15:00Z"
+        }
+      ],
+      "status": "processing",
+      "items": [
+        {
+          "product_id": 1,
+          "product_name": "Classic White Shirt",
+          "product_code": "WSH-001",
+          "image_url": "https://cdn.zatiq.com/products/white-shirt-1.jpg",
+          "quantity": 2,
+          "unit_price": 2500.0,
+          "line_total": 5000.0
+        }
+      ],
+      "created_at": "2024-11-17T16:00:00Z",
+      "updated_at": "2024-11-17T16:30:00Z"
+    }
+  }
+}

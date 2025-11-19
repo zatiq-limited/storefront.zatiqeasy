@@ -2,265 +2,61 @@
   "success": true,
   "data": {
     "product": {
-      "id": "prod_001",
-      "handle": "classic-white-shirt",
-      "title": "Classic White Shirt",
-      "vendor": "ZatiqStyle",
-      "type": "Shirts",
-      "tags": ["cotton", "formal", "bestseller", "eco-friendly"],
-      "price": {
-        "amount": 89.0,
-        "compareAt": 129.0,
-        "currency": "USD",
-        "taxIncluded": false
-      },
-      "description": {
-        "short": "A timeless white shirt crafted from premium organic cotton.",
-        "long": "<p>Our Classic White Shirt is a wardrobe essential that combines timeless style with modern comfort. Made from 100% organic cotton, this shirt offers breathability and softness that lasts all day.</p>\n               <p>Features:</p>\n               <ul>\n                 <li>Premium organic cotton fabric</li>\n                 <li>Classic fit with modern tailoring</li>\n                 <li>Mother-of-pearl buttons</li>\n                 <li>Reinforced collar and cuffs</li>\n                 <li>Machine washable</li>\n               </ul>",
-        "markdown": "### The Perfect White Shirt\n\nCrafted with attention to detail..."
-      },
-      "images": [
+      "id": 1,
+      "name": "Classic White Shirt",
+      "related_products": [
         {
-          "id": "img_001",
-          "src": "https://cdn.zatiq.com/products/white-shirt-1.jpg",
-          "alt": "Classic White Shirt - Front View",
-          "width": 1200,
-          "height": 1600,
-          "position": 1
+          "id": 3,
+          "name": "Striped Cotton Shirt",
+          "price": 2200.0,
+          "old_price": 2800.0,
+          "image_url": "https://cdn.zatiq.com/products/striped-shirt.jpg"
         },
         {
-          "id": "img_002",
-          "src": "https://cdn.zatiq.com/products/white-shirt-2.jpg",
-          "alt": "Classic White Shirt - Back View",
-          "width": 1200,
-          "height": 1600,
-          "position": 2
-        },
-        {
-          "id": "img_003",
-          "src": "https://cdn.zatiq.com/products/white-shirt-3.jpg",
-          "alt": "Classic White Shirt - Detail",
-          "width": 1200,
-          "height": 1600,
-          "position": 3
-        },
-        {
-          "id": "img_004",
-          "src": "https://cdn.zatiq.com/products/white-shirt-4.jpg",
-          "alt": "Classic White Shirt - Model",
-          "width": 1200,
-          "height": 1600,
-          "position": 4
+          "id": 4,
+          "name": "Blue Denim Shirt",
+          "price": 2800.0,
+          "old_price": null,
+          "image_url": "https://cdn.zatiq.com/products/denim-shirt.jpg"
         }
       ],
-      "variants": [
+      "reviews": [
         {
-          "id": "var_001",
-          "title": "White / XS",
-          "sku": "WSH-WH-XS",
-          "price": 89.0,
-          "compareAtPrice": 129.0,
-          "available": true,
-          "inventory": 15,
-          "options": {
-            "color": "White",
-            "size": "XS"
-          },
-          "image": "img_001"
+          "id": 1,
+          "name": "Sarah Johnson",
+          "reviewer_type": "verified_buyer",
+          "description": "Excellent quality shirt! The fabric is soft and comfortable.",
+          "images": ["https://cdn.zatiq.com/reviews/1/image1.jpg"],
+          "serial": 1,
+          "inventory_id": 1,
+          "shop_id": 1,
+          "created_at": "2024-11-10T10:00:00Z"
         },
         {
-          "id": "var_002",
-          "title": "White / S",
-          "sku": "WSH-WH-S",
-          "price": 89.0,
-          "compareAtPrice": 129.0,
-          "available": true,
-          "inventory": 23,
-          "options": {
-            "color": "White",
-            "size": "S"
-          },
-          "image": "img_001"
-        },
-        {
-          "id": "var_003",
-          "title": "White / M",
-          "sku": "WSH-WH-M",
-          "price": 89.0,
-          "compareAtPrice": 129.0,
-          "available": true,
-          "inventory": 31,
-          "options": {
-            "color": "White",
-            "size": "M"
-          },
-          "image": "img_001"
-        },
-        {
-          "id": "var_004",
-          "title": "White / L",
-          "sku": "WSH-WH-L",
-          "price": 89.0,
-          "compareAtPrice": 129.0,
-          "available": true,
-          "inventory": 18,
-          "options": {
-            "color": "White",
-            "size": "L"
-          },
-          "image": "img_001"
-        },
-        {
-          "id": "var_005",
-          "title": "White / XL",
-          "sku": "WSH-WH-XL",
-          "price": 89.0,
-          "compareAtPrice": 129.0,
-          "available": false,
-          "inventory": 0,
-          "options": {
-            "color": "White",
-            "size": "XL"
-          },
-          "image": "img_001"
+          "id": 2,
+          "name": "Michael Chen",
+          "reviewer_type": "verified_buyer",
+          "description": "Perfect fit and great value for money",
+          "images": null,
+          "serial": 2,
+          "inventory_id": 1,
+          "shop_id": 1,
+          "created_at": "2024-11-08T14:30:00Z"
         }
       ],
-      "options": [
-        {
-          "name": "Color",
-          "position": 1,
-          "values": ["White", "Light Blue", "Pink"]
+      "theme": {
+        "id": 1,
+        "slug": "classic-white-shirt",
+        "page_title": "Classic White Shirt - Premium Cotton | Demo Fashion Store",
+        "page_description": "Shop our Classic White Shirt made from 100% premium cotton. Free delivery across Bangladesh.",
+        "theme_name": "Modern Product",
+        "theme_data": {
+          "gallery_layout": "thumbnails_left",
+          "show_zoom": true,
+          "show_size_guide": true,
+          "show_share_buttons": true
         },
-        {
-          "name": "Size",
-          "position": 2,
-          "values": ["XS", "S", "M", "L", "XL"]
-        }
-      ],
-      "metafields": {
-        "details": {
-          "material": "100% Organic Cotton",
-          "care": "Machine wash cold, tumble dry low",
-          "fit": "Classic fit",
-          "origin": "Made in Italy"
-        },
-        "sustainability": {
-          "certified": true,
-          "certifications": ["GOTS", "Fair Trade"],
-          "description": "This product is made from certified organic cotton and produced in Fair Trade certified facilities."
-        },
-        "sizeGuide": {
-          "enabled": true,
-          "url": "/pages/size-guide#shirts"
-        }
-      },
-      "rating": {
-        "average": 4.5,
-        "count": 128,
-        "distribution": {
-          "5": 78,
-          "4": 32,
-          "3": 12,
-          "2": 4,
-          "1": 2
-        }
-      },
-      "shipping": {
-        "freeShippingThreshold": 100,
-        "estimatedDays": {
-          "min": 3,
-          "max": 5
-        },
-        "express": {
-          "available": true,
-          "price": 15.0,
-          "days": {
-            "min": 1,
-            "max": 2
-          }
-        }
-      },
-      "relatedProducts": ["prod_002", "prod_003", "prod_004", "prod_005"],
-      "createdAt": "2024-01-15T10:00:00Z",
-      "updatedAt": "2024-11-15T14:30:00Z"
-    },
-    "sections": [
-      {
-        "id": "product_main",
-        "type": "product-detail-1",
-        "settings": {
-          "galleryLayout": "thumbnails-left",
-          "enableZoom": true,
-          "stickyAddToCart": true,
-          "showBreadcrumbs": true,
-          "showShare": true,
-          "showSizeGuide": true,
-          "trustBadges": ["secure-checkout", "free-returns", "authentic"]
-        }
-      },
-      {
-        "id": "product_info_tabs",
-        "type": "tabs-1",
-        "settings": {
-          "defaultTab": "description"
-        },
-        "tabs": [
-          {
-            "id": "description",
-            "title": "Description",
-            "content": "dynamic:product.description.long"
-          },
-          {
-            "id": "details",
-            "title": "Details & Care",
-            "content": "dynamic:product.metafields.details"
-          },
-          {
-            "id": "shipping",
-            "title": "Shipping & Returns",
-            "content": "static:shipping-policy"
-          },
-          {
-            "id": "reviews",
-            "title": "Reviews (128)",
-            "content": "dynamic:product.reviews"
-          }
-        ]
-      },
-      {
-        "id": "related_products",
-        "type": "product-grid-1",
-        "settings": {
-          "title": "You May Also Like",
-          "source": "related",
-          "limit": 4,
-          "columns": 4,
-          "columnsMobile": 2
-        }
-      },
-      {
-        "id": "recently_viewed",
-        "type": "product-carousel-1",
-        "settings": {
-          "title": "Recently Viewed",
-          "source": "recently-viewed",
-          "limit": 6
-        }
-      }
-    ],
-    "seo": {
-      "title": "Classic White Shirt | Demo Fashion Store",
-      "description": "Shop our Classic White Shirt made from 100% organic cotton. Free shipping on orders over $100.",
-      "canonical": "https://demo-store.zatiq.com/products/classic-white-shirt",
-      "og": {
-        "title": "Classic White Shirt",
-        "description": "A timeless white shirt crafted from premium organic cotton",
-        "image": "https://cdn.zatiq.com/products/white-shirt-og.jpg",
-        "type": "product",
-        "price": {
-          "amount": 89.0,
-          "currency": "USD"
-        }
+        "preview": "https://cdn.zatiq.com/themes/product-preview.jpg"
       }
     }
   }

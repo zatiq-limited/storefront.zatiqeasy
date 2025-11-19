@@ -1,0 +1,284 @@
+{
+  "success": true,
+  "data": {
+    "products": [
+      {
+        "id": 1,
+        "name": "Classic White Shirt",
+        "product_code": "WSH-001",
+        "price": 2500.0,
+        "old_price": 3500.0,
+        "buying_price": 1200.0,
+        "image_url": "https://cdn.zatiq.com/products/white-shirt-1.jpg",
+        "images": [
+          "https://cdn.zatiq.com/products/white-shirt-1.jpg",
+          "https://cdn.zatiq.com/products/white-shirt-2.jpg",
+          "https://cdn.zatiq.com/products/white-shirt-3.jpg",
+          "https://cdn.zatiq.com/products/white-shirt-4.jpg"
+        ],
+        "quantity": 150,
+        "initial_product_sold": 50,
+        "inventory_view_count": 1234,
+        "inventory_type": "Clothing",
+        "unit_name": "piece",
+        "warranty": "30 days return policy",
+        "description": "Premium quality white shirt made from 100% cotton. Perfect for formal and casual occasions.",
+        "short_description": "Classic white cotton shirt",
+        "brand": "ZatiqStyle",
+        "condition": "new",
+        "video_link": "https://youtube.com/watch?v=abc123",
+        "custom_fields": {
+          "Material": "100% Cotton",
+          "Care Instructions": "Machine wash cold",
+          "Origin": "Made in Bangladesh",
+          "Fit": "Regular fit"
+        },
+        "has_variant": true,
+        "is_stock_manage_by_variant": true,
+        "image_variant_type_id": 2,
+        "categories": [
+          {
+            "id": 2,
+            "name": "Men's Fashion"
+          },
+          {
+            "id": 8,
+            "name": "Shirts"
+          }
+        ],
+        "variant_types": [
+          {
+            "id": 1,
+            "title": "Size",
+            "is_mandatory": true,
+            "variants": [
+              {
+                "id": 1,
+                "name": "S",
+                "price": 0,
+                "image_url": null
+              },
+              {
+                "id": 2,
+                "name": "M",
+                "price": 0,
+                "image_url": null
+              },
+              {
+                "id": 3,
+                "name": "L",
+                "price": 100,
+                "image_url": null
+              },
+              {
+                "id": 4,
+                "name": "XL",
+                "price": 200,
+                "image_url": null
+              }
+            ]
+          },
+          {
+            "id": 2,
+            "title": "Color",
+            "is_mandatory": true,
+            "variants": [
+              {
+                "id": 5,
+                "name": "White",
+                "price": 0,
+                "image_url": "https://cdn.zatiq.com/swatches/white.jpg"
+              },
+              {
+                "id": 6,
+                "name": "Light Blue",
+                "price": 0,
+                "image_url": "https://cdn.zatiq.com/swatches/light-blue.jpg"
+              }
+            ]
+          }
+        ],
+        "stocks": [
+          {
+            "id": 1,
+            "combination": "[1,5]",
+            "quantity": 25,
+            "is_active": true
+          },
+          {
+            "id": 2,
+            "combination": "[2,5]",
+            "quantity": 30,
+            "is_active": true
+          },
+          {
+            "id": 3,
+            "combination": "[3,5]",
+            "quantity": 20,
+            "is_active": true
+          },
+          {
+            "id": 4,
+            "combination": "[4,5]",
+            "quantity": 15,
+            "is_active": true
+          },
+          {
+            "id": 5,
+            "combination": "[1,6]",
+            "quantity": 20,
+            "is_active": true
+          },
+          {
+            "id": 6,
+            "combination": "[2,6]",
+            "quantity": 25,
+            "is_active": true
+          },
+          {
+            "id": 7,
+            "combination": "[3,6]",
+            "quantity": 15,
+            "is_active": true
+          },
+          {
+            "id": 8,
+            "combination": "[4,6]",
+            "quantity": 0,
+            "is_active": false
+          }
+        ],
+        "review_summary": {
+          "average_rating": 4.5,
+          "total_reviews": 23,
+          "rating_distribution": {
+            "5": 15,
+            "4": 5,
+            "3": 2,
+            "2": 1,
+            "1": 0
+          }
+        },
+        "isApplyDefaultDeliveryCharge": false,
+        "specific_delivery_charges": {
+          "Dhaka": 50,
+          "Others": 100
+        },
+        "others_delivery_charge": 120,
+        "is_active": true,
+        "serial": 1,
+        "shop_id": 1,
+        "source_id": null,
+        "source_url": null,
+        "source_sku": null,
+        "source_meta": null,
+        "created_at": "2024-01-15T10:00:00Z",
+        "updated_at": "2024-11-15T14:30:00Z"
+      },
+      {
+        "id": 2,
+        "name": "Elegant Black Dress",
+        "product_code": "DRS-001",
+        "price": 4500.0,
+        "old_price": null,
+        "buying_price": 2000.0,
+        "image_url": "https://cdn.zatiq.com/products/black-dress-1.jpg",
+        "images": [
+          "https://cdn.zatiq.com/products/black-dress-1.jpg",
+          "https://cdn.zatiq.com/products/black-dress-2.jpg",
+          "https://cdn.zatiq.com/products/black-dress-3.jpg"
+        ],
+        "quantity": 75,
+        "initial_product_sold": 25,
+        "inventory_view_count": 890,
+        "inventory_type": "Clothing",
+        "unit_name": "piece",
+        "warranty": "30 days return policy",
+        "description": "Elegant black evening dress perfect for special occasions",
+        "short_description": "Black evening dress",
+        "brand": "ZatiqStyle",
+        "condition": "new",
+        "video_link": null,
+        "custom_fields": {
+          "Material": "Polyester blend",
+          "Care Instructions": "Dry clean only",
+          "Origin": "Made in Bangladesh"
+        },
+        "has_variant": true,
+        "is_stock_manage_by_variant": false,
+        "image_variant_type_id": null,
+        "categories": [
+          {
+            "id": 1,
+            "name": "Women's Fashion"
+          },
+          {
+            "id": 5,
+            "name": "Dresses"
+          }
+        ],
+        "variant_types": [
+          {
+            "id": 3,
+            "title": "Size",
+            "is_mandatory": true,
+            "variants": [
+              {
+                "id": 9,
+                "name": "XS",
+                "price": 0,
+                "image_url": null
+              },
+              {
+                "id": 10,
+                "name": "S",
+                "price": 0,
+                "image_url": null
+              },
+              {
+                "id": 11,
+                "name": "M",
+                "price": 0,
+                "image_url": null
+              },
+              {
+                "id": 12,
+                "name": "L",
+                "price": 0,
+                "image_url": null
+              }
+            ]
+          }
+        ],
+        "stocks": [],
+        "review_summary": {
+          "average_rating": 4.8,
+          "total_reviews": 18,
+          "rating_distribution": {
+            "5": 16,
+            "4": 2,
+            "3": 0,
+            "2": 0,
+            "1": 0
+          }
+        },
+        "isApplyDefaultDeliveryCharge": true,
+        "specific_delivery_charges": null,
+        "others_delivery_charge": null,
+        "is_active": true,
+        "serial": 2,
+        "shop_id": 1,
+        "created_at": "2024-01-20T10:00:00Z",
+        "updated_at": "2024-11-16T09:15:00Z"
+      }
+    ],
+    "pagination": {
+      "current_page": 1,
+      "per_page": 20,
+      "total": 156,
+      "total_pages": 8,
+      "from": 1,
+      "to": 20
+    }
+  }
+}

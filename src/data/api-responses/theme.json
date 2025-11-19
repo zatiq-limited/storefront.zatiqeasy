@@ -50,7 +50,10 @@
                       "text": "New Arrivals",
                       "url": "/collections/womens-new"
                     },
-                    { "text": "Dresses", "url": "/collections/womens-dresses" },
+                    {
+                      "text": "Dresses",
+                      "url": "/collections/womens-dresses"
+                    },
                     {
                       "text": "Tops & Blouses",
                       "url": "/collections/womens-tops"
@@ -72,7 +75,10 @@
                       "text": "Best Sellers",
                       "url": "/collections/womens-bestsellers"
                     },
-                    { "text": "Sale Items", "url": "/collections/womens-sale" },
+                    {
+                      "text": "Sale Items",
+                      "url": "/collections/womens-sale"
+                    },
                     {
                       "text": "Gift Ideas",
                       "url": "/collections/gifts-for-her"
@@ -123,10 +129,22 @@
             "settings": {
               "title": "Shop",
               "links": [
-                { "text": "Women", "url": "/collections/womens" },
-                { "text": "Men", "url": "/collections/mens" },
-                { "text": "New Arrivals", "url": "/collections/new" },
-                { "text": "Sale", "url": "/collections/sale" }
+                {
+                  "text": "Women",
+                  "url": "/collections/womens"
+                },
+                {
+                  "text": "Men",
+                  "url": "/collections/mens"
+                },
+                {
+                  "text": "New Arrivals",
+                  "url": "/collections/new"
+                },
+                {
+                  "text": "Sale",
+                  "url": "/collections/sale"
+                }
               ]
             }
           },
@@ -136,11 +154,26 @@
             "settings": {
               "title": "Customer Care",
               "links": [
-                { "text": "Contact Us", "url": "/pages/contact" },
-                { "text": "Shipping Info", "url": "/pages/shipping" },
-                { "text": "Returns & Exchanges", "url": "/pages/returns" },
-                { "text": "Size Guide", "url": "/pages/size-guide" },
-                { "text": "FAQs", "url": "/pages/faq" }
+                {
+                  "text": "Contact Us",
+                  "url": "/pages/contact"
+                },
+                {
+                  "text": "Shipping Info",
+                  "url": "/pages/shipping"
+                },
+                {
+                  "text": "Returns & Exchanges",
+                  "url": "/pages/returns"
+                },
+                {
+                  "text": "Size Guide",
+                  "url": "/pages/size-guide"
+                },
+                {
+                  "text": "FAQs",
+                  "url": "/pages/faq"
+                }
               ]
             }
           },
@@ -150,10 +183,22 @@
             "settings": {
               "title": "Company",
               "links": [
-                { "text": "About Us", "url": "/pages/about" },
-                { "text": "Sustainability", "url": "/pages/sustainability" },
-                { "text": "Careers", "url": "/pages/careers" },
-                { "text": "Press", "url": "/pages/press" }
+                {
+                  "text": "About Us",
+                  "url": "/pages/about"
+                },
+                {
+                  "text": "Sustainability",
+                  "url": "/pages/sustainability"
+                },
+                {
+                  "text": "Careers",
+                  "url": "/pages/careers"
+                },
+                {
+                  "text": "Press",
+                  "url": "/pages/press"
+                }
               ]
             }
           },

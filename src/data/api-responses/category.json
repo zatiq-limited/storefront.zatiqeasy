@@ -1,149 +1,105 @@
 {
   "success": true,
   "data": {
-    "collection": {
-      "id": "coll_001",
-      "handle": "womens",
-      "title": "Women's Collection",
-      "description": "Discover our curated selection of women's fashion, from everyday essentials to statement pieces.",
-      "image": {
-        "src": "https://cdn.zatiq.com/collections/womens-hero.jpg",
-        "alt": "Women's Collection"
+    "categories": [
+      {
+        "id": 1,
+        "name": "Women's Fashion",
+        "image_url": "https://cdn.zatiq.com/categories/womens.jpg",
+        "banner_url": "https://cdn.zatiq.com/categories/womens-banner.jpg",
+        "description": "Latest women's fashion trends",
+        "serial": 1,
+        "parent_id": null,
+        "shop_id": 1,
+        "children": [
+          {
+            "id": 5,
+            "name": "Dresses",
+            "image_url": "https://cdn.zatiq.com/categories/dresses.jpg",
+            "parent_id": 1,
+            "serial": 1,
+            "product_count": 45
+          },
+          {
+            "id": 6,
+            "name": "Tops",
+            "image_url": "https://cdn.zatiq.com/categories/tops.jpg",
+            "parent_id": 1,
+            "serial": 2,
+            "product_count": 38
+          },
+          {
+            "id": 7,
+            "name": "Bottoms",
+            "image_url": "https://cdn.zatiq.com/categories/bottoms.jpg",
+            "parent_id": 1,
+            "serial": 3,
+            "product_count": 29
+          }
+        ],
+        "product_count": 112,
+        "created_at": "2024-01-15T10:00:00Z",
+        "updated_at": "2024-11-15T14:30:00Z"
       },
-      "productsCount": 156,
-      "filters": [
-        {
-          "id": "product_type",
-          "label": "Category",
-          "type": "list",
-          "values": [
-            { "value": "dresses", "label": "Dresses", "count": 34 },
-            { "value": "tops", "label": "Tops", "count": 45 },
-            { "value": "bottoms", "label": "Bottoms", "count": 28 },
-            { "value": "outerwear", "label": "Outerwear", "count": 18 },
-            { "value": "accessories", "label": "Accessories", "count": 31 }
-          ]
-        },
-        {
-          "id": "size",
-          "label": "Size",
-          "type": "list",
-          "values": [
-            { "value": "xs", "label": "XS", "count": 89 },
-            { "value": "s", "label": "S", "count": 124 },
-            { "value": "m", "label": "M", "count": 145 },
-            { "value": "l", "label": "L", "count": 132 },
-            { "value": "xl", "label": "XL", "count": 98 }
-          ]
-        },
-        {
-          "id": "color",
-          "label": "Color",
-          "type": "swatch",
-          "values": [
-            {
-              "value": "black",
-              "label": "Black",
-              "hex": "#000000",
-              "count": 67
-            },
-            {
-              "value": "white",
-              "label": "White",
-              "hex": "#FFFFFF",
-              "count": 54
-            },
-            { "value": "navy", "label": "Navy", "hex": "#001F3F", "count": 43 },
-            { "value": "red", "label": "Red", "hex": "#FF0000", "count": 28 },
-            { "value": "blue", "label": "Blue", "hex": "#0074D9", "count": 35 }
-          ]
-        },
-        {
-          "id": "price",
-          "label": "Price",
-          "type": "range",
-          "min": 29,
-          "max": 599,
-          "values": [
-            { "value": "0-50", "label": "Under $50", "count": 23 },
-            { "value": "50-100", "label": "$50 - $100", "count": 45 },
-            { "value": "100-200", "label": "$100 - $200", "count": 56 },
-            { "value": "200-plus", "label": "Over $200", "count": 32 }
-          ]
-        },
-        {
-          "id": "brand",
-          "label": "Brand",
-          "type": "list",
-          "values": [
-            { "value": "zatiq", "label": "Zatiq", "count": 45 },
-            { "value": "urban", "label": "Urban Style", "count": 38 },
-            { "value": "luxury", "label": "Luxury Line", "count": 29 },
-            { "value": "eco", "label": "Eco Fashion", "count": 44 }
-          ]
-        }
-      ],
-      "sortOptions": [
-        { "value": "featured", "label": "Featured" },
-        { "value": "best-selling", "label": "Best Selling" },
-        { "value": "title-asc", "label": "Alphabetically, A-Z" },
-        { "value": "title-desc", "label": "Alphabetically, Z-A" },
-        { "value": "price-asc", "label": "Price, Low to High" },
-        { "value": "price-desc", "label": "Price, High to Low" },
-        { "value": "created-desc", "label": "Date, New to Old" },
-        { "value": "created-asc", "label": "Date, Old to New" }
-      ]
-    },
-    "products": {
-      "items": [],
-      "pagination": {
-        "currentPage": 1,
-        "totalPages": 7,
-        "perPage": 24,
-        "totalItems": 156,
-        "hasNext": true,
-        "hasPrev": false
+      {
+        "id": 2,
+        "name": "Men's Fashion",
+        "image_url": "https://cdn.zatiq.com/categories/mens.jpg",
+        "banner_url": "https://cdn.zatiq.com/categories/mens-banner.jpg",
+        "description": "Men's clothing and accessories",
+        "serial": 2,
+        "parent_id": null,
+        "shop_id": 1,
+        "children": [
+          {
+            "id": 8,
+            "name": "Shirts",
+            "image_url": "https://cdn.zatiq.com/categories/shirts.jpg",
+            "parent_id": 2,
+            "serial": 1,
+            "product_count": 34
+          },
+          {
+            "id": 9,
+            "name": "Pants",
+            "image_url": "https://cdn.zatiq.com/categories/pants.jpg",
+            "parent_id": 2,
+            "serial": 2,
+            "product_count": 28
+          }
+        ],
+        "product_count": 89,
+        "created_at": "2024-01-15T10:00:00Z",
+        "updated_at": "2024-11-15T14:30:00Z"
+      },
+      {
+        "id": 3,
+        "name": "Accessories",
+        "image_url": "https://cdn.zatiq.com/categories/accessories.jpg",
+        "banner_url": null,
+        "description": "Bags, jewelry, and more",
+        "serial": 3,
+        "parent_id": null,
+        "shop_id": 1,
+        "children": [],
+        "product_count": 67,
+        "created_at": "2024-01-15T10:00:00Z",
+        "updated_at": "2024-11-15T14:30:00Z"
+      },
+      {
+        "id": 4,
+        "name": "Sale",
+        "image_url": "https://cdn.zatiq.com/categories/sale.jpg",
+        "banner_url": "https://cdn.zatiq.com/categories/sale-banner.jpg",
+        "description": "Discounted items",
+        "serial": 4,
+        "parent_id": null,
+        "shop_id": 1,
+        "children": [],
+        "product_count": 45,
+        "created_at": "2024-01-15T10:00:00Z",
+        "updated_at": "2024-11-15T14:30:00Z"
       }
-    },
-    "sections": [
-      {
-        "id": "collection_header",
-        "type": "collection-header-1",
-        "settings": {
-          "showImage": true,
-          "showDescription": true,
-          "showBreadcrumbs": true,
-          "showProductCount": true
-        }
-      },
-      {
-        "id": "collection_filters",
-        "type": "filters-sidebar-1",
-        "settings": {
-          "position": "left",
-          "sticky": true,
-          "collapsible": true,
-          "showClearAll": true,
-          "showActiveFilters": true
-        }
-      },
-      {
-        "id": "collection_products",
-        "type": "product-grid-2",
-        "settings": {
-          "columns": 3,
-          "columnsMobile": 2,
-          "showToolbar": true,
-          "showSort": true,
-          "showViewOptions": true,
-          "infiniteScroll": false
-        }
-      }
-    ],
-    "seo": {
-      "title": "Women's Collection | Demo Fashion Store",
-      "description": "Shop women's clothing at Demo Fashion Store. Free shipping on orders over $100.",
-      "canonical": "https://demo-store.zatiq.com/collections/womens"
-    }
+    ]
   }
 }

@@ -80,11 +80,26 @@
           "title": "Women",
           "url": "/collections/womens",
           "submenu": [
-            { "title": "New Arrivals", "url": "/collections/womens-new" },
-            { "title": "Dresses", "url": "/collections/womens-dresses" },
-            { "title": "Tops", "url": "/collections/womens-tops" },
-            { "title": "Bottoms", "url": "/collections/womens-bottoms" },
-            { "title": "Outerwear", "url": "/collections/womens-outerwear" }
+            {
+              "title": "New Arrivals",
+              "url": "/collections/womens-new"
+            },
+            {
+              "title": "Dresses",
+              "url": "/collections/womens-dresses"
+            },
+            {
+              "title": "Tops",
+              "url": "/collections/womens-tops"
+            },
+            {
+              "title": "Bottoms",
+              "url": "/collections/womens-bottoms"
+            },
+            {
+              "title": "Outerwear",
+              "url": "/collections/womens-outerwear"
+            }
           ]
         },
         {
@@ -92,11 +107,26 @@
           "title": "Men",
           "url": "/collections/mens",
           "submenu": [
-            { "title": "New Arrivals", "url": "/collections/mens-new" },
-            { "title": "Shirts", "url": "/collections/mens-shirts" },
-            { "title": "Pants", "url": "/collections/mens-pants" },
-            { "title": "Jackets", "url": "/collections/mens-jackets" },
-            { "title": "Accessories", "url": "/collections/mens-accessories" }
+            {
+              "title": "New Arrivals",
+              "url": "/collections/mens-new"
+            },
+            {
+              "title": "Shirts",
+              "url": "/collections/mens-shirts"
+            },
+            {
+              "title": "Pants",
+              "url": "/collections/mens-pants"
+            },
+            {
+              "title": "Jackets",
+              "url": "/collections/mens-jackets"
+            },
+            {
+              "title": "Accessories",
+              "url": "/collections/mens-accessories"
+            }
           ]
         },
         {
