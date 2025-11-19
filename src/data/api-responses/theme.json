@@ -112,7 +112,7 @@
       },
       "footer": {
         "enabled": true,
-        "type": "footer-1",
+        "type": "footer-2",
         "settings": {
           "backgroundColor": "#1F2937",
           "textColor": "#F9FAFB",

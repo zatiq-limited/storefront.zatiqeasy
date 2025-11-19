@@ -53,7 +53,7 @@ const brands = [
 
 const Brands2: React.FC = () => {
   return (
-    <div className="w-full bg-white py-8 md:py-12 px-4 md:px-8">
+    <div className="w-full bg-white pb-8 md:pb-14 px-4">
       <div className="max-w-[1050px] mx-auto">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 md:gap-x-8 lg:gap-x-[30px] gap-y-6 md:gap-y-8">
           {brands.map((brand, index) => (

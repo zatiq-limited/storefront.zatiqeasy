@@ -6,7 +6,6 @@ interface FeatureBadgeProps {
   icon: React.ReactNode;
   title: string;
   description: string;
-  isRightAligned?: boolean;
 }
 
 interface BadgeData {
@@ -15,17 +14,17 @@ interface BadgeData {
   description: string;
 }
 
-const FeatureBadge: React.FC<FeatureBadgeProps> = ({ icon, title, description, isRightAligned = false }) => {
+const FeatureBadge: React.FC<FeatureBadgeProps> = ({ icon, title, description }) => {
   return (
-    <div className={`flex items-center gap-3 md:gap-4 w-full ${isRightAligned ? 'flex-row-reverse sm:flex-row' : ''}`}>
+    <div className="flex justify-center items-center gap-3 md:gap-4 w-full">
       {/* Icon Container */}
-      <div className="shrink-0 w-14 h-14 md:w-[70px] md:h-[70px] lg:w-[86px] lg:h-[86px] flex items-center justify-center bg-gray-100 rounded-full">
+      <div className="shrink-0 w-14 h-14 lg:w-16 lg:h-16 flex items-center justify-center bg-gray-100 rounded-full">
         <div className="w-full h-full flex items-center justify-center scale-[0.65] md:scale-[0.82] lg:scale-100">
           {icon}
         </div>
       </div>
       {/* Text Content */}
-      <div className={`flex flex-col flex-1 min-w-0 ${isRightAligned ? 'text-right sm:text-left' : ''}`}>
+      <div className="flex flex-col min-w-0 text-center sm:text-left">
         <h3 className="font-inter font-semibold text-sm md:text-base leading-5 md:leading-6 text-gray-900 line-clamp-2">{title}</h3>
         <p className="font-inter font-normal text-xs md:text-sm leading-[18px] md:leading-[22px] text-[#4E5562] line-clamp-2">{description}</p>
       </div>
@@ -88,13 +87,12 @@ const Badges1: React.FC = () => {
       <div className="max-w-[1440px] mx-auto">
         <div className="flex items-center lg:px-[60px]">
           <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
-            {badges.map((badge, index) => (
+            {badges.map((badge) => (
               <FeatureBadge
-                key={index}
+                key={badge.title}
                 icon={badge.icon}
                 title={badge.title}
                 description={badge.description}
-                isRightAligned={index % 2 === 1}
               />
             ))}
           </div>

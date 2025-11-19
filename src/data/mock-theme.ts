@@ -109,7 +109,7 @@ export const mockTheme: ZatiqTheme = {
     // Footer
     footer: {
       id: "global_footer",
-      type: "footer-1",
+      type: "footer-2",
       enabled: true,
       settings: {
         background_color: "#1F2937",
