@@ -189,34 +189,262 @@
         },
         "blocks": [
           {
-            "image": "https://cdn.zatiq.com/categories/womens-cat.jpg",
-            "label": "New Collection",
-            "labelColor": "#ef4444",
-            "title": "Women's Fashion",
-            "subtitle": "2025 Spring/Summer",
-            "buttonText": "Shop Women",
-            "url": "/collections/womens",
-            "overlayOpacity": 20
+            "label": "Ends Today",
+            "title": "Elements Of Style",
+            "subtitle": "Top Ten Products of the Week",
+            "image": "assets/category/c-11.png",
+            "labelColor": "#E77C40",
+            "titleColor": "#252B42",
+            "subtitleColor": "#737373",
+            "linkColor": "#252B42",
+            "buttonText": "Explore Items",
+            "url": "#"
           },
           {
-            "image": "https://cdn.zatiq.com/categories/mens-cat.jpg",
-            "label": "Trending Now",
-            "labelColor": "#3b82f6",
-            "title": "Men's Style",
-            "subtitle": "Latest Arrivals",
-            "buttonText": "Shop Men",
-            "url": "/collections/mens",
-            "overlayOpacity": 20
+            "label": "Your Space",
+            "title": "Unique Life",
+            "subtitle": "Top Ten Products of the Week",
+            "image": "assets/category/c-12.png",
+            "labelColor": "#ECECEC",
+            "titleColor": "#FFFFFF",
+            "subtitleColor": "#FFFFFF",
+            "linkColor": "#FFFFFF",
+            "buttonText": "Explore Items",
+            "url": "#"
           },
           {
-            "image": "https://cdn.zatiq.com/categories/accessories-cat.jpg",
-            "label": "Up to 50% Off",
-            "labelColor": "#10b981",
-            "title": "Accessories",
-            "subtitle": "Complete Your Look",
-            "buttonText": "Shop Accessories",
-            "url": "/collections/accessories",
-            "overlayOpacity": 20
+            "label": "Your Space",
+            "title": "Unique Life",
+            "subtitle": "Top Ten Products of the Week",
+            "image": "assets/category/c-12.png",
+            "labelColor": "#ECECEC",
+            "titleColor": "#FFFFFF",
+            "subtitleColor": "#FFFFFF",
+            "linkColor": "#FFFFFF",
+            "buttonText": "Explore Items",
+            "url": "#"
+          }
+        ]
+      },
+      {
+        "id": "categories_right_aligned",
+        "type": "category-2",
+        "settings": {
+          "title": "Featured Collections",
+          "subtitle": "Discover our curated selections"
+        },
+        "blocks": [
+          {
+            "label": "Ends Today",
+            "title": "Elements\nStyle",
+            "linkText": "Explore Items",
+            "textColor": "#252B42",
+            "titleColor": "#252B42",
+            "labelColor": "#737373",
+            "image": "assets/category/c-21.png",
+            "url": "/collections/elements-style"
+          },
+          {
+            "label": "Your Space",
+            "title": "Unique Life",
+            "linkText": "Explore Items",
+            "textColor": "#252B42",
+            "titleColor": "#252B42",
+            "labelColor": "#737373",
+            "image": "assets/category/c-22.png",
+            "url": "/collections/unique-life"
+          }
+        ]
+      },
+      {
+        "id": "categories_text_left",
+        "type": "category-3",
+        "settings": {
+          "title": "Style Categories",
+          "subtitle": "Browse by style"
+        },
+        "blocks": [
+          {
+            "label": "Ends Today",
+            "title": "Elements\nStyle",
+            "linkText": "Explore Items",
+            "titleColor": "#252B42",
+            "labelColor": "#E77C40",
+            "image": "assets/category/c-31.png",
+            "url": "/collections/elements"
+          },
+          {
+            "label": "Limited Time",
+            "title": "Modern\nLiving",
+            "linkText": "Shop Now",
+            "titleColor": "#252B42",
+            "labelColor": "#E77C40",
+            "image": "assets/category/c-32.png",
+            "url": "/collections/modern"
+          },
+          {
+            "label": "Your Space",
+            "title": "Unique Life",
+            "linkText": "Explore Items",
+            "titleColor": "#252B42",
+            "labelColor": "#E77C40",
+            "image": "assets/category/c-32.png",
+            "url": "/collections/unique"
+          }
+        ]
+      },
+      {
+        "id": "categories_circular",
+        "type": "category-4",
+        "settings": {
+          "title": "Shop by Category",
+          "subtitle": "Browse our electronics collection"
+        },
+        "blocks": [
+          {
+            "name": "Headphones",
+            "count": "15 Products",
+            "image": "assets/category/c-41.png",
+            "titleColor": "#181D25",
+            "subtitleColor": "#666666",
+            "url": "/collections/headphones"
+          },
+          {
+            "name": "Smart Watches",
+            "count": "14 Products",
+            "image": "assets/category/c-42.png",
+            "titleColor": "#181D25",
+            "subtitleColor": "#666666",
+            "url": "/collections/smart-watches"
+          },
+          {
+            "name": "Mobile Phones",
+            "count": "120 Products",
+            "image": "assets/category/c-43.png",
+            "titleColor": "#181D25",
+            "subtitleColor": "#666666",
+            "url": "/collections/phones"
+          },
+          {
+            "name": "Earbuds",
+            "count": "110 Products",
+            "image": "assets/category/c-44.png",
+            "titleColor": "#181D25",
+            "subtitleColor": "#666666",
+            "url": "/collections/earbuds"
+          },
+          {
+            "name": "Monitors",
+            "count": "80 Products",
+            "image": "assets/category/c-43.png",
+            "titleColor": "#181D25",
+            "subtitleColor": "#666666",
+            "url": "/collections/monitors"
+          },
+          {
+            "name": "Laptops",
+            "count": "75 Products",
+            "image": "assets/category/c-42.png",
+            "titleColor": "#181D25",
+            "subtitleColor": "#666666",
+            "url": "/collections/laptops"
+          },
+          {
+            "name": "Accessories",
+            "count": "200 Products",
+            "image": "assets/category/c-41.png",
+            "titleColor": "#181D25",
+            "subtitleColor": "#666666",
+            "url": "/collections/accessories"
+          }
+        ]
+      },
+      {
+        "id": "categories_home",
+        "type": "category-5",
+        "settings": {
+          "title": "Home & Living",
+          "subtitle": "Shop by room"
+        },
+        "blocks": [
+          {
+            "name": "Bedroom",
+            "image": "assets/category/c-51.png",
+            "titleColor": "#181D25",
+            "url": "/collections/bedroom"
+          },
+          {
+            "name": "Living room",
+            "image": "assets/category/c-52.png",
+            "titleColor": "#181D25",
+            "url": "/collections/living-room"
+          },
+          {
+            "name": "Bathroom",
+            "image": "assets/category/c-53.png",
+            "titleColor": "#181D25",
+            "url": "/collections/bathroom"
+          },
+          {
+            "name": "Decoration",
+            "image": "assets/category/c-54.png",
+            "titleColor": "#181D25",
+            "url": "/collections/decoration"
+          },
+          {
+            "name": "Office",
+            "image": "assets/category/c-52.png",
+            "titleColor": "#181D25",
+            "url": "/collections/office"
+          },
+          {
+            "name": "Kitchen",
+            "image": "assets/category/c-51.png",
+            "titleColor": "#181D25",
+            "url": "/collections/kitchen"
+          }
+        ]
+      },
+      {
+        "id": "categories_food",
+        "type": "category-6",
+        "settings": {
+          "title": "Fresh Food Categories",
+          "subtitle": "Quality ingredients for your table"
+        },
+        "blocks": [
+          {
+            "count": "124 products",
+            "subtitle": "124 products",
+            "title": "Only fresh fish to your table",
+            "linkText": "Shop now",
+            "image": "assets/category/c-61.png",
+            "countColor": "#4E5562",
+            "titleColor": "#181D25",
+            "linkColor": "#222934",
+            "url": "/collections/fresh-fish"
+          },
+          {
+            "count": "97 products",
+            "subtitle": "97 products",
+            "title": "Products for the Easter table",
+            "linkText": "Shop now",
+            "image": "assets/category/c-62.png",
+            "countColor": "#4E5562",
+            "titleColor": "#181D25",
+            "linkColor": "#222934",
+            "url": "/collections/easter"
+          },
+          {
+            "count": "28 products",
+            "subtitle": "28 products",
+            "title": "Berries from the garden",
+            "linkText": "Shop now",
+            "image": "assets/category/c-63.png",
+            "countColor": "#4E5562",
+            "titleColor": "#181D25",
+            "linkColor": "#222934",
+            "url": "/collections/berries"
           }
         ]
       },
