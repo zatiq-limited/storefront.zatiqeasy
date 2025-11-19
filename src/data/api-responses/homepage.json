@@ -179,37 +179,6 @@
         ]
       },
       {
-        "id": "trust_badges",
-        "type": "badges-2",
-        "settings": {
-          "backgroundColor": "#F9FAFB",
-          "columns": 4,
-          "columnsMobile": 2
-        },
-        "blocks": [
-          {
-            "icon": "truck",
-            "title": "Free Worldwide Shipping",
-            "description": "On orders over $100"
-          },
-          {
-            "icon": "shield-check",
-            "title": "Secure Payment",
-            "description": "100% secure transactions"
-          },
-          {
-            "icon": "refresh",
-            "title": "Easy Returns",
-            "description": "30 days return policy"
-          },
-          {
-            "icon": "headphones",
-            "title": "24/7 Support",
-            "description": "Dedicated support team"
-          }
-        ]
-      },
-      {
         "id": "featured_categories",
         "type": "category-1",
         "settings": {
@@ -604,6 +573,37 @@
             "name": "Tommy Hilfiger",
             "logo": "https://cdn.zatiq.com/brands/tommy.svg",
             "url": "/collections/tommy-hilfiger"
+          }
+        ]
+      },
+      {
+        "id": "trust_badges",
+        "type": "badges-2",
+        "settings": {
+          "backgroundColor": "#F9FAFB",
+          "columns": 4,
+          "columnsMobile": 2
+        },
+        "blocks": [
+          {
+            "icon": "truck",
+            "title": "Free Worldwide Shipping",
+            "description": "On orders over $100"
+          },
+          {
+            "icon": "shield-check",
+            "title": "Secure Payment",
+            "description": "100% secure transactions"
+          },
+          {
+            "icon": "refresh",
+            "title": "Easy Returns",
+            "description": "30 days return policy"
+          },
+          {
+            "icon": "headphones",
+            "title": "24/7 Support",
+            "description": "Dedicated support team"
           }
         ]
       }
