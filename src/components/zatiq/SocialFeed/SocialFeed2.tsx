@@ -81,7 +81,7 @@ export default function SocialFeed2({
   };
 
   return (
-    <section className="pb-8 sm:pb-14 px-4 sm:px-0">
+    <section className="pb-8 sm:pb-14 px-4 2xl:px-0">
       <div className="max-w-[1440px] mx-auto">
         {/* Header */}
         <div className="text-center mb-10 md:mb-14 lg:mb-16">

@@ -59,7 +59,7 @@ const Reviews2: React.FC<Reviews2Props> = ({
 
   return (
     <div className="w-full pb-8 md:pb-14 font-volkhov">
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-0">
+      <div className="max-w-[1440px] mx-auto px-4 2xl:px-0">
         {/* Header */}
         <div className="text-center mb-8 md:mb-10 lg:mb-12">
           <h2 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-900 mb-2 md:mb-4">

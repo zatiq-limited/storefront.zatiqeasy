@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 // Component-specific types
 interface BrandBlock {
@@ -18,22 +18,13 @@ interface Brands1Props {
 }
 
 const Brands1: React.FC<Brands1Props> = ({ settings = {}, blocks = [] }) => {
-  // Default brand data
-  const defaultBrands: BrandBlock[] = [
-    { name: 'Sony', logo: '/assets/Brands/sony.png' },
-    { name: 'Skullcandy', logo: '/assets/Brands/Skullcandy.png' },
-    { name: 'Bose', logo: '/assets/Brands/Bose.png' },
-    { name: 'Oppo', logo: '/assets/Brands/oppo.png' },
-    { name: 'Panasonic', logo: '/assets/Brands/parasonic.png' },
-    { name: 'Samsung', logo: '/assets/Brands/samsung.png' },
-  ];
-
-  const brands = blocks.length > 0 ? blocks : defaultBrands;
-  const title = settings?.title || 'Shop by brand';
+  if (blocks.length <= 0) return null;
+  const brands = blocks;
+  const title = settings?.title;
 
   return (
     <div className="w-full bg-white pb-8 md:pb-14 px-4">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-[1440px] mx-auto px-4 2xl:px-0">
         {/* Title */}
         <h2 className="text-2xl md:text-3xl font-bold text-center mb-6 md:mb-8 text-gray-900">
           {title}
