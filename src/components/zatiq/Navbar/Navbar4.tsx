@@ -32,8 +32,8 @@ const Navbar4: React.FC = () => {
   ];
 
   return (
-    <nav className="bg-white px-3 sm:px-4 md:px-6 lg:px-6 py-3 md:py-4">
-      <div className="flex justify-between items-center gap-2">
+    <nav className="bg-white py-3 md:py-4">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-0 flex justify-between items-center gap-2">
         {/* Logo */}
         <div className="flex items-center shrink-0">
           <img

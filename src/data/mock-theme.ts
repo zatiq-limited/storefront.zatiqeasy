@@ -52,7 +52,7 @@ export const mockTheme: ZatiqTheme = {
     // Announcement Bar
     announcement: {
       id: "global_announcement",
-      type: "announcement-bar-2",
+      type: "announcement-bar-1",
       enabled: true,
       settings: {
         message: "🎉 Black Friday Sale - Up to 70% OFF + Free Shipping!",
@@ -67,7 +67,7 @@ export const mockTheme: ZatiqTheme = {
     // Header/Navbar
     header: {
       id: "global_header",
-      type: "navbar-1",
+      type: "navbar-2",
       enabled: true,
       settings: {
         logo: "/logo.svg",

@@ -72,7 +72,7 @@ const Navbar3: React.FC = () => {
   ];
 
   return (
-    <nav className="bg-white">
+    <nav className="bg-white mb-1">
       {/* Top Row */}
       <div className="border-b border-gray-200 px-3 sm:px-4 md:px-8 lg:px-16 py-3 md:py-8">
         <div className="flex justify-center items-center gap-2">
