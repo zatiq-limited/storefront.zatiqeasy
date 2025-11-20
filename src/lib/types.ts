@@ -30,6 +30,7 @@ export interface Section {
   enabled: boolean;
   settings: Record<string, any>;
   blocks?: Block[];
+  products?: any[];
 }
 
 export interface Block {

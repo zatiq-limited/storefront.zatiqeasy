@@ -158,25 +158,25 @@ export async function getTheme(shopId: string = SHOP_ID): Promise<ZatiqTheme> {
  * Response: { success: true, data: { template, sections, seo } }
  */
 export async function getHomepageData(): Promise<any> {
-  if (USE_MOCK_DATA) {
-    console.log(`[Mock] Using mock homepage data`);
-    return {
-      template: "index",
-      sections: mockTheme.templates.index.sections,
-      seo: mockTheme.templates.index.seo,
-    };
-  }
-
   try {
+    // Try to fetch from real API first
     const response = await apiCall<any>(`/api/storefront/v1/page/home`);
+    console.log('[API] Using homepage data from API');
     return response;
   } catch (error) {
-    console.warn(`Failed to fetch homepage data, using mock data`);
-    return {
-      template: "index",
-      sections: mockTheme.templates.index.sections,
-      seo: mockTheme.templates.index.seo,
-    };
+    // Fallback to local JSON file if API fails
+    console.warn(`Failed to fetch homepage data from API, loading from homepage.json`);
+    try {
+      const homepageData = await import("../data/api-responses/homepage.json");
+      return homepageData.default || homepageData;
+    } catch (jsonError) {
+      console.error('Failed to load homepage.json, using mock theme data');
+      return {
+        template: "index",
+        sections: mockTheme.templates.index.sections,
+        seo: mockTheme.templates.index.seo,
+      };
+    }
   }
 }
 
