@@ -73,7 +73,7 @@ const Reviews3: React.FC<Reviews3Props> = ({ settings = {}, reviews: reviewsProp
   );
 
   return (
-    <div className="w-full bg-gray-50 pb-8 md:pb-14 px-4 overflow-hidden font-sans">
+    <div className="w-full bg-gray-50 pb-8 md:pb-14 px-4 font-sans">
       <div className="container mx-auto md:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-6 md:mb-8 lg:mb-10 px-4">
@@ -108,7 +108,7 @@ const Reviews3: React.FC<Reviews3Props> = ({ settings = {}, reviews: reviewsProp
         </div>
 
         {/* Carousel Container */}
-        <div className="w-full max-w-full px-4">
+        <div className="w-full max-w-full px-4 overflow-visible">
           <Carousel
             opts={{
               align: "start",
@@ -116,15 +116,15 @@ const Reviews3: React.FC<Reviews3Props> = ({ settings = {}, reviews: reviewsProp
             }}
             plugins={settings?.autoplay !== false ? [autoplayPlugin.current] : []}
             setApi={setApi}
-            className="w-full"
+            className="w-full overflow-visible"
           >
             <CarouselContent className="-ml-4 md:-ml-5 lg:-ml-6">
               {reviews.map((review, index) => (
                 <CarouselItem
                   key={index}
-                  className="pl-4 md:pl-5 lg:pl-6 basis-full md:basis-1/2 lg:basis-1/3"
+                  className="pl-4 md:pl-5 lg:pl-6 basis-full md:basis-1/2 lg:basis-1/3 py-4 px-2"
                 >
-                  <div className="bg-white p-4 md:p-6 lg:p-8 rounded-xl md:rounded-2xl shadow-lg h-full flex flex-col w-full max-w-full">
+                  <div className="bg-white p-4 md:p-6 lg:p-8 rounded-xl md:rounded-2xl shadow-lg h-full flex flex-col w-full max-w-full relative z-10">
                     {/* Quote Icon */}
                     <div className="mb-3 md:mb-4">
                       <svg className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 text-gray-300" fill="currentColor" viewBox="0 0 24 24">
