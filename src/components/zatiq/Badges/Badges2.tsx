@@ -40,15 +40,15 @@ const getIcon = (iconName: string, size: number = 40): React.ReactNode => {
 
 const FeatureBadge: React.FC<FeatureBadgeProps> = ({ icon, title, description }) => {
   return (
-    <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-3 text-center md:text-left">
+    <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-3">
       {/* Icon */}
       <div className="shrink-0 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center">
         {icon}
       </div>
       {/* Text Content */}
       <div className="flex flex-col min-w-0">
-        <h3 className="text-sm md:text-base lg:text-[20px] font-medium text-gray-900 whitespace-nowrap">{title}</h3>
-        <p className="text-xs md:text-sm lg:text-[20px] font-normal text-gray-600 whitespace-nowrap">{description}</p>
+        <h3 className="text-sm md:text-base font-medium text-gray-900 whitespace-nowrap">{title}</h3>
+        <p className="text-xs md:text-sm font-normal text-gray-600 whitespace-nowrap">{description}</p>
       </div>
     </div>
   );
@@ -83,7 +83,7 @@ const Badges2: React.FC<Badges2Props> = ({ settings = {}, blocks = [] }) => {
 
   return (
     <div className="w-full pb-8 md:pb-14 px-4 font-poppins">
-      <div className="max-w-[1440px] mx-auto md:px-12 lg:px-16">
+      <div className="max-w-[1440px] mx-auto">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-4 md:gap-x-8 lg:gap-x-12 gap-y-6 md:gap-y-8">
           {badges.map((badge, index) => (
             <FeatureBadge

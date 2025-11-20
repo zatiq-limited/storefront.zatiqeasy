@@ -179,37 +179,6 @@
         ]
       },
       {
-        "id": "trust_badges",
-        "type": "badges-3",
-        "settings": {
-          "backgroundColor": "#F9FAFB",
-          "columns": 4,
-          "columnsMobile": 2
-        },
-        "blocks": [
-          {
-            "icon": "truck",
-            "title": "Free Worldwide Shipping",
-            "description": "On orders over $100"
-          },
-          {
-            "icon": "shield-check",
-            "title": "Secure Payment",
-            "description": "100% secure transactions"
-          },
-          {
-            "icon": "refresh",
-            "title": "Easy Returns",
-            "description": "30 days return policy"
-          },
-          {
-            "icon": "headphones",
-            "title": "24/7 Support",
-            "description": "Dedicated support team"
-          }
-        ]
-      },
-      {
         "id": "featured_categories",
         "type": "category-1",
         "settings": {
@@ -481,7 +450,7 @@
       },
       {
         "id": "featured_products",
-        "type": "special-offers-slider-3",
+        "type": "special-offers-slider-1",
         "settings": {
           "title": "Featured Products",
           "subtitle": "Hand-picked styles just for you",
@@ -836,8 +805,70 @@
         ]
       },
       {
-        "id": "trust_badges",
+        "id": "trust_badges_1",
+        "type": "badges-1",
+        "settings": {
+          "backgroundColor": "#F9FAFB",
+          "columns": 4,
+          "columnsMobile": 2
+        },
+        "blocks": [
+          {
+            "icon": "truck",
+            "title": "Free Shipping & Returns",
+            "description": "For all orders over $199.00"
+          },
+          {
+            "icon": "credit-card",
+            "title": "Secure Payment",
+            "description": "We ensure secure payment"
+          },
+          {
+            "icon": "rotate-ccw",
+            "title": "Money Back Guarantee",
+            "description": "Returning money 30 days"
+          },
+          {
+            "icon": "messages-square",
+            "title": "24/7 Customer Support",
+            "description": "Friendly customer support"
+          }
+        ]
+      },
+      {
+        "id": "trust_badges_2",
         "type": "badges-2",
+        "settings": {
+          "backgroundColor": "#FFFFFF",
+          "columns": 4,
+          "columnsMobile": 2
+        },
+        "blocks": [
+          {
+            "icon": "badge-check",
+            "title": "High Quality",
+            "description": "crafted from top materials"
+          },
+          {
+            "icon": "shield-check",
+            "title": "Warranty Protection",
+            "description": "Over 2 years"
+          },
+          {
+            "icon": "truck",
+            "title": "Free Shipping",
+            "description": "Order over 150 $"
+          },
+          {
+            "icon": "headphones",
+            "title": "24 / 7 Support",
+            "description": "Dedicated support"
+          }
+        ]
+      },
+      {
+        "id": "trust_badges",
+        "type": "badges-3",
         "settings": {
           "backgroundColor": "#F9FAFB",
           "columns": 4,

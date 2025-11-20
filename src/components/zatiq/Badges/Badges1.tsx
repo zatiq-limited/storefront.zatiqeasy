@@ -47,7 +47,7 @@ const FeatureBadge: React.FC<FeatureBadgeProps> = ({ icon, title, description })
         </div>
       </div>
       {/* Text Content */}
-      <div className="flex flex-col min-w-0 text-center sm:text-left">
+      <div className="flex flex-col min-w-0">
         <h3 className="font-inter font-semibold text-sm md:text-base leading-5 md:leading-6 text-gray-900 line-clamp-2">{title}</h3>
         <p className="font-inter font-normal text-xs md:text-sm leading-[18px] md:leading-[22px] text-[#4E5562] line-clamp-2">{description}</p>
       </div>
@@ -85,7 +85,7 @@ const Badges1: React.FC<Badges1Props> = ({ settings = {}, blocks = [] }) => {
   return (
     <div className="w-full px-4 pb-8 md:pb-14 font-sans">
       <div className="max-w-[1440px] mx-auto">
-        <div className="flex items-center lg:px-[60px]">
+        <div className="flex items-center">
           <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
             {badges.map((badge, index) => (
               <FeatureBadge

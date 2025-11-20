@@ -40,7 +40,7 @@ const getIcon = (iconName: string, size: number = 28): React.ReactNode => {
 
 const FeatureBadge: React.FC<FeatureBadgeProps> = ({ icon, title, description }) => {
   return (
-    <div className="flex items-center gap-3 md:gap-5 w-full">
+    <div className="flex items-center justify-center gap-3 md:gap-5 w-full">
       {/* Icon Container - Red Circle */}
       <div className="shrink-0 w-12 h-12 md:w-14 md:h-14 lg:w-[61px] lg:h-[61px] flex items-center justify-center rounded-full" style={{ backgroundColor: '#E74040' }}>
         <div className="text-white scale-75 md:scale-90 lg:scale-100">
@@ -48,7 +48,7 @@ const FeatureBadge: React.FC<FeatureBadgeProps> = ({ icon, title, description })
         </div>
       </div>
       {/* Text Content */}
-      <div className="flex flex-col gap-1 md:gap-[5px] flex-1 min-w-0">
+      <div className="flex flex-col gap-1 md:gap-[5px] min-w-0">
         <h3 className="font-montserrat font-bold text-xs md:text-sm leading-5 md:leading-6 tracking-[0.2px] text-gray-900 line-clamp-2">{title}</h3>
         <p className="font-montserrat font-normal text-[10px] md:text-xs leading-3 md:leading-4 tracking-[0.2px] text-gray-600 line-clamp-2">{description}</p>
       </div>
@@ -86,7 +86,7 @@ const Badges3: React.FC<Badges3Props> = ({ settings = {}, blocks = [] }) => {
   return (
     <div className="w-full pb-8 md:pb-14 px-4 font-montserrat">
       <div className="max-w-[1440px] mx-auto">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 lg:gap-[70px]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 lg:gap-8">
           {badges.map((badge, index) => (
             <FeatureBadge
               key={index}
