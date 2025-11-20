@@ -37,9 +37,10 @@ export default function SocialFeed1({
     subtitle,
     source = "instagram",
     username,
-    columns = 4,
-    columnsMobile = 2,
-    showLikes = true,
+    columns,
+    columnsMobile,
+    showLikes,
+    limit
   } = settings;
 
   // Early return if no posts
@@ -47,7 +48,7 @@ export default function SocialFeed1({
     return null;
   }
 
-  const displayPosts = posts;
+  const displayPosts = posts.slice(0, limit || posts.length);
 
   const gridColsMap = {
     2: "md:grid-cols-2",
@@ -64,10 +65,9 @@ export default function SocialFeed1({
   };
 
   const gridColsClass =
-    gridColsMap[columns as keyof typeof gridColsMap] || "md:grid-cols-4";
+    gridColsMap[columns as keyof typeof gridColsMap];
   const gridColsMobileClass =
-    gridColsMobileMap[columnsMobile as keyof typeof gridColsMobileMap] ||
-    "grid-cols-2";
+    gridColsMobileMap[columnsMobile as keyof typeof gridColsMobileMap];
 
   const formatLikes = (likes: number) => {
     if (likes >= 1000) {
@@ -77,8 +77,8 @@ export default function SocialFeed1({
   };
 
   return (
-    <section className="py-12 md:py-16 lg:py-20 px-4 md:px-6 lg:px-8 bg-linear-to-b from-white to-gray-50">
-      <div className="container mx-auto max-w-7xl">
+    <section className="pb-8 sm:pb-14 px-4 2xl:px-0">
+      <div className="max-w-[1440px] mx-auto">
         {/* Header */}
         <div className="text-center mb-10 md:mb-14 lg:mb-16">
           {title && (
