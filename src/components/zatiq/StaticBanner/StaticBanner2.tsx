@@ -72,42 +72,44 @@ const StaticBanner2: React.FC<StaticBanner2Props> = ({
         ></div>
       )}
 
-      {/* Content Container */}
-      <div className={`relative z-10 h-full flex items-center ${alignmentClasses} ${contentAlignClasses} px-4 sm:px-8 md:px-12 lg:px-20 xl:pl-52`}>
-        <div className={`${textAlignment === "center" ? "text-center" : textAlignment === "right" ? "text-right" : "text-left"} md:${textAlignment === "center" ? "text-center" : textAlignment === "right" ? "text-right" : "text-left"} max-w-[90%] sm:max-w-[550px] md:max-w-[600px] lg:max-w-[650px]`}>
-          {/* Heading */}
-          {title && (
-            <h1 
-              className="font-bold mb-3 sm:mb-4 leading-tight sm:leading-[50px] md:leading-[60px] lg:leading-[70px] text-3xl sm:text-4xl md:text-5xl"
-              style={{ color: textColor }}
-            >
-              {title.split('\n').map((line, i) => (
-                <React.Fragment key={i}>
-                  {line}
-                  {i < title.split('\n').length - 1 && <br />}
-                </React.Fragment>
-              ))}
-            </h1>
-          )}
+      {/* Content Container - Centered with max-width */}
+      <div className="relative z-10 h-full flex items-center justify-center px-4">
+        <div className="w-full max-w-[1440px] flex items-center justify-center md:justify-start">
+          <div className="text-center md:text-left max-w-[90%] sm:max-w-[500px] md:max-w-[550px] lg:max-w-[600px] md:ml-8 lg:ml-12">
+            {/* Heading */}
+            {title && (
+              <h1
+                className="font-bold mb-3 sm:mb-4 leading-tight sm:leading-[50px] md:leading-[60px] lg:leading-[70px] text-3xl sm:text-4xl md:text-5xl"
+                style={{ color: textColor }}
+              >
+                {title.split('\n').map((line, i) => (
+                  <React.Fragment key={i}>
+                    {line}
+                    {i < title.split('\n').length - 1 && <br />}
+                  </React.Fragment>
+                ))}
+              </h1>
+            )}
 
-          {/* Description */}
-          {description && (
-            <p 
-              className="mb-6 sm:mb-7 md:mb-8 text-sm sm:text-base font-normal leading-6"
-              style={{ color: textColor, opacity: 0.9 }}
-            >
-              {description}
-            </p>
-          )}
+            {/* Description */}
+            {description && (
+              <p
+                className="mb-6 sm:mb-7 md:mb-8 text-sm sm:text-base font-normal leading-6"
+                style={{ color: textColor, opacity: 0.9 }}
+              >
+                {description}
+              </p>
+            )}
 
-          {/* CTA Button */}
-          {buttonText && buttonLink && (
-            <a href={buttonLink}>
-              <button className="bg-[#3465F0] min-w-40 sm:min-w-[180px] md:min-w-[200px] min-h-10 sm:min-h-12 md:min-h-14 text-white font-medium hover:bg-[#3758CC] transition-colors text-sm sm:text-base px-4 rounded leading-6">
-                {buttonText}
-              </button>
-            </a>
-          )}
+            {/* CTA Button */}
+            {buttonText && buttonLink && (
+              <a href={buttonLink}>
+                <button className="bg-[#3465F0] min-w-40 sm:min-w-[180px] md:min-w-[200px] min-h-10 sm:min-h-12 md:min-h-14 text-white font-medium hover:bg-[#3758CC] transition-colors text-sm sm:text-base px-4 rounded leading-6">
+                  {buttonText}
+                </button>
+              </a>
+            )}
+          </div>
         </div>
       </div>
     </div>
