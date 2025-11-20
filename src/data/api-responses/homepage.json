@@ -1101,9 +1101,9 @@
           "source": "facebook",
           "username": "demofashion",
           "pageName": "Demo Fashion Store",
-          "limit": 6,
-          "columns": 3,
-          "columnsMobile": 1,
+          "limit": 8,
+          "columns": 4,
+          "columnsMobile": 2,
           "showLikes": true
         },
         "posts": [
@@ -1160,6 +1160,24 @@
             "comments": 112,
             "shares": 67,
             "link": "https://facebook.com/demofashion/posts/128"
+          },
+          {
+            "id": "fb_002",
+            "image": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&h=400&fit=crop&q=80",
+            "caption": "Weekend Vibes ✨ Looking for the perfect outfit? Check out our exclusive designer collection that's making waves this season!",
+            "likes": 1876,
+            "comments": 92,
+            "shares": 45,
+            "link": "https://facebook.com/demofashion/posts/124"
+          },
+          {
+            "id": "fb_003",
+            "image": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&h=400&fit=crop&q=80",
+            "caption": "Customer Love 💕 Thank you for all the amazing reviews! Your support means everything to us. Keep sharing your style stories!",
+            "likes": 3421,
+            "comments": 234,
+            "shares": 127,
+            "link": "https://facebook.com/demofashion/posts/125"
           }
         ]
       },

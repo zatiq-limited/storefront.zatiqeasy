@@ -41,9 +41,10 @@ export default function SocialFeed2({
     source = "facebook",
     username,
     pageName,
-    columns = 3,
-    columnsMobile = 1,
-    showLikes = true,
+    columns,
+    columnsMobile,
+    showLikes,
+    limit
   } = settings;
 
   // Early return if no posts
@@ -51,7 +52,7 @@ export default function SocialFeed2({
     return null;
   }
 
-  const displayPosts = posts;
+  const displayPosts = posts.slice(0, limit || posts.length);
 
   const gridColsMap = {
     2: "md:grid-cols-2",
@@ -65,10 +66,9 @@ export default function SocialFeed2({
   };
 
   const gridColsClass =
-    gridColsMap[columns as keyof typeof gridColsMap] || "md:grid-cols-3";
+    gridColsMap[columns as keyof typeof gridColsMap];
   const gridColsMobileClass =
-    gridColsMobileMap[columnsMobile as keyof typeof gridColsMobileMap] ||
-    "grid-cols-1";
+    gridColsMobileMap[columnsMobile as keyof typeof gridColsMobileMap];
 
   const formatNumber = (num: number) => {
     if (num >= 1000000) {
@@ -81,8 +81,8 @@ export default function SocialFeed2({
   };
 
   return (
-    <section className="py-12 md:py-16 lg:py-20 px-4 md:px-6 lg:px-8 bg-gray-50">
-      <div className="container mx-auto max-w-7xl">
+    <section className="pb-8 sm:pb-14 px-4 sm:px-0">
+      <div className="max-w-[1440px] mx-auto">
         {/* Header */}
         <div className="text-center mb-10 md:mb-14 lg:mb-16">
           {title && (
