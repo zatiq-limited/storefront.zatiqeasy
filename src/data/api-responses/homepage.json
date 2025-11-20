@@ -639,6 +639,7 @@
       {
         "id": "special_offers",
         "type": "special-offers-slider-1",
+        "enabled": true,
         "settings": {
           "title": "Special offers for you",
           "titleColor": "#000000",
@@ -687,9 +688,10 @@
           }
         ]
       },
-       {
+      {
         "id": "special_offers",
         "type": "special-offers-slider-2",
+        "enabled": true,
         "settings": {
           "title": "Special offers for you",
           "titleColor": "#000000",
@@ -704,7 +706,12 @@
             "discount": "-30% off",
             "image": "/assets/SpecialOfferSlider/sunglass.png",
             "buttonText": "Shop now",
-            "url": "/products/polarized-sunglasses"
+            "url": "/products/polarized-sunglasses",
+            "countdown": {
+              "days": 12,
+              "hours": 10,
+              "minutes": 12
+            }
           },
           {
             "id": 2,
@@ -714,7 +721,12 @@
             "discount": "-31% off",
             "image": "/assets/SpecialOfferSlider/sunglass.png",
             "buttonText": "Shop now",
-            "url": "/products/bluetooth-headphones"
+            "url": "/products/bluetooth-headphones",
+            "countdown": {
+              "days": 12,
+              "hours": 10,
+              "minutes": 12
+            }
           },
           {
             "id": 3,
@@ -724,7 +736,12 @@
             "discount": "-40% off",
             "image": "/assets/SpecialOfferSlider/sunglass.png",
             "buttonText": "Shop now",
-            "url": "/products/designer-watch"
+            "url": "/products/designer-watch",
+            "countdown": {
+              "days": 12,
+              "hours": 10,
+              "minutes": 12
+            }
           },
           {
             "id": 4,
@@ -734,9 +751,124 @@
             "discount": "-40% off",
             "image": "/assets/SpecialOfferSlider/sunglass.png",
             "buttonText": "Shop now",
-            "url": "/products/leather-wallet"
+            "url": "/products/leather-wallet",
+            "countdown": {
+              "days": 12,
+              "hours": 10,
+              "minutes": 12
+            }
           }
         ]
+      },
+      {
+        "id": "special_offers_3",
+        "type": "special-offers-slider-3",
+        "enabled": true,
+        "settings": {
+          "title": "Buy Bottle now",
+          "titleHighlight": "25% off",
+          "highlightColor": "#2563eb",
+          "buttonText": "Buy Now",
+          "buttonColor": "#2563eb",
+          "buttonHoverColor": "#1d4ed8",
+          "bgColor": "#ffffff",
+          "images": [
+            {
+              "src": "/assets/spOffer/sp1.png",
+              "alt": "Premium Water Bottle"
+            },
+            {
+              "src": "/assets/spOffer/sp2.png",
+              "alt": "Sports Bottle Collection"
+            },
+            {
+              "src": "/assets/spOffer/sp3.png",
+              "alt": "Insulated Bottle"
+            },
+            {
+              "src": "/assets/spOffer/sp4.png",
+              "alt": "Eco-Friendly Bottle"
+            }
+          ]
+        }
+      },
+      {
+        "id": "special_offers_4",
+        "type": "special-offers-slider-4",
+        "enabled": true,
+        "settings": {
+          "bgColor": "transparent",
+          "leftCard": {
+            "image": "/assets/spOffer/image-left.jpg",
+            "subtitle": "Sale 20% off all store",
+            "title": "Smartphone\nBLU G91 Pro 2022",
+            "buttonText": "Shop Now",
+            "titleColor": "#010F1C",
+            "textColor": "#010F1C"
+          },
+          "rightCard": {
+            "image": "/assets/spOffer/image-right.jpg",
+            "title": "HyperX Cloud II\nWireless",
+            "discount": "Sale 35% off",
+            "buttonText": "Shop Now",
+            "titleColor": "#010F1C",
+            "textColor": "#010F1C"
+          }
+        }
+      },
+      {
+        "id": "special_offers_5",
+        "type": "special-offers-slider-5",
+        "enabled": true,
+        "settings": {
+          "autoPlayInterval": 3000,
+          "height": "500px",
+          "bgColor": "transparent",
+          "slides": [
+            {
+              "background": "/assets/spOffer/Container.png",
+              "category": "TABLET COLLECTION 2023",
+              "title": "Galaxy Tab S6 Lite\nAndroid Tablet",
+              "originalPrice": "$320",
+              "salePrice": "$288",
+              "buttonText": "Shop now",
+              "altText": "Galaxy Tab S6 Lite Android Tablet",
+              "categoryColor": "#7E7E7E",
+              "titleColor": "#070707",
+              "priceColor": "#7E7E7E",
+              "buttonBgColor": "#010F1C",
+              "buttonTextColor": "#FFFFFF"
+            },
+            {
+              "background": "/assets/spOffer/image-left.jpg",
+              "category": "SMARTPHONE DEALS 2023",
+              "title": "Smartphone\nBLU G91 Pro 2022",
+              "originalPrice": "$299",
+              "salePrice": "$239",
+              "buttonText": "Shop now",
+              "altText": "Smartphone BLU G91 Pro 2022",
+              "categoryColor": "#7E7E7E",
+              "titleColor": "#070707",
+              "priceColor": "#7E7E7E",
+              "buttonBgColor": "#010F1C",
+              "buttonTextColor": "#FFFFFF"
+            },
+            {
+              "background": "/assets/spOffer/image-right.jpg",
+              "category": "SMARTPHONE DEALS 2023",
+              "title": "Smartphone\nBLU G91 Pro 2022",
+              "originalPrice": "$299",
+              "salePrice": "$239",
+              "buttonText": "Shop now",
+              "altText": "Smartphone BLU G91 Pro 2022",
+              "categoryColor": "#7E7E7E",
+              "titleColor": "#070707",
+              "priceColor": "#7E7E7E",
+              "buttonBgColor": "#010F1C",
+              "buttonTextColor": "#FFFFFF"
+            }
+          ]
+        }
       },
       {
         "id": "product_tabs",
