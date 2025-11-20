@@ -18,7 +18,7 @@ interface Category2Props {
 
 const Category2: React.FC<Category2Props> = ({ blocks = [] }) => {
   return (
-    <div className="font-montserrat w-full max-w-[1440px] mx-auto px-4 sm:px-0 pb-8 sm:pb-14">
+    <div className="font-montserrat w-full max-w-[1440px] mx-auto px-4 2xl:px-0 pb-8 sm:pb-14">
       <div className="flex flex-col sm:flex-row h-[300px] gap-4 sm:gap-6 lg:gap-8">
         {blocks.map((card, i) => (
           <div

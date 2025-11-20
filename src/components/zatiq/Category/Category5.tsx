@@ -14,7 +14,7 @@ interface Category5Props {
 
 const Category5: React.FC<Category5Props> = ({ blocks = [] }) => {
   return (
-    <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-0 lg:px-8 py-6 pb-8 sm:pb-14">
+    <div className="w-full max-w-[1440px] mx-auto px-4 2xl:px-0 lg:px-8 py-6 pb-8 sm:pb-14">
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6">
         {blocks.map((category, i) => (
           <a

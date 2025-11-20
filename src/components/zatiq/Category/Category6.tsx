@@ -19,7 +19,7 @@ interface Category6Props {
 
 const Category6: React.FC<Category6Props> = ({ blocks = [] }) => {
   return (
-    <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-0 pb-8 sm:pb-14">
+    <div className="w-full max-w-[1440px] mx-auto px-4 2xl:px-0 pb-8 sm:pb-14">
       <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
         {blocks.map((category, i) => (
           <div

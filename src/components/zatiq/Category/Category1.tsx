@@ -19,7 +19,7 @@ interface Category1Props {
 
 const Category1: React.FC<Category1Props> = ({ blocks = [] }) => {
   return (
-    <div className="font-montserrat w-full max-w-[1440px] mx-auto px-4 sm:px-0 mb-8 sm:mb-14">
+    <div className="font-montserrat w-full max-w-[1440px] mx-auto px-4 2xl:px-0 mb-8 sm:mb-14">
       <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 lg:gap-8">
         {blocks.map((block, i) => (
           <div

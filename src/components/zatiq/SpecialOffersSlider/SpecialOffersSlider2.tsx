@@ -42,7 +42,7 @@ const SpecialOffersSlider2: React.FC<SpecialOffersSlider2Props> = ({
   );
 
   return (
-    <div className="w-full max-w-[1440px] mx-auto font-sans px-4 pb-8 md:pb-14">
+    <div className="w-full max-w-[1440px] mx-auto font-sans px-4 2xl:px-0 pb-8 md:pb-14">
       {/* Title */}
       {title && (
         <h2
