@@ -179,37 +179,6 @@
         ]
       },
       {
-        "id": "trust_badges",
-        "type": "badges-1",
-        "settings": {
-          "backgroundColor": "#F9FAFB",
-          "columns": 4,
-          "columnsMobile": 2
-        },
-        "blocks": [
-          {
-            "icon": "truck",
-            "title": "Free Worldwide Shipping",
-            "description": "On orders over $100"
-          },
-          {
-            "icon": "shield-check",
-            "title": "Secure Payment",
-            "description": "100% secure transactions"
-          },
-          {
-            "icon": "refresh",
-            "title": "Easy Returns",
-            "description": "30 days return policy"
-          },
-          {
-            "icon": "headphones",
-            "title": "24/7 Support",
-            "description": "Dedicated support team"
-          }
-        ]
-      },
-      {
         "id": "featured_categories",
         "type": "category-1",
         "settings": {
@@ -481,7 +450,7 @@
       },
       {
         "id": "featured_products",
-        "type": "special-offers-slider-3",
+        "type": "special-offers-slider-1",
         "settings": {
           "title": "Featured Products",
           "subtitle": "Hand-picked styles just for you",
@@ -1027,51 +996,202 @@
         ]
       },
       {
-        "id": "brand_logos",
+        "id": "brand_logos_1",
+        "type": "brands-1",
+        "settings": {
+          "backgroundColor": "#FFFFFF",
+          "columns": 6,
+          "columnsMobile": 2
+        },
+        "blocks": [
+          {
+            "name": "Sony",
+            "logo": "/assets/Brands/sony.png"
+          },
+          {
+            "name": "Skullcandy",
+            "logo": "/assets/Brands/Skullcandy.png"
+          },
+          {
+            "name": "Bose",
+            "logo": "/assets/Brands/Bose.png"
+          },
+          {
+            "name": "Oppo",
+            "logo": "/assets/Brands/oppo.png"
+          },
+          {
+            "name": "Panasonic",
+            "logo": "/assets/Brands/parasonic.png"
+          },
+          {
+            "name": "Samsung",
+            "logo": "/assets/Brands/samsung.png"
+          }
+        ]
+      },
+      {
+        "id": "brand_logos_2",
+        "type": "brands-2",
+        "settings": {
+          "backgroundColor": "#FFFFFF",
+          "columns": 4,
+          "columnsMobile": 2
+        },
+        "blocks": [
+          {
+            "name": "Sony",
+            "logo": "/assets/Brands/sony.png",
+            "description": "Get your best looking smile now!"
+          },
+          {
+            "name": "Skullcandy",
+            "logo": "/assets/Brands/Skullcandy.png",
+            "description": "DentalCare is most focused in helping you discover your most beautiful smile"
+          },
+          {
+            "name": "Bose",
+            "logo": "/assets/Brands/Bose.png",
+            "description": "Overcame any hurdle or any other problem."
+          },
+          {
+            "name": "Oppo",
+            "logo": "/assets/Brands/oppo.png",
+            "description": "Overcame any hurdle or any other problem."
+          },
+          {
+            "name": "Samsung",
+            "logo": "/assets/Brands/samsung.png",
+            "description": "Get your best looking smile now!"
+          },
+          {
+            "name": "Philips",
+            "logo": "/assets/Brands/Philips.png",
+            "description": "DentalCare is most focused in helping you discover your most beautiful smile"
+          },
+          {
+            "name": "Oracle",
+            "logo": "/assets/Brands/oracle.png",
+            "description": "Overcame any hurdle or any other problem."
+          },
+          {
+            "name": "Dell",
+            "logo": "/assets/Brands/Dell.png",
+            "description": "Overcame any hurdle or any other problem."
+          }
+        ]
+      },
+      {
+        "id": "brand_logos_3",
         "type": "brands-3",
         "settings": {
-          "title": "Featured Brands",
-          "columns": 6,
-          "columnsMobile": 3,
-          "grayscale": true,
-          "hoverEffect": true
+          "title": "Shop by brand",
+          "backgroundColor": "#FFFFFF"
         },
-        "brands": [
+        "blocks": [
           {
-            "name": "Nike",
-            "logo": "https://cdn.zatiq.com/brands/nike.svg",
-            "url": "/collections/nike"
+            "name": "Zara",
+            "image": "/src/assets/image/Brands/D/Zara.png"
+          },
+          {
+            "name": "Brooks",
+            "image": "/src/assets/image/Brands/D/brooks.png"
+          },
+          {
+            "name": "FILA",
+            "image": "/src/assets/image/Brands/D/FILA.png"
           },
           {
             "name": "Adidas",
-            "logo": "https://cdn.zatiq.com/brands/adidas.svg",
-            "url": "/collections/adidas"
+            "image": "/src/assets/image/Brands/D/adidas.png"
+          },
+          {
+            "name": "Hermes",
+            "image": "/src/assets/image/Brands/D/hermes.png"
+          },
+          {
+            "name": "Dior",
+            "image": "/src/assets/image/Brands/D/Dior.png"
+          },
+          {
+            "name": "New Balance",
+            "image": "/src/assets/image/Brands/D/NB.png"
           },
           {
             "name": "Puma",
-            "logo": "https://cdn.zatiq.com/brands/puma.svg",
-            "url": "/collections/puma"
+            "image": "/src/assets/image/Brands/D/Puma.png"
           },
           {
-            "name": "Levi's",
-            "logo": "https://cdn.zatiq.com/brands/levis.svg",
-            "url": "/collections/levis"
+            "name": "H&M",
+            "image": "/src/assets/image/Brands/D/H&M.png"
+          }
+        ]
+      },
+      {
+        "id": "trust_badges_1",
+        "type": "badges-1",
+        "settings": {
+          "backgroundColor": "#F9FAFB",
+          "columns": 4,
+          "columnsMobile": 2
+        },
+        "blocks": [
+          {
+            "icon": "truck",
+            "title": "Free Shipping & Returns",
+            "description": "For all orders over $199.00"
           },
           {
-            "name": "Calvin Klein",
-            "logo": "https://cdn.zatiq.com/brands/ck.svg",
-            "url": "/collections/calvin-klein"
+            "icon": "credit-card",
+            "title": "Secure Payment",
+            "description": "We ensure secure payment"
           },
           {
-            "name": "Tommy Hilfiger",
-            "logo": "https://cdn.zatiq.com/brands/tommy.svg",
-            "url": "/collections/tommy-hilfiger"
+            "icon": "rotate-ccw",
+            "title": "Money Back Guarantee",
+            "description": "Returning money 30 days"
+          },
+          {
+            "icon": "messages-square",
+            "title": "24/7 Customer Support",
+            "description": "Friendly customer support"
+          }
+        ]
+      },
+      {
+        "id": "trust_badges_2",
+        "type": "badges-2",
+        "settings": {
+          "backgroundColor": "#FFFFFF",
+          "columns": 4,
+          "columnsMobile": 2
+        },
+        "blocks": [
+          {
+            "icon": "badge-check",
+            "title": "High Quality",
+            "description": "crafted from top materials"
+          },
+          {
+            "icon": "shield-check",
+            "title": "Warranty Protection",
+            "description": "Over 2 years"
+          },
+          {
+            "icon": "truck",
+            "title": "Free Shipping",
+            "description": "Order over 150 $"
+          },
+          {
+            "icon": "headphones",
+            "title": "24 / 7 Support",
+            "description": "Dedicated support"
           }
         ]
       },
       {
         "id": "trust_badges",
-        "type": "badges-2",
+        "type": "badges-3",
         "settings": {
           "backgroundColor": "#F9FAFB",
           "columns": 4,

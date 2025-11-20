@@ -1,7 +1,23 @@
 import React from 'react';
 
-const Brands3: React.FC = () => {
-  const brands = [
+// Component-specific types
+interface BrandBlock {
+  name: string;
+  image: string;
+  url?: string;
+}
+
+interface Brands3Props {
+  settings?: {
+    title?: string;
+    backgroundColor?: string;
+  };
+  blocks?: BrandBlock[];
+}
+
+const Brands3: React.FC<Brands3Props> = ({ settings = {}, blocks = [] }) => {
+  // Default brand data
+  const defaultBrands: BrandBlock[] = [
     { name: 'Zara', image: '/src/assets/image/Brands/D/Zara.png' },
     { name: 'Brooks', image: '/src/assets/image/Brands/D/brooks.png' },
     { name: 'FILA', image: '/src/assets/image/Brands/D/FILA.png' },
@@ -13,12 +29,15 @@ const Brands3: React.FC = () => {
     { name: 'H&M', image: '/src/assets/image/Brands/D/H&M.png' },
   ];
 
+  const brands = blocks.length > 0 ? blocks : defaultBrands;
+  const title = settings?.title || 'Shop by brand';
+
   return (
     <section className="w-full pb-8 md:pb-14 px-4 bg-white">
       <div className="max-w-7xl mx-auto">
         {/* Title */}
         <h2 className="text-2xl md:text-3xl font-bold text-center mb-6 md:mb-8 text-gray-900">
-          Shop by brand
+          {title}
         </h2>
 
         {/* Mobile: Simple Grid */}
@@ -42,8 +61,8 @@ const Brands3: React.FC = () => {
           {/* Zara - Large */}
           <div className="col-span-2 row-span-4 border border-gray-200 p-6 lg:p-8 flex items-center justify-center hover:border-gray-300 hover:shadow-md transition-all duration-300 cursor-pointer bg-white">
             <img
-              src="/src/assets/image/Brands/D/Zara.png"
-              alt="Zara"
+              src={brands[0]?.image || "/src/assets/image/Brands/D/Zara.png"}
+              alt={brands[0]?.name || "Zara"}
               className="max-w-full max-h-full object-contain"
             />
           </div>
@@ -51,8 +70,8 @@ const Brands3: React.FC = () => {
           {/* Brooks */}
           <div className="col-span-2 row-span-2 col-start-1 row-start-5 border border-gray-200 p-6 lg:p-8 flex items-center justify-center hover:border-gray-300 hover:shadow-md transition-all duration-300 cursor-pointer bg-white">
             <img
-              src="/src/assets/image/Brands/D/brooks.png"
-              alt="Brooks"
+              src={brands[1]?.image || "/src/assets/image/Brands/D/brooks.png"}
+              alt={brands[1]?.name || "Brooks"}
               className="max-w-full max-h-full object-contain"
             />
           </div>
@@ -60,8 +79,8 @@ const Brands3: React.FC = () => {
           {/* FILA */}
           <div className="row-span-3 col-start-3 row-start-1 border border-gray-200 p-6 lg:p-8 flex items-center justify-center hover:border-gray-300 hover:shadow-md transition-all duration-300 cursor-pointer bg-white">
             <img
-              src="/src/assets/image/Brands/D/FILA.png"
-              alt="FILA"
+              src={brands[2]?.image || "/src/assets/image/Brands/D/FILA.png"}
+              alt={brands[2]?.name || "FILA"}
               className="max-w-full max-h-full object-contain"
             />
           </div>
@@ -69,8 +88,8 @@ const Brands3: React.FC = () => {
           {/* Adidas */}
           <div className="row-span-3 col-start-3 row-start-4 border border-gray-200 p-6 lg:p-8 flex items-center justify-center hover:border-gray-300 hover:shadow-md transition-all duration-300 cursor-pointer bg-white">
             <img
-              src="/src/assets/image/Brands/D/adidas.png"
-              alt="Adidas"
+              src={brands[3]?.image || "/src/assets/image/Brands/D/adidas.png"}
+              alt={brands[3]?.name || "Adidas"}
               className="max-w-full max-h-full object-contain"
             />
           </div>
@@ -78,8 +97,8 @@ const Brands3: React.FC = () => {
           {/* Hermes */}
           <div className="row-span-4 col-start-4 row-start-1 border border-gray-200 p-6 lg:p-8 flex items-center justify-center hover:border-gray-300 hover:shadow-md transition-all duration-300 cursor-pointer bg-white">
             <img
-              src="/src/assets/image/Brands/D/hermes.png"
-              alt="Hermes"
+              src={brands[4]?.image || "/src/assets/image/Brands/D/hermes.png"}
+              alt={brands[4]?.name || "Hermes"}
               className="max-w-full max-h-full object-contain"
             />
           </div>
@@ -87,8 +106,8 @@ const Brands3: React.FC = () => {
           {/* Dior */}
           <div className="row-span-4 col-start-5 row-start-1 border border-gray-200 p-6 lg:p-8 flex items-center justify-center hover:border-gray-300 hover:shadow-md transition-all duration-300 cursor-pointer bg-white">
             <img
-              src="/src/assets/image/Brands/D/Dior.png"
-              alt="Dior"
+              src={brands[5]?.image || "/src/assets/image/Brands/D/Dior.png"}
+              alt={brands[5]?.name || "Dior"}
               className="max-w-full max-h-full object-contain"
             />
           </div>
@@ -96,8 +115,8 @@ const Brands3: React.FC = () => {
           {/* New Balance */}
           <div className="col-span-2 row-span-2 col-start-4 row-start-5 border border-gray-200 p-6 lg:p-8 flex items-center justify-center hover:border-gray-300 hover:shadow-md transition-all duration-300 cursor-pointer bg-white">
             <img
-              src="/src/assets/image/Brands/D/NB.png"
-              alt="New Balance"
+              src={brands[6]?.image || "/src/assets/image/Brands/D/NB.png"}
+              alt={brands[6]?.name || "New Balance"}
               className="max-w-full max-h-full object-contain"
             />
           </div>
@@ -105,8 +124,8 @@ const Brands3: React.FC = () => {
           {/* Puma */}
           <div className="row-span-2 col-start-6 row-start-1 border border-gray-200 p-6 lg:p-8 flex items-center justify-center hover:border-gray-300 hover:shadow-md transition-all duration-300 cursor-pointer bg-white">
             <img
-              src="/src/assets/image/Brands/D/Puma.png"
-              alt="Puma"
+              src={brands[7]?.image || "/src/assets/image/Brands/D/Puma.png"}
+              alt={brands[7]?.name || "Puma"}
               className="max-w-full max-h-full object-contain"
             />
           </div>
@@ -114,8 +133,8 @@ const Brands3: React.FC = () => {
           {/* H&M */}
           <div className="row-span-4 col-start-6 row-start-3 border border-gray-200 p-6 lg:p-8 flex items-center justify-center hover:border-gray-300 hover:shadow-md transition-all duration-300 cursor-pointer bg-white">
             <img
-              src="/src/assets/image/Brands/D/H&M.png"
-              alt="H&M"
+              src={brands[8]?.image || "/src/assets/image/Brands/D/H&M.png"}
+              alt={brands[8]?.name || "H&M"}
               className="max-w-full max-h-full object-contain"
             />
           </div>
