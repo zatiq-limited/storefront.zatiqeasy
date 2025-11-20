@@ -790,6 +790,38 @@
         ]
       },
       {
+        "id": "special_offers_3",
+        "type": "special-offers-slider-3",
+        "enabled": true,
+        "settings": {
+          "title": "Buy Bottle now",
+          "titleHighlight": "25% off",
+          "highlightColor": "#2563eb",
+          "buttonText": "Buy Now",
+          "buttonColor": "#2563eb",
+          "buttonHoverColor": "#1d4ed8",
+          "bgColor": "#ffffff",
+          "images": [
+            {
+              "src": "/assets/spOffer/sp1.png",
+              "alt": "Premium Water Bottle"
+            },
+            {
+              "src": "/assets/spOffer/sp2.png",
+              "alt": "Sports Bottle Collection"
+            },
+            {
+              "src": "/assets/spOffer/sp3.png",
+              "alt": "Insulated Bottle"
+            },
+            {
+              "src": "/assets/spOffer/sp4.png",
+              "alt": "Eco-Friendly Bottle"
+            }
+          ]
+        }
+      },
+      {
         "id": "product_tabs",
         "type": "product-tabs-1",
         "settings": {
