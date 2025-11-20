@@ -637,6 +637,108 @@
         }
       },
       {
+        "id": "special_offers",
+        "type": "special-offers-slider-1",
+        "settings": {
+          "title": "Special offers for you",
+          "titleColor": "#000000",
+          "bgColor": "#DCEEE7"
+        },
+        "products": [
+          {
+            "id": 1,
+            "name": "Polarized sunglasses for men",
+            "price": 56.0,
+            "originalPrice": 80.0,
+            "discount": "-30% off",
+            "image": "/assets/SpecialOfferSlider/sunglass.png",
+            "buttonText": "Shop now",
+            "url": "/products/polarized-sunglasses"
+          },
+          {
+            "id": 2,
+            "name": "Wireless Bluetooth Headphones",
+            "price": 89.99,
+            "originalPrice": 129.99,
+            "discount": "-31% off",
+            "image": "/assets/SpecialOfferSlider/sunglass.png",
+            "buttonText": "Shop now",
+            "url": "/products/bluetooth-headphones"
+          },
+          {
+            "id": 3,
+            "name": "Designer Watch Collection",
+            "price": 149.0,
+            "originalPrice": 250.0,
+            "discount": "-40% off",
+            "image": "/assets/SpecialOfferSlider/sunglass.png",
+            "buttonText": "Shop now",
+            "url": "/products/designer-watch"
+          },
+          {
+            "id": 4,
+            "name": "Premium Leather Wallet",
+            "price": 45.0,
+            "originalPrice": 75.0,
+            "discount": "-40% off",
+            "image": "/assets/SpecialOfferSlider/sunglass.png",
+            "buttonText": "Shop now",
+            "url": "/products/leather-wallet"
+          }
+        ]
+      },
+       {
+        "id": "special_offers",
+        "type": "special-offers-slider-2",
+        "settings": {
+          "title": "Special offers for you",
+          "titleColor": "#000000",
+          "bgColor": "#DCEEE7"
+        },
+        "products": [
+          {
+            "id": 1,
+            "name": "Polarized sunglasses for men",
+            "price": 56.0,
+            "originalPrice": 80.0,
+            "discount": "-30% off",
+            "image": "/assets/SpecialOfferSlider/sunglass.png",
+            "buttonText": "Shop now",
+            "url": "/products/polarized-sunglasses"
+          },
+          {
+            "id": 2,
+            "name": "Wireless Bluetooth Headphones",
+            "price": 89.99,
+            "originalPrice": 129.99,
+            "discount": "-31% off",
+            "image": "/assets/SpecialOfferSlider/sunglass.png",
+            "buttonText": "Shop now",
+            "url": "/products/bluetooth-headphones"
+          },
+          {
+            "id": 3,
+            "name": "Designer Watch Collection",
+            "price": 149.0,
+            "originalPrice": 250.0,
+            "discount": "-40% off",
+            "image": "/assets/SpecialOfferSlider/sunglass.png",
+            "buttonText": "Shop now",
+            "url": "/products/designer-watch"
+          },
+          {
+            "id": 4,
+            "name": "Premium Leather Wallet",
+            "price": 45.0,
+            "originalPrice": 75.0,
+            "discount": "-40% off",
+            "image": "/assets/SpecialOfferSlider/sunglass.png",
+            "buttonText": "Shop now",
+            "url": "/products/leather-wallet"
+          }
+        ]
+      },
+      {
         "id": "product_tabs",
         "type": "product-tabs-1",
         "settings": {

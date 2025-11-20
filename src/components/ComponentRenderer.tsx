@@ -48,14 +48,14 @@ export default function ComponentRenderer({
     return null;
   }
 
-  // Render component with settings and blocks
+  // Render component with settings and blocks/products
   return (
     <div
       data-section-id={section.id}
       data-section-type={section.type}
       className="zatiq-section"
     >
-      <Component {...section.settings} blocks={section.blocks} />
+      <Component {...section.settings} blocks={section.blocks} products={section.products} />
     </div>
   );
 }
