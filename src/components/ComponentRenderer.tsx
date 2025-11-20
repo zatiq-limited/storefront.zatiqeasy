@@ -48,14 +48,22 @@ export default function ComponentRenderer({
     return null;
   }
 
-  // Render component with settings and blocks/products
+  // Render component with settings and blocks/products/posts
   return (
     <div
       data-section-id={section.id}
       data-section-type={section.type}
       className="zatiq-section"
     >
-      <Component {...section.settings} blocks={section.blocks} products={section.products} />
+      <Component
+        settings={section.settings}
+        blocks={section.blocks}
+        products={section.products}
+        posts={section.posts}
+        reviews={section.reviews}
+        testimonials={section.testimonials}
+        tabs={section.tabs}
+      />
     </div>
   );
 }

@@ -27,10 +27,14 @@ export interface Template {
 export interface Section {
   id: string;
   type: string;
-  enabled: boolean;
-  settings: Record<string, any>;
+  enabled?: boolean;
+  settings?: Record<string, any>;
   blocks?: Block[];
   products?: any[];
+  posts?: any[];
+  reviews?: any[];
+  testimonials?: any[];
+  tabs?: any[];
 }
 
 export interface Block {

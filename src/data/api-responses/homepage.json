@@ -1036,31 +1036,130 @@
         "posts": [
           {
             "id": "ig_001",
-            "image": "https://cdn.zatiq.com/instagram/post-1.jpg",
+            "image": "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=500&h=500&fit=crop&q=80",
             "caption": "New arrivals dropping tomorrow! 🔥",
             "likes": 1234,
             "link": "https://instagram.com/p/abc123"
           },
           {
             "id": "ig_002",
-            "image": "https://cdn.zatiq.com/instagram/post-2.jpg",
+            "image": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=500&h=500&fit=crop&q=80",
             "caption": "Winter styles to keep you cozy ❄️",
             "likes": 987,
             "link": "https://instagram.com/p/def456"
           },
           {
             "id": "ig_003",
-            "image": "https://cdn.zatiq.com/instagram/post-3.jpg",
+            "image": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=500&h=500&fit=crop&q=80",
             "caption": "Accessorize your look with our latest collection ✨",
             "likes": 765,
             "link": "https://instagram.com/p/ghi789"
           },
           {
             "id": "ig_004",
-            "image": "https://cdn.zatiq.com/instagram/post-4.jpg",
+            "image": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=500&h=500&fit=crop&q=80",
             "caption": "Sustainable fashion never looked so good 🌿",
             "likes": 432,
             "link": "https://instagram.com/p/jkl012"
+          },
+          {
+            "id": "ig_003",
+            "image": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=500&h=500&fit=crop&q=80",
+            "caption": "Accessorize your look with our latest collection ✨",
+            "likes": 765,
+            "link": "https://instagram.com/p/ghi789"
+          },
+          {
+            "id": "ig_004",
+            "image": "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=500&h=500&fit=crop&q=80",
+            "caption": "Sustainable fashion never looked so good 🌿",
+            "likes": 432,
+            "link": "https://instagram.com/p/jkl012"
+          },
+          {
+            "id": "ig_003",
+            "image": "https://images.unsplash.com/photo-1445205170230-053b83016050?w=500&h=500&fit=crop&q=80",
+            "caption": "Accessorize your look with our latest collection ✨",
+            "likes": 765,
+            "link": "https://instagram.com/p/ghi789"
+          },
+          {
+            "id": "ig_004",
+            "image": "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=500&h=500&fit=crop&q=80",
+            "caption": "Sustainable fashion never looked so good 🌿",
+            "likes": 432,
+            "link": "https://instagram.com/p/jkl012"
+          }
+        ]
+      },
+      {
+        "id": "facebook_feed",
+        "type": "social-feed-2",
+        "settings": {
+          "title": "Connect with Us on Facebook",
+          "subtitle": "Join our community",
+          "source": "facebook",
+          "username": "demofashion",
+          "pageName": "Demo Fashion Store",
+          "limit": 6,
+          "columns": 3,
+          "columnsMobile": 1,
+          "showLikes": true
+        },
+        "posts": [
+          {
+            "id": "fb_001",
+            "image": "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600&h=400&fit=crop&q=80",
+            "caption": "🎉 New Collection Alert! Discover our latest winter arrivals that blend comfort with style. Shop now and get 20% off on your first purchase!",
+            "likes": 2543,
+            "comments": 156,
+            "shares": 89,
+            "link": "https://facebook.com/demofashion/posts/123"
+          },
+          {
+            "id": "fb_002",
+            "image": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&h=400&fit=crop&q=80",
+            "caption": "Weekend Vibes ✨ Looking for the perfect outfit? Check out our exclusive designer collection that's making waves this season!",
+            "likes": 1876,
+            "comments": 92,
+            "shares": 45,
+            "link": "https://facebook.com/demofashion/posts/124"
+          },
+          {
+            "id": "fb_003",
+            "image": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&h=400&fit=crop&q=80",
+            "caption": "Customer Love 💕 Thank you for all the amazing reviews! Your support means everything to us. Keep sharing your style stories!",
+            "likes": 3421,
+            "comments": 234,
+            "shares": 127,
+            "link": "https://facebook.com/demofashion/posts/125"
+          },
+          {
+            "id": "fb_004",
+            "image": "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&h=400&fit=crop&q=80",
+            "caption": "Flash Sale Alert! 🔥 48 hours only - Up to 50% off on selected items. Don't miss out on these incredible deals!",
+            "likes": 4567,
+            "comments": 389,
+            "shares": 256,
+            "link": "https://facebook.com/demofashion/posts/126"
+          },
+          {
+            "id": "fb_005",
+            "image": "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=600&h=400&fit=crop&q=80",
+            "caption": "Style Tips Tuesday 💫 How to layer your outfits like a pro this winter. Swipe through for our expert styling guide!",
+            "likes": 1932,
+            "comments": 78,
+            "shares": 34,
+            "link": "https://facebook.com/demofashion/posts/127"
+          },
+          {
+            "id": "fb_006",
+            "image": "https://images.unsplash.com/photo-1445205170230-053b83016050?w=600&h=400&fit=crop&q=80",
+            "caption": "Behind the Scenes 🎬 Take a peek at our latest photoshoot! Creating magic with our talented team. Stay tuned for more!",
+            "likes": 2134,
+            "comments": 112,
+            "shares": 67,
+            "link": "https://facebook.com/demofashion/posts/128"
           }
         ]
       },
