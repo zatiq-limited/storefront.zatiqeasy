@@ -48,7 +48,8 @@ export default function ComponentRenderer({
     return null;
   }
 
-  // Render component with settings and blocks/products/posts
+  // Render component with all section data
+  // Spread settings as top-level props + pass other data as named props
   return (
     <div
       data-section-id={section.id}
@@ -56,6 +57,7 @@ export default function ComponentRenderer({
       className="zatiq-section"
     >
       <Component
+        {...section.settings}
         settings={section.settings}
         blocks={section.blocks}
         products={section.products}
