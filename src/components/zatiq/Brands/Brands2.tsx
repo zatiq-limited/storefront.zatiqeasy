@@ -10,6 +10,7 @@ interface BrandBlock {
 
 interface Brands2Props {
   settings?: {
+    title?: string;
     backgroundColor?: string;
     columns?: number;
     columnsMobile?: number;
@@ -63,10 +64,16 @@ const Brands2: React.FC<Brands2Props> = ({ settings = {}, blocks = [] }) => {
   ];
 
   const brands = blocks.length > 0 ? blocks : defaultBrands;
+  const title = settings?.title || 'Shop by brand';
 
   return (
     <div className="w-full bg-white pb-8 md:pb-14 px-4">
       <div className="max-w-[1050px] mx-auto">
+        {/* Title */}
+        <h2 className="text-2xl md:text-3xl font-bold text-center mb-6 md:mb-8 text-gray-900">
+          {title}
+        </h2>
+
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 md:gap-x-8 lg:gap-x-[30px] gap-y-6 md:gap-y-8">
           {brands.map((brand, index) => (
             <div key={index} className="flex flex-col items-start">

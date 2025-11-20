@@ -867,6 +867,7 @@
         "id": "brand_logos_1",
         "type": "brands-1",
         "settings": {
+          "title": "Shop by brand",
           "backgroundColor": "#FFFFFF",
           "columns": 6,
           "columnsMobile": 2
@@ -902,6 +903,7 @@
         "id": "brand_logos_2",
         "type": "brands-2",
         "settings": {
+          "title": "Shop by brand",
           "backgroundColor": "#FFFFFF",
           "columns": 4,
           "columnsMobile": 2
