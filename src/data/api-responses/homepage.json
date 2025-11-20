@@ -718,7 +718,7 @@
           }
         ]
       },
-       {
+      {
         "id": "special_offers",
         "type": "special-offers-slider-2",
         "settings": {
@@ -735,7 +735,12 @@
             "discount": "-30% off",
             "image": "/assets/SpecialOfferSlider/sunglass.png",
             "buttonText": "Shop now",
-            "url": "/products/polarized-sunglasses"
+            "url": "/products/polarized-sunglasses",
+            "countdown": {
+              "days": 12,
+              "hours": 10,
+              "minutes": 12
+            }
           },
           {
             "id": 2,
@@ -745,7 +750,12 @@
             "discount": "-31% off",
             "image": "/assets/SpecialOfferSlider/sunglass.png",
             "buttonText": "Shop now",
-            "url": "/products/bluetooth-headphones"
+            "url": "/products/bluetooth-headphones",
+            "countdown": {
+              "days": 12,
+              "hours": 10,
+              "minutes": 12
+            }
           },
           {
             "id": 3,
@@ -755,7 +765,12 @@
             "discount": "-40% off",
             "image": "/assets/SpecialOfferSlider/sunglass.png",
             "buttonText": "Shop now",
-            "url": "/products/designer-watch"
+            "url": "/products/designer-watch",
+            "countdown": {
+              "days": 12,
+              "hours": 10,
+              "minutes": 12
+            }
           },
           {
             "id": 4,
@@ -765,7 +780,12 @@
             "discount": "-40% off",
             "image": "/assets/SpecialOfferSlider/sunglass.png",
             "buttonText": "Shop now",
-            "url": "/products/leather-wallet"
+            "url": "/products/leather-wallet",
+            "countdown": {
+              "days": 12,
+              "hours": 10,
+              "minutes": 12
+            }
           }
         ]
       },
