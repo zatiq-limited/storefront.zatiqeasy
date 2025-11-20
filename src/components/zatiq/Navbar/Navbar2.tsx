@@ -43,8 +43,8 @@ const Navbar2: React.FC = () => {
   ];
 
   return (
-    <nav className="bg-white px-3 sm:px-4 md:px-8 lg:px-16 py-3 md:py-4 border-b border-gray-200">
-      <div className="flex justify-between items-center gap-2">
+    <nav className="bg-white py-3 md:py-4 border-b border-gray-200 mb-1">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-0 flex justify-between items-center gap-2">
         {/* Logo and Navigation */}
         <div className="flex items-center gap-2 sm:gap-4 md:gap-8">
           <img src={logoImage} alt="nextek" className="w-[90px] h-[22px] shrink-0" />

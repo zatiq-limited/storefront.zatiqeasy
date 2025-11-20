@@ -26,8 +26,8 @@ const Navbar1: React.FC = () => {
   }, [isMobileMenuOpen]);
 
   return (
-    <nav className="bg-white px-3 sm:px-4 md:px-8 lg:px-10 py-3 md:py-[18px]">
-      <div className="flex justify-between items-center gap-2">
+    <nav className="bg-white py-3 md:py-[18px]">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-0 flex justify-between items-center gap-2">
         <div className="flex items-center gap-2 sm:gap-4 md:gap-10">
           {/* Logo */}
           <div className="flex items-center shrink-0">
