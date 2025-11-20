@@ -18,8 +18,8 @@ interface HeroSlide {
 // Component props interface
 interface Hero1Props {
   settings?: {
-    autoplay?: boolean;
-    autoplaySpeed?: number;
+    autoPlay?: boolean;
+    autoPlaySpeed?: number;
     showArrows?: boolean;
     showIndicators?: boolean;
   };
@@ -36,8 +36,8 @@ const Hero1: React.FC<Hero1Props> = ({ settings = {}, blocks = [] }) => {
   const totalSlides = heroSlides.length;
 
   // Settings with defaults
-  const autoplay = settings.autoplay !== false; // Default: true
-  const autoplaySpeed = settings.autoplaySpeed || 5000; // Default: 5s
+  const autoPlay = settings.autoPlay !== false; // Default: true
+  const autoPlaySpeed = settings.autoPlaySpeed || 5000; // Default: 5s
   const showArrows = settings.showArrows !== false; // Default: true
   const showIndicators = settings.showIndicators !== false; // Default: true
 
@@ -51,14 +51,14 @@ const Hero1: React.FC<Hero1Props> = ({ settings = {}, blocks = [] }) => {
 
   // Auto-advance carousel
   useEffect(() => {
-    if (!autoplay || isPaused || totalSlides === 0) return;
+    if (!autoPlay || isPaused || totalSlides === 0) return;
 
     const interval = setInterval(() => {
       handleNext();
-    }, autoplaySpeed);
+    }, autoPlaySpeed);
 
     return () => clearInterval(interval);
-  }, [isPaused, handleNext, autoplay, autoplaySpeed, totalSlides]);
+  }, [isPaused, handleNext, autoPlay, autoPlaySpeed, totalSlides]);
 
   // Handle previous slide
   const handlePrev = useCallback(() => {

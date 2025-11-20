@@ -7,8 +7,8 @@
         "id": "hero_main",
         "type": "hero-1",
         "settings": {
-          "autoplay": true,
-          "autoplaySpeed": 5000,
+          "autoPlay": true,
+          "autoPlaySpeed": 5000,
           "showArrows": true,
           "showIndicators": true
         },
@@ -57,8 +57,8 @@
         "id": "hero_centered",
         "type": "hero-2",
         "settings": {
-          "autoplay": true,
-          "autoplaySpeed": 5000,
+          "autoPlay": true,
+          "autoPlaySpeed": 5000,
           "showArrows": true,
           "showIndicators": true
         },
@@ -102,8 +102,8 @@
         "id": "hero_with_side_arrows",
         "type": "hero-3",
         "settings": {
-          "autoplay": true,
-          "autoplaySpeed": 5000,
+          "autoPlay": true,
+          "autoPlaySpeed": 5000,
           "showArrows": true,
           "showIndicators": true
         },
@@ -150,8 +150,8 @@
         "id": "hero_left_aligned",
         "type": "hero-4",
         "settings": {
-          "autoplay": true,
-          "autoplaySpeed": 5000,
+          "autoPlay": true,
+          "autoPlaySpeed": 5000,
           "showArrows": true,
           "showIndicators": true
         },
