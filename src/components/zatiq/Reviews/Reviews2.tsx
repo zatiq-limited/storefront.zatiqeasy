@@ -80,7 +80,7 @@ const Reviews2: React.FC<Reviews2Props> = ({ settings = {}, testimonials: testim
   }, [api]);
 
   return (
-    <div className="w-full py-8 md:py-12 lg:py-16 bg-gray-50 overflow-hidden font-volkhov">
+    <div className="w-full py-8 md:py-12 lg:py-16 bg-gray-50 font-volkhov">
       <div className="container mx-auto px-4 md:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-8 md:mb-10 lg:mb-12">
@@ -93,7 +93,7 @@ const Reviews2: React.FC<Reviews2Props> = ({ settings = {}, testimonials: testim
         </div>
 
         {/* Triple Slider Carousel - 3D Coverflow Effect */}
-        <div className="relative">
+        <div className="relative overflow-visible px-4 md:px-8 lg:px-12">
           <Carousel
             opts={{
               align: "center",
@@ -101,7 +101,7 @@ const Reviews2: React.FC<Reviews2Props> = ({ settings = {}, testimonials: testim
             }}
             plugins={settings?.autoplay !== false ? [autoplayPlugin.current] : []}
             setApi={setApi}
-            className="w-full"
+            className="w-full overflow-visible"
           >
             <CarouselContent className="-ml-2">
               {testimonials.map((testimonial, index) => {
