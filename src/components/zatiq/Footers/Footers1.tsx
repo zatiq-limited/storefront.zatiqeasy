@@ -3,8 +3,8 @@ import { Facebook, Instagram, Youtube, Send, Share2 } from 'lucide-react';
 
 const Footers1: React.FC = () => {
   return (
-    <footer className="w-full bg-white py-8 md:py-12 px-4 md:px-8 overflow-hidden font-sans">
-      <div className="w-full max-w-7xl mx-auto">
+    <footer className="w-full py-8 md:py-12 overflow-hidden font-sans">
+      <div className="w-full max-w-[1440px] mx-auto px-4 2xl:px-0">
         {/* Logo and Newsletter - Mobile/Tablet First */}
         <div className="w-full mb-8 lg:hidden">
           <img 

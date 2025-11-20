@@ -5,8 +5,8 @@ const Footers2: React.FC = () => {
   return (
     <footer className="w-full bg-white overflow-hidden font-sans">
       {/* Main Footer Content */}
-      <div className="w-full bg-gray-50 py-8 md:py-12 px-2 md:px-8">
-        <div className="max-w-7xl mx-auto">
+      <div className="w-full bg-gray-50 py-8 md:py-12">
+        <div className="max-w-[1440px] mx-auto px-4 2xl:px-0">
           {/* Logo and Description - Full width on mobile/tablet */}
           <div className="mb-8 lg:hidden">
             <div className="mb-6">
@@ -163,8 +163,8 @@ const Footers2: React.FC = () => {
       </div>
 
       {/* Bottom Footer - Dark Section */}
-      <div className="w-full bg-gray-800 py-4 px-4 md:px-8">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+      <div className="w-full bg-gray-800 py-4">
+        <div className="max-w-[1440px] mx-auto px-4 2xl:px-0 flex flex-col md:flex-row justify-between items-center gap-4">
           {/* Copyright */}
           <p className="text-white text-sm">
             All rights reserved for Zatiq Ltd © 2025
