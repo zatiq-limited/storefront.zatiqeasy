@@ -67,14 +67,14 @@ const SpecialOffersSlider4: React.FC<SpecialOffersSlider4Props> = ({
       className="w-full pb-8 md:pb-14 px-4 font-roboto"
       style={{ backgroundColor: bgColor }}
     >
-      <div className="w-full max-w-[1296px] mx-auto">
+      <div className="w-full max-w-[1440px] mx-auto">
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Left Card - Large card */}
           {leftCard && (
-            <div className={`w-full lg:w-[856px] h-[260px] relative rounded-lg overflow-hidden flex items-center transition-all duration-500 ease-out ${
+            <div className={`w-full lg:w-2/3 h-[260px] relative rounded-lg overflow-hidden flex items-center transition-all duration-500 ease-out ${
               isVisible
-                ? 'opacity-100 translate-x-0'
-                : 'opacity-0 -translate-x-16'
+                ? 'opacity-100 lg:translate-x-0'
+                : 'opacity-0 lg:-translate-x-16'
             }`}>
               {/* Background Image */}
               {leftCard.image && (
@@ -117,10 +117,10 @@ const SpecialOffersSlider4: React.FC<SpecialOffersSlider4Props> = ({
 
           {/* Right Card - Small card */}
           {rightCard && (
-            <div className={`w-full lg:w-[416px] h-[260px] relative rounded-lg overflow-hidden flex items-center transition-all duration-500 ease-out ${
+            <div className={`w-full lg:w-1/3 h-[260px] relative rounded-lg overflow-hidden flex items-center transition-all duration-500 ease-out ${
               isVisible
-                ? 'opacity-100 translate-x-0'
-                : 'opacity-0 translate-x-16'
+                ? 'opacity-100 lg:translate-x-0'
+                : 'opacity-0 lg:translate-x-16'
             }`}>
               {/* Background Image */}
               {rightCard.image && (

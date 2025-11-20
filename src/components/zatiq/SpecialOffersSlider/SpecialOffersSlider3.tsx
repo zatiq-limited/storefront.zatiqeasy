@@ -59,7 +59,7 @@ const SpecialOffersSlider3: React.FC<SpecialOffersSlider3Props> = ({
       className="w-full px-4 pb-8 md:pb-14 font-sans"
       style={{ backgroundColor: bgColor }}
     >
-      <div className="max-w-[1296px] mx-auto">
+      <div className="max-w-[1440px] mx-auto">
         {/* Mobile Layout */}
         <div className="lg:hidden flex flex-col items-center gap-6">
           {/* Top Images */}

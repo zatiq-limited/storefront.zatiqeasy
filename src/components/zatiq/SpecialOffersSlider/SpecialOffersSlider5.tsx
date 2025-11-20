@@ -63,7 +63,7 @@ const SpecialOffersSlider5: React.FC<SpecialOffersSlider5Props> = ({
       className="w-full pb-8 md:pb-14 px-4 font-roboto"
       style={{ backgroundColor: bgColor }}
     >
-      <div className="max-w-[1296px] mx-auto">
+      <div className="max-w-[1440px] mx-auto">
         {/* Vertical Carousel Container */}
         <div className="relative rounded-lg overflow-hidden">
           <Carousel

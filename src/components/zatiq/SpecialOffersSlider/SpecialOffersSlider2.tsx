@@ -42,11 +42,11 @@ const SpecialOffersSlider2: React.FC<SpecialOffersSlider2Props> = ({
   );
 
   return (
-    <div className="w-full max-w-[1296px] mx-auto font-sans px-4 pb-8 md:pb-14">
+    <div className="w-full max-w-[1440px] mx-auto font-sans px-4 pb-8 md:pb-14">
       {/* Title */}
       {title && (
         <h2
-          className="w-full max-w-[1296px] font-inter font-semibold text-2xl md:text-[32px] leading-8 md:leading-[42px] tracking-[0%] text-center mb-6 md:mb-8"
+          className="w-full max-w-[1440px] font-inter font-semibold text-2xl md:text-[32px] leading-8 md:leading-[42px] tracking-[0%] text-center mb-6 md:mb-8"
           style={{ color: titleColor }}
         >
           {title}
@@ -56,7 +56,7 @@ const SpecialOffersSlider2: React.FC<SpecialOffersSlider2Props> = ({
       {/* Products Carousel */}
       {products.length > 0 && (
         <div
-          className="relative w-full max-w-[1296px] min-h-[542px] rounded-2xl py-6 px-4 md:px-9"
+          className="relative w-full max-w-[1440px] min-h-[542px] rounded-2xl py-6 px-4 md:px-9"
           style={{ backgroundColor: bgColor }}
         >
         <Carousel
