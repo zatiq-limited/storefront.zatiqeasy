@@ -1,17 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import Autoplay from "embla-carousel-autoplay";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+
 const image1 = '/assets/Review/image.png';
 const image2 = '/assets/Review/image2.png';
 const image3 = '/assets/Review/image3.png';
 
-const Reviews1: React.FC = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [touchStart, setTouchStart] = useState(0);
-  const [touchEnd, setTouchEnd] = useState(0);
-  const [cardsPerView, setCardsPerView] = useState(1);
-  const [isHovered, setIsHovered] = useState(false);
+// Component-specific types
+interface ReviewBlock {
+  name: string;
+  rating: number;
+  comment: string;
+  image: string;
+}
 
-  const reviews = [
+interface Reviews1Props {
+  settings?: {
+    title?: string;
+    subtitle?: string;
+    autoplay?: boolean;
+    autoplaySpeed?: number;
+  };
+  reviews?: ReviewBlock[];
+}
+
+const Reviews1: React.FC<Reviews1Props> = ({ settings = {}, reviews: reviewsProps = [] }) => {
+  // Default review data
+  const defaultReviews: ReviewBlock[] = [
     {
       name: 'Victoria Gardner',
       rating: 5,
@@ -44,177 +60,76 @@ const Reviews1: React.FC = () => {
     },
   ];
 
-  // Update cards per view based on screen size
-  useEffect(() => {
-    const updateCardsPerView = () => {
-      if (window.innerWidth >= 1024) {
-        setCardsPerView(3);
-      } else if (window.innerWidth >= 768) {
-        setCardsPerView(2);
-      } else {
-        setCardsPerView(1);
-      }
-    };
+  const reviews = reviewsProps.length > 0 ? reviewsProps : defaultReviews;
+  const title = settings?.title || 'Happy customers';
 
-    updateCardsPerView();
-    window.addEventListener('resize', updateCardsPerView);
-    return () => window.removeEventListener('resize', updateCardsPerView);
-  }, []);
-
-  // Auto-play functionality
-  useEffect(() => {
-    if (!isHovered) {
-      const interval = setInterval(() => {
-        handleNext();
-      }, 3000);
-      return () => clearInterval(interval);
-    }
-  }, [currentIndex, isHovered, cardsPerView]);
-
-  const handleNext = () => {
-    setCurrentIndex((prevIndex) => {
-      const maxIndex = reviews.length - cardsPerView;
-      return prevIndex >= maxIndex ? 0 : prevIndex + 1;
-    });
-  };
-
-  const handlePrev = () => {
-    setCurrentIndex((prevIndex) => {
-      const maxIndex = reviews.length - cardsPerView;
-      return prevIndex <= 0 ? maxIndex : prevIndex - 1;
-    });
-  };
-
-  // Touch handlers for swipe
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStart(e.targetTouches[0].clientX);
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientX);
-  };
-
-  const handleTouchEnd = () => {
-    if (touchStart - touchEnd > 75) {
-      // Swipe left
-      handleNext();
-    }
-
-    if (touchStart - touchEnd < -75) {
-      // Swipe right
-      handlePrev();
-    }
-  };
-
-  // Calculate transform percentage
-  const getTransformValue = () => {
-    const cardWidth = 100 / cardsPerView;
-    return -(currentIndex * cardWidth);
-  };
-
-  // Calculate total pages for pagination
-  const totalPages = reviews.length - cardsPerView + 1;
+  // Configure autoplay plugin
+  const autoplayPlugin = React.useRef(
+    Autoplay({ delay: settings?.autoplaySpeed || 3000, stopOnInteraction: true })
+  );
 
   return (
     <div className="w-full bg-gray-50 py-8 md:py-12 lg:py-16 px-4 md:px-6 lg:px-8 overflow-hidden font-sans">
       <div className="max-w-6xl mx-auto">
         <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-8 md:mb-10 lg:mb-12">
-          Happy customers
+          {title}
         </h2>
 
         {/* Carousel Container */}
-        <div
-          className="relative"
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
+        <Carousel
+          opts={{
+            align: "start",
+            loop: true,
+          }}
+          plugins={settings?.autoplay !== false ? [autoplayPlugin.current] : []}
+          className="w-full"
         >
-          {/* Left Navigation Button - Hidden on Mobile */}
-          <button
-            onClick={handlePrev}
-            className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-5 z-10 w-10 h-10 bg-transparent border border-gray-300 rounded-full items-center justify-center p-3 transition-all hover:border-gray-400 hover:bg-white"
-            aria-label="Previous"
-          >
-            <ChevronLeft className="w-4 h-4 text-gray-800" />
-          </button>
-
-          {/* Right Navigation Button - Hidden on Mobile */}
-          <button
-            onClick={handleNext}
-            className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-5 z-10 w-10 h-10 bg-transparent border border-gray-300 rounded-full items-center justify-center p-3 transition-all hover:border-gray-400 hover:bg-white"
-            aria-label="Next"
-          >
-            <ChevronRight className="w-4 h-4 text-gray-800" />
-          </button>
-
-          {/* Cards Container */}
-          <div className="overflow-hidden">
-            <div
-              className="flex transition-transform duration-300 ease-in-out gap-4 md:gap-5 lg:gap-6"
-              style={{
-                transform: `translateX(calc(${getTransformValue()}% - ${currentIndex * (cardsPerView === 1 ? 0 : cardsPerView === 2 ? 10 : 12)}px))`
-              }}
-              onTouchStart={handleTouchStart}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={handleTouchEnd}
-            >
-              {reviews.map((review, index) => (
-                <div
-                  key={index}
-                  className="shrink-0 w-full md:w-[calc(50%-10px)] lg:w-[calc(33.333%-16px)]"
-                >
-                  <div className="bg-white p-4 md:p-6 lg:p-8 rounded-xl md:rounded-2xl h-full flex flex-col">
-                    <div className="flex gap-4 md:gap-6">
-                      {/* Product Image */}
-                      <div className="shrink-0">
-                        <img
-                          src={review.image}
-                          alt={`Product reviewed by ${review.name}`}
-                          className="w-20 h-20 md:w-24 md:h-24 object-contain"
-                        />
-                      </div>
-
-                      {/* Review Content */}
-                      <div className="flex-1 min-w-0">
-                        {/* Stars */}
-                        <div className="flex items-center gap-0.5 md:gap-1 mb-2">
-                          {[...Array(5)].map((_, star) => (
-                            <span key={star} className={`text-base md:text-lg ${star < review.rating ? 'text-orange-400' : 'text-gray-300'}`}>★</span>
-                          ))}
-                        </div>
-
-                        {/* Name */}
-                        <h4 className="font-bold text-sm md:text-base text-gray-900 mb-2 md:mb-3">
-                          {review.name}
-                        </h4>
-                      </div>
+          <CarouselContent className="-ml-4 md:-ml-5 lg:-ml-6">
+            {reviews.map((review, index) => (
+              <CarouselItem
+                key={index}
+                className="pl-4 md:pl-5 lg:pl-6 basis-full md:basis-1/2 lg:basis-1/3"
+              >
+                <div className="bg-white p-4 md:p-6 lg:p-8 rounded-xl md:rounded-2xl h-full flex flex-col">
+                  <div className="flex gap-4 md:gap-6">
+                    {/* Product Image */}
+                    <div className="shrink-0">
+                      <img
+                        src={review.image}
+                        alt={`Product reviewed by ${review.name}`}
+                        className="w-20 h-20 md:w-24 md:h-24 object-contain"
+                      />
                     </div>
 
-                    {/* Comment */}
-                    <p className="text-xs md:text-sm text-gray-600 leading-relaxed mt-3 md:mt-4">
-                      {review.comment}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+                    {/* Review Content */}
+                    <div className="flex-1 min-w-0">
+                      {/* Stars */}
+                      <div className="flex items-center gap-0.5 md:gap-1 mb-2">
+                        {[...Array(5)].map((_, star) => (
+                          <span key={star} className={`text-base md:text-lg ${star < review.rating ? 'text-orange-400' : 'text-gray-300'}`}>★</span>
+                        ))}
+                      </div>
 
-          {/* Pagination Dots */}
-          <div className="flex justify-center gap-2 mt-6 md:mt-8">
-            {[...Array(totalPages)].map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentIndex(index)}
-                className={`h-2.5 rounded-full transition-all ${
-                  currentIndex === index
-                    ? 'bg-orange-500 w-6'
-                    : 'bg-gray-300 w-2.5'
-                }`}
-                aria-label={`Go to slide ${index + 1}`}
-              />
+                      {/* Name */}
+                      <h4 className="font-bold text-sm md:text-base text-gray-900 mb-2 md:mb-3">
+                        {review.name}
+                      </h4>
+                    </div>
+                  </div>
+
+                  {/* Comment */}
+                  <p className="text-xs md:text-sm text-gray-600 leading-relaxed mt-3 md:mt-4">
+                    {review.comment}
+                  </p>
+                </div>
+              </CarouselItem>
             ))}
-          </div>
-        </div>
+          </CarouselContent>
+
+          {/* Navigation Buttons */}
+          <CarouselPrevious className="hidden md:flex border border-gray-300 bg-transparent hover:bg-white hover:border-gray-400 left-0 -translate-x-5" />
+          <CarouselNext className="hidden md:flex border border-gray-300 bg-transparent hover:bg-white hover:border-gray-400 right-0 translate-x-5" />
+        </Carousel>
       </div>
     </div>
   );
