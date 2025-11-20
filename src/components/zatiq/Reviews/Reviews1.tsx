@@ -1,5 +1,4 @@
 import React from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import Autoplay from "embla-carousel-autoplay";
 import {
   Carousel,
@@ -8,10 +7,6 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-
-const image1 = "/assets/Review/image.png";
-const image2 = "/assets/Review/image2.png";
-const image3 = "/assets/Review/image3.png";
 
 // Component-specific types
 interface ReviewBlock {
