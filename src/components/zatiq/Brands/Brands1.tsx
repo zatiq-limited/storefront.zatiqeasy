@@ -1,21 +1,34 @@
 import React from 'react';
-const sony = '/assets/Brands/sony.png';
-const skullcandy = '/assets/Brands/Skullcandy.png';
-const bose = '/assets/Brands/Bose.png';
-const oppo = '/assets/Brands/oppo.png';
-const panasonic = '/assets/Brands/parasonic.png';
-const samsung = '/assets/Brands/samsung.png';
 
-const brands = [
-  { name: 'Sony', logo: sony },
-  { name: 'Skullcandy', logo: skullcandy },
-  { name: 'Bose', logo: bose },
-  { name: 'Oppo', logo: oppo },
-  { name: 'Panasonic', logo: panasonic },
-  { name: 'Samsung', logo: samsung },
-];
+// Component-specific types
+interface BrandBlock {
+  name: string;
+  logo: string;
+  url?: string;
+}
 
-const Brands1: React.FC = () => {
+interface Brands1Props {
+  settings?: {
+    backgroundColor?: string;
+    columns?: number;
+    columnsMobile?: number;
+  };
+  blocks?: BrandBlock[];
+}
+
+const Brands1: React.FC<Brands1Props> = ({ settings = {}, blocks = [] }) => {
+  // Default brand data
+  const defaultBrands: BrandBlock[] = [
+    { name: 'Sony', logo: '/assets/Brands/sony.png' },
+    { name: 'Skullcandy', logo: '/assets/Brands/Skullcandy.png' },
+    { name: 'Bose', logo: '/assets/Brands/Bose.png' },
+    { name: 'Oppo', logo: '/assets/Brands/oppo.png' },
+    { name: 'Panasonic', logo: '/assets/Brands/parasonic.png' },
+    { name: 'Samsung', logo: '/assets/Brands/samsung.png' },
+  ];
+
+  const brands = blocks.length > 0 ? blocks : defaultBrands;
+
   return (
     <div className="w-full bg-white pb-8 md:pb-14 px-4">
       <div className="max-w-7xl mx-auto">

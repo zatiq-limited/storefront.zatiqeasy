@@ -1,57 +1,69 @@
 import React from 'react';
-const sony = '/assets/Brands/sony.png';
-const skullcandy = '/assets/Brands/Skullcandy.png';
-const bose = '/assets/Brands/Bose.png';
-const oppo = '/assets/Brands/oppo.png';
-const samsung = '/assets/Brands/samsung.png';
-const philips = '/assets/Brands/Philips.png';
-const oracle = '/assets/Brands/oracle.png';
-const dell = '/assets/Brands/Dell.png';
 
-const brands = [
-  {
-    name: 'Sony',
-    logo: sony,
-    description: 'Get your best looking smile now!',
-  },
-  {
-    name: 'Skullcandy',
-    logo: skullcandy,
-    description: 'DentalCare is most focused in helping you discover your most beautiful smile',
-  },
-  {
-    name: 'Bose',
-    logo: bose,
-    description: 'Overcame any hurdle or any other problem.',
-  },
-  {
-    name: 'Oppo',
-    logo: oppo,
-    description: 'Overcame any hurdle or any other problem.',
-  },
-  {
-    name: 'Samsung',
-    logo: samsung,
-    description: 'Get your best looking smile now!',
-  },
-  {
-    name: 'Philips',
-    logo: philips,
-    description: 'DentalCare is most focused in helping you discover your most beautiful smile',
-  },
-  {
-    name: 'Oracle',
-    logo: oracle,
-    description: 'Overcame any hurdle or any other problem.',
-  },
-  {
-    name: 'Dell',
-    logo: dell,
-    description: 'Overcame any hurdle or any other problem.',
-  },
-];
+// Component-specific types
+interface BrandBlock {
+  name: string;
+  logo: string;
+  description: string;
+  url?: string;
+}
 
-const Brands2: React.FC = () => {
+interface Brands2Props {
+  settings?: {
+    backgroundColor?: string;
+    columns?: number;
+    columnsMobile?: number;
+  };
+  blocks?: BrandBlock[];
+}
+
+const Brands2: React.FC<Brands2Props> = ({ settings = {}, blocks = [] }) => {
+  // Default brand data
+  const defaultBrands: BrandBlock[] = [
+    {
+      name: 'Sony',
+      logo: '/assets/Brands/sony.png',
+      description: 'Get your best looking smile now!',
+    },
+    {
+      name: 'Skullcandy',
+      logo: '/assets/Brands/Skullcandy.png',
+      description: 'DentalCare is most focused in helping you discover your most beautiful smile',
+    },
+    {
+      name: 'Bose',
+      logo: '/assets/Brands/Bose.png',
+      description: 'Overcame any hurdle or any other problem.',
+    },
+    {
+      name: 'Oppo',
+      logo: '/assets/Brands/oppo.png',
+      description: 'Overcame any hurdle or any other problem.',
+    },
+    {
+      name: 'Samsung',
+      logo: '/assets/Brands/samsung.png',
+      description: 'Get your best looking smile now!',
+    },
+    {
+      name: 'Philips',
+      logo: '/assets/Brands/Philips.png',
+      description: 'DentalCare is most focused in helping you discover your most beautiful smile',
+    },
+    {
+      name: 'Oracle',
+      logo: '/assets/Brands/oracle.png',
+      description: 'Overcame any hurdle or any other problem.',
+    },
+    {
+      name: 'Dell',
+      logo: '/assets/Brands/Dell.png',
+      description: 'Overcame any hurdle or any other problem.',
+    },
+  ];
+
+  const brands = blocks.length > 0 ? blocks : defaultBrands;
+
   return (
     <div className="w-full bg-white pb-8 md:pb-14 px-4">
       <div className="max-w-[1050px] mx-auto">
