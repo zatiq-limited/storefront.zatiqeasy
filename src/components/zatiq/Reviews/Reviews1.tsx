@@ -1,11 +1,17 @@
-import React from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import React from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import Autoplay from "embla-carousel-autoplay";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
-const image1 = '/assets/Review/image.png';
-const image2 = '/assets/Review/image2.png';
-const image3 = '/assets/Review/image3.png';
+const image1 = "/assets/Review/image.png";
+const image2 = "/assets/Review/image2.png";
+const image3 = "/assets/Review/image3.png";
 
 // Component-specific types
 interface ReviewBlock {
@@ -25,52 +31,25 @@ interface Reviews1Props {
   reviews?: ReviewBlock[];
 }
 
-const Reviews1: React.FC<Reviews1Props> = ({ settings = {}, reviews: reviewsProps = [] }) => {
-  // Default review data
-  const defaultReviews: ReviewBlock[] = [
-    {
-      name: 'Victoria Gardner',
-      rating: 5,
-      comment: 'Very satisfied with the bag! A wonderful shopper, not too big and not too small, but as it should be 👌 The bag looks more expensive than it costs.',
-      image: image1
-    },
-    {
-      name: 'Alexandra D.',
-      rating: 5,
-      comment: 'A wonderful compact bag, holds a lot of things, good tailoring, smooth seams, strong fittings, good quality.',
-      image: image2
-    },
-    {
-      name: 'Jenny Wilson',
-      rating: 4,
-      comment: 'Elegant blouse and the color is very nice, the seams are neat. 🎁 Excellent quality fabric, for summer weather is very good because the fabric is light and does not stick to the body.',
-      image: image3
-    },
-    {
-      name: 'Alexandra D.',
-      rating: 5,
-      comment: 'A wonderful compact bag, holds a lot of things, good tailoring, smooth seams, strong fittings, good quality.',
-      image: image2
-    },
-    {
-      name: 'Jenny Wilson',
-      rating: 4,
-      comment: 'Elegant blouse and the color is very nice, the seams are neat. 🎁 Excellent quality fabric, for summer weather is very good because the fabric is light and does not stick to the body.',
-      image: image3
-    },
-  ];
-
-  const reviews = reviewsProps.length > 0 ? reviewsProps : defaultReviews;
-  const title = settings?.title || 'Happy customers';
+const Reviews1: React.FC<Reviews1Props> = ({
+  settings = {},
+  reviews: reviewsProps = [],
+}) => {
+  if (reviewsProps.length <= 0) return null;
+  const reviews = reviewsProps;
+  const title = settings?.title;
 
   // Configure autoplay plugin
   const autoplayPlugin = React.useRef(
-    Autoplay({ delay: settings?.autoplaySpeed || 3000, stopOnInteraction: true })
+    Autoplay({
+      delay: settings?.autoplaySpeed || 3000,
+      stopOnInteraction: true,
+    })
   );
 
   return (
-    <div className="w-full bg-gray-50 py-8 md:py-12 lg:py-16 px-4 md:px-6 lg:px-8 overflow-hidden font-sans">
-      <div className="max-w-6xl mx-auto">
+    <div className="w-full pb-8 md:pb-14 overflow-hidden font-sans">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-10">
         <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-8 md:mb-10 lg:mb-12">
           {title}
         </h2>
@@ -106,7 +85,16 @@ const Reviews1: React.FC<Reviews1Props> = ({ settings = {}, reviews: reviewsProp
                       {/* Stars */}
                       <div className="flex items-center gap-0.5 md:gap-1 mb-2">
                         {[...Array(5)].map((_, star) => (
-                          <span key={star} className={`text-base md:text-lg ${star < review.rating ? 'text-orange-400' : 'text-gray-300'}`}>★</span>
+                          <span
+                            key={star}
+                            className={`text-base md:text-lg ${
+                              star < review.rating
+                                ? "text-orange-400"
+                                : "text-gray-300"
+                            }`}
+                          >
+                            ★
+                          </span>
                         ))}
                       </div>
 

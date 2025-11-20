@@ -1,11 +1,12 @@
-import React from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import React from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import Autoplay from "embla-carousel-autoplay";
-import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
-
-const avatar1 = '/assets/avatar/a1.jpg';
-const avatar2 = '/assets/avatar/a2.jpg';
-const avatar3 = '/assets/avatar/a3.jpg';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  type CarouselApi,
+} from "@/components/ui/carousel";
 
 // Component-specific types
 interface ReviewBlock {
@@ -25,55 +26,30 @@ interface Reviews3Props {
   reviews?: ReviewBlock[];
 }
 
-const Reviews3: React.FC<Reviews3Props> = ({ settings = {}, reviews: reviewsProps = [] }) => {
-  // Default review data
-  const defaultReviews: ReviewBlock[] = [
-    {
-      name: 'Amina Rahman',
-      comment: 'The portable Bluetooth speaker delivers surprisingly powerful sound for its size. Perfect for outdoor use. I just wish the charging time was a bit shorter. Overall, a solid buy for casual music lovers.',
-      rating: 4,
-      avatar: avatar1,
-    },
-    {
-      name: 'Liam Ahmed',
-      comment: "The smart home camera has decent video quality during the day, but night vision isn't very clear. Setup was easy, but I had some trouble with the app notifications. It does the job, but not perfect.",
-      rating: 4,
-      avatar: avatar2,
-    },
-    {
-      name: 'Sofia Islam',
-      comment: 'I bought the smartwatch mainly for fitness tracking, and it works well for steps and heart rate. But the battery barely lasts two days, which is disappointing. I hope future updates improve the performance.',
-      rating: 5,
-      avatar: avatar3,
-    },
-    {
-      name: 'Amina Rahman',
-      comment: 'The portable Bluetooth speaker delivers surprisingly powerful sound for its size. Perfect for outdoor use. I just wish the charging time was a bit shorter. Overall, a solid buy for casual music lovers.',
-      rating: 4,
-      avatar: avatar1,
-    },
-    {
-      name: 'Liam Ahmed',
-      comment: "The smart home camera has decent video quality during the day, but night vision isn't very clear. Setup was easy, but I had some trouble with the app notifications. It does the job, but not perfect.",
-      rating: 4,
-      avatar: avatar2,
-    },
-  ];
+const Reviews3: React.FC<Reviews3Props> = ({
+  settings = {},
+  reviews: reviewsProps = [],
+}) => {
+  if (reviewsProps.length <= 0) return null;
 
-  const reviews = reviewsProps.length > 0 ? reviewsProps : defaultReviews;
-  const title = settings?.title || 'Customer Opinions';
-  const subtitle = settings?.subtitle || 'We are showcasing some user opinions and comments';
+  const reviews = reviewsProps;
+  const title = settings?.title;
+  const subtitle = settings?.subtitle;
 
   // Carousel API state for custom navigation
   const [api, setApi] = React.useState<CarouselApi>();
 
   // Configure autoplay plugin
   const autoplayPlugin = React.useRef(
-    Autoplay({ delay: settings?.autoplaySpeed || 3000, stopOnInteraction: false, stopOnMouseEnter: true })
+    Autoplay({
+      delay: settings?.autoplaySpeed || 3000,
+      stopOnInteraction: false,
+      stopOnMouseEnter: true,
+    })
   );
 
   return (
-    <div className="w-full bg-gray-50 pb-8 md:pb-14 px-4 font-sans">
+    <div className="w-full pb-8 md:pb-14 px-4 font-sans">
       <div className="container mx-auto md:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-6 md:mb-8 lg:mb-10 px-4">
@@ -114,11 +90,13 @@ const Reviews3: React.FC<Reviews3Props> = ({ settings = {}, reviews: reviewsProp
               align: "start",
               loop: true,
             }}
-            plugins={settings?.autoplay !== false ? [autoplayPlugin.current] : []}
+            plugins={
+              settings?.autoplay !== false ? [autoplayPlugin.current] : []
+            }
             setApi={setApi}
             className="w-full overflow-visible"
           >
-            <CarouselContent className="-ml-4 md:-ml-5 lg:-ml-6">
+            <CarouselContent>
               {reviews.map((review, index) => (
                 <CarouselItem
                   key={index}
@@ -127,7 +105,11 @@ const Reviews3: React.FC<Reviews3Props> = ({ settings = {}, reviews: reviewsProp
                   <div className="bg-white p-4 md:p-6 lg:p-8 rounded-xl md:rounded-2xl shadow-lg h-full flex flex-col w-full max-w-full relative z-10">
                     {/* Quote Icon */}
                     <div className="mb-3 md:mb-4">
-                      <svg className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                      <svg
+                        className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 text-gray-300"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
                         <path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z" />
                       </svg>
                     </div>
@@ -135,7 +117,14 @@ const Reviews3: React.FC<Reviews3Props> = ({ settings = {}, reviews: reviewsProp
                     {/* Star Rating */}
                     <div className="flex items-center gap-0.5 md:gap-1 mb-3 md:mb-4">
                       {[...Array(5)].map((_, i) => (
-                        <span key={i} className={`text-base md:text-lg lg:text-xl ${i < review.rating ? 'text-orange-400' : 'text-gray-300'}`}>
+                        <span
+                          key={i}
+                          className={`text-base md:text-lg lg:text-xl ${
+                            i < review.rating
+                              ? "text-orange-400"
+                              : "text-gray-300"
+                          }`}
+                        >
                           ★
                         </span>
                       ))}
@@ -153,7 +142,9 @@ const Reviews3: React.FC<Reviews3Props> = ({ settings = {}, reviews: reviewsProp
                         alt={review.name}
                         className="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover shrink-0"
                       />
-                      <h4 className="font-semibold text-gray-900 text-sm md:text-base truncate">{review.name}</h4>
+                      <h4 className="font-semibold text-gray-900 text-sm md:text-base truncate">
+                        {review.name}
+                      </h4>
                     </div>
                   </div>
                 </CarouselItem>
