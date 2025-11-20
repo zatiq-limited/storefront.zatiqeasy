@@ -31,9 +31,9 @@ interface SpecialOffersSlider5Props {
 
 const SpecialOffersSlider5: React.FC<SpecialOffersSlider5Props> = ({
   slides = [],
-  autoPlayInterval = 3000,
-  height = '500px',
-  bgColor = 'transparent'
+  autoPlayInterval,
+  height,
+  bgColor
 }) => {
   const [api, setApi] = React.useState<CarouselApi>();
   const [current, setCurrent] = React.useState(0);

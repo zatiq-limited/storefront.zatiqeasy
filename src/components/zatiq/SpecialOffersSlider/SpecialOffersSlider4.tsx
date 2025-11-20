@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import { ArrowRight } from 'lucide-react';
 
 interface Card {
@@ -18,52 +18,12 @@ interface SpecialOffersSlider4Props {
 }
 
 const SpecialOffersSlider4: React.FC<SpecialOffersSlider4Props> = ({
-  leftCard = {
-    image: '/assets/spOffer/image-left.jpg',
-    subtitle: 'Sale 20% off all store',
-    title: 'Smartphone\nBLU G91 Pro 2022',
-    buttonText: 'Shop Now',
-    titleColor: '#010F1C',
-    textColor: '#010F1C'
-  },
-  rightCard = {
-    image: '/assets/spOffer/image-right.jpg',
-    title: 'HyperX Cloud II\nWireless',
-    discount: 'Sale 35% off',
-    buttonText: 'Shop Now',
-    titleColor: '#010F1C',
-    textColor: '#010F1C'
-  },
+  leftCard,
+  rightCard,
   bgColor = 'transparent'
 }) => {
-  const [isVisible, setIsVisible] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsVisible(entry.isIntersecting);
-      },
-      {
-        threshold: 0.2,
-        rootMargin: '100px 0px',
-      }
-    );
-
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
-    }
-
-    return () => {
-      if (containerRef.current) {
-        observer.unobserve(containerRef.current);
-      }
-    };
-  }, []);
-
   return (
     <div
-      ref={containerRef}
       className="w-full pb-8 md:pb-14 px-4 font-roboto"
       style={{ backgroundColor: bgColor }}
     >
@@ -71,11 +31,7 @@ const SpecialOffersSlider4: React.FC<SpecialOffersSlider4Props> = ({
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Left Card - Large card */}
           {leftCard && (
-            <div className={`w-full lg:w-2/3 h-[260px] relative rounded-lg overflow-hidden flex items-center transition-all duration-500 ease-out ${
-              isVisible
-                ? 'opacity-100 lg:translate-x-0'
-                : 'opacity-0 lg:-translate-x-16'
-            }`}>
+            <div className="w-full lg:w-2/3 h-[260px] relative rounded-lg overflow-hidden flex items-center">
               {/* Background Image */}
               {leftCard.image && (
                 <img
@@ -117,11 +73,7 @@ const SpecialOffersSlider4: React.FC<SpecialOffersSlider4Props> = ({
 
           {/* Right Card - Small card */}
           {rightCard && (
-            <div className={`w-full lg:w-1/3 h-[260px] relative rounded-lg overflow-hidden flex items-center transition-all duration-500 ease-out ${
-              isVisible
-                ? 'opacity-100 lg:translate-x-0'
-                : 'opacity-0 lg:translate-x-16'
-            }`}>
+            <div className="w-full lg:w-1/3 h-[260px] relative rounded-lg overflow-hidden flex items-center">
               {/* Background Image */}
               {rightCard.image && (
                 <img
