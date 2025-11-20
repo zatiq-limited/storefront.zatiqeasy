@@ -52,7 +52,7 @@ export const mockTheme: ZatiqTheme = {
     // Announcement Bar
     announcement: {
       id: "global_announcement",
-      type: "announcement-bar-1",
+      type: "announcement-bar-2",
       enabled: true,
       settings: {
         message: "🎉 Black Friday Sale - Up to 70% OFF + Free Shipping!",

@@ -2,7 +2,7 @@ import React from "react";
 
 const AnnouncementBar3: React.FC = () => {
   return (
-    <div className="max-w-[1440px] mx-auto min-h-16 sm:min-h-14 bg-[#6D0AB6] text-white">
+    <div className="w-full mx-auto min-h-16 sm:min-h-14 bg-[#6D0AB6] text-white">
       <div className="max-w-5xl mx-auto min-h-14 px-5 py-3 flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-4">
         <div className="flex items-center gap-4">
           <a

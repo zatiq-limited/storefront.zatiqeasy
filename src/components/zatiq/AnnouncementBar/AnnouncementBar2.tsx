@@ -2,8 +2,8 @@ import React from "react";
 
 const AnnouncementBar2: React.FC = () => {
   return (
-    <div className="max-w-[1440px] min-h-14 mx-auto flex items-center justify-between bg-[#23856D] text-white py-3 px-4">
-      <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-1 sm:gap-6 lg:gap-10">
+    <div className="min-h-10 sm:min-h-14 flex items-center justify-between bg-[#23856D] text-white py-1.5 sm:py-3 px-4">
+      <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-0 sm:gap-6 lg:gap-10">
         <div className="flex items-center gap-2">
           <svg
             width="16"
