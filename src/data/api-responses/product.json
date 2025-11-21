@@ -4,20 +4,109 @@
     "product": {
       "id": 1,
       "name": "Classic White Shirt",
+      "product_code": "CWS-001",
+      "slug": "classic-white-shirt",
+      "description": "Elevate your wardrobe with our Classic White Shirt. Crafted from premium 100% cotton fabric, this shirt offers unparalleled comfort and style. Perfect for both formal and casual occasions, it features a modern fit with attention to detail in every stitch.",
+      "short_description": "Premium 100% cotton white shirt with modern fit",
+      "price": 2500.0,
+      "old_price": 3200.0,
+      "image_url": "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=800&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=800&q=80",
+        "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=800&q=80",
+        "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=800&q=80",
+        "https://images.unsplash.com/photo-1603252109303-2751441dd157?w=800&q=80"
+      ],
+      "brand": "Premium Collection",
+      "quantity": 25,
+      "warranty": "30 days return policy",
+      "isApplyDefaultDeliveryCharge": false,
+      "specific_delivery_charges": {
+        "Dhaka": 60,
+        "Others": 120
+      },
+      "variant_types": [
+        {
+          "id": 1,
+          "title": "Size",
+          "is_mandatory": true,
+          "variants": [
+            {
+              "id": 1,
+              "name": "S",
+              "price": 0
+            },
+            {
+              "id": 2,
+              "name": "M",
+              "price": 0
+            },
+            {
+              "id": 3,
+              "name": "L",
+              "price": 0
+            },
+            {
+              "id": 4,
+              "name": "XL",
+              "price": 100
+            },
+            {
+              "id": 5,
+              "name": "XXL",
+              "price": 200
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "title": "Fit",
+          "is_mandatory": false,
+          "variants": [
+            {
+              "id": 6,
+              "name": "Slim Fit",
+              "price": 0
+            },
+            {
+              "id": 7,
+              "name": "Regular Fit",
+              "price": 0
+            },
+            {
+              "id": 8,
+              "name": "Relaxed Fit",
+              "price": 150
+            }
+          ]
+        }
+      ],
+      "custom_fields": {
+        "Material": "100% Premium Cotton",
+        "Pattern": "Solid",
+        "Sleeve Length": "Full Sleeve",
+        "Collar Style": "Classic Collar",
+        "Care Instructions": "Machine wash cold, tumble dry low",
+        "Country of Origin": "Bangladesh"
+      },
+      "review_summary": {
+        "average_rating": 4.5,
+        "total_reviews": 128
+      },
       "related_products": [
         {
           "id": 3,
           "name": "Striped Cotton Shirt",
           "price": 2200.0,
           "old_price": 2800.0,
-          "image_url": "https://cdn.zatiq.com/products/striped-shirt.jpg"
+          "image_url": "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=800&q=80"
         },
         {
           "id": 4,
           "name": "Blue Denim Shirt",
           "price": 2800.0,
           "old_price": null,
-          "image_url": "https://cdn.zatiq.com/products/denim-shirt.jpg"
+          "image_url": "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=800&q=80"
         }
       ],
       "reviews": [
@@ -26,7 +115,9 @@
           "name": "Sarah Johnson",
           "reviewer_type": "verified_buyer",
           "description": "Excellent quality shirt! The fabric is soft and comfortable.",
-          "images": ["https://cdn.zatiq.com/reviews/1/image1.jpg"],
+          "images": [
+            "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=400&q=80"
+          ],
           "serial": 1,
           "inventory_id": 1,
           "shop_id": 1,

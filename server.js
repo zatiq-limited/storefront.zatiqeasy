@@ -24,6 +24,7 @@ const db = {
   theme_init: loadJSON("theme_init.json"),
   theme: loadJSON("theme.json"),
   homepage: loadJSON("homepage.json"),
+  products: loadJSON("products.json"),
   product: loadJSON("product.json"),
   category: loadJSON("category.json"),
 };
@@ -41,7 +42,17 @@ app.get("/api/storefront/v1/page/home", (req, res) => {
   res.json(db.homepage);
 });
 
+// Product list endpoint with query support
+app.get("/api/storefront/v1/products", (req, res) => {
+  const { page = 1, per_page = 20, category, search, sort } = req.query;
+  // Return products list (in real backend, this would filter/paginate)
+  res.json(db.products);
+});
+
+// Single product detail endpoint
 app.get("/api/storefront/v1/products/:handle", (req, res) => {
+  const { handle } = req.params;
+  // Return single product detail (in real backend, this would find by handle)
   res.json(db.product);
 });
 
@@ -55,11 +66,10 @@ app.get("/api/storefront/v1/cart", (req, res) => {
 
 // Direct access routes (for debugging)
 app.get("/theme_init", (req, res) => res.json(db.theme_init));
-app.get("/global", (req, res) => res.json(db.global));
 app.get("/homepage", (req, res) => res.json(db.homepage));
+app.get("/products", (req, res) => res.json(db.products));
 app.get("/product", (req, res) => res.json(db.product));
 app.get("/category", (req, res) => res.json(db.category));
-app.get("/cart", (req, res) => res.json(db.cart));
 
 // Start server
 app.listen(PORT, () => {
@@ -69,7 +79,10 @@ app.listen(PORT, () => {
   console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/theme`);
   console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/page/home`);
   console.log(
-    `   GET  http://localhost:${PORT}/api/storefront/v1/products/:handle`
+    `   GET  http://localhost:${PORT}/api/storefront/v1/products                    - List all products`
+  );
+  console.log(
+    `   GET  http://localhost:${PORT}/api/storefront/v1/products/:handle             - Single product detail`
   );
   console.log(
     `   GET  http://localhost:${PORT}/api/storefront/v1/collections/:handle`

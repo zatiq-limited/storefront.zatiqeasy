@@ -197,19 +197,31 @@ export async function getPageData(
 export async function getProducts(params?: {
   page?: number;
   limit?: number;
+  per_page?: number;
+  category?: string;
   collection?: string;
   sort?: string;
-}): Promise<Product[]> {
+  search?: string;
+}): Promise<any> {
   try {
-    const queryString = new URLSearchParams(params as any).toString();
-    const data = await apiCall<{ products: Product[]; pagination: any }>(
-      `/api/storefront/v1/products?${queryString}`
-    );
+    const queryParams: Record<string, string> = {};
+    if (params?.page) queryParams.page = params.page.toString();
+    if (params?.per_page) queryParams.per_page = params.per_page.toString();
+    if (params?.category) queryParams.category = params.category;
+    if (params?.sort) queryParams.sort = params.sort;
+    if (params?.search) queryParams.search = params.search;
+
+    const queryString = new URLSearchParams(queryParams).toString();
+    const endpoint = queryString
+      ? `/api/storefront/v1/products?${queryString}`
+      : `/api/storefront/v1/products`;
+
+    const data = await apiCall<any>(endpoint);
     console.log("[API] ✅ Products loaded from API");
-    return data.products;
+    return data;
   } catch (error) {
     console.error("[API] ❌ Products API failed");
-    return [];
+    return { products: [], pagination: null };
   }
 }
 
