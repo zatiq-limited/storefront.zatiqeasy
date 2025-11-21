@@ -138,3 +138,43 @@ const heroSlides: HeroSlide[] = [
     imageAlt: "Spring Arrivals Collection",
   },
 ];
+
+theme.json value in bellow
+announcement-bar-1
+ "announcement": {
+        "enabled": true,
+        "type": "announcement-bar-1",
+        "settings": {
+          "message": "🎉 Black Friday Sale - Up to 70% OFF + Free Shipping on orders over $100!",
+          "icon_left": "🔥",
+          "icon_right": "🔥",
+          "gradient_start": "#FF6B6B",
+          "gradient_end": "#4ECDC4",
+          "text_color": "#FFFFFF",
+          "dismissible": true,
+          "sticky": true
+        }
+      },
+
+announcement-bar-2
+ "announcement": {
+        "enabled": true,
+        "type": "announcement-bar-2",
+        "settings": {
+          "phone": "(225) 555-0118",
+          "message": "Follow Us and get a chance to win 80% off",
+          "backgroundColor": "#23856D",
+          "textColor": "#FFFFFF",
+          "showSocial": true,
+          "socialLinks": {
+            "instagram": "https://instagram.com/demofashion",
+            "youtube": "https://youtube.com/demofashion",
+            "facebook": "https://facebook.com/demofashion",
+            "twitter": "https://twitter.com/demofashion"
+          },
+          "dismissible": true,
+          "sticky": false
+        }
+      },
+
+announcement-bar-3
