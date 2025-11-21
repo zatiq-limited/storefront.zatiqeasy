@@ -178,3 +178,26 @@ announcement-bar-2
       },
 
 announcement-bar-3
+ "announcement": {
+        "enabled": true,
+        "type": "announcement-bar-3",
+        "settings": {
+          "backgroundColor": "#6D0AB6",
+          "textColor": "#FFFFFF",
+          "links": [
+            {
+              "text": "Get in Touch",
+              "url": "/pages/contact"
+            },
+            {
+              "text": "Refund and Exchange Guidelines",
+              "url": "/pages/refund-policy"
+            }
+          ],
+          "email": "support@zatiq.com",
+          "phone": "+1-202-555-0173",
+          "dismissible": true,
+          "sticky": false
+        }
+      },
+

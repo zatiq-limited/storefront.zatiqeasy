@@ -1,28 +1,59 @@
 import React from "react";
 
-const AnnouncementBar3: React.FC = () => {
+interface AnnouncementBar3Props {
+  backgroundColor?: string;
+  textColor?: string;
+  links?: {
+    text: string;
+    url: string;
+  }[];
+  email?: string;
+  phone?: string;
+  dismissible?: boolean;
+  sticky?: boolean;
+}
+
+const AnnouncementBar3: React.FC<AnnouncementBar3Props> = ({
+  backgroundColor,
+  textColor,
+  links = [],
+  email,
+  phone,
+  dismissible,
+  sticky,
+}) => {
+  const [isVisible, setIsVisible] = React.useState(true);
+
+  if (!isVisible) return null;
+
   return (
-    <div className="w-full mx-auto min-h-16 sm:min-h-14 bg-[#6D0AB6] text-white">
+    <div
+      className={`w-full mx-auto min-h-16 sm:min-h-14 ${
+        sticky ? "sticky top-0 z-50" : ""
+      }`}
+      style={{
+        backgroundColor,
+        color: textColor,
+      }}
+    >
       <div className="max-w-5xl mx-auto min-h-14 px-5 py-3 flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-4">
         <div className="flex items-center gap-4">
-          <a
-            href="#"
-            className="text-sm font-normal hover:opacity-80 transition-opacity"
-          >
-            Get in Touch
-          </a>
-          <span className="text-sm">|</span>
-          <a
-            href="#"
-            className="text-sm font-normal hover:opacity-80 transition-opacity"
-          >
-            Refund and Exchange Guidelines
-          </a>
+          {links.map((link, index) => (
+            <React.Fragment key={index}>
+              {index > 0 && <span className="text-sm">|</span>}
+              <a
+                href={link.url}
+                className="text-sm font-normal hover:opacity-80 transition-opacity"
+              >
+                {link.text}
+              </a>
+            </React.Fragment>
+          ))}
         </div>
 
         <div className="flex items-center gap-4">
           <a
-            href="mailto:support@zatiq.com"
+            href={`mailto:${email}`}
             className="flex items-center gap-2 hover:opacity-80 transition-opacity"
           >
             <svg
@@ -42,11 +73,11 @@ const AnnouncementBar3: React.FC = () => {
               />
             </svg>
 
-            <span className="text-sm font-normal">support@zatiq.com</span>
+            <span className="text-sm font-normal">{email}</span>
           </a>
           <span className="text-sm">|</span>
           <a
-            href="tel:+12025550173"
+            href={`tel:${phone?.replace(/[^0-9+]/g, "")}`}
             className="flex items-center gap-2 hover:opacity-80 transition-opacity"
           >
             <svg
@@ -70,8 +101,20 @@ const AnnouncementBar3: React.FC = () => {
               />
             </svg>
 
-            <span className="text-sm font-normal">+1-202-555-0173</span>
+            <span className="text-sm font-normal">{phone}</span>
           </a>
+          {dismissible && (
+            <>
+              <span className="text-sm">|</span>
+              <button
+                onClick={() => setIsVisible(false)}
+                className="hover:opacity-70 transition-opacity"
+                aria-label="Close announcement"
+              >
+                ✕
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>

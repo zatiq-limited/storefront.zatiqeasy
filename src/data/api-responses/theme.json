@@ -5,19 +5,22 @@
     "globalSections": {
       "announcement": {
         "enabled": true,
-        "type": "announcement-bar-2",
+        "type": "announcement-bar-3",
         "settings": {
-          "phone": "(225) 555-0118",
-          "message": "Follow Us and get a chance to win 80% off",
-          "backgroundColor": "#23856D",
+          "backgroundColor": "#6D0AB6",
           "textColor": "#FFFFFF",
-          "showSocial": true,
-          "socialLinks": {
-            "instagram": "https://instagram.com/demofashion",
-            "youtube": "https://youtube.com/demofashion",
-            "facebook": "https://facebook.com/demofashion",
-            "twitter": "https://twitter.com/demofashion"
-          },
+          "links": [
+            {
+              "text": "Get in Touch",
+              "url": "/pages/contact"
+            },
+            {
+              "text": "Refund and Exchange Guidelines",
+              "url": "/pages/refund-policy"
+            }
+          ],
+          "email": "support@zatiq.com",
+          "phone": "+1-202-555-0173",
           "dismissible": true,
           "sticky": false
         }
