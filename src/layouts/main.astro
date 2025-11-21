@@ -5,11 +5,11 @@
  * ========================================
  * 
  * Global layout with header, footer, and announcement bar
+ * Dynamically loads from theme.json
  */
 
 import '../styles/global.css';
 import ComponentRenderer from '../components/ComponentRenderer';
-import { mockTheme, mockShopConfig } from '../data/mock-theme';
 
 interface Props {
 	title?: string;
@@ -19,13 +19,40 @@ interface Props {
 
 const { title, description, image } = Astro.props;
 
+// Import API client (will be added below)
+import { getTheme } from '../lib/api-client';
+
+// Load theme data using API client
+// Automatically handles API call with fallback
+let themeData: any = null;
+let designSystem: any = null;
+
+try {
+	// Use getTheme() which handles API call + fallback internally
+	const themeResponse = await getTheme();
+	themeData = themeResponse;
+	console.log('[Layout] ✅ Theme loaded successfully');
+} catch (error) {
+	console.error('[Layout] ❌ Failed to load theme:', error);
+}
+
+// Load design system from theme_init.json
+try {
+	const themeInit = await import('../data/api-responses/theme_init.json');
+	designSystem = themeInit.default?.data?.theme?.design || themeInit.data?.theme?.design;
+} catch (e) {
+	console.log('[Layout] Using default design system');
+}
+
 // Get global sections from theme
-const { announcement, header, footer } = mockTheme.globalSections;
+const announcement = themeData?.globalSections?.announcement || null;
+const header = themeData?.globalSections?.header || null;
+const footer = themeData?.globalSections?.footer || null;
 
 // SEO defaults
-const siteTitle = title || mockTheme.templates.index.seo?.title || mockShopConfig.name;
-const siteDescription = description || mockTheme.templates.index.seo?.description || '';
-const ogImage = image || mockTheme.templates.index.seo?.image || '';
+const siteTitle = title || 'Demo Fashion Store';
+const siteDescription = description || 'Shop the latest fashion trends';
+const ogImage = image || '';
 ---
 
 <html lang="en">
@@ -53,13 +80,13 @@ const ogImage = image || mockTheme.templates.index.seo?.image || '';
 		
 		<!-- Design System CSS Variables -->
 		<style is:inline define:vars={{ 
-			primaryColor: mockTheme.designSystem.colors.primary,
-			secondaryColor: mockTheme.designSystem.colors.secondary,
-			accentColor: mockTheme.designSystem.colors.accent,
-			backgroundColor: mockTheme.designSystem.colors.background,
-			textColor: mockTheme.designSystem.colors.text,
-			headingFont: mockTheme.designSystem.fonts.heading,
-			bodyFont: mockTheme.designSystem.fonts.body
+			primaryColor: designSystem?.colors?.primary || '#2563eb',
+			secondaryColor: designSystem?.colors?.secondary || '#1f2937',
+			accentColor: designSystem?.colors?.accent || '#f59e0b',
+			backgroundColor: designSystem?.colors?.background || '#ffffff',
+			textColor: designSystem?.colors?.text || '#111827',
+			headingFont: designSystem?.fonts?.heading || 'Poppins, sans-serif',
+			bodyFont: designSystem?.fonts?.body || 'Inter, system-ui, sans-serif'
 		}}>
 			:root {
 				--color-primary: var(--primaryColor);
@@ -83,18 +110,39 @@ const ogImage = image || mockTheme.templates.index.seo?.image || '';
 		</style>
 	</head>
 	<body>
-		<!-- Announcement Bar (Global) -->
-		{announcement && <ComponentRenderer section={announcement} client:load />}
+		<!-- Announcement Bar (Global) - Dynamic from theme.json -->
+		{announcement?.enabled && (
+			<ComponentRenderer 
+				type={announcement.type}
+				{...announcement.settings}
+				blocks={announcement.blocks}
+				client:load 
+			/>
+		)}
 		
-		<!-- Header/Navbar (Global) -->
-		{header && <ComponentRenderer section={header} client:load />}
+		<!-- Header/Navbar (Global) - Dynamic from theme.json -->
+		{header?.enabled && (
+			<ComponentRenderer 
+				type={header.type}
+				{...header.settings}
+				blocks={header.blocks}
+				client:load 
+			/>
+		)}
 		
 		<!-- Main Content -->
 		<div class="zatiq-main-content">
 			<slot />
 		</div>
 		
-		<!-- Footer (Global) -->
-		{footer && <ComponentRenderer section={footer} client:load />}
+		<!-- Footer (Global) - Dynamic from theme.json -->
+		{footer?.enabled && (
+			<ComponentRenderer 
+				type={footer.type}
+				{...footer.settings}
+				blocks={footer.blocks}
+				client:load 
+			/>
+		)}
 	</body>
 </html>

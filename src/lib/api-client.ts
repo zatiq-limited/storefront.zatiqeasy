@@ -112,20 +112,16 @@ async function apiCall<T>(endpoint: string, options?: RequestInit): Promise<T> {
  */
 export async function getShopConfig(
   shopId: string = SHOP_ID
-): Promise<ShopConfig> {
-  if (USE_MOCK_DATA) {
-    console.log("[Mock] Using mock shop config");
-    return mockShopConfig;
-  }
-
+): Promise<ShopConfig | null> {
   try {
     const data = await apiCall<{ shop: ShopConfig; session: any }>(
       `/api/storefront/v1/init?shopId=${shopId}`
     );
+    console.log("[API] ✅ Shop config loaded from API");
     return data.shop;
   } catch (error) {
-    console.warn("Failed to fetch shop config, falling back to mock data");
-    return mockShopConfig;
+    console.error("[API] ❌ Shop config API failed");
+    return null;
   }
 }
 
@@ -135,19 +131,21 @@ export async function getShopConfig(
  * Backend API: GET /api/storefront/v1/theme
  * Response: { success: true, data: ZatiqTheme }
  */
-export async function getTheme(shopId: string = SHOP_ID): Promise<ZatiqTheme> {
-  if (USE_MOCK_DATA) {
-    console.log("[Mock] Using mock theme");
-    return mockTheme;
-  }
-
+export async function getTheme(shopId: string = SHOP_ID): Promise<any> {
+  // Only call API - backend returns theme.json structure
+  // Backend must send: { globalSections: { announcement, header, footer }, templates, componentStyles }
   try {
-    return await apiCall<ZatiqTheme>(
+    console.log("[API] Calling theme endpoint...");
+    const themeData = await apiCall<any>(
       `/api/storefront/v1/theme?shopId=${shopId}`
     );
+    console.log("[API] ✅ Theme loaded from API");
+
+    // Backend sends theme.json structure directly - no transformation needed
+    return themeData;
   } catch (error) {
-    console.warn("Failed to fetch theme, falling back to mock data");
-    return mockTheme;
+    console.error("[API] ❌ Theme API failed - no data will be shown");
+    return null;
   }
 }
 
@@ -159,24 +157,12 @@ export async function getTheme(shopId: string = SHOP_ID): Promise<ZatiqTheme> {
  */
 export async function getHomepageData(): Promise<any> {
   try {
-    // Try to fetch from real API first
     const response = await apiCall<any>(`/api/storefront/v1/page/home`);
-    console.log('[API] Using homepage data from API');
+    console.log("[API] ✅ Homepage data loaded from API");
     return response;
   } catch (error) {
-    // Fallback to local JSON file if API fails
-    console.warn(`Failed to fetch homepage data from API, loading from homepage.json`);
-    try {
-      const homepageData = await import("../data/api-responses/homepage.json");
-      return homepageData.default || homepageData;
-    } catch (jsonError) {
-      console.error('Failed to load homepage.json, using mock theme data');
-      return {
-        template: "index",
-        sections: mockTheme.templates.index.sections,
-        seo: mockTheme.templates.index.seo,
-      };
-    }
+    console.error("[API] ❌ Homepage API failed - no data will be shown");
+    return null;
   }
 }
 
@@ -190,24 +176,15 @@ export async function getPageData(
   pageType: "index" | "product" | "collection" | "cart",
   shopId: string = SHOP_ID
 ): Promise<any> {
-  if (USE_MOCK_DATA) {
-    console.log(`[Mock] Using mock data for page: ${pageType}`);
-    return {
-      template: mockTheme.templates[pageType],
-      pageData: {},
-    };
-  }
-
   try {
-    return await apiCall(
+    const data = await apiCall(
       `/api/storefront/v1/page/${pageType}?shopId=${shopId}`
     );
+    console.log(`[API] ✅ Page data loaded for ${pageType}`);
+    return data;
   } catch (error) {
-    console.warn(`Failed to fetch page data for ${pageType}, using mock data`);
-    return {
-      template: mockTheme.templates[pageType],
-      pageData: {},
-    };
+    console.error(`[API] ❌ Page API failed for ${pageType}`);
+    return null;
   }
 }
 
@@ -223,20 +200,16 @@ export async function getProducts(params?: {
   collection?: string;
   sort?: string;
 }): Promise<Product[]> {
-  if (USE_MOCK_DATA) {
-    console.log("[Mock] Using mock products");
-    return mockProducts;
-  }
-
   try {
     const queryString = new URLSearchParams(params as any).toString();
     const data = await apiCall<{ products: Product[]; pagination: any }>(
       `/api/storefront/v1/products?${queryString}`
     );
+    console.log("[API] ✅ Products loaded from API");
     return data.products;
   } catch (error) {
-    console.warn("Failed to fetch products, falling back to mock data");
-    return mockProducts;
+    console.error("[API] ❌ Products API failed");
+    return [];
   }
 }
 
@@ -247,18 +220,15 @@ export async function getProducts(params?: {
  * Response: { success: true, data: Product }
  */
 export async function getProduct(handle: string): Promise<Product | null> {
-  if (USE_MOCK_DATA) {
-    console.log(`[Mock] Using mock data for product: ${handle}`);
-    return mockProducts.find((p) => p.handle === handle) || null;
-  }
-
   try {
-    return await apiCall<Product>(`/api/storefront/v1/products/${handle}`);
-  } catch (error) {
-    console.warn(
-      `Failed to fetch product ${handle}, falling back to mock data`
+    const product = await apiCall<Product>(
+      `/api/storefront/v1/products/${handle}`
     );
-    return mockProducts.find((p) => p.handle === handle) || null;
+    console.log(`[API] ✅ Product loaded: ${handle}`);
+    return product;
+  } catch (error) {
+    console.error(`[API] ❌ Product API failed: ${handle}`);
+    return null;
   }
 }
 
@@ -271,20 +241,15 @@ export async function getProduct(handle: string): Promise<Product | null> {
 export async function getFeaturedProducts(
   limit: number = 8
 ): Promise<Product[]> {
-  if (USE_MOCK_DATA) {
-    console.log(`[Mock] Using mock featured products (limit: ${limit})`);
-    return mockProducts.slice(0, limit);
-  }
-
   try {
-    return await apiCall<Product[]>(
+    const products = await apiCall<Product[]>(
       `/api/storefront/v1/products/featured?limit=${limit}`
     );
+    console.log("[API] ✅ Featured products loaded from API");
+    return products;
   } catch (error) {
-    console.warn(
-      "Failed to fetch featured products, falling back to mock data"
-    );
-    return mockProducts.slice(0, limit);
+    console.error("[API] ❌ Featured products API failed");
+    return [];
   }
 }
 
@@ -295,16 +260,15 @@ export async function getFeaturedProducts(
  * Response: { success: true, data: Collection[] }
  */
 export async function getCollections(): Promise<Collection[]> {
-  if (USE_MOCK_DATA) {
-    console.log("[Mock] Using mock collections");
-    return mockCollections;
-  }
-
   try {
-    return await apiCall<Collection[]>("/api/storefront/v1/collections");
+    const collections = await apiCall<Collection[]>(
+      "/api/storefront/v1/collections"
+    );
+    console.log("[API] ✅ Collections loaded from API");
+    return collections;
   } catch (error) {
-    console.warn("Failed to fetch collections, falling back to mock data");
-    return mockCollections;
+    console.error("[API] ❌ Collections API failed");
+    return [];
   }
 }
 
@@ -317,21 +281,15 @@ export async function getCollections(): Promise<Collection[]> {
 export async function getCollection(
   handle: string
 ): Promise<Collection | null> {
-  if (USE_MOCK_DATA) {
-    console.log(`[Mock] Using mock data for collection: ${handle}`);
-    return mockCollections.find((c) => c.handle === handle) || null;
-  }
-
   try {
     const data = await apiCall<{ collection: Collection; products: Product[] }>(
       `/api/storefront/v1/collections/${handle}`
     );
+    console.log(`[API] ✅ Collection loaded: ${handle}`);
     return data.collection;
   } catch (error) {
-    console.warn(
-      `Failed to fetch collection ${handle}, falling back to mock data`
-    );
-    return mockCollections.find((c) => c.handle === handle) || null;
+    console.error(`[API] ❌ Collection API failed: ${handle}`);
+    return null;
   }
 }
 
@@ -342,26 +300,15 @@ export async function getCollection(
  * Response: { success: true, data: Product[] }
  */
 export async function searchProducts(query: string): Promise<Product[]> {
-  if (USE_MOCK_DATA) {
-    console.log(`[Mock] Searching products for: ${query}`);
-    return mockProducts.filter(
-      (p) =>
-        p.title.toLowerCase().includes(query.toLowerCase()) ||
-        p.description.toLowerCase().includes(query.toLowerCase())
-    );
-  }
-
   try {
-    return await apiCall<Product[]>(
+    const products = await apiCall<Product[]>(
       `/api/storefront/v1/search?q=${encodeURIComponent(query)}`
     );
+    console.log(`[API] ✅ Search results loaded for: ${query}`);
+    return products;
   } catch (error) {
-    console.warn("Search failed, falling back to local search");
-    return mockProducts.filter(
-      (p) =>
-        p.title.toLowerCase().includes(query.toLowerCase()) ||
-        p.description.toLowerCase().includes(query.toLowerCase())
-    );
+    console.error(`[API] ❌ Search API failed for: ${query}`);
+    return [];
   }
 }
 
@@ -385,34 +332,20 @@ function setCartToken(token: string): void {
  * Response: { success: true, data: { id, items, itemCount, total } }
  */
 export async function getCart(): Promise<any> {
-  if (USE_MOCK_DATA) {
-    console.log("[Mock] Using empty cart");
-    return {
-      items: [],
-      itemCount: 0,
-      subtotal: 0,
-      total: 0,
-    };
-  }
-
   try {
     const cartToken = getCartToken();
     if (!cartToken) {
-      // Create new cart if no token exists
       return await createCart();
     }
 
-    return await apiCall("/api/storefront/v1/cart", {
+    const cart = await apiCall("/api/storefront/v1/cart", {
       headers: { "X-Cart-Token": cartToken },
     });
+    console.log("[API] ✅ Cart loaded from API");
+    return cart;
   } catch (error) {
-    console.warn("Failed to fetch cart");
-    return {
-      items: [],
-      itemCount: 0,
-      subtotal: 0,
-      total: 0,
-    };
+    console.error("[API] ❌ Cart API failed");
+    return null;
   }
 }
 
@@ -449,20 +382,17 @@ export async function addToCart(
   variantId: string,
   quantity: number
 ): Promise<any> {
-  if (USE_MOCK_DATA) {
-    console.log(`[Mock] Adding to cart: ${variantId} x ${quantity}`);
-    return { success: true };
-  }
-
   try {
     const cartToken = getCartToken();
-    return await apiCall("/api/storefront/v1/cart/add", {
+    const result = await apiCall("/api/storefront/v1/cart/add", {
       method: "POST",
       headers: { "X-Cart-Token": cartToken },
       body: JSON.stringify({ variantId, quantity }),
     });
+    console.log(`[API] ✅ Added to cart: ${variantId}`);
+    return result;
   } catch (error) {
-    console.error("Failed to add to cart");
+    console.error("[API] ❌ Failed to add to cart");
     throw error;
   }
 }
@@ -477,20 +407,17 @@ export async function updateCartItem(
   lineItemId: string,
   quantity: number
 ): Promise<any> {
-  if (USE_MOCK_DATA) {
-    console.log(`[Mock] Updating cart item: ${lineItemId} to ${quantity}`);
-    return { success: true };
-  }
-
   try {
     const cartToken = getCartToken();
-    return await apiCall("/api/storefront/v1/cart/update", {
+    const result = await apiCall("/api/storefront/v1/cart/update", {
       method: "PUT",
       headers: { "X-Cart-Token": cartToken },
       body: JSON.stringify({ lineItemId, quantity }),
     });
+    console.log(`[API] ✅ Cart item updated: ${lineItemId}`);
+    return result;
   } catch (error) {
-    console.error("Failed to update cart item");
+    console.error("[API] ❌ Failed to update cart item");
     throw error;
   }
 }
@@ -502,20 +429,17 @@ export async function updateCartItem(
  * Response: { success: true, data: { cart: {...} } }
  */
 export async function removeFromCart(lineItemId: string): Promise<any> {
-  if (USE_MOCK_DATA) {
-    console.log(`[Mock] Removing from cart: ${lineItemId}`);
-    return { success: true };
-  }
-
   try {
     const cartToken = getCartToken();
-    return await apiCall("/api/storefront/v1/cart/remove", {
+    const result = await apiCall("/api/storefront/v1/cart/remove", {
       method: "DELETE",
       headers: { "X-Cart-Token": cartToken },
       body: JSON.stringify({ lineItemId }),
     });
+    console.log(`[API] ✅ Cart item removed: ${lineItemId}`);
+    return result;
   } catch (error) {
-    console.error("Failed to remove from cart");
+    console.error("[API] ❌ Failed to remove from cart");
     throw error;
   }
 }

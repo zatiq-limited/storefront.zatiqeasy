@@ -4,6 +4,7 @@
  * ========================================
  *
  * Dynamic component rendering based on API response
+ * Supports both section object and direct props
  */
 
 import React from "react";
@@ -11,25 +12,48 @@ import { getComponent } from "../lib/component-registry";
 import type { Section } from "../lib/types";
 
 interface ComponentRendererProps {
-  section: Section;
+  // Option 1: Pass section object (homepage.json style)
+  section?: Section;
+
+  // Option 2: Pass props directly (theme.json style)
+  type?: string;
+  settings?: any;
+  blocks?: any[];
+  products?: any[];
+  posts?: any[];
+  reviews?: any[];
+  testimonials?: any[];
+  tabs?: any[];
+  enabled?: boolean;
+
   client?: "load" | "visible" | "idle" | "only";
+  [key: string]: any; // Allow spread props
 }
 
 /**
  * Component Renderer
  * API response থেকে component type অনুযায়ী dynamic rendering করে
  */
-export default function ComponentRenderer({
-  section,
-  client = "load",
-}: ComponentRendererProps) {
-  // Check if section is explicitly disabled
-  if (section.enabled === false) {
+export default function ComponentRenderer(props: ComponentRendererProps) {
+  const { section, type: directType, client = "load", ...restProps } = props;
+
+  // Determine if using section object or direct props
+  const componentType = section?.type || directType;
+  const enabled = section?.enabled !== false && restProps.enabled !== false;
+  const componentId = section?.id || `component-${componentType}`;
+
+  // Check if explicitly disabled
+  if (!enabled) {
+    return null;
+  }
+
+  if (!componentType) {
+    console.error("ComponentRenderer: No component type provided");
     return null;
   }
 
   // Get component from registry
-  const Component = getComponent(section.type);
+  const Component = getComponent(componentType);
 
   // Component not found - show error in development
   if (!Component) {
@@ -37,7 +61,7 @@ export default function ComponentRenderer({
       return (
         <div className="bg-red-50 border border-red-200 rounded p-4 my-4">
           <p className="text-red-800 font-semibold">
-            Component not found: {section.type}
+            Component not found: {componentType}
           </p>
           <p className="text-red-600 text-sm mt-1">
             Make sure the component is registered in component-registry.ts
@@ -48,24 +72,55 @@ export default function ComponentRenderer({
     return null;
   }
 
-  // Render component with all section data
-  // Spread settings as top-level props + pass other data as named props
+  // Prepare props for component
+  let componentProps: any = {};
+
+  if (section) {
+    // Using section object (homepage.json style)
+    componentProps = {
+      ...section.settings,
+      settings: section.settings,
+      blocks: section.blocks,
+      products: section.products,
+      posts: section.posts,
+      reviews: section.reviews,
+      testimonials: section.testimonials,
+      tabs: section.tabs,
+    };
+  } else {
+    // Using direct props (theme.json style)
+    const {
+      settings,
+      blocks,
+      products,
+      posts,
+      reviews,
+      testimonials,
+      tabs,
+      enabled,
+      ...spreadProps
+    } = restProps;
+    componentProps = {
+      ...settings,
+      ...spreadProps,
+      settings,
+      blocks,
+      products,
+      posts,
+      reviews,
+      testimonials,
+      tabs,
+    };
+  }
+
+  // Render component with all data
   return (
     <div
-      data-section-id={section.id}
-      data-section-type={section.type}
+      data-section-id={componentId}
+      data-section-type={componentType}
       className="zatiq-section"
     >
-      <Component
-        {...section.settings}
-        settings={section.settings}
-        blocks={section.blocks}
-        products={section.products}
-        posts={section.posts}
-        reviews={section.reviews}
-        testimonials={section.testimonials}
-        tabs={section.tabs}
-      />
+      <Component {...componentProps} />
     </div>
   );
 }

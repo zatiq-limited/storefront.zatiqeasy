@@ -22,7 +22,7 @@ const loadJSON = (filename) => {
 
 const db = {
   theme_init: loadJSON("theme_init.json"),
-  global: loadJSON("global.json"),
+  theme: loadJSON("theme.json"),
   homepage: loadJSON("homepage.json"),
   product: loadJSON("product.json"),
   category: loadJSON("category.json"),
@@ -34,7 +34,7 @@ app.get("/api/storefront/v1/init", (req, res) => {
 });
 
 app.get("/api/storefront/v1/theme", (req, res) => {
-  res.json(db.global);
+  res.json(db.theme);
 });
 
 app.get("/api/storefront/v1/page/home", (req, res) => {
