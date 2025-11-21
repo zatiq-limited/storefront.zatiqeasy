@@ -1,12 +1,53 @@
-import React from 'react';
+import React from "react";
 
-const AnnouncementBar1: React.FC = () => {
+interface AnnouncementBar1Props {
+  message?: string;
+  icon_left?: string;
+  icon_right?: string;
+  gradient_start?: string;
+  gradient_end?: string;
+  text_color?: string;
+  dismissible?: boolean;
+  sticky?: boolean;
+}
+
+const AnnouncementBar1: React.FC<AnnouncementBar1Props> = ({
+  message,
+  icon_left,
+  icon_right,
+  gradient_start,
+  gradient_end,
+  text_color,
+  dismissible,
+  sticky,
+}) => {
+  const [isVisible, setIsVisible] = React.useState(true);
+
+  if (!isVisible) return null;
+
   return (
-    <div className="min-h-8 sm:min-h-10 lg:min-h-14 flex items-center justify-center bg-linear-to-r from-[#50D1F6] to-[#B198FD] text-black text-center text-xs sm:text-sm font-bold">
-      <div className="max-w-[1440px] mx-auto flex items-center justify-center gap-2">
-        <span>🔥</span>
-        <span>For a limited time, enjoy a 20% discount on all our products !</span>
-        <span>🔥</span>
+    <div
+      className={`min-h-8 sm:min-h-10 lg:min-h-14 flex items-center justify-center text-center text-xs sm:text-sm font-bold ${
+        sticky ? "sticky top-0 z-50" : ""
+      }`}
+      style={{
+        background: `linear-gradient(to right, ${gradient_start}, ${gradient_end})`,
+        color: text_color,
+      }}
+    >
+      <div className="max-w-[1440px] mx-auto flex items-center justify-center gap-2 px-4">
+        {icon_left && <span>{icon_left}</span>}
+        <span>{message}</span>
+        {icon_right && <span>{icon_right}</span>}
+        {dismissible && (
+          <button
+            onClick={() => setIsVisible(false)}
+            className="ml-4 hover:opacity-70 transition-opacity"
+            aria-label="Close announcement"
+          >
+            ✕
+          </button>
+        )}
       </div>
     </div>
   );
