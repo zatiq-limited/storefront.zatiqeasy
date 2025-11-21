@@ -5,8 +5,8 @@
       {
         "id": 1,
         "name": "Women's Fashion",
-        "image_url": "https://cdn.zatiq.com/categories/womens.jpg",
-        "banner_url": "https://cdn.zatiq.com/categories/womens-banner.jpg",
+        "image_url": "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&q=80",
+        "banner_url": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1200&q=80",
         "description": "Latest women's fashion trends",
         "serial": 1,
         "parent_id": null,
@@ -15,7 +15,7 @@
           {
             "id": 5,
             "name": "Dresses",
-            "image_url": "https://cdn.zatiq.com/categories/dresses.jpg",
+            "image_url": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800&q=80",
             "parent_id": 1,
             "serial": 1,
             "product_count": 45
@@ -23,7 +23,7 @@
           {
             "id": 6,
             "name": "Tops",
-            "image_url": "https://cdn.zatiq.com/categories/tops.jpg",
+            "image_url": "https://images.unsplash.com/photo-1564859228273-274232fdb516?w=800&q=80",
             "parent_id": 1,
             "serial": 2,
             "product_count": 38
@@ -31,7 +31,7 @@
           {
             "id": 7,
             "name": "Bottoms",
-            "image_url": "https://cdn.zatiq.com/categories/bottoms.jpg",
+            "image_url": "https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=800&q=80",
             "parent_id": 1,
             "serial": 3,
             "product_count": 29
@@ -44,8 +44,8 @@
       {
         "id": 2,
         "name": "Men's Fashion",
-        "image_url": "https://cdn.zatiq.com/categories/mens.jpg",
-        "banner_url": "https://cdn.zatiq.com/categories/mens-banner.jpg",
+        "image_url": "https://images.unsplash.com/photo-1490114538077-0a7f8cb49891?w=800&q=80",
+        "banner_url": "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1200&q=80",
         "description": "Men's clothing and accessories",
         "serial": 2,
         "parent_id": null,
@@ -54,7 +54,7 @@
           {
             "id": 8,
             "name": "Shirts",
-            "image_url": "https://cdn.zatiq.com/categories/shirts.jpg",
+            "image_url": "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=800&q=80",
             "parent_id": 2,
             "serial": 1,
             "product_count": 34
@@ -62,7 +62,7 @@
           {
             "id": 9,
             "name": "Pants",
-            "image_url": "https://cdn.zatiq.com/categories/pants.jpg",
+            "image_url": "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=800&q=80",
             "parent_id": 2,
             "serial": 2,
             "product_count": 28
@@ -75,7 +75,7 @@
       {
         "id": 3,
         "name": "Accessories",
-        "image_url": "https://cdn.zatiq.com/categories/accessories.jpg",
+        "image_url": "https://images.unsplash.com/photo-1492707892479-7bc8d5a4ee93?w=800&q=80",
         "banner_url": null,
         "description": "Bags, jewelry, and more",
         "serial": 3,
@@ -89,8 +89,8 @@
       {
         "id": 4,
         "name": "Sale",
-        "image_url": "https://cdn.zatiq.com/categories/sale.jpg",
-        "banner_url": "https://cdn.zatiq.com/categories/sale-banner.jpg",
+        "image_url": "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&q=80",
+        "banner_url": "https://images.unsplash.com/photo-1607082349566-187342175e2f?w=1200&q=80",
         "description": "Discounted items",
         "serial": 4,
         "parent_id": null,

@@ -56,7 +56,15 @@ app.get("/api/storefront/v1/products/:handle", (req, res) => {
   res.json(db.product);
 });
 
+// Collections list endpoint
+app.get("/api/storefront/v1/collections", (req, res) => {
+  res.json(db.category);
+});
+
+// Single collection detail endpoint
 app.get("/api/storefront/v1/collections/:handle", (req, res) => {
+  const { handle } = req.params;
+  // Return single collection with products (in real backend, this would find by handle)
   res.json(db.category);
 });
 
@@ -85,7 +93,10 @@ app.listen(PORT, () => {
     `   GET  http://localhost:${PORT}/api/storefront/v1/products/:handle             - Single product detail`
   );
   console.log(
-    `   GET  http://localhost:${PORT}/api/storefront/v1/collections/:handle`
+    `   GET  http://localhost:${PORT}/api/storefront/v1/collections                  - List all collections`
+  );
+  console.log(
+    `   GET  http://localhost:${PORT}/api/storefront/v1/collections/:handle          - Single collection detail`
   );
   console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/cart`);
   console.log(`\n✨ Press Ctrl+C to stop\n`);
