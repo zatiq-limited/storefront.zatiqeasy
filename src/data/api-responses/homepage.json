@@ -459,7 +459,7 @@
           "subtitleColor": "#666666",
           "viewAllText": "View All",
           "viewAllLink": "/collections/featured",
-          "productCardType": "product-card-6",
+          "productCardType": "product-card-8",
           "viewTotalProducts": 6,
           "columns": 4,
           "columnsMobile": 2,
@@ -482,7 +482,7 @@
             "badgeColor": "#ef4444",
             "rating": 4.5,
             "reviewCount": 23,
-            "colors": ["white", "light-blue"],
+            "colors": ["green", "light-blue"],
             "sizes": ["S", "M", "L", "XL"],
             "quickAddEnabled": true,
             "buyNowEnabled": true
@@ -522,7 +522,7 @@
             "badgeColor": "#f59e0b",
             "rating": 4.3,
             "reviewCount": 45,
-            "colors": ["dark-blue", "black", "light-blue"],
+            "colors": ["blue", "black", "light-blue"],
             "sizes": ["30", "32", "34", "36"],
             "quickAddEnabled": true,
             "buyNowEnabled": true
@@ -542,7 +542,7 @@
             "badgeColor": "#3b82f6",
             "rating": 4.6,
             "reviewCount": 28,
-            "colors": ["floral-pink", "floral-blue"],
+            "colors": ["pink", "floral-blue"],
             "sizes": ["S", "M", "L", "XL"],
             "quickAddEnabled": true,
             "buyNowEnabled": true
@@ -562,7 +562,7 @@
             "badgeColor": "#10b981",
             "rating": 4.4,
             "reviewCount": 89,
-            "colors": ["black", "white", "navy", "gray"],
+            "colors": ["black", "green", "navy", "gray"],
             "sizes": ["S", "M", "L", "XL", "XXL"],
             "quickAddEnabled": true,
             "buyNowEnabled": true
@@ -622,7 +622,7 @@
             "badgeColor": "#ef4444",
             "rating": 4.5,
             "reviewCount": 112,
-            "colors": ["white", "navy", "red", "green"],
+            "colors": ["green", "navy", "red", "green"],
             "sizes": ["S", "M", "L", "XL"],
             "quickAddEnabled": true,
             "buyNowEnabled": true
