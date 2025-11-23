@@ -25,6 +25,7 @@ interface ProductCollection2Props {
   viewAllText?: string;
   viewAllLink?: string;
   productCardType?: string;
+  viewTotalProducts?: number;
   products?: any[];
   bgColor?: string;
   showViewAll?: boolean;
@@ -41,6 +42,7 @@ const ProductCollection2: React.FC<ProductCollection2Props> = ({
   viewAllText = "Explore Collection",
   viewAllLink = "/collections/all",
   productCardType = "product-card-1",
+  viewTotalProducts = 4,
   products = [],
   bgColor = "#FAFAFA",
   showViewAll = true,
@@ -118,7 +120,7 @@ const ProductCollection2: React.FC<ProductCollection2Props> = ({
       <div className="w-full max-w-[1440px] mx-auto px-4 md:px-8 lg:px-12 relative">
         {/* Premium Header */}
         <div
-          className={`flex flex-col lg:flex-row lg:justify-between lg:items-center mb-14 md:mb-20 gap-6 transition-all duration-1000 ${
+          className={`flex flex-col lg:flex-row lg:justify-between lg:items-center mb-14 gap-6 transition-all duration-1000 ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
@@ -187,7 +189,7 @@ const ProductCollection2: React.FC<ProductCollection2Props> = ({
             className="w-full"
           >
             <CarouselContent className="-ml-4 md:-ml-6">
-              {products.map((product, index) => (
+              {products.slice(0, viewTotalProducts).map((product, index) => (
                 <CarouselItem
                   key={product.id || index}
                   className="pl-4 md:pl-6 basis-[85%] sm:basis-1/2 md:basis-1/3 lg:basis-1/4"
@@ -212,15 +214,15 @@ const ProductCollection2: React.FC<ProductCollection2Props> = ({
 
             {/* Navigation Arrows */}
             {showArrows && (
-              <>
+              <div className={`${viewTotalProducts <= 4 ? "hidden" : ""}`}>
                 <CarouselPrevious className="hidden md:flex -left-4 lg:-left-6 w-14 h-14 bg-white border-0 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300" />
                 <CarouselNext className="hidden md:flex -right-4 lg:-right-6 w-14 h-14 bg-white border-0 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300" />
-              </>
+              </div>
             )}
           </Carousel>
 
           {/* Progress Dots */}
-          <div className="flex justify-center mt-10 gap-2">
+          <div className={`${viewTotalProducts <= 4 ? "hidden" : ""} flex justify-center mt-10 gap-2`}>
             {products.slice(0, Math.min(products.length, 8)).map((_, index) => (
               <button
                 key={index}
