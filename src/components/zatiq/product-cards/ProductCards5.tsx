@@ -1,48 +1,83 @@
-import React from "react";
+import React, { useState } from "react";
 
-const ProductCards5: React.FC = () => {
-  const product = {
-    image: "assets/card/p-5.png",
-    discount: "-5%",
-    title: "Chamarel Cross Front Multilit Singlet Top",
-    salePrice: "630",
-    originalPrice: "830",
-  };
+interface ProductCards5Props {
+  id?: string | number;
+  handle?: string;
+  title?: string;
+  subtitle?: string;
+  vendor?: string;
+  price?: number;
+  comparePrice?: number | null;
+  currency?: string;
+  image?: string;
+  hoverImage?: string;
+  badge?: string;
+  badgeColor?: string;
+  rating?: number;
+  reviewCount?: number;
+  colors?: string[];
+  sizes?: string[];
+  quickAddEnabled?: boolean;
+  buyNowEnabled?: boolean;
+}
+
+const ProductCards5: React.FC<ProductCards5Props> = ({
+  title,
+  price,
+  comparePrice,
+  currency,
+  image,
+  hoverImage,
+}) => {
+  const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <div className="font-roboto flex gap-6 justify-center">
-      <div className="w-[282px] h-[513px] overflow-hidden relative cursor-pointer transition-all duration-300">
-        {/* Top - Image Container (462px) */}
-        <div className="w-[282px] h-[450px] relative">
+    <div className="font-roboto flex gap-6 justify-center p-1">
+      <div
+        className="w-[282px] h-[513px] overflow-hidden relative cursor-pointer transition-all duration-300"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        {/* Top - Image Container */}
+        <div className="w-[282px] h-[450px] relative overflow-hidden">
           <img
-            src={product.image}
-            alt={product.title}
-            className="w-full h-full object-cover"
+            src={isHovered && hoverImage ? hoverImage : image}
+            alt={title}
+            className="w-full h-full object-cover object-top transition-transform duration-500 ease-out"
+            style={{ transform: isHovered ? "scale(1.05)" : "scale(1)" }}
           />
-          {/* Discount Badge */}
-          <div className="absolute top-3 right-3 w-11 h-11 bg-[#E97171] rounded-full flex items-center justify-center">
-            <span className="text-white text-base font-normal leading-[150%]">
-              {product.discount}
-            </span>
-          </div>
+          {/* Badge */}
+          {comparePrice && price && (
+            <div
+              className="absolute top-3 right-3 w-12 h-12 rounded-full flex items-center justify-center bg-[#ef4444]"
+            >
+              <span className="text-white text-base font-normal leading-[150%]">
+                {comparePrice && price ? - ((comparePrice - price) / comparePrice * 100).toFixed(0) + "%" : ""}
+              </span>
+            </div>
+          )}
         </div>
 
-        {/* Bottom - Content Area (51px) */}
+        {/* Bottom - Content Area */}
         <div className="pt-3 flex flex-col justify-center">
           {/* Title */}
           <h3 className="text-xs font-normal text-[#212121] mb-1 overflow-hidden text-ellipsis whitespace-nowrap">
-            {product.title}
+            {title}
           </h3>
 
           {/* Prices */}
-          <div className="pt-1.5 flex items-center gap-1.5">
-            <span className="text-sm font-bold text-[#212121]">
-              BDT {product.salePrice}
-            </span>
-            <span className="text-sm text-[#9C9B9B] line-through font-normal">
-              {product.originalPrice} tk
-            </span>
-          </div>
+          {price !== undefined && (
+            <div className="pt-1.5 flex items-center gap-1.5">
+              <span className="text-sm font-bold text-[#212121]">
+                {currency} {price.toLocaleString()}
+              </span>
+              {comparePrice && (
+                <span className="text-sm text-[#9C9B9B] line-through font-normal">
+                  {comparePrice.toLocaleString()} {currency}
+                </span>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>
