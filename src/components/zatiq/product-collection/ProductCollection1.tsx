@@ -10,6 +10,7 @@ interface ProductCollection1Props {
   viewAllText?: string;
   viewAllLink?: string;
   productCardType?: string;
+  viewTotalProducts?: number;
   columns?: number;
   columnsMobile?: number;
   products?: any[];
@@ -25,6 +26,7 @@ const ProductCollection1: React.FC<ProductCollection1Props> = ({
   viewAllText,
   viewAllLink,
   productCardType,
+  viewTotalProducts,
   columns,
   columnsMobile,
   products,
@@ -81,7 +83,7 @@ const ProductCollection1: React.FC<ProductCollection1Props> = ({
             gridTemplateColumns: `repeat(${columnsMobile}, 1fr)`,
           }}
         >
-          {products.map((product, index) => (
+          {products.slice(0, viewTotalProducts).map((product, index) => (
             <div
               key={product.id || index}
               className="animate-fadeIn overflow-hidden"
