@@ -459,7 +459,7 @@
           "subtitleColor": "#666666",
           "viewAllText": "View All",
           "viewAllLink": "/collections/featured",
-          "productCardType": "product-card-2",
+          "productCardType": "product-card-3",
           "viewTotalProducts": 6,
           "columns": 4,
           "columnsMobile": 2,
@@ -483,7 +483,8 @@
             "reviewCount": 23,
             "colors": ["white", "light-blue"],
             "sizes": ["S", "M", "L", "XL"],
-            "quickAddEnabled": true
+            "quickAddEnabled": true,
+            "buyNowEnabled": true
           },
           {
             "id": "prod_002",
@@ -501,7 +502,8 @@
             "reviewCount": 18,
             "colors": ["black"],
             "sizes": ["XS", "S", "M", "L"],
-            "quickAddEnabled": true
+            "quickAddEnabled": true,
+            "buyNowEnabled": true
           },
           {
             "id": "prod_003",
@@ -519,7 +521,8 @@
             "reviewCount": 45,
             "colors": ["dark-blue", "black", "light-blue"],
             "sizes": ["30", "32", "34", "36"],
-            "quickAddEnabled": true
+            "quickAddEnabled": true,
+            "buyNowEnabled": true
           },
           {
             "id": "prod_004",
@@ -537,7 +540,8 @@
             "reviewCount": 28,
             "colors": ["floral-pink", "floral-blue"],
             "sizes": ["S", "M", "L", "XL"],
-            "quickAddEnabled": true
+            "quickAddEnabled": true,
+            "buyNowEnabled": true
           },
           {
             "id": "prod_005",
@@ -555,7 +559,8 @@
             "reviewCount": 89,
             "colors": ["black", "white", "navy", "gray"],
             "sizes": ["S", "M", "L", "XL", "XXL"],
-            "quickAddEnabled": true
+            "quickAddEnabled": true,
+            "buyNowEnabled": true
           },
           {
             "id": "prod_006",
@@ -573,7 +578,8 @@
             "reviewCount": 32,
             "colors": ["brown", "black", "beige"],
             "sizes": [],
-            "quickAddEnabled": true
+            "quickAddEnabled": true,
+            "buyNowEnabled": true
           },
           {
             "id": "prod_007",
@@ -591,7 +597,8 @@
             "reviewCount": 67,
             "colors": ["navy", "black", "charcoal"],
             "sizes": ["S", "M", "L", "XL", "XXL"],
-            "quickAddEnabled": true
+            "quickAddEnabled": true,
+            "buyNowEnabled": true
           },
           {
             "id": "prod_008",
@@ -609,7 +616,8 @@
             "reviewCount": 112,
             "colors": ["white", "navy", "red", "green"],
             "sizes": ["S", "M", "L", "XL"],
-            "quickAddEnabled": true
+            "quickAddEnabled": true,
+            "buyNowEnabled": true
           },
           {
             "id": "prod_009",
@@ -627,7 +635,8 @@
             "reviewCount": 89,
             "colors": ["khaki", "navy", "olive", "black"],
             "sizes": ["30", "32", "34", "36", "38"],
-            "quickAddEnabled": true
+            "quickAddEnabled": true,
+            "buyNowEnabled": true
           },
           {
             "id": "prod_010",
@@ -645,7 +654,8 @@
             "reviewCount": 156,
             "colors": ["black", "brown"],
             "sizes": ["S", "M", "L", "XL"],
-            "quickAddEnabled": true
+            "quickAddEnabled": true,
+            "buyNowEnabled": true
           },
           {
             "id": "prod_011",
@@ -663,7 +673,8 @@
             "reviewCount": 45,
             "colors": ["gray", "black", "navy", "burgundy"],
             "sizes": ["S", "M", "L", "XL", "XXL"],
-            "quickAddEnabled": true
+            "quickAddEnabled": true,
+            "buyNowEnabled": true
           }
         ]
       },
