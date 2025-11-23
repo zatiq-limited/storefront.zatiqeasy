@@ -1,61 +1,87 @@
 import React from "react";
 
-const ProductCards1: React.FC = () => {
-  const product = {
-    image: "assets/card/p-1.png",
-    discount: "25% Off",
-    category: "Watches",
-    title: "New Smartwatch from Series 8",
-    subtitle: "Black Sports Band - Regular.",
-    salePrice: "5,500",
-    originalPrice: "8,000",
-  };
+interface ProductCards1Props {
+  id?: number;
+  name?: string;
+  price?: number;
+  old_price?: number;
+  image_url?: string;
+  brand?: string;
+  rating?: number;
+  reviews_count?: number;
+}
+
+const ProductCards1: React.FC<ProductCards1Props> = ({
+  image_url,
+  old_price,
+  brand,
+  name,
+  price,
+  rating,
+  reviews_count,
+}) => {
+  const discount =
+    old_price && price
+      ? Math.round(((old_price - price) / old_price) * 100)
+      : 0;
 
   return (
-    <div className="flex gap-6 justify-center">
-      <div className="w-[282px] h-[441px] bg-white rounded overflow-hidden relative cursor-pointer transition-all duration-300 shadow-sm hover:shadow-xl">
+    <div className="w-full">
+      <div className="w-full h-[441px] bg-white rounded overflow-hidden relative cursor-pointer transition-all duration-300 shadow-sm hover:shadow-xl">
         {/* Top Half - Image Container */}
         <div className="w-full h-[228px] relative">
           <img
-            src={product.image}
-            alt={product.title}
+            src={image_url}
+            alt={name}
             className="w-full h-full object-cover"
           />
           {/* Discount Badge */}
-          <div className="absolute top-4 left-4 bg-[#F55157] text-white px-3 py-1 rounded text-sm font-normal">
-            {product.discount}
-          </div>
+          {discount > 0 && (
+            <div className="absolute top-4 left-4 bg-[#F55157] text-white px-3 py-1 rounded text-sm font-normal">
+              {discount}% Off
+            </div>
+          )}
         </div>
 
         {/* Bottom Half - Content Area */}
         <div className="p-4 h-[213px] flex flex-col">
           {/* Category */}
-          <div className="text-sm text-[#3465F0] font-normal">
-            {product.category}
-          </div>
+          {brand && (
+            <div className="text-sm text-[#3465F0] font-normal">{brand}</div>
+          )}
 
           {/* Title */}
           <h3 className="text-base font-medium text-[#181D25] mb-1 leading-[1.4] overflow-hidden text-ellipsis line-clamp-2">
-            {product.title}
+            {name}
           </h3>
 
-          {/* Subtitle */}
-          <p className="text-sm font-normal text-[#666666]">
-            {product.subtitle}
-          </p>
+          {/* Rating */}
+          {rating && (
+            <div className="flex items-center gap-1 mb-2">
+              <span className="text-yellow-500">★</span>
+              <span className="text-sm text-[#666666]">{rating}</span>
+              {reviews_count && (
+                <span className="text-sm text-[#9CA3AF]">
+                  ({reviews_count})
+                </span>
+              )}
+            </div>
+          )}
 
           {/* Prices */}
           <div className="mb-8">
             <span className="text-lg font-medium text-[#F55157] leading-6">
-              {product.salePrice} BDT
+              {price} BDT
             </span>
-            <span className="text-sm font-normal leading-6 text-[#9CA3AF] line-through ml-2">
-              {product.originalPrice} BDT
-            </span>
+            {old_price && (
+              <span className="text-sm font-normal leading-6 text-[#9CA3AF] line-through ml-2">
+                {old_price} BDT
+              </span>
+            )}
           </div>
 
           {/* Add to Cart Button */}
-          <button className="w-full h-14 border border-[#EEEEEE] rounded bg-white flex items-center justify-center cursor-pointer text-base leading-6 font-normal text-[#1F2937] gap-2 transition-all duration-300 hover:bg-gray-50">
+          <button className="w-full h-14 border border-[#EEEEEE] rounded bg-white flex items-center justify-center cursor-pointer text-base leading-6 font-normal text-[#1F2937] gap-2 transition-all duration-300 hover:bg-gray-900/20">
             Add to Cart
             <svg
               width="16"

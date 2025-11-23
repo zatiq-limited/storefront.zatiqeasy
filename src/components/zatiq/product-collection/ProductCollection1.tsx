@@ -1,8 +1,3 @@
-/**
- * Product Collection 1 - Modern Grid Layout
- * Shopify-inspired clean grid with smooth animations & hover effects
- */
-
 import React from "react";
 import { ArrowRight } from "lucide-react";
 import { getComponent } from "../../../lib/component-registry";
@@ -23,56 +18,45 @@ interface ProductCollection1Props {
 }
 
 const ProductCollection1: React.FC<ProductCollection1Props> = ({
-  title = "Featured Products",
+  title,
   subtitle,
-  titleColor = "#000000",
-  subtitleColor = "#6B7280",
-  viewAllText = "View All",
-  viewAllLink = "/collections/all",
-  productCardType = "product-card-1",
-  columns = 4,
-  columnsMobile = 2,
-  products = [],
-  bgColor = "#FFFFFF",
-  showViewAll = true,
+  titleColor,
+  subtitleColor,
+  viewAllText,
+  viewAllLink,
+  productCardType,
+  columns,
+  columnsMobile,
+  products,
+  bgColor,
+  showViewAll,
 }) => {
-  const ProductCard = getComponent(productCardType);
+  // Get the product card component
+  const ProductCard = productCardType ? getComponent(productCardType) : null;
 
-  if (!ProductCard) {
-    console.error(`Product card type "${productCardType}" not found`);
+  if (!ProductCard || !products) {
     return null;
   }
 
-  const gridCols: Record<number, string> = {
-    2: "md:grid-cols-2",
-    3: "md:grid-cols-3",
-    4: "md:grid-cols-4",
-    5: "md:grid-cols-5",
-    6: "md:grid-cols-6",
-  };
-
   return (
     <section
-      className="w-full py-16 md:py-24 px-4 md:px-6 lg:px-8"
+      className="w-full py-16 md:py-24"
       style={{ backgroundColor: bgColor }}
     >
-      <div className="w-full max-w-[1400px] mx-auto">
-        {/* Header - Premium Spacing */}
-        <div className="flex flex-col md:flex-row md:justify-between md:items-end mb-12 md:mb-16 gap-6">
-          <div className="flex-1 max-w-3xl">
+      <div className="max-w-[1440px] mx-auto px-4 2xl:px-0">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row md:justify-between md:items-end mb-12 gap-6">
+          <div>
             {title && (
               <h2
-                className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight mb-4 leading-tight"
+                className="text-3xl md:text-5xl font-bold mb-4"
                 style={{ color: titleColor }}
               >
                 {title}
               </h2>
             )}
             {subtitle && (
-              <p
-                className="text-base md:text-lg lg:text-xl leading-relaxed"
-                style={{ color: subtitleColor }}
-              >
+              <p className="text-lg" style={{ color: subtitleColor }}>
                 {subtitle}
               </p>
             )}
@@ -81,28 +65,26 @@ const ProductCollection1: React.FC<ProductCollection1Props> = ({
           {showViewAll && viewAllLink && (
             <a
               href={viewAllLink}
-              className="group inline-flex items-center gap-2 text-sm md:text-base font-bold transition-all hover:gap-4 px-6 py-3 rounded-full border-2 border-current hover:bg-gray-900 hover:text-white"
-              style={{ color: titleColor }}
+              className="group inline-flex items-center gap-2 font-bold px-6 py-3 rounded-full border-2 hover:bg-gray-900/20 hover:text-white transition-all"
+              style={{ color: titleColor, borderColor: titleColor }}
             >
               {viewAllText}
-              <ArrowRight
-                className="w-5 h-5 transition-transform group-hover:translate-x-1"
-                strokeWidth={2.5}
-              />
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </a>
           )}
         </div>
 
-        {/* Product Grid - Professional Spacing */}
+        {/* Product Grid */}
         <div
-          className={`grid grid-cols-${columnsMobile} ${
-            gridCols[columns] || "md:grid-cols-4"
-          } gap-6 md:gap-8 lg:gap-10 xl:gap-12`}
+          className="grid gap-6"
+          style={{
+            gridTemplateColumns: `repeat(${columnsMobile}, 1fr)`,
+          }}
         >
           {products.map((product, index) => (
             <div
               key={product.id || index}
-              className="group animate-fadeInUp"
+              className="animate-fadeIn overflow-hidden"
               style={{ animationDelay: `${index * 80}ms` }}
             >
               <ProductCard {...product} />
@@ -112,19 +94,18 @@ const ProductCollection1: React.FC<ProductCollection1Props> = ({
       </div>
 
       <style>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
         }
-        .animate-fadeInUp {
-          animation: fadeInUp 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        .animate-fadeIn {
+          animation: fadeIn 0.6s ease-out forwards;
           opacity: 0;
+        }
+        @media (min-width: 768px) {
+          .grid {
+            grid-template-columns: repeat(${columns}, 1fr) !important;
+          }
         }
       `}</style>
     </section>
