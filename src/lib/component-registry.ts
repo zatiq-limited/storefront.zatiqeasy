@@ -10,17 +10,17 @@
 import type { ComponentType } from "react";
 
 // Import all components from local zatiq components folder
-import { Hero1, Hero2, Hero3, Hero4 } from "../components/zatiq/Hero";
-import { Navbar1, Navbar2, Navbar3, Navbar4 } from "../components/zatiq/Navbar";
+import { Hero1, Hero2, Hero3, Hero4 } from "../components/zatiq/heroes";
+import { Navbar1, Navbar2, Navbar3, Navbar4 } from "../components/zatiq/navbars";
 import {
   Category1,
   Category2,
   Category3,
   Category4,
-} from "../components/zatiq/Category";
+} from "../components/zatiq/category";
 // Category5 and Category6 are default exports
-import Category5 from "../components/zatiq/Category/Category5";
-import Category6 from "../components/zatiq/Category/Category6";
+import Category5 from "../components/zatiq/category/Category5";
+import Category6 from "../components/zatiq/category/Category6";
 import {
   ProductCards1,
   ProductCards2,
@@ -30,37 +30,36 @@ import {
   ProductCards6,
   ProductCards7,
   ProductCards8,
-} from "../components/zatiq/ProductCards";
-import { Footers1, Footers2 } from "../components/zatiq/Footers";
-import { Reviews1, Reviews2, Reviews3 } from "../components/zatiq/Reviews";
-import { Brands1, Brands2, Brands3 } from "../components/zatiq/Brands";
+} from "../components/zatiq/product-cards";
+import { Footers1, Footers2 } from "../components/zatiq/footers";
+import { Reviews1, Reviews2, Reviews3 } from "../components/zatiq/reviews";
+import { Brands1, Brands2, Brands3 } from "../components/zatiq/brands";
 import {
   SpecialOffersSlider1,
   SpecialOffersSlider2,
   SpecialOffersSlider3,
   SpecialOffersSlider4,
   SpecialOffersSlider5,
-} from "../components/zatiq/SpecialOffersSlider";
-import { Badges1, Badges2, Badges3 } from "../components/zatiq/Badges";
+} from "../components/zatiq/special-offers-slider";
+import { Badges1, Badges2, Badges3 } from "../components/zatiq/badges";
 import {
   AnnouncementBar1,
   AnnouncementBar2,
   AnnouncementBar3,
-} from "../components/zatiq/AnnouncementBar";
+} from "../components/zatiq/announcement-bars";
 import {
   StaticBanner1,
   StaticBanner2,
   StaticBanner3,
   StaticBanner4,
-} from "../components/zatiq/StaticBanner";
-// StaticBanner5 might be a default export, import separately if exists
-import StaticBanner5 from "../components/zatiq/StaticBanner/StaticBanner5";
+} from "../components/zatiq/static-banner";
+
 import {
   PaymentStatus1,
   PaymentStatus2,
-} from "../components/zatiq/PaymentStatus";
-import { ProductTabs1 } from "../components/zatiq/ProductTabs";
-import { SocialFeed1, SocialFeed2 } from "../components/zatiq/SocialFeed";
+} from "../components/zatiq/payment-status";
+import { ProductTabs1 } from "../components/zatiq/product-tabs";
+import { SocialFeed1, SocialFeed2 } from "../components/zatiq/social-feed";
 
 /**
  * Component Registry
@@ -89,7 +88,6 @@ export const ZATIQ_COMPONENTS: Record<string, ComponentType<any>> = {
   "static-banner-2": StaticBanner2,
   "static-banner-3": StaticBanner3,
   "static-banner-4": StaticBanner4,
-  "static-banner-5": StaticBanner5,
 
   // Categories (6 variants)
   "category-1": Category1,
