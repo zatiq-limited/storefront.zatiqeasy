@@ -1,16 +1,26 @@
 /**
- * Product Collection 2 - Premium Horizontal Carousel
- * Shopify/Apple-inspired smooth scroll with gradient edges
+ * Product Collection 2 - Premium Carousel with Auto-play
+ * World-class design with shadcn carousel and smooth animations
  */
 
 import React, { useRef, useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { getComponent } from "../../../lib/component-registry";
+import Autoplay from "embla-carousel-autoplay";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+  type CarouselApi,
+} from "@/components/ui/carousel";
 
 interface ProductCollection2Props {
   title?: string;
   subtitle?: string;
   titleColor?: string;
+  curatedTag?: string;
   subtitleColor?: string;
   viewAllText?: string;
   viewAllLink?: string;
@@ -19,74 +29,117 @@ interface ProductCollection2Props {
   bgColor?: string;
   showViewAll?: boolean;
   showArrows?: boolean;
-  slidesToShow?: number;
+  autoplayDelay?: number;
 }
 
 const ProductCollection2: React.FC<ProductCollection2Props> = ({
   title = "Featured Products",
   subtitle,
-  titleColor = "#000000",
+  curatedTag = "Curated Selection",
+  titleColor = "#111827",
   subtitleColor = "#6B7280",
-  viewAllText = "View All",
+  viewAllText = "Explore Collection",
   viewAllLink = "/collections/all",
   productCardType = "product-card-1",
   products = [],
-  bgColor = "#F9FAFB",
+  bgColor = "#FAFAFA",
   showViewAll = true,
   showArrows = true,
-  slidesToShow = 4,
+  autoplayDelay = 3000,
 }) => {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
+  const [api, setApi] = useState<CarouselApi>();
+  const [current, setCurrent] = useState(0);
+  const sectionRef = useRef<HTMLElement>(null);
 
   const ProductCard = getComponent(productCardType);
+
+  const autoplayPlugin = React.useMemo(
+    () =>
+      Autoplay({
+        delay: autoplayDelay,
+        stopOnInteraction: false,
+        stopOnMouseEnter: true,
+      }),
+    [autoplayDelay]
+  );
 
   if (!ProductCard) {
     console.error(`Product card type "${productCardType}" not found`);
     return null;
   }
 
-  const updateScrollButtons = () => {
-    if (scrollRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
-      setCanScrollLeft(scrollLeft > 10);
-      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
-    }
-  };
-
+  // Intersection Observer for entrance animation
   useEffect(() => {
-    const scrollElement = scrollRef.current;
-    if (scrollElement) {
-      scrollElement.addEventListener("scroll", updateScrollButtons);
-      updateScrollButtons();
-      return () =>
-        scrollElement.removeEventListener("scroll", updateScrollButtons);
-    }
-  }, [products]);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
 
-  const scroll = (direction: "left" | "right") => {
-    if (scrollRef.current) {
-      const scrollAmount = scrollRef.current.clientWidth * 0.75;
-      scrollRef.current.scrollBy({
-        left: direction === "left" ? -scrollAmount : scrollAmount,
-        behavior: "smooth",
-      });
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
     }
-  };
+
+    return () => observer.disconnect();
+  }, []);
+
+  // Track current slide
+  useEffect(() => {
+    if (!api) return;
+
+    setCurrent(api.selectedScrollSnap());
+
+    api.on("select", () => {
+      setCurrent(api.selectedScrollSnap());
+    });
+  }, [api]);
 
   return (
     <section
-      className="w-full py-16 md:py-24 relative"
+      ref={sectionRef}
+      className="w-full py-20 md:py-28 lg:py-32 relative overflow-hidden"
       style={{ backgroundColor: bgColor }}
     >
-      <div className="w-full max-w-[1400px] mx-auto px-4 md:px-6 lg:px-8">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:justify-between md:items-end mb-12 md:mb-16 gap-6">
-          <div className="flex-1 max-w-3xl">
+      {/* Subtle Background Pattern */}
+      <div className="absolute inset-0 opacity-[0.02]">
+        <div
+          className="w-full h-full"
+          style={{
+            backgroundImage: `radial-gradient(circle at 1px 1px, ${titleColor} 1px, transparent 0)`,
+            backgroundSize: "40px 40px",
+          }}
+        />
+      </div>
+
+      <div className="w-full max-w-[1440px] mx-auto px-4 md:px-8 lg:px-12 relative">
+        {/* Premium Header */}
+        <div
+          className={`flex flex-col lg:flex-row lg:justify-between lg:items-center mb-14 md:mb-20 gap-6 transition-all duration-1000 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
+          <div className="flex-1 max-w-2xl">
+            {/* Elegant Label */}
+            <div className="flex items-center gap-3 mb-2">
+              <div
+                className="w-12 h-[2px] rounded-full"
+                style={{ backgroundColor: titleColor }}
+              />
+              <span
+                className="text-xs font-semibold tracking-[0.2em] uppercase"
+                style={{ color: subtitleColor }}
+              >
+                {curatedTag}
+              </span>
+            </div>
+
             {title && (
               <h2
-                className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight mb-4 leading-tight"
+                className="text-4xl md:text-5xl font-bold tracking-tight mb-2 leading-[1.1]"
                 style={{ color: titleColor }}
               >
                 {title}
@@ -94,7 +147,7 @@ const ProductCollection2: React.FC<ProductCollection2Props> = ({
             )}
             {subtitle && (
               <p
-                className="text-base md:text-lg lg:text-xl leading-relaxed"
+                className="text-lg md:text-xl leading-relaxed font-light"
                 style={{ color: subtitleColor }}
               >
                 {subtitle}
@@ -102,95 +155,89 @@ const ProductCollection2: React.FC<ProductCollection2Props> = ({
             )}
           </div>
 
-          <div className="flex items-center gap-4">
-            {showArrows && (
-              <div className="hidden md:flex gap-3">
-                <button
-                  onClick={() => scroll("left")}
-                  disabled={!canScrollLeft}
-                  className={`w-12 h-12 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
-                    canScrollLeft
-                      ? "border-gray-900 hover:bg-gray-900 hover:text-white hover:scale-110"
-                      : "border-gray-200 text-gray-300 cursor-not-allowed"
-                  }`}
-                  aria-label="Previous"
-                >
-                  <ChevronLeft className="w-5 h-5" strokeWidth={2.5} />
-                </button>
-                <button
-                  onClick={() => scroll("right")}
-                  disabled={!canScrollRight}
-                  className={`w-12 h-12 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
-                    canScrollRight
-                      ? "border-gray-900 hover:bg-gray-900 hover:text-white hover:scale-110"
-                      : "border-gray-200 text-gray-300 cursor-not-allowed"
-                  }`}
-                  aria-label="Next"
-                >
-                  <ChevronRight className="w-5 h-5" strokeWidth={2.5} />
-                </button>
-              </div>
-            )}
-
-            {showViewAll && viewAllLink && (
-              <a
-                href={viewAllLink}
-                className="group inline-flex items-center gap-2 text-sm md:text-base font-bold transition-all hover:gap-4"
-                style={{ color: titleColor }}
-              >
-                {viewAllText}
-                <ArrowRight
-                  className="w-5 h-5 transition-transform group-hover:translate-x-1"
-                  strokeWidth={2.5}
-                />
-              </a>
-            )}
-          </div>
+          {/* View All Button */}
+          {showViewAll && viewAllLink && (
+            <a
+              href={viewAllLink}
+              className="inline-flex items-center gap-3 px-10 py-4 rounded-full font-semibold text-sm tracking-wide transition-all duration-500 ease-out hover:gap-5 group shadow-lg hover:shadow-xl"
+              style={{
+                backgroundColor: titleColor,
+                color: bgColor,
+              }}
+            >
+              {viewAllText}
+              <ArrowRight className="w-4 h-4 transition-transform duration-500 group-hover:translate-x-1" />
+            </a>
+          )}
         </div>
 
-        {/* Product Carousel with Gradient Edges */}
-        <div className="relative -mx-4 md:-mx-6 lg:-mx-8">
-          {/* Left Gradient */}
-          {canScrollLeft && (
-            <div className="hidden md:block absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-[var(--bg-color)] to-transparent z-10 pointer-events-none"></div>
-          )}
-
-          {/* Right Gradient */}
-          {canScrollRight && (
-            <div className="hidden md:block absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-[var(--bg-color)] to-transparent z-10 pointer-events-none"></div>
-          )}
-
-          <div
-            ref={scrollRef}
-            className="overflow-x-auto scroll-smooth px-4 md:px-6 lg:px-8 pb-2"
-            style={
-              {
-                scrollbarWidth: "none",
-                msOverflowStyle: "none",
-                WebkitOverflowScrolling: "touch",
-                "--bg-color": bgColor,
-              } as React.CSSProperties
-            }
+        {/* Product Carousel with Autoplay */}
+        <div
+          className={`relative transition-all duration-1000 delay-200 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
+          }`}
+        >
+          <Carousel
+            setApi={setApi}
+            plugins={[autoplayPlugin]}
+            opts={{
+              align: "start",
+              loop: true,
+            }}
+            className="w-full"
           >
-            <div className="flex gap-6 md:gap-8 lg:gap-10">
+            <CarouselContent className="-ml-4 md:-ml-6">
               {products.map((product, index) => (
-                <div
+                <CarouselItem
                   key={product.id || index}
-                  className="flex-shrink-0 w-[280px] md:w-[320px] lg:w-[360px] group"
+                  className="pl-4 md:pl-6 basis-[85%] sm:basis-1/2 md:basis-1/3 lg:basis-1/4"
                 >
-                  <ProductCard {...product} />
-                </div>
+                  <div
+                    className={`transition-all duration-700 ${
+                      isVisible
+                        ? "opacity-100 translate-y-0"
+                        : "opacity-0 translate-y-8"
+                    }`}
+                    style={{
+                      transitionDelay: isVisible
+                        ? `${300 + index * 100}ms`
+                        : "0ms",
+                    }}
+                  >
+                    <ProductCard {...product} />
+                  </div>
+                </CarouselItem>
               ))}
-            </div>
+            </CarouselContent>
+
+            {/* Navigation Arrows */}
+            {showArrows && (
+              <>
+                <CarouselPrevious className="hidden md:flex -left-4 lg:-left-6 w-14 h-14 bg-white border-0 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300" />
+                <CarouselNext className="hidden md:flex -right-4 lg:-right-6 w-14 h-14 bg-white border-0 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300" />
+              </>
+            )}
+          </Carousel>
+
+          {/* Progress Dots */}
+          <div className="flex justify-center mt-10 gap-2">
+            {products.slice(0, Math.min(products.length, 8)).map((_, index) => (
+              <button
+                key={index}
+                onClick={() => api?.scrollTo(index)}
+                className={`h-2 rounded-full transition-all duration-500 ${
+                  current === index ? "w-8" : "w-2"
+                }`}
+                style={{
+                  backgroundColor:
+                    current === index ? titleColor : `${titleColor}30`,
+                }}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
           </div>
         </div>
       </div>
-
-      <style>{`
-        section::-webkit-scrollbar {
-          display: none;
-        }
-      `}</style>
     </section>
   );
 };

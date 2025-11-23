@@ -450,10 +450,11 @@
       },
       {
         "id": "featured_products_grid",
-        "type": "product-collection-1",
+        "type": "product-collection-2",
         "settings": {
           "title": "Featured Products",
           "subtitle": "Hand-picked styles just for you",
+          "curatedTag":"Curated Selection",
           "titleColor": "#181D25",
           "subtitleColor": "#666666",
           "viewAllText": "View All",
