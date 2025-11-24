@@ -71,10 +71,10 @@ export default function ProductTabs2({
     viewTotalProducts,
     columns = 4,
     columnsMobile = 2,
-    titleColor,
-    subtitleColor,
-    accentColor,
-    bgColor,
+    titleColor = "#111827",
+    subtitleColor = "#6B7280",
+    accentColor = "#111827",
+    bgColor = "#FFFFFF",
   } = settings;
 
   const activeTabData = tabs.find((tab) => tab.id === activeTab);
@@ -87,6 +87,21 @@ export default function ProductTabs2({
 
   // Get the product card component from registry
   const ProductCard = productCardType ? getComponent(productCardType) : null;
+
+  // Responsive grid classes
+  const mobileColsClass = {
+    1: "grid-cols-1",
+    2: "grid-cols-2",
+    3: "grid-cols-3",
+  }[columnsMobile] || "grid-cols-2";
+
+  const desktopColsClass = {
+    2: "lg:grid-cols-2",
+    3: "lg:grid-cols-3",
+    4: "lg:grid-cols-4",
+    5: "lg:grid-cols-5",
+    6: "lg:grid-cols-6",
+  }[columns] || "lg:grid-cols-4";
 
   // Intersection Observer for entrance animation
   useEffect(() => {
@@ -135,10 +150,14 @@ export default function ProductTabs2({
     return null;
   }
 
+  const productsToShow = viewTotalProducts
+    ? activeTabData?.products.slice(0, viewTotalProducts)
+    : activeTabData?.products;
+
   return (
     <section
       ref={sectionRef}
-      className="w-full py-20 md:py-28 relative overflow-hidden"
+      className="w-full py-12 md:py-20 lg:py-28 relative overflow-hidden"
       style={{ backgroundColor: bgColor }}
     >
       {/* Subtle gradient overlay */}
@@ -152,25 +171,25 @@ export default function ProductTabs2({
       <div className="max-w-[1440px] mx-auto px-4 2xl:px-0 relative">
         {/* Premium Header */}
         <div
-          className={`text-center mb-14 transition-all duration-1000 ${
+          className={`text-center mb-8 md:mb-14 transition-all duration-1000 ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
           {/* Tagline with decorative lines */}
           {tagline && (
-            <div className="flex items-center justify-center gap-4 mb-6">
+            <div className="flex items-center justify-center gap-3 md:gap-4 mb-4 md:mb-6">
               <div
-                className="hidden sm:block w-12 md:w-20 h-px"
+                className="hidden sm:block w-8 md:w-20 h-px"
                 style={{ backgroundColor: `${accentColor}30` }}
               />
               <span
-                className="text-xs md:text-sm font-semibold tracking-[0.25em] uppercase"
+                className="text-[10px] sm:text-xs md:text-sm font-semibold tracking-[0.2em] md:tracking-[0.25em] uppercase"
                 style={{ color: accentColor }}
               >
                 {tagline}
               </span>
               <div
-                className="hidden sm:block w-12 md:w-20 h-px"
+                className="hidden sm:block w-8 md:w-20 h-px"
                 style={{ backgroundColor: `${accentColor}30` }}
               />
             </div>
@@ -180,14 +199,14 @@ export default function ProductTabs2({
           {title && (
             <div className="relative inline-block">
               <h2
-                className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1]"
+                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight leading-[1.1]"
                 style={{ color: titleColor }}
               >
                 {title}
               </h2>
               {/* Decorative underline accent */}
               <div
-                className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-16 md:w-24 h-1 rounded-full"
+                className="absolute -bottom-1.5 md:-bottom-2 left-1/2 -translate-x-1/2 w-12 md:w-24 h-0.5 md:h-1 rounded-full"
                 style={{
                   background: `linear-gradient(90deg, transparent, ${accentColor}, transparent)`,
                 }}
@@ -198,7 +217,7 @@ export default function ProductTabs2({
           {/* Subtitle with refined typography */}
           {subtitle && (
             <p
-              className="text-base md:text-lg lg:text-xl max-w-2xl mx-auto leading-relaxed font-light mt-6"
+              className="text-sm sm:text-base md:text-lg lg:text-xl max-w-2xl mx-auto leading-relaxed font-light mt-4 md:mt-6 px-4"
               style={{ color: subtitleColor }}
             >
               {subtitle}
@@ -206,14 +225,14 @@ export default function ProductTabs2({
           )}
         </div>
 
-        {/* Tabs with Underline Indicator */}
+        {/* Tabs with Underline Indicator - Scrollable on mobile */}
         <div
-          className={`mb-14 transition-all duration-1000 delay-100 ${
+          className={`mb-8 md:mb-14 transition-all duration-1000 delay-100 overflow-x-auto scrollbar-hide ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
           <div className={`flex ${alignmentClass}`}>
-            <div className="relative inline-flex border-b border-gray-200">
+            <div className="relative inline-flex border-b border-gray-200 min-w-max">
               {tabs.map((tab, index) => (
                 <button
                   key={tab.id}
@@ -221,7 +240,7 @@ export default function ProductTabs2({
                     tabRefs.current[index] = el;
                   }}
                   onClick={() => handleTabChange(tab.id)}
-                  className={`relative px-6 md:px-10 py-4 text-base md:text-lg font-medium transition-colors duration-300 ${
+                  className={`relative px-4 sm:px-6 md:px-10 py-3 md:py-4 text-sm sm:text-base md:text-lg font-medium transition-colors duration-300 whitespace-nowrap ${
                     activeTab === tab.id
                       ? ""
                       : "text-gray-500 hover:text-gray-700"
@@ -233,7 +252,7 @@ export default function ProductTabs2({
                   {tab.label}
                   {/* Product count badge */}
                   <span
-                    className={`ml-2 text-xs px-2 py-0.5 rounded-full transition-all duration-300 ${
+                    className={`ml-1.5 sm:ml-2 text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 rounded-full transition-all duration-300 ${
                       activeTab === tab.id
                         ? "bg-gray-900 text-white"
                         : "bg-gray-100 text-gray-500"
@@ -246,7 +265,7 @@ export default function ProductTabs2({
 
               {/* Animated Underline Indicator */}
               <div
-                className="absolute bottom-0 h-[3px] rounded-full transition-all duration-500 ease-out"
+                className="absolute bottom-0 h-0.5 md:h-[3px] rounded-full transition-all duration-500 ease-out"
                 style={{
                   left: indicatorStyle.left,
                   width: indicatorStyle.width,
@@ -260,15 +279,12 @@ export default function ProductTabs2({
         {/* Products Grid with Animation */}
         {activeTabData && (
           <div
-            className={`grid gap-6 transition-all duration-500 ${
+            className={`grid ${mobileColsClass} md:grid-cols-3 ${desktopColsClass} gap-3 sm:gap-4 md:gap-6 transition-all duration-500 ${
               isAnimating ? "opacity-0 translate-y-4" : "opacity-100 translate-y-0"
             }`}
-            style={{
-              gridTemplateColumns: `repeat(${columnsMobile}, 1fr)`,
-            }}
           >
-            {activeTabData.products.length > 0 ? (
-              activeTabData.products.slice(0, viewTotalProducts).map((product, index) => (
+            {productsToShow && productsToShow.length > 0 ? (
+              productsToShow.map((product, index) => (
                 <div
                   key={product.id || index}
                   className={`transition-all duration-700 ${
@@ -284,10 +300,10 @@ export default function ProductTabs2({
                 </div>
               ))
             ) : (
-              <div className="col-span-full text-center py-16">
-                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
+              <div className="col-span-full text-center py-12 md:py-16">
+                <div className="w-12 h-12 md:w-16 md:h-16 mx-auto mb-3 md:mb-4 rounded-full bg-gray-100 flex items-center justify-center">
                   <svg
-                    className="w-8 h-8 text-gray-400"
+                    className="w-6 h-6 md:w-8 md:h-8 text-gray-400"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -300,7 +316,7 @@ export default function ProductTabs2({
                     />
                   </svg>
                 </div>
-                <p className="text-gray-500 text-lg">
+                <p className="text-gray-500 text-sm md:text-lg">
                   No products available in this category
                 </p>
               </div>
@@ -310,10 +326,12 @@ export default function ProductTabs2({
       </div>
 
       <style>{`
-        @media (min-width: 768px) {
-          .grid {
-            grid-template-columns: repeat(${columns}, 1fr) !important;
-          }
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
         }
       `}</style>
     </section>

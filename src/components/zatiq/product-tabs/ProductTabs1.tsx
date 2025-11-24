@@ -39,6 +39,7 @@ interface ProductTabs1Props {
     subtitle?: string;
     tabAlignment?: "left" | "center" | "right";
     productCardType?: string;
+    viewTotalProducts?: number;
     columns?: number;
     columnsMobile?: number;
   };
@@ -56,6 +57,7 @@ export default function ProductTabs1({
     subtitle,
     tabAlignment = "center",
     productCardType,
+    viewTotalProducts,
     columns = 4,
     columnsMobile = 2,
   } = settings;
@@ -75,49 +77,69 @@ export default function ProductTabs1({
     return null;
   }
 
+  // Responsive grid classes
+  const mobileColsClass = {
+    1: "grid-cols-1",
+    2: "grid-cols-2",
+    3: "grid-cols-3",
+  }[columnsMobile] || "grid-cols-2";
+
+  const desktopColsClass = {
+    2: "lg:grid-cols-2",
+    3: "lg:grid-cols-3",
+    4: "lg:grid-cols-4",
+    5: "lg:grid-cols-5",
+    6: "lg:grid-cols-6",
+  }[columns] || "lg:grid-cols-4";
+
+  const productsToShow = viewTotalProducts
+    ? activeTabData?.products.slice(0, viewTotalProducts)
+    : activeTabData?.products;
+
   return (
-    <section className="w-full py-16 md:py-24">
+    <section className="w-full py-12 md:py-16 lg:py-24">
       <div className="max-w-[1440px] mx-auto px-4 2xl:px-0">
         {/* Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-8 md:mb-12">
           {title && (
-            <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-3 md:mb-4">
               {title}
             </h2>
           )}
-          {subtitle && <p className="text-gray-600 text-lg">{subtitle}</p>}
+          {subtitle && (
+            <p className="text-gray-600 text-sm sm:text-base md:text-lg max-w-2xl mx-auto">
+              {subtitle}
+            </p>
+          )}
         </div>
 
-        {/* Tabs */}
-        <div className={`flex flex-wrap gap-4 mb-12 ${alignmentClass}`}>
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`px-6 py-3 rounded-lg font-medium transition-all ${
-                activeTab === tab.id
-                  ? "bg-gray-900 text-white shadow-lg"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
+        {/* Tabs - Scrollable on mobile */}
+        <div className={`mb-8 md:mb-12 overflow-x-auto scrollbar-hide`}>
+          <div className={`flex gap-2 sm:gap-4 ${alignmentClass} min-w-max sm:min-w-0`}>
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg text-sm sm:text-base font-medium transition-all whitespace-nowrap ${
+                  activeTab === tab.id
+                    ? "bg-gray-900 text-white shadow-lg"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Products Grid */}
         {activeTabData && (
-          <div
-            className="grid"
-            style={{
-              gridTemplateColumns: `repeat(${columnsMobile}, 1fr)`,
-            }}
-          >
-            {activeTabData.products.length > 0 ? (
-              activeTabData.products.map((product, index) => (
+          <div className={`grid ${mobileColsClass} md:grid-cols-3 ${desktopColsClass} gap-3 sm:gap-4 md:gap-6`}>
+            {productsToShow && productsToShow.length > 0 ? (
+              productsToShow.map((product, index) => (
                 <div
                   key={product.id || index}
-                  className="animate-fadeIn overflow-hidden"
+                  className="animate-fadeIn"
                   style={{ animationDelay: `${index * 80}ms` }}
                 >
                   <ProductCard {...product} />
@@ -125,7 +147,7 @@ export default function ProductTabs1({
               ))
             ) : (
               <div className="col-span-full text-center py-12">
-                <p className="text-gray-500 text-lg">
+                <p className="text-gray-500 text-base md:text-lg">
                   No products available in this category
                 </p>
               </div>
@@ -143,10 +165,12 @@ export default function ProductTabs1({
           animation: fadeIn 0.6s ease-out forwards;
           opacity: 0;
         }
-        @media (min-width: 768px) {
-          .grid {
-            grid-template-columns: repeat(${columns}, 1fr) !important;
-          }
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
         }
       `}</style>
     </section>
