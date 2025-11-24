@@ -43,15 +43,10 @@ interface Footers2Props {
 }
 
 const Footers2: React.FC<Footers2Props> = ({
-  logo = '/src/assets/image/nav/nav1.png',
-  description = 'Digital Haven is a top-notch store offering a wide range of digital products at unbeatable prices from renowned global brands. Dive in now to discover fresh designs and take advantage of fantastic deals and discounts.',
-  copyrightText = 'All rights reserved for Zatiq Ltd © 2025',
-  paymentIcons = [
-    { src: '/src/assets/image/payment/bkash.png', alt: 'bKash' },
-    { src: '/src/assets/image/payment/paypal.png', alt: 'PayPal' },
-    { src: '/src/assets/image/payment/master.png', alt: 'Mastercard' },
-    { src: '/src/assets/image/payment/visa.png', alt: 'Visa' }
-  ],
+  logo,
+  description,
+  copyrightText,
+  paymentIcons = [],
   blocks = []
 }) => {
   // Separate contact block from menu columns
