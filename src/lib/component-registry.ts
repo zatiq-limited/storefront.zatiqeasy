@@ -63,7 +63,7 @@ import {
   PaymentStatus1,
   PaymentStatus2,
 } from "@/components/zatiq/payment-status";
-import { ProductTabs1 } from "../components/zatiq/product-tabs";
+import { ProductTabs1, ProductTabs2 } from "../components/zatiq/product-tabs";
 import { ProductCollection1, ProductCollection2 } from "@/components/zatiq/product-collection";
 import { SocialFeed1, SocialFeed2 } from "@/components/zatiq/social-feed";
 
@@ -144,8 +144,9 @@ export const ZATIQ_COMPONENTS: Record<string, ComponentType<any>> = {
   "payment-status-1": PaymentStatus1,
   "payment-status-2": PaymentStatus2,
 
-  // Product Tabs
+  // Product Tabs (2 variants)
   "product-tabs-1": ProductTabs1,
+  "product-tabs-2": ProductTabs2,
 
   // Product Collections (2 variants)
   "product-collection-1": ProductCollection1,
