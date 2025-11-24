@@ -9,17 +9,13 @@ interface ProductsFilter2Props {
   settings?: {
     showSearch?: boolean;
     showSort?: boolean;
-    showViewToggle?: boolean;
-    showFilterButton?: boolean;
     sortOptions?: SortOption[];
   };
   currentSort?: string;
   currentSearch?: string;
-  currentView?: "grid" | "list";
   productCount?: number;
   onSortChange?: (sort: string) => void;
   onSearchChange?: (search: string) => void;
-  onViewChange?: (view: "grid" | "list") => void;
   onFilterToggle?: () => void;
 }
 
@@ -27,25 +23,16 @@ const ProductsFilter2: React.FC<ProductsFilter2Props> = ({
   settings = {},
   currentSort = "featured",
   currentSearch = "",
-  currentView = "grid",
   productCount = 0,
   onSortChange,
   onSearchChange,
-  onViewChange,
   onFilterToggle,
 }) => {
   const [searchValue, setSearchValue] = useState(currentSearch);
   const {
     showSearch = true,
     showSort = true,
-    showViewToggle = true,
-    showFilterButton = true,
-    sortOptions = [
-      { value: "featured", label: "Featured" },
-      { value: "price-asc", label: "Price: Low to High" },
-      { value: "price-desc", label: "Price: High to Low" },
-      { value: "newest", label: "Newest First" },
-    ],
+    sortOptions = [],
   } = settings;
 
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -76,27 +63,16 @@ const ProductsFilter2: React.FC<ProductsFilter2Props> = ({
 
   return (
     <section className="bg-gray-50 border-b">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <div className="max-w-[1440px] mx-auto px-4 2xl:px-0 py-4">
         <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
           {/* Left Side - Filter Button & Product Count */}
           <div className="flex items-center gap-4">
-            {showFilterButton && (
-              <button
-                onClick={onFilterToggle}
-                className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-                </svg>
-                <span className="font-medium">Filters</span>
-              </button>
-            )}
             <p className="text-sm text-gray-600">
               <span className="font-semibold">{productCount}</span> products
             </p>
           </div>
 
-          {/* Right Side - Search, View Toggle & Sort */}
+          {/* Right Side - Search & Sort */}
           <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto">
             {/* Search */}
             {showSearch && (
@@ -119,28 +95,6 @@ const ProductsFilter2: React.FC<ProductsFilter2Props> = ({
                     </svg>
                   </button>
                 </div>
-              </div>
-            )}
-
-            {/* View Toggle */}
-            {showViewToggle && (
-              <div className="flex items-center bg-white border border-gray-300 rounded-lg overflow-hidden">
-                <button
-                  onClick={() => onViewChange?.("grid")}
-                  className={`p-2.5 ${currentView === "grid" ? "bg-blue-50 text-blue-600" : "text-gray-600"} hover:bg-gray-50 transition-colors`}
-                >
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                  </svg>
-                </button>
-                <button
-                  onClick={() => onViewChange?.("list")}
-                  className={`p-2.5 ${currentView === "list" ? "bg-blue-50 text-blue-600" : "text-gray-600"} hover:bg-gray-50 transition-colors`}
-                >
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
-                  </svg>
-                </button>
               </div>
             )}
 

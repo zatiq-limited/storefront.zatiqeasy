@@ -14,11 +14,10 @@
       },
       {
         "id": "products_filter",
-        "type": "products-filter-1",
+        "type": "products-filter-2",
         "settings": {
           "showSearch": true,
           "showSort": true,
-          "showViewToggle": true,
           "sticky": true,
           "sortOptions": [
             { "value": "featured", "label": "Featured" },
@@ -30,98 +29,83 @@
         }
       },
       {
-        "id": "products_main_layout",
+        "id": "products_layout",
         "type": "products-layout-1",
         "settings": {
           "showSidebar": true,
-          "sidebarPosition": "left"
+          "sidebarPosition": "left",
+          "showViewToggle": true,
+          "defaultView": "grid",
+          "columns": 4,
+          "columnsTablet": 2,
+          "columnsMobile": 1,
+          "gap": 2,
+          "cardStyle": "product-card-5"
         },
-        "blocks": [
-          {
-            "id": "sidebar",
-            "type": "products-sidebar-1",
-            "settings": {
-              "showCategories": true,
-              "showPriceRange": true,
-              "showBrands": true,
-              "showColors": true,
-              "showSizes": true,
-              "collapsible": true
-            },
-            "blocks": [
-              {
-                "id": "category_filter",
-                "title": "Categories",
-                "type": "category",
-                "items": [
-                  { "id": "1", "name": "Women's Fashion", "count": 45 },
-                  { "id": "2", "name": "Men's Fashion", "count": 38 },
-                  { "id": "3", "name": "Accessories", "count": 22 },
-                  { "id": "4", "name": "Bags", "count": 15 },
-                  { "id": "5", "name": "Shoes", "count": 28 }
-                ]
-              },
-              {
-                "id": "price_filter",
-                "title": "Price Range",
-                "type": "price",
-                "min": 0,
-                "max": 10000,
-                "currency": "BDT"
-              },
-              {
-                "id": "brand_filter",
-                "title": "Brands",
-                "type": "brand",
-                "items": [
-                  { "id": "1", "name": "ZatiqStyle", "count": 25 },
-                  { "id": "2", "name": "ZatiqDenim", "count": 18 },
-                  { "id": "3", "name": "ZatiqBasics", "count": 32 },
-                  { "id": "4", "name": "ZatiqLux", "count": 12 }
-                ]
-              },
-              {
-                "id": "color_filter",
-                "title": "Colors",
-                "type": "color",
-                "items": [
-                  { "id": "1", "name": "Black", "hex": "#000000", "count": 45 },
-                  { "id": "2", "name": "White", "hex": "#FFFFFF", "count": 38 },
-                  { "id": "3", "name": "Blue", "hex": "#3B82F6", "count": 22 },
-                  { "id": "4", "name": "Red", "hex": "#EF4444", "count": 15 },
-                  { "id": "5", "name": "Brown", "hex": "#92400E", "count": 18 }
-                ]
-              },
-              {
-                "id": "size_filter",
-                "title": "Sizes",
-                "type": "size",
-                "items": [
-                  { "id": "1", "name": "XS", "count": 12 },
-                  { "id": "2", "name": "S", "count": 28 },
-                  { "id": "3", "name": "M", "count": 45 },
-                  { "id": "4", "name": "L", "count": 38 },
-                  { "id": "5", "name": "XL", "count": 22 },
-                  { "id": "6", "name": "XXL", "count": 10 }
-                ]
-              }
-            ]
+        "sidebar": {
+          "type": "products-sidebar-1",
+          "settings": {
+            "collapsible": true
           },
-          {
-            "id": "products_grid",
-            "type": "products-grid-1",
-            "settings": {
-              "columns": 3,
-              "columnsTablet": 2,
-              "columnsMobile": 1,
-              "gap": 6,
-              "cardStyle": "product-card-8",
-              "showQuickView": true,
-              "showWishlist": true,
-              "showCompare": false
+          "filters": [
+            {
+              "id": "category_filter",
+              "title": "Categories",
+              "type": "category",
+              "items": [
+                { "id": "1", "name": "Women's Fashion", "count": 45 },
+                { "id": "2", "name": "Men's Fashion", "count": 38 },
+                { "id": "3", "name": "Accessories", "count": 22 },
+                { "id": "4", "name": "Bags", "count": 15 },
+                { "id": "5", "name": "Shoes", "count": 28 }
+              ]
+            },
+            {
+              "id": "price_filter",
+              "title": "Price Range",
+              "type": "price",
+              "min": 0,
+              "max": 10000,
+              "currency": "BDT"
+            },
+            {
+              "id": "brand_filter",
+              "title": "Brands",
+              "type": "brand",
+              "items": [
+                { "id": "1", "name": "ZatiqStyle", "count": 25 },
+                { "id": "2", "name": "ZatiqDenim", "count": 18 },
+                { "id": "3", "name": "ZatiqBasics", "count": 32 },
+                { "id": "4", "name": "ZatiqLux", "count": 12 }
+              ]
+            },
+            {
+              "id": "color_filter",
+              "title": "Colors",
+              "type": "color",
+              "items": [
+                { "id": "1", "name": "Black", "hex": "#000000", "count": 45 },
+                { "id": "2", "name": "White", "hex": "#FFFFFF", "count": 38 },
+                { "id": "3", "name": "Blue", "hex": "#3B82F6", "count": 22 },
+                { "id": "4", "name": "Red", "hex": "#EF4444", "count": 15 },
+                { "id": "5", "name": "Brown", "hex": "#92400E", "count": 18 }
+              ]
+            },
+            {
+              "id": "size_filter",
+              "title": "Sizes",
+              "type": "size",
+              "items": [
+                { "id": "1", "name": "XS", "count": 12 },
+                { "id": "2", "name": "S", "count": 28 },
+                { "id": "3", "name": "M", "count": 45 },
+                { "id": "4", "name": "L", "count": 38 },
+                { "id": "5", "name": "XL", "count": 22 },
+                { "id": "6", "name": "XXL", "count": 10 }
+              ]
             }
-          }
-        ]
+          ]
+        }
       },
       {
         "id": "products_pagination",

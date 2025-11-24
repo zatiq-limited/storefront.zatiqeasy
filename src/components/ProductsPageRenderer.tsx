@@ -85,8 +85,16 @@ export default function ProductsPageRenderer({
     };
 
     // Inject products data for specific component types
-    if (section.type.includes("products-grid") || section.type.includes("products-layout")) {
+    if (
+      section.type.includes("products-grid") ||
+      section.type.includes("products-layout")
+    ) {
       componentProps.products = products;
+    }
+
+    // For products-layout, also pass sidebar data
+    if (section.type.includes("products-layout")) {
+      componentProps.sidebar = (section as any).sidebar;
     }
 
     // Inject pagination data
@@ -137,8 +145,8 @@ export default function ProductsPageRenderer({
         .filter((section) => {
           // If no products and this is NOT an empty state component, check if it should be shown
           if (showEmptyState) {
-            // Only show header, filter, and empty state when no products
-            const alwaysShow = ["products-header", "products-filter", "products-empty"];
+            // Only show header, filter, layout, and empty state when no products
+            const alwaysShow = ["products-header", "products-filter", "products-layout", "products-empty"];
             return alwaysShow.some((type) => section.type.includes(type));
           }
           // If we have products, don't show empty state
