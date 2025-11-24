@@ -66,6 +66,7 @@ import {
 import { ProductTabs1, ProductTabs2 } from "../components/zatiq/product-tabs";
 import { ProductCollection1, ProductCollection2 } from "@/components/zatiq/product-collection";
 import { SocialFeed1, SocialFeed2 } from "@/components/zatiq/social-feed";
+import { CustomSections } from "@/components/zatiq/custom-sections";
 
 
 /**
@@ -155,6 +156,10 @@ export const ZATIQ_COMPONENTS: Record<string, ComponentType<any>> = {
   // Social Feed (2 variants)
   "social-feed-1": SocialFeed1,
   "social-feed-2": SocialFeed2,
+
+  // Custom Sections (2 variants - same component, different settings)
+  "custom-sections-1": CustomSections,
+  "custom-sections-2": CustomSections,
 };
 
 /**
