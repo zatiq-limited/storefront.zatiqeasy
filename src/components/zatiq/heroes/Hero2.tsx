@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 
-// Carousel slide data structure
+// Carousel slide data structure (internal)
 interface HeroSlide {
   id: string | number;
   badge: string;
@@ -17,6 +17,23 @@ interface HeroSlide {
   buttonLink: string;
   imageUrl: string;
   imageAlt?: string;
+  overlayOpacity: number;
+}
+
+// Slide from homepage.json (snake_case)
+interface SlideInput {
+  badge?: string;
+  heading?: string;
+  title?: string;
+  description?: string;
+  button_text?: string;
+  button_link?: string;
+  image?: string;
+  overlay_opacity?: number;
+  // Also support camelCase
+  buttonText?: string;
+  buttonLink?: string;
+  imageUrl?: string;
   overlayOpacity?: string;
 }
 
@@ -25,25 +42,60 @@ interface Hero2Props {
   settings?: {
     autoPlay?: boolean;
     autoPlaySpeed?: number;
+    auto_advance?: boolean;
+    advance_interval?: number;
     showArrows?: boolean;
     showIndicators?: boolean;
+    slides?: SlideInput[];
   };
   blocks?: HeroSlide[];
+  // Direct props spread from ComponentRenderer
+  slides?: SlideInput[];
+  auto_advance?: boolean;
+  advance_interval?: number;
+  height?: string;
 }
 
-const Hero2: React.FC<Hero2Props> = ({ settings = {}, blocks = [] }) => {
+const Hero2: React.FC<Hero2Props> = ({
+  settings = {},
+  blocks = [],
+  slides: directSlides,
+  auto_advance,
+  advance_interval,
+}) => {
   const [api, setApi] = useState<CarouselApi>();
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  // Use blocks from props or fallback to empty array
-  const heroSlides = blocks.length > 0 ? blocks : [];
+  // Get slides from: blocks > direct slides prop > settings.slides
+  const rawSlides =
+    blocks.length > 0 ? blocks : directSlides || settings?.slides || [];
+
+  // Transform slides to expected format (handle snake_case from theme builder)
+  const heroSlides: HeroSlide[] = rawSlides.map(
+    (slide: SlideInput, index: number) => ({
+      id: index,
+      badge: slide.badge || "",
+      heading: slide.heading || slide.title || "",
+      description: slide.description || "",
+      buttonText: slide.button_text || slide.buttonText || "Shop now",
+      buttonLink: slide.button_link || slide.buttonLink || "#",
+      imageUrl: slide.image || slide.imageUrl || "",
+      imageAlt: slide.heading || slide.title || "Hero image",
+      overlayOpacity: slide.overlay_opacity ?? 20,
+    })
+  );
+
   const totalSlides = heroSlides.length;
 
-  // Settings with defaults
-  const autoPlay = settings.autoPlay !== false; // Default: true
-  const autoPlaySpeed = settings.autoPlaySpeed || 5000; // Default: 5s
-  const showArrows = settings.showArrows !== false; // Default: true
-  const showIndicators = settings.showIndicators !== false; // Default: true
+  // Settings with defaults (support both camelCase and snake_case)
+  const autoPlay =
+    settings?.autoPlay !== false &&
+    (settings?.auto_advance ?? auto_advance) !== false;
+  const autoPlaySpeed = Number(
+    settings?.advance_interval || advance_interval || settings?.autoPlaySpeed || 5000
+  );
+  const showArrows = settings?.showArrows !== false;
+  const showIndicators = settings?.showIndicators !== false;
 
   // Autoplay plugin
   const autoplayPlugin = useMemo(
@@ -117,7 +169,10 @@ const Hero2: React.FC<Hero2Props> = ({ settings = {}, blocks = [] }) => {
                     loading={index === 0 ? "eager" : "lazy"}
                   />
                   {/* Dark Overlay */}
-                  <div className={`absolute inset-0 bg-black ${slide.overlayOpacity || "opacity-20"}`}></div>
+                  <div
+                    className="absolute inset-0 bg-black"
+                    style={{ opacity: slide.overlayOpacity / 100 }}
+                  ></div>
                 </div>
 
                 {/* Content Container */}

@@ -47,6 +47,7 @@ try {
 // Get global sections from theme
 const announcement = themeData?.globalSections?.announcement || null;
 const header = themeData?.globalSections?.header || null;
+const announcementAfterHeader = themeData?.globalSections?.announcementAfterHeader || null;
 const footer = themeData?.globalSections?.footer || null;
 
 // SEO defaults
@@ -122,14 +123,24 @@ const ogImage = image || '';
 		
 		<!-- Header/Navbar (Global) - Dynamic from theme.json -->
 		{header?.enabled && (
-			<ComponentRenderer 
+			<ComponentRenderer
 				type={header.type}
 				{...header.settings}
 				blocks={header.blocks}
-				client:load 
+				client:load
 			/>
 		)}
-		
+
+		<!-- Announcement Bar After Header (Global) - Dynamic from theme.json -->
+		{announcementAfterHeader?.enabled && (
+			<ComponentRenderer
+				type={announcementAfterHeader.type}
+				{...announcementAfterHeader.settings}
+				blocks={announcementAfterHeader.blocks}
+				client:load
+			/>
+		)}
+
 		<!-- Main Content -->
 		<div class="zatiq-main-content">
 			<slot />

@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 
-// Carousel slide data structure
+// Carousel slide data structure (internal)
 interface HeroSlide {
   id: string | number;
   tagline: string;
@@ -20,6 +20,29 @@ interface HeroSlide {
   bgGradient: string;
   textColor: string;
   taglineColor: string;
+  buttonColor?: string;
+}
+
+// Slide from homepage.json (snake_case)
+interface SlideInput {
+  tagline?: string;
+  title?: string;
+  subtitle?: string;
+  button_text?: string;
+  button_link?: string;
+  image?: string;
+  gradient_start?: string;
+  gradient_end?: string;
+  text_color?: string;
+  tagline_color?: string;
+  button_color?: string;
+  // Also support camelCase
+  buttonText?: string;
+  buttonLink?: string;
+  imageUrl?: string;
+  bgGradient?: string;
+  textColor?: string;
+  taglineColor?: string;
 }
 
 // Component props interface
@@ -27,25 +50,67 @@ interface Hero1Props {
   settings?: {
     autoPlay?: boolean;
     autoPlaySpeed?: number;
+    auto_advance?: boolean;
+    advance_interval?: number;
     showArrows?: boolean;
     showIndicators?: boolean;
+    slides?: SlideInput[];
   };
   blocks?: HeroSlide[];
+  // Direct props spread from ComponentRenderer
+  slides?: SlideInput[];
+  auto_advance?: boolean;
+  advance_interval?: number;
+  height?: string;
 }
 
-const Hero1: React.FC<Hero1Props> = ({ settings = {}, blocks = [] }) => {
+const Hero1: React.FC<Hero1Props> = ({
+  settings = {},
+  blocks = [],
+  slides: directSlides,
+  auto_advance,
+  advance_interval,
+}) => {
   const [api, setApi] = useState<CarouselApi>();
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  // Use blocks from props or fallback to empty array
-  const heroSlides = blocks.length > 0 ? blocks : [];
+  // Get slides from: blocks > direct slides prop > settings.slides
+  const rawSlides =
+    blocks.length > 0 ? blocks : directSlides || settings?.slides || [];
+
+  // Transform slides to expected format (handle snake_case from theme builder)
+  const heroSlides: HeroSlide[] = rawSlides.map(
+    (slide: SlideInput, index: number) => ({
+      id: index,
+      tagline: slide.tagline || "",
+      title: slide.title || "",
+      subtitle: slide.subtitle || "",
+      buttonText: slide.button_text || slide.buttonText || "Shop now",
+      buttonLink: slide.button_link || slide.buttonLink || "#",
+      imageUrl: slide.image || slide.imageUrl || "",
+      imageAlt: slide.title || "Hero image",
+      bgGradient:
+        slide.bgGradient ||
+        (slide.gradient_start && slide.gradient_end
+          ? `from-[${slide.gradient_start}] to-[${slide.gradient_end}]`
+          : "from-[#DAD4EC] to-[#F3E7E9]"),
+      textColor: slide.text_color || slide.textColor || "#181D25",
+      taglineColor: slide.tagline_color || slide.taglineColor || "#4E5562",
+      buttonColor: slide.button_color || "#F55266",
+    })
+  );
+
   const totalSlides = heroSlides.length;
 
-  // Settings with defaults
-  const autoPlay = settings.autoPlay !== false; // Default: true
-  const autoPlaySpeed = settings.autoPlaySpeed || 5000; // Default: 5s
-  const showArrows = settings.showArrows !== false; // Default: true
-  const showIndicators = settings.showIndicators !== false; // Default: true
+  // Settings with defaults (support both camelCase and snake_case)
+  const autoPlay =
+    settings?.autoPlay !== false &&
+    (settings?.auto_advance ?? auto_advance) !== false;
+  const autoPlaySpeed = Number(
+    settings?.advance_interval || advance_interval || 5000
+  );
+  const showArrows = settings?.showArrows !== false;
+  const showIndicators = settings?.showIndicators !== false;
 
   // Autoplay plugin
   const autoplayPlugin = useMemo(
@@ -101,7 +166,7 @@ const Hero1: React.FC<Hero1Props> = ({ settings = {}, blocks = [] }) => {
           {heroSlides.map((slide, index) => (
             <CarouselItem key={slide.id} className="pl-0">
               <div
-                className={`relative w-full h-[480px] md:h-[600px] rounded-2xl overflow-hidden bg-gradient-to-r ${slide.bgGradient}`}
+                className={`relative w-full h-[480px] md:h-[600px] rounded-2xl overflow-hidden bg-linear-to-r ${slide.bgGradient}`}
               >
                 {/* Left Content Section */}
                 <div className="absolute left-6 bottom-24 md:left-16 md:bottom-32 lg:left-28 lg:bottom-40 max-w-[280px] md:max-w-[400px] lg:max-w-[500px] z-10">
