@@ -82,9 +82,9 @@ const Hero4: React.FC<Hero4Props> = ({ settings = {}, blocks = [] }) => {
   }
 
   return (
-    <div className="w-full px-4 pb-8 sm:pb-14 py-0 2xl:px-0">
+    <div className="w-full pb-8 sm:pb-14 py-0">
       <div
-        className="relative font-montserrat w-full max-w-[1440px] min-h-[500px] sm:min-h-[600px] lg:h-[716px] mx-auto bg-[#7FC5D9] overflow-hidden group"
+        className="relative font-montserrat w-full min-h-[500px] sm:min-h-[600px] lg:h-[716px] bg-[#7FC5D9] overflow-hidden group"
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
       >
@@ -107,8 +107,8 @@ const Hero4: React.FC<Hero4Props> = ({ settings = {}, blocks = [] }) => {
             </div>
 
             {/* Content */}
-            <div className="relative z-10 h-full flex items-center mt-0">
-              <div className="px-4 md:px-20 lg:px-0 lg:ml-40 pt-8 lg:pt-8 w-full lg:w-auto">
+            <div className="relative z-10 max-w-[1440px] mx-auto h-full flex items-center mt-0">
+              <div className="pl-4 sm:pl-6 md:pl-20 lg:pl-40 2xl:px-0 pt-8 lg:pt-8 w-full lg:w-auto">
                 {/* Tag */}
                 <div className="mb-6 lg:mb-9">
                   <span

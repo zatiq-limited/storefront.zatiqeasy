@@ -81,9 +81,9 @@ const Hero3: React.FC<Hero3Props> = ({ settings = {}, blocks = [] }) => {
   }
 
   return (
-    <div className="w-full px-4 pb-8 sm:pb-14 py-0 2xl:px-0">
+    <div className="w-full pb-8 sm:pb-14 py-0">
       <div
-        className="relative w-full max-w-[1440px] min-h-[480px] sm:min-h-[558px] mx-auto bg-[#1F2937] overflow-hidden group"
+        className="relative w-full min-h-[480px] sm:min-h-[558px] bg-[#1F2937] overflow-hidden group"
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
       >

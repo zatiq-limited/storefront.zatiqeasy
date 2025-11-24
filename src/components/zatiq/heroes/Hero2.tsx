@@ -83,9 +83,9 @@ const Hero2: React.FC<Hero2Props> = ({ settings = {}, blocks = [] }) => {
   }
 
   return (
-    <div className="w-full px-4 pb-8 sm:pb-14 py-0 2xl:px-0">
+    <div className="w-full pb-8 sm:pb-14 py-0">
       <div
-        className="font-segoe relative w-full max-w-[1440px] mx-auto h-[580px] sm:h-[716px] overflow-hidden group"
+        className="font-segoe relative w-full h-[580px] sm:h-[716px] overflow-hidden group"
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
       >
