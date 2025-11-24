@@ -207,7 +207,14 @@ footer-1
         "type": "footer-1",
         "settings": {
           "logo": "/src/assets/image/nav/nav1.png",
-          "copyrightText": "© 2025 Quantum Retail. Style for the future."
+          "copyrightText": "© 2025 Quantum Retail. Style for the future.",
+          "socialLinks": {
+            "facebook": "https://facebook.com/quantumretail",
+            "instagram": "https://instagram.com/quantumretail",
+            "twitter": "https://twitter.com/quantumretail",
+            "youtube": "https://youtube.com/quantumretail",
+            "linkedin": "https://linkedin.com/company/quantumretail"
+          }
         },
         "blocks": [
           {

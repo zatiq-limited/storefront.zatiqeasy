@@ -7,6 +7,15 @@ interface Link {
   url: string;
 }
 
+interface SocialLinks {
+  facebook?: string;
+  instagram?: string;
+  twitter?: string;
+  youtube?: string;
+  linkedin?: string;
+  pinterest?: string;
+}
+
 interface MenuColumnBlock {
   id: string;
   type: 'menu_column';
@@ -34,12 +43,14 @@ interface Footers1Props {
   logo: string;
   copyrightText: string;
   blocks: FooterBlock[];
+  socialLinks?: SocialLinks;
 }
 
 const Footers1: React.FC<Footers1Props> = ({
   logo,
   copyrightText,
-  blocks
+  blocks,
+  socialLinks
 }) => {
   // Return null if no data provided
   if (!logo || !copyrightText || !blocks || blocks.length === 0) {
@@ -126,23 +137,35 @@ const Footers1: React.FC<Footers1Props> = ({
         </div>
 
         {/* Social Media Icons */}
-        <div className="w-full flex justify-start items-center gap-3 md:gap-4 mb-6 md:mb-8 pb-6 md:pb-8 border-b border-gray-200">
-          <a href="#" className="flex-shrink-0 w-10 h-10 flex items-center justify-center hover:bg-gray-100 rounded-md">
-            <Facebook className="w-5 h-5 text-gray-700" />
-          </a>
-          <a href="#" className="flex-shrink-0 w-10 h-10 flex items-center justify-center hover:bg-gray-100 rounded-md">
-            <Instagram className="w-5 h-5 text-gray-700" />
-          </a>
-          <a href="#" className="flex-shrink-0 w-10 h-10 flex items-center justify-center hover:bg-gray-100 rounded-md">
-            <Share2 className="w-5 h-5 text-gray-700" />
-          </a>
-          <a href="#" className="flex-shrink-0 w-10 h-10 flex items-center justify-center hover:bg-gray-100 rounded-md">
-            <Youtube className="w-5 h-5 text-gray-700" />
-          </a>
-          <a href="#" className="flex-shrink-0 w-10 h-10 flex items-center justify-center hover:bg-gray-100 rounded-md">
-            <Send className="w-5 h-5 text-gray-700" />
-          </a>
-        </div>
+        {socialLinks && Object.keys(socialLinks).length > 0 && (
+          <div className="w-full flex justify-start items-center gap-3 md:gap-4 mb-6 md:mb-8 pb-6 md:pb-8 border-b border-gray-200">
+            {socialLinks.facebook && (
+              <a href={socialLinks.facebook} target="_blank" rel="noopener noreferrer" className="flex-shrink-0 w-10 h-10 flex items-center justify-center hover:bg-gray-100 rounded-md">
+                <Facebook className="w-5 h-5 text-gray-700" />
+              </a>
+            )}
+            {socialLinks.instagram && (
+              <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" className="flex-shrink-0 w-10 h-10 flex items-center justify-center hover:bg-gray-100 rounded-md">
+                <Instagram className="w-5 h-5 text-gray-700" />
+              </a>
+            )}
+            {socialLinks.twitter && (
+              <a href={socialLinks.twitter} target="_blank" rel="noopener noreferrer" className="flex-shrink-0 w-10 h-10 flex items-center justify-center hover:bg-gray-100 rounded-md">
+                <Share2 className="w-5 h-5 text-gray-700" />
+              </a>
+            )}
+            {socialLinks.youtube && (
+              <a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer" className="flex-shrink-0 w-10 h-10 flex items-center justify-center hover:bg-gray-100 rounded-md">
+                <Youtube className="w-5 h-5 text-gray-700" />
+              </a>
+            )}
+            {socialLinks.linkedin && (
+              <a href={socialLinks.linkedin} target="_blank" rel="noopener noreferrer" className="flex-shrink-0 w-10 h-10 flex items-center justify-center hover:bg-gray-100 rounded-md">
+                <Send className="w-5 h-5 text-gray-700" />
+              </a>
+            )}
+          </div>
+        )}
 
         {/* Copyright */}
         <div className="w-full text-left">

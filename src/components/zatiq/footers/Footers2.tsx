@@ -7,6 +7,15 @@ interface Link {
   url: string;
 }
 
+interface SocialLinks {
+  facebook?: string;
+  instagram?: string;
+  twitter?: string;
+  youtube?: string;
+  linkedin?: string;
+  pinterest?: string;
+}
+
 interface PaymentIcon {
   src: string;
   alt: string;
@@ -40,6 +49,7 @@ interface Footers2Props {
   copyrightText: string;
   paymentIcons: PaymentIcon[];
   blocks: FooterBlock[];
+  socialLinks?: SocialLinks;
 }
 
 const Footers2: React.FC<Footers2Props> = ({
@@ -47,7 +57,8 @@ const Footers2: React.FC<Footers2Props> = ({
   description,
   copyrightText,
   paymentIcons,
-  blocks
+  blocks,
+  socialLinks
 }) => {
   // Return null if no data provided
   if (!logo || !description || !copyrightText || !paymentIcons || !blocks || blocks.length === 0) {
@@ -147,47 +158,67 @@ const Footers2: React.FC<Footers2Props> = ({
             ))}
 
             {/* Follow us on - Desktop Only (5th column) */}
-            <div className="hidden lg:block lg:order-5 lg:col-span-1">
-              <h4 className="text-base font-semibold text-gray-900 mb-4">
-                Follow us on
-              </h4>
-              <div className="flex gap-3">
-                <a href="#" className="text-gray-600 hover:text-gray-900">
-                  <Facebook className="w-5 h-5" />
-                </a>
-                <a href="#" className="text-gray-600 hover:text-gray-900">
-                  <Instagram className="w-5 h-5" />
-                </a>
-                <a href="#" className="text-gray-600 hover:text-gray-900">
-                  <Twitter className="w-5 h-5" />
-                </a>
-                <a href="#" className="text-gray-600 hover:text-gray-900">
-                  <Linkedin className="w-5 h-5" />
-                </a>
+            {socialLinks && Object.keys(socialLinks).length > 0 && (
+              <div className="hidden lg:block lg:order-5 lg:col-span-1">
+                <h4 className="text-base font-semibold text-gray-900 mb-4">
+                  Follow us on
+                </h4>
+                <div className="flex gap-3">
+                  {socialLinks.facebook && (
+                    <a href={socialLinks.facebook} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-gray-900">
+                      <Facebook className="w-5 h-5" />
+                    </a>
+                  )}
+                  {socialLinks.instagram && (
+                    <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-gray-900">
+                      <Instagram className="w-5 h-5" />
+                    </a>
+                  )}
+                  {socialLinks.twitter && (
+                    <a href={socialLinks.twitter} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-gray-900">
+                      <Twitter className="w-5 h-5" />
+                    </a>
+                  )}
+                  {socialLinks.linkedin && (
+                    <a href={socialLinks.linkedin} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-gray-900">
+                      <Linkedin className="w-5 h-5" />
+                    </a>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           {/* Follow us on - Mobile/Tablet Only */}
-          <div className="mt-8 pt-6 border-t border-gray-200 lg:hidden">
-            <h4 className="text-sm md:text-base font-semibold text-gray-900 mb-4">
-              Follow us on
-            </h4>
-            <div className="flex gap-4">
-              <a href="#" className="text-gray-600 hover:text-gray-900">
-                <Facebook className="w-5 h-5" />
-              </a>
-              <a href="#" className="text-gray-600 hover:text-gray-900">
-                <Instagram className="w-5 h-5" />
-              </a>
-              <a href="#" className="text-gray-600 hover:text-gray-900">
-                <Twitter className="w-5 h-5" />
-              </a>
-              <a href="#" className="text-gray-600 hover:text-gray-900">
-                <Linkedin className="w-5 h-5" />
-              </a>
+          {socialLinks && Object.keys(socialLinks).length > 0 && (
+            <div className="mt-8 pt-6 border-t border-gray-200 lg:hidden">
+              <h4 className="text-sm md:text-base font-semibold text-gray-900 mb-4">
+                Follow us on
+              </h4>
+              <div className="flex gap-4">
+                {socialLinks.facebook && (
+                  <a href={socialLinks.facebook} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-gray-900">
+                    <Facebook className="w-5 h-5" />
+                  </a>
+                )}
+                {socialLinks.instagram && (
+                  <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-gray-900">
+                    <Instagram className="w-5 h-5" />
+                  </a>
+                )}
+                {socialLinks.twitter && (
+                  <a href={socialLinks.twitter} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-gray-900">
+                    <Twitter className="w-5 h-5" />
+                  </a>
+                )}
+                {socialLinks.linkedin && (
+                  <a href={socialLinks.linkedin} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-gray-900">
+                    <Linkedin className="w-5 h-5" />
+                  </a>
+                )}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
 
