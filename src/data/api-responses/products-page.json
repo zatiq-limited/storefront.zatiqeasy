@@ -1,0 +1,166 @@
+{
+  "success": true,
+  "data": {
+    "template": "products",
+    "sections": [
+      {
+        "id": "products_header",
+        "type": "products-header-1",
+        "settings": {
+          "showBreadcrumb": true,
+          "showProductCount": true,
+          "backgroundGradient": "from-blue-50 to-purple-50"
+        }
+      },
+      {
+        "id": "products_filter",
+        "type": "products-filter-1",
+        "settings": {
+          "showSearch": true,
+          "showSort": true,
+          "showViewToggle": true,
+          "sticky": true,
+          "sortOptions": [
+            { "value": "featured", "label": "Featured" },
+            { "value": "price-asc", "label": "Price: Low to High" },
+            { "value": "price-desc", "label": "Price: High to Low" },
+            { "value": "newest", "label": "Newest First" },
+            { "value": "rating", "label": "Top Rated" }
+          ]
+        }
+      },
+      {
+        "id": "products_main_layout",
+        "type": "products-layout-1",
+        "settings": {
+          "showSidebar": true,
+          "sidebarPosition": "left"
+        },
+        "blocks": [
+          {
+            "id": "sidebar",
+            "type": "products-sidebar-1",
+            "settings": {
+              "showCategories": true,
+              "showPriceRange": true,
+              "showBrands": true,
+              "showColors": true,
+              "showSizes": true,
+              "collapsible": true
+            },
+            "blocks": [
+              {
+                "id": "category_filter",
+                "title": "Categories",
+                "type": "category",
+                "items": [
+                  { "id": "1", "name": "Women's Fashion", "count": 45 },
+                  { "id": "2", "name": "Men's Fashion", "count": 38 },
+                  { "id": "3", "name": "Accessories", "count": 22 },
+                  { "id": "4", "name": "Bags", "count": 15 },
+                  { "id": "5", "name": "Shoes", "count": 28 }
+                ]
+              },
+              {
+                "id": "price_filter",
+                "title": "Price Range",
+                "type": "price",
+                "min": 0,
+                "max": 10000,
+                "currency": "BDT"
+              },
+              {
+                "id": "brand_filter",
+                "title": "Brands",
+                "type": "brand",
+                "items": [
+                  { "id": "1", "name": "ZatiqStyle", "count": 25 },
+                  { "id": "2", "name": "ZatiqDenim", "count": 18 },
+                  { "id": "3", "name": "ZatiqBasics", "count": 32 },
+                  { "id": "4", "name": "ZatiqLux", "count": 12 }
+                ]
+              },
+              {
+                "id": "color_filter",
+                "title": "Colors",
+                "type": "color",
+                "items": [
+                  { "id": "1", "name": "Black", "hex": "#000000", "count": 45 },
+                  { "id": "2", "name": "White", "hex": "#FFFFFF", "count": 38 },
+                  { "id": "3", "name": "Blue", "hex": "#3B82F6", "count": 22 },
+                  { "id": "4", "name": "Red", "hex": "#EF4444", "count": 15 },
+                  { "id": "5", "name": "Brown", "hex": "#92400E", "count": 18 }
+                ]
+              },
+              {
+                "id": "size_filter",
+                "title": "Sizes",
+                "type": "size",
+                "items": [
+                  { "id": "1", "name": "XS", "count": 12 },
+                  { "id": "2", "name": "S", "count": 28 },
+                  { "id": "3", "name": "M", "count": 45 },
+                  { "id": "4", "name": "L", "count": 38 },
+                  { "id": "5", "name": "XL", "count": 22 },
+                  { "id": "6", "name": "XXL", "count": 10 }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "products_grid",
+            "type": "products-grid-1",
+            "settings": {
+              "columns": 3,
+              "columnsTablet": 2,
+              "columnsMobile": 1,
+              "gap": 6,
+              "cardStyle": "product-card-8",
+              "showQuickView": true,
+              "showWishlist": true,
+              "showCompare": false
+            }
+          }
+        ]
+      },
+      {
+        "id": "products_pagination",
+        "type": "products-pagination-1",
+        "settings": {
+          "showPageNumbers": true,
+          "showPrevNext": true,
+          "maxVisiblePages": 5,
+          "position": "center"
+        }
+      },
+      {
+        "id": "empty_state",
+        "type": "products-empty-1",
+        "enabled": false,
+        "settings": {
+          "title": "No products found",
+          "description": "Try adjusting your search or filter criteria",
+          "showCategorySuggestions": true,
+          "buttonText": "View All Products",
+          "buttonLink": "/products"
+        }
+      }
+    ],
+    "seo": {
+      "title": "All Products | ZatiqEasy",
+      "description": "Shop our complete collection of premium fashion and lifestyle products",
+      "canonical": "/products",
+      "og": {
+        "title": "All Products | ZatiqEasy",
+        "description": "Shop our complete collection of premium fashion and lifestyle products",
+        "image": "/assets/og/products.jpg",
+        "type": "website"
+      },
+      "twitter": {
+        "card": "summary_large_image",
+        "title": "All Products | ZatiqEasy",
+        "description": "Shop our complete collection of premium fashion and lifestyle products"
+      }
+    }
+  }
+}

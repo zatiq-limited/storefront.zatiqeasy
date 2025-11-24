@@ -167,6 +167,39 @@ export async function getHomepageData(): Promise<any> {
 }
 
 /**
+ * Get products page data (sections + products)
+ *
+ * Backend API: GET /api/storefront/v1/page/products
+ * Response: { success: true, data: { template, sections, products, pagination, seo } }
+ */
+export async function getProductsPageData(params?: {
+  page?: number;
+  category?: string;
+  sort?: string;
+  search?: string;
+}): Promise<any> {
+  try {
+    const queryParams: Record<string, string> = {};
+    if (params?.page) queryParams.page = params.page.toString();
+    if (params?.category) queryParams.category = params.category;
+    if (params?.sort) queryParams.sort = params.sort;
+    if (params?.search) queryParams.search = params.search;
+
+    const queryString = new URLSearchParams(queryParams).toString();
+    const endpoint = queryString
+      ? `/api/storefront/v1/page/products?${queryString}`
+      : `/api/storefront/v1/page/products`;
+
+    const response = await apiCall<any>(endpoint);
+    console.log("[API] ✅ Products page data loaded from API");
+    return response;
+  } catch (error) {
+    console.error("[API] ❌ Products page API failed");
+    return null;
+  }
+}
+
+/**
  * Get page data
  *
  * Backend API: GET /api/storefront/v1/page/:pageType

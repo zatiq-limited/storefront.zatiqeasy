@@ -27,6 +27,7 @@ const db = {
   products: loadJSON("products.json"),
   product: loadJSON("product.json"),
   category: loadJSON("category.json"),
+  productsPage: loadJSON("products-page.json"),
 };
 
 // Custom API routes
@@ -40,6 +41,34 @@ app.get("/api/storefront/v1/theme", (req, res) => {
 
 app.get("/api/storefront/v1/page/home", (req, res) => {
   res.json(db.homepage);
+});
+
+// Products page endpoint (sections + products combined)
+app.get("/api/storefront/v1/page/products", (req, res) => {
+  const { page = 1, per_page = 20, category, search, sort } = req.query;
+
+  // Combine page sections with products data
+  const productsPageData = db.productsPage;
+  const productsData = db.products;
+
+  // Merge products into the response
+  const response = {
+    success: true,
+    data: {
+      ...productsPageData.data,
+      products: productsData.data.products,
+      pagination: productsData.data.pagination,
+      // Pass query params for components to use
+      filters: {
+        page: parseInt(page),
+        category: category || null,
+        search: search || null,
+        sort: sort || "featured",
+      },
+    },
+  };
+
+  res.json(response);
 });
 
 // Product list endpoint with query support

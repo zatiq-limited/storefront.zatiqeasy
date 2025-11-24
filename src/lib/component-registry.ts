@@ -66,6 +66,21 @@ import {
 import { ProductTabs1, ProductTabs2 } from "../components/zatiq/product-tabs";
 import { ProductCollection1, ProductCollection2 } from "@/components/zatiq/product-collection";
 import { SocialFeed1, SocialFeed2 } from "@/components/zatiq/social-feed";
+import {
+  ProductsHeader1,
+  ProductsHeader2,
+  ProductsFilter1,
+  ProductsFilter2,
+  ProductsSidebar1,
+  ProductsSidebar2,
+  ProductsGrid1,
+  ProductsGrid2,
+  ProductsPagination1,
+  ProductsPagination2,
+  ProductsLayout1,
+  ProductsLayout2,
+  ProductsEmpty1,
+} from "@/components/zatiq/products-page";
 
 
 /**
@@ -155,6 +170,21 @@ export const ZATIQ_COMPONENTS: Record<string, ComponentType<any>> = {
   // Social Feed (2 variants)
   "social-feed-1": SocialFeed1,
   "social-feed-2": SocialFeed2,
+
+  // Products Page Components
+  "products-header-1": ProductsHeader1,
+  "products-header-2": ProductsHeader2,
+  "products-filter-1": ProductsFilter1,
+  "products-filter-2": ProductsFilter2,
+  "products-sidebar-1": ProductsSidebar1,
+  "products-sidebar-2": ProductsSidebar2,
+  "products-grid-1": ProductsGrid1,
+  "products-grid-2": ProductsGrid2,
+  "products-pagination-1": ProductsPagination1,
+  "products-pagination-2": ProductsPagination2,
+  "products-layout-1": ProductsLayout1,
+  "products-layout-2": ProductsLayout2,
+  "products-empty-1": ProductsEmpty1,
 };
 
 /**
