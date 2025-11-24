@@ -201,3 +201,118 @@ announcement-bar-3
         }
       },
 
+footer-1
+"footer": {
+        "enabled": true,
+        "type": "footer-1",
+        "settings": {
+          "logo": "/src/assets/image/nav/nav1.png",
+          "copyrightText": "© 2025 Quantum Retail. Style for the future."
+        },
+        "blocks": [
+          {
+            "id": "footer_company",
+            "type": "menu_column",
+            "settings": {
+              "title": "Company",
+              "links": [
+                { "text": "Our Story", "url": "#" },
+                { "text": "Careers", "url": "#" },
+                { "text": "Sustainability", "url": "#" },
+                { "text": "Press", "url": "#" },
+                { "text": "Blog", "url": "#" }
+              ]
+            }
+          },
+          {
+            "id": "footer_shop",
+            "type": "menu_column",
+            "settings": {
+              "title": "Shop",
+              "links": [
+                { "text": "New Arrivals", "url": "#" },
+                { "text": "Best Sellers", "url": "#" },
+                { "text": "Brands", "url": "#" },
+                { "text": "Dresses", "url": "#" },
+                { "text": "Shoes", "url": "#" }
+              ]
+            }
+          },
+          {
+            "id": "footer_help",
+            "type": "menu_column",
+            "settings": {
+              "title": "Help Center",
+              "links": [
+                { "text": "Data Protection", "url": "#" },
+                { "text": "Terms & Conditions", "url": "#" },
+                { "text": "Size Guide", "url": "#" },
+                { "text": "Returns", "url": "#" }
+              ]
+            }
+          },
+          {
+            "id": "footer_newsletter",
+            "type": "newsletter",
+            "settings": {
+              "description": "Unlock exclusive deals, early access to sales, and the latest product drops. Stay ahead of the curve with personalized recommendations and style tips delivered to your inbox.",
+              "placeholder": "Your email"
+            }
+          }
+        ]
+      },
+
+footer-2
+"footer": {
+        "enabled": true,
+        "type": "footer-2",
+        "settings": {
+          "logo": "/src/assets/image/nav/nav1.png",
+          "description": "Digital Haven is a top-notch store offering a wide range of digital products at unbeatable prices from renowned global brands. Dive in now to discover fresh designs and take advantage of fantastic deals and discounts.",
+          "copyrightText": "All rights reserved for Zatiq Ltd © 2025",
+          "paymentIcons": [
+            { "src": "/src/assets/image/payment/bkash.png", "alt": "bKash" },
+            { "src": "/src/assets/image/payment/paypal.png", "alt": "PayPal" },
+            { "src": "/src/assets/image/payment/master.png", "alt": "Mastercard" },
+            { "src": "/src/assets/image/payment/visa.png", "alt": "Visa" }
+          ]
+        },
+        "blocks": [
+          {
+            "id": "footer_contact",
+            "type": "contact",
+            "settings": {
+              "title": "Contact us",
+              "whatsapp": "009612345678932",
+              "mobile": "009612345678932",
+              "email": "support@zatiq.com"
+            }
+          },
+          {
+            "id": "footer_account",
+            "type": "menu_column",
+            "settings": {
+              "title": "My Account",
+              "links": [
+                { "text": "My Orders", "url": "#" },
+                { "text": "Shopping Cart", "url": "#" },
+                { "text": "Favorites", "url": "#" }
+              ]
+            }
+          },
+          {
+            "id": "footer_links",
+            "type": "menu_column",
+            "settings": {
+              "title": "Important Links",
+              "links": [
+                { "text": "About Us", "url": "#" },
+                { "text": "Privacy Policy", "url": "#" },
+                { "text": "Terms and Conditions", "url": "#" },
+                { "text": "Technical Support", "url": "#" }
+              ]
+            }
+          }
+        ]
+      },
+
