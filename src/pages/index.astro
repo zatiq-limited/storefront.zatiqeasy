@@ -3,9 +3,9 @@
  * ========================================
  * HOMEPAGE
  * ========================================
- * 
+ *
  * Fetches data from API and renders sections dynamically
- * 
+ *
  * Backend API Endpoint: GET /api/storefront/v1/page/home
  */
 
@@ -16,7 +16,9 @@ import { getHomepageData } from '../lib/api-client';
 // Fetch homepage data from API
 const homepageData = await getHomepageData();
 
-const { template, sections = [], seo = {} } = homepageData.data || homepageData;
+// Handle null case and extract data
+const pageData = homepageData?.data || homepageData || {};
+const { template = 'index', sections = [], seo = {} } = pageData;
 ---
 
 <Layout 

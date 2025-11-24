@@ -17,6 +17,7 @@ interface HeroSlide {
   buttonLink: string;
   imageUrl: string;
   imageAlt?: string;
+  overlayOpacity: number;
 }
 
 // Slide from homepage.json (snake_case)
@@ -29,10 +30,12 @@ interface SlideInput {
   button_text?: string;
   button_link?: string;
   image?: string;
+  overlay_opacity?: number;
   // Also support camelCase
   buttonText?: string;
   buttonLink?: string;
   imageUrl?: string;
+  overlayOpacity?: number;
 }
 
 // Component props interface
@@ -79,6 +82,7 @@ const Hero4: React.FC<Hero4Props> = ({
       buttonLink: slide.button_link || slide.buttonLink || "#",
       imageUrl: slide.image || slide.imageUrl || "",
       imageAlt: slide.heading || slide.title || "Hero image",
+      overlayOpacity: slide.overlay_opacity ?? slide.overlayOpacity ?? 0,
     })
   );
 
@@ -165,6 +169,13 @@ const Hero4: React.FC<Hero4Props> = ({
                     className="w-full h-full object-cover object-center"
                     loading={index === 0 ? "eager" : "lazy"}
                   />
+                  {/* Dark Overlay */}
+                  {slide.overlayOpacity > 0 && (
+                    <div
+                      className="absolute inset-0 bg-black"
+                      style={{ opacity: slide.overlayOpacity / 100 }}
+                    ></div>
+                  )}
                 </div>
 
                 {/* Content */}

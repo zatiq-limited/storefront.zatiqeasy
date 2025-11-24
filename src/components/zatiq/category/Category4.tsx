@@ -27,7 +27,7 @@ const Category4: React.FC<Category4Props> = ({ blocks = [] }) => {
           >
             {/* Circle Image Container with light gray background */}
             {category.image && (
-              <div className="relative rounded-full overflow-hidden mb-3 sm:mb-4 w-[140px] h-[140px] sm:w-[160px] sm:h-[160px] lg:w-[180px] lg:h-[180px] bg-[#F7F7F7]">
+              <div className="relative rounded-full overflow-hidden mb-3 sm:mb-4 w-[140px] h-[140px] sm:w-40 sm:h-40 lg:w-[180px] lg:h-[180px] bg-[#F7F7F7]">
                 <img
                   src={category.image}
                   alt={category.name || category.title || "Category"}
@@ -49,7 +49,7 @@ const Category4: React.FC<Category4Props> = ({ blocks = [] }) => {
             {/* Product Count */}
             {(category.count || category.subtitle) && (
               <p
-                className="text-center text-sm sm:text-base tracking-normal leading-5 sm:leading-6 font-normal"
+                className="text-center text-sm sm:text-base tracking-normal line-clamp-2 leading-5 sm:leading-6 font-normal"
                 style={{ color: category.subtitleColor || "#666666" }}
               >
                 {category.count || category.subtitle}
