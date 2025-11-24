@@ -128,10 +128,7 @@
           "paymentIcons": [
             { "src": "/src/assets/image/payment/bkash.png", "alt": "bKash" },
             { "src": "/src/assets/image/payment/paypal.png", "alt": "PayPal" },
-            {
-              "src": "/src/assets/image/payment/master.png",
-              "alt": "Mastercard"
-            },
+            { "src": "/src/assets/image/payment/master.png", "alt": "Mastercard" },
             { "src": "/src/assets/image/payment/visa.png", "alt": "Visa" }
           ]
         },
