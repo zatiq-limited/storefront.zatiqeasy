@@ -47,13 +47,13 @@
       },
       {
         "id": "related_products",
-        "type": "related-products-2",
+        "type": "related-products-1",
         "enabled": true,
         "settings": {
           "title": "You May Also Like",
           "columns": 4,
           "cardStyle": "product-card-5",
-          "limit": 4
+          "limit": 8
         }
       }
     ]
