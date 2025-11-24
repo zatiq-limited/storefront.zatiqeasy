@@ -157,7 +157,7 @@ export default function ProductTabs2({
   return (
     <section
       ref={sectionRef}
-      className="w-full py-12 md:py-20 lg:py-28 relative overflow-hidden"
+      className="w-full pb-12 md:pb-20 relative overflow-hidden"
       style={{ backgroundColor: bgColor }}
     >
       {/* Subtle gradient overlay */}

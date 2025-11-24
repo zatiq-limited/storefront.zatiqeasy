@@ -1005,7 +1005,7 @@
       },
       {
         "id": "product_tabs",
-        "type": "product-tabs-2",
+        "type": "product-tabs-1",
         "settings": {
           "title": "Curated Collections",
           "subtitle": "Discover our handpicked selections",

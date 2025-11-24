@@ -97,7 +97,7 @@ export default function ProductTabs1({
     : activeTabData?.products;
 
   return (
-    <section className="w-full py-12 md:py-16 lg:py-24">
+    <section className="w-full pb-12 md:pb-16 lg:pb-20">
       <div className="max-w-[1440px] mx-auto px-4 2xl:px-0">
         {/* Header */}
         <div className="text-center mb-8 md:mb-12">
