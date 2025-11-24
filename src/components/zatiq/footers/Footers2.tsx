@@ -35,20 +35,25 @@ interface MenuColumnBlock {
 type FooterBlock = ContactBlock | MenuColumnBlock;
 
 interface Footers2Props {
-  logo?: string;
-  description?: string;
-  copyrightText?: string;
-  paymentIcons?: PaymentIcon[];
-  blocks?: FooterBlock[];
+  logo: string;
+  description: string;
+  copyrightText: string;
+  paymentIcons: PaymentIcon[];
+  blocks: FooterBlock[];
 }
 
 const Footers2: React.FC<Footers2Props> = ({
   logo,
   description,
   copyrightText,
-  paymentIcons = [],
-  blocks = []
+  paymentIcons,
+  blocks
 }) => {
+  // Return null if no data provided
+  if (!logo || !description || !copyrightText || !paymentIcons || !blocks || blocks.length === 0) {
+    return null;
+  }
+
   // Separate contact block from menu columns
   const contactBlock = blocks.find((block): block is ContactBlock => block.type === 'contact');
   const menuColumns = blocks.filter((block): block is MenuColumnBlock => block.type === 'menu_column');

@@ -31,25 +31,31 @@ interface NewsletterBlock {
 type FooterBlock = MenuColumnBlock | NewsletterBlock;
 
 interface Footers1Props {
-  logo?: string;
-  copyrightText?: string;
-  blocks?: FooterBlock[];
+  logo: string;
+  copyrightText: string;
+  blocks: FooterBlock[];
 }
 
 const Footers1: React.FC<Footers1Props> = ({
-  logo = '/src/assets/image/nav/nav1.png',
-  copyrightText = '© 2025 Quantum Retail. Style for the future.',
-  blocks = []
+  logo,
+  copyrightText,
+  blocks
 }) => {
+  // Return null if no data provided
+  if (!logo || !copyrightText || !blocks || blocks.length === 0) {
+    return null;
+  }
+
   // Separate menu columns from newsletter
   const menuColumns = blocks.filter((block): block is MenuColumnBlock => block.type === 'menu_column');
   const newsletterBlock = blocks.find((block): block is NewsletterBlock => block.type === 'newsletter');
 
-  // Default newsletter settings
-  const newsletter = newsletterBlock?.settings || {
-    description: 'Unlock exclusive deals, early access to sales, and the latest product drops. Stay ahead of the curve with personalized recommendations and style tips delivered to your inbox.',
-    placeholder: 'Your email'
-  };
+  // Return null if no newsletter block
+  if (!newsletterBlock) {
+    return null;
+  }
+
+  const newsletter = newsletterBlock.settings;
 
   return (
     <footer className="w-full bg-white py-8 md:py-12 overflow-hidden font-sans">
