@@ -28,6 +28,7 @@ const db = {
   product: loadJSON("product.json"),
   category: loadJSON("category.json"),
   productsPage: loadJSON("products-page.json"),
+  productDetailsPage: loadJSON("product-details-page.json"),
 };
 
 // Custom API routes
@@ -101,12 +102,18 @@ app.get("/api/storefront/v1/cart", (req, res) => {
   res.json(db.cart);
 });
 
+// Product details page sections endpoint
+app.get("/api/storefront/v1/page/product-details", (req, res) => {
+  res.json(db.productDetailsPage);
+});
+
 // Direct access routes (for debugging)
 app.get("/theme_init", (req, res) => res.json(db.theme_init));
 app.get("/homepage", (req, res) => res.json(db.homepage));
 app.get("/products", (req, res) => res.json(db.products));
 app.get("/product", (req, res) => res.json(db.product));
 app.get("/category", (req, res) => res.json(db.category));
+app.get("/products-page", (req, res) => res.json(db.productsPage));
 
 // Start server
 app.listen(PORT, () => {
@@ -128,5 +135,6 @@ app.listen(PORT, () => {
     `   GET  http://localhost:${PORT}/api/storefront/v1/collections/:handle          - Single collection detail`
   );
   console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/cart`);
+  console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/page/product-details    - Product details page sections`);
   console.log(`\n✨ Press Ctrl+C to stop\n`);
 });

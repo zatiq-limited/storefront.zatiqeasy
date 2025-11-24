@@ -83,6 +83,16 @@ import {
   ProductsEmpty1,
 } from "@/components/zatiq/products-page";
 
+// Product Details Page Components
+import ProductBreadcrumb1 from "@/components/zatiq/product-details-page/ProductBreadcrumb1";
+import ProductBreadcrumb2 from "@/components/zatiq/product-details-page/ProductBreadcrumb2";
+import ProductDetail1 from "@/components/zatiq/product-details-page/ProductDetail1";
+import ProductDetail2 from "@/components/zatiq/product-details-page/ProductDetail2";
+import CustomerReviews1 from "@/components/zatiq/product-details-page/CustomerReviews1";
+import CustomerReviews2 from "@/components/zatiq/product-details-page/CustomerReviews2";
+import RelatedProducts1 from "@/components/zatiq/product-details-page/RelatedProducts1";
+import RelatedProducts2 from "@/components/zatiq/product-details-page/RelatedProducts2";
+
 
 /**
  * Component Registry
@@ -187,6 +197,16 @@ export const ZATIQ_COMPONENTS: Record<string, ComponentType<any>> = {
   "products-layout-2": ProductsLayout2,
   "products-content-1": ProductsContent1,
   "products-empty-1": ProductsEmpty1,
+
+  // Product Details Page Components
+  "product-breadcrumb-1": ProductBreadcrumb1,
+  "product-breadcrumb-2": ProductBreadcrumb2,
+  "product-detail-1": ProductDetail1,
+  "product-detail-2": ProductDetail2,
+  "customer-reviews-1": CustomerReviews1,
+  "customer-reviews-2": CustomerReviews2,
+  "related-products-1": RelatedProducts1,
+  "related-products-2": RelatedProducts2,
 };
 
 /**
