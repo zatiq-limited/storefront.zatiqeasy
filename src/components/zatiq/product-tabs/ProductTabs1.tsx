@@ -3,12 +3,34 @@
  * Displays products in tabbed sections (New Arrivals, Best Sellers, On Sale, etc.)
  */
 
-import React, { useState } from "react";
+import { useState } from "react";
+import { getComponent } from "@/lib/component-registry";
+
+interface Product {
+  id: string;
+  handle?: string;
+  title: string;
+  subtitle?: string;
+  vendor?: string;
+  price: number;
+  comparePrice?: number | null;
+  currency?: string;
+  image: string;
+  hoverImage?: string;
+  badge?: string;
+  badgeColor?: string;
+  rating?: number;
+  reviewCount?: number;
+  colors?: string[];
+  sizes?: string[];
+  quickAddEnabled?: boolean;
+  buyNowEnabled?: boolean;
+}
 
 interface Tab {
   id: string;
   label: string;
-  products: any[];
+  products: Product[];
 }
 
 interface ProductTabs1Props {
@@ -16,6 +38,9 @@ interface ProductTabs1Props {
     title?: string;
     subtitle?: string;
     tabAlignment?: "left" | "center" | "right";
+    productCardType?: string;
+    columns?: number;
+    columnsMobile?: number;
   };
   tabs?: Tab[];
 }
@@ -27,9 +52,12 @@ export default function ProductTabs1({
   const [activeTab, setActiveTab] = useState(tabs[0]?.id || "");
 
   const {
-    title = "Shop by Collection",
-    subtitle = "",
+    title,
+    subtitle,
     tabAlignment = "center",
+    productCardType,
+    columns = 4,
+    columnsMobile = 2,
   } = settings;
 
   const activeTabData = tabs.find((tab) => tab.id === activeTab);
@@ -40,13 +68,20 @@ export default function ProductTabs1({
     right: "justify-end",
   }[tabAlignment];
 
+  // Get the product card component from registry
+  const ProductCard = productCardType ? getComponent(productCardType) : null;
+
+  if (!ProductCard) {
+    return null;
+  }
+
   return (
-    <section className="py-12 px-4">
-      <div className="container mx-auto max-w-7xl">
+    <section className="w-full py-16 md:py-24">
+      <div className="max-w-[1440px] mx-auto px-4 2xl:px-0">
         {/* Header */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-12">
           {title && (
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+            <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4">
               {title}
             </h2>
           )}
@@ -54,14 +89,14 @@ export default function ProductTabs1({
         </div>
 
         {/* Tabs */}
-        <div className={`flex flex-wrap gap-4 mb-8 ${alignmentClass}`}>
+        <div className={`flex flex-wrap gap-4 mb-12 ${alignmentClass}`}>
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`px-6 py-3 rounded-lg font-medium transition-all ${
                 activeTab === tab.id
-                  ? "bg-blue-600 text-white shadow-lg"
+                  ? "bg-gray-900 text-white shadow-lg"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200"
               }`}
             >
@@ -72,30 +107,20 @@ export default function ProductTabs1({
 
         {/* Products Grid */}
         {activeTabData && (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div
+            className="grid"
+            style={{
+              gridTemplateColumns: `repeat(${columnsMobile}, 1fr)`,
+            }}
+          >
             {activeTabData.products.length > 0 ? (
-              activeTabData.products.map((product: any, index: number) => (
+              activeTabData.products.map((product, index) => (
                 <div
                   key={product.id || index}
-                  className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow"
+                  className="animate-fadeIn overflow-hidden"
+                  style={{ animationDelay: `${index * 80}ms` }}
                 >
-                  {product.image && (
-                    <img
-                      src={product.image}
-                      alt={product.title || "Product"}
-                      className="w-full h-64 object-cover"
-                    />
-                  )}
-                  <div className="p-4">
-                    <h3 className="font-semibold text-gray-900 mb-2">
-                      {product.title || "Product"}
-                    </h3>
-                    {product.price && (
-                      <p className="text-blue-600 font-bold">
-                        ${product.price}
-                      </p>
-                    )}
-                  </div>
+                  <ProductCard {...product} />
                 </div>
               ))
             ) : (
@@ -108,6 +133,22 @@ export default function ProductTabs1({
           </div>
         )}
       </div>
+
+      <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeIn {
+          animation: fadeIn 0.6s ease-out forwards;
+          opacity: 0;
+        }
+        @media (min-width: 768px) {
+          .grid {
+            grid-template-columns: repeat(${columns}, 1fr) !important;
+          }
+        }
+      `}</style>
     </section>
   );
 }
