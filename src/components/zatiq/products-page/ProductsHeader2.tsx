@@ -47,34 +47,43 @@ const ProductsHeader2: React.FC<ProductsHeader2Props> = ({
         style={{ backgroundImage: `url(${backgroundImage})` }}
       />
       <div className={`absolute inset-0 ${overlayOpacity}`} />
-      <div className="relative z-10 h-full flex flex-col justify-center">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-          {showBreadcrumb && (
-            <nav className="mb-6" aria-label="Breadcrumb">
-              <ol className="flex items-center space-x-2 text-sm">
-                {breadcrumbs.map((crumb, index) => (
-                  <li key={index} className="flex items-center">
-                    {index > 0 && (
-                      <svg className="w-4 h-4 mx-2 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                    )}
-                    {index === breadcrumbs.length - 1 ? (
-                      <span className="text-white font-medium">{crumb.label}</span>
-                    ) : (
-                      <a href={crumb.href} className="text-white/80 hover:text-white transition-colors">{crumb.label}</a>
-                    )}
-                  </li>
-                ))}
-              </ol>
-            </nav>
-          )}
-          <div className="text-center md:text-left">
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">{displayTitle}</h1>
-            <p className="text-lg text-white/80 max-w-2xl">{description}</p>
-            {showProductCount && productCount > 0 && (
-              <p className="mt-4 text-sm text-white/60">{productCount} products found</p>
-            )}
+      <div className="relative z-10 h-full flex flex-col">
+        {/* Breadcrumb at top */}
+        {showBreadcrumb && (
+          <div className="pt-2">
+            <div className="max-w-[1440px] mx-auto px-4 2xl:px-0">
+              <nav aria-label="Breadcrumb">
+                <ol className="flex items-center space-x-2 text-sm">
+                  {breadcrumbs.map((crumb, index) => (
+                    <li key={index} className="flex items-center">
+                      {index > 0 && (
+                        <svg className="w-4 h-4 mx-2 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      )}
+                      {index === breadcrumbs.length - 1 ? (
+                        <span className="text-white font-medium">{crumb.label}</span>
+                      ) : (
+                        <a href={crumb.href} className="text-white/80 hover:text-white transition-colors">{crumb.label}</a>
+                      )}
+                    </li>
+                  ))}
+                </ol>
+              </nav>
+            </div>
+          </div>
+        )}
+
+        {/* Title Content - centered vertically in remaining space */}
+        <div className="flex-1 flex flex-col justify-center">
+          <div className="max-w-[1440px] mx-auto px-4 2xl:px-0 w-full">
+            <div className="text-center md:text-left">
+              <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">{displayTitle}</h1>
+              <p className="text-lg text-white/80 max-w-2xl">{description}</p>
+              {showProductCount && productCount > 0 && (
+                <p className="mt-4 text-sm text-white/60">{productCount} products found</p>
+              )}
+            </div>
           </div>
         </div>
       </div>

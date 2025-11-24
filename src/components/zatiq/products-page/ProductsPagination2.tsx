@@ -82,7 +82,7 @@ const ProductsPagination2: React.FC<ProductsPagination2Props> = ({
 
   // Standard Pagination Style
   return (
-    <div className="py-8">
+    <div className="py-8 max-w-[1440px] mx-auto px-4 2xl:px-0">
       <div className="flex items-center justify-between">
         {/* Page Info */}
         <p className="text-sm text-gray-600">

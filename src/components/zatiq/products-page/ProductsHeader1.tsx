@@ -40,11 +40,11 @@ const ProductsHeader1: React.FC<ProductsHeader1Props> = ({
     : title || "All Products";
 
   return (
-    <section className={`bg-gradient-to-r ${backgroundGradient} py-12 md:py-16`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className={`bg-gradient-to-r ${backgroundGradient}`}>
+      <div className="max-w-[1440px] mx-auto px-4 2xl:px-0">
         {/* Breadcrumb */}
         {showBreadcrumb && (
-          <nav className="mb-4" aria-label="Breadcrumb">
+          <nav className="mb-4 pt-4" aria-label="Breadcrumb">
             <ol className="flex items-center space-x-2 text-sm">
               {breadcrumbs.map((crumb, index) => (
                 <li key={index} className="flex items-center">
@@ -80,7 +80,7 @@ const ProductsHeader1: React.FC<ProductsHeader1Props> = ({
         )}
 
         {/* Title and Description */}
-        <div className="text-center">
+        <div className="text-center py-12 md:py-16">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
             {displayTitle}
           </h1>

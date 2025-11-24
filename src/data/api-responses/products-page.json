@@ -5,7 +5,7 @@
     "sections": [
       {
         "id": "products_header",
-        "type": "products-header-1",
+        "type": "products-header-2",
         "settings": {
           "showBreadcrumb": true,
           "showProductCount": true,
@@ -38,7 +38,7 @@
           "defaultView": "grid",
           "columns": 4,
           "columnsTablet": 2,
-          "columnsMobile": 1,
+          "columnsMobile": 2,
           "gap": 2,
           "cardStyle": "product-card-5"
         },
@@ -109,7 +109,7 @@
       },
       {
         "id": "products_pagination",
-        "type": "products-pagination-1",
+        "type": "products-pagination-2",
         "settings": {
           "showPageNumbers": true,
           "showPrevNext": true,
