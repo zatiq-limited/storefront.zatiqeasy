@@ -27,6 +27,10 @@ const db = {
   products: loadJSON("products.json"),
   product: loadJSON("product.json"),
   category: loadJSON("category.json"),
+  productsPage: loadJSON("products-page.json"),
+  productDetailsPage: loadJSON("product-details-page.json"),
+  collectionsPage: loadJSON("collections-page.json"),
+  collectionDetailsPage: loadJSON("collection-details-page.json"),
 };
 
 // Custom API routes
@@ -40,6 +44,52 @@ app.get("/api/storefront/v1/theme", (req, res) => {
 
 app.get("/api/storefront/v1/page/home", (req, res) => {
   res.json(db.homepage);
+});
+
+// Products page endpoint (sections + products combined)
+app.get("/api/storefront/v1/page/products", (req, res) => {
+  const { page = 1, per_page = 20, category, search, sort } = req.query;
+
+  // Combine page sections with products data
+  const productsPageData = db.productsPage;
+  const productsData = db.products;
+
+  // Merge products into the response
+  const response = {
+    success: true,
+    data: {
+      ...productsPageData.data,
+      products: productsData.data.products,
+      pagination: productsData.data.pagination,
+      // Pass query params for components to use
+      filters: {
+        page: parseInt(page),
+        category: category || null,
+        search: search || null,
+        sort: sort || "featured",
+      },
+    },
+  };
+
+  res.json(response);
+});
+
+// Collections page endpoint (sections + collections combined)
+app.get("/api/storefront/v1/page/collections", (req, res) => {
+  // Combine page sections with category data (collections)
+  const collectionsPageData = db.collectionsPage;
+  const categoryData = db.category;
+
+  // Merge collections into the response
+  const response = {
+    success: true,
+    data: {
+      ...collectionsPageData.data,
+      collections: categoryData.data.categories, // Using category data as collections
+    },
+  };
+
+  res.json(response);
 });
 
 // Product list endpoint with query support
@@ -65,11 +115,16 @@ app.get("/api/storefront/v1/collections", (req, res) => {
 app.get("/api/storefront/v1/collections/:handle", (req, res) => {
   const { handle } = req.params;
   // Return single collection with products (in real backend, this would find by handle)
-  res.json(db.category);
+  res.json(db.collectionDetailsPage);
 });
 
 app.get("/api/storefront/v1/cart", (req, res) => {
   res.json(db.cart);
+});
+
+// Product details page sections endpoint
+app.get("/api/storefront/v1/page/product-details", (req, res) => {
+  res.json(db.productDetailsPage);
 });
 
 // Direct access routes (for debugging)
@@ -78,6 +133,8 @@ app.get("/homepage", (req, res) => res.json(db.homepage));
 app.get("/products", (req, res) => res.json(db.products));
 app.get("/product", (req, res) => res.json(db.product));
 app.get("/category", (req, res) => res.json(db.category));
+app.get("/products-page", (req, res) => res.json(db.productsPage));
+app.get("/collections-page", (req, res) => res.json(db.collectionsPage));
 
 // Start server
 app.listen(PORT, () => {
@@ -99,5 +156,8 @@ app.listen(PORT, () => {
     `   GET  http://localhost:${PORT}/api/storefront/v1/collections/:handle          - Single collection detail`
   );
   console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/cart`);
+  console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/page/products           - Products page sections`);
+  console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/page/collections        - Collections page sections`);
+  console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/page/product-details    - Product details page sections`);
   console.log(`\n✨ Press Ctrl+C to stop\n`);
 });

@@ -1,14 +1,15 @@
 ---
 /**
  * ========================================
- * PRODUCT DETAIL PAGE
+ * PRODUCT DETAIL PAGE (DYNAMIC)
  * ========================================
- * 
- * Single product page with gallery, variants, reviews
- * Fully API-driven from product.json
+ *
+ * Single product page with dynamic sections from API
+ * Sections: Breadcrumb, ProductDetail, CustomerReviews, RelatedProducts
  */
 
 import Layout from '../../layouts/main.astro';
+import ProductDetailsPageRenderer from '../../components/ProductDetailsPageRenderer';
 
 // Enable server-side rendering for dynamic product pages
 export const prerender = false;
@@ -17,22 +18,28 @@ export const prerender = false;
 const { handle } = Astro.params;
 
 // Fetch product from API
-let productData: any = null;
 let product: any = null;
-let relatedProducts: any[] = [];
-let reviews: any[] = [];
 let theme: any = null;
+let sections: any[] = [];
 
 try {
 	const API_BASE_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3001';
-	const response = await fetch(`${API_BASE_URL}/api/storefront/v1/products/${handle}`);
-	const result = await response.json();
-	
-	if (result.success && result.data?.product) {
-		product = result.data.product;
-		relatedProducts = product.related_products || [];
-		reviews = product.reviews || [];
+
+	// Fetch product data
+	const productResponse = await fetch(`${API_BASE_URL}/api/storefront/v1/products/${handle}`);
+	const productResult = await productResponse.json();
+
+	if (productResult.success && productResult.data?.product) {
+		product = productResult.data.product;
 		theme = product.theme || null;
+	}
+
+	// Fetch page sections config
+	const sectionsResponse = await fetch(`${API_BASE_URL}/api/storefront/v1/page/product-details`);
+	const sectionsResult = await sectionsResponse.json();
+
+	if (sectionsResult.success && sectionsResult.data?.sections) {
+		sections = sectionsResult.data.sections;
 	}
 } catch (error) {
 	console.error('[Product Page] Failed to load product:', error);
@@ -42,439 +49,92 @@ if (!product) {
 	return Astro.redirect('/404');
 }
 
-// Calculate discount percentage
-const discountPercent = product.old_price 
-	? Math.round(((product.old_price - product.price) / product.old_price) * 100)
-	: 0;
+// Fallback sections if API doesn't return any
+if (!sections || sections.length === 0) {
+	sections = [
+		{
+			id: "product_breadcrumb",
+			type: "product-breadcrumb-1",
+			enabled: true,
+			settings: {
+				showHome: true,
+				showCategory: true
+			}
+		},
+		{
+			id: "product_detail",
+			type: "product-detail-1",
+			enabled: true,
+			settings: {
+				showBrand: true,
+				showSku: true,
+				showRating: true,
+				showStock: true,
+				showVariants: true,
+				showDescription: true,
+				showSpecifications: true,
+				showShipping: true,
+				galleryPosition: "left",
+				thumbnailPosition: "bottom"
+			}
+		},
+		{
+			id: "customer_reviews",
+			type: "customer-reviews-1",
+			enabled: true,
+			settings: {
+				title: "Customer Reviews",
+				showRatingSummary: true,
+				showReviewImages: true,
+				columns: 3,
+				limit: 6
+			}
+		},
+		{
+			id: "related_products",
+			type: "related-products-1",
+			enabled: true,
+			settings: {
+				title: "You May Also Like",
+				columns: 4,
+				cardStyle: "product-card-1",
+				limit: 8
+			}
+		}
+	];
+}
 ---
 
-<Layout 
+<Layout
 	title={theme?.page_title || `${product.name} | ZatiqEasy`}
 	description={theme?.page_description || product.description || product.short_description}
 	image={product.image_url}
 >
-	
-	<!-- Breadcrumb -->
-	<nav class="bg-gray-50 border-b">
-		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-			<ol class="flex items-center space-x-2 text-sm">
-				<li><a href="/" class="text-gray-500 hover:text-gray-700">Home</a></li>
-				<li><span class="text-gray-400">/</span></li>
-				<li><a href="/products" class="text-gray-500 hover:text-gray-700">Products</a></li>
-				<li><span class="text-gray-400">/</span></li>
-				<li class="text-gray-900 font-medium truncate">{product.name}</li>
-			</ol>
-		</div>
-	</nav>
-
-	<!-- Product Detail Section -->
-	<section class="py-8 md:py-12">
-		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-			<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-				
-				<!-- Product Gallery -->
-				<div>
-					<!-- Thumbnail Gallery -->
-					{product.images && product.images.length > 1 && (
-						<div class="grid grid-cols-4 gap-3 mb-4">
-							{product.images.map((img: string, index: number) => (
-								<button 
-									class="aspect-square bg-gray-100 rounded-lg overflow-hidden border-2 border-transparent hover:border-blue-500 transition-colors thumbnail-btn"
-									data-image={img}
-								>
-									<img 
-										src={img} 
-										alt={`${product.name} - Image ${index + 1}`}
-										class="w-full h-full object-cover"
-									/>
-								</button>
-							))}
-						</div>
-					)}
-
-					<!-- Main Image -->
-					<div class="aspect-square bg-gray-100 rounded-2xl overflow-hidden sticky top-4 shadow-lg">
-						<img 
-							id="mainImage"
-							src={product.image_url} 
-							alt={product.name}
-							class="w-full h-full object-cover"
-						/>
-					</div>
-				</div>
-
-				<!-- Product Info -->
-				<div class="space-y-6">
-					
-					<!-- Brand & Code -->
-					<div class="flex items-center justify-between">
-						{product.brand && (
-							<span class="text-sm font-medium text-blue-600 uppercase tracking-wide">
-								{product.brand}
-							</span>
-						)}
-						{product.product_code && (
-							<span class="text-xs text-gray-500">
-								SKU: {product.product_code}
-							</span>
-						)}
-					</div>
-
-					<!-- Title -->
-					<h1 class="text-3xl md:text-4xl font-bold text-gray-900">
-						{product.name}
-					</h1>
-
-					<!-- Rating & Reviews -->
-					{product.review_summary && (
-						<div class="flex items-center gap-4">
-							<div class="flex items-center gap-1">
-								{Array.from({ length: 5 }).map((_, i) => (
-									<svg 
-										class={`w-5 h-5 ${i < Math.floor(product.review_summary.average_rating) ? 'text-yellow-400' : 'text-gray-300'}`} 
-										fill="currentColor" 
-										viewBox="0 0 20 20"
-									>
-										<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-									</svg>
-								))}
-							</div>
-							<span class="text-sm text-gray-600">
-								{product.review_summary.average_rating.toFixed(1)} ({product.review_summary.total_reviews} reviews)
-							</span>
-						</div>
-					)}
-
-					<!-- Price -->
-					<div class="flex items-baseline gap-3">
-						<span class="text-4xl font-bold text-gray-900">
-							৳{product.price?.toLocaleString() || product.price || '0'}
-						</span>
-						{product.old_price && (
-							<>
-								<span class="text-2xl text-gray-500 line-through">
-									৳{product.old_price?.toLocaleString() || product.old_price}
-								</span>
-								<span class="px-3 py-1 bg-red-100 text-red-700 text-sm font-bold rounded-full">
-									{discountPercent}% OFF
-								</span>
-							</>
-						)}
-					</div>
-
-					<!-- Short Description -->
-					{product.short_description && (
-						<p class="text-gray-600 leading-relaxed">
-							{product.short_description}
-						</p>
-					)}
-
-					<!-- Variants -->
-					{product.variant_types && product.variant_types.length > 0 && (
-						<div class="space-y-4 pt-4 border-t">
-							{product.variant_types.map((variantType: any) => (
-								<div>
-									<label class="block text-sm font-semibold text-gray-900 mb-2">
-										{variantType.title}
-										{variantType.is_mandatory && <span class="text-red-500">*</span>}
-									</label>
-									<div class="flex flex-wrap gap-2">
-										{variantType.variants.map((variant: any) => (
-											<button 
-												class="px-4 py-2 border-2 border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-all variant-btn"
-												data-variant-id={variant.id}
-											>
-												{variant.name}
-												{variant.price > 0 && (
-													<span class="text-xs text-gray-500 ml-1">
-														+৳{variant.price}
-													</span>
-												)}
-											</button>
-										))}
-									</div>
-								</div>
-							))}
-						</div>
-					)}
-
-					<!-- Stock Status -->
-					<div class="flex items-center gap-2">
-						{product.quantity > 0 ? (
-							<>
-								<svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-									<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-								</svg>
-								<span class="text-green-700 font-medium">In Stock</span>
-								{product.quantity <= 10 && (
-									<span class="text-orange-600 text-sm">
-										(Only {product.quantity} left!)
-									</span>
-								)}
-							</>
-						) : (
-							<>
-								<svg class="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
-									<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
-								</svg>
-								<span class="text-red-700 font-medium">Out of Stock</span>
-							</>
-						)}
-					</div>
-
-					<!-- Add to Cart Buttons -->
-					<div class="flex gap-3 pt-4">
-						<button 
-							class="flex-1 py-4 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
-							disabled={product.quantity === 0}
-						>
-							Add to Cart
-						</button>
-						<button 
-							class="px-6 py-4 border-2 border-gray-300 rounded-xl hover:border-red-500 hover:bg-red-50 transition-all"
-							title="Add to Wishlist"
-						>
-							<svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-							</svg>
-						</button>
-					</div>
-
-					<!-- Product Details Accordion -->
-					<div class="space-y-2 pt-6 border-t">
-						
-						<!-- Description -->
-						{product.description && (
-							<details class="group" open>
-								<summary class="flex items-center justify-between py-4 cursor-pointer font-semibold text-gray-900">
-									<span>Product Description</span>
-									<svg class="w-5 h-5 transform group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-									</svg>
-								</summary>
-								<div class="pb-4 text-gray-600 leading-relaxed">
-									{product.description}
-								</div>
-							</details>
-						)}
-
-						<!-- Specifications -->
-						{product.custom_fields && Object.keys(product.custom_fields).length > 0 && (
-							<details class="group">
-								<summary class="flex items-center justify-between py-4 cursor-pointer font-semibold text-gray-900 border-t">
-									<span>Specifications</span>
-									<svg class="w-5 h-5 transform group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-									</svg>
-								</summary>
-								<div class="pb-4">
-									<dl class="space-y-2">
-										{Object.entries(product.custom_fields).map(([key, value]) => (
-											<div class="flex justify-between py-2 border-b border-gray-100">
-												<dt class="text-gray-600">{key}</dt>
-												<dd class="font-medium text-gray-900">{value as string}</dd>
-											</div>
-										))}
-									</dl>
-								</div>
-							</details>
-						)}
-
-						<!-- Shipping & Returns -->
-						<details class="group">
-							<summary class="flex items-center justify-between py-4 cursor-pointer font-semibold text-gray-900 border-t">
-								<span>Shipping & Returns</span>
-								<svg class="w-5 h-5 transform group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-								</svg>
-							</summary>
-							<div class="pb-4 space-y-3 text-sm text-gray-600">
-								<p>• {product.warranty || '30 days return policy'}</p>
-								{!product.isApplyDefaultDeliveryCharge && product.specific_delivery_charges && (
-									<>
-										<p>• Dhaka: ৳{product.specific_delivery_charges.Dhaka}</p>
-										<p>• Outside Dhaka: ৳{product.specific_delivery_charges.Others}</p>
-									</>
-								)}
-								{product.isApplyDefaultDeliveryCharge && (
-									<p>• Standard delivery charges apply</p>
-								)}
-							</div>
-						</details>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<!-- Customer Reviews -->
-	{reviews && reviews.length > 0 && (
-		<section class="py-12 bg-gray-50">
-			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-				<h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-8">
-					Customer Reviews
-				</h2>
-
-				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-					{reviews.map((review: any) => (
-						<div class="bg-white rounded-xl p-6 shadow-sm">
-							<!-- Review Text -->
-							<p class="text-gray-600 text-sm mb-4 line-clamp-3">
-								{review.description}
-							</p>
-
-							<!-- Reviewer -->
-							<div class="flex items-center gap-3 pt-4 border-t">
-								<div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
-									<span class="text-gray-600 font-medium text-sm">
-										{review.name?.charAt(0) || 'U'}
-									</span>
-								</div>
-								<div>
-									<p class="font-medium text-gray-900 text-sm">
-										{review.name}
-									</p>
-									{review.reviewer_type === 'verified_buyer' && (
-										<p class="text-xs text-green-600">✓ Verified Purchase</p>
-									)}
-									{review.created_at && (
-										<p class="text-xs text-gray-500">
-											{new Date(review.created_at).toLocaleDateString('en-US', { 
-												year: 'numeric', 
-												month: 'short', 
-												day: 'numeric' 
-											})}
-										</p>
-									)}
-								</div>
-							</div>
-
-							<!-- Review Images -->
-							{review.images && review.images.length > 0 && (
-								<div class="flex gap-2 mt-4">
-									{review.images.map((img: string) => (
-										<img 
-											src={img} 
-											alt="Review"
-											class="w-16 h-16 rounded-lg object-cover cursor-pointer hover:opacity-75"
-										/>
-									))}
-								</div>
-							)}
-						</div>
-					))}
-				</div>
-			</div>
-		</section>
-	)}
-
-	<!-- Related Products -->
-	{relatedProducts && relatedProducts.length > 0 && (
-		<section class="py-12">
-			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-				<h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-8">
-					You May Also Like
-				</h2>
-
-				<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-					{relatedProducts.map((relatedProduct: any) => (
-						<a 
-							href={`/products/${relatedProduct.slug || relatedProduct.product_code?.toLowerCase() || relatedProduct.id}`}
-							class="group bg-white rounded-xl shadow-sm hover:shadow-xl transition-all overflow-hidden"
-						>
-							<div class="aspect-square bg-gray-100 overflow-hidden">
-								<img 
-									src={relatedProduct.image_url} 
-									alt={relatedProduct.name}
-									class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-									loading="lazy"
-								/>
-							</div>
-							<div class="p-4">
-								<h3 class="font-semibold text-gray-900 mb-2 line-clamp-2 text-sm">
-									{relatedProduct.name}
-								</h3>
-								<div class="flex items-center gap-2">
-									<span class="text-lg font-bold text-gray-900">
-										৳{relatedProduct.price?.toLocaleString() || relatedProduct.price || '0'}
-									</span>
-									{relatedProduct.old_price && (
-										<span class="text-xs text-gray-500 line-through">
-											৳{relatedProduct.old_price?.toLocaleString() || relatedProduct.old_price}
-										</span>
-									)}
-								</div>
-								{relatedProduct.average_rating && (
-									<div class="flex items-center gap-1 mt-2">
-										<svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-											<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-										</svg>
-										<span class="text-xs text-gray-600">
-											{relatedProduct.average_rating} ({relatedProduct.total_reviews || 0})
-										</span>
-									</div>
-								)}
-							</div>
-						</a>
-					))}
-				</div>
-			</div>
-		</section>
-	)}
-
-	<script>
-		// Image Gallery
-		const mainImage = document.getElementById('mainImage') as HTMLImageElement;
-		const thumbnails = document.querySelectorAll('.thumbnail-btn');
-
-		thumbnails.forEach(thumb => {
-			thumb.addEventListener('click', () => {
-				const newImage = thumb.getAttribute('data-image');
-				if (newImage && mainImage) {
-					mainImage.src = newImage;
-					// Update active state
-					thumbnails.forEach(t => t.classList.remove('border-blue-500'));
-					thumb.classList.add('border-blue-500');
-				}
-			});
-		});
-
-		// Set first thumbnail as active
-		if (thumbnails.length > 0) {
-			thumbnails[0].classList.add('border-blue-500');
-		}
-
-		// Variant Selection
-		const variantButtons = document.querySelectorAll('.variant-btn');
-		variantButtons.forEach(btn => {
-			btn.addEventListener('click', () => {
-				// Toggle selection within same variant type
-				const siblings = btn.parentElement?.querySelectorAll('.variant-btn');
-				siblings?.forEach(s => s.classList.remove('border-blue-500', 'bg-blue-50'));
-				btn.classList.add('border-blue-500', 'bg-blue-50');
-			});
-		});
-	</script>
-
-	<style>
-		/* Smooth scrolling */
-		html {
-			scroll-behavior: smooth;
-		}
-
-		/* Line clamp utilities */
-		.line-clamp-2 {
-			display: -webkit-box;
-			-webkit-line-clamp: 2;
-			-webkit-box-orient: vertical;
-			overflow: hidden;
-		}
-
-		.line-clamp-3 {
-			display: -webkit-box;
-			-webkit-line-clamp: 3;
-			-webkit-box-orient: vertical;
-			overflow: hidden;
-		}
-	</style>
+	<ProductDetailsPageRenderer
+		sections={sections}
+		product={product}
+		client:load
+	/>
 </Layout>
+
+<style>
+	/* Smooth scrolling */
+	html {
+		scroll-behavior: smooth;
+	}
+
+	/* Line clamp utilities */
+	.line-clamp-2 {
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	.line-clamp-3 {
+		display: -webkit-box;
+		-webkit-line-clamp: 3;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+</style>

@@ -125,13 +125,17 @@
           "logo": "/src/assets/image/nav/nav1.png",
           "description": "Digital Haven is a top-notch store offering a wide range of digital products at unbeatable prices from renowned global brands. Dive in now to discover fresh designs and take advantage of fantastic deals and discounts.",
           "copyrightText": "All rights reserved for Zatiq Ltd © 2025",
+          "socialLinks": {
+            "facebook": "https://facebook.com/zatiq",
+            "instagram": "https://instagram.com/zatiq",
+            "twitter": "https://twitter.com/zatiq",
+            "youtube": "https://youtube.com/zatiq",
+            "linkedin": "https://linkedin.com/company/zatiq"
+          },
           "paymentIcons": [
             { "src": "/src/assets/image/payment/bkash.png", "alt": "bKash" },
             { "src": "/src/assets/image/payment/paypal.png", "alt": "PayPal" },
-            {
-              "src": "/src/assets/image/payment/master.png",
-              "alt": "Mastercard"
-            },
+            { "src": "/src/assets/image/payment/master.png", "alt": "Mastercard" },
             { "src": "/src/assets/image/payment/visa.png", "alt": "Visa" }
           ]
         },

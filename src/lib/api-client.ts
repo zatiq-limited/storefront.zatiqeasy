@@ -185,6 +185,39 @@ export async function getHomepageData(): Promise<any> {
 }
 
 /**
+ * Get products page data (sections + products)
+ *
+ * Backend API: GET /api/storefront/v1/page/products
+ * Response: { success: true, data: { template, sections, products, pagination, seo } }
+ */
+export async function getProductsPageData(params?: {
+  page?: number;
+  category?: string;
+  sort?: string;
+  search?: string;
+}): Promise<any> {
+  try {
+    const queryParams: Record<string, string> = {};
+    if (params?.page) queryParams.page = params.page.toString();
+    if (params?.category) queryParams.category = params.category;
+    if (params?.sort) queryParams.sort = params.sort;
+    if (params?.search) queryParams.search = params.search;
+
+    const queryString = new URLSearchParams(queryParams).toString();
+    const endpoint = queryString
+      ? `/api/storefront/v1/page/products?${queryString}`
+      : `/api/storefront/v1/page/products`;
+
+    const response = await apiCall<any>(endpoint);
+    console.log("[API] ✅ Products page data loaded from API");
+    return response;
+  } catch (error) {
+    console.error("[API] ❌ Products page API failed");
+    return null;
+  }
+}
+
+/**
  * Get page data
  *
  * Backend API: GET /api/storefront/v1/page/:pageType
@@ -284,6 +317,23 @@ export async function getFeaturedProducts(
 }
 
 /**
+ * Get collections page data (sections + collections)
+ *
+ * Backend API: GET /api/storefront/v1/page/collections
+ * Response: { success: true, data: { template, sections, collections, seo } }
+ */
+export async function getCollectionsPageData(): Promise<any> {
+  try {
+    const response = await apiCall<any>(`/api/storefront/v1/page/collections`);
+    console.log("[API] ✅ Collections page data loaded from API");
+    return response;
+  } catch (error) {
+    console.error("[API] ❌ Collections page API failed");
+    return null;
+  }
+}
+
+/**
  * Get collections
  *
  * Backend API: GET /api/storefront/v1/collections
@@ -317,6 +367,27 @@ export async function getCollection(
     );
     console.log(`[API] ✅ Collection loaded: ${handle}`);
     return data.collection;
+  } catch (error) {
+    console.error(`[API] ❌ Collection API failed: ${handle}`);
+    return null;
+  }
+}
+
+/**
+ * Get single collection with products
+ *
+ * Backend API: GET /api/storefront/v1/collections/:handle
+ * Response: { success: true, data: { collection: Collection, products: Product[] } }
+ */
+export async function getCollectionWithProducts(
+  handle: string
+): Promise<{ collection: Collection; products: Product[] } | null> {
+  try {
+    const data = await apiCall<{ collection: Collection; products: Product[] }>(
+      `/api/storefront/v1/collections/${handle}`
+    );
+    console.log(`[API] ✅ Collection with products loaded: ${handle}`);
+    return data;
   } catch (error) {
     console.error(`[API] ❌ Collection API failed: ${handle}`);
     return null;

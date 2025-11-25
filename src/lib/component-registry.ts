@@ -67,6 +67,50 @@ import { ProductTabs1, ProductTabs2 } from "../components/zatiq/product-tabs";
 import { ProductCollection1, ProductCollection2 } from "@/components/zatiq/product-collection";
 import { SocialFeed1, SocialFeed2 } from "@/components/zatiq/social-feed";
 import { CustomSections } from "@/components/zatiq/custom-sections";
+import {
+  ProductsHeader1,
+  ProductsHeader2,
+  ProductsFilter1,
+  ProductsFilter2,
+  ProductsSidebar1,
+  ProductsSidebar2,
+  ProductsGrid1,
+  ProductsGrid2,
+  ProductsPagination1,
+  ProductsPagination2,
+  ProductsLayout1,
+  ProductsLayout2,
+  ProductsContent1,
+  ProductsEmpty1,
+} from "@/components/zatiq/products-page";
+
+// Product Details Page Components
+import ProductBreadcrumb1 from "@/components/zatiq/product-details-page/ProductBreadcrumb1";
+import ProductBreadcrumb2 from "@/components/zatiq/product-details-page/ProductBreadcrumb2";
+import ProductDetail1 from "@/components/zatiq/product-details-page/ProductDetail1";
+import ProductDetail2 from "@/components/zatiq/product-details-page/ProductDetail2";
+import CustomerReviews1 from "@/components/zatiq/product-details-page/CustomerReviews1";
+import CustomerReviews2 from "@/components/zatiq/product-details-page/CustomerReviews2";
+import RelatedProducts1 from "@/components/zatiq/product-details-page/RelatedProducts1";
+import RelatedProducts2 from "@/components/zatiq/product-details-page/RelatedProducts2";
+
+// Collections Page Components
+import {
+  CollectionsHero1,
+  CollectionsHero2,
+  CollectionsGrid1,
+  CollectionsGrid2,
+} from "@/components/zatiq/collections";
+
+// Collection Details Page Components
+import {
+  CollectionBreadcrumb1,
+  CollectionBreadcrumb2,
+  CollectionBanner1,
+  CollectionBanner2,
+  CollectionProducts1,
+  CollectionProducts2,
+} from "@/components/zatiq/collection-details";
 
 
 /**
@@ -160,6 +204,45 @@ export const ZATIQ_COMPONENTS: Record<string, ComponentType<any>> = {
   // Custom Sections (2 variants - same component, different settings)
   "custom-sections-1": CustomSections,
   "custom-sections-2": CustomSections,
+  // Products Page Components
+  "products-header-1": ProductsHeader1,
+  "products-header-2": ProductsHeader2,
+  "products-filter-1": ProductsFilter1,
+  "products-filter-2": ProductsFilter2,
+  "products-sidebar-1": ProductsSidebar1,
+  "products-sidebar-2": ProductsSidebar2,
+  "products-grid-1": ProductsGrid1,
+  "products-grid-2": ProductsGrid2,
+  "products-pagination-1": ProductsPagination1,
+  "products-pagination-2": ProductsPagination2,
+  "products-layout-1": ProductsLayout1,
+  "products-layout-2": ProductsLayout2,
+  "products-content-1": ProductsContent1,
+  "products-empty-1": ProductsEmpty1,
+
+  // Product Details Page Components
+  "product-breadcrumb-1": ProductBreadcrumb1,
+  "product-breadcrumb-2": ProductBreadcrumb2,
+  "product-detail-1": ProductDetail1,
+  "product-detail-2": ProductDetail2,
+  "customer-reviews-1": CustomerReviews1,
+  "customer-reviews-2": CustomerReviews2,
+  "related-products-1": RelatedProducts1,
+  "related-products-2": RelatedProducts2,
+
+  // Collections Page Components
+  "collections-hero-1": CollectionsHero1,
+  "collections-hero-2": CollectionsHero2,
+  "collections-grid-1": CollectionsGrid1,
+  "collections-grid-2": CollectionsGrid2,
+
+  // Collection Details Page Components
+  "collection-breadcrumb-1": CollectionBreadcrumb1,
+  "collection-breadcrumb-2": CollectionBreadcrumb2,
+  "collection-banner-1": CollectionBanner1,
+  "collection-banner-2": CollectionBanner2,
+  "collection-products-1": CollectionProducts1,
+  "collection-products-2": CollectionProducts2,
 };
 
 /**

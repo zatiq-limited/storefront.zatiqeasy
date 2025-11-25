@@ -1,0 +1,44 @@
+{
+  "success": true,
+  "data": {
+    "template": "collections",
+    "sections": [
+      {
+        "id": "collections_hero",
+        "type": "collections-hero-2",
+        "enabled": true,
+        "settings": {
+          "title": "Discover Your Style",
+          "subtitle": "Explore our handpicked collections crafted for every occasion and trend",
+          "badge": "Curated Collections",
+          "backgroundColor": "#000000",
+          "textColor": "#ffffff"
+        }
+      },
+      {
+        "id": "collections_grid_featured",
+        "type": "collections-grid-2",
+        "enabled": true,
+        "settings": {
+          "backgroundColor": "#f9fafb"
+        }
+      }
+    ],
+    "seo": {
+      "title": "Shop by Collections | ZatiqEasy",
+      "description": "Browse our curated collections and find your perfect style",
+      "canonical": "/collections",
+      "og": {
+        "title": "Shop by Collections | ZatiqEasy",
+        "description": "Browse our curated collections and find your perfect style",
+        "image": "/assets/og/collections.jpg",
+        "type": "website"
+      },
+      "twitter": {
+        "card": "summary_large_image",
+        "title": "Shop by Collections | ZatiqEasy",
+        "description": "Browse our curated collections and find your perfect style"
+      }
+    }
+  }
+}

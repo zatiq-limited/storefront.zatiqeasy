@@ -1,0 +1,61 @@
+{
+  "success": true,
+  "data": {
+    "page": {
+      "id": "product_details",
+      "name": "Product Details Page",
+      "description": "Single product page with gallery, variants, reviews"
+    },
+    "sections": [
+      {
+        "id": "product_breadcrumb",
+        "type": "product-breadcrumb-2",
+        "enabled": true,
+        "settings": {
+          "showHome": true,
+          "showCategory": true
+        }
+      },
+      {
+        "id": "product_detail",
+        "type": "product-detail-2",
+        "enabled": true,
+        "settings": {
+          "showBrand": true,
+          "showSku": true,
+          "showRating": true,
+          "showStock": true,
+          "showVariants": true,
+          "showDescription": true,
+          "showSpecifications": true,
+          "showShipping": true,
+          "galleryPosition": "left",
+          "thumbnailPosition": "left"
+        }
+      },
+      {
+        "id": "customer_reviews",
+        "type": "customer-reviews-1",
+        "enabled": true,
+        "settings": {
+          "title": "Customer Reviews",
+          "showRatingSummary": true,
+          "showReviewImages": true,
+          "columns": 3,
+          "limit": 6
+        }
+      },
+      {
+        "id": "related_products",
+        "type": "related-products-1",
+        "enabled": true,
+        "settings": {
+          "title": "You May Also Like",
+          "columns": 4,
+          "cardStyle": "product-card-5",
+          "limit": 8
+        }
+      }
+    ]
+  }
+}

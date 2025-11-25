@@ -1,42 +1,91 @@
 ---
 /**
  * ========================================
- * COLLECTION PAGE
+ * COLLECTION DETAIL PAGE (DYNAMIC)
  * ========================================
- * 
- * Backend API Endpoints:
- * 
+ *
+ * Backend API Endpoint:
  * GET /api/storefront/v1/collections/:handle
- * - Returns: Collection with products
- * 
- * GET /api/storefront/v1/collections/:handle/filters
- * - Returns: Available filters for collection
+ * Returns: { success: true, data: { sections: [...], collection: {...}, products: [...] } }
+ *
+ * Dev Mode: Uses collection-details-page.json as fallback
  */
 
 import Layout from '../../layouts/main.astro';
-import TemplateRenderer from '../../components/TemplateRenderer';
-import { mockTheme } from '../../data/mock-theme';
-import { mockCollections } from '../../data/mock-products';
+import CollectionDetailsPageRenderer from '../../components/CollectionDetailsPageRenderer';
+import collectionDetailsPageData from '../../data/api-responses/collection-details-page.json';
+
+// Enable server-side rendering for dynamic collection pages
+export const prerender = false;
 
 // Get handle from URL
 const { handle } = Astro.params;
 
-// Get collection template from theme
-const collectionTemplate = mockTheme.templates.collection;
+// Fetch collection data from API
+let collection: any = null;
+let products: any[] = [];
+let sections: any[] = [];
 
-// In production, fetch from API
-// const collection = await fetch(`/api/storefront/v1/collections/${handle}`).then(r => r.json())
-const collection = mockCollections.find(c => c.handle === handle);
+try {
+	const API_BASE_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3001';
+
+	// Single API call to get everything
+	const collectionResponse = await fetch(`${API_BASE_URL}/api/storefront/v1/collections/${handle}`);
+	const collectionResult = await collectionResponse.json();
+
+	if (collectionResult.success && collectionResult.data) {
+		// Extract sections (from API or use default from JSON)
+		sections = collectionResult.data.sections || collectionDetailsPageData.data.sections;
+
+		// Extract collection and products
+		collection = collectionResult.data.collection;
+		products = collectionResult.data.products || [];
+	}
+} catch (error) {
+	console.error('[Collection Page] API failed, using dev mode data:', error);
+
+	// Dev mode: Use mock data from JSON file
+	sections = collectionDetailsPageData.data.sections;
+	collection = collectionDetailsPageData.data.collection;
+	products = collectionDetailsPageData.data.products;
+}
 
 if (!collection) {
 	return Astro.redirect('/404');
 }
 ---
 
-<Layout 
-	title={`${collection.title} | ${mockTheme.templates.index.seo?.title}`}
-	description={collection.description}
-	image={collection.image}
+<Layout
+	title={collection.seo?.meta_title || `${collection.title} | ZatiqEasy`}
+	description={collection.seo?.meta_description || collection.description || collection.subtitle}
+	image={collection.seo?.og_image || collection.banner_url || collection.image}
 >
-	<TemplateRenderer template={collectionTemplate} client:load />
+	<CollectionDetailsPageRenderer
+		sections={sections}
+		collection={collection}
+		products={products}
+		client:load
+	/>
 </Layout>
+
+<style>
+	/* Smooth scrolling */
+	html {
+		scroll-behavior: smooth;
+	}
+
+	/* Line clamp utilities */
+	.line-clamp-2 {
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	.line-clamp-3 {
+		display: -webkit-box;
+		-webkit-line-clamp: 3;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+</style>
