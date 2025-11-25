@@ -15,19 +15,24 @@
       },
       {
         "id": "collection_banner",
-        "type": "collection-banner-2",
+        "type": "collection-banner-1",
         "enabled": true,
         "settings": {
           "showBanner": true,
           "showDescription": true,
           "showProductCount": true,
           "textPosition": "center",
-          "overlayOpacity": 0.6
+          "overlayOpacity": 0.6,
+          "rate": 4.9,
+          "cardTag": "New",
+          "cardTagValue": "Arrival",
+          "bannerButtonText": "Explore Collection",
+          "bannerButtonLink": "/products"
         }
       },
       {
         "id": "collection_products",
-        "type": "collection-products-1",
+        "type": "collection-products-2",
         "enabled": true,
         "settings": {
           "columns": 4,
@@ -45,6 +50,7 @@
       "description": "Discover our curated collection of women's fashion featuring elegant dresses, stylish tops, premium accessories, and more. Shop the latest trends and timeless classics.",
       "image": "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&q=80",
       "banner_url": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1200&q=80",
+      "imgTag": "Trending",
       "product_count": 112,
       "is_active": true,
       "serial": 1,

@@ -27,6 +27,8 @@ interface CollectionBanner1Props {
     showProductCount?: boolean;
     textPosition?: "left" | "center" | "right";
     overlayOpacity?: number;
+    bannerButtonText?: string;
+    bannerButtonLink?: string;
   };
 }
 
@@ -40,6 +42,8 @@ const CollectionBanner1: React.FC<CollectionBanner1Props> = ({
     showProductCount = true,
     textPosition = "center",
     overlayOpacity = 0.4,
+    bannerButtonText = "Explore Collection",
+    bannerButtonLink = "/products",
   } = settings;
 
   const bannerImage = collection.banner_url || collection.image;
@@ -51,7 +55,7 @@ const CollectionBanner1: React.FC<CollectionBanner1Props> = ({
   }[textPosition];
 
   return (
-    <section className="relative h-[85vh] min-h-[600px] overflow-hidden bg-gray-900">
+    <section className="relative h-[85vh] min-h-[750px] overflow-hidden bg-gray-900">
       {/* Parallax Background Image */}
       {showBanner && bannerImage && (
         <div
@@ -63,7 +67,7 @@ const CollectionBanner1: React.FC<CollectionBanner1Props> = ({
         >
           {/* Elegant Gradient Overlay */}
           <div
-            className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black/80"
+            className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black/0"
             style={{ opacity: overlayOpacity }}
           />
           {/* Vignette Effect */}
@@ -130,12 +134,12 @@ const CollectionBanner1: React.FC<CollectionBanner1Props> = ({
             >
               {/* Explore Button */}
               <a
-                href="#products"
+                href={bannerButtonLink}
                 className="group relative inline-flex items-center overflow-hidden rounded-full bg-white text-gray-900 px-8 py-4 font-semibold shadow-2xl transition-all hover:scale-105 hover:shadow-white/25"
               >
                 <span className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 <span className="relative z-10 flex items-center group-hover:text-white transition-colors">
-                  Explore Collection
+                  {bannerButtonText}
                   <svg
                     className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform"
                     fill="none"
@@ -154,7 +158,7 @@ const CollectionBanner1: React.FC<CollectionBanner1Props> = ({
 
               {/* Product Count Badge */}
               {showProductCount && collection.product_count !== undefined && (
-                <div className="inline-flex items-center backdrop-blur-md bg-white/10 border border-white/30 rounded-full px-6 py-4 text-white">
+                <div className="inline-flex items-center backdrop-blur-md bg-black/20 border border-white/30 rounded-full px-6 py-4 text-white">
                   <svg
                     className="w-5 h-5 mr-3 opacity-80"
                     fill="none"
@@ -179,7 +183,7 @@ const CollectionBanner1: React.FC<CollectionBanner1Props> = ({
       {/* Scroll Indicator */}
       <a
         href="#products"
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center text-white/80 hover:text-white transition-colors"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center text-black hover:text-white transition-colors"
         style={{ animation: "bounce 2s infinite" }}
       >
         <span className="text-sm font-medium mb-2 tracking-wider uppercase">Scroll</span>

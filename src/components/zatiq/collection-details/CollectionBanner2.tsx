@@ -17,6 +17,7 @@ interface Collection {
   image?: string;
   banner_url?: string;
   product_count?: number;
+  imgTag?: string;
 }
 
 interface CollectionBanner2Props {
@@ -27,6 +28,11 @@ interface CollectionBanner2Props {
     showProductCount?: boolean;
     imagePosition?: "left" | "right";
     backgroundColor?: string;
+    rate?: number;
+    cardTag?: string;
+    cardTagValue?: string;
+    bannerButtonText?: string;
+    bannerButtonLink?: string;
   };
 }
 
@@ -40,21 +46,37 @@ const CollectionBanner2: React.FC<CollectionBanner2Props> = ({
     showProductCount = true,
     imagePosition = "right",
     backgroundColor = "#fafafa",
+    rate = 4.9,
+    cardTag = "New",
+    cardTagValue = "Arrival",
+    bannerButtonText = "Explore Collection",
+    bannerButtonLink = "/products",
   } = settings;
 
   const bannerImage = collection.banner_url || collection.image;
 
   return (
-    <section className="relative py-16 md:py-24 overflow-hidden" style={{ backgroundColor }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
+    <section
+      className="relative pb-12 md:pb-14 overflow-hidden"
+      style={{ backgroundColor }}
+    >
+      <div className="max-w-[1440px] mx-auto px-4 2xl:px-0">
         {/* Asymmetric Grid Layout - 60/40 split */}
-        <div className={`grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center ${imagePosition === "left" ? "lg:flex-row-reverse" : ""}`}>
-
+        <div
+          className={`grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center ${
+            imagePosition === "left" ? "lg:flex-row-reverse" : ""
+          }`}
+        >
           {/* Content Side - 60% width */}
-          <div className={`lg:col-span-7 ${imagePosition === "left" ? "lg:col-start-6" : ""}`}>
-            <div className="relative z-10" style={{ animation: "fadeInLeft 1s ease-out" }}>
-
+          <div
+            className={`lg:col-span-7 ${
+              imagePosition === "left" ? "lg:col-start-6" : ""
+            }`}
+          >
+            <div
+              className="relative z-10"
+              style={{ animation: "fadeInLeft 1s ease-out" }}
+            >
               {/* Vertical Label Accent */}
               {collection.subtitle && (
                 <div className="flex items-center mb-6">
@@ -111,8 +133,12 @@ const CollectionBanner2: React.FC<CollectionBanner2Props> = ({
                         </svg>
                       </div>
                       <div>
-                        <p className="text-2xl font-bold text-gray-900">{collection.product_count}</p>
-                        <p className="text-xs text-gray-600 font-medium">Products</p>
+                        <p className="text-2xl font-bold text-gray-900">
+                          {collection.product_count}
+                        </p>
+                        <p className="text-xs text-gray-600 font-medium">
+                          Products
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -136,8 +162,12 @@ const CollectionBanner2: React.FC<CollectionBanner2Props> = ({
                       </svg>
                     </div>
                     <div>
-                      <p className="text-2xl font-bold text-gray-900">New</p>
-                      <p className="text-xs text-gray-600 font-medium">Arrivals</p>
+                      <p className="text-2xl font-bold text-gray-900">
+                        {cardTag}
+                      </p>
+                      <p className="text-xs text-gray-600 font-medium">
+                        {cardTagValue}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -154,7 +184,7 @@ const CollectionBanner2: React.FC<CollectionBanner2Props> = ({
                       </svg>
                     </div>
                     <div>
-                      <p className="text-2xl font-bold text-gray-900">4.9</p>
+                      <p className="text-2xl font-bold text-gray-900">{rate}</p>
                       <p className="text-xs text-gray-600 font-medium">Rated</p>
                     </div>
                   </div>
@@ -163,11 +193,11 @@ const CollectionBanner2: React.FC<CollectionBanner2Props> = ({
 
               {/* CTA Button */}
               <a
-                href="#products"
+                href={bannerButtonLink}
                 className="group inline-flex items-center gap-3 bg-gray-900 text-white px-8 py-4 rounded-full font-semibold hover:bg-gray-800 transition-all duration-300 hover:gap-5 hover:pr-6"
                 style={{ animation: "fadeInLeft 1s ease-out 0.8s both" }}
               >
-                <span>Explore Collection</span>
+                <span>{bannerButtonText}</span>
                 <svg
                   className="w-5 h-5 transform group-hover:translate-x-1 transition-transform"
                   fill="none"
@@ -188,7 +218,9 @@ const CollectionBanner2: React.FC<CollectionBanner2Props> = ({
           {/* Image Side - 40% width with overlap */}
           {showBanner && bannerImage && (
             <div
-              className={`lg:col-span-5 ${imagePosition === "left" ? "lg:col-start-1 lg:row-start-1" : ""}`}
+              className={`lg:col-span-5 ${
+                imagePosition === "left" ? "lg:col-start-1 lg:row-start-1" : ""
+              }`}
               style={{ animation: "fadeInRight 1s ease-out 0.4s both" }}
             >
               <div className="relative">
@@ -203,9 +235,13 @@ const CollectionBanner2: React.FC<CollectionBanner2Props> = ({
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
                   {/* Floating Badge */}
-                  <div className="absolute top-6 right-6 backdrop-blur-md bg-white/90 rounded-full px-4 py-2 shadow-lg">
-                    <span className="text-sm font-bold text-gray-900">Trending</span>
-                  </div>
+                  {collection.imgTag && (
+                    <div className="absolute top-6 right-6 backdrop-blur-md bg-white/90 rounded-full px-4 py-2 shadow-lg">
+                      <span className="text-sm font-bold text-gray-900">
+                        {collection.imgTag}
+                      </span>
+                    </div>
+                  )}
                 </div>
 
                 {/* Decorative Elements */}
@@ -215,12 +251,6 @@ const CollectionBanner2: React.FC<CollectionBanner2Props> = ({
             </div>
           )}
         </div>
-      </div>
-
-      {/* Background Decorative Pattern */}
-      <div className="absolute top-0 right-0 w-1/2 h-full opacity-5 pointer-events-none">
-        <div className="absolute top-20 right-20 w-64 h-64 border-2 border-gray-900 rounded-full"></div>
-        <div className="absolute top-40 right-40 w-32 h-32 border border-gray-900 rounded-full"></div>
       </div>
 
       {/* Animations */}
