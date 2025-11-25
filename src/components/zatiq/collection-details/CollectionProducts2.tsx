@@ -47,15 +47,13 @@ const CollectionProducts2: React.FC<CollectionProducts2Props> = ({
   settings = {},
 }) => {
   const { backgroundColor = "#fafafa", cardStyle = "product-card-1" } = settings;
-  const [showFilters, setShowFilters] = useState(false);
 
   // Calculate stats
-  const inStockCount = products.filter((p) => p.quantity > 0).length;
   const onSaleCount = products.filter((p) => p.old_price && p.old_price > p.price).length;
 
   return (
     <section className="py-16 md:py-20" style={{ backgroundColor }} id="products">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[1440px] mx-auto px-4 2xl:px-0">
 
         {/* Modern Sticky Header Bar */}
         <div className="mb-12">
@@ -66,9 +64,8 @@ const CollectionProducts2: React.FC<CollectionProducts2Props> = ({
                 {collection?.title || "Products"}
               </h2>
               <div className="flex items-center gap-4 text-sm">
-                <span className="text-gray-600">{products.length} Products</span>
                 <span className="w-1 h-1 rounded-full bg-gray-400"></span>
-                <span className="text-emerald-600 font-medium">{inStockCount} In Stock</span>
+                <span className="text-emerald-600 font-medium">{products.length} Products</span>
                 {onSaleCount > 0 && (
                   <>
                     <span className="w-1 h-1 rounded-full bg-gray-400"></span>
@@ -77,129 +74,6 @@ const CollectionProducts2: React.FC<CollectionProducts2Props> = ({
                 )}
               </div>
             </div>
-
-            {/* Filter Toggle Button */}
-            <button
-              onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-white border-2 border-gray-200 hover:border-gray-900 transition-colors font-medium"
-            >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
-                />
-              </svg>
-              <span>Filters</span>
-              {showFilters && (
-                <span className="w-2 h-2 rounded-full bg-indigo-600"></span>
-              )}
-            </button>
-          </div>
-
-          {/* Expandable Filter Bar */}
-          {showFilters && (
-            <div
-              className="bg-white rounded-xl border border-gray-200 p-6 mb-6"
-              style={{ animation: "slideDown 0.3s ease-out" }}
-            >
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {/* Availability Filter */}
-                <div>
-                  <label className="block text-sm font-semibold text-gray-900 mb-3">
-                    Availability
-                  </label>
-                  <div className="space-y-2">
-                    <label className="flex items-center gap-3 cursor-pointer group">
-                      <input
-                        type="checkbox"
-                        className="w-5 h-5 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                      />
-                      <span className="text-gray-700 group-hover:text-gray-900">
-                        In Stock ({inStockCount})
-                      </span>
-                    </label>
-                    <label className="flex items-center gap-3 cursor-pointer group">
-                      <input
-                        type="checkbox"
-                        className="w-5 h-5 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                      />
-                      <span className="text-gray-700 group-hover:text-gray-900">
-                        On Sale ({onSaleCount})
-                      </span>
-                    </label>
-                  </div>
-                </div>
-
-                {/* Price Range */}
-                <div>
-                  <label className="block text-sm font-semibold text-gray-900 mb-3">
-                    Price Range
-                  </label>
-                  <div className="flex items-center gap-3">
-                    <input
-                      type="number"
-                      placeholder="Min"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    />
-                    <span className="text-gray-400">—</span>
-                    <input
-                      type="number"
-                      placeholder="Max"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    />
-                  </div>
-                </div>
-
-                {/* Sort By */}
-                <div>
-                  <label className="block text-sm font-semibold text-gray-900 mb-3">
-                    Sort By
-                  </label>
-                  <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white">
-                    <option>Featured</option>
-                    <option>Price: Low to High</option>
-                    <option>Price: High to Low</option>
-                    <option>Newest</option>
-                    <option>Best Selling</option>
-                  </select>
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex items-center gap-3 mt-6 pt-6 border-t border-gray-200">
-                <button className="px-6 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-medium">
-                  Apply Filters
-                </button>
-                <button className="px-6 py-2 text-gray-700 hover:text-gray-900 transition-colors font-medium">
-                  Clear All
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* Quick Filter Chips */}
-          <div className="flex flex-wrap gap-2">
-            <button className="px-4 py-2 rounded-full bg-white border-2 border-gray-200 hover:border-indigo-600 hover:text-indigo-600 transition-all text-sm font-medium">
-              All Products
-            </button>
-            <button className="px-4 py-2 rounded-full bg-white border-2 border-gray-200 hover:border-emerald-600 hover:text-emerald-600 transition-all text-sm font-medium">
-              In Stock
-            </button>
-            {onSaleCount > 0 && (
-              <button className="px-4 py-2 rounded-full bg-rose-50 border-2 border-rose-200 text-rose-600 hover:bg-rose-100 transition-all text-sm font-medium">
-                🔥 On Sale
-              </button>
-            )}
-            <button className="px-4 py-2 rounded-full bg-white border-2 border-gray-200 hover:border-amber-600 hover:text-amber-600 transition-all text-sm font-medium">
-              ⭐ 4+ Stars
-            </button>
           </div>
         </div>
 
@@ -251,10 +125,10 @@ const CollectionProducts2: React.FC<CollectionProducts2Props> = ({
               Try adjusting your filters or check back later for new arrivals
             </p>
             <button
-              onClick={() => setShowFilters(false)}
+              onClick={() => window.location.href = "/collections"}
               className="text-indigo-600 hover:text-indigo-700 font-semibold"
             >
-              Clear all filters
+              Go back to Collections
             </button>
           </div>
         )}

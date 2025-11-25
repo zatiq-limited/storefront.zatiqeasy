@@ -32,7 +32,7 @@
       },
       {
         "id": "collection_products",
-        "type": "collection-products-2",
+        "type": "collection-products-1",
         "enabled": true,
         "settings": {
           "columns": 4,
