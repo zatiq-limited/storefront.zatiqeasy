@@ -12,51 +12,71 @@ interface PaymentIcon {
   alt: string;
 }
 
-interface ContactBlock {
-  id: string;
-  type: 'contact';
-  settings: {
-    title: string;
-    whatsapp?: string;
-    mobile?: string;
-    email?: string;
-  };
+interface MenuColumn {
+  title: string;
+  links: Link[];
 }
 
-interface MenuColumnBlock {
-  id: string;
-  type: 'menu_column';
-  settings: {
-    title: string;
-    links: Link[];
-  };
+interface ContactInfo {
+  title: string;
+  whatsapp?: string;
+  mobile?: string;
+  email?: string;
 }
 
-type FooterBlock = ContactBlock | MenuColumnBlock;
-
-interface Footers2Props {
+interface Footers2Settings {
+  backgroundColor?: string;
+  textColor?: string;
+  bottomBarColor?: string;
   logo?: string;
   description?: string;
   copyrightText?: string;
+  showSocial?: boolean;
+  facebookUrl?: string;
+  instagramUrl?: string;
+  twitterUrl?: string;
+  linkedinUrl?: string;
+}
+
+interface Footers2Props {
+  settings?: Footers2Settings;
+  blocks?: MenuColumn[];
+  contact?: ContactInfo;
   paymentIcons?: PaymentIcon[];
-  blocks?: FooterBlock[];
 }
 
 const Footers2: React.FC<Footers2Props> = ({
-  logo,
-  description,
-  copyrightText,
+  settings = {},
+  blocks = [],
+  contact,
   paymentIcons = [],
-  blocks = []
 }) => {
-  // Separate contact block from menu columns
-  const contactBlock = blocks.find((block): block is ContactBlock => block.type === 'contact');
-  const menuColumns = blocks.filter((block): block is MenuColumnBlock => block.type === 'menu_column');
+  const {
+    backgroundColor = '#F9FAFB',
+    textColor = '#000000',
+    bottomBarColor = '#1F2937',
+    logo = '/src/assets/image/nav/nav1.png',
+    description = 'Digital Haven is a top-notch store offering a wide range of digital products at unbeatable prices from renowned global brands. Dive in now to discover fresh designs and take advantage of fantastic deals and discounts.',
+    copyrightText = 'All rights reserved for Zatiq Ltd © 2025',
+    showSocial = true,
+    facebookUrl = '#',
+    instagramUrl = '#',
+    twitterUrl = '#',
+    linkedinUrl = '#',
+  } = settings;
+
+  const menuColumns = blocks;
+  const contactInfo = contact || {
+    title: 'Contact us',
+    whatsapp: '009612345678932',
+    mobile: '009612345678932',
+    email: 'support@zatiq.com',
+  };
 
   return (
-    <footer className="w-full bg-white overflow-hidden font-sans">
+    <footer className="w-full overflow-hidden font-sans" style={{ backgroundColor }}>
       {/* Main Footer Content */}
-      <div className="w-full bg-gray-50 py-8 md:py-12">
+      <div className="w-full py-8 md:py-12" style={{ backgroundColor, color: textColor }}>
         <div className="max-w-[1440px] mx-auto px-4">
           {/* Logo and Description - Full width on mobile/tablet */}
           <div className="mb-8 lg:hidden">
@@ -89,33 +109,33 @@ const Footers2: React.FC<Footers2Props> = ({
             </div>
 
             {/* Contact Us - First on mobile */}
-            {contactBlock && (
+            {contactInfo && (
               <div className="order-1 lg:order-4">
                 <h3 className="text-xs md:text-sm lg:text-base font-semibold text-gray-900 mb-3 md:mb-4">
-                  {contactBlock.settings.title}
+                  {contactInfo.title}
                 </h3>
                 <ul className="space-y-2 md:space-y-3">
-                  {contactBlock.settings.whatsapp && (
+                  {contactInfo.whatsapp && (
                     <li>
                       <div className="text-xs md:text-sm text-gray-600">
                         <p className="font-medium text-gray-900">WhatsApp</p>
-                        <p className="wrap-break-word">{contactBlock.settings.whatsapp}</p>
+                        <p className="wrap-break-word">{contactInfo.whatsapp}</p>
                       </div>
                     </li>
                   )}
-                  {contactBlock.settings.mobile && (
+                  {contactInfo.mobile && (
                     <li>
                       <div className="text-xs md:text-sm text-gray-600">
                         <p className="font-medium text-gray-900">Mobile</p>
-                        <p className="wrap-break-word">{contactBlock.settings.mobile}</p>
+                        <p className="wrap-break-word">{contactInfo.mobile}</p>
                       </div>
                     </li>
                   )}
-                  {contactBlock.settings.email && (
+                  {contactInfo.email && (
                     <li>
                       <div className="text-xs md:text-sm text-gray-600">
                         <p className="font-medium text-gray-900">Email</p>
-                        <p className="wrap-break-word">{contactBlock.settings.email}</p>
+                        <p className="wrap-break-word">{contactInfo.email}</p>
                       </div>
                     </li>
                   )}
@@ -125,12 +145,12 @@ const Footers2: React.FC<Footers2Props> = ({
 
             {/* Menu Columns from blocks */}
             {menuColumns.map((column, index) => (
-              <div key={column.id} className={`order-${index + 2} lg:order-${index + 2}`}>
+              <div key={index} className={`order-${index + 2} lg:order-${index + 2}`}>
                 <h3 className="text-xs md:text-sm lg:text-base font-semibold text-gray-900 mb-3 md:mb-4">
-                  {column.settings.title}
+                  {column.title}
                 </h3>
                 <ul className="space-y-2 md:space-y-3">
-                  {column.settings.links.map((link, idx) => (
+                  {column.links.map((link, idx) => (
                     <li key={idx}>
                       <a href={link.url} className="text-xs md:text-sm text-gray-600 hover:text-gray-900">
                         {link.text}
@@ -142,52 +162,72 @@ const Footers2: React.FC<Footers2Props> = ({
             ))}
 
             {/* Follow us on - Desktop Only (5th column) */}
-            <div className="hidden lg:block lg:order-5 lg:col-span-1">
-              <h4 className="text-base font-semibold text-gray-900 mb-4">
-                Follow us on
-              </h4>
-              <div className="flex gap-3">
-                <a href="#" className="text-gray-600 hover:text-gray-900">
-                  <Facebook className="w-5 h-5" />
-                </a>
-                <a href="#" className="text-gray-600 hover:text-gray-900">
-                  <Instagram className="w-5 h-5" />
-                </a>
-                <a href="#" className="text-gray-600 hover:text-gray-900">
-                  <Twitter className="w-5 h-5" />
-                </a>
-                <a href="#" className="text-gray-600 hover:text-gray-900">
-                  <Linkedin className="w-5 h-5" />
-                </a>
+            {showSocial && (
+              <div className="hidden lg:block lg:order-5 lg:col-span-1">
+                <h4 className="text-base font-semibold text-gray-900 mb-4">
+                  Follow us on
+                </h4>
+                <div className="flex gap-3">
+                  {facebookUrl && (
+                    <a href={facebookUrl} className="text-gray-600 hover:text-gray-900">
+                      <Facebook className="w-5 h-5" />
+                    </a>
+                  )}
+                  {instagramUrl && (
+                    <a href={instagramUrl} className="text-gray-600 hover:text-gray-900">
+                      <Instagram className="w-5 h-5" />
+                    </a>
+                  )}
+                  {twitterUrl && (
+                    <a href={twitterUrl} className="text-gray-600 hover:text-gray-900">
+                      <Twitter className="w-5 h-5" />
+                    </a>
+                  )}
+                  {linkedinUrl && (
+                    <a href={linkedinUrl} className="text-gray-600 hover:text-gray-900">
+                      <Linkedin className="w-5 h-5" />
+                    </a>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           {/* Follow us on - Mobile/Tablet Only */}
-          <div className="mt-8 pt-6 border-t border-gray-200 lg:hidden">
-            <h4 className="text-sm md:text-base font-semibold text-gray-900 mb-4">
-              Follow us on
-            </h4>
-            <div className="flex gap-4">
-              <a href="#" className="text-gray-600 hover:text-gray-900">
-                <Facebook className="w-5 h-5" />
-              </a>
-              <a href="#" className="text-gray-600 hover:text-gray-900">
-                <Instagram className="w-5 h-5" />
-              </a>
-              <a href="#" className="text-gray-600 hover:text-gray-900">
-                <Twitter className="w-5 h-5" />
-              </a>
-              <a href="#" className="text-gray-600 hover:text-gray-900">
-                <Linkedin className="w-5 h-5" />
-              </a>
+          {showSocial && (
+            <div className="mt-8 pt-6 border-t border-gray-200 lg:hidden">
+              <h4 className="text-sm md:text-base font-semibold text-gray-900 mb-4">
+                Follow us on
+              </h4>
+              <div className="flex gap-4">
+                {facebookUrl && (
+                  <a href={facebookUrl} className="text-gray-600 hover:text-gray-900">
+                    <Facebook className="w-5 h-5" />
+                  </a>
+                )}
+                {instagramUrl && (
+                  <a href={instagramUrl} className="text-gray-600 hover:text-gray-900">
+                    <Instagram className="w-5 h-5" />
+                  </a>
+                )}
+                {twitterUrl && (
+                  <a href={twitterUrl} className="text-gray-600 hover:text-gray-900">
+                    <Twitter className="w-5 h-5" />
+                  </a>
+                )}
+                {linkedinUrl && (
+                  <a href={linkedinUrl} className="text-gray-600 hover:text-gray-900">
+                    <Linkedin className="w-5 h-5" />
+                  </a>
+                )}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
 
       {/* Bottom Footer - Dark Section */}
-      <div className="w-full bg-gray-800 py-4">
+      <div className="w-full py-4" style={{ backgroundColor: bottomBarColor }}>
         <div className="max-w-[1440px] mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
           {/* Copyright */}
           <p className="text-white text-sm">
@@ -195,16 +235,18 @@ const Footers2: React.FC<Footers2Props> = ({
           </p>
 
           {/* Payment Methods */}
-          <div className="flex items-center gap-3">
-            {paymentIcons.map((icon, index) => (
-              <img
-                key={index}
-                src={icon.src}
-                alt={icon.alt}
-                className="h-8 object-contain"
-              />
-            ))}
-          </div>
+          {paymentIcons.length > 0 && (
+            <div className="flex items-center gap-3">
+              {paymentIcons.map((icon, index) => (
+                <img
+                  key={index}
+                  src={icon.src}
+                  alt={icon.alt}
+                  className="h-8 object-contain"
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </footer>
