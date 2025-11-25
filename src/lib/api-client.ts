@@ -299,6 +299,23 @@ export async function getFeaturedProducts(
 }
 
 /**
+ * Get collections page data (sections + collections)
+ *
+ * Backend API: GET /api/storefront/v1/page/collections
+ * Response: { success: true, data: { template, sections, collections, seo } }
+ */
+export async function getCollectionsPageData(): Promise<any> {
+  try {
+    const response = await apiCall<any>(`/api/storefront/v1/page/collections`);
+    console.log("[API] ✅ Collections page data loaded from API");
+    return response;
+  } catch (error) {
+    console.error("[API] ❌ Collections page API failed");
+    return null;
+  }
+}
+
+/**
  * Get collections
  *
  * Backend API: GET /api/storefront/v1/collections

@@ -29,6 +29,7 @@ const db = {
   category: loadJSON("category.json"),
   productsPage: loadJSON("products-page.json"),
   productDetailsPage: loadJSON("product-details-page.json"),
+  collectionsPage: loadJSON("collections-page.json"),
 };
 
 // Custom API routes
@@ -66,6 +67,24 @@ app.get("/api/storefront/v1/page/products", (req, res) => {
         search: search || null,
         sort: sort || "featured",
       },
+    },
+  };
+
+  res.json(response);
+});
+
+// Collections page endpoint (sections + collections combined)
+app.get("/api/storefront/v1/page/collections", (req, res) => {
+  // Combine page sections with category data (collections)
+  const collectionsPageData = db.collectionsPage;
+  const categoryData = db.category;
+
+  // Merge collections into the response
+  const response = {
+    success: true,
+    data: {
+      ...collectionsPageData.data,
+      collections: categoryData.data.categories, // Using category data as collections
     },
   };
 
@@ -114,6 +133,7 @@ app.get("/products", (req, res) => res.json(db.products));
 app.get("/product", (req, res) => res.json(db.product));
 app.get("/category", (req, res) => res.json(db.category));
 app.get("/products-page", (req, res) => res.json(db.productsPage));
+app.get("/collections-page", (req, res) => res.json(db.collectionsPage));
 
 // Start server
 app.listen(PORT, () => {
@@ -135,6 +155,8 @@ app.listen(PORT, () => {
     `   GET  http://localhost:${PORT}/api/storefront/v1/collections/:handle          - Single collection detail`
   );
   console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/cart`);
+  console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/page/products           - Products page sections`);
+  console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/page/collections        - Collections page sections`);
   console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/page/product-details    - Product details page sections`);
   console.log(`\n✨ Press Ctrl+C to stop\n`);
 });

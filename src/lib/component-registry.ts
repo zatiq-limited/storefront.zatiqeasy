@@ -93,6 +93,14 @@ import CustomerReviews2 from "@/components/zatiq/product-details-page/CustomerRe
 import RelatedProducts1 from "@/components/zatiq/product-details-page/RelatedProducts1";
 import RelatedProducts2 from "@/components/zatiq/product-details-page/RelatedProducts2";
 
+// Collections Page Components
+import {
+  CollectionsHero1,
+  CollectionsHero2,
+  CollectionsGrid1,
+  CollectionsGrid2,
+} from "@/components/zatiq/collections";
+
 
 /**
  * Component Registry
@@ -207,6 +215,12 @@ export const ZATIQ_COMPONENTS: Record<string, ComponentType<any>> = {
   "customer-reviews-2": CustomerReviews2,
   "related-products-1": RelatedProducts1,
   "related-products-2": RelatedProducts2,
+
+  // Collections Page Components
+  "collections-hero-1": CollectionsHero1,
+  "collections-hero-2": CollectionsHero2,
+  "collections-grid-1": CollectionsGrid1,
+  "collections-grid-2": CollectionsGrid2,
 };
 
 /**
