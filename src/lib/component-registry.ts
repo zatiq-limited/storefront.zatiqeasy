@@ -101,6 +101,16 @@ import {
   CollectionsGrid2,
 } from "@/components/zatiq/collections";
 
+// Collection Details Page Components
+import {
+  CollectionBreadcrumb1,
+  CollectionBreadcrumb2,
+  CollectionBanner1,
+  CollectionBanner2,
+  CollectionProducts1,
+  CollectionProducts2,
+} from "@/components/zatiq/collection-details";
+
 
 /**
  * Component Registry
@@ -221,6 +231,14 @@ export const ZATIQ_COMPONENTS: Record<string, ComponentType<any>> = {
   "collections-hero-2": CollectionsHero2,
   "collections-grid-1": CollectionsGrid1,
   "collections-grid-2": CollectionsGrid2,
+
+  // Collection Details Page Components
+  "collection-breadcrumb-1": CollectionBreadcrumb1,
+  "collection-breadcrumb-2": CollectionBreadcrumb2,
+  "collection-banner-1": CollectionBanner1,
+  "collection-banner-2": CollectionBanner2,
+  "collection-products-1": CollectionProducts1,
+  "collection-products-2": CollectionProducts2,
 };
 
 /**

@@ -30,6 +30,7 @@ const db = {
   productsPage: loadJSON("products-page.json"),
   productDetailsPage: loadJSON("product-details-page.json"),
   collectionsPage: loadJSON("collections-page.json"),
+  collectionDetailsPage: loadJSON("collection-details-page.json"),
 };
 
 // Custom API routes
@@ -114,7 +115,7 @@ app.get("/api/storefront/v1/collections", (req, res) => {
 app.get("/api/storefront/v1/collections/:handle", (req, res) => {
   const { handle } = req.params;
   // Return single collection with products (in real backend, this would find by handle)
-  res.json(db.category);
+  res.json(db.collectionDetailsPage);
 });
 
 app.get("/api/storefront/v1/cart", (req, res) => {

@@ -356,6 +356,27 @@ export async function getCollection(
 }
 
 /**
+ * Get single collection with products
+ *
+ * Backend API: GET /api/storefront/v1/collections/:handle
+ * Response: { success: true, data: { collection: Collection, products: Product[] } }
+ */
+export async function getCollectionWithProducts(
+  handle: string
+): Promise<{ collection: Collection; products: Product[] } | null> {
+  try {
+    const data = await apiCall<{ collection: Collection; products: Product[] }>(
+      `/api/storefront/v1/collections/${handle}`
+    );
+    console.log(`[API] ✅ Collection with products loaded: ${handle}`);
+    return data;
+  } catch (error) {
+    console.error(`[API] ❌ Collection API failed: ${handle}`);
+    return null;
+  }
+}
+
+/**
  * Search products
  *
  * Backend API: GET /api/storefront/v1/search?q=:query
