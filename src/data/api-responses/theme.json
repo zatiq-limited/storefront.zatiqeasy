@@ -1,190 +1,210 @@
 {
   "success": true,
   "data": {
-    "id": "theme_zatiq_modern_v3",
+    "id": "theme_custom_1764072035611",
+    "globalSettings": {
+      "typography": {
+        "fontFamily": "Inter",
+        "headingFontFamily": "Inter"
+      },
+      "colors": {
+        "primary": "#3B82F6",
+        "secondary": "#3bde3d"
+      }
+    },
     "globalSections": {
       "announcement": {
         "enabled": true,
-        "type": "announcement-bar-3",
+        "type": "announcement-bar-1",
         "settings": {
-          "backgroundColor": "#6D0AB6",
-          "textColor": "#FFFFFF",
-          "links": [
-            {
-              "text": "Get in Touch",
-              "url": "/pages/contact"
-            },
-            {
-              "text": "Refund and Exchange Guidelines",
-              "url": "/pages/refund-policy"
-            }
-          ],
-          "email": "support@zatiq.com",
-          "phone": "+1-202-555-0173",
-          "dismissible": true,
-          "sticky": false
+          "message": "For a limited time, enjoy a 20% discount on all our products!",
+          "icon_left": "🔥",
+          "icon_right": "🔥",
+          "gradient_start": "#50D1F6",
+          "gradient_end": "#B198FD",
+          "text_color": "#000000",
+          "font_weight": "bold",
+          "text_size": "sm",
+          "fontFamily": "inherit"
         }
       },
       "header": {
         "enabled": true,
         "type": "navbar-1",
         "settings": {
-          "logo": "https://cdn.zatiq.com/shop/demo/logo.svg",
-          "logoWidth": 150,
-          "searchPlaceholder": "Search products...",
-          "showSearch": true,
-          "showAccount": true,
-          "showWishlist": true,
-          "showCart": true,
-          "cartStyle": "drawer",
+          "logo": "https://i.ibb.co.com/4ww2cHtc/Pasted-image.png",
+          "show_search": true,
+          "show_cart": true,
+          "show_dark_mode": true,
+          "background_color": "#FFFFFF",
+          "text_color": "#000000",
           "sticky": true,
-          "transparentOnHome": false,
-          "backgroundColor": "#FFFFFF",
-          "textColor": "#111827"
+          "fontFamily": "inherit",
+          "menu_items": [
+            {
+              "label": "Handbags",
+              "url": "#"
+            },
+            {
+              "label": "Watches",
+              "url": "#"
+            },
+            {
+              "label": "Skincare",
+              "url": "#"
+            },
+            {
+              "label": "Jewellery",
+              "url": "#"
+            },
+            {
+              "label": "Apparels",
+              "url": "#"
+            }
+          ]
         },
-        "blocks": [
-          {
-            "id": "menu_women",
-            "type": "menu_item",
-            "settings": {
-              "title": "Women",
-              "url": "/collections/womens",
-              "megaMenu": true,
-              "columns": [
-                {
-                  "title": "Categories",
-                  "links": [
-                    {
-                      "text": "New Arrivals",
-                      "url": "/collections/womens-new"
-                    },
-                    {
-                      "text": "Dresses",
-                      "url": "/collections/womens-dresses"
-                    },
-                    {
-                      "text": "Tops & Blouses",
-                      "url": "/collections/womens-tops"
-                    },
-                    {
-                      "text": "Pants & Skirts",
-                      "url": "/collections/womens-bottoms"
-                    },
-                    {
-                      "text": "Outerwear",
-                      "url": "/collections/womens-outerwear"
-                    }
-                  ]
-                },
-                {
-                  "title": "Featured",
-                  "links": [
-                    {
-                      "text": "Best Sellers",
-                      "url": "/collections/womens-bestsellers"
-                    },
-                    {
-                      "text": "Sale Items",
-                      "url": "/collections/womens-sale"
-                    },
-                    {
-                      "text": "Gift Ideas",
-                      "url": "/collections/gifts-for-her"
-                    }
-                  ]
-                }
-              ],
-              "featuredImage": "https://cdn.zatiq.com/menus/women-featured.jpg"
-            }
-          },
-          {
-            "id": "menu_men",
-            "type": "menu_item",
-            "settings": {
-              "title": "Men",
-              "url": "/collections/mens",
-              "megaMenu": false
-            }
-          },
-          {
-            "id": "menu_sale",
-            "type": "menu_item",
-            "settings": {
-              "title": "Sale",
-              "url": "/collections/sale",
-              "highlight": true,
-              "highlightColor": "#ef4444"
-            }
-          }
-        ]
+        "blocks": []
+      },
+      "announcementAfterHeader": {
+        "enabled": true,
+        "type": "announcement-bar-2",
+        "settings": {
+          "phone": "(225) 555-0118",
+          "message": "Follow Us and get a chance to win 80% off",
+          "background_color": "#23856D",
+          "text_color": "#FFFFFF",
+          "show_phone": true,
+          "show_social": true,
+          "show_instagram": true,
+          "show_youtube": true,
+          "show_facebook": true,
+          "show_twitter": true,
+          "instagram_url": "#",
+          "youtube_url": "#",
+          "facebook_url": "#",
+          "twitter_url": "#",
+          "fontFamily": "inherit"
+        }
       },
       "footer": {
         "enabled": true,
         "type": "footer-2",
         "settings": {
-          "logo": "/src/assets/image/nav/nav1.png",
+          "backgroundColor": "#F9FAFB",
+          "textColor": "#000000",
+          "bottomBarColor": "#1F2937",
+          "logo": "https://i.ibb.co.com/4ww2cHtc/Pasted-image.png",
           "description": "Digital Haven is a top-notch store offering a wide range of digital products at unbeatable prices from renowned global brands. Dive in now to discover fresh designs and take advantage of fantastic deals and discounts.",
           "copyrightText": "All rights reserved for Zatiq Ltd © 2025",
-          "socialLinks": {
-            "facebook": "https://facebook.com/zatiq",
-            "instagram": "https://instagram.com/zatiq",
-            "twitter": "https://twitter.com/zatiq",
-            "youtube": "https://youtube.com/zatiq",
-            "linkedin": "https://linkedin.com/company/zatiq"
-          },
-          "paymentIcons": [
-            { "src": "/src/assets/image/payment/bkash.png", "alt": "bKash" },
-            { "src": "/src/assets/image/payment/paypal.png", "alt": "PayPal" },
-            { "src": "/src/assets/image/payment/master.png", "alt": "Mastercard" },
-            { "src": "/src/assets/image/payment/visa.png", "alt": "Visa" }
-          ]
+          "fontFamily": "inherit",
+          "contactTitle": "Contact us",
+          "whatsapp": "009612345678932",
+          "mobile": "009612345678932",
+          "email": "support@zatiq.com",
+          "showSocial": true,
+          "facebookUrl": "#",
+          "instagramUrl": "#",
+          "twitterUrl": "#",
+          "linkedinUrl": "#",
+          "column1Title": "My Account",
+          "column1Link1Text": "My Orders",
+          "column1Link1Url": "/orders",
+          "column1Link2Text": "Shopping Cart",
+          "column1Link2Url": "/cart",
+          "column1Link3Text": "Favorites",
+          "column1Link3Url": "/favorites",
+          "column2Title": "Important Links",
+          "column2Link1Text": "About Us",
+          "column2Link1Url": "/about",
+          "column2Link2Text": "Privacy Policy",
+          "column2Link2Url": "/privacy",
+          "column2Link3Text": "Terms and Conditions",
+          "column2Link3Url": "/terms",
+          "column2Link4Text": "Technical Support",
+          "column2Link4Url": "/support",
+          "showPaymentIcons": true,
+          "payment1Image": "https://i.ibb.co.com/5W4mDXzk/bkash.png",
+          "payment1Alt": "bKash",
+          "payment2Image": "https://i.ibb.co.com/tPDYMFvk/nagad.png",
+          "payment2Alt": "Nagad",
+          "payment3Image": "https://i.ibb.co.com/psTzX4Q/master.png",
+          "payment3Alt": "Mastercard",
+          "payment4Image": "https://i.ibb.co.com/pBD3qRgZ/visa.png",
+          "payment4Alt": "Visa"
         },
         "blocks": [
           {
-            "id": "footer_contact",
-            "type": "contact",
-            "settings": {
-              "title": "Contact us",
-              "whatsapp": "009612345678932",
-              "mobile": "009612345678932",
-              "email": "support@zatiq.com"
-            }
+            "title": "My Account",
+            "links": [
+              {
+                "text": "My Orders",
+                "url": "/orders"
+              },
+              {
+                "text": "Shopping Cart",
+                "url": "/cart"
+              },
+              {
+                "text": "Favorites",
+                "url": "/favorites"
+              }
+            ]
           },
           {
-            "id": "footer_account",
-            "type": "menu_column",
-            "settings": {
-              "title": "My Account",
-              "links": [
-                { "text": "My Orders", "url": "#" },
-                { "text": "Shopping Cart", "url": "#" },
-                { "text": "Favorites", "url": "#" }
-              ]
-            }
+            "title": "Important Links",
+            "links": [
+              {
+                "text": "About Us",
+                "url": "/about"
+              },
+              {
+                "text": "Privacy Policy",
+                "url": "/privacy"
+              },
+              {
+                "text": "Terms and Conditions",
+                "url": "/terms"
+              },
+              {
+                "text": "Technical Support",
+                "url": "/support"
+              }
+            ]
+          }
+        ],
+        "contact": {
+          "title": "Contact us",
+          "whatsapp": "009612345678932",
+          "mobile": "009612345678932",
+          "email": "support@zatiq.com"
+        },
+        "paymentIcons": [
+          {
+            "src": "https://i.ibb.co.com/5W4mDXzk/bkash.png",
+            "alt": "bKash"
           },
           {
-            "id": "footer_links",
-            "type": "menu_column",
-            "settings": {
-              "title": "Important Links",
-              "links": [
-                { "text": "About Us", "url": "#" },
-                { "text": "Privacy Policy", "url": "#" },
-                { "text": "Terms and Conditions", "url": "#" },
-                { "text": "Technical Support", "url": "#" }
-              ]
-            }
+            "src": "https://i.ibb.co.com/tPDYMFvk/nagad.png",
+            "alt": "Nagad"
+          },
+          {
+            "src": "https://i.ibb.co.com/psTzX4Q/master.png",
+            "alt": "Mastercard"
+          },
+          {
+            "src": "https://i.ibb.co.com/pBD3qRgZ/visa.png",
+            "alt": "Visa"
           }
         ]
       }
     },
     "templates": {
+      "404": "not-found",
       "index": "homepage",
       "product": "product-detail",
       "collection": "collection-grid",
       "cart": "cart-drawer",
-      "search": "search-results",
-      "404": "not-found"
+      "search": "search-results"
     },
     "componentStyles": {
       "productCard": {
