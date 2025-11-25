@@ -1,0 +1,212 @@
+{
+  "success": true,
+  "data": {
+    "template": "about",
+    "sections": [
+      {
+        "id": "about_hero",
+        "type": "about-hero-1",
+        "enabled": true,
+        "settings": {
+          "backgroundColor": "#FFFFFF",
+          "textColor": "#111827",
+          "headline": "Building Tomorrow's Solutions Today",
+          "subheadline": "Our Journey",
+          "description": "From humble beginnings to becoming a leader in our industry, we've stayed true to our core values of innovation, quality, and customer satisfaction. Our team is dedicated to pushing boundaries and creating experiences that matter.",
+          "buttonText": "Learn More",
+          "buttonLink": "#story",
+          "buttonColor": "#2563EB",
+          "image": "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&h=600&fit=crop",
+          "imagePosition": "right"
+        }
+      },
+      {
+        "id": "about_story",
+        "type": "about-story-1",
+        "enabled": true,
+        "settings": {
+          "backgroundColor": "#F9FAFB",
+          "textColor": "#111827",
+          "title": "Our Story",
+          "subtitle": "The journey that defines us"
+        },
+        "blocks": [
+          {
+            "id": "story_1",
+            "type": "story_block",
+            "settings": {
+              "image": "https://images.unsplash.com/photo-1556761175-b413da4baf72?w=800&h=600&fit=crop",
+              "title": "The Beginning",
+              "description": "Started our journey with a vision to revolutionize the e-commerce experience. What began as a small startup in 2010 quickly grew into a mission-driven company focused on delivering quality products and exceptional service to customers worldwide."
+            }
+          },
+          {
+            "id": "story_2",
+            "type": "story_block",
+            "settings": {
+              "image": "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800&h=600&fit=crop",
+              "title": "Growth & Expansion",
+              "description": "Through dedication and innovation, we expanded to serve customers across multiple countries. Our product range grew significantly, and so did our team, bringing together talented individuals passionate about making a difference in the e-commerce industry."
+            }
+          },
+          {
+            "id": "story_3",
+            "type": "story_block",
+            "settings": {
+              "image": "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&h=600&fit=crop",
+              "title": "Innovation & Technology",
+              "description": "We launched our innovative platform features and mobile app, making shopping more accessible and convenient. Our commitment to cutting-edge technology ensures our customers always have the best shopping experience possible."
+            }
+          }
+        ]
+      },
+      {
+        "id": "about_values",
+        "type": "about-values-2",
+        "enabled": true,
+        "settings": {
+          "backgroundColor": "#FFFFFF",
+          "textColor": "#111827",
+          "accentColor": "#2563EB",
+          "title": "Our Core Values",
+          "subtitle": "The principles that guide everything we do"
+        },
+        "blocks": [
+          {
+            "id": "value_1",
+            "type": "value",
+            "settings": {
+              "icon": "⭐",
+              "title": "Quality First",
+              "description": "We never compromise on quality. Every product is carefully selected and tested to meet our high standards."
+            }
+          },
+          {
+            "id": "value_2",
+            "type": "value",
+            "settings": {
+              "icon": "💡",
+              "title": "Innovation",
+              "description": "We continuously innovate to provide the best shopping experience with cutting-edge technology."
+            }
+          },
+          {
+            "id": "value_3",
+            "type": "value",
+            "settings": {
+              "icon": "🤝",
+              "title": "Customer Focus",
+              "description": "Our customers are at the heart of everything we do. Their satisfaction is our success."
+            }
+          },
+          {
+            "id": "value_4",
+            "type": "value",
+            "settings": {
+              "icon": "🌍",
+              "title": "Sustainability",
+              "description": "We're committed to sustainable practices and reducing our environmental impact."
+            }
+          },
+          {
+            "id": "value_5",
+            "type": "value",
+            "settings": {
+              "icon": "🔒",
+              "title": "Integrity",
+              "description": "We operate with transparency and honesty in all our business dealings."
+            }
+          },
+          {
+            "id": "value_6",
+            "type": "value",
+            "settings": {
+              "icon": "🚀",
+              "title": "Excellence",
+              "description": "We strive for excellence in every aspect of our business, from products to service."
+            }
+          }
+        ]
+      },
+      {
+        "id": "about_team",
+        "type": "about-team-2",
+        "enabled": true,
+        "settings": {
+          "backgroundColor": "#F9FAFB",
+          "textColor": "#111827",
+          "title": "Meet Our Team",
+          "subtitle": "The talented people behind our success"
+        },
+        "blocks": [
+          {
+            "id": "team_1",
+            "type": "team_member",
+            "settings": {
+              "name": "Sarah Johnson",
+              "role": "CEO & Founder",
+              "image": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop&crop=faces",
+              "bio": "Visionary leader with 15+ years in e-commerce",
+              "social": {
+                "linkedin": "https://linkedin.com",
+                "twitter": "https://twitter.com",
+                "email": "sarah@example.com"
+              }
+            }
+          },
+          {
+            "id": "team_2",
+            "type": "team_member",
+            "settings": {
+              "name": "Michael Chen",
+              "role": "CTO",
+              "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=faces",
+              "bio": "Tech innovator driving our digital transformation",
+              "social": {
+                "linkedin": "https://linkedin.com",
+                "twitter": "https://twitter.com"
+              }
+            }
+          },
+          {
+            "id": "team_3",
+            "type": "team_member",
+            "settings": {
+              "name": "Emily Rodriguez",
+              "role": "Head of Design",
+              "image": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop&crop=faces",
+              "bio": "Creative designer crafting exceptional experiences",
+              "social": {
+                "linkedin": "https://linkedin.com",
+                "email": "emily@example.com"
+              }
+            }
+          },
+          {
+            "id": "team_4",
+            "type": "team_member",
+            "settings": {
+              "name": "David Kim",
+              "role": "Head of Marketing",
+              "image": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=faces",
+              "bio": "Marketing strategist connecting brands with customers",
+              "social": {
+                "twitter": "https://twitter.com",
+                "email": "david@example.com"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "seo": {
+      "title": "About Us - Learn Our Story",
+      "description": "Discover the story behind our brand, our values, and the passionate team that makes it all possible.",
+      "og": {
+        "title": "About Us",
+        "description": "Learn about our journey, values, and team",
+        "image": "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1200&h=630&fit=crop"
+      }
+    }
+  }
+}
