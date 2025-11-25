@@ -4,7 +4,7 @@
     "sections": [
       {
         "id": "collection_breadcrumb",
-        "type": "collection-breadcrumb-2",
+        "type": "collection-breadcrumb-1",
         "enabled": true,
         "settings": {
           "showHome": true,

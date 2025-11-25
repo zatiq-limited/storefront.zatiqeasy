@@ -39,7 +39,7 @@ const CollectionBreadcrumb1: React.FC<CollectionBreadcrumb1Props> = ({
 
   return (
     <section className="py-3 border-b border-gray-100" style={{ backgroundColor }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[1440px] mx-auto px-4 2xl:px-0">
         <div className="flex items-center justify-between">
           {/* Breadcrumb Navigation */}
           <nav className="flex items-center gap-2 text-xs sm:text-sm" aria-label="Breadcrumb">
