@@ -14,7 +14,7 @@
       },
       {
         "id": "products_layout",
-        "type": "products-layout-1",
+        "type": "products-layout-2",
         "settings": {
           "showSidebar": true,
           "sidebarPosition": "left",
@@ -37,7 +37,7 @@
           ]
         },
         "sidebar": {
-          "type": "products-sidebar-1",
+          "type": "products-sidebar-2",
           "settings": {
             "collapsible": true
           },
