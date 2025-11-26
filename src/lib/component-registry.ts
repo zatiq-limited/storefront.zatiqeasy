@@ -68,8 +68,8 @@ import { ProductCollection1, ProductCollection2 } from "@/components/zatiq/produ
 import { SocialFeed1, SocialFeed2 } from "@/components/zatiq/social-feed";
 import { CustomSections } from "@/components/zatiq/custom-sections";
 import {
-  ProductsHeader1,
-  ProductsHeader2,
+  ProductsHero1,
+  ProductsHero2,
   ProductsFilter1,
   ProductsFilter2,
   ProductsSidebar1,
@@ -217,8 +217,8 @@ export const ZATIQ_COMPONENTS: Record<string, ComponentType<any>> = {
   "custom-sections-1": CustomSections,
   "custom-sections-2": CustomSections,
   // Products Page Components
-  "products-header-1": ProductsHeader1,
-  "products-header-2": ProductsHeader2,
+  "products-hero-1": ProductsHero1,
+  "products-hero-2": ProductsHero2,
   "products-filter-1": ProductsFilter1,
   "products-filter-2": ProductsFilter2,
   "products-sidebar-1": ProductsSidebar1,
