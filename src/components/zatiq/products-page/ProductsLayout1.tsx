@@ -271,7 +271,7 @@ const ProductsLayout1: React.FC<ProductsLayout1Props> = ({
   };
 
   return (
-    <section className="pb-8 bg-gray-50">
+    <section className="pb-8">
       {/* Filter Bar - Professional Design */}
       {(showSearch || showSort) && (
         <div
