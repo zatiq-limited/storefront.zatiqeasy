@@ -4,8 +4,8 @@
     "template": "products",
     "sections": [
       {
-        "id": "products_header",
-        "type": "products-header-2",
+        "id": "products_hero",
+        "type": "products-hero-1",
         "settings": {
           "showBreadcrumb": true,
           "showProductCount": true,
@@ -13,9 +13,18 @@
         }
       },
       {
-        "id": "products_filter",
-        "type": "products-filter-2",
+        "id": "products_layout",
+        "type": "products-layout-2",
         "settings": {
+          "showSidebar": true,
+          "sidebarPosition": "left",
+          "showViewToggle": true,
+          "defaultView": "grid",
+          "columns": 4,
+          "columnsTablet": 2,
+          "columnsMobile": 2,
+          "gap": 2,
+          "cardStyle": "product-card-5",
           "showSearch": true,
           "showSort": true,
           "sticky": true,
@@ -26,24 +35,9 @@
             { "value": "newest", "label": "Newest First" },
             { "value": "rating", "label": "Top Rated" }
           ]
-        }
-      },
-      {
-        "id": "products_layout",
-        "type": "products-layout-1",
-        "settings": {
-          "showSidebar": true,
-          "sidebarPosition": "left",
-          "showViewToggle": true,
-          "defaultView": "grid",
-          "columns": 4,
-          "columnsTablet": 2,
-          "columnsMobile": 2,
-          "gap": 2,
-          "cardStyle": "product-card-5"
         },
         "sidebar": {
-          "type": "products-sidebar-1",
+          "type": "products-sidebar-2",
           "settings": {
             "collapsible": true
           },

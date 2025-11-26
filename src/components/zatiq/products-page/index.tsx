@@ -7,13 +7,9 @@
  * Each component type has 2 variants for theme customization
  */
 
-// Header Components
-export { default as ProductsHeader1 } from "./ProductsHeader1";
-export { default as ProductsHeader2 } from "./ProductsHeader2";
-
-// Filter Components
-export { default as ProductsFilter1 } from "./ProductsFilter1";
-export { default as ProductsFilter2 } from "./ProductsFilter2";
+// Hero Components
+export { default as ProductsHero1 } from "./ProductsHero1";
+export { default as ProductsHero2 } from "./ProductsHero2";
 
 // Sidebar Components
 export { default as ProductsSidebar1 } from "./ProductsSidebar1";

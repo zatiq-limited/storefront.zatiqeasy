@@ -15,6 +15,7 @@
     "@astrojs/mdx": "^4.3.11",
     "@astrojs/partytown": "^2.1.4",
     "@astrojs/react": "^4.4.2",
+    "@radix-ui/react-select": "^2.2.6",
     "@radix-ui/react-slot": "^1.2.4",
     "@tailwindcss/vite": "^4.1.16",
     "@types/canvas-confetti": "^1.9.0",

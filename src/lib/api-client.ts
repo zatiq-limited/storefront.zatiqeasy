@@ -161,26 +161,8 @@ export async function getHomepageData(): Promise<any> {
     console.log("[API] ✅ Homepage data loaded from API");
     return response;
   } catch (error) {
-    console.error("[API] ❌ Homepage API failed - falling back to local file");
-    // Fallback to local homepage.json file
-    try {
-      const localHomepage = await import("../data/api-responses/homepage.json");
-      console.log("[API] ✅ Homepage data loaded from local file");
-
-      // Handle different import structures
-      // JSON import can be: { default: { success, data } } or { success, data }
-      const imported = localHomepage.default || localHomepage;
-
-      // If it has success/data wrapper, return the data portion
-      // Otherwise return as-is (it's already the data)
-      const result = imported?.data || imported;
-
-      console.log("[API] Homepage sections:", result?.sections?.length || 0);
-      return result;
-    } catch (localError) {
-      console.error("[API] ❌ Local homepage.json also failed:", localError);
-      return null;
-    }
+    console.error("[API] ❌ Homepage API failed");
+    return null;
   }
 }
 
@@ -213,6 +195,23 @@ export async function getProductsPageData(params?: {
     return response;
   } catch (error) {
     console.error("[API] ❌ Products page API failed");
+    return null;
+  }
+}
+
+/**
+ * Get checkout page data (sections + order + payment methods)
+ *
+ * Backend API: GET /api/storefront/v1/page/checkout
+ * Response: { success: true, data: { template, sections, order, delivery_options, payment_methods, currency, seo } }
+ */
+export async function getCheckoutPageData(): Promise<any> {
+  try {
+    const response = await apiCall<any>(`/api/storefront/v1/page/checkout`);
+    console.log("[API] ✅ Checkout page data loaded from API");
+    return response;
+  } catch (error) {
+    console.error("[API] ❌ Checkout page API failed");
     return null;
   }
 }

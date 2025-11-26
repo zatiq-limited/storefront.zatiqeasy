@@ -68,10 +68,8 @@ import { ProductCollection1, ProductCollection2 } from "@/components/zatiq/produ
 import { SocialFeed1, SocialFeed2 } from "@/components/zatiq/social-feed";
 import { CustomSections } from "@/components/zatiq/custom-sections";
 import {
-  ProductsHeader1,
-  ProductsHeader2,
-  ProductsFilter1,
-  ProductsFilter2,
+  ProductsHero1,
+  ProductsHero2,
   ProductsSidebar1,
   ProductsSidebar2,
   ProductsGrid1,
@@ -124,6 +122,13 @@ import {
   AboutTeam2,
 } from "@/components/zatiq/about";
 
+// Checkout Page Components
+import {
+  CheckoutHero1,
+  CheckoutHero2,
+  CheckoutContent1,
+  CheckoutContent2,
+} from "@/components/zatiq/checkout-page";
 // Contact Page Components
 import {
   ContactHero1,
@@ -230,10 +235,8 @@ export const ZATIQ_COMPONENTS: Record<string, ComponentType<any>> = {
   "custom-sections-1": CustomSections,
   "custom-sections-2": CustomSections,
   // Products Page Components
-  "products-header-1": ProductsHeader1,
-  "products-header-2": ProductsHeader2,
-  "products-filter-1": ProductsFilter1,
-  "products-filter-2": ProductsFilter2,
+  "products-hero-1": ProductsHero1,
+  "products-hero-2": ProductsHero2,
   "products-sidebar-1": ProductsSidebar1,
   "products-sidebar-2": ProductsSidebar2,
   "products-grid-1": ProductsGrid1,
@@ -279,6 +282,11 @@ export const ZATIQ_COMPONENTS: Record<string, ComponentType<any>> = {
   "about-team-1": AboutTeam1,
   "about-team-2": AboutTeam2,
 
+  // Checkout Page Components (2 variants each)
+  "checkout-hero-1": CheckoutHero1,
+  "checkout-hero-2": CheckoutHero2,
+  "checkout-content-1": CheckoutContent1,
+  "checkout-content-2": CheckoutContent2,
   // Contact Page Components (2 variants each)
   "contact-hero-1": ContactHero1,
   "contact-hero-2": ContactHero2,

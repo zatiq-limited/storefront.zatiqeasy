@@ -32,6 +32,9 @@ const db = {
   collectionsPage: loadJSON("collections-page.json"),
   collectionDetailsPage: loadJSON("collection-details-page.json"),
   about: loadJSON("about.json"),
+  checkoutPage: loadJSON("checkout-page.json"),
+  order: loadJSON("order.json"),
+  promoCode: loadJSON("promo-code.json"),
   contact: loadJSON("contact.json"),
 };
 
@@ -99,6 +102,43 @@ app.get("/api/storefront/v1/page/about", (req, res) => {
   res.json(db.about);
 });
 
+// Checkout page endpoint (sections + order + payment methods combined)
+app.get("/api/storefront/v1/page/checkout", (_req, res) => {
+  const checkoutPageData = db.checkoutPage;
+  const orderData = db.order;
+
+  // Merge order into the checkout page response
+  const response = {
+    success: true,
+    data: {
+      ...checkoutPageData.data,
+      order: orderData.data.order,
+    },
+  };
+
+  res.json(response);
+});
+
+// Promo code validation endpoint
+app.get("/api/promo-code", (req, res) => {
+  const { code } = req.query;
+
+  // In real backend, validate the code against database
+  // For now, return mock data
+  if (code === "WELCOME10") {
+    res.json(db.promoCode);
+  } else {
+    res.json({
+      success: false,
+      data: {
+        promo_code: {
+          applicable: false,
+          message: "Invalid promo code",
+        },
+      },
+    });
+  }
+});
 // Contact page endpoint
 app.get("/api/storefront/v1/page/contact", (req, res) => {
   res.json(db.contact);
@@ -149,6 +189,10 @@ app.get("/products-page", (req, res) => res.json(db.productsPage));
 app.get("/collections-page", (req, res) => res.json(db.collectionsPage));
 
 // Direct access routes (for debugging)
+app.get("/about", (_req, res) => res.json(db.about));
+app.get("/checkout", (_req, res) => res.json(db.checkoutPage));
+app.get("/order", (_req, res) => res.json(db.order));
+app.get("/promo-code", (_req, res) => res.json(db.promoCode));
 app.get("/about", (req, res) => res.json(db.about));
 app.get("/contact", (req, res) => res.json(db.contact));
 
@@ -175,7 +219,9 @@ app.listen(PORT, () => {
   console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/page/products           - Products page sections`);
   console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/page/collections        - Collections page sections`);
   console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/page/about              - About page sections`);
+  console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/page/checkout           - Checkout page sections`);
   console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/page/contact            - Contact page sections`);
   console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/page/product-details    - Product details page sections`);
+  console.log(`   GET  http://localhost:${PORT}/api/promo-code?code=WELCOME10              - Validate promo code`);
   console.log(`\n✨ Press Ctrl+C to stop\n`);
 });
