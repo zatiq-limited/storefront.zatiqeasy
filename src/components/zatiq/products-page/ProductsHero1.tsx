@@ -1,6 +1,6 @@
 import React from "react";
 
-interface ProductsHeader1Props {
+interface ProductsHero1Props {
   title?: string;
   description?: string;
   productCount?: number;
@@ -14,7 +14,7 @@ interface ProductsHeader1Props {
   category?: string;
 }
 
-const ProductsHeader1: React.FC<ProductsHeader1Props> = ({
+const ProductsHero1: React.FC<ProductsHero1Props> = ({
   title,
   description = "Discover our curated collection of premium products",
   productCount = 0,
@@ -96,4 +96,4 @@ const ProductsHeader1: React.FC<ProductsHeader1Props> = ({
   );
 };
 
-export default ProductsHeader1;
+export default ProductsHero1;

@@ -4,8 +4,8 @@
     "template": "products",
     "sections": [
       {
-        "id": "products_header",
-        "type": "products-header-2",
+        "id": "products_hero",
+        "type": "products-hero-1",
         "settings": {
           "showBreadcrumb": true,
           "showProductCount": true,
@@ -30,7 +30,7 @@
       },
       {
         "id": "products_layout",
-        "type": "products-layout-1",
+        "type": "products-layout-2",
         "settings": {
           "showSidebar": true,
           "sidebarPosition": "left",

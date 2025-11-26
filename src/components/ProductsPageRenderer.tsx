@@ -102,8 +102,8 @@ export default function ProductsPageRenderer({
       componentProps.pagination = pagination;
     }
 
-    // Inject filter data for header and filter components
-    if (section.type.includes("products-header")) {
+    // Inject filter data for hero and filter components
+    if (section.type.includes("products-hero")) {
       componentProps.productCount = pagination?.total || products.length;
       componentProps.searchQuery = filters.search;
       componentProps.category = filters.category;
@@ -145,8 +145,8 @@ export default function ProductsPageRenderer({
         .filter((section) => {
           // If no products and this is NOT an empty state component, check if it should be shown
           if (showEmptyState) {
-            // Only show header, filter, layout, and empty state when no products
-            const alwaysShow = ["products-header", "products-filter", "products-layout", "products-empty"];
+            // Only show hero, filter, layout, and empty state when no products
+            const alwaysShow = ["products-hero", "products-filter", "products-layout", "products-empty"];
             return alwaysShow.some((type) => section.type.includes(type));
           }
           // If we have products, don't show empty state
