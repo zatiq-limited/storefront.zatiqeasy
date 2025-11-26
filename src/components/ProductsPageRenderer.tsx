@@ -92,9 +92,12 @@ export default function ProductsPageRenderer({
       componentProps.products = products;
     }
 
-    // For products-layout, also pass sidebar data
+    // For products-layout, also pass sidebar data and filter props
     if (section.type.includes("products-layout")) {
       componentProps.sidebar = (section as any).sidebar;
+      componentProps.currentSort = filters.sort;
+      componentProps.currentSearch = filters.search || "";
+      componentProps.productCount = pagination?.total || products.length;
     }
 
     // Inject pagination data

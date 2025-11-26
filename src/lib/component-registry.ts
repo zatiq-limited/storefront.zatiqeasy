@@ -70,8 +70,6 @@ import { CustomSections } from "@/components/zatiq/custom-sections";
 import {
   ProductsHero1,
   ProductsHero2,
-  ProductsFilter1,
-  ProductsFilter2,
   ProductsSidebar1,
   ProductsSidebar2,
   ProductsGrid1,
@@ -219,8 +217,6 @@ export const ZATIQ_COMPONENTS: Record<string, ComponentType<any>> = {
   // Products Page Components
   "products-hero-1": ProductsHero1,
   "products-hero-2": ProductsHero2,
-  "products-filter-1": ProductsFilter1,
-  "products-filter-2": ProductsFilter2,
   "products-sidebar-1": ProductsSidebar1,
   "products-sidebar-2": ProductsSidebar2,
   "products-grid-1": ProductsGrid1,
