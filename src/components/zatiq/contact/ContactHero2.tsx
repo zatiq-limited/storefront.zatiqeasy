@@ -17,36 +17,38 @@ const ContactHero2: React.FC<ContactHero2Props> = ({ settings = {} }) => {
   const {
     backgroundColor = "#FFFFFF",
     textColor = "#111827",
-    headline = "Get In Touch",
-    subheadline = "Contact Us",
-    description = "Have questions or need assistance? We're here to help. Reach out to us and our team will get back to you as soon as possible.",
-    accentColor = "#2563EB",
+    headline = "Contact Us",
+    subheadline = "Get in Touch",
+    description = "Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.",
+    accentColor = "#111827",
   } = settings;
 
   return (
-    <section className="w-full py-16 md:py-20 lg:py-24" style={{ backgroundColor }}>
-      <div className="max-w-[1440px] mx-auto px-4">
-        <div className="text-center max-w-3xl mx-auto">
-          <p
-            className="text-sm md:text-base font-semibold uppercase tracking-wider mb-4"
-            style={{ color: accentColor }}
-          >
-            {subheadline}
-          </p>
-          <h1
-            className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
-            style={{ color: textColor }}
-          >
-            {headline}
-          </h1>
-          <p className="text-base md:text-lg lg:text-xl text-gray-600">
-            {description}
-          </p>
-          <div
-            className="mt-8 w-24 h-1 mx-auto rounded-full"
-            style={{ backgroundColor: accentColor }}
-          />
-        </div>
+    <section
+      className="w-full pt-12 pb-8 md:pt-16 md:pb-12"
+      style={{ backgroundColor }}
+    >
+      <div className="max-w-[800px] mx-auto px-4 text-center">
+        {/* Subheadline */}
+        <p
+          className="text-sm font-medium uppercase tracking-wider mb-3"
+          style={{ color: accentColor }}
+        >
+          {subheadline}
+        </p>
+
+        {/* Headline */}
+        <h1
+          className="text-3xl md:text-4xl lg:text-5xl font-semibold mb-4"
+          style={{ color: textColor }}
+        >
+          {headline}
+        </h1>
+
+        {/* Description */}
+        <p className="text-gray-600 text-base md:text-lg max-w-lg mx-auto leading-relaxed">
+          {description}
+        </p>
       </div>
     </section>
   );
