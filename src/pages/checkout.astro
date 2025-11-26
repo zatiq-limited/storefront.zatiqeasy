@@ -1,0 +1,59 @@
+---
+/**
+ * ========================================
+ * CHECKOUT PAGE
+ * ========================================
+ *
+ * Dynamic checkout page - sections from API
+ *
+ * Backend API Endpoint: GET /api/storefront/v1/page/checkout
+ */
+
+import Layout from '../layouts/main.astro';
+import CheckoutPageRenderer from '../components/CheckoutPageRenderer';
+import { getCheckoutPageData } from '../lib/api-client';
+
+// Fetch checkout page data from API
+let pageData: any = null;
+let sections: any[] = [];
+let order: any = null;
+let deliveryOptions: any[] = [];
+let paymentMethods: any[] = [];
+let currency: string = 'BDT';
+let seo: any = {};
+
+try {
+  pageData = await getCheckoutPageData();
+
+  if (pageData) {
+    sections = pageData.sections || [];
+    deliveryOptions = pageData.delivery_options || [];
+    paymentMethods = pageData.payment_methods || [];
+    currency = pageData.currency || 'BDT';
+    order = pageData.order || null;
+    seo = pageData.seo || {};
+  }
+} catch (error) {
+  console.error('[Checkout Page] Failed to load data:', error);
+}
+
+// Dynamic title
+const title = seo?.title || 'Checkout';
+---
+
+<Layout
+  title={`${title} | ZatiqEasy`}
+  description={seo?.description || "Complete your order securely"}
+  image={seo?.og?.image}
+>
+  <main class="zatiq-checkout-page">
+    <CheckoutPageRenderer
+      sections={sections}
+      order={order}
+      deliveryOptions={deliveryOptions}
+      paymentMethods={paymentMethods}
+      currency={currency}
+      client:load
+    />
+  </main>
+</Layout>

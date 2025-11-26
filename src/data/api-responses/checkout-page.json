@@ -1,0 +1,115 @@
+{
+  "success": true,
+  "data": {
+    "template": "checkout",
+    "sections": [
+      {
+        "id": "checkout_hero",
+        "type": "checkout-hero-1",
+        "settings": {
+          "title": "Checkout",
+          "subtitle": "Complete your order",
+          "showBreadcrumb": true,
+          "showSteps": true,
+          "currentStep": 2,
+          "steps": [
+            { "id": 1, "name": "Cart", "icon": "shopping-cart" },
+            { "id": 2, "name": "Checkout", "icon": "credit-card" },
+            { "id": 3, "name": "Confirmation", "icon": "check-circle" }
+          ],
+          "backgroundGradient": "from-violet-50 via-purple-50 to-blue-50"
+        }
+      },
+      {
+        "id": "checkout_content",
+        "type": "checkout-content-1",
+        "settings": {
+          "layout": "two-column",
+          "stickyOrderSummary": true,
+          "showPromoCode": true,
+          "showPaymentMethods": true,
+          "currency": "BDT"
+        }
+      }
+    ],
+    "currency": "BDT",
+    "payment_methods": [
+      {
+        "id": "bkash",
+        "name": "bKash",
+        "type": "mobile_banking",
+        "icon": "https://cdn.zatiq.com/payment-icons/bkash.svg",
+        "description": "Pay with bKash mobile banking",
+        "enabled": true,
+        "fee": 0,
+        "fee_type": "fixed"
+      },
+      {
+        "id": "nagad",
+        "name": "Nagad",
+        "type": "mobile_banking",
+        "icon": "https://cdn.zatiq.com/payment-icons/nagad.svg",
+        "description": "Pay with Nagad mobile banking",
+        "enabled": true,
+        "fee": 0,
+        "fee_type": "fixed"
+      },
+      {
+        "id": "rocket",
+        "name": "Rocket",
+        "type": "mobile_banking",
+        "icon": "https://cdn.zatiq.com/payment-icons/rocket.svg",
+        "description": "Pay with Rocket mobile banking",
+        "enabled": true,
+        "fee": 0,
+        "fee_type": "fixed"
+      },
+      {
+        "id": "card",
+        "name": "Credit/Debit Card",
+        "type": "card",
+        "icon": "https://cdn.zatiq.com/payment-icons/card.svg",
+        "description": "Pay with Visa, Mastercard, or Amex",
+        "enabled": true,
+        "fee": 0,
+        "fee_type": "fixed"
+      },
+      {
+        "id": "cod",
+        "name": "Cash on Delivery",
+        "type": "cod",
+        "icon": "https://cdn.zatiq.com/payment-icons/cod.svg",
+        "description": "Pay when you receive your order",
+        "enabled": true,
+        "fee": 50,
+        "fee_type": "fixed"
+      }
+    ],
+    "delivery_options": [
+      {
+        "id": "standard",
+        "name": "Standard Delivery",
+        "description": "Delivery within 5-7 business days",
+        "delivery_time": "5-7 days",
+        "fee": 60,
+        "enabled": true
+      },
+      {
+        "id": "express",
+        "name": "Express Delivery",
+        "description": "Delivery within 2-3 business days",
+        "delivery_time": "2-3 days",
+        "fee": 120,
+        "enabled": true
+      },
+      {
+        "id": "same_day",
+        "name": "Same Day Delivery",
+        "description": "Order before 12 PM for same day delivery",
+        "delivery_time": "Same day",
+        "fee": 200,
+        "enabled": true
+      }
+    ]
+  }
+}

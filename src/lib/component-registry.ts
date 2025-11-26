@@ -122,6 +122,14 @@ import {
   AboutTeam2,
 } from "@/components/zatiq/about";
 
+// Checkout Page Components
+import {
+  CheckoutHero1,
+  CheckoutHero2,
+  CheckoutContent1,
+  CheckoutContent2,
+} from "@/components/zatiq/checkout-page";
+
 
 /**
  * Component Registry
@@ -261,6 +269,12 @@ export const ZATIQ_COMPONENTS: Record<string, ComponentType<any>> = {
   "about-values-2": AboutValues2,
   "about-team-1": AboutTeam1,
   "about-team-2": AboutTeam2,
+
+  // Checkout Page Components (2 variants each)
+  "checkout-hero-1": CheckoutHero1,
+  "checkout-hero-2": CheckoutHero2,
+  "checkout-content-1": CheckoutContent1,
+  "checkout-content-2": CheckoutContent2,
 };
 
 /**
