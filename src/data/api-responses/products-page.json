@@ -30,7 +30,7 @@
       },
       {
         "id": "products_layout",
-        "type": "products-layout-1",
+        "type": "products-layout-2",
         "settings": {
           "showSidebar": true,
           "sidebarPosition": "left",
