@@ -73,11 +73,13 @@ const Navbar1: React.FC<Navbar1Props> = ({
         <div className="flex items-center gap-2 sm:gap-4 md:gap-10">
           {/* Logo */}
           <div className="flex items-center shrink-0">
-            <img
-              src={logo}
-              alt="Logo"
-              className="h-5 w-20 sm:h-6 sm:w-24 md:h-8 md:w-32 object-contain"
-            />
+            <a href="/">
+              <img
+                src={logo}
+                alt="Logo"
+                className="h-5 w-20 sm:h-6 sm:w-24 md:h-8 md:w-32 object-contain"
+              />
+            </a>
           </div>
 
           {/* Navigation Links - Desktop */}

@@ -120,11 +120,13 @@ const Navbar3: React.FC<Navbar3Props> = ({
         <div className="flex justify-center items-center gap-2">
           {/* Logo */}
           <div className="shrink-0">
-            <img
-              src={logo}
-              alt="Logo"
-              className="h-5 w-20 sm:h-6 sm:w-24 md:h-10 md:w-44 object-contain"
-            />
+            <a href="/">
+              <img
+                src={logo}
+                alt="Logo"
+                className="h-5 w-20 sm:h-6 sm:w-24 md:h-10 md:w-44 object-contain"
+              />
+            </a>
           </div>
 
           {/* Search Bar - Desktop */}

@@ -70,11 +70,13 @@ const Navbar4: React.FC<Navbar4Props> = ({
       <div className="max-w-[1440px] mx-auto px-4 2xl:px-0 flex justify-between items-center gap-2">
         {/* Logo */}
         <div className="flex items-center shrink-0">
-          <img
-            src={logo}
-            alt="Logo"
-            className="w-[100px] h-[34px] object-contain"
-          />
+          <a href="/">
+            <img
+              src={logo}
+              alt="Logo"
+              className="w-[100px] h-[34px] object-contain"
+            />
+          </a>
         </div>
 
         {/* Navigation Links - Desktop */}

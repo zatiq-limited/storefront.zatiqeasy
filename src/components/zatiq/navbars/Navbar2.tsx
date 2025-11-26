@@ -109,11 +109,13 @@ const Navbar2: React.FC<Navbar2Props> = ({
       <div className="max-w-[1440px] mx-auto px-4 2xl:px-0 flex justify-between items-center gap-2">
         {/* Logo and Navigation */}
         <div className="flex items-center gap-2 sm:gap-4 md:gap-8">
-          <img
-            src={logo}
-            alt="Logo"
-            className="w-[90px] h-[22px] shrink-0 object-contain"
-          />
+          <a href="/">
+            <img
+              src={logo}
+              alt="Logo"
+              className="w-[90px] h-[22px] shrink-0 object-contain"
+            />
+          </a>
 
           {/* Navigation Links - Desktop */}
           <div className="hidden lg:flex items-center gap-6">
