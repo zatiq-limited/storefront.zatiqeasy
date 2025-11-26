@@ -32,7 +32,7 @@ const Brands3: React.FC<Brands3Props> = ({ settings = {}, blocks = [] }) => {
   const brands = blocks;
 
   return (
-    <section className="w-full py-8 md:py-14 px-4 2xl:px-0" style={{ backgroundColor }}>
+    <section className="w-full pb-8 md:pb-14 px-4 2xl:px-0" style={{ backgroundColor }}>
       <div className="max-w-[1440px] mx-auto">
         {/* Title */}
         {title && (

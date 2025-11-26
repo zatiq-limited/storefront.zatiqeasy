@@ -38,7 +38,7 @@ import {
 } from "@/components/zatiq/product-cards";
 import { Footers1, Footers2 } from "@/components/zatiq/footers";
 import { Reviews1, Reviews2, Reviews3 } from "@/components/zatiq/reviews";
-import { Brands1, Brands2, Brands3 } from "@/components/zatiq/brands";
+import { Brands1, Brands2, Brands3, Brands4 } from "@/components/zatiq/brands";
 import {
   SpecialOffersSlider1,
   SpecialOffersSlider2,
@@ -124,6 +124,18 @@ import {
   AboutTeam2,
 } from "@/components/zatiq/about";
 
+// Contact Page Components
+import {
+  ContactHero1,
+  ContactHero2,
+  ContactInfo1,
+  ContactInfo2,
+  ContactForm1,
+  ContactForm2,
+  ContactMap1,
+  ContactMap2,
+} from "@/components/zatiq/contact";
+
 
 /**
  * Component Registry
@@ -188,10 +200,11 @@ export const ZATIQ_COMPONENTS: Record<string, ComponentType<any>> = {
   "reviews-2": Reviews2,
   "reviews-3": Reviews3,
 
-  // Brands (3 variants)
+  // Brands (4 variants)
   "brands-1": Brands1,
   "brands-2": Brands2,
   "brands-3": Brands3,
+  "brands-4": Brands4,
 
   // Footers (2 variants)
   "footer-1": Footers1,
@@ -265,6 +278,16 @@ export const ZATIQ_COMPONENTS: Record<string, ComponentType<any>> = {
   "about-values-2": AboutValues2,
   "about-team-1": AboutTeam1,
   "about-team-2": AboutTeam2,
+
+  // Contact Page Components (2 variants each)
+  "contact-hero-1": ContactHero1,
+  "contact-hero-2": ContactHero2,
+  "contact-info-1": ContactInfo1,
+  "contact-info-2": ContactInfo2,
+  "contact-form-1": ContactForm1,
+  "contact-form-2": ContactForm2,
+  "contact-map-1": ContactMap1,
+  "contact-map-2": ContactMap2,
 };
 
 /**

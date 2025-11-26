@@ -1877,6 +1877,40 @@
         ]
       },
       {
+        "id": "brand_logos_4",
+        "type": "brands-4",
+        "settings": {
+          "title": "Our Partners",
+          "backgroundColor": "#FFFFFF"
+        },
+        "blocks": [
+          {
+            "name": "Sony",
+            "logo": "/assets/Brands/sony.png"
+          },
+          {
+            "name": "Skullcandy",
+            "logo": "/assets/Brands/Skullcandy.png"
+          },
+          {
+            "name": "Bose",
+            "logo": "/assets/Brands/Bose.png"
+          },
+          {
+            "name": "Oppo",
+            "logo": "/assets/Brands/oppo.png"
+          },
+          {
+            "name": "Panasonic",
+            "logo": "/assets/Brands/parasonic.png"
+          },
+          {
+            "name": "Samsung",
+            "logo": "/assets/Brands/samsung.png"
+          }
+        ]
+      },
+      {
         "id": "trust_badges_1",
         "type": "badges-1",
         "settings": {
