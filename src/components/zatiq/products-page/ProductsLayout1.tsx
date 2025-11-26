@@ -361,56 +361,20 @@ const ProductsLayout1: React.FC<ProductsLayout1Props> = ({
           {/* Sidebar */}
           {showSidebar && sidebar && (
             <>
-              <div className="hidden lg:block w-64 shrink-0">
-                <div className="sticky top-24">
-                  {SidebarComponent ? (
-                    <SidebarComponent settings={sidebar.settings} blocks={sidebar.filters} />
-                  ) : (
-                    <div className="bg-white rounded-xl p-4 shadow-sm">
-                      <h3 className="font-semibold mb-4">Filters</h3>
-                      {sidebar.filters?.map((filter) => (
-                        <div key={filter.id} className="mb-4">
-                          <h4 className="font-medium text-sm mb-2">{filter.title}</h4>
-                          {filter.items && (
-                            <ul className="space-y-1">
-                              {filter.items.map((item) => (
-                                <li key={item.id} className="text-sm text-gray-600">
-                                  {item.name} ({item.count})
-                                </li>
-                              ))}
-                            </ul>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Mobile Sidebar */}
-              {isMobileSidebarOpen && (
+              {SidebarComponent ? (
+                <SidebarComponent
+                  settings={sidebar.settings}
+                  blocks={sidebar.filters}
+                  isOpen={isMobileSidebarOpen}
+                  onClose={() => setIsMobileSidebarOpen(false)}
+                />
+              ) : (
                 <>
-                  <div
-                    className="lg:hidden fixed inset-0 bg-black/50 z-50"
-                    onClick={() => setIsMobileSidebarOpen(false)}
-                  />
-                  <div className="lg:hidden fixed inset-y-0 left-0 w-full max-w-sm bg-white z-50 overflow-y-auto">
-                    <div className="p-4">
-                      <div className="flex items-center justify-between mb-4">
-                        <h2 className="text-xl font-bold">Filters</h2>
-                        <button
-                          onClick={() => setIsMobileSidebarOpen(false)}
-                          className="p-2 hover:bg-gray-100 rounded-full"
-                        >
-                          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                          </svg>
-                        </button>
-                      </div>
-                      {SidebarComponent ? (
-                        <SidebarComponent settings={sidebar.settings} blocks={sidebar.filters} />
-                      ) : (
-                        sidebar.filters?.map((filter) => (
+                  <div className="hidden lg:block w-64 shrink-0">
+                    <div className="sticky top-24">
+                      <div className="bg-white rounded-xl p-4 shadow-sm">
+                        <h3 className="font-semibold mb-4">Filters</h3>
+                        {sidebar.filters?.map((filter) => (
                           <div key={filter.id} className="mb-4">
                             <h4 className="font-medium text-sm mb-2">{filter.title}</h4>
                             {filter.items && (
@@ -423,16 +387,55 @@ const ProductsLayout1: React.FC<ProductsLayout1Props> = ({
                               </ul>
                             )}
                           </div>
-                        ))
-                      )}
-                      <button
-                        onClick={() => setIsMobileSidebarOpen(false)}
-                        className="w-full mt-4 py-3 bg-gray-900 text-white rounded-lg font-semibold"
-                      >
-                        Show Results
-                      </button>
+                        ))}
+                      </div>
                     </div>
                   </div>
+
+                  {/* Mobile Sidebar Fallback */}
+                  {isMobileSidebarOpen && (
+                    <>
+                      <div
+                        className="lg:hidden fixed inset-0 bg-black/50 z-50"
+                        onClick={() => setIsMobileSidebarOpen(false)}
+                      />
+                      <div className="lg:hidden fixed inset-y-0 left-0 w-full max-w-sm bg-white z-50 overflow-y-auto">
+                        <div className="p-4">
+                          <div className="flex items-center justify-between mb-4">
+                            <h2 className="text-xl font-bold">Filters</h2>
+                            <button
+                              onClick={() => setIsMobileSidebarOpen(false)}
+                              className="p-2 hover:bg-gray-100 rounded-full"
+                            >
+                              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                              </svg>
+                            </button>
+                          </div>
+                          {sidebar.filters?.map((filter) => (
+                            <div key={filter.id} className="mb-4">
+                              <h4 className="font-medium text-sm mb-2">{filter.title}</h4>
+                              {filter.items && (
+                                <ul className="space-y-1">
+                                  {filter.items.map((item) => (
+                                    <li key={item.id} className="text-sm text-gray-600">
+                                      {item.name} ({item.count})
+                                    </li>
+                                  ))}
+                                </ul>
+                              )}
+                            </div>
+                          ))}
+                          <button
+                            onClick={() => setIsMobileSidebarOpen(false)}
+                            className="w-full mt-4 py-3 bg-gray-900 text-white rounded-lg font-semibold"
+                          >
+                            Show Results
+                          </button>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </>
               )}
             </>

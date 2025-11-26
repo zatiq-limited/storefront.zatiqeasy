@@ -201,7 +201,7 @@ const ProductsLayout2: React.FC<ProductsLayout2Props> = ({
     if (products.length === 0) {
       return (
         <div className="text-center py-24 px-6">
-          <div className="w-32 h-32 mx-auto mb-8 bg-gradient-to-br from-purple-100 to-indigo-100 rounded-3xl flex items-center justify-center shadow-lg">
+          <div className="w-32 h-32 mx-auto mb-8 bg-linear-to-br from-purple-100 to-indigo-100 rounded-3xl flex items-center justify-center shadow-lg">
             <svg className="w-16 h-16 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
             </svg>
@@ -213,7 +213,7 @@ const ProductsLayout2: React.FC<ProductsLayout2Props> = ({
           <div className="flex items-center justify-center gap-4 flex-wrap">
             <button
               onClick={() => window.location.href = "/products"}
-              className="px-8 py-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-full font-semibold hover:from-purple-700 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+              className="px-8 py-4 bg-linear-to-r from-purple-600 to-indigo-600 text-white rounded-full font-semibold hover:from-purple-700 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
             >
               Reset Filters
             </button>
@@ -228,63 +228,63 @@ const ProductsLayout2: React.FC<ProductsLayout2Props> = ({
       );
     }
 
-    // List View - Horizontal Cards with gradient accent
+    // List View - Compact horizontal cards optimized for mobile
     if (currentView === "list") {
       return (
-        <div className="space-y-5">
+        <div className="space-y-3">
           {products.map((product) => {
             const props = mapProductToCardProps(product);
             return (
               <a
                 key={product.id}
                 href={`/products/${product.product_code?.toLowerCase() || product.id}`}
-                className="group flex flex-col md:flex-row gap-5 bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-purple-200 transition-all duration-300 hover:shadow-xl hover:shadow-purple-100/50"
+                className="group flex gap-3 sm:gap-4 bg-white rounded-lg sm:rounded-xl overflow-hidden border border-violet-200/60 hover:border-violet-400 transition-all duration-300 hover:shadow-xl hover:shadow-violet-500/10 p-2 sm:p-3"
               >
-                {/* Image with gradient overlay */}
-                <div className="relative w-full md:w-48 h-44 md:h-auto shrink-0 overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
+                {/* Compact Image - Smaller on mobile */}
+                <div className="relative w-28 h-28 md:w-36 md:h-36 lg:w-48 lg:h-48 shrink-0 rounded-md overflow-hidden bg-linear-to-br from-violet-100/50 to-purple-100/50">
                   <img
                     src={props.image}
                     alt={props.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     loading="lazy"
                   />
                   {props.badge && (
-                    <div className="absolute top-4 left-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-lg">
+                    <div className="absolute top-1 left-1 sm:top-2 sm:left-2 bg-linear-to-r from-rose-500 to-pink-500 text-white px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-md text-[10px] sm:text-xs font-semibold shadow-lg shadow-rose-500/30">
                       {props.badge}
                     </div>
                   )}
-                  {/* Quick view overlay */}
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center">
-                    <span className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium text-gray-900 shadow-lg">
-                      Quick View
-                    </span>
-                  </div>
                 </div>
 
-                {/* Content */}
-                <div className="flex-1 p-6 flex flex-col justify-between">
-                  <div>
+                {/* Content - Optimized for mobile */}
+                <div className="flex-1 flex flex-col justify-between min-w-0 py-0 sm:py-1">
+                  <div className="space-y-0.5 sm:space-y-1">
+                    {/* Vendor badge - smaller on mobile */}
                     {props.vendor && (
-                      <span className="inline-block px-3 py-1 bg-purple-50 text-purple-600 text-xs font-semibold rounded-full mb-3">
+                      <span className="inline-block px-2 py-0.5 bg-linear-to-r from-blue-100 to-cyan-100 text-blue-700 text-[10px] sm:text-xs font-semibold rounded-md border border-blue-200">
                         {props.vendor}
                       </span>
                     )}
-                    <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-purple-600 transition-colors line-clamp-2">
+
+                    {/* Title - truncated on mobile */}
+                    <h3 className="text-sm sm:text-base md:text-lg font-semibold text-gray-800 group-hover:text-violet-600 transition-colors line-clamp-2">
                       {props.title}
                     </h3>
+
+                    {/* Description - hidden on mobile, show on tablet+ */}
                     {props.subtitle && (
-                      <p className="text-gray-500 line-clamp-2 mb-4">
+                      <p className="hidden sm:block text-xs sm:text-sm text-muted-foreground line-clamp-1 md:line-clamp-2">
                         {props.subtitle}
                       </p>
                     )}
-                    {/* Rating */}
+
+                    {/* Rating - compact on mobile */}
                     {props.rating && (
-                      <div className="flex items-center gap-2 mb-4">
-                        <div className="flex items-center">
+                      <div className="flex items-center gap-1 sm:gap-2">
+                        <div className="flex items-center gap-0.5">
                           {[...Array(5)].map((_, i) => (
                             <svg
                               key={i}
-                              className={`w-4 h-4 ${i < Math.floor(props.rating!) ? "text-yellow-400" : "text-gray-200"}`}
+                              className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${i < Math.floor(props.rating!) ? "text-yellow-400" : "text-muted/30"}`}
                               fill="currentColor"
                               viewBox="0 0 20 20"
                             >
@@ -292,23 +292,30 @@ const ProductsLayout2: React.FC<ProductsLayout2Props> = ({
                             </svg>
                           ))}
                         </div>
-                        <span className="text-sm text-gray-500">({props.reviewCount})</span>
+                        <span className="text-[10px] sm:text-xs text-muted-foreground">({props.reviewCount})</span>
                       </div>
                     )}
                   </div>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-baseline gap-3">
-                      <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+
+                  {/* Price and Action - Responsive layout */}
+                  <div className="flex items-center justify-between gap-2 mt-2">
+                    <div className="flex flex-col sm:flex-row sm:items-baseline gap-0.5 sm:gap-2">
+                      <span className="text-base sm:text-lg md:text-xl font-bold bg-linear-to-r from-violet-600 via-purple-600 to-fuchsia-600 bg-clip-text text-transparent">
                         {currency} {props.price?.toLocaleString()}
                       </span>
                       {props.comparePrice && (
-                        <span className="text-base text-gray-400 line-through">
+                        <span className="text-xs sm:text-sm text-muted-foreground/60 line-through">
                           {currency} {props.comparePrice.toLocaleString()}
                         </span>
                       )}
                     </div>
-                    <button className="px-5 py-2.5 bg-gray-900 text-white rounded-full text-sm font-medium hover:bg-purple-600 transition-colors">
-                      Add to Cart
+
+                    {/* Add to Cart button - Icon only on mobile, text on tablet+ */}
+                    <button className="shrink-0 h-8 sm:h-9 px-3 sm:px-4 bg-linear-to-r from-violet-600 to-purple-600 text-white rounded-lg text-xs sm:text-sm font-semibold hover:from-violet-700 hover:to-purple-700 transition-all shadow-md hover:shadow-lg shadow-violet-500/30 inline-flex items-center gap-1.5">
+                      <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                      </svg>
+                      <span className="hidden sm:inline">Add</span>
                     </button>
                   </div>
                 </div>
@@ -353,7 +360,7 @@ const ProductsLayout2: React.FC<ProductsLayout2Props> = ({
               href={`/products/${product.product_code?.toLowerCase() || product.id}`}
               className="group block bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-purple-200 transition-all duration-300 hover:shadow-xl hover:shadow-purple-100/50 transform hover:-translate-y-1"
             >
-              <div className="aspect-square overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 relative">
+              <div className="aspect-square overflow-hidden bg-linear-to-br from-gray-50 to-gray-100 relative">
                 <img
                   src={product.image_url}
                   alt={product.name}
@@ -361,12 +368,12 @@ const ProductsLayout2: React.FC<ProductsLayout2Props> = ({
                   loading="lazy"
                 />
                 {props.badge && (
-                  <div className="absolute top-3 left-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-3 py-1 rounded-full text-xs font-bold">
+                  <div className="absolute top-3 left-3 bg-linear-to-r from-purple-600 to-indigo-600 text-white px-3 py-1 rounded-full text-xs font-bold">
                     {props.badge}
                   </div>
                 )}
                 {/* Hover overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
+                <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
                   <button className="px-6 py-2.5 bg-white text-gray-900 rounded-full text-sm font-semibold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
                     Quick Add
                   </button>
@@ -382,7 +389,7 @@ const ProductsLayout2: React.FC<ProductsLayout2Props> = ({
                   {product.name}
                 </h3>
                 <div className="flex items-baseline gap-2">
-                  <span className="text-lg font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+                  <span className="text-lg font-bold bg-linear-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
                     {currency} {product.price.toLocaleString()}
                   </span>
                   {props.comparePrice && (
@@ -400,13 +407,13 @@ const ProductsLayout2: React.FC<ProductsLayout2Props> = ({
   };
 
   return (
-    <section className="pb-10 bg-gradient-to-b from-gray-50 to-white min-h-screen">
+    <section className="pb-10 bg-linear-to-b from-violet-50/50 via-white to-blue-50/30 min-h-screen">
       {/* Filter Bar - Professional Design */}
       {(showSearch || showSort) && (
         <div
           className={cn(
-            "border-b border-border/40 bg-gradient-to-r from-background/98 to-background/95 backdrop-blur-md supports-backdrop-filter:bg-background/90",
-            sticky && "sticky top-0 z-40 shadow-[0_1px_3px_0_rgb(0_0_0_/0.05)]"
+            "border-b border-violet-200/40 bg-linear-to-r from-white/98 via-violet-50/95 to-blue-50/98 backdrop-blur-md supports-backdrop-filter:bg-white/90",
+            sticky && "sticky top-0 z-40 shadow-lg shadow-violet-500/10"
           )}
         >
           <div className="max-w-[1440px] mx-auto px-4 2xl:px-0 py-3">
@@ -416,7 +423,7 @@ const ProductsLayout2: React.FC<ProductsLayout2Props> = ({
                 {showSidebar && (
                   <button
                     onClick={() => setIsMobileSidebarOpen(true)}
-                    className="lg:hidden inline-flex items-center justify-center gap-2 h-10 px-3 bg-gradient-to-b from-background to-muted/30 text-foreground rounded-lg hover:bg-muted/50 transition-all shadow-sm border border-border/50 hover:border-border shrink-0"
+                    className="lg:hidden inline-flex items-center justify-center gap-2 h-10 px-3 bg-linear-to-br from-violet-500 to-purple-600 text-white rounded-lg hover:from-violet-600 hover:to-purple-700 transition-all shadow-md hover:shadow-lg shadow-violet-500/25 shrink-0"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
@@ -444,11 +451,11 @@ const ProductsLayout2: React.FC<ProductsLayout2Props> = ({
               <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end min-w-0">
                 {/* Product Count Badge */}
                 {productCount > 0 && (
-                  <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-muted/50 rounded-md border border-border/30">
-                    <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                    <p className="text-xs font-medium text-foreground">
+                  <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-linear-to-r from-violet-100 to-purple-100 rounded-lg border border-violet-200">
+                    <div className="w-1.5 h-1.5 rounded-full bg-violet-500 animate-pulse" />
+                    <p className="text-xs font-medium text-violet-900">
                       <span className="font-bold">{productCount}</span>
-                      <span className="text-muted-foreground ml-1">items</span>
+                      <span className="text-violet-600 ml-1">items</span>
                     </p>
                   </div>
                 )}
@@ -456,14 +463,14 @@ const ProductsLayout2: React.FC<ProductsLayout2Props> = ({
                 {/* Sort Dropdown */}
                 {showSort && sortOptions.length > 0 && (
                   <div className="flex items-center gap-2 shrink-0">
-                    <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide hidden md:block">
+                    <label className="text-xs font-semibold text-violet-700 uppercase tracking-wide hidden md:block">
                       Sort
                     </label>
                     <Select value={currentSort} onValueChange={handleSortChange}>
-                      <SelectTrigger className="h-10 w-[140px] sm:w-[160px] bg-background/50 border-border/50 hover:border-border shadow-sm transition-all">
+                      <SelectTrigger className="h-10 w-[140px] sm:w-40 bg-white border-violet-200 hover:border-violet-400 shadow-sm hover:shadow-md transition-all">
                         <SelectValue placeholder="Sort by" />
                       </SelectTrigger>
-                      <SelectContent className="min-w-[160px]">
+                      <SelectContent className="min-w-40">
                         {sortOptions.map((option) => (
                           <SelectItem
                             key={option.value}
@@ -480,14 +487,14 @@ const ProductsLayout2: React.FC<ProductsLayout2Props> = ({
 
                 {/* View Toggle */}
                 {showViewToggle && (
-                  <div className="flex p-1 bg-muted/50 rounded-lg border border-border/30 shrink-0">
+                  <div className="flex p-1 bg-linear-to-r from-violet-100 to-purple-100 rounded-lg border border-violet-200 shrink-0">
                     <button
                       onClick={() => setCurrentView("grid")}
                       className={cn(
                         "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all",
                         currentView === "grid"
-                          ? "bg-background text-foreground shadow-sm"
-                          : "text-muted-foreground hover:text-foreground"
+                          ? "bg-linear-to-br from-violet-500 to-purple-600 text-white shadow-md"
+                          : "text-violet-700 hover:text-violet-900 hover:bg-white/50"
                       )}
                     >
                       <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -500,8 +507,8 @@ const ProductsLayout2: React.FC<ProductsLayout2Props> = ({
                       className={cn(
                         "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all",
                         currentView === "list"
-                          ? "bg-background text-foreground shadow-sm"
-                          : "text-muted-foreground hover:text-foreground"
+                          ? "bg-linear-to-br from-violet-500 to-purple-600 text-white shadow-md"
+                          : "text-violet-700 hover:text-violet-900 hover:bg-white/50"
                       )}
                     >
                       <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -524,148 +531,151 @@ const ProductsLayout2: React.FC<ProductsLayout2Props> = ({
           {/* Sidebar - Dark theme with gradient */}
           {showSidebar && sidebar && (
             <>
-              <div className="hidden lg:block w-72 shrink-0">
-                <div className="sticky top-6">
-                  {SidebarComponent ? (
-                    <SidebarComponent settings={sidebar.settings} blocks={sidebar.filters} />
-                  ) : (
-                    <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-6 text-white shadow-2xl">
-                      <div className="flex items-center justify-between mb-6">
-                        <h3 className="text-lg font-bold">Filters</h3>
-                        <button className="text-xs text-purple-400 hover:text-purple-300 font-medium">
-                          Clear All
-                        </button>
-                      </div>
-                      {sidebar.filters?.map((filter, index) => (
-                        <div key={filter.id} className={`${index !== 0 ? "pt-5 mt-5 border-t border-gray-700" : ""}`}>
-                          <h4 className="font-semibold text-sm mb-3 text-gray-300 uppercase tracking-wider">
-                            {filter.title}
-                          </h4>
-                          {filter.type === "color" && filter.items ? (
-                            <div className="flex flex-wrap gap-2">
-                              {filter.items.map((item) => (
-                                <button
-                                  key={item.id}
-                                  className="w-8 h-8 rounded-full border-2 border-gray-600 hover:border-purple-400 transition-colors relative group"
-                                  style={{ backgroundColor: item.hex }}
-                                  title={item.name}
-                                >
-                                  <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-white text-gray-900 text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                                    {item.name}
-                                  </span>
-                                </button>
-                              ))}
-                            </div>
-                          ) : filter.items ? (
-                            <ul className="space-y-2">
-                              {filter.items.map((item) => (
-                                <li key={item.id}>
-                                  <label className="flex items-center gap-3 cursor-pointer group">
-                                    <input
-                                      type="checkbox"
-                                      className="w-4 h-4 rounded border-gray-600 bg-gray-700 text-purple-500 focus:ring-purple-500 focus:ring-offset-gray-800"
-                                    />
-                                    <span className="text-sm text-gray-300 group-hover:text-white transition-colors flex-1">
+              {SidebarComponent ? (
+                <SidebarComponent
+                  settings={sidebar.settings}
+                  blocks={sidebar.filters}
+                  isOpen={isMobileSidebarOpen}
+                  onClose={() => setIsMobileSidebarOpen(false)}
+                />
+              ) : (
+                <>
+                  <div className="hidden lg:block w-72 shrink-0">
+                    <div className="sticky top-6">
+                      <div className="bg-linear-to-br from-gray-900 to-gray-800 rounded-2xl p-6 text-white shadow-2xl">
+                        <div className="flex items-center justify-between mb-6">
+                          <h3 className="text-lg font-bold">Filters</h3>
+                          <button className="text-xs text-purple-400 hover:text-purple-300 font-medium">
+                            Clear All
+                          </button>
+                        </div>
+                        {sidebar.filters?.map((filter, index) => (
+                          <div key={filter.id} className={`${index !== 0 ? "pt-5 mt-5 border-t border-gray-700" : ""}`}>
+                            <h4 className="font-semibold text-sm mb-3 text-gray-300 uppercase tracking-wider">
+                              {filter.title}
+                            </h4>
+                            {filter.type === "color" && filter.items ? (
+                              <div className="flex flex-wrap gap-2">
+                                {filter.items.map((item) => (
+                                  <button
+                                    key={item.id}
+                                    className="w-8 h-8 rounded-full border-2 border-gray-600 hover:border-purple-400 transition-colors relative group"
+                                    style={{ backgroundColor: item.hex }}
+                                    title={item.name}
+                                  >
+                                    <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-white text-gray-900 text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                                       {item.name}
                                     </span>
-                                    <span className="text-xs text-gray-500 bg-gray-700 px-2 py-0.5 rounded-full">
-                                      {item.count}
-                                    </span>
-                                  </label>
-                                </li>
-                              ))}
-                            </ul>
-                          ) : filter.type === "price" ? (
-                            <div className="space-y-4">
-                              <div className="flex gap-3">
-                                <input
-                                  type="number"
-                                  placeholder="Min"
-                                  className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
-                                />
-                                <input
-                                  type="number"
-                                  placeholder="Max"
-                                  className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
-                                />
+                                  </button>
+                                ))}
                               </div>
-                              <button className="w-full py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-sm font-medium transition-colors">
-                                Apply
-                              </button>
-                            </div>
-                          ) : null}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Mobile Sidebar - Slide from right with dark theme */}
-              {isMobileSidebarOpen && (
-                <>
-                  <div
-                    className="lg:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
-                    onClick={() => setIsMobileSidebarOpen(false)}
-                  />
-                  <div className="lg:hidden fixed inset-y-0 right-0 w-full max-w-md bg-gradient-to-br from-gray-900 to-gray-800 z-50 overflow-y-auto shadow-2xl">
-                    <div className="p-6">
-                      <div className="flex items-center justify-between mb-8">
-                        <h2 className="text-2xl font-bold text-white">Filters</h2>
-                        <button
-                          onClick={() => setIsMobileSidebarOpen(false)}
-                          className="p-2 hover:bg-gray-700 rounded-full text-gray-400 hover:text-white transition-colors"
-                        >
-                          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                          </svg>
-                        </button>
-                      </div>
-                      {SidebarComponent ? (
-                        <SidebarComponent settings={sidebar.settings} blocks={sidebar.filters} />
-                      ) : (
-                        <div className="space-y-6">
-                          {sidebar.filters?.map((filter) => (
-                            <div key={filter.id} className="pb-6 border-b border-gray-700 last:border-0">
-                              <h4 className="font-semibold text-sm mb-4 text-gray-300 uppercase tracking-wider">
-                                {filter.title}
-                              </h4>
-                              {filter.items && (
-                                <ul className="space-y-3">
-                                  {filter.items.map((item) => (
-                                    <li key={item.id}>
-                                      <label className="flex items-center gap-3 cursor-pointer">
-                                        <input
-                                          type="checkbox"
-                                          className="w-5 h-5 rounded border-gray-600 bg-gray-700 text-purple-500 focus:ring-purple-500"
-                                        />
-                                        <span className="text-gray-300 flex-1">{item.name}</span>
-                                        <span className="text-xs text-gray-500">({item.count})</span>
-                                      </label>
-                                    </li>
-                                  ))}
-                                </ul>
-                              )}
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                      <div className="mt-8 flex gap-3">
-                        <button
-                          onClick={() => setIsMobileSidebarOpen(false)}
-                          className="flex-1 py-4 bg-gray-700 text-white rounded-xl font-semibold hover:bg-gray-600 transition-colors"
-                        >
-                          Clear All
-                        </button>
-                        <button
-                          onClick={() => setIsMobileSidebarOpen(false)}
-                          className="flex-1 py-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl font-semibold hover:from-purple-700 hover:to-indigo-700 transition-all shadow-lg"
-                        >
-                          Show {products.length} Results
-                        </button>
+                            ) : filter.items ? (
+                              <ul className="space-y-2">
+                                {filter.items.map((item) => (
+                                  <li key={item.id}>
+                                    <label className="flex items-center gap-3 cursor-pointer group">
+                                      <input
+                                        type="checkbox"
+                                        className="w-4 h-4 rounded border-gray-600 bg-gray-700 text-purple-500 focus:ring-purple-500 focus:ring-offset-gray-800"
+                                      />
+                                      <span className="text-sm text-gray-300 group-hover:text-white transition-colors flex-1">
+                                        {item.name}
+                                      </span>
+                                      <span className="text-xs text-gray-500 bg-gray-700 px-2 py-0.5 rounded-full">
+                                        {item.count}
+                                      </span>
+                                    </label>
+                                  </li>
+                                ))}
+                              </ul>
+                            ) : filter.type === "price" ? (
+                              <div className="space-y-4">
+                                <div className="flex gap-3">
+                                  <input
+                                    type="number"
+                                    placeholder="Min"
+                                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
+                                  />
+                                  <input
+                                    type="number"
+                                    placeholder="Max"
+                                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
+                                  />
+                                </div>
+                                <button className="w-full py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-sm font-medium transition-colors">
+                                  Apply
+                                </button>
+                              </div>
+                            ) : null}
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </div>
+
+                  {/* Mobile Sidebar Fallback - Slide from right with dark theme */}
+                  {isMobileSidebarOpen && (
+                    <>
+                      <div
+                        className="lg:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
+                        onClick={() => setIsMobileSidebarOpen(false)}
+                      />
+                      <div className="lg:hidden fixed inset-y-0 right-0 w-full max-w-md bg-linear-to-br from-gray-900 to-gray-800 z-50 overflow-y-auto shadow-2xl">
+                        <div className="p-6">
+                          <div className="flex items-center justify-between mb-8">
+                            <h2 className="text-2xl font-bold text-white">Filters</h2>
+                            <button
+                              onClick={() => setIsMobileSidebarOpen(false)}
+                              className="p-2 hover:bg-gray-700 rounded-full text-gray-400 hover:text-white transition-colors"
+                            >
+                              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                              </svg>
+                            </button>
+                          </div>
+                          <div className="space-y-6">
+                            {sidebar.filters?.map((filter) => (
+                              <div key={filter.id} className="pb-6 border-b border-gray-700 last:border-0">
+                                <h4 className="font-semibold text-sm mb-4 text-gray-300 uppercase tracking-wider">
+                                  {filter.title}
+                                </h4>
+                                {filter.items && (
+                                  <ul className="space-y-3">
+                                    {filter.items.map((item) => (
+                                      <li key={item.id}>
+                                        <label className="flex items-center gap-3 cursor-pointer">
+                                          <input
+                                            type="checkbox"
+                                            className="w-5 h-5 rounded border-gray-600 bg-gray-700 text-purple-500 focus:ring-purple-500"
+                                          />
+                                          <span className="text-gray-300 flex-1">{item.name}</span>
+                                          <span className="text-xs text-gray-500">({item.count})</span>
+                                        </label>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                          <div className="mt-8 flex gap-3">
+                            <button
+                              onClick={() => setIsMobileSidebarOpen(false)}
+                              className="flex-1 py-4 bg-gray-700 text-white rounded-xl font-semibold hover:bg-gray-600 transition-colors"
+                            >
+                              Clear All
+                            </button>
+                            <button
+                              onClick={() => setIsMobileSidebarOpen(false)}
+                              className="flex-1 py-4 bg-linear-to-r from-purple-600 to-indigo-600 text-white rounded-xl font-semibold hover:from-purple-700 hover:to-indigo-700 transition-all shadow-lg"
+                            >
+                              Show {products.length} Results
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </>
               )}
             </>
