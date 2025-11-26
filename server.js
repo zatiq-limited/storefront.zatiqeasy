@@ -35,6 +35,7 @@ const db = {
   checkoutPage: loadJSON("checkout-page.json"),
   order: loadJSON("order.json"),
   promoCode: loadJSON("promo-code.json"),
+  contact: loadJSON("contact.json"),
 };
 
 // Custom API routes
@@ -138,6 +139,10 @@ app.get("/api/promo-code", (req, res) => {
     });
   }
 });
+// Contact page endpoint
+app.get("/api/storefront/v1/page/contact", (req, res) => {
+  res.json(db.contact);
+});
 
 // Product list endpoint with query support
 app.get("/api/storefront/v1/products", (req, res) => {
@@ -188,6 +193,8 @@ app.get("/about", (_req, res) => res.json(db.about));
 app.get("/checkout", (_req, res) => res.json(db.checkoutPage));
 app.get("/order", (_req, res) => res.json(db.order));
 app.get("/promo-code", (_req, res) => res.json(db.promoCode));
+app.get("/about", (req, res) => res.json(db.about));
+app.get("/contact", (req, res) => res.json(db.contact));
 
 // Start server
 app.listen(PORT, () => {
@@ -213,6 +220,7 @@ app.listen(PORT, () => {
   console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/page/collections        - Collections page sections`);
   console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/page/about              - About page sections`);
   console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/page/checkout           - Checkout page sections`);
+  console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/page/contact            - Contact page sections`);
   console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/page/product-details    - Product details page sections`);
   console.log(`   GET  http://localhost:${PORT}/api/promo-code?code=WELCOME10              - Validate promo code`);
   console.log(`\n✨ Press Ctrl+C to stop\n`);

@@ -8,23 +8,21 @@ interface BrandBlock {
   url?: string;
 }
 
-interface Brands1Props {
+interface Brands4Props {
   settings?: {
     title?: string;
     backgroundColor?: string;
-    columns?: number;
-    columnsMobile?: number;
   };
   blocks?: BrandBlock[];
 }
 
-const Brands1: React.FC<Brands1Props> = ({ settings = {}, blocks = [] }) => {
+const Brands4: React.FC<Brands4Props> = ({ settings = {}, blocks = [] }) => {
   if (blocks.length <= 0) return null;
   const brands = blocks;
   const title = settings?.title;
 
   return (
-    <div className="w-full bg-white pb-8 md:pb-14 px-4">
+    <div className="w-full font-montserrat bg-white pb-8 md:pb-14 px-4">
       <div className="max-w-[1440px] mx-auto px-4 2xl:px-0">
         {/* Title */}
         {title && (
@@ -34,7 +32,7 @@ const Brands1: React.FC<Brands1Props> = ({ settings = {}, blocks = [] }) => {
         )}
 
         {/* Marquee */}
-        <Marquee pauseOnHover className="[--duration:40s] [--gap:64px]">
+        <Marquee pauseOnHover className="[--duration:40s] [--gap:48px]">
           {brands.map((brand, index) => (
             <div
               key={`brand-${index}`}
@@ -43,7 +41,7 @@ const Brands1: React.FC<Brands1Props> = ({ settings = {}, blocks = [] }) => {
               <img
                 src={brand.logo}
                 alt={brand.name}
-                className="h-[152px] w-auto max-w-[200px] object-contain"
+                className="h-6 sm:h-8 md:h-10 w-auto object-contain"
               />
             </div>
           ))}
@@ -53,4 +51,4 @@ const Brands1: React.FC<Brands1Props> = ({ settings = {}, blocks = [] }) => {
   );
 };
 
-export default Brands1;
+export default Brands4;

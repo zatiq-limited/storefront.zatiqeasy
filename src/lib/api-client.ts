@@ -350,6 +350,23 @@ export async function getAboutPageData(): Promise<any> {
 }
 
 /**
+ * Get contact page data
+ *
+ * Backend API: GET /api/storefront/v1/page/contact
+ * Response: { success: true, data: { template, sections, seo } }
+ */
+export async function getContactPageData(): Promise<any> {
+  try {
+    const response = await apiCall<any>(`/api/storefront/v1/page/contact`);
+    console.log("[API] ✅ Contact page data loaded from API");
+    return response;
+  } catch (error) {
+    console.error("[API] ❌ Contact page API failed");
+    return null;
+  }
+}
+
+/**
  * Get collections
  *
  * Backend API: GET /api/storefront/v1/collections
