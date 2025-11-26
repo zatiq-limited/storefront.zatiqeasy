@@ -55,9 +55,7 @@ const Brands2: React.FC<Brands2Props> = ({ settings = {}, blocks = [] }) => {
                 <img
                   src={brand.logo}
                   alt={brand.name}
-                  className={`h-8 sm:h-10 md:h-10 w-10/12 object-contain ${
-                    grayscale ? 'grayscale hover:grayscale-0 transition-all duration-300' : ''
-                  }`}
+                  className="h-8 sm:h-10 md:h-10 w-3/4 object-contain"
                 />
               </div>
               {/* Brand Description */}

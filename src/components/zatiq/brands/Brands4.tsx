@@ -32,7 +32,7 @@ const Brands4: React.FC<Brands4Props> = ({ settings = {}, blocks = [] }) => {
         )}
 
         {/* Marquee */}
-        <Marquee pauseOnHover className="[--duration:40s] [--gap:48px]">
+        <Marquee pauseOnHover className="[--duration:40s] [--gap:64px]">
           {brands.map((brand, index) => (
             <div
               key={`brand-${index}`}
@@ -41,7 +41,7 @@ const Brands4: React.FC<Brands4Props> = ({ settings = {}, blocks = [] }) => {
               <img
                 src={brand.logo}
                 alt={brand.name}
-                className="h-6 sm:h-8 md:h-10 w-auto object-contain"
+                className="h-4 sm:h-6 md:h-8 w-3/4 object-contain"
               />
             </div>
           ))}

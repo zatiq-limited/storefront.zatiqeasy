@@ -345,22 +345,8 @@ export async function getAboutPageData(): Promise<any> {
     console.log("[API] ✅ About page data loaded from API");
     return response;
   } catch (error) {
-    console.error("[API] ❌ About page API failed - falling back to local file");
-    // Fallback to local about.json file
-    try {
-      const localAbout = await import("../data/api-responses/about.json");
-      console.log("[API] ✅ About page data loaded from local file");
-
-      // Handle different import structures
-      const imported = localAbout.default || localAbout;
-      const result = imported?.data || imported;
-
-      console.log("[API] About sections:", result?.sections?.length || 0);
-      return result;
-    } catch (localError) {
-      console.error("[API] ❌ Local about.json also failed:", localError);
-      return null;
-    }
+    console.error("[API] ❌ About page API failed");
+    return null;
   }
 }
 
