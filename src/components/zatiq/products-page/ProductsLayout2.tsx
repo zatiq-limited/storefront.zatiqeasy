@@ -1,5 +1,20 @@
 import React, { useState, useEffect } from "react";
+import { Search } from "lucide-react";
 import { getComponent } from "@/lib/component-registry";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { cn } from "@/lib/utils";
+
+interface SortOption {
+  value: string;
+  label: string;
+}
 
 interface FilterItem {
   id: string;
@@ -46,6 +61,10 @@ interface ProductsLayout2Props {
     columnsMobile?: number;
     gap?: number;
     cardStyle?: string;
+    showSearch?: boolean;
+    showSort?: boolean;
+    sticky?: boolean;
+    sortOptions?: SortOption[];
   };
   sidebar?: {
     type?: string;
@@ -56,6 +75,11 @@ interface ProductsLayout2Props {
   };
   products?: Product[];
   currency?: string;
+  currentSort?: string;
+  currentSearch?: string;
+  productCount?: number;
+  onSortChange?: (sort: string) => void;
+  onSearchChange?: (search: string) => void;
 }
 
 const ProductsLayout2: React.FC<ProductsLayout2Props> = ({
@@ -63,6 +87,11 @@ const ProductsLayout2: React.FC<ProductsLayout2Props> = ({
   sidebar,
   products = [],
   currency = "BDT",
+  currentSort = "featured",
+  currentSearch = "",
+  productCount = 0,
+  onSortChange,
+  onSearchChange,
 }) => {
   const {
     showSidebar = true,
@@ -74,14 +103,46 @@ const ProductsLayout2: React.FC<ProductsLayout2Props> = ({
     columnsMobile = 1,
     gap = 6,
     cardStyle = "product-card-1",
+    showSearch = true,
+    showSort = true,
+    sticky = true,
+    sortOptions = [],
   } = settings;
 
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [currentView, setCurrentView] = useState<"grid" | "list">(defaultView);
+  const [searchValue, setSearchValue] = useState(currentSearch);
 
   useEffect(() => {
     setCurrentView(defaultView);
   }, [defaultView]);
+
+  // Handle sort change
+  const handleSortChange = (value: string) => {
+    if (onSortChange) {
+      onSortChange(value);
+    } else {
+      const url = new URL(window.location.href);
+      url.searchParams.set("sort", value);
+      window.location.href = url.toString();
+    }
+  };
+
+  // Handle search
+  const handleSearch = () => {
+    if (onSearchChange) {
+      onSearchChange(searchValue);
+    } else {
+      const url = new URL(window.location.href);
+      if (searchValue) {
+        url.searchParams.set("search", searchValue);
+      } else {
+        url.searchParams.delete("search");
+      }
+      url.searchParams.delete("page");
+      window.location.href = url.toString();
+    }
+  };
 
   // Get sidebar component dynamically
   const SidebarComponent = sidebar?.type ? getComponent(sidebar.type) : null;
@@ -339,59 +400,111 @@ const ProductsLayout2: React.FC<ProductsLayout2Props> = ({
   };
 
   return (
-    <section className="py-10 bg-gradient-to-b from-gray-50 to-white min-h-screen">
-      <div className="max-w-[1440px] mx-auto px-4 2xl:px-0">
-        {/* Top Bar - Modern gradient design */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-4">
-            {showSidebar && (
-              <button
-                onClick={() => setIsMobileSidebarOpen(true)}
-                className="lg:hidden flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-full hover:from-purple-700 hover:to-indigo-700 transition-all shadow-md"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-                </svg>
-                <span className="font-medium">Filters</span>
-              </button>
-            )}
-          </div>
+    <section className="pb-10 bg-gradient-to-b from-gray-50 to-white min-h-screen">
+      {/* Filter Bar - Shadcn Design */}
+      {(showSearch || showSort) && (
+        <div
+          className={cn(
+            "border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 shadow-sm",
+            sticky && "sticky top-0 z-40"
+          )}
+        >
+          <div className="max-w-[1440px] mx-auto px-4 2xl:px-0 py-4">
+            <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
+              {/* Left - Search and Filter Button */}
+              <div className="flex items-center gap-3 flex-1 w-full md:w-auto">
+                {showSidebar && (
+                  <button
+                    onClick={() => setIsMobileSidebarOpen(true)}
+                    className="lg:hidden flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors shadow-sm"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                    </svg>
+                    <span className="font-medium text-sm">Filters</span>
+                  </button>
+                )}
 
-          {showViewToggle && (
-            <div className="flex items-center gap-3">
-              <span className="text-sm text-gray-500 hidden sm:block font-medium">View as:</span>
-              {/* Pill-style toggle */}
-              <div className="flex p-1 bg-gray-100 rounded-full">
-                <button
-                  onClick={() => setCurrentView("grid")}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                    currentView === "grid"
-                      ? "bg-white text-purple-600 shadow-md"
-                      : "text-gray-500 hover:text-gray-700"
-                  }`}
-                >
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                  </svg>
-                  <span className="hidden sm:inline">Grid</span>
-                </button>
-                <button
-                  onClick={() => setCurrentView("list")}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                    currentView === "list"
-                      ? "bg-white text-purple-600 shadow-md"
-                      : "text-gray-500 hover:text-gray-700"
-                  }`}
-                >
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
-                  </svg>
-                  <span className="hidden sm:inline">List</span>
-                </button>
+                {showSearch && (
+                  <div className="relative flex-1 max-w-md">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <Input
+                      type="search"
+                      value={searchValue}
+                      onChange={(e) => setSearchValue(e.target.value)}
+                      onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                      placeholder="Search products..."
+                      className="pl-9"
+                    />
+                  </div>
+                )}
+              </div>
+
+              {/* Right - Product Count, Sort and View Toggle */}
+              <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end">
+                {/* Product Count */}
+                {productCount > 0 && (
+                  <p className="text-sm text-muted-foreground hidden sm:block">
+                    <span className="font-semibold text-foreground">{productCount}</span> products
+                  </p>
+                )}
+
+                {/* Sort */}
+                {showSort && sortOptions.length > 0 && (
+                  <Select value={currentSort} onValueChange={handleSortChange}>
+                    <SelectTrigger className="w-[150px] sm:w-[180px]">
+                      <SelectValue placeholder="Sort by" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {sortOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
+
+                {/* View Toggle */}
+                {showViewToggle && (
+                  <div className="flex p-1 bg-muted rounded-md">
+                    <button
+                      onClick={() => setCurrentView("grid")}
+                      className={cn(
+                        "flex items-center gap-1.5 px-3 py-1.5 rounded text-sm font-medium transition-all",
+                        currentView === "grid"
+                          ? "bg-background text-foreground shadow-sm"
+                          : "text-muted-foreground hover:text-foreground"
+                      )}
+                    >
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                      </svg>
+                      <span className="hidden sm:inline">Grid</span>
+                    </button>
+                    <button
+                      onClick={() => setCurrentView("list")}
+                      className={cn(
+                        "flex items-center gap-1.5 px-3 py-1.5 rounded text-sm font-medium transition-all",
+                        currentView === "list"
+                          ? "bg-background text-foreground shadow-sm"
+                          : "text-muted-foreground hover:text-foreground"
+                      )}
+                    >
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
+                      </svg>
+                      <span className="hidden sm:inline">List</span>
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
-          )}
+          </div>
         </div>
+      )}
+
+      <div className="max-w-[1440px] mx-auto px-4 2xl:px-0 pt-4">
 
         {/* Main Content */}
         <div className={`flex gap-8 ${sidebarPosition === "right" ? "flex-row-reverse" : ""}`}>

@@ -11,10 +11,6 @@
 export { default as ProductsHero1 } from "./ProductsHero1";
 export { default as ProductsHero2 } from "./ProductsHero2";
 
-// Filter Components
-export { default as ProductsFilter1 } from "./ProductsFilter1";
-export { default as ProductsFilter2 } from "./ProductsFilter2";
-
 // Sidebar Components
 export { default as ProductsSidebar1 } from "./ProductsSidebar1";
 export { default as ProductsSidebar2 } from "./ProductsSidebar2";
