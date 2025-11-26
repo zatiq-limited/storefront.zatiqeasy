@@ -30,6 +30,7 @@ interface AnnouncementBar2Props {
   };
   dismissible?: boolean;
   sticky?: boolean;
+  fontFamily?: string;
 }
 
 const AnnouncementBar2: React.FC<AnnouncementBar2Props> = ({
@@ -53,6 +54,7 @@ const AnnouncementBar2: React.FC<AnnouncementBar2Props> = ({
   socialLinks = {},
   dismissible,
   sticky,
+  fontFamily,
 }) => {
   // Resolve props (support both naming conventions)
   const bgColor = background_color || backgroundColor || '#23856D';
@@ -84,6 +86,7 @@ const AnnouncementBar2: React.FC<AnnouncementBar2Props> = ({
       style={{
         backgroundColor: bgColor,
         color: txtColor,
+        fontFamily: fontFamily || undefined
       }}
     >
       <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-0 sm:gap-6 lg:gap-10">

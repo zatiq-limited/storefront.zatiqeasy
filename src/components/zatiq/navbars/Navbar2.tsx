@@ -27,6 +27,7 @@ interface Navbar2Props {
   sticky?: boolean;
   menu_items?: MenuItem[];
   search_placeholder?: string;
+  fontFamily?: string;
 }
 
 const Navbar2: React.FC<Navbar2Props> = ({
@@ -40,6 +41,7 @@ const Navbar2: React.FC<Navbar2Props> = ({
   sticky = false,
   menu_items,
   search_placeholder = "Search...",
+  fontFamily,
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
@@ -104,6 +106,7 @@ const Navbar2: React.FC<Navbar2Props> = ({
       } ${transparent ? "bg-transparent" : ""}`}
       style={{
         backgroundColor: transparent ? "transparent" : background_color,
+        fontFamily: fontFamily || undefined
       }}
     >
       <div className="max-w-[1440px] mx-auto px-4 2xl:px-0 flex justify-between items-center gap-2">

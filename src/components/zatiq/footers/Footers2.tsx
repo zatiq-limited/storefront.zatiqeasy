@@ -36,6 +36,7 @@ interface Footers2Settings {
   instagramUrl?: string;
   twitterUrl?: string;
   linkedinUrl?: string;
+  fontFamily?: string;
 }
 
 interface Footers2Props {
@@ -63,6 +64,7 @@ const Footers2: React.FC<Footers2Props> = ({
     instagramUrl = "#",
     twitterUrl = "#",
     linkedinUrl = "#",
+    fontFamily,
   } = settings;
 
   const menuColumns = blocks;
@@ -76,7 +78,10 @@ const Footers2: React.FC<Footers2Props> = ({
   return (
     <footer
       className="w-full overflow-hidden font-sans"
-      style={{ backgroundColor }}
+      style={{
+        backgroundColor,
+        fontFamily: fontFamily || undefined
+      }}
     >
       {/* Main Footer Content */}
       <div

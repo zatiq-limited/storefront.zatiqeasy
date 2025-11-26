@@ -25,6 +25,7 @@ interface Footers1Settings {
   instagramUrl?: string;
   youtubeUrl?: string;
   twitterUrl?: string;
+  fontFamily?: string;
 }
 
 interface Footers1Props {
@@ -46,6 +47,7 @@ const Footers1: React.FC<Footers1Props> = ({ settings = {}, blocks = [] }) => {
     instagramUrl = "#",
     youtubeUrl = "#",
     twitterUrl = "#",
+    fontFamily,
   } = settings;
 
   const menuColumns = blocks;
@@ -53,7 +55,11 @@ const Footers1: React.FC<Footers1Props> = ({ settings = {}, blocks = [] }) => {
   return (
     <footer
       className="w-full py-8 md:py-12 overflow-hidden font-sans"
-      style={{ backgroundColor, color: textColor }}
+      style={{
+        backgroundColor,
+        color: textColor,
+        fontFamily: fontFamily || undefined
+      }}
     >
       <div className="w-full max-w-[1440px] mx-auto px-4">
         {/* Logo and Newsletter - Mobile/Tablet First */}

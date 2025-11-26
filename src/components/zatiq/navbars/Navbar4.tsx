@@ -19,6 +19,7 @@ interface Navbar4Props {
   sticky?: boolean;
   menu_items?: MenuItem[];
   search_placeholder?: string;
+  fontFamily?: string;
 }
 
 const Navbar4: React.FC<Navbar4Props> = ({
@@ -31,6 +32,7 @@ const Navbar4: React.FC<Navbar4Props> = ({
   sticky = false,
   menu_items,
   search_placeholder = 'Search...',
+  fontFamily,
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -65,7 +67,10 @@ const Navbar4: React.FC<Navbar4Props> = ({
   return (
     <nav
       className={`py-3 md:py-4 ${sticky ? 'sticky top-0 z-50' : ''}`}
-      style={{ backgroundColor: background_color }}
+      style={{
+        backgroundColor: background_color,
+        fontFamily: fontFamily || undefined
+      }}
     >
       <div className="max-w-[1440px] mx-auto px-4 2xl:px-0 flex justify-between items-center gap-2">
         {/* Logo */}

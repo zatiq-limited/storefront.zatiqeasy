@@ -24,6 +24,7 @@ interface AnnouncementBar3Props {
   show_phone?: boolean;
   dismissible?: boolean;
   sticky?: boolean;
+  fontFamily?: string;
 }
 
 const AnnouncementBar3: React.FC<AnnouncementBar3Props> = ({
@@ -43,6 +44,7 @@ const AnnouncementBar3: React.FC<AnnouncementBar3Props> = ({
   show_phone = true,
   dismissible,
   sticky,
+  fontFamily,
 }) => {
   const [isVisible, setIsVisible] = React.useState(true);
 
@@ -66,6 +68,7 @@ const AnnouncementBar3: React.FC<AnnouncementBar3Props> = ({
       style={{
         backgroundColor: bgColor,
         color: txtColor,
+        fontFamily: fontFamily || undefined
       }}
     >
       <div className="max-w-5xl mx-auto min-h-14 px-5 py-3 flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-4">

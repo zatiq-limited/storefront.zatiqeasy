@@ -30,6 +30,7 @@ interface Navbar3Props {
   cart_count?: number;
   cart_total?: string;
   categories?: Category[];
+  fontFamily?: string;
 }
 
 const Navbar3: React.FC<Navbar3Props> = ({
@@ -45,6 +46,7 @@ const Navbar3: React.FC<Navbar3Props> = ({
   cart_count = 2,
   cart_total = "12,000 BDT",
   categories: propCategories,
+  fontFamily,
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
@@ -113,7 +115,10 @@ const Navbar3: React.FC<Navbar3Props> = ({
   return (
     <nav
       className={`mb-1 ${sticky ? "sticky top-0 z-50" : ""}`}
-      style={{ backgroundColor: background_color }}
+      style={{
+        backgroundColor: background_color,
+        fontFamily: fontFamily || undefined
+      }}
     >
       {/* Top Row */}
       <div className="border-b border-gray-200 px-3 sm:px-4 md:px-8 lg:px-16 py-3 md:py-8">

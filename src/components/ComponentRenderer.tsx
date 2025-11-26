@@ -26,6 +26,9 @@ interface ComponentRendererProps {
   tabs?: any[];
   enabled?: boolean;
 
+  // Global settings for font inheritance
+  globalSettings?: any;
+
   client?: "load" | "visible" | "idle" | "only";
   [key: string]: any; // Allow spread props
 }
@@ -35,7 +38,7 @@ interface ComponentRendererProps {
  * API response থেকে component type অনুযায়ী dynamic rendering করে
  */
 export default function ComponentRenderer(props: ComponentRendererProps) {
-  const { section, type: directType, client = "load", ...restProps } = props;
+  const { section, type: directType, client = "load", globalSettings, ...restProps } = props;
 
   // Determine if using section object or direct props
   const componentType = section?.type || directType;
@@ -111,6 +114,17 @@ export default function ComponentRenderer(props: ComponentRendererProps) {
       testimonials,
       tabs,
     };
+  }
+
+  // Resolve font inheritance: if fontFamily is "inherit", use global font
+  if (globalSettings?.typography?.fontFamily) {
+    if (componentProps.fontFamily === "inherit") {
+      componentProps.fontFamily = globalSettings.typography.fontFamily;
+    }
+    // Also check in settings object if it exists
+    if (componentProps.settings?.fontFamily === "inherit") {
+      componentProps.settings.fontFamily = globalSettings.typography.fontFamily;
+    }
   }
 
   // Render component with all data

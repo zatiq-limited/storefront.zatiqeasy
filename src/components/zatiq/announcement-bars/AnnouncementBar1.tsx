@@ -9,6 +9,7 @@ interface AnnouncementBar1Props {
   text_color?: string;
   dismissible?: boolean;
   sticky?: boolean;
+  fontFamily?: string;
 }
 
 const AnnouncementBar1: React.FC<AnnouncementBar1Props> = ({
@@ -20,6 +21,7 @@ const AnnouncementBar1: React.FC<AnnouncementBar1Props> = ({
   text_color,
   dismissible,
   sticky,
+  fontFamily,
 }) => {
   const [isVisible, setIsVisible] = React.useState(true);
 
@@ -33,6 +35,7 @@ const AnnouncementBar1: React.FC<AnnouncementBar1Props> = ({
       style={{
         background: `linear-gradient(to right, ${gradient_start}, ${gradient_end})`,
         color: text_color,
+        fontFamily: fontFamily || undefined
       }}
     >
       <div className="max-w-[1440px] mx-auto flex items-center justify-center gap-2 px-4">

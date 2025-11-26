@@ -44,7 +44,8 @@ try {
 	console.log('[Layout] Using default design system');
 }
 
-// Get global sections from theme
+// Get global settings and sections from theme
+const globalSettings = themeData?.globalSettings || null;
 const announcement = themeData?.globalSections?.announcement || null;
 const header = themeData?.globalSections?.header || null;
 const announcementAfterHeader = themeData?.globalSections?.announcementAfterHeader || null;
@@ -113,20 +114,22 @@ const ogImage = image || '';
 	<body>
 		<!-- Announcement Bar (Global) - Dynamic from theme.json -->
 		{announcement?.enabled && (
-			<ComponentRenderer 
+			<ComponentRenderer
 				type={announcement.type}
 				{...announcement.settings}
 				blocks={announcement.blocks}
-				client:load 
+				globalSettings={globalSettings}
+				client:load
 			/>
 		)}
-		
+
 		<!-- Header/Navbar (Global) - Dynamic from theme.json -->
 		{header?.enabled && (
 			<ComponentRenderer
 				type={header.type}
 				{...header.settings}
 				blocks={header.blocks}
+				globalSettings={globalSettings}
 				client:load
 			/>
 		)}
@@ -137,6 +140,7 @@ const ogImage = image || '';
 				type={announcementAfterHeader.type}
 				{...announcementAfterHeader.settings}
 				blocks={announcementAfterHeader.blocks}
+				globalSettings={globalSettings}
 				client:load
 			/>
 		)}
@@ -148,11 +152,12 @@ const ogImage = image || '';
 		
 		<!-- Footer (Global) - Dynamic from theme.json -->
 		{footer?.enabled && (
-			<ComponentRenderer 
+			<ComponentRenderer
 				type={footer.type}
 				{...footer.settings}
 				blocks={footer.blocks}
-				client:load 
+				globalSettings={globalSettings}
+				client:load
 			/>
 		)}
 	</body>
