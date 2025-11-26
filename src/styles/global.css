@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&family=Roboto:wght@400;500;700&family=Volkhov:wght@400;700&display=swap');
+
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -43,6 +45,13 @@
 
 :root {
   --radius: 0.625rem;
+
+  /* Font Families */
+  --font-family-inter: 'Inter', sans-serif;
+  --font-family-montserrat: 'Montserrat', sans-serif;
+  --font-family-poppins: 'Poppins', sans-serif;
+  --font-family-roboto: 'Roboto', sans-serif;
+  --font-family-volkhov: 'Volkhov', serif;
   --background: oklch(1 0 0);
   --foreground: oklch(0.13 0.028 261.692);
   --card: oklch(1 0 0);
@@ -144,6 +153,23 @@
   }
   .animate-marquee-vertical {
     animation: marquee-vertical var(--duration) linear infinite;
+  }
+
+  /* Font Utility Classes */
+  .font-inter {
+    font-family: 'Inter', sans-serif;
+  }
+  .font-montserrat {
+    font-family: 'Montserrat', sans-serif;
+  }
+  .font-poppins {
+    font-family: 'Poppins', sans-serif;
+  }
+  .font-roboto {
+    font-family: 'Roboto', sans-serif;
+  }
+  .font-volkhov {
+    font-family: 'Volkhov', serif;
   }
 }
 
