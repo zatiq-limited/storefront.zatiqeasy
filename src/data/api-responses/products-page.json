@@ -103,7 +103,7 @@
       },
       {
         "id": "products_pagination",
-        "type": "products-pagination-2",
+        "type": "products-pagination-1",
         "settings": {
           "showPageNumbers": true,
           "showPrevNext": true,
