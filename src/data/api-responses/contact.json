@@ -5,7 +5,7 @@
     "sections": [
       {
         "id": "contact_hero",
-        "type": "contact-hero-1",
+        "type": "contact-hero-2",
         "enabled": true,
         "settings": {
           "backgroundColor": "#F9FAFB",
@@ -18,7 +18,7 @@
       },
       {
         "id": "contact_info",
-        "type": "contact-info-1",
+        "type": "contact-info-2",
         "enabled": true,
         "settings": {
           "backgroundColor": "#FFFFFF",
@@ -68,7 +68,7 @@
       },
       {
         "id": "contact_form",
-        "type": "contact-form-1",
+        "type": "contact-form-2",
         "enabled": true,
         "settings": {
           "backgroundColor": "#F9FAFB",
@@ -143,7 +143,7 @@
       },
       {
         "id": "contact_map",
-        "type": "contact-map-1",
+        "type": "contact-map-2",
         "enabled": true,
         "settings": {
           "backgroundColor": "#FFFFFF",

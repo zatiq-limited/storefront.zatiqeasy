@@ -43,7 +43,7 @@ const Brands1: React.FC<Brands1Props> = ({ settings = {}, blocks = [] }) => {
               <img
                 src={brand.logo}
                 alt={brand.name}
-                className="h-[152px] w-auto max-w-[200px] object-contain"
+                className="h-4 sm:h-6 md:h-8 w-3/4 object-contain"
               />
             </div>
           ))}
