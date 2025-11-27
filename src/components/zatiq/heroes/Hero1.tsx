@@ -152,7 +152,7 @@ const Hero1: React.FC<Hero1Props> = ({
   }
 
   return (
-    <div className="w-full px-4 pb-8 sm:pb-14 py-0 2xl:px-0">
+    <div className="w-full px-4 pb-8 sm:pb-14 py-0 2xl:px-0 pt-2">
       <Carousel
         setApi={setApi}
         opts={{
