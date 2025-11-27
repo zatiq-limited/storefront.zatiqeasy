@@ -48,7 +48,7 @@ interface ProductDetail1Props {
     showSpecifications?: boolean;
     showShipping?: boolean;
     galleryPosition?: "left" | "right";
-    thumbnailPosition?: "bottom" | "left";
+    thumbnailPosition?: "bottom" | "left" | "top" | "right";
   };
   product: Product;
   currency?: string;
@@ -83,37 +83,62 @@ const ProductDetail1: React.FC<ProductDetail1Props> = ({
     setSelectedVariants((prev) => ({ ...prev, [variantTypeId]: variantId }));
   };
 
-  const renderGallery = () => (
-    <div>
-      {/* Thumbnails */}
-      {product.images && product.images.length > 1 && thumbnailPosition === "bottom" && (
-        <div className="grid grid-cols-4 gap-3 mb-4">
-          {product.images.map((img, index) => (
-            <button
-              key={index}
-              onClick={() => setMainImage(img)}
-              className={`aspect-square bg-gray-100 rounded-lg overflow-hidden border-2 transition-colors ${
-                mainImage === img ? "border-blue-500" : "border-transparent hover:border-blue-300"
-              }`}
-            >
-              <img
-                src={img}
-                alt={`${product.name} - Image ${index + 1}`}
-                className="w-full h-full object-cover"
-              />
-            </button>
-          ))}
-        </div>
-      )}
+  const isVerticalThumbnails = thumbnailPosition === "left" || thumbnailPosition === "right";
 
-      {/* Main Image */}
-      <div className="aspect-square bg-gray-100 rounded-2xl overflow-hidden shadow-lg">
-        <img
-          src={mainImage}
-          alt={product.name}
-          className="w-full h-full object-cover"
-        />
+  const renderThumbnails = () => (
+    product.images && product.images.length > 1 ? (
+      <div className={`${isVerticalThumbnails ? "flex flex-col gap-3" : "grid grid-cols-4 gap-3"}`}>
+        {product.images.map((img, index) => (
+          <button
+            key={index}
+            onClick={() => setMainImage(img)}
+            className={`aspect-square bg-gray-100 rounded-lg overflow-hidden border-2 transition-colors ${
+              mainImage === img ? "border-blue-500" : "border-transparent hover:border-blue-300"
+            } ${isVerticalThumbnails ? "w-16 h-16" : ""}`}
+          >
+            <img
+              src={img}
+              alt={`${product.name} - Image ${index + 1}`}
+              className="w-full h-full object-cover"
+            />
+          </button>
+        ))}
       </div>
+    ) : null
+  );
+
+  const renderGallery = () => (
+    <div className={`${isVerticalThumbnails ? "flex gap-4" : ""}`}>
+      {/* Thumbnails - Left Position */}
+      {thumbnailPosition === "left" && renderThumbnails()}
+
+      <div className="flex-1">
+        {/* Thumbnails - Top Position */}
+        {thumbnailPosition === "top" && (
+          <div className="mb-4">
+            {renderThumbnails()}
+          </div>
+        )}
+
+        {/* Main Image */}
+        <div className="aspect-square bg-gray-100 rounded-2xl overflow-hidden shadow-lg">
+          <img
+            src={mainImage}
+            alt={product.name}
+            className="w-full h-full object-cover"
+          />
+        </div>
+
+        {/* Thumbnails - Bottom Position */}
+        {thumbnailPosition === "bottom" && (
+          <div className="mt-4">
+            {renderThumbnails()}
+          </div>
+        )}
+      </div>
+
+      {/* Thumbnails - Right Position */}
+      {thumbnailPosition === "right" && renderThumbnails()}
     </div>
   );
 
