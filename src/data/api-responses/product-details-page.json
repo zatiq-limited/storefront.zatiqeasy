@@ -36,7 +36,7 @@
       },
       {
         "id": "customer_reviews",
-        "type": "customer-reviews-1",
+        "type": "customer-reviews-2",
         "enabled": true,
         "settings": {
           "title": "Customer Reviews",

@@ -147,7 +147,7 @@ const ProductDetail2: React.FC<ProductDetail2Props> = ({
 
   // Render gallery section
   const renderGallery = () => (
-    <div className={`p-6 lg:p-8 bg-gray-50 ${(thumbnailPosition === "bottom" || thumbnailPosition === "top") ? "" : "flex gap-4"}`}>
+    <div className={`p-6 lg:p-8 ${(thumbnailPosition === "bottom" || thumbnailPosition === "top") ? "" : "flex gap-4"}`}>
       {/* Side Thumbnails (Left) */}
       {thumbnailPosition === "left" && renderThumbnails("left")}
 
@@ -342,7 +342,7 @@ const ProductDetail2: React.FC<ProductDetail2Props> = ({
   );
 
   return (
-    <section className="py-8 md:py-4 bg-gradient-to-b from-gray-50 to-white">
+    <section className="py-8 md:py-4">
       <div className="max-w-[1440px] mx-auto px-4 2xl:px-0">
         <div className="bg-white rounded-3xl overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-2">
@@ -363,7 +363,7 @@ const ProductDetail2: React.FC<ProductDetail2Props> = ({
           {/* Tabs Section */}
           <div className="border-t">
             {/* Tab Headers */}
-            <div className="flex border-b bg-gray-50">
+            <div className="flex border-b">
               {showDescription && product.description && (
                 <button
                   onClick={() => setActiveTab("description")}
