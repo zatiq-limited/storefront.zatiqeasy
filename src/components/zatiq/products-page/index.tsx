@@ -27,6 +27,9 @@ export { default as ProductsPagination2 } from "./ProductsPagination2";
 export { default as ProductsLayout1 } from "./ProductsLayout1";
 export { default as ProductsLayout2 } from "./ProductsLayout2";
 
+// New unified Layout Component
+export { default as ProductsLayout } from "./ProductsLayout";
+
 // Content Components (simplified sidebar + grid)
 export { default as ProductsContent1 } from "./ProductsContent1";
 

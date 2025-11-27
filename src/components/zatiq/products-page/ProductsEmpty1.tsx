@@ -15,7 +15,11 @@ const ProductsEmpty1: React.FC<ProductsEmpty1Props> = ({
   settings = {},
   categories = [
     { id: "1", name: "Men's Fashion", href: "/products?category=mens-fashion" },
-    { id: "2", name: "Women's Fashion", href: "/products?category=womens-fashion" },
+    {
+      id: "2",
+      name: "Women's Fashion",
+      href: "/products?category=womens-fashion",
+    },
     { id: "3", name: "Accessories", href: "/products?category=accessories" },
     { id: "4", name: "New Arrivals", href: "/products?category=new-arrivals" },
   ],
@@ -51,7 +55,9 @@ const ProductsEmpty1: React.FC<ProductsEmpty1Props> = ({
 
           {/* Title & Description */}
           <h2 className="text-3xl font-bold text-gray-900 mb-3">{title}</h2>
-          <p className="text-lg text-gray-600 max-w-md mx-auto mb-8">{description}</p>
+          <p className="text-lg text-gray-600 max-w-md mx-auto mb-8">
+            {description}
+          </p>
 
           {/* CTA Button */}
           <a
@@ -59,8 +65,18 @@ const ProductsEmpty1: React.FC<ProductsEmpty1Props> = ({
             className="inline-flex items-center gap-2 px-8 py-3 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-800 transition-colors"
           >
             {buttonText}
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M17 8l4 4m0 0l-4 4m4-4H3"
+              />
             </svg>
           </a>
         </div>

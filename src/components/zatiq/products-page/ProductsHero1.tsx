@@ -40,7 +40,7 @@ const ProductsHero1: React.FC<ProductsHero1Props> = ({
     : title || "All Products";
 
   return (
-    <section className={`bg-gradient-to-r ${backgroundGradient}`}>
+    <section className={`bg-linear-to-r ${backgroundGradient}`}>
       <div className="max-w-[1440px] mx-auto px-4 2xl:px-0">
         {/* Breadcrumb */}
         {showBreadcrumb && (
@@ -64,7 +64,9 @@ const ProductsHero1: React.FC<ProductsHero1Props> = ({
                     </svg>
                   )}
                   {index === breadcrumbs.length - 1 ? (
-                    <span className="text-gray-600 font-medium">{crumb.label}</span>
+                    <span className="text-gray-600 font-medium">
+                      {crumb.label}
+                    </span>
                   ) : (
                     <a
                       href={crumb.href}
@@ -84,7 +86,9 @@ const ProductsHero1: React.FC<ProductsHero1Props> = ({
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
             {displayTitle}
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">{description}</p>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            {description}
+          </p>
           {showProductCount && productCount > 0 && (
             <p className="mt-4 text-sm text-gray-500">
               Showing {productCount} products

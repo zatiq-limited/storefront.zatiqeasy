@@ -60,7 +60,9 @@ const ProductsGrid2: React.FC<ProductsGrid2Props> = ({
     // Calculate discount badge
     let badge: string | undefined;
     if (product.old_price && product.old_price > product.price) {
-      const discount = Math.round(((product.old_price - product.price) / product.old_price) * 100);
+      const discount = Math.round(
+        ((product.old_price - product.price) / product.old_price) * 100
+      );
       badge = `${discount}% OFF`;
     }
 
@@ -85,7 +87,9 @@ const ProductsGrid2: React.FC<ProductsGrid2Props> = ({
 
   // Fallback if component not found - use inline rendering
   if (!ProductCard) {
-    console.warn(`ProductsGrid2: Card style "${currentCardStyle}" not found, using fallback`);
+    console.warn(
+      `ProductsGrid2: Card style "${currentCardStyle}" not found, using fallback`
+    );
 
     // List View Fallback
     if (view === "list") {
@@ -94,10 +98,12 @@ const ProductsGrid2: React.FC<ProductsGrid2Props> = ({
           {products.map((product) => (
             <a
               key={product.id}
-              href={`/products/${product.product_code?.toLowerCase() || product.id}`}
+              href={`/products/${
+                product.product_code?.toLowerCase() || product.id
+              }`}
               className="flex gap-6 bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden p-4"
             >
-              <div className="relative w-48 h-48 flex-shrink-0 overflow-hidden bg-gray-100 rounded-lg">
+              <div className="relative w-48 h-48 shrink-0 overflow-hidden bg-gray-100 rounded-lg">
                 <img
                   src={product.image_url}
                   alt={product.name}
@@ -106,24 +112,40 @@ const ProductsGrid2: React.FC<ProductsGrid2Props> = ({
                 />
                 {product.old_price && (
                   <div className="absolute top-2 left-2 bg-red-500 text-white px-2 py-0.5 rounded text-xs font-bold">
-                    -{Math.round(((product.old_price - product.price) / product.old_price) * 100)}%
+                    -
+                    {Math.round(
+                      ((product.old_price - product.price) /
+                        product.old_price) *
+                        100
+                    )}
+                    %
                   </div>
                 )}
               </div>
               <div className="flex-1 flex flex-col justify-between py-2">
                 <div>
                   {product.brand && (
-                    <p className="text-xs text-blue-600 font-medium mb-1">{product.brand}</p>
+                    <p className="text-xs text-blue-600 font-medium mb-1">
+                      {product.brand}
+                    </p>
                   )}
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{product.name}</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                    {product.name}
+                  </h3>
                   {product.short_description && (
-                    <p className="text-sm text-gray-600 line-clamp-2 mb-3">{product.short_description}</p>
+                    <p className="text-sm text-gray-600 line-clamp-2 mb-3">
+                      {product.short_description}
+                    </p>
                   )}
                 </div>
                 <div className="flex items-baseline gap-2">
-                  <span className="text-2xl font-bold text-gray-900">{currency} {product.price.toLocaleString()}</span>
+                  <span className="text-2xl font-bold text-gray-900">
+                    {currency} {product.price.toLocaleString()}
+                  </span>
                   {product.old_price && (
-                    <span className="text-base text-gray-500 line-through">{currency} {product.old_price.toLocaleString()}</span>
+                    <span className="text-base text-gray-500 line-through">
+                      {currency} {product.old_price.toLocaleString()}
+                    </span>
                   )}
                 </div>
               </div>
@@ -145,7 +167,9 @@ const ProductsGrid2: React.FC<ProductsGrid2Props> = ({
         {products.map((product) => (
           <a
             key={product.id}
-            href={`/products/${product.product_code?.toLowerCase() || product.id}`}
+            href={`/products/${
+              product.product_code?.toLowerCase() || product.id
+            }`}
             className="block bg-white rounded-xl shadow-sm hover:shadow-xl transition-all overflow-hidden"
           >
             <div className="aspect-square overflow-hidden bg-gray-100">
@@ -157,12 +181,20 @@ const ProductsGrid2: React.FC<ProductsGrid2Props> = ({
               />
             </div>
             <div className="p-4">
-              {product.brand && <p className="text-xs text-blue-600 mb-1">{product.brand}</p>}
-              <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">{product.name}</h3>
+              {product.brand && (
+                <p className="text-xs text-blue-600 mb-1">{product.brand}</p>
+              )}
+              <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">
+                {product.name}
+              </h3>
               <div>
-                <span className="text-lg font-bold">{currency} {product.price.toLocaleString()}</span>
+                <span className="text-lg font-bold">
+                  {currency} {product.price.toLocaleString()}
+                </span>
                 {product.old_price && (
-                  <span className="text-sm text-gray-500 line-through ml-2">{currency} {product.old_price.toLocaleString()}</span>
+                  <span className="text-sm text-gray-500 line-through ml-2">
+                    {currency} {product.old_price.toLocaleString()}
+                  </span>
                 )}
               </div>
             </div>
@@ -179,7 +211,9 @@ const ProductsGrid2: React.FC<ProductsGrid2Props> = ({
         {products.map((product) => (
           <a
             key={product.id}
-            href={`/products/${product.product_code?.toLowerCase() || product.id}`}
+            href={`/products/${
+              product.product_code?.toLowerCase() || product.id
+            }`}
             className="block"
           >
             <ProductCard {...mapProductToCardProps(product)} />
@@ -202,7 +236,9 @@ const ProductsGrid2: React.FC<ProductsGrid2Props> = ({
       {products.map((product) => (
         <a
           key={product.id}
-          href={`/products/${product.product_code?.toLowerCase() || product.id}`}
+          href={`/products/${
+            product.product_code?.toLowerCase() || product.id
+          }`}
           className="block"
         >
           <ProductCard {...mapProductToCardProps(product)} />

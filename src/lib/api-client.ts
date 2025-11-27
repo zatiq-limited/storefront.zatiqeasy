@@ -212,8 +212,22 @@ export async function getProductsPageData(params?: {
     console.log("[API] ✅ Products page data loaded from API");
     return response;
   } catch (error) {
-    console.error("[API] ❌ Products page API failed");
-    return null;
+    console.error("[API] ❌ Products page API failed - falling back to local file");
+    // Fallback to local products-page.json file
+    try {
+      const localProductsPage = await import("../data/api-responses/products-page.json");
+      console.log("[API] ✅ Products page data loaded from local file");
+
+      // Handle different import structures
+      const imported = localProductsPage.default || localProductsPage;
+      const result = imported?.data || imported;
+
+      console.log("[API] Products page sections:", result?.sections?.length || 0);
+      return result;
+    } catch (localError) {
+      console.error("[API] ❌ Local products-page.json also failed:", localError);
+      return null;
+    }
   }
 }
 

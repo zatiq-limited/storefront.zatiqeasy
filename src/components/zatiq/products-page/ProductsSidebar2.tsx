@@ -37,10 +37,13 @@ const ProductsSidebar2: React.FC<ProductsSidebar2Props> = ({
   onClose,
 }) => {
   const { collapsible = true } = settings;
-  const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>(
-    blocks.reduce((acc, block) => ({ ...acc, [block.id]: true }), {})
-  );
-  const [priceRange, setPriceRange] = useState<{ min: number; max: number }>({ min: 0, max: 10000 });
+  const [expandedSections, setExpandedSections] = useState<
+    Record<string, boolean>
+  >(blocks.reduce((acc, block) => ({ ...acc, [block.id]: true }), {}));
+  const [priceRange, setPriceRange] = useState<{ min: number; max: number }>({
+    min: 0,
+    max: 10000,
+  });
 
   const toggleSection = (id: string) => {
     if (!collapsible) return;
@@ -85,13 +88,29 @@ const ProductsSidebar2: React.FC<ProductsSidebar2Props> = ({
       <div className="flex items-center justify-between p-4 border-b">
         <h2 className="text-xl font-bold text-gray-900">Filters</h2>
         <div className="flex items-center gap-4">
-          <button onClick={clearAllFilters} className="text-sm text-blue-600 hover:text-blue-800">
+          <button
+            onClick={clearAllFilters}
+            className="text-sm text-blue-600 hover:text-blue-800"
+          >
             Clear all
           </button>
           {onClose && (
-            <button onClick={onClose} className="lg:hidden p-1 hover:bg-gray-100 rounded-full">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+            <button
+              onClick={onClose}
+              className="lg:hidden p-1 hover:bg-gray-100 rounded-full"
+            >
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </button>
           )}
@@ -106,15 +125,24 @@ const ProductsSidebar2: React.FC<ProductsSidebar2Props> = ({
               onClick={() => toggleSection(block.id)}
               className="flex items-center justify-between w-full text-left mb-3"
             >
-              <h3 className="text-base font-semibold text-gray-900">{block.title}</h3>
+              <h3 className="text-base font-semibold text-gray-900">
+                {block.title}
+              </h3>
               {collapsible && (
                 <svg
-                  className={`w-5 h-5 text-gray-400 transition-transform ${expandedSections[block.id] ? "rotate-180" : ""}`}
+                  className={`w-5 h-5 text-gray-400 transition-transform ${
+                    expandedSections[block.id] ? "rotate-180" : ""
+                  }`}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M19 9l-7 7-7-7"
+                  />
                 </svg>
               )}
             </button>
@@ -128,13 +156,24 @@ const ProductsSidebar2: React.FC<ProductsSidebar2Props> = ({
                       min={block.min || 0}
                       max={block.max || 10000}
                       value={priceRange.max}
-                      onChange={(e) => setPriceRange((prev) => ({ ...prev, max: Number(e.target.value) }))}
+                      onChange={(e) =>
+                        setPriceRange((prev) => ({
+                          ...prev,
+                          max: Number(e.target.value),
+                        }))
+                      }
                       className="w-full accent-blue-600"
                     />
                     <div className="flex items-center gap-2 text-sm">
-                      <span className="text-gray-600">{block.currency || "৳"}{priceRange.min}</span>
+                      <span className="text-gray-600">
+                        {block.currency || "৳"}
+                        {priceRange.min}
+                      </span>
                       <span className="text-gray-400">-</span>
-                      <span className="text-gray-600">{block.currency || "৳"}{priceRange.max}</span>
+                      <span className="text-gray-600">
+                        {block.currency || "৳"}
+                        {priceRange.max}
+                      </span>
                     </div>
                     <button
                       onClick={handlePriceApply}
@@ -159,8 +198,16 @@ const ProductsSidebar2: React.FC<ProductsSidebar2Props> = ({
                       >
                         {selectedFilters.color?.includes(item.id) && (
                           <span className="absolute inset-0 flex items-center justify-center">
-                            <svg className="w-5 h-5 text-white drop-shadow" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                            <svg
+                              className="w-5 h-5 text-white drop-shadow"
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                clipRule="evenodd"
+                              />
                             </svg>
                           </span>
                         )}
@@ -185,16 +232,26 @@ const ProductsSidebar2: React.FC<ProductsSidebar2Props> = ({
                   </div>
                 ) : (
                   block.items?.map((item) => (
-                    <label key={item.id} className="flex items-center gap-3 py-1 cursor-pointer group">
+                    <label
+                      key={item.id}
+                      className="flex items-center gap-3 py-1 cursor-pointer group"
+                    >
                       <input
                         type="checkbox"
-                        checked={selectedFilters[block.type]?.includes(item.id) || false}
+                        checked={
+                          selectedFilters[block.type]?.includes(item.id) ||
+                          false
+                        }
                         onChange={() => handleFilterChange(block.type, item.id)}
                         className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                       />
-                      <span className="text-sm text-gray-700 group-hover:text-gray-900 flex-1">{item.name}</span>
+                      <span className="text-sm text-gray-700 group-hover:text-gray-900 flex-1">
+                        {item.name}
+                      </span>
                       {item.count !== undefined && (
-                        <span className="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">{item.count}</span>
+                        <span className="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
+                          {item.count}
+                        </span>
                       )}
                     </label>
                   ))
@@ -227,7 +284,10 @@ const ProductsSidebar2: React.FC<ProductsSidebar2Props> = ({
       {/* Mobile Drawer */}
       {isOpen && (
         <>
-          <div className="lg:hidden fixed inset-0 bg-black/50 z-50" onClick={onClose} />
+          <div
+            className="lg:hidden fixed inset-0 bg-black/50 z-50"
+            onClick={onClose}
+          />
           <div className="lg:hidden fixed inset-y-0 left-0 w-full max-w-sm bg-white z-50 shadow-xl">
             {sidebarContent}
           </div>

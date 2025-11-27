@@ -4,140 +4,120 @@
     "template": "products",
     "sections": [
       {
-        "id": "products_hero",
+        "id": "products_hero_1_0",
         "type": "products-hero-1",
         "settings": {
+          "title": "All Products",
+          "description": "Discover our curated collection of premium products",
           "showBreadcrumb": true,
           "showProductCount": true,
-          "backgroundGradient": "from-blue-50 to-purple-50"
+          "gradient_start": "#EBF4FF",
+          "gradient_end": "#F3E8FF",
+          "titleFontFamily": "inherit",
+          "titleFontSize": "text-4xl md:text-5xl",
+          "titleFontWeight": "font-bold",
+          "titleColor": "#111827",
+          "descriptionFontFamily": "inherit",
+          "descriptionFontSize": "text-lg",
+          "descriptionColor": "#4B5563",
+          "breadcrumbColor": "#6B7280",
+          "productCountColor": "#6B7280",
+          "productCountFontSize": "text-sm"
         }
       },
       {
-        "id": "products_layout",
-        "type": "products-layout-2",
+        "id": "products_layout_1",
+        "type": "products-layout",
         "settings": {
           "showSidebar": true,
+          "sidebarType": "products-sidebar-1",
           "sidebarPosition": "left",
-          "showViewToggle": true,
-          "defaultView": "grid",
+          "showPagination": true,
+          "paginationType": "products-pagination-1",
+          "productsPerPage": 20,
           "columns": 4,
           "columnsTablet": 2,
           "columnsMobile": 2,
-          "gap": 2,
-          "cardStyle": "product-card-5",
+          "gap": 6,
+          "cardType": "card-1",
           "showSearch": true,
           "showSort": true,
+          "showViewToggle": true,
+          "defaultView": "grid",
           "sticky": true,
-          "sortOptions": [
-            { "value": "featured", "label": "Featured" },
-            { "value": "price-asc", "label": "Price: Low to High" },
-            { "value": "price-desc", "label": "Price: High to Low" },
-            { "value": "newest", "label": "Newest First" },
-            { "value": "rating", "label": "Top Rated" }
-          ]
-        },
-        "sidebar": {
-          "type": "products-sidebar-2",
-          "settings": {
-            "collapsible": true
-          },
-          "filters": [
-            {
-              "id": "category_filter",
-              "title": "Categories",
-              "type": "category",
-              "items": [
-                { "id": "1", "name": "Women's Fashion", "count": 45 },
-                { "id": "2", "name": "Men's Fashion", "count": 38 },
-                { "id": "3", "name": "Accessories", "count": 22 },
-                { "id": "4", "name": "Bags", "count": 15 },
-                { "id": "5", "name": "Shoes", "count": 28 }
-              ]
-            },
-            {
-              "id": "price_filter",
-              "title": "Price Range",
-              "type": "price",
-              "min": 0,
-              "max": 10000,
-              "currency": "BDT"
-            },
-            {
-              "id": "brand_filter",
-              "title": "Brands",
-              "type": "brand",
-              "items": [
-                { "id": "1", "name": "ZatiqStyle", "count": 25 },
-                { "id": "2", "name": "ZatiqDenim", "count": 18 },
-                { "id": "3", "name": "ZatiqBasics", "count": 32 },
-                { "id": "4", "name": "ZatiqLux", "count": 12 }
-              ]
-            },
-            {
-              "id": "color_filter",
-              "title": "Colors",
-              "type": "color",
-              "items": [
-                { "id": "1", "name": "Black", "hex": "#000000", "count": 45 },
-                { "id": "2", "name": "White", "hex": "#FFFFFF", "count": 38 },
-                { "id": "3", "name": "Blue", "hex": "#3B82F6", "count": 22 },
-                { "id": "4", "name": "Red", "hex": "#EF4444", "count": 15 },
-                { "id": "5", "name": "Brown", "hex": "#92400E", "count": 18 }
-              ]
-            },
-            {
-              "id": "size_filter",
-              "title": "Sizes",
-              "type": "size",
-              "items": [
-                { "id": "1", "name": "XS", "count": 12 },
-                { "id": "2", "name": "S", "count": 28 },
-                { "id": "3", "name": "M", "count": 45 },
-                { "id": "4", "name": "L", "count": 38 },
-                { "id": "5", "name": "XL", "count": 22 },
-                { "id": "6", "name": "XXL", "count": 10 }
-              ]
-            }
-          ]
+          "filterBarBgColor": "#FFFFFF",
+          "searchBorderColor": "#E5E7EB",
+          "sortBorderColor": "#E5E7EB",
+          "productCountBgColor": "#F3F4F6",
+          "productCountTextColor": "#111827",
+          "searchFontFamily": "inherit",
+          "searchFontSize": "text-sm",
+          "sortFontFamily": "inherit",
+          "sortFontSize": "text-sm",
+          "productCountFontFamily": "inherit",
+          "productCountFontSize": "text-xs",
+          "productCount": 128
         }
       },
       {
-        "id": "products_pagination",
-        "type": "products-pagination-2",
+        "id": "static_banner_1_2",
+        "type": "static-banner-1",
         "settings": {
-          "showPageNumbers": true,
-          "showPrevNext": true,
-          "maxVisiblePages": 5,
-          "position": "center"
+          "image": "https://i.ibb.co.com/5x6wzDWj/laptop-cover.webp",
+          "imageMobile": "",
+          "title": "Best Discounts\n2025",
+          "description": "Salla Store provides you with everything you need, from electronics to home furniture, along with the best discounts on products. Shop now and enjoy all the discounts on products.",
+          "buttonText": "Discover more",
+          "buttonLink": "/collections/discounts",
+          "secondaryButtonText": "",
+          "secondaryButtonLink": "",
+          "textAlignment": "right",
+          "textColor": "#FFFFFF",
+          "overlayColor": "#000000",
+          "overlayOpacity": 5,
+          "height": "medium",
+          "titleFont": "sans",
+          "descriptionFont": "sans"
         }
       },
       {
-        "id": "empty_state",
-        "type": "products-empty-1",
-        "enabled": false,
+        "id": "special_offers_slider_4_3",
+        "type": "special-offers-slider-4",
         "settings": {
-          "title": "No products found",
-          "description": "Try adjusting your search or filter criteria",
-          "showCategorySuggestions": true,
-          "buttonText": "View All Products",
-          "buttonLink": "/products"
+          "bgColor": "transparent",
+          "leftCardImage": "https://i.ibb.co.com/B2s1CxpY/8381449cda78484f78ab0e499626aff8f031bb85.jpg",
+          "leftCardTitle": "Smartphone\nBLU G91 Pro 2022",
+          "leftCardSubtitle": "Sale 20% off all store",
+          "leftCardButtonText": "Shop Now",
+          "leftCardButtonLink": "#",
+          "leftCardTitleColor": "#010F1C",
+          "leftCardTextColor": "#010F1C",
+          "rightCardImage": "https://i.ibb.co.com/NgXRg0g3/c1d56950ca32c579c48f4a92888c4a547802c115.jpg",
+          "rightCardTitle": "HyperX Cloud II\nWireless",
+          "rightCardDiscount": "Sale 35% off",
+          "rightCardButtonText": "Shop Now",
+          "rightCardButtonLink": "#",
+          "rightCardTitleColor": "#010F1C",
+          "rightCardTextColor": "#010F1C",
+          "fontFamily": "inherit"
         }
       }
     ],
     "seo": {
-      "title": "All Products | ZatiqEasy",
-      "description": "Shop our complete collection of premium fashion and lifestyle products",
-      "canonical": "/products",
+      "title": "All Products - Custom Theme Store",
+      "description": "Browse our complete collection of products.",
+      "canonical": "",
       "og": {
-        "title": "All Products | ZatiqEasy",
-        "description": "Shop our complete collection of premium fashion and lifestyle products",
-        "image": "/assets/og/products.jpg",
+        "title": "All Products - Custom Theme Store",
+        "description": "Browse our complete collection of products.",
+        "image": "",
         "type": "website"
       },
       "twitter": {
         "card": "summary_large_image",
-        "title": "All Products | ZatiqEasy",
-        "description": "Shop our complete collection of premium fashion and lifestyle products"
+        "title": "All Products - Custom Theme Store",
+        "description": "Browse our complete collection of products.",
+        "image": ""
       }
     }
   }

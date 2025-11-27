@@ -1,7 +1,7 @@
 {
   "success": true,
   "data": {
-    "id": "theme_custom_1764072035611",
+    "id": "theme_custom_1764227103153",
     "globalSettings": {
       "typography": {
         "fontFamily": "Inter",
@@ -9,7 +9,7 @@
       },
       "colors": {
         "primary": "#3B82F6",
-        "secondary": "#3bde3d"
+        "secondary": "#6B7280"
       }
     },
     "globalSections": {
@@ -42,49 +42,21 @@
           "fontFamily": "inherit",
           "menu_items": [
             {
-              "label": "Handbags",
-              "url": "#"
+              "label": "Home",
+              "url": "/home"
             },
             {
-              "label": "Watches",
-              "url": "#"
-            },
-            {
-              "label": "Skincare",
-              "url": "#"
-            },
-            {
-              "label": "Jewellery",
-              "url": "#"
-            },
-            {
-              "label": "Apparels",
-              "url": "#"
+              "label": "Products",
+              "url": "/products"
             }
           ]
         },
         "blocks": []
       },
       "announcementAfterHeader": {
-        "enabled": true,
-        "type": "announcement-bar-2",
-        "settings": {
-          "phone": "(225) 555-0118",
-          "message": "Follow Us and get a chance to win 80% off",
-          "background_color": "#23856D",
-          "text_color": "#FFFFFF",
-          "show_phone": true,
-          "show_social": true,
-          "show_instagram": true,
-          "show_youtube": true,
-          "show_facebook": true,
-          "show_twitter": true,
-          "instagram_url": "#",
-          "youtube_url": "#",
-          "facebook_url": "#",
-          "twitter_url": "#",
-          "fontFamily": "inherit"
-        }
+        "enabled": false,
+        "type": "announcement-bar-1",
+        "settings": {}
       },
       "footer": {
         "enabled": true,

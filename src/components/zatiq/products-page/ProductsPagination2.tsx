@@ -55,7 +55,9 @@ const ProductsPagination2: React.FC<ProductsPagination2Props> = ({
     return (
       <div className="py-6 md:py-8 text-center px-4">
         <p className="text-xs sm:text-sm text-muted-foreground mb-4">
-          Showing <span className="font-semibold text-foreground">{to}</span> of <span className="font-semibold text-foreground">{total}</span> products
+          Showing <span className="font-semibold text-foreground">{to}</span> of{" "}
+          <span className="font-semibold text-foreground">{total}</span>{" "}
+          products
         </p>
         {current_page < total_pages && (
           <button
@@ -63,8 +65,18 @@ const ProductsPagination2: React.FC<ProductsPagination2Props> = ({
             className="px-6 sm:px-8 py-2.5 sm:py-3 bg-foreground text-background rounded-full font-medium hover:opacity-90 transition-all inline-flex items-center gap-2 shadow-md hover:shadow-lg text-sm sm:text-base"
           >
             {loadMoreText}
-            <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+            <svg
+              className="w-4 h-4 sm:w-5 sm:h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M19 9l-7 7-7-7"
+              />
             </svg>
           </button>
         )}
@@ -89,7 +101,9 @@ const ProductsPagination2: React.FC<ProductsPagination2Props> = ({
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
         {/* Page Info - Hidden on mobile, shown on tablet+ */}
         <p className="hidden sm:block text-xs sm:text-sm text-muted-foreground order-1">
-          Page <span className="font-semibold text-foreground">{current_page}</span> of{" "}
+          Page{" "}
+          <span className="font-semibold text-foreground">{current_page}</span>{" "}
+          of{" "}
           <span className="font-semibold text-foreground">{total_pages}</span>
         </p>
 
@@ -107,8 +121,18 @@ const ProductsPagination2: React.FC<ProductsPagination2Props> = ({
                   : "text-foreground hover:bg-muted/50 shadow-sm"
               }`}
             >
-              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+              <svg
+                className="w-4 h-4 sm:w-5 sm:h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M15 19l-7-7 7-7"
+                />
               </svg>
             </button>
           )}
@@ -134,7 +158,7 @@ const ProductsPagination2: React.FC<ProductsPagination2Props> = ({
                     onClick={() => handlePageChange(pageNum)}
                     aria-label={`Go to page ${pageNum}`}
                     aria-current={pageNum === current_page ? "page" : undefined}
-                    className={`min-w-[2.25rem] sm:w-10 h-9 sm:h-10 rounded-lg font-medium text-xs sm:text-sm transition-all ${
+                    className={`min-w-9 sm:w-10 h-9 sm:h-10 rounded-lg font-medium text-xs sm:text-sm transition-all ${
                       pageNum === current_page
                         ? "bg-primary text-primary-foreground shadow-md"
                         : "text-foreground hover:bg-muted/50 shadow-sm"
@@ -159,8 +183,18 @@ const ProductsPagination2: React.FC<ProductsPagination2Props> = ({
                   : "text-foreground hover:bg-muted/50 shadow-sm"
               }`}
             >
-              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+              <svg
+                className="w-4 h-4 sm:w-5 sm:h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M9 5l7 7-7 7"
+                />
               </svg>
             </button>
           )}
@@ -168,8 +202,11 @@ const ProductsPagination2: React.FC<ProductsPagination2Props> = ({
 
         {/* Results Info - Full width on mobile, right aligned on tablet+ */}
         <p className="text-xs sm:text-sm text-muted-foreground text-center sm:text-right order-3 w-full sm:w-auto">
-          Showing <span className="font-semibold text-foreground">{from}-{to}</span> of{" "}
-          <span className="font-semibold text-foreground">{total}</span>
+          Showing{" "}
+          <span className="font-semibold text-foreground">
+            {from}-{to}
+          </span>{" "}
+          of <span className="font-semibold text-foreground">{total}</span>
         </p>
       </div>
     </div>

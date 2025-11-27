@@ -161,7 +161,9 @@ const ProductsContent1: React.FC<ProductsContent1Props> = ({
             return (
               <a
                 key={product.id}
-                href={`/products/${product.product_code?.toLowerCase() || product.id}`}
+                href={`/products/${
+                  product.product_code?.toLowerCase() || product.id
+                }`}
                 className="flex flex-col sm:flex-row gap-4 sm:gap-6 bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden p-4 border border-gray-100"
               >
                 {/* Product Image */}
@@ -204,7 +206,11 @@ const ProductsContent1: React.FC<ProductsContent1Props> = ({
                           {[...Array(5)].map((_, i) => (
                             <svg
                               key={i}
-                              className={`w-4 h-4 ${i < Math.floor(props.rating!) ? "text-yellow-400" : "text-gray-300"}`}
+                              className={`w-4 h-4 ${
+                                i < Math.floor(props.rating!)
+                                  ? "text-yellow-400"
+                                  : "text-gray-300"
+                              }`}
                               fill="currentColor"
                               viewBox="0 0 20 20"
                             >
@@ -278,7 +284,9 @@ const ProductsContent1: React.FC<ProductsContent1Props> = ({
           {products.map((product) => (
             <a
               key={product.id}
-              href={`/products/${product.product_code?.toLowerCase() || product.id}`}
+              href={`/products/${
+                product.product_code?.toLowerCase() || product.id
+              }`}
               className="block"
             >
               <ProductCard {...mapProductToCardProps(product)} />
@@ -300,7 +308,9 @@ const ProductsContent1: React.FC<ProductsContent1Props> = ({
         {products.map((product) => (
           <a
             key={product.id}
-            href={`/products/${product.product_code?.toLowerCase() || product.id}`}
+            href={`/products/${
+              product.product_code?.toLowerCase() || product.id
+            }`}
             className="block bg-white rounded-xl shadow-sm hover:shadow-xl transition-all overflow-hidden"
           >
             <div className="aspect-square overflow-hidden bg-gray-100">
@@ -363,14 +373,18 @@ const ProductsContent1: React.FC<ProductsContent1Props> = ({
               </button>
             )}
             <p className="text-gray-600">
-              <span className="font-semibold text-gray-900">{products.length}</span>{" "}
+              <span className="font-semibold text-gray-900">
+                {products.length}
+              </span>{" "}
               products
             </p>
           </div>
 
           {showViewToggle && (
             <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-500 hidden sm:block">View:</span>
+              <span className="text-sm text-gray-500 hidden sm:block">
+                View:
+              </span>
               <div className="flex border border-gray-300 rounded-lg overflow-hidden">
                 <button
                   onClick={() => setCurrentView("grid")}
@@ -380,7 +394,11 @@ const ProductsContent1: React.FC<ProductsContent1Props> = ({
                       : "bg-white text-gray-600 hover:bg-gray-50"
                   }`}
                 >
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <svg
+                    className="w-5 h-5"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
                     <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                   </svg>
                 </button>
@@ -392,7 +410,11 @@ const ProductsContent1: React.FC<ProductsContent1Props> = ({
                       : "bg-white text-gray-600 hover:bg-gray-50"
                   }`}
                 >
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <svg
+                    className="w-5 h-5"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
                     <path
                       fillRule="evenodd"
                       d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
@@ -407,7 +429,9 @@ const ProductsContent1: React.FC<ProductsContent1Props> = ({
 
         {/* Main Content */}
         <div
-          className={`flex gap-8 ${sidebarPosition === "right" ? "flex-row-reverse" : ""}`}
+          className={`flex gap-8 ${
+            sidebarPosition === "right" ? "flex-row-reverse" : ""
+          }`}
         >
           {/* Sidebar */}
           {showSidebar && sidebar && (
@@ -423,11 +447,16 @@ const ProductsContent1: React.FC<ProductsContent1Props> = ({
                     <h3 className="font-semibold mb-4">Filters</h3>
                     {sidebar.filters?.map((filter) => (
                       <div key={filter.id} className="mb-4">
-                        <h4 className="font-medium text-sm mb-2">{filter.title}</h4>
+                        <h4 className="font-medium text-sm mb-2">
+                          {filter.title}
+                        </h4>
                         {filter.items && (
                           <ul className="space-y-1">
                             {filter.items.map((item) => (
-                              <li key={item.id} className="text-sm text-gray-600">
+                              <li
+                                key={item.id}
+                                className="text-sm text-gray-600"
+                              >
                                 {item.name} ({item.count})
                               </li>
                             ))}
@@ -477,11 +506,16 @@ const ProductsContent1: React.FC<ProductsContent1Props> = ({
                       ) : (
                         sidebar.filters?.map((filter) => (
                           <div key={filter.id} className="mb-4">
-                            <h4 className="font-medium text-sm mb-2">{filter.title}</h4>
+                            <h4 className="font-medium text-sm mb-2">
+                              {filter.title}
+                            </h4>
                             {filter.items && (
                               <ul className="space-y-1">
                                 {filter.items.map((item) => (
-                                  <li key={item.id} className="text-sm text-gray-600">
+                                  <li
+                                    key={item.id}
+                                    className="text-sm text-gray-600"
+                                  >
                                     {item.name} ({item.count})
                                   </li>
                                 ))}

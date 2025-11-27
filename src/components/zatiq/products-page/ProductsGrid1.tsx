@@ -52,7 +52,9 @@ const ProductsGrid1: React.FC<ProductsGrid1Props> = ({
 
   // Fallback if component not found
   if (!ProductCard) {
-    console.warn(`ProductsGrid1: Card style "${cardStyle}" not found in registry`);
+    console.warn(
+      `ProductsGrid1: Card style "${cardStyle}" not found in registry`
+    );
     return (
       <div className="text-center py-8 text-gray-500">
         Product card component "{cardStyle}" not found
@@ -65,7 +67,9 @@ const ProductsGrid1: React.FC<ProductsGrid1Props> = ({
     // Calculate discount badge
     let badge: string | undefined;
     if (product.old_price && product.old_price > product.price) {
-      const discount = Math.round(((product.old_price - product.price) / product.old_price) * 100);
+      const discount = Math.round(
+        ((product.old_price - product.price) / product.old_price) * 100
+      );
       badge = `${discount}% OFF`;
     }
 
@@ -100,11 +104,13 @@ const ProductsGrid1: React.FC<ProductsGrid1Props> = ({
       {products.map((product) => (
         <a
           key={product.id}
-          href={`/products/${product.product_code?.toLowerCase() || product.id}`}
+          href={`/products/${
+            product.product_code?.toLowerCase() || product.id
+          }`}
           className="block"
         >
           <ProductCard {...mapProductToCardProps(product)} />
-          </a>
+        </a>
       ))}
     </div>
   );

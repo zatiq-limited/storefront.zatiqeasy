@@ -78,6 +78,7 @@ import {
   ProductsPagination2,
   ProductsLayout1,
   ProductsLayout2,
+  ProductsLayout,
   ProductsContent1,
   ProductsEmpty1,
 } from "@/components/zatiq/products-page";
@@ -225,6 +226,7 @@ export const ZATIQ_COMPONENTS: Record<string, ComponentType<any>> = {
   "products-pagination-2": ProductsPagination2,
   "products-layout-1": ProductsLayout1,
   "products-layout-2": ProductsLayout2,
+  "products-layout": ProductsLayout,
   "products-content-1": ProductsContent1,
   "products-empty-1": ProductsEmpty1,
 
