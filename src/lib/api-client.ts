@@ -367,6 +367,23 @@ export async function getContactPageData(): Promise<any> {
 }
 
 /**
+ * Get order success page data
+ *
+ * Backend API: GET /api/storefront/v1/page/order-success
+ * Response: { success: true, data: { template, sections, seo } }
+ */
+export async function getOrderSuccessPageData(): Promise<any> {
+  try {
+    const response = await apiCall<any>(`/api/storefront/v1/page/order-success`);
+    console.log("[API] ✅ Order success page data loaded from API");
+    return response;
+  } catch (error) {
+    console.error("[API] ❌ Order success page API failed");
+    return null;
+  }
+}
+
+/**
  * Get collections
  *
  * Backend API: GET /api/storefront/v1/collections
