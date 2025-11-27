@@ -49,6 +49,7 @@ interface ProductDetail1Props {
     showShipping?: boolean;
     galleryPosition?: "left" | "right";
     thumbnailPosition?: "bottom" | "left" | "top" | "right";
+    thumbnailSize?: "sm" | "md" | "lg";
   };
   product: Product;
   currency?: string;
@@ -70,6 +71,7 @@ const ProductDetail1: React.FC<ProductDetail1Props> = ({
     showShipping = true,
     galleryPosition = "left",
     thumbnailPosition = "bottom",
+    thumbnailSize = "md",
   } = settings;
 
   const [mainImage, setMainImage] = useState(product.image_url);
@@ -85,16 +87,22 @@ const ProductDetail1: React.FC<ProductDetail1Props> = ({
 
   const isVerticalThumbnails = thumbnailPosition === "left" || thumbnailPosition === "right";
 
+  const thumbnailSizeClasses = {
+    sm: { vertical: "w-12 h-12", grid: "grid-cols-6 gap-2" },
+    md: { vertical: "w-16 h-16", grid: "grid-cols-4 gap-3" },
+    lg: { vertical: "w-20 h-20", grid: "grid-cols-3 gap-4" },
+  };
+
   const renderThumbnails = () => (
     product.images && product.images.length > 1 ? (
-      <div className={`${isVerticalThumbnails ? "flex flex-col gap-3" : "grid grid-cols-4 gap-3"}`}>
+      <div className={`${isVerticalThumbnails ? "flex flex-col gap-3" : `grid ${thumbnailSizeClasses[thumbnailSize].grid}`}`}>
         {product.images.map((img, index) => (
           <button
             key={index}
             onClick={() => setMainImage(img)}
             className={`aspect-square bg-gray-100 rounded-lg overflow-hidden border-2 transition-colors ${
               mainImage === img ? "border-blue-500" : "border-transparent hover:border-blue-300"
-            } ${isVerticalThumbnails ? "w-16 h-16" : ""}`}
+            } ${isVerticalThumbnails ? thumbnailSizeClasses[thumbnailSize].vertical : ""}`}
           >
             <img
               src={img}

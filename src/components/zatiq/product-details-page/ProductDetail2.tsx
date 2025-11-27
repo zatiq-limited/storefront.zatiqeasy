@@ -49,6 +49,7 @@ interface ProductDetail2Props {
     showShipping?: boolean;
     galleryPosition?: "left" | "right";
     thumbnailPosition?: "bottom" | "left" | "right" | "top";
+    thumbnailSize?: "sm" | "md" | "lg";
   };
   product: Product;
   currency?: string;
@@ -70,6 +71,7 @@ const ProductDetail2: React.FC<ProductDetail2Props> = ({
     showShipping = true,
     galleryPosition = "left",
     thumbnailPosition = "left",
+    thumbnailSize = "md",
   } = settings;
 
   const [mainImage, setMainImage] = useState(product.image_url);
@@ -84,6 +86,12 @@ const ProductDetail2: React.FC<ProductDetail2Props> = ({
     setSelectedVariants((prev) => ({ ...prev, [variantTypeId]: variantId }));
   };
 
+  const thumbnailSizeClasses = {
+    sm: { vertical: "w-14", grid: "grid-cols-6 gap-2", mobile: "w-12 h-12" },
+    md: { vertical: "w-20", grid: "grid-cols-4 gap-3", mobile: "w-16 h-16" },
+    lg: { vertical: "w-24", grid: "grid-cols-3 gap-4", mobile: "w-20 h-20" },
+  };
+
   // Render thumbnails based on position
   const renderThumbnails = (position: "left" | "right" | "bottom" | "top") => {
     if (!product.images || product.images.length <= 1) return null;
@@ -91,7 +99,7 @@ const ProductDetail2: React.FC<ProductDetail2Props> = ({
     // Horizontal thumbnails (top or bottom)
     if (position === "bottom" || position === "top") {
       return (
-        <div className={`grid grid-cols-4 gap-3 ${position === "top" ? "mb-4" : "mt-4"}`}>
+        <div className={`grid ${thumbnailSizeClasses[thumbnailSize].grid} ${position === "top" ? "mb-4" : "mt-4"}`}>
           {product.images.map((img, index) => (
             <button
               key={index}
@@ -115,7 +123,7 @@ const ProductDetail2: React.FC<ProductDetail2Props> = ({
 
     // Left or Right vertical thumbnails
     return (
-      <div className={`hidden md:flex flex-col gap-3 w-20 ${position === "right" ? "order-2" : "order-1"}`}>
+      <div className={`hidden md:flex flex-col gap-3 ${thumbnailSizeClasses[thumbnailSize].vertical} ${position === "right" ? "order-2" : "order-1"}`}>
         {product.images.map((img, index) => (
           <button
             key={index}
@@ -171,7 +179,7 @@ const ProductDetail2: React.FC<ProductDetail2Props> = ({
               <button
                 key={index}
                 onClick={() => setMainImage(img)}
-                className={`w-16 h-16 shrink-0 rounded-lg overflow-hidden border-2 ${
+                className={`${thumbnailSizeClasses[thumbnailSize].mobile} shrink-0 rounded-lg overflow-hidden border-2 ${
                   mainImage === img ? "border-purple-500" : "border-transparent"
                 }`}
               >

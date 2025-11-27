@@ -30,7 +30,8 @@
           "showSpecifications": true,
           "showShipping": true,
           "galleryPosition": "left",
-          "thumbnailPosition": "left"
+          "thumbnailPosition": "bottom",
+          "thumbnailSize": "sm"
         }
       },
       {
