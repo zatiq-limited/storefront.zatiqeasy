@@ -18,6 +18,11 @@ interface CollectionsHero2Props {
   textColor?: string;
   imagePosition?: "left" | "right";
   badgeColor?: string;
+  showStats?: boolean;
+  stats?: {
+    label: string;
+    value: string;
+  }[];
 }
 
 const CollectionsHero2: React.FC<CollectionsHero2Props> = ({
@@ -33,13 +38,16 @@ const CollectionsHero2: React.FC<CollectionsHero2Props> = ({
   backgroundColor = "#f8f9fa",
   textColor = "#1a1a1a",
   imagePosition = "right",
+  showStats = true,
+  stats = [
+    { label: "Collections", value: "50+" },
+    { label: "Products", value: "1000+" },
+    { label: "Happy Customers", value: "10K+" },
+  ],
 }) => {
   return (
-    <section
-      className="relative overflow-hidden"
-      style={{ backgroundColor }}
-    >
-      <div className="max-w-7xl mx-auto">
+    <section className="relative overflow-hidden" style={{ backgroundColor }}>
+      <div className="max-w-[1440px] mx-auto px-4 2xl:px-0">
         <div
           className={`grid lg:grid-cols-2 gap-0 min-h-[500px] lg:min-h-[600px] ${
             imagePosition === "left" ? "lg:flex-row-reverse" : ""
@@ -47,20 +55,27 @@ const CollectionsHero2: React.FC<CollectionsHero2Props> = ({
         >
           {/* Content Side */}
           <div
-            className={`flex items-center px-6 sm:px-10 lg:px-16 py-16 lg:py-20 ${
+            className={`flex items-center px-0 sm:px-10 lg:px-16 py-16 lg:py-20 ${
               imagePosition === "left" ? "lg:order-2" : ""
             }`}
           >
             <div className="max-w-xl">
               {/* Badge */}
               {badge && (
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6"
-                style={{ backgroundColor: badgeColor, color: buttonTextColor }}
+                <div
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6"
+                  style={{
+                    backgroundColor: badgeColor,
+                    color: buttonTextColor,
+                  }}
                 >
-                  <span className="w-2 h-2 bg-black rounded-full animate-pulse"></span>
+                  <span
+                    className="w-2 h-2 rounded-full animate-pulse"
+                    style={{ backgroundColor: buttonTextColor }}
+                  ></span>
                   <span
                     className="text-sm font-semibold uppercase tracking-wider"
-                    style={{ color: textColor }}
+                    style={{ color: buttonTextColor }}
                   >
                     {badge}
                   </span>
@@ -90,7 +105,10 @@ const CollectionsHero2: React.FC<CollectionsHero2Props> = ({
                 <a
                   href={buttonLink}
                   className="inline-flex items-center gap-3 px-8 py-4 font-semibold rounded-full hover:opacity-90 transition-all duration-300 group"
-                  style={{ backgroundColor: buttonBackgroundColor, color: buttonTextColor }}
+                  style={{
+                    backgroundColor: buttonBackgroundColor,
+                    color: buttonTextColor,
+                  }}
                 >
                   <span>{buttonText}</span>
                   <svg
@@ -110,50 +128,26 @@ const CollectionsHero2: React.FC<CollectionsHero2Props> = ({
               )}
 
               {/* Stats */}
-              <div className="mt-12 grid grid-cols-3 gap-6">
-                <div>
-                  <div
-                    className="text-3xl font-bold mb-1"
-                    style={{ color: textColor }}
-                  >
-                    50+
-                  </div>
-                  <div
-                    className="text-sm opacity-70"
-                    style={{ color: textColor }}
-                  >
-                    Collections
-                  </div>
+              {showStats && stats && stats.length > 0 && (
+                <div className="mt-12 grid grid-cols-3 gap-2 sm:gap-6">
+                  {stats.map((stat, index) => (
+                    <div key={index}>
+                      <div
+                        className="text-3xl font-bold mb-1"
+                        style={{ color: textColor }}
+                      >
+                        {stat.value}
+                      </div>
+                      <div
+                        className="text-sm opacity-70"
+                        style={{ color: textColor }}
+                      >
+                        {stat.label}
+                      </div>
+                    </div>
+                  ))}
                 </div>
-                <div>
-                  <div
-                    className="text-3xl font-bold mb-1"
-                    style={{ color: textColor }}
-                  >
-                    1000+
-                  </div>
-                  <div
-                    className="text-sm opacity-70"
-                    style={{ color: textColor }}
-                  >
-                    Products
-                  </div>
-                </div>
-                <div>
-                  <div
-                    className="text-3xl font-bold mb-1"
-                    style={{ color: textColor }}
-                  >
-                    4.9
-                  </div>
-                  <div
-                    className="text-sm opacity-70"
-                    style={{ color: textColor }}
-                  >
-                    Rating
-                  </div>
-                </div>
-              </div>
+              )}
             </div>
           </div>
 
@@ -170,8 +164,8 @@ const CollectionsHero2: React.FC<CollectionsHero2Props> = ({
               className="absolute inset-0 w-full h-full object-cover"
             />
 
-            {/* Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-black/20 to-transparent"></div>
+            {/* linear Overlay */}
+            <div className="absolute inset-0 bg-linear-to-t lg:bg-linear-to-r from-black/20 to-transparent"></div>
 
             {/* Decorative Elements */}
             <div className="absolute top-10 right-10 w-24 h-24 bg-white/10 backdrop-blur-sm rounded-full"></div>
