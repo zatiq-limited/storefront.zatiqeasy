@@ -35,14 +35,14 @@ const ProductCards7: React.FC<ProductCards7Props> = ({
   const [selectedColor, setSelectedColor] = useState(0);
 
   return (
-    <div className="font-sans flex gap-6 justify-center p-1">
+    <div className="font-sans w-full h-full">
       <div
-        className="w-[282px] h-[474px] overflow-visible relative cursor-pointer transition-all duration-300"
+        className="w-full h-full overflow-visible relative cursor-pointer transition-all duration-300 flex flex-col"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
         {/* Top - Image Container */}
-        <div className="w-[282px] h-[306px] relative mb-4 overflow-hidden">
+        <div className="w-full aspect-282/306 relative mb-2 sm:mb-3 lg:mb-4 overflow-hidden">
           <img
             src={isHovered && hoverImage ? hoverImage : image}
             alt={title}
@@ -52,7 +52,7 @@ const ProductCards7: React.FC<ProductCards7Props> = ({
           {/* Badge */}
           {comparePrice && price && (
             <div
-              className="absolute top-4 left-4 text-white px-2.5 py-1 rounded text-xs font-medium leading-4 bg-[#ef4444]"
+              className="absolute top-2 left-2 sm:top-3 sm:left-3 lg:top-4 lg:left-4 text-white px-1.5 py-0.5 sm:px-2 sm:py-0.5 lg:px-2.5 lg:py-1 rounded text-[10px] sm:text-xs font-medium leading-4 bg-[#ef4444]"
             >
               {comparePrice && price ? - ((comparePrice - price) / comparePrice * 100).toFixed(0) + "%" : ""}
             </div>
@@ -60,21 +60,21 @@ const ProductCards7: React.FC<ProductCards7Props> = ({
         </div>
 
         {/* Bottom - Content Area */}
-        <div className="flex flex-col">
+        <div className="flex flex-col flex-1">
           {/* Color Options */}
           {colors.length > 0 && (
-            <div className="flex gap-2 mb-4">
+            <div className="flex gap-1.5 sm:gap-2 mb-2 sm:mb-3 lg:mb-4">
               {colors.map((color, index) => (
                 <button
                   key={index}
                   onClick={() => setSelectedColor(index)}
-                  className={`relative w-6 h-6 rounded-full flex items-center justify-center transition-all duration-200 ${
+                  className={`relative w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center transition-all duration-200 ${
                     selectedColor === index ? "" : ""
                   }`}
                 >
                   <div
                     className={`rounded-full transition-all duration-200 ${
-                      selectedColor === index ? "w-4 h-4" : "w-6 h-6"
+                      selectedColor === index ? "w-3 h-3 sm:w-4 sm:h-4" : "w-5 h-5 sm:w-6 sm:h-6"
                     }`}
                     style={{ backgroundColor: color }}
                   />
@@ -87,18 +87,18 @@ const ProductCards7: React.FC<ProductCards7Props> = ({
           )}
 
           {/* Title */}
-          <h3 className="text-sm font-medium text-[#181D25] leading-5 mb-2 line-clamp-2">
+          <h3 className="text-xs sm:text-sm font-medium text-[#181D25] leading-5 mb-1 sm:mb-2 line-clamp-2">
             {title}
           </h3>
 
           {/* Prices */}
           {price !== undefined && (
-            <div className="flex items-center gap-2 mb-4">
-              <span className="text-base font-semibold text-[#181D25] leading-6">
+            <div className="flex items-center flex-wrap gap-1 sm:gap-2 mb-2 sm:mb-3 lg:mb-4">
+              <span className="text-xs sm:text-sm lg:text-base font-semibold text-[#181D25] leading-6">
                 {currency} {price.toLocaleString()}
               </span>
               {comparePrice && (
-                <span className="text-sm font-semibold text-[#9CA3AF] line-through leading-5">
+                <span className="text-[10px] sm:text-xs lg:text-sm font-semibold text-[#9CA3AF] line-through leading-5">
                   {currency} {comparePrice.toLocaleString()}
                 </span>
               )}
@@ -107,7 +107,7 @@ const ProductCards7: React.FC<ProductCards7Props> = ({
 
           {/* Add to Cart Button */}
           {quickAddEnabled && (
-            <button className="w-full h-11 border-none rounded-3xl bg-[#222934] text-white text-sm font-medium cursor-pointer transition-all duration-300 hover:bg-[#1A202C]">
+            <button className="w-full h-9 sm:h-10 lg:h-11 border-none rounded-3xl bg-[#222934] text-white text-xs sm:text-sm font-medium cursor-pointer transition-all duration-300 hover:bg-[#1A202C] active:scale-95 mt-auto">
               Add to cart
             </button>
           )}
