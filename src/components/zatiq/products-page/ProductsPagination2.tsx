@@ -17,6 +17,8 @@ interface ProductsPagination2Props {
   };
   onPageChange?: (page: number) => void;
   onLoadMore?: () => void;
+  activeColor?: string;
+  textColor?: string;
 }
 
 const ProductsPagination2: React.FC<ProductsPagination2Props> = ({
@@ -24,6 +26,8 @@ const ProductsPagination2: React.FC<ProductsPagination2Props> = ({
   pagination,
   onPageChange,
   onLoadMore,
+  activeColor = "#3B82F6",
+  textColor = "#374151",
 }) => {
   const {
     showPageNumbers = true,
@@ -62,7 +66,8 @@ const ProductsPagination2: React.FC<ProductsPagination2Props> = ({
         {current_page < total_pages && (
           <button
             onClick={() => onLoadMore?.() || handlePageChange(current_page + 1)}
-            className="px-6 sm:px-8 py-2.5 sm:py-3 bg-foreground text-background rounded-full font-medium hover:opacity-90 transition-all inline-flex items-center gap-2 shadow-md hover:shadow-lg text-sm sm:text-base"
+            className="px-6 sm:px-8 py-2.5 sm:py-3 rounded-full font-medium hover:opacity-90 transition-all inline-flex items-center gap-2 shadow-md hover:shadow-lg text-sm sm:text-base"
+            style={{ backgroundColor: activeColor, color: "#FFFFFF" }}
           >
             {loadMoreText}
             <svg
@@ -83,8 +88,8 @@ const ProductsPagination2: React.FC<ProductsPagination2Props> = ({
         <div className="mt-4 sm:mt-6">
           <div className="w-full bg-muted rounded-full h-1.5 sm:h-2 max-w-xs sm:max-w-sm mx-auto">
             <div
-              className="bg-primary h-1.5 sm:h-2 rounded-full transition-all duration-500"
-              style={{ width: `${(to / total) * 100}%` }}
+              className="h-1.5 sm:h-2 rounded-full transition-all duration-500"
+              style={{ width: `${(to / total) * 100}%`, backgroundColor: activeColor }}
             />
           </div>
           <p className="text-xs text-muted-foreground mt-2">
@@ -160,9 +165,14 @@ const ProductsPagination2: React.FC<ProductsPagination2Props> = ({
                     aria-current={pageNum === current_page ? "page" : undefined}
                     className={`min-w-9 sm:w-10 h-9 sm:h-10 rounded-lg font-medium text-xs sm:text-sm transition-all ${
                       pageNum === current_page
-                        ? "bg-primary text-primary-foreground shadow-md"
-                        : "text-foreground hover:bg-muted/50 shadow-sm"
+                        ? "shadow-md"
+                        : "hover:bg-muted/50 shadow-sm"
                     }`}
+                    style={
+                      pageNum === current_page
+                        ? { backgroundColor: activeColor, color: "#FFFFFF" }
+                        : { color: textColor }
+                    }
                   >
                     {pageNum}
                   </button>

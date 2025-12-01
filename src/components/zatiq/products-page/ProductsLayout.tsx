@@ -35,6 +35,8 @@ interface ProductsLayoutProps {
   // Pagination settings
   showPagination?: boolean;
   paginationType?: string;
+  paginationActiveColor?: string;
+  paginationTextColor?: string;
 
   // Grid settings
   columns?: number;
@@ -107,6 +109,8 @@ const ProductsLayout: React.FC<ProductsLayoutProps> = (props) => {
     sortFontSize = props.settings?.sortFontSize ?? "text-sm",
     productCountFontFamily = props.settings?.productCountFontFamily ?? "inherit",
     productCountFontSize = props.settings?.productCountFontSize ?? "text-xs",
+    paginationActiveColor = props.settings?.paginationActiveColor ?? "#3B82F6",
+    paginationTextColor = props.settings?.paginationTextColor ?? "#374151",
     currency = props.currency ?? "BDT",
   } = props;
 
@@ -681,6 +685,8 @@ const ProductsLayout: React.FC<ProductsLayoutProps> = (props) => {
                   total: totalProducts,
                 }}
                 onPageChange={handlePageChange}
+                activeColor={paginationActiveColor}
+                textColor={paginationTextColor}
               />
             )}
           </div>

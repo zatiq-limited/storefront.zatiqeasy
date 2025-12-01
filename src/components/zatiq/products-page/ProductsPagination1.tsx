@@ -16,12 +16,16 @@ interface ProductsPagination1Props {
     to: number;
   };
   onPageChange?: (page: number) => void;
+  activeColor?: string;
+  textColor?: string;
 }
 
 const ProductsPagination1: React.FC<ProductsPagination1Props> = ({
   settings = {},
   pagination,
   onPageChange,
+  activeColor = "#3B82F6",
+  textColor = "#374151",
 }) => {
   const {
     showPageNumbers = true,
@@ -115,7 +119,8 @@ const ProductsPagination1: React.FC<ProductsPagination1Props> = ({
                 <button
                   onClick={() => handlePageChange(1)}
                   aria-label="Go to page 1"
-                  className="min-w-10 h-10 px-2 sm:px-3 border border-border rounded-lg hover:bg-muted/50 transition-all text-sm sm:text-base font-medium text-foreground shadow-sm hover:border-border"
+                  className="min-w-10 h-10 px-2 sm:px-3 border border-border rounded-lg hover:bg-muted/50 transition-all text-sm sm:text-base font-medium shadow-sm hover:border-border"
+                  style={{ color: textColor }}
                 >
                   1
                 </button>
@@ -136,9 +141,14 @@ const ProductsPagination1: React.FC<ProductsPagination1Props> = ({
                 aria-current={page === current_page ? "page" : undefined}
                 className={`min-w-10 h-10 px-2 sm:px-3 rounded-lg font-medium transition-all text-sm sm:text-base ${
                   page === current_page
-                    ? "bg-primary text-primary-foreground shadow-md"
-                    : "border border-border hover:bg-muted/50 text-foreground shadow-sm hover:border-border"
+                    ? "shadow-md"
+                    : "border border-border hover:bg-muted/50 shadow-sm hover:border-border"
                 }`}
+                style={
+                  page === current_page
+                    ? { backgroundColor: activeColor, color: "#FFFFFF" }
+                    : { color: textColor }
+                }
               >
                 {page}
               </button>
@@ -155,7 +165,8 @@ const ProductsPagination1: React.FC<ProductsPagination1Props> = ({
                 <button
                   onClick={() => handlePageChange(total_pages)}
                   aria-label={`Go to page ${total_pages}`}
-                  className="min-w-10 h-10 px-2 sm:px-3 border border-border rounded-lg hover:bg-muted/50 transition-all text-sm sm:text-base font-medium text-foreground shadow-sm hover:border-border"
+                  className="min-w-10 h-10 px-2 sm:px-3 border border-border rounded-lg hover:bg-muted/50 transition-all text-sm sm:text-base font-medium shadow-sm hover:border-border"
+                  style={{ color: textColor }}
                 >
                   {total_pages}
                 </button>
