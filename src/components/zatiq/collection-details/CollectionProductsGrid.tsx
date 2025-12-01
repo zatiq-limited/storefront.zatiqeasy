@@ -29,6 +29,7 @@ interface CollectionProductsGridProps {
   products: Product[];
   settings?: {
     columns?: number;
+    columnsMobile?: 1 | 2;
     cardStyle?: string;
   };
 }
@@ -39,6 +40,7 @@ const CollectionProductsGrid: React.FC<CollectionProductsGridProps> = ({
 }) => {
   const {
     columns = 4,
+    columnsMobile = 2,
     cardStyle = "product-card-1",
   } = settings;
 
@@ -69,6 +71,8 @@ const CollectionProductsGrid: React.FC<CollectionProductsGridProps> = ({
     5: "lg:grid-cols-5",
   }[columns] || "lg:grid-cols-4";
 
+  const mobileGridCols = columnsMobile === 1 ? "grid-cols-1" : "grid-cols-2";
+
   // Map product to card props
   const mapProps = (product: Product) => {
     let badge: string | undefined;
@@ -97,7 +101,7 @@ const CollectionProductsGrid: React.FC<CollectionProductsGridProps> = ({
   };
 
   return (
-    <div className={`grid grid-cols-1 sm:grid-cols-2 ${gridCols} gap-6`}>
+    <div className={`grid ${mobileGridCols} sm:grid-cols-2 ${gridCols} gap-4 sm:gap-6`}>
       {products.map((product, index) => (
         <div
           key={product.id}
