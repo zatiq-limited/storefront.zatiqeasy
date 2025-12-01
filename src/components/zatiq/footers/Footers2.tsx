@@ -37,6 +37,41 @@ interface Footers2Settings {
   twitterUrl?: string;
   linkedinUrl?: string;
   fontFamily?: string;
+  // Contact settings (flat format)
+  contactTitle?: string;
+  whatsapp?: string;
+  mobile?: string;
+  email?: string;
+  // Column 1 settings (flat format)
+  column1Title?: string;
+  column1Link1Text?: string;
+  column1Link1Url?: string;
+  column1Link2Text?: string;
+  column1Link2Url?: string;
+  column1Link3Text?: string;
+  column1Link3Url?: string;
+  column1Link4Text?: string;
+  column1Link4Url?: string;
+  // Column 2 settings (flat format)
+  column2Title?: string;
+  column2Link1Text?: string;
+  column2Link1Url?: string;
+  column2Link2Text?: string;
+  column2Link2Url?: string;
+  column2Link3Text?: string;
+  column2Link3Url?: string;
+  column2Link4Text?: string;
+  column2Link4Url?: string;
+  // Payment icons settings (flat format)
+  showPaymentIcons?: boolean;
+  payment1Image?: string;
+  payment1Alt?: string;
+  payment2Image?: string;
+  payment2Alt?: string;
+  payment3Image?: string;
+  payment3Alt?: string;
+  payment4Image?: string;
+  payment4Alt?: string;
 }
 
 interface Footers2Props {
@@ -65,15 +100,90 @@ const Footers2: React.FC<Footers2Props> = ({
     twitterUrl = "#",
     linkedinUrl = "#",
     fontFamily,
+    // Flat format settings
+    contactTitle,
+    whatsapp,
+    mobile,
+    email,
+    column1Title,
+    column1Link1Text,
+    column1Link1Url,
+    column1Link2Text,
+    column1Link2Url,
+    column1Link3Text,
+    column1Link3Url,
+    column1Link4Text,
+    column1Link4Url,
+    column2Title,
+    column2Link1Text,
+    column2Link1Url,
+    column2Link2Text,
+    column2Link2Url,
+    column2Link3Text,
+    column2Link3Url,
+    column2Link4Text,
+    column2Link4Url,
+    showPaymentIcons = true,
+    payment1Image,
+    payment1Alt,
+    payment2Image,
+    payment2Alt,
+    payment3Image,
+    payment3Alt,
+    payment4Image,
+    payment4Alt,
   } = settings;
 
-  const menuColumns = blocks;
-  const contactInfo = contact || {
-    title: "Contact us",
-    whatsapp: "009612345678932",
-    mobile: "009612345678932",
-    email: "support@zatiq.com",
+  // Build menu columns from flat settings if blocks not provided
+  const buildColumnsFromSettings = (): MenuColumn[] => {
+    const columns: MenuColumn[] = [];
+
+    // Column 1
+    if (column1Title) {
+      const links: Link[] = [];
+      if (column1Link1Text && column1Link1Url) links.push({ text: column1Link1Text, url: column1Link1Url });
+      if (column1Link2Text && column1Link2Url) links.push({ text: column1Link2Text, url: column1Link2Url });
+      if (column1Link3Text && column1Link3Url) links.push({ text: column1Link3Text, url: column1Link3Url });
+      if (column1Link4Text && column1Link4Url) links.push({ text: column1Link4Text, url: column1Link4Url });
+      if (links.length > 0) columns.push({ title: column1Title, links });
+    }
+
+    // Column 2
+    if (column2Title) {
+      const links: Link[] = [];
+      if (column2Link1Text && column2Link1Url) links.push({ text: column2Link1Text, url: column2Link1Url });
+      if (column2Link2Text && column2Link2Url) links.push({ text: column2Link2Text, url: column2Link2Url });
+      if (column2Link3Text && column2Link3Url) links.push({ text: column2Link3Text, url: column2Link3Url });
+      if (column2Link4Text && column2Link4Url) links.push({ text: column2Link4Text, url: column2Link4Url });
+      if (links.length > 0) columns.push({ title: column2Title, links });
+    }
+
+    return columns;
   };
+
+  // Build payment icons from flat settings if paymentIcons not provided
+  const buildPaymentIconsFromSettings = (): PaymentIcon[] => {
+    const icons: PaymentIcon[] = [];
+    if (payment1Image) icons.push({ src: payment1Image, alt: payment1Alt || "Payment 1" });
+    if (payment2Image) icons.push({ src: payment2Image, alt: payment2Alt || "Payment 2" });
+    if (payment3Image) icons.push({ src: payment3Image, alt: payment3Alt || "Payment 3" });
+    if (payment4Image) icons.push({ src: payment4Image, alt: payment4Alt || "Payment 4" });
+    return icons;
+  };
+
+  // Use blocks prop if provided, otherwise build from flat settings
+  const menuColumns = blocks.length > 0 ? blocks : buildColumnsFromSettings();
+
+  // Use contact prop if provided, otherwise build from flat settings
+  const contactInfo = contact || {
+    title: contactTitle || "Contact us",
+    whatsapp: whatsapp || "009612345678932",
+    mobile: mobile || "009612345678932",
+    email: email || "support@zatiq.com",
+  };
+
+  // Use paymentIcons prop if provided, otherwise build from flat settings
+  const paymentIconsList = paymentIcons.length > 0 ? paymentIcons : buildPaymentIconsFromSettings();
 
   return (
     <footer
@@ -268,9 +378,9 @@ const Footers2: React.FC<Footers2Props> = ({
           <p className="text-white text-sm">{copyrightText}</p>
 
           {/* Payment Methods */}
-          {paymentIcons.length > 0 && (
+          {showPaymentIcons && paymentIconsList.length > 0 && (
             <div className="flex items-center gap-3">
-              {paymentIcons.map((icon, index) => (
+              {paymentIconsList.map((icon, index) => (
                 <img
                   key={index}
                   src={icon.src}

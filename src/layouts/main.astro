@@ -154,8 +154,10 @@ const ogImage = image || '';
 		{footer?.enabled && (
 			<ComponentRenderer
 				type={footer.type}
-				{...footer.settings}
+				settings={footer.settings}
 				blocks={footer.blocks}
+				contact={footer.contact}
+				paymentIcons={footer.paymentIcons}
 				globalSettings={globalSettings}
 				client:load
 			/>

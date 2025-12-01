@@ -107,7 +107,6 @@ const ProductsLayout: React.FC<ProductsLayoutProps> = (props) => {
     sortFontSize = props.settings?.sortFontSize ?? "text-sm",
     productCountFontFamily = props.settings?.productCountFontFamily ?? "inherit",
     productCountFontSize = props.settings?.productCountFontSize ?? "text-xs",
-    productsPerPage = props.settings?.productsPerPage ?? 20,
     currency = props.currency ?? "BDT",
   } = props;
 
@@ -293,11 +292,17 @@ const ProductsLayout: React.FC<ProductsLayoutProps> = (props) => {
     return result;
   }, [products, selectedCategories, searchValue, priceRange, sortValue]);
 
+  // Ensure productsPerPage is a stable number
+  const perPage = useMemo(() => {
+    const value = Number(props.settings?.productsPerPage);
+    return isNaN(value) || value <= 0 ? 20 : value;
+  }, [props.settings?.productsPerPage]);
+
   // Pagination
   const totalProducts = filteredAndSortedProducts.length;
-  const totalPages = Math.ceil(totalProducts / productsPerPage);
-  const startIndex = (currentPage - 1) * productsPerPage;
-  const endIndex = startIndex + productsPerPage;
+  const totalPages = Math.ceil(totalProducts / perPage);
+  const startIndex = (currentPage - 1) * perPage;
+  const endIndex = startIndex + perPage;
   const displayProducts = filteredAndSortedProducts.slice(startIndex, endIndex);
 
   // Handle page change
@@ -667,11 +672,14 @@ const ProductsLayout: React.FC<ProductsLayoutProps> = (props) => {
             {/* Pagination */}
             {showPagination && totalPages > 1 && PaginationComponent && (
               <PaginationComponent
-                currentPage={currentPage}
-                totalPages={totalPages}
-                from={startIndex + 1}
-                to={Math.min(endIndex, totalProducts)}
-                total={totalProducts}
+                pagination={{
+                  current_page: currentPage,
+                  total_pages: totalPages,
+                  per_page: perPage,
+                  from: startIndex + 1,
+                  to: Math.min(endIndex, totalProducts),
+                  total: totalProducts,
+                }}
                 onPageChange={handlePageChange}
               />
             )}

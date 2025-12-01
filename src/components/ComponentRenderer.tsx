@@ -7,7 +7,6 @@
  * Supports both section object and direct props
  */
 
-import React from "react";
 import { getComponent } from "../lib/component-registry";
 import type { Section } from "../lib/types";
 
@@ -24,6 +23,8 @@ interface ComponentRendererProps {
   reviews?: any[];
   testimonials?: any[];
   tabs?: any[];
+  contact?: any;
+  paymentIcons?: any[];
   enabled?: boolean;
 
   // Global settings for font inheritance
@@ -100,6 +101,8 @@ export default function ComponentRenderer(props: ComponentRendererProps) {
       reviews,
       testimonials,
       tabs,
+      contact,
+      paymentIcons,
       enabled,
       ...spreadProps
     } = restProps;
@@ -113,6 +116,8 @@ export default function ComponentRenderer(props: ComponentRendererProps) {
       reviews,
       testimonials,
       tabs,
+      contact,
+      paymentIcons,
     };
   }
 
