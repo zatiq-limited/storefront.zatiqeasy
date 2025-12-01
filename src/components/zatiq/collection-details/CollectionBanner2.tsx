@@ -57,7 +57,7 @@ const CollectionBanner2: React.FC<CollectionBanner2Props> = ({
 
   return (
     <section
-      className="relative pb-12 md:pb-14 overflow-hidden"
+      className="relative py-8 md:py-14 overflow-hidden"
       style={{ backgroundColor }}
     >
       <div className="max-w-[1440px] mx-auto px-4 2xl:px-0">
