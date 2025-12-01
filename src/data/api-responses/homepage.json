@@ -454,7 +454,7 @@
         "settings": {
           "title": "Featured Products",
           "subtitle": "Hand-picked styles just for you",
-          "curatedTag":"Curated Selection",
+          "curatedTag": "Curated Selection",
           "titleColor": "#181D25",
           "subtitleColor": "#666666",
           "viewAllText": "View All",
@@ -1873,6 +1873,18 @@
           {
             "name": "H&M",
             "image": "/src/assets/image/Brands/D/H&M.png"
+          },
+          {
+            "name": "Brooks",
+            "image": "/src/assets/image/Brands/D/brooks.png"
+          },
+          {
+            "name": "FILA",
+            "image": "/src/assets/image/Brands/D/FILA.png"
+          },
+          {
+            "name": "Adidas",
+            "image": "/src/assets/image/Brands/D/adidas.png"
           }
         ]
       },

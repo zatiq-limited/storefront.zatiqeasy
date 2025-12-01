@@ -31,6 +31,7 @@ interface ProductCollection2Props {
   showViewAll?: boolean;
   showArrows?: boolean;
   autoplayDelay?: number;
+  columnsMobile?: 1 | 2;
 }
 
 const ProductCollection2: React.FC<ProductCollection2Props> = ({
@@ -48,6 +49,7 @@ const ProductCollection2: React.FC<ProductCollection2Props> = ({
   showViewAll = true,
   showArrows = true,
   autoplayDelay = 3000,
+  columnsMobile = 2,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [api, setApi] = useState<CarouselApi>();
@@ -55,6 +57,9 @@ const ProductCollection2: React.FC<ProductCollection2Props> = ({
   const sectionRef = useRef<HTMLElement>(null);
 
   const ProductCard = getComponent(productCardType);
+
+  // Mobile basis class based on columnsMobile setting
+  const mobileBasis = columnsMobile === 1 ? "basis-[85%]" : "basis-1/2";
 
   const autoplayPlugin = React.useMemo(
     () =>
@@ -192,7 +197,7 @@ const ProductCollection2: React.FC<ProductCollection2Props> = ({
               {products.slice(0, viewTotalProducts).map((product, index) => (
                 <CarouselItem
                   key={product.id || index}
-                  className="pl-4 md:pl-6 basis-[85%] sm:basis-1/2 md:basis-1/3 lg:basis-1/4"
+                  className={`pl-4 md:pl-6 ${mobileBasis} sm:basis-1/2 md:basis-1/3 lg:basis-1/4`}
                 >
                   <div
                     className={`transition-all duration-700 ${
