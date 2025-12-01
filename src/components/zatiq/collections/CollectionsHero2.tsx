@@ -8,23 +8,27 @@ import React from "react";
 interface CollectionsHero2Props {
   title?: string;
   subtitle?: string;
-  description?: string;
   badge?: string;
   buttonText?: string;
   buttonLink?: string;
+  buttonBackgroundColor?: string;
+  buttonTextColor?: string;
   image?: string;
   backgroundColor?: string;
   textColor?: string;
   imagePosition?: "left" | "right";
+  badgeColor?: string;
 }
 
 const CollectionsHero2: React.FC<CollectionsHero2Props> = ({
   title = "Discover Your Style",
   subtitle = "Curated Collections",
-  description = "Explore our handpicked collections crafted for every occasion and trend. From timeless classics to the latest trends, find pieces that define your unique style.",
   badge = "New Season",
+  badgeColor = "#ff6f61",
   buttonText = "Explore Collections",
-  buttonLink = "#collections",
+  buttonLink = "/products",
+  buttonBackgroundColor = "#ff6f61",
+  buttonTextColor = "#ffffff",
   image = "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1200&q=80",
   backgroundColor = "#f8f9fa",
   textColor = "#1a1a1a",
@@ -50,7 +54,9 @@ const CollectionsHero2: React.FC<CollectionsHero2Props> = ({
             <div className="max-w-xl">
               {/* Badge */}
               {badge && (
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-black/5 rounded-full mb-6">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6"
+                style={{ backgroundColor: badgeColor, color: buttonTextColor }}
+                >
                   <span className="w-2 h-2 bg-black rounded-full animate-pulse"></span>
                   <span
                     className="text-sm font-semibold uppercase tracking-wider"
@@ -61,16 +67,6 @@ const CollectionsHero2: React.FC<CollectionsHero2Props> = ({
                 </div>
               )}
 
-              {/* Subtitle */}
-              {subtitle && (
-                <p
-                  className="text-sm uppercase tracking-[0.2em] font-bold mb-4 opacity-70"
-                  style={{ color: textColor }}
-                >
-                  {subtitle}
-                </p>
-              )}
-
               {/* Title */}
               <h1
                 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight"
@@ -79,13 +75,13 @@ const CollectionsHero2: React.FC<CollectionsHero2Props> = ({
                 {title}
               </h1>
 
-              {/* Description */}
-              {description && (
+              {/* subtitle */}
+              {subtitle && (
                 <p
                   className="text-lg sm:text-xl mb-8 leading-relaxed opacity-80"
                   style={{ color: textColor }}
                 >
-                  {description}
+                  {subtitle}
                 </p>
               )}
 
@@ -93,7 +89,8 @@ const CollectionsHero2: React.FC<CollectionsHero2Props> = ({
               {buttonText && (
                 <a
                   href={buttonLink}
-                  className="inline-flex items-center gap-3 px-8 py-4 bg-black text-white font-semibold rounded-full hover:bg-gray-800 transition-all duration-300 group"
+                  className="inline-flex items-center gap-3 px-8 py-4 font-semibold rounded-full hover:opacity-90 transition-all duration-300 group"
+                  style={{ backgroundColor: buttonBackgroundColor, color: buttonTextColor }}
                 >
                   <span>{buttonText}</span>
                   <svg
