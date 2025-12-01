@@ -1,299 +1,181 @@
 import React, { useState } from "react";
 
-interface FilterItem {
-  id: string;
+interface Category {
+  id: number | string;
   name: string;
+  products_count?: number;
   count?: number;
-  hex?: string;
-}
-
-interface FilterBlock {
-  id: string;
-  title: string;
-  type: "category" | "price" | "brand" | "color" | "size";
-  items?: FilterItem[];
-  min?: number;
-  max?: number;
-  currency?: string;
+  sub_categories?: Category[];
 }
 
 interface ProductsSidebar2Props {
-  settings?: {
-    collapsible?: boolean;
-  };
-  blocks?: FilterBlock[];
-  selectedFilters?: Record<string, string[]>;
-  onFilterChange?: (filterType: string, values: string[]) => void;
-  isOpen?: boolean;
-  onClose?: () => void;
+  showCategories?: boolean;
+  showPriceFilter?: boolean;
+  showColors?: boolean;
+  showSizes?: boolean;
+  categories?: Category[] | null;
+  selectedCategories?: (string | number)[];
+  onCategoryChange?: (categoryId: string | number, isSelected: boolean) => void;
+  onClearFilters?: () => void;
+  priceRange?: { min: number; max: number };
+  onPriceRangeChange?: (range: { min: number; max: number }) => void;
+  // Button colors
+  buttonBgColor?: string;
+  buttonTextColor?: string;
 }
 
 const ProductsSidebar2: React.FC<ProductsSidebar2Props> = ({
-  settings = {},
-  blocks = [],
-  selectedFilters = {},
-  onFilterChange,
-  isOpen = false,
-  onClose,
+  showCategories = true,
+  showPriceFilter = true,
+  showColors = true,
+  showSizes = true,
+  categories = null,
+  selectedCategories = [],
+  onCategoryChange = null,
+  onClearFilters = null,
+  priceRange = { min: 0, max: 0 },
+  onPriceRangeChange = null,
+  // Button colors
+  buttonBgColor = "#111827",
+  buttonTextColor = "#FFFFFF",
 }) => {
-  const { collapsible = true } = settings;
-  const [expandedSections, setExpandedSections] = useState<
-    Record<string, boolean>
-  >(blocks.reduce((acc, block) => ({ ...acc, [block.id]: true }), {}));
-  const [priceRange, setPriceRange] = useState<{ min: number; max: number }>({
-    min: 0,
-    max: 10000,
-  });
+  // Local state for price inputs
+  const [localPriceMin, setLocalPriceMin] = useState<string>(
+    priceRange.min ? String(priceRange.min) : ""
+  );
+  const [localPriceMax, setLocalPriceMax] = useState<string>(
+    priceRange.max ? String(priceRange.max) : ""
+  );
 
-  const toggleSection = (id: string) => {
-    if (!collapsible) return;
-    setExpandedSections((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
-
-  const handleFilterChange = (filterType: string, itemId: string) => {
-    const current = selectedFilters[filterType] || [];
-    const updated = current.includes(itemId)
-      ? current.filter((id) => id !== itemId)
-      : [...current, itemId];
-
-    if (onFilterChange) {
-      onFilterChange(filterType, updated);
-    } else {
-      const url = new URL(window.location.href);
-      if (updated.length > 0) {
-        url.searchParams.set(filterType, updated.join(","));
-      } else {
-        url.searchParams.delete(filterType);
-      }
-      url.searchParams.delete("page");
-      window.location.href = url.toString();
+  // Apply price range filter
+  const handleApplyPriceFilter = () => {
+    if (onPriceRangeChange) {
+      onPriceRangeChange({
+        min: Number(localPriceMin) || 0,
+        max: Number(localPriceMax) || 0,
+      });
     }
   };
 
-  const handlePriceApply = () => {
-    const url = new URL(window.location.href);
-    url.searchParams.set("minPrice", priceRange.min.toString());
-    url.searchParams.set("maxPrice", priceRange.max.toString());
-    url.searchParams.delete("page");
-    window.location.href = url.toString();
-  };
+  // Mock categories (used if no real categories provided)
+  const mockCategories: Category[] = [
+    { id: "all", name: "All Products" },
+    { id: "new", name: "New Arrivals" },
+    { id: "best", name: "Best Sellers" },
+    { id: "sale", name: "On Sale" },
+  ];
 
-  const clearAllFilters = () => {
-    window.location.href = "/products";
-  };
-
-  const sidebarContent = (
-    <div className="h-full flex flex-col">
-      {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b">
-        <h2 className="text-xl font-bold text-gray-900">Filters</h2>
-        <div className="flex items-center gap-4">
-          <button
-            onClick={clearAllFilters}
-            className="text-sm text-blue-600 hover:text-blue-800"
-          >
-            Clear all
-          </button>
-          {onClose && (
-            <button
-              onClick={onClose}
-              className="lg:hidden p-1 hover:bg-gray-100 rounded-full"
-            >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* Filter Blocks */}
-      <div className="flex-1 overflow-y-auto p-4">
-        {blocks.map((block) => (
-          <div key={block.id} className="mb-6">
-            <button
-              onClick={() => toggleSection(block.id)}
-              className="flex items-center justify-between w-full text-left mb-3"
-            >
-              <h3 className="text-base font-semibold text-gray-900">
-                {block.title}
-              </h3>
-              {collapsible && (
-                <svg
-                  className={`w-5 h-5 text-gray-400 transition-transform ${
-                    expandedSections[block.id] ? "rotate-180" : ""
-                  }`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              )}
-            </button>
-
-            {expandedSections[block.id] && (
-              <div className="space-y-2">
-                {block.type === "price" ? (
-                  <div className="space-y-3">
-                    <input
-                      type="range"
-                      min={block.min || 0}
-                      max={block.max || 10000}
-                      value={priceRange.max}
-                      onChange={(e) =>
-                        setPriceRange((prev) => ({
-                          ...prev,
-                          max: Number(e.target.value),
-                        }))
-                      }
-                      className="w-full accent-blue-600"
-                    />
-                    <div className="flex items-center gap-2 text-sm">
-                      <span className="text-gray-600">
-                        {block.currency || "৳"}
-                        {priceRange.min}
-                      </span>
-                      <span className="text-gray-400">-</span>
-                      <span className="text-gray-600">
-                        {block.currency || "৳"}
-                        {priceRange.max}
-                      </span>
-                    </div>
-                    <button
-                      onClick={handlePriceApply}
-                      className="w-full py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
-                    >
-                      Apply Price
-                    </button>
-                  </div>
-                ) : block.type === "color" ? (
-                  <div className="flex flex-wrap gap-3">
-                    {block.items?.map((item) => (
-                      <button
-                        key={item.id}
-                        onClick={() => handleFilterChange("color", item.id)}
-                        className={`relative w-10 h-10 rounded-full border-2 transition-all ${
-                          selectedFilters.color?.includes(item.id)
-                            ? "border-blue-500 scale-110"
-                            : "border-gray-200 hover:scale-105"
-                        }`}
-                        style={{ backgroundColor: item.hex }}
-                        title={item.name}
-                      >
-                        {selectedFilters.color?.includes(item.id) && (
-                          <span className="absolute inset-0 flex items-center justify-center">
-                            <svg
-                              className="w-5 h-5 text-white drop-shadow"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                          </span>
-                        )}
-                      </button>
-                    ))}
-                  </div>
-                ) : block.type === "size" ? (
-                  <div className="flex flex-wrap gap-2">
-                    {block.items?.map((item) => (
-                      <button
-                        key={item.id}
-                        onClick={() => handleFilterChange("size", item.id)}
-                        className={`px-4 py-2 text-sm font-medium rounded-lg border transition-all ${
-                          selectedFilters.size?.includes(item.id)
-                            ? "bg-gray-900 text-white border-gray-900"
-                            : "bg-white text-gray-700 border-gray-300 hover:border-gray-400"
-                        }`}
-                      >
-                        {item.name}
-                      </button>
-                    ))}
-                  </div>
-                ) : (
-                  block.items?.map((item) => (
-                    <label
-                      key={item.id}
-                      className="flex items-center gap-3 py-1 cursor-pointer group"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={
-                          selectedFilters[block.type]?.includes(item.id) ||
-                          false
-                        }
-                        onChange={() => handleFilterChange(block.type, item.id)}
-                        className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                      />
-                      <span className="text-sm text-gray-700 group-hover:text-gray-900 flex-1">
-                        {item.name}
-                      </span>
-                      {item.count !== undefined && (
-                        <span className="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
-                          {item.count}
-                        </span>
-                      )}
-                    </label>
-                  ))
-                )}
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
-
-      {/* Apply Button (Mobile) */}
-      <div className="lg:hidden p-4 border-t bg-white">
-        <button
-          onClick={onClose}
-          className="w-full py-3 bg-gray-900 text-white rounded-lg font-semibold hover:bg-gray-800 transition-colors"
-        >
-          Show Results
-        </button>
-      </div>
-    </div>
-  );
+  // Transform real categories
+  const displayCategories =
+    categories && categories.length > 0
+      ? categories.slice(0, 4).map((cat) => ({ id: cat.id, name: cat.name }))
+      : mockCategories;
 
   return (
-    <>
-      {/* Desktop Sidebar */}
-      <aside className="hidden lg:block w-72 bg-white rounded-xl border border-gray-200 h-fit sticky top-24 overflow-hidden">
-        {sidebarContent}
-      </aside>
+    <div className="w-full bg-white rounded-lg p-6 shadow-sm">
+      <h3 className="text-lg font-bold text-gray-900 mb-6">Filters</h3>
 
-      {/* Mobile Drawer */}
-      {isOpen && (
-        <>
-          <div
-            className="lg:hidden fixed inset-0 bg-black/50 z-50"
-            onClick={onClose}
-          />
-          <div className="lg:hidden fixed inset-y-0 left-0 w-full max-w-sm bg-white z-50 shadow-xl">
-            {sidebarContent}
+      {/* Categories */}
+      {showCategories && (
+        <div className="mb-6">
+          <h4 className="font-medium text-gray-900 mb-3">Categories</h4>
+          <div className="space-y-2">
+            {displayCategories.map((cat) => {
+              const isSelected =
+                selectedCategories.includes(cat.id) ||
+                selectedCategories.includes(cat.id?.toString());
+              return (
+                <label key={cat.id} className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={isSelected}
+                    onChange={(e) =>
+                      onCategoryChange && onCategoryChange(cat.id, e.target.checked)
+                    }
+                    className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <span className="text-sm text-gray-700">{cat.name}</span>
+                </label>
+              );
+            })}
           </div>
-        </>
+        </div>
       )}
-    </>
+
+      {/* Price */}
+      {showPriceFilter && (
+        <div className="mb-6">
+          <h4 className="font-medium text-gray-900 mb-3">Price Range</h4>
+          <div className="flex items-center gap-2 mb-3">
+            <input
+              type="number"
+              value={localPriceMin}
+              onChange={(e) => setLocalPriceMin(e.target.value)}
+              placeholder="Min"
+              className="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+            />
+            <span className="text-gray-500">-</span>
+            <input
+              type="number"
+              value={localPriceMax}
+              onChange={(e) => setLocalPriceMax(e.target.value)}
+              placeholder="Max"
+              className="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+            />
+          </div>
+          <button
+            onClick={handleApplyPriceFilter}
+            className="w-full py-2 rounded text-sm font-medium hover:opacity-90 transition-opacity"
+            style={{ backgroundColor: buttonBgColor, color: buttonTextColor }}
+          >
+            Apply
+          </button>
+        </div>
+      )}
+
+      {/* Colors */}
+      {showColors && (
+        <div className="mb-6">
+          <h4 className="font-medium text-gray-900 mb-3">Colors</h4>
+          <div className="flex flex-wrap gap-2">
+            {["#000000", "#FFFFFF", "#FF0000", "#0000FF", "#00FF00", "#FFFF00"].map(
+              (color) => (
+                <button
+                  key={color}
+                  className="w-8 h-8 rounded-full border-2 border-gray-300 hover:border-blue-500"
+                  style={{ backgroundColor: color }}
+                />
+              )
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Sizes */}
+      {showSizes && (
+        <div className="mb-6">
+          <h4 className="font-medium text-gray-900 mb-3">Sizes</h4>
+          <div className="grid grid-cols-3 gap-2">
+            {["XS", "S", "M", "L", "XL", "XXL"].map((size) => (
+              <button
+                key={size}
+                className="py-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 text-sm"
+              >
+                {size}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <button
+        onClick={onClearFilters || undefined}
+        className="w-full py-3 rounded hover:opacity-90 transition-opacity mt-4"
+        style={{ backgroundColor: buttonBgColor, color: buttonTextColor }}
+      >
+        Reset Filters
+      </button>
+    </div>
   );
 };
 

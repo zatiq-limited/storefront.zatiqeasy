@@ -42,6 +42,10 @@ interface ProductsLayoutProps {
   cardButtonBgColor?: string;
   cardButtonTextColor?: string;
 
+  // Sidebar button colors
+  sidebarButtonBgColor?: string;
+  sidebarButtonTextColor?: string;
+
   // Grid settings
   columns?: number;
   columnsTablet?: number;
@@ -117,6 +121,8 @@ const ProductsLayout: React.FC<ProductsLayoutProps> = (props) => {
     paginationTextColor = props.settings?.paginationTextColor ?? "#374151",
     cardButtonBgColor = props.settings?.cardButtonBgColor ?? "#3B82F6",
     cardButtonTextColor = props.settings?.cardButtonTextColor ?? "#FFFFFF",
+    sidebarButtonBgColor = props.settings?.sidebarButtonBgColor ?? "#111827",
+    sidebarButtonTextColor = props.settings?.sidebarButtonTextColor ?? "#FFFFFF",
     currency = props.currency ?? "BDT",
   } = props;
 
@@ -503,6 +509,8 @@ const ProductsLayout: React.FC<ProductsLayoutProps> = (props) => {
                       onClearFilters={handleClearFilters}
                       priceRange={priceRange}
                       onPriceRangeChange={handlePriceRangeChange}
+                      buttonBgColor={sidebarButtonBgColor}
+                      buttonTextColor={sidebarButtonTextColor}
                     />
                   ) : (
                     <div className="bg-white rounded-xl p-4 shadow-sm border">
@@ -546,11 +554,14 @@ const ProductsLayout: React.FC<ProductsLayoutProps> = (props) => {
                           onClearFilters={handleClearFilters}
                           priceRange={priceRange}
                           onPriceRangeChange={handlePriceRangeChange}
+                          buttonBgColor={sidebarButtonBgColor}
+                          buttonTextColor={sidebarButtonTextColor}
                         />
                       )}
                       <button
                         onClick={() => setIsMobileSidebarOpen(false)}
-                        className="w-full mt-4 py-3 bg-gray-900 text-white rounded-lg font-semibold"
+                        className="w-full mt-4 py-3 rounded-lg font-semibold hover:opacity-90 transition-opacity"
+                        style={{ backgroundColor: sidebarButtonBgColor, color: sidebarButtonTextColor }}
                       >
                         Show {totalProducts} Results
                       </button>

@@ -51,6 +51,9 @@ interface CustomSectionsSettings {
   buttonTextColor?: string;
   buttonRadius?: number;
   backgroundColor?: string;
+  // Product card button colors
+  cardButtonBgColor?: string;
+  cardButtonTextColor?: string;
 }
 
 interface CustomSectionsProps {
@@ -83,6 +86,8 @@ const CustomSections: React.FC<CustomSectionsProps> = ({
     buttonTextColor = "#FFFFFF",
     buttonRadius = 24,
     backgroundColor = "#FFFFFF",
+    cardButtonBgColor = "#3B82F6",
+    cardButtonTextColor = "#FFFFFF",
   } = settings;
 
   const [api, setApi] = useState<CarouselApi>();
@@ -174,6 +179,8 @@ const CustomSections: React.FC<CustomSectionsProps> = ({
     rating: product.rating || 0,
     reviewCount: product.reviewCount || 0,
     subtitle: product.category,
+    buttonBgColor: cardButtonBgColor,
+    buttonTextColor: cardButtonTextColor,
   });
 
   // Button component for reuse
