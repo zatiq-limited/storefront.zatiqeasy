@@ -1,0 +1,32 @@
+---
+/**
+ * ========================================
+ * ORDER SUCCESS PAGE
+ * ========================================
+ *
+ * Fetches data from API and renders payment status sections dynamically
+ *
+ * Backend API Endpoint: GET /api/storefront/v1/page/order-success
+ */
+
+import Layout from '../layouts/main.astro';
+import SectionRenderer from '../components/SectionRenderer';
+import { getOrderSuccessPageData } from '../lib/api-client';
+
+// Fetch order success page data from API
+const orderSuccessPageData = await getOrderSuccessPageData();
+
+// Handle null case and extract data
+const pageData = orderSuccessPageData?.data || orderSuccessPageData || {};
+const { template = 'order-success', sections = [], seo = {} } = pageData;
+---
+
+<Layout
+	title={seo?.title || 'Order Success'}
+	description={seo?.description}
+	image={seo?.og?.image}
+>
+	<main class="zatiq-order-success-page">
+		<SectionRenderer sections={sections} client:load />
+	</main>
+</Layout>

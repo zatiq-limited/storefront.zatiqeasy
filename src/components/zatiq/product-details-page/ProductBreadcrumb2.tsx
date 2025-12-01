@@ -26,7 +26,7 @@ const ProductBreadcrumb2: React.FC<ProductBreadcrumb2Props> = ({
   return (
     <nav className="bg-white border-b border-t">
       <div className="max-w-[1440px] mx-auto px-4 2xl:px-0 py-2">
-        <ol className="flex items-center flex-wrap gap-2 text-sm">
+        <ol className="flex items-center gap-2 text-sm overflow-hidden whitespace-nowrap">
           {showHome && (
             <li className="flex items-center">
               <a

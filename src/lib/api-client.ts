@@ -161,26 +161,8 @@ export async function getHomepageData(): Promise<any> {
     console.log("[API] ✅ Homepage data loaded from API");
     return response;
   } catch (error) {
-    console.error("[API] ❌ Homepage API failed - falling back to local file");
-    // Fallback to local homepage.json file
-    try {
-      const localHomepage = await import("../data/api-responses/homepage.json");
-      console.log("[API] ✅ Homepage data loaded from local file");
-
-      // Handle different import structures
-      // JSON import can be: { default: { success, data } } or { success, data }
-      const imported = localHomepage.default || localHomepage;
-
-      // If it has success/data wrapper, return the data portion
-      // Otherwise return as-is (it's already the data)
-      const result = imported?.data || imported;
-
-      console.log("[API] Homepage sections:", result?.sections?.length || 0);
-      return result;
-    } catch (localError) {
-      console.error("[API] ❌ Local homepage.json also failed:", localError);
-      return null;
-    }
+    console.error("[API] ❌ Homepage API failed");
+    return null;
   }
 }
 
@@ -228,6 +210,23 @@ export async function getProductsPageData(params?: {
       console.error("[API] ❌ Local products-page.json also failed:", localError);
       return null;
     }
+  }
+}
+
+/**
+ * Get checkout page data (sections + order + payment methods)
+ *
+ * Backend API: GET /api/storefront/v1/page/checkout
+ * Response: { success: true, data: { template, sections, order, delivery_options, payment_methods, currency, seo } }
+ */
+export async function getCheckoutPageData(): Promise<any> {
+  try {
+    const response = await apiCall<any>(`/api/storefront/v1/page/checkout`);
+    console.log("[API] ✅ Checkout page data loaded from API");
+    return response;
+  } catch (error) {
+    console.error("[API] ❌ Checkout page API failed");
+    return null;
   }
 }
 
@@ -359,22 +358,42 @@ export async function getAboutPageData(): Promise<any> {
     console.log("[API] ✅ About page data loaded from API");
     return response;
   } catch (error) {
-    console.error("[API] ❌ About page API failed - falling back to local file");
-    // Fallback to local about.json file
-    try {
-      const localAbout = await import("../data/api-responses/about.json");
-      console.log("[API] ✅ About page data loaded from local file");
+    console.error("[API] ❌ About page API failed");
+    return null;
+  }
+}
 
-      // Handle different import structures
-      const imported = localAbout.default || localAbout;
-      const result = imported?.data || imported;
+/**
+ * Get contact page data
+ *
+ * Backend API: GET /api/storefront/v1/page/contact
+ * Response: { success: true, data: { template, sections, seo } }
+ */
+export async function getContactPageData(): Promise<any> {
+  try {
+    const response = await apiCall<any>(`/api/storefront/v1/page/contact`);
+    console.log("[API] ✅ Contact page data loaded from API");
+    return response;
+  } catch (error) {
+    console.error("[API] ❌ Contact page API failed");
+    return null;
+  }
+}
 
-      console.log("[API] About sections:", result?.sections?.length || 0);
-      return result;
-    } catch (localError) {
-      console.error("[API] ❌ Local about.json also failed:", localError);
-      return null;
-    }
+/**
+ * Get order success page data
+ *
+ * Backend API: GET /api/storefront/v1/page/order-success
+ * Response: { success: true, data: { template, sections, seo } }
+ */
+export async function getOrderSuccessPageData(): Promise<any> {
+  try {
+    const response = await apiCall<any>(`/api/storefront/v1/page/order-success`);
+    console.log("[API] ✅ Order success page data loaded from API");
+    return response;
+  } catch (error) {
+    console.error("[API] ❌ Order success page API failed");
+    return null;
   }
 }
 

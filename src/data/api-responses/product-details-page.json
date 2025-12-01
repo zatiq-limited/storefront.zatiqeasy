@@ -9,7 +9,7 @@
     "sections": [
       {
         "id": "product_breadcrumb",
-        "type": "product-breadcrumb-2",
+        "type": "product-breadcrumb-1",
         "enabled": true,
         "settings": {
           "showHome": true,
@@ -18,7 +18,7 @@
       },
       {
         "id": "product_detail",
-        "type": "product-detail-2",
+        "type": "product-detail-1",
         "enabled": true,
         "settings": {
           "showBrand": true,
@@ -29,13 +29,18 @@
           "showDescription": true,
           "showSpecifications": true,
           "showShipping": true,
+          "showAddToCart": true,
+          "showBuyNow": true,
+          "showWhatsAppBuy": true,
+          "showWishlist": true,
           "galleryPosition": "left",
-          "thumbnailPosition": "left"
+          "thumbnailPosition": "bottom",
+          "thumbnailSize": "sm"
         }
       },
       {
         "id": "customer_reviews",
-        "type": "customer-reviews-1",
+        "type": "customer-reviews-2",
         "enabled": true,
         "settings": {
           "title": "Customer Reviews",
@@ -47,12 +52,15 @@
       },
       {
         "id": "related_products",
-        "type": "related-products-1",
+        "type": "related-products-2",
         "enabled": true,
         "settings": {
           "title": "You May Also Like",
           "columns": 4,
-          "cardStyle": "product-card-5",
+          "mobileColumns": 2,
+          "tabletColumns": 2,
+          "gap": "sm",
+          "cardStyle": "product-card-2",
           "limit": 8
         }
       }
