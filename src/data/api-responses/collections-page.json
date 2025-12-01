@@ -5,7 +5,7 @@
     "sections": [
       {
         "id": "collections_hero",
-        "type": "collections-hero-2",
+        "type": "collections-hero-1",
         "enabled": true,
         "settings": {
           "title": "Discover Your Style",
@@ -19,7 +19,7 @@
           "image": "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1200&q=80",
           "backgroundColor": "#f8f9fa",
           "textColor": "#1a1a1a",
-          "imagePosition": "right",
+          "imagePosition": "left",
           "showStats": true,
           "stats": [
             { "label": "Collections", "value": "50+" },
@@ -30,7 +30,7 @@
       },
       {
         "id": "collections_grid_featured",
-        "type": "collections-grid-2",
+        "type": "collections-grid-1",
         "enabled": true,
         "settings": {
           "backgroundColor": "#f9fafb"
