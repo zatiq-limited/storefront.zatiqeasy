@@ -123,8 +123,10 @@ import {
 import {
   CheckoutHero1,
   CheckoutHero2,
+  CheckoutHero3,
   CheckoutContent1,
   CheckoutContent2,
+  CheckoutContent3,
 } from "@/components/zatiq/checkout-page";
 // Contact Page Components
 import {
@@ -281,8 +283,10 @@ export const ZATIQ_COMPONENTS: Record<string, ComponentType<any>> = {
   // Checkout Page Components (2 variants each)
   "checkout-hero-1": CheckoutHero1,
   "checkout-hero-2": CheckoutHero2,
+  "checkout-hero-3": CheckoutHero3,
   "checkout-content-1": CheckoutContent1,
   "checkout-content-2": CheckoutContent2,
+  "checkout-content-3": CheckoutContent3,
   // Contact Page Components (2 variants each)
   "contact-hero-1": ContactHero1,
   "contact-hero-2": ContactHero2,
