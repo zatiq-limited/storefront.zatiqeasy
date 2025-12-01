@@ -36,6 +36,7 @@ interface CollectionProducts1Props {
   collection?: Collection;
   settings?: {
     columns?: number;
+    columnsMobile?: 1 | 2;
     cardStyle?: string;
     backgroundColor?: string;
   };
@@ -46,7 +47,7 @@ const CollectionProducts1: React.FC<CollectionProducts1Props> = ({
   collection,
   settings = {},
 }) => {
-  const { backgroundColor = "#ffffff", columns = 4, cardStyle = "product-card-1" } = settings;
+  const { backgroundColor = "#ffffff", columns = 4, columnsMobile = 2, cardStyle = "product-card-1" } = settings;
 
   // Initialize viewMode based on columns prop, default to 4
   const getInitialViewMode = (): 2 | 3 | 4 => {
@@ -151,6 +152,7 @@ const CollectionProducts1: React.FC<CollectionProducts1Props> = ({
             settings={{
               ...settings,
               columns: viewMode,
+              columnsMobile,
               cardStyle,
             }}
           />

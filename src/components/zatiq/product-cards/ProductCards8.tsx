@@ -39,14 +39,14 @@ const ProductCards8: React.FC<ProductCards8Props> = ({
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <div className="font-poppins flex gap-6 justify-center p-1">
+    <div className="font-poppins w-full h-full">
       <div
-        className="w-[298px] h-[472px] bg-white rounded-lg overflow-hidden relative cursor-pointer transition-all duration-300 border border-gray-100 hover:shadow-lg"
+        className="w-full h-full bg-white rounded-lg overflow-hidden relative cursor-pointer transition-all duration-300 border border-gray-100 hover:shadow-lg flex flex-col"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
         {/* Top - Image Container */}
-        <div className="w-[298px] h-[246px] relative bg-[#FAFAFA] overflow-hidden">
+        <div className="w-full aspect-298/246 relative bg-[#FAFAFA] overflow-hidden">
           <img
             src={isHovered && hoverImage ? hoverImage : image}
             alt={title}
@@ -56,28 +56,27 @@ const ProductCards8: React.FC<ProductCards8Props> = ({
         </div>
 
         {/* Bottom - Content Area */}
-        <div className="px-5 pt-3 pb-6 h-[201px] flex flex-col bg-white">
+        <div className="px-3 sm:px-4 lg:px-5 pt-2 sm:pt-3 pb-3 sm:pb-4 lg:pb-6 flex flex-col flex-1 bg-white">
           {/* Category/Vendor */}
           {vendor && (
-            <div className="text-xs text-[#ADADAD] font-normal leading-6 mb-3">
+            <div className="text-[10px] sm:text-xs text-[#ADADAD] font-normal leading-6 mb-1.5 sm:mb-2 lg:mb-3">
               {vendor}
             </div>
           )}
 
           {/* Title */}
-          <h3 className="text-base font-medium text-[#2B2B2D] leading-6 mb-3 min-h-12 overflow-hidden line-clamp-2">
+          <h3 className="text-xs sm:text-sm lg:text-base font-medium text-[#2B2B2D] leading-5 sm:leading-6 mb-1.5 sm:mb-2 lg:mb-3 overflow-hidden line-clamp-2">
             {title}
           </h3>
 
           {/* Rating */}
-          <div className="flex items-center gap-1.5 mb-8">
+          <div className="flex items-center gap-1 sm:gap-1.5 mb-3 sm:mb-5 lg:mb-8">
             {/* Star Rating */}
             <div className="flex gap-0.5">
               {[1, 2, 3, 4, 5].map((star) => (
                 <svg
                   key={star}
-                  width="18"
-                  height="17"
+                  className="w-3 h-3 sm:w-4 sm:h-4 lg:w-[18px] lg:h-[17px]"
                   viewBox="0 0 18 17"
                   fill={star <= Math.round(rating) ? "#FFA500" : "#E5E7EB"}
                   xmlns="http://www.w3.org/2000/svg"
@@ -88,17 +87,17 @@ const ProductCards8: React.FC<ProductCards8Props> = ({
             </div>
             {/* Rating Count */}
             {rating > 0 && (
-              <span className="text-sm font-normal text-[#B6B6B6] leading-6 underline">
+              <span className="text-[10px] sm:text-xs lg:text-sm font-normal text-[#B6B6B6] leading-6 underline">
                 ({rating.toFixed(1)})
               </span>
             )}
           </div>
 
           {/* Price and Button Row */}
-          <div className="flex items-center justify-between mt-auto">
+          <div className="flex items-center justify-between mt-auto gap-2">
             {/* Price */}
             {price !== undefined && (
-              <span className="text-xl font-bold text-[#10B981] leading-7">
+              <span className="text-sm sm:text-base lg:text-xl font-bold text-[#10B981] leading-7">
                 {currency} {price.toLocaleString()}
               </span>
             )}
@@ -107,11 +106,13 @@ const ProductCards8: React.FC<ProductCards8Props> = ({
             {quickAddEnabled && (
               <button
                 className="w-20 h-10 border-none rounded text-sm font-bold leading-6 cursor-pointer transition-all duration-300 flex items-center justify-center gap-1 hover:opacity-90"
-                style={{ backgroundColor: buttonBgColor, color: buttonTextColor }}
+                style={{
+                  backgroundColor: buttonBgColor,
+                  color: buttonTextColor,
+                }}
               >
                 <svg
-                  width="14"
-                  height="14"
+                  className="w-3 h-3 sm:w-3.5 sm:h-3.5 lg:w-3.5 lg:h-3.5"
                   viewBox="0 0 14 14"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"

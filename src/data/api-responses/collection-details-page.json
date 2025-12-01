@@ -32,11 +32,12 @@
       },
       {
         "id": "collection_products",
-        "type": "collection-products-1",
+        "type": "collection-products-2",
         "enabled": true,
         "settings": {
           "columns": 4,
-          "cardStyle": "product-card-5",
+          "columnsMobile": 2,
+          "cardStyle": "product-card-2",
           "backgroundColor": "#ffffff"
         }
       }

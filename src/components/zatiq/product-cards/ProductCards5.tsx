@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Plus, ShoppingBag, Zap } from "lucide-react";
 
 interface ProductCards5Props {
   id?: string | number;
@@ -28,6 +29,8 @@ const ProductCards5: React.FC<ProductCards5Props> = ({
   currency,
   image,
   hoverImage,
+  quickAddEnabled = true,
+  buyNowEnabled = true,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -67,16 +70,55 @@ const ProductCards5: React.FC<ProductCards5Props> = ({
 
           {/* Prices */}
           {price !== undefined && (
-            <div className="pt-1 sm:pt-1.5 flex items-center flex-wrap gap-1 sm:gap-1.5">
-              <span className="text-xs sm:text-sm lg:text-base font-bold text-[#212121]">
-                {currency} {price.toLocaleString()}
-              </span>
-              {comparePrice && (
-                <span className="text-[10px] sm:text-xs lg:text-sm text-[#9C9B9B] line-through font-normal">
-                  {comparePrice.toLocaleString()} {currency}
+            <div className="pt-1 sm:pt-1.5 flex items-center justify-between gap-1 sm:gap-1.5">
+              <div className="flex items-center flex-wrap gap-1 sm:gap-1.5">
+                <span className="text-xs sm:text-sm lg:text-base font-bold text-[#212121]">
+                  {currency} {price.toLocaleString()}
                 </span>
+                {comparePrice && (
+                  <span className="text-[10px] sm:text-xs lg:text-sm text-[#9C9B9B] line-through font-normal">
+                    {comparePrice.toLocaleString()} {currency}
+                  </span>
+                )}
+              </div>
+
+              {/* Mobile Icon Buttons - Always visible on mobile */}
+              {(quickAddEnabled || buyNowEnabled) && (
+                <div className="flex sm:hidden gap-1.5">
+                  {quickAddEnabled && (
+                    <button className="group/btn w-8 h-8 rounded-lg bg-muted-foreground/10 flex items-center justify-center cursor-pointer transition-all duration-200 active:scale-95 hover:bg-black">
+                      <Plus className="w-4 h-4 text-foreground transition-transform duration-200 group-hover/btn:scale-110" strokeWidth={1.75} />
+                    </button>
+                  )}
+                  {buyNowEnabled && (
+                    <button className="group/btn w-8 h-8 rounded-lg bg-[#ef4444]/90 flex items-center justify-center cursor-pointer transition-all duration-200 active:scale-95 hover:bg-[#dc2626]">
+                      <ShoppingBag className="w-4 h-4 text-white transition-transform duration-200 group-hover/btn:scale-110" strokeWidth={1.75} />
+                    </button>
+                  )}
+                </div>
               )}
             </div>
+          )}
+        </div>
+
+        {/* Desktop Hover Overlay with Buttons - Hidden on mobile */}
+        <div
+          className={`absolute top-0 left-0 w-full h-full bg-black/40 hidden sm:flex flex-col items-center justify-center gap-3 px-4 lg:px-[18px] z-5 transition-opacity duration-300 ${
+            isHovered ? "opacity-100" : "opacity-0 pointer-events-none"
+          }`}
+        >
+          {/* Add to Cart Button */}
+          {quickAddEnabled && (
+            <button className="w-full h-11 lg:h-12 rounded bg-white flex items-center justify-center cursor-pointer text-sm font-medium text-[#212121] transition-all duration-300 leading-5 hover:bg-gray-100">
+              Add to Cart
+            </button>
+          )}
+
+          {/* Buy Now Button */}
+          {buyNowEnabled && (
+            <button className="w-full h-11 lg:h-12 rounded bg-[#ef4444] flex items-center justify-center cursor-pointer text-sm font-medium text-white transition-all duration-300 leading-5 hover:bg-[#dc2626]">
+              Buy Now
+            </button>
           )}
         </div>
       </div>

@@ -41,14 +41,14 @@ const ProductCards3: React.FC<ProductCards3Props> = ({
   const [isHovered, setIsHovered] = React.useState(false);
 
   return (
-    <div className="font-sans flex gap-6 justify-center p-1">
+    <div className="font-sans w-full h-full">
       <div
-        className="w-[282px] h-[479px] bg-white overflow-hidden relative cursor-pointer transition-all rounded duration-300 shadow-[0_0_0_1px_#E5E7EB] hover:shadow-lg"
+        className="w-full h-full bg-white overflow-hidden relative cursor-pointer transition-all rounded duration-300 shadow-[0_0_0_1px_#E5E7EB] hover:shadow-lg flex flex-col"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
         {/* Top - Image Container */}
-        <div className="w-[282px] h-[228px] relative bg-[#E8E4F3] overflow-hidden">
+        <div className="w-full aspect-square relative bg-[#E8E4F3] overflow-hidden">
           <img
             src={isHovered && hoverImage ? hoverImage : image}
             alt={title}
@@ -58,7 +58,7 @@ const ProductCards3: React.FC<ProductCards3Props> = ({
           {/* Badge */}
           {badge && (
             <div
-              className="absolute top-4 left-4 text-white px-3 py-1 rounded text-sm font-normal"
+              className="absolute top-2 left-2 sm:top-3 sm:left-3 lg:top-4 lg:left-4 text-white px-2 py-0.5 sm:px-2.5 sm:py-1 lg:px-3 rounded text-[10px] sm:text-xs lg:text-sm font-normal"
               style={{ backgroundColor: badgeColor }}
             >
               {badge}
@@ -67,27 +67,27 @@ const ProductCards3: React.FC<ProductCards3Props> = ({
         </div>
 
         {/* Bottom - Content Area */}
-        <div className="p-4 h-[251px] flex flex-col bg-white">
+        <div className="p-2.5 sm:p-3 lg:p-4 flex flex-col flex-1 bg-white">
           {/* Category/Vendor */}
           {vendor && (
-            <div className="text-sm text-[#3465F0] font-normal mb-1">
+            <div className="text-[10px] sm:text-xs lg:text-sm text-[#3465F0] font-normal mb-0.5 sm:mb-1">
               {vendor}
             </div>
           )}
 
           {/* Title */}
-          <h3 className="text-base font-medium text-[#181D25] mb-1 line-clamp-2 overflow-hidden">
+          <h3 className="text-xs sm:text-sm lg:text-base font-medium text-[#181D25] mb-0.5 sm:mb-1 line-clamp-2 overflow-hidden">
             {title}
           </h3>
 
           {/* Prices */}
           {price !== undefined && (
-            <div className="mb-8">
-              <span className="text-lg font-medium text-[#F55157] leading-6">
+            <div className="mb-2 sm:mb-4 lg:mb-6 mt-1 sm:mt-2">
+              <span className="text-sm sm:text-base lg:text-lg font-medium text-[#F55157] leading-6">
                 {price.toLocaleString()} {currency}
               </span>
               {comparePrice && (
-                <span className="text-sm text-[#9CA3AF] line-through ml-2 font-normal leading-6">
+                <span className="text-[10px] sm:text-xs lg:text-sm text-[#9CA3AF] line-through ml-1 sm:ml-2 font-normal leading-6">
                   {comparePrice.toLocaleString()} {currency}
                 </span>
               )}
@@ -102,8 +102,7 @@ const ProductCards3: React.FC<ProductCards3Props> = ({
             >
               Add to Cart
               <svg
-                width="16"
-                height="16"
+                className="w-3.5 h-3.5 sm:w-4 sm:h-4"
                 viewBox="0 0 16 16"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -126,11 +125,10 @@ const ProductCards3: React.FC<ProductCards3Props> = ({
 
           {/* Buy Now Button */}
           {buyNowEnabled && (
-            <button className="w-full h-14 border border-[#2962FF] rounded bg-white flex items-center justify-center cursor-pointer text-base font-medium text-[#3465F0] gap-2 transition-all duration-300 leading-6 hover:bg-gray-500/20">
+            <button className="w-full h-10 sm:h-12 lg:h-14 border border-[#2962FF] rounded bg-white flex items-center justify-center cursor-pointer text-xs sm:text-sm lg:text-base font-medium text-[#3465F0] gap-1.5 sm:gap-2 transition-all duration-300 leading-6 hover:bg-gray-500/20">
               Buy Now
               <svg
-                width="16"
-                height="16"
+                className="w-3.5 h-3.5 sm:w-4 sm:h-4"
                 viewBox="0 0 16 16"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
