@@ -9,7 +9,7 @@
     "sections": [
       {
         "id": "product_breadcrumb",
-        "type": "product-breadcrumb-2",
+        "type": "product-breadcrumb-1",
         "enabled": true,
         "settings": {
           "showHome": true,
@@ -18,7 +18,7 @@
       },
       {
         "id": "product_detail",
-        "type": "product-detail-2",
+        "type": "product-detail-1",
         "enabled": true,
         "settings": {
           "showBrand": true,
@@ -29,6 +29,10 @@
           "showDescription": true,
           "showSpecifications": true,
           "showShipping": true,
+          "showAddToCart": true,
+          "showBuyNow": true,
+          "showWhatsAppBuy": true,
+          "showWishlist": true,
           "galleryPosition": "left",
           "thumbnailPosition": "bottom",
           "thumbnailSize": "sm"
