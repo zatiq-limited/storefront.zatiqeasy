@@ -11,12 +11,7 @@ import type { ComponentType } from "react";
 
 // Import all components from local zatiq components folder
 import { Hero1, Hero2, Hero3, Hero4 } from "@/components/zatiq/heroes";
-import {
-  Navbar1,
-  Navbar2,
-  Navbar3,
-  Navbar4,
-} from "@/components/zatiq/navbars";
+import { Navbar1, Navbar2, Navbar3, Navbar4 } from "@/components/zatiq/navbars";
 import {
   Category1,
   Category2,
@@ -64,7 +59,10 @@ import {
   PaymentStatus2,
 } from "@/components/zatiq/payment-status";
 import { ProductTabs1, ProductTabs2 } from "../components/zatiq/product-tabs";
-import { ProductCollection1, ProductCollection2 } from "@/components/zatiq/product-collection";
+import {
+  ProductCollection1,
+  ProductCollection2,
+} from "@/components/zatiq/product-collection";
 import { SocialFeed1, SocialFeed2 } from "@/components/zatiq/social-feed";
 import { CustomSections } from "@/components/zatiq/custom-sections";
 import {
@@ -76,8 +74,6 @@ import {
   ProductsGrid2,
   ProductsPagination1,
   ProductsPagination2,
-  ProductsLayout1,
-  ProductsLayout2,
   ProductsLayout,
   ProductsContent1,
   ProductsEmpty1,
@@ -122,7 +118,6 @@ import {
   AboutTeam1,
   AboutTeam2,
 } from "@/components/zatiq/about";
-
 
 /**
  * Component Registry
@@ -224,8 +219,6 @@ export const ZATIQ_COMPONENTS: Record<string, ComponentType<any>> = {
   "products-grid-2": ProductsGrid2,
   "products-pagination-1": ProductsPagination1,
   "products-pagination-2": ProductsPagination2,
-  "products-layout-1": ProductsLayout1,
-  "products-layout-2": ProductsLayout2,
   "products-layout": ProductsLayout,
   "products-content-1": ProductsContent1,
   "products-empty-1": ProductsEmpty1,

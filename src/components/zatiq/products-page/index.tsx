@@ -23,10 +23,6 @@ export { default as ProductsGrid2 } from "./ProductsGrid2";
 export { default as ProductsPagination1 } from "./ProductsPagination1";
 export { default as ProductsPagination2 } from "./ProductsPagination2";
 
-// Layout Components (combines sidebar + grid) - Legacy
-export { default as ProductsLayout1 } from "./ProductsLayout1";
-export { default as ProductsLayout2 } from "./ProductsLayout2";
-
 // New unified Layout Component
 export { default as ProductsLayout } from "./ProductsLayout";
 
