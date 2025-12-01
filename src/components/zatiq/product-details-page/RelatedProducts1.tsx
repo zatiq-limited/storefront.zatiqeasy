@@ -24,6 +24,9 @@ interface RelatedProducts1Props {
   settings?: {
     title?: string;
     columns?: number;
+    mobileColumns?: number;
+    tabletColumns?: number;
+    gap?: "sm" | "md" | "lg";
     cardStyle?: string;
     limit?: number;
   };
@@ -39,9 +42,19 @@ const RelatedProducts1: React.FC<RelatedProducts1Props> = ({
   const {
     title = "You May Also Like",
     columns = 4,
+    mobileColumns = 2,
+    tabletColumns = 3,
+    gap = "md",
     cardStyle = "product-card-1",
     limit = 8,
   } = settings;
+
+  // Gap classes
+  const gapClasses = {
+    sm: "gap-3 sm:gap-4",
+    md: "gap-4 sm:gap-5 lg:gap-6",
+    lg: "gap-5 sm:gap-6 lg:gap-8",
+  };
 
   const carouselRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -189,17 +202,34 @@ const RelatedProducts1: React.FC<RelatedProducts1Props> = ({
   const displayedProducts = products.slice(0, limit);
   const ProductCard = getComponent(cardStyle);
 
-  // Calculate card width based on columns
+  // Calculate responsive card width based on columns for different breakpoints
   const getCardWidth = () => {
-    const widthMap: Record<number, string> = {
+    const mobileWidthMap: Record<number, string> = {
       1: "w-full",
-      2: "w-[calc(50%-12px)]",
-      3: "w-[calc(33.333%-16px)]",
-      4: "w-[calc(25%-18px)]",
-      5: "w-[calc(20%-19.2px)]",
-      6: "w-[calc(16.666%-20px)]",
+      2: "w-[calc(50%-8px)]",
+      3: "w-[calc(33.333%-11px)]",
     };
-    return widthMap[columns] || "w-[calc(25%-18px)]";
+
+    const tabletWidthMap: Record<number, string> = {
+      1: "sm:w-full",
+      2: "sm:w-[calc(50%-10px)]",
+      3: "sm:w-[calc(33.333%-14px)]",
+    };
+
+    const desktopWidthMap: Record<number, string> = {
+      1: "lg:w-full",
+      2: "lg:w-[calc(50%-12px)]",
+      3: "lg:w-[calc(33.333%-16px)]",
+      4: "lg:w-[calc(25%-14px)]",
+      5: "lg:w-[calc(20%-16px)]",
+      6: "lg:w-[calc(16.666%-15px)]",
+    };
+
+    const mobileWidth = mobileWidthMap[mobileColumns] || "w-[calc(50%-8px)]";
+    const tabletWidth = tabletWidthMap[tabletColumns] || "sm:w-[calc(33.333%-14px)]";
+    const desktopWidth = desktopWidthMap[columns] || "lg:w-[calc(25%-18px)]";
+
+    return `${mobileWidth} ${tabletWidth} ${desktopWidth}`;
   };
 
   const mapProductToCardProps = (product: Product) => {
@@ -237,11 +267,11 @@ const RelatedProducts1: React.FC<RelatedProducts1Props> = ({
   const totalSlides = Math.ceil(displayedProducts.length / columns);
 
   return (
-    <section className="py-12 bg-white">
+    <section className="py-8 sm:py-12">
       <div className="max-w-[1440px] mx-auto px-4 2xl:px-0">
         {/* Header with Navigation */}
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900">{title}</h2>
+        <div className="flex items-center justify-between mb-4 sm:mb-6 lg:mb-8">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">{title}</h2>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-3">
@@ -302,7 +332,7 @@ const RelatedProducts1: React.FC<RelatedProducts1Props> = ({
           }}
           onMouseMove={handleMouseMove}
           onMouseEnter={handleMouseEnter}
-          className="flex overflow-x-auto gap-6 snap-x snap-mandatory scrollbar-hide pb-2 cursor-grab select-none"
+          className={`flex overflow-x-auto ${gapClasses[gap]} snap-x snap-mandatory scrollbar-hide pb-2 cursor-grab select-none`}
           style={{
             scrollbarWidth: "none",
             msOverflowStyle: "none",
@@ -312,13 +342,13 @@ const RelatedProducts1: React.FC<RelatedProducts1Props> = ({
             <a
               key={product.id}
               href={`/products/${product.slug || product.product_code?.toLowerCase() || product.id}`}
-              className={`group block shrink-0 ${getCardWidth()} snap-start min-w-[200px]`}
+              className={`group block shrink-0 p-0.5 ${getCardWidth()} snap-start min-w-[140px] sm:min-w-[180px] lg:min-w-[200px]`}
               draggable="false"
             >
               {ProductCard ? (
                 <ProductCard {...mapProductToCardProps(product)} />
               ) : (
-                <div className="bg-white rounded-xl border border-gray-200 hover:border-gray-900 transition-all overflow-hidden h-full">
+                <div className="bg-white rounded-lg sm:rounded-xl border border-gray-200 hover:border-gray-900 transition-all overflow-hidden h-full">
                   <div className="aspect-square bg-gray-50 overflow-hidden relative">
                     <img
                       src={product.image_url}
@@ -328,34 +358,34 @@ const RelatedProducts1: React.FC<RelatedProducts1Props> = ({
                       draggable="false"
                     />
                     {product.old_price && (
-                      <div className="absolute top-3 right-3 bg-red-600 text-white px-2 py-1 rounded text-xs font-semibold">
+                      <div className="absolute top-2 right-2 sm:top-3 sm:right-3 bg-red-600 text-white px-1.5 py-0.5 sm:px-2 sm:py-1 rounded text-[10px] sm:text-xs font-semibold">
                         -{Math.round(((product.old_price - product.price) / product.old_price) * 100)}%
                       </div>
                     )}
                   </div>
-                  <div className="p-4">
-                    <h3 className="font-medium text-gray-900 mb-2 line-clamp-2 text-sm leading-tight">
+                  <div className="p-2.5 sm:p-3 lg:p-4">
+                    <h3 className="font-medium text-gray-900 mb-1.5 sm:mb-2 line-clamp-2 text-xs sm:text-sm leading-tight">
                       {product.name}
                     </h3>
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="text-base font-bold text-gray-900">
+                    <div className="flex items-center gap-1.5 sm:gap-2 mb-1.5 sm:mb-2">
+                      <span className="text-sm sm:text-base font-bold text-gray-900">
                         {currency}{product.price?.toLocaleString()}
                       </span>
                       {product.old_price && (
-                        <span className="text-xs text-gray-500 line-through">
+                        <span className="text-[10px] sm:text-xs text-gray-500 line-through">
                           {currency}{product.old_price?.toLocaleString()}
                         </span>
                       )}
                     </div>
                     {(product.review_summary?.average_rating || product.average_rating) && (
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-0.5 sm:gap-1">
                         <div className="flex items-center">
                           {Array.from({ length: 5 }).map((_, i) => {
                             const rating = product.review_summary?.average_rating || product.average_rating || 0;
                             return (
                               <svg
                                 key={i}
-                                className={`w-3.5 h-3.5 ${
+                                className={`w-2.5 h-2.5 sm:w-3 sm:h-3 lg:w-3.5 lg:h-3.5 ${
                                   i < Math.floor(rating) ? "text-gray-900" : "text-gray-300"
                                 }`}
                                 fill="currentColor"
@@ -366,7 +396,7 @@ const RelatedProducts1: React.FC<RelatedProducts1Props> = ({
                             );
                           })}
                         </div>
-                        <span className="text-xs text-gray-600">
+                        <span className="text-[10px] sm:text-xs text-gray-600">
                           ({product.review_summary?.total_reviews || product.total_reviews || 0})
                         </span>
                       </div>
@@ -380,7 +410,7 @@ const RelatedProducts1: React.FC<RelatedProducts1Props> = ({
 
         {/* Progress Dots - Shopify Style */}
         {totalSlides > 1 && (
-          <div className="flex justify-center gap-2 mt-6">
+          <div className="flex justify-center gap-1.5 sm:gap-2 mt-4 sm:mt-6">
             {Array.from({ length: totalSlides }).map((_, index) => (
               <button
                 key={index}
