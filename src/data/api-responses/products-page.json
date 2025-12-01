@@ -4,25 +4,28 @@
     "template": "products",
     "sections": [
       {
-        "id": "products_hero_1_0",
-        "type": "products-hero-1",
+        "id": "products_hero_2_0",
+        "type": "products-hero-2",
         "settings": {
           "title": "All Products",
           "description": "Discover our curated collection of premium products",
           "showBreadcrumb": true,
           "showProductCount": true,
-          "gradient_start": "#EBF4FF",
-          "gradient_end": "#F3E8FF",
+          "backgroundImage": "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1920&q=80",
+          "overlayColor": "#000000",
+          "overlayOpacity": 50,
+          "heroHeight": "h-[300px] md:h-[400px]",
           "titleFontFamily": "inherit",
-          "titleFontSize": "text-4xl md:text-5xl",
+          "titleFontSize": "text-4xl md:text-6xl",
           "titleFontWeight": "font-bold",
-          "titleColor": "#111827",
+          "titleColor": "#FFFFFF",
           "descriptionFontFamily": "inherit",
           "descriptionFontSize": "text-lg",
-          "descriptionColor": "#4B5563",
-          "breadcrumbColor": "#6B7280",
-          "productCountColor": "#6B7280",
-          "productCountFontSize": "text-sm"
+          "descriptionColor": "#FFFFFFCC",
+          "breadcrumbColor": "#FFFFFFCC",
+          "productCountColor": "#FFFFFF99",
+          "productCountFontSize": "text-sm",
+          "textAlign": "text-center md:text-left"
         }
       },
       {
@@ -39,7 +42,7 @@
           "columnsTablet": 2,
           "columnsMobile": 2,
           "gap": 6,
-          "cardType": "card-1",
+          "cardType": "card-7",
           "showSearch": true,
           "showSort": true,
           "showViewToggle": true,
@@ -56,50 +59,13 @@
           "sortFontSize": "text-sm",
           "productCountFontFamily": "inherit",
           "productCountFontSize": "text-xs",
-          "productCount": 128
-        }
-      },
-      {
-        "id": "static_banner_1_2",
-        "type": "static-banner-1",
-        "settings": {
-          "image": "https://i.ibb.co.com/5x6wzDWj/laptop-cover.webp",
-          "imageMobile": "",
-          "title": "Best Discounts\n2025",
-          "description": "Salla Store provides you with everything you need, from electronics to home furniture, along with the best discounts on products. Shop now and enjoy all the discounts on products.",
-          "buttonText": "Discover more",
-          "buttonLink": "/collections/discounts",
-          "secondaryButtonText": "",
-          "secondaryButtonLink": "",
-          "textAlignment": "right",
-          "textColor": "#FFFFFF",
-          "overlayColor": "#000000",
-          "overlayOpacity": 5,
-          "height": "medium",
-          "titleFont": "sans",
-          "descriptionFont": "sans"
-        }
-      },
-      {
-        "id": "special_offers_slider_4_3",
-        "type": "special-offers-slider-4",
-        "settings": {
-          "bgColor": "transparent",
-          "leftCardImage": "https://i.ibb.co.com/B2s1CxpY/8381449cda78484f78ab0e499626aff8f031bb85.jpg",
-          "leftCardTitle": "Smartphone\nBLU G91 Pro 2022",
-          "leftCardSubtitle": "Sale 20% off all store",
-          "leftCardButtonText": "Shop Now",
-          "leftCardButtonLink": "#",
-          "leftCardTitleColor": "#010F1C",
-          "leftCardTextColor": "#010F1C",
-          "rightCardImage": "https://i.ibb.co.com/NgXRg0g3/c1d56950ca32c579c48f4a92888c4a547802c115.jpg",
-          "rightCardTitle": "HyperX Cloud II\nWireless",
-          "rightCardDiscount": "Sale 35% off",
-          "rightCardButtonText": "Shop Now",
-          "rightCardButtonLink": "#",
-          "rightCardTitleColor": "#010F1C",
-          "rightCardTextColor": "#010F1C",
-          "fontFamily": "inherit"
+          "productCount": 128,
+          "paginationActiveColor": "#3B82F6",
+          "paginationTextColor": "#374151",
+          "cardButtonBgColor": "#051733",
+          "cardButtonTextColor": "#FFFFFF",
+          "sidebarButtonBgColor": "#051733",
+          "sidebarButtonTextColor": "#FFFFFF"
         }
       }
     ],

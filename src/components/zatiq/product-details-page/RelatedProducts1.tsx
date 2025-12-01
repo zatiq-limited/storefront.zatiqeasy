@@ -27,7 +27,7 @@ interface RelatedProducts1Props {
     mobileColumns?: number;
     tabletColumns?: number;
     gap?: "sm" | "md" | "lg";
-    cardStyle?: string;
+    cardDesign?: string;
     limit?: number;
   };
   products: Product[];
@@ -45,7 +45,7 @@ const RelatedProducts1: React.FC<RelatedProducts1Props> = ({
     mobileColumns = 2,
     tabletColumns = 3,
     gap = "md",
-    cardStyle = "product-card-1",
+    cardDesign = "card-1",
     limit = 8,
   } = settings;
 
@@ -200,7 +200,11 @@ const RelatedProducts1: React.FC<RelatedProducts1Props> = ({
   }
 
   const displayedProducts = products.slice(0, limit);
-  const ProductCard = getComponent(cardStyle);
+  // Convert cardDesign format (e.g., 'card-1') to component registry format (e.g., 'product-card-1')
+  const cardComponentName = cardDesign.startsWith('card-')
+    ? `product-${cardDesign}`
+    : cardDesign;
+  const ProductCard = getComponent(cardComponentName);
 
   // Calculate responsive card width based on columns for different breakpoints
   const getCardWidth = () => {

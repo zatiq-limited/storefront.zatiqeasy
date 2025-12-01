@@ -1,7 +1,7 @@
 {
   "success": true,
   "data": {
-    "id": "theme_custom_1764227103153",
+    "id": "theme_custom_1764589504842",
     "globalSettings": {
       "typography": {
         "fontFamily": "Inter",
@@ -17,7 +17,7 @@
         "enabled": true,
         "type": "announcement-bar-1",
         "settings": {
-          "message": "For a limited time, enjoy a 20% discount on all our products!",
+          "message": "For a limited time, enjoy a 50% discount on all our products!",
           "icon_left": "🔥",
           "icon_right": "🔥",
           "gradient_start": "#50D1F6",
@@ -48,6 +48,10 @@
             {
               "label": "Products",
               "url": "/products"
+            },
+            {
+              "label": "Category",
+              "url": "/category"
             }
           ]
         },
@@ -70,14 +74,14 @@
           "copyrightText": "All rights reserved for Zatiq Ltd © 2025",
           "fontFamily": "inherit",
           "contactTitle": "Contact us",
-          "whatsapp": "009612345678932",
-          "mobile": "009612345678932",
+          "whatsapp": "01533785541",
+          "mobile": "01533785541",
           "email": "support@zatiq.com",
           "showSocial": true,
-          "facebookUrl": "#",
-          "instagramUrl": "#",
-          "twitterUrl": "#",
-          "linkedinUrl": "#",
+          "facebookUrl": "facebook.com",
+          "instagramUrl": "instagram.com",
+          "twitterUrl": "twitter.com",
+          "linkedinUrl": "linkedIn.com",
           "column1Title": "My Account",
           "column1Link1Text": "My Orders",
           "column1Link1Url": "/orders",
@@ -146,8 +150,8 @@
         ],
         "contact": {
           "title": "Contact us",
-          "whatsapp": "009612345678932",
-          "mobile": "009612345678932",
+          "whatsapp": "01533785541",
+          "mobile": "01533785541",
           "email": "support@zatiq.com"
         },
         "paymentIcons": [

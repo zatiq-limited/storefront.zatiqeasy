@@ -54,6 +54,9 @@ interface ProductDetail2Props {
     galleryPosition?: "left" | "right";
     thumbnailPosition?: "bottom" | "left" | "right" | "top";
     thumbnailSize?: "sm" | "md" | "lg";
+    buyNowGradientStart?: string;
+    buyNowGradientEnd?: string;
+    buyNowTextColor?: string;
   };
   product: Product;
   currency?: string;
@@ -82,14 +85,23 @@ const ProductDetail2: React.FC<ProductDetail2Props> = ({
     galleryPosition = "left",
     thumbnailPosition = "left",
     thumbnailSize = "md",
+    buyNowGradientStart = "#F97316",
+    buyNowGradientEnd = "#EF4444",
+    buyNowTextColor = "#FFFFFF",
   } = settings;
 
   const [mainImage, setMainImage] = useState(product.image_url);
-  const [selectedVariants, setSelectedVariants] = useState<Record<number, number>>({});
-  const [activeTab, setActiveTab] = useState<"description" | "specs" | "shipping">("description");
+  const [selectedVariants, setSelectedVariants] = useState<
+    Record<number, number>
+  >({});
+  const [activeTab, setActiveTab] = useState<
+    "description" | "specs" | "shipping"
+  >("description");
 
   const discountPercent = product.old_price
-    ? Math.round(((product.old_price - product.price) / product.old_price) * 100)
+    ? Math.round(
+        ((product.old_price - product.price) / product.old_price) * 100
+      )
     : 0;
 
   const handleVariantSelect = (variantTypeId: number, variantId: number) => {
@@ -97,9 +109,21 @@ const ProductDetail2: React.FC<ProductDetail2Props> = ({
   };
 
   const thumbnailSizeClasses = {
-    sm: { vertical: "w-12 sm:w-14", grid: "grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-1.5 sm:gap-2", mobile: "w-10 h-10 sm:w-12 sm:h-12" },
-    md: { vertical: "w-16 sm:w-20", grid: "grid-cols-3 sm:grid-cols-4 gap-2 sm:gap-3", mobile: "w-14 h-14 sm:w-16 sm:h-16" },
-    lg: { vertical: "w-18 sm:w-24", grid: "grid-cols-3 gap-2 sm:gap-4", mobile: "w-16 h-16 sm:w-20 sm:h-20" },
+    sm: {
+      vertical: "w-12 sm:w-14",
+      grid: "grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-1.5 sm:gap-2",
+      mobile: "w-10 h-10 sm:w-12 sm:h-12",
+    },
+    md: {
+      vertical: "w-16 sm:w-20",
+      grid: "grid-cols-3 sm:grid-cols-4 gap-2 sm:gap-3",
+      mobile: "w-14 h-14 sm:w-16 sm:h-16",
+    },
+    lg: {
+      vertical: "w-18 sm:w-24",
+      grid: "grid-cols-3 gap-2 sm:gap-4",
+      mobile: "w-16 h-16 sm:w-20 sm:h-20",
+    },
   };
 
   // Render thumbnails based on position
@@ -109,7 +133,11 @@ const ProductDetail2: React.FC<ProductDetail2Props> = ({
     // Horizontal thumbnails (top or bottom)
     if (position === "bottom" || position === "top") {
       return (
-        <div className={`grid ${thumbnailSizeClasses[thumbnailSize].grid} ${position === "top" ? "mb-4" : "mt-4"}`}>
+        <div
+          className={`grid ${thumbnailSizeClasses[thumbnailSize].grid} ${
+            position === "top" ? "mb-4" : "mt-4"
+          }`}
+        >
           {product.images.map((img, index) => (
             <button
               key={index}
@@ -133,7 +161,11 @@ const ProductDetail2: React.FC<ProductDetail2Props> = ({
 
     // Left or Right vertical thumbnails
     return (
-      <div className={`hidden md:flex flex-col gap-3 ${thumbnailSizeClasses[thumbnailSize].vertical} ${position === "right" ? "order-2" : "order-1"}`}>
+      <div
+        className={`hidden md:flex flex-col gap-3 ${
+          thumbnailSizeClasses[thumbnailSize].vertical
+        } ${position === "right" ? "order-2" : "order-1"}`}
+      >
         {product.images.map((img, index) => (
           <button
             key={index}
@@ -157,12 +189,30 @@ const ProductDetail2: React.FC<ProductDetail2Props> = ({
 
   // Render gallery section
   const renderGallery = () => (
-    <div className={`p-0 sm:p-6 lg:p-8 ${(thumbnailPosition === "bottom" || thumbnailPosition === "top") ? "" : "flex gap-2 sm:gap-4"}`}>
+    <div
+      className={`p-0 sm:p-6 lg:p-8 ${
+        thumbnailPosition === "bottom" || thumbnailPosition === "top"
+          ? ""
+          : "flex gap-2 sm:gap-4"
+      }`}
+    >
       {/* Side Thumbnails (Left) */}
       {thumbnailPosition === "left" && renderThumbnails("left")}
 
       {/* Main Image */}
-      <div className={`${(thumbnailPosition === "bottom" || thumbnailPosition === "top") ? "" : "flex-1"} ${thumbnailPosition === "left" ? "order-2" : thumbnailPosition === "right" ? "order-1" : ""}`}>
+      <div
+        className={`${
+          thumbnailPosition === "bottom" || thumbnailPosition === "top"
+            ? ""
+            : "flex-1"
+        } ${
+          thumbnailPosition === "left"
+            ? "order-2"
+            : thumbnailPosition === "right"
+            ? "order-1"
+            : ""
+        }`}
+      >
         {/* Top Thumbnails */}
         {thumbnailPosition === "top" && renderThumbnails("top")}
 
@@ -183,21 +233,32 @@ const ProductDetail2: React.FC<ProductDetail2Props> = ({
         {thumbnailPosition === "bottom" && renderThumbnails("bottom")}
 
         {/* Mobile Thumbnails (always at bottom on mobile) */}
-        {product.images && product.images.length > 1 && thumbnailPosition !== "bottom" && thumbnailPosition !== "top" && (
-          <div className="md:hidden flex gap-1.5 sm:gap-2 mt-3 sm:mt-4 overflow-x-auto pb-2 scrollbar-hide">
-            {product.images.map((img, index) => (
-              <button
-                key={index}
-                onClick={() => setMainImage(img)}
-                className={`${thumbnailSizeClasses[thumbnailSize].mobile} shrink-0 rounded-lg overflow-hidden border-2 ${
-                  mainImage === img ? "border-purple-500" : "border-transparent"
-                }`}
-              >
-                <img src={img} alt="" className="w-full h-full object-cover" />
-              </button>
-            ))}
-          </div>
-        )}
+        {product.images &&
+          product.images.length > 1 &&
+          thumbnailPosition !== "bottom" &&
+          thumbnailPosition !== "top" && (
+            <div className="md:hidden flex gap-1.5 sm:gap-2 mt-3 sm:mt-4 overflow-x-auto pb-2 scrollbar-hide">
+              {product.images.map((img, index) => (
+                <button
+                  key={index}
+                  onClick={() => setMainImage(img)}
+                  className={`${
+                    thumbnailSizeClasses[thumbnailSize].mobile
+                  } shrink-0 rounded-lg overflow-hidden border-2 ${
+                    mainImage === img
+                      ? "border-purple-500"
+                      : "border-transparent"
+                  }`}
+                >
+                  <img
+                    src={img}
+                    alt=""
+                    className="w-full h-full object-cover"
+                  />
+                </button>
+              ))}
+            </div>
+          )}
       </div>
 
       {/* Side Thumbnails (Right) */}
@@ -216,7 +277,9 @@ const ProductDetail2: React.FC<ProductDetail2Props> = ({
           </span>
         )}
         {showSku && product.product_code && (
-          <span className="text-[10px] sm:text-xs text-gray-400">SKU: {product.product_code}</span>
+          <span className="text-[10px] sm:text-xs text-gray-400">
+            SKU: {product.product_code}
+          </span>
         )}
       </div>
 
@@ -256,51 +319,64 @@ const ProductDetail2: React.FC<ProductDetail2Props> = ({
       {/* Price */}
       <div className="flex items-baseline flex-wrap gap-2 sm:gap-4 py-3 sm:py-4 border-y border-gray-100">
         <span className="text-2xl sm:text-3xl md:text-4xl font-bold bg-linear-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
-          {currency}{product.price?.toLocaleString()}
+          {currency}
+          {product.price?.toLocaleString()}
         </span>
         {product.old_price && (
           <span className="text-base sm:text-lg md:text-xl text-gray-400 line-through">
-            {currency}{product.old_price?.toLocaleString()}
+            {currency}
+            {product.old_price?.toLocaleString()}
           </span>
         )}
       </div>
 
       {/* Short Description */}
       {product.short_description && (
-        <p className="text-sm sm:text-base text-gray-600 leading-relaxed">{product.short_description}</p>
+        <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
+          {product.short_description}
+        </p>
       )}
 
       {/* Variants */}
-      {showVariants && product.variant_types && product.variant_types.length > 0 && (
-        <div className="space-y-3 sm:space-y-4">
-          {product.variant_types.map((variantType) => (
-            <div key={variantType.id}>
-              <label className="block text-xs sm:text-sm font-semibold text-gray-900 mb-2 sm:mb-3">
-                {variantType.title}
-                {variantType.is_mandatory && <span className="text-red-500 ml-1">*</span>}
-              </label>
-              <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                {variantType.variants.map((variant) => (
-                  <button
-                    key={variant.id}
-                    onClick={() => handleVariantSelect(variantType.id, variant.id)}
-                    className={`px-3 py-1.5 sm:px-5 sm:py-2.5 rounded-full text-xs sm:text-sm font-medium transition-all ${
-                      selectedVariants[variantType.id] === variant.id
-                        ? "bg-purple-600 text-white shadow-lg"
-                        : "bg-gray-100 text-gray-700 hover:bg-purple-100 hover:text-purple-700"
-                    }`}
-                  >
-                    {variant.name}
-                    {variant.price > 0 && (
-                      <span className="ml-1 opacity-75">+{currency}{variant.price}</span>
-                    )}
-                  </button>
-                ))}
+      {showVariants &&
+        product.variant_types &&
+        product.variant_types.length > 0 && (
+          <div className="space-y-3 sm:space-y-4">
+            {product.variant_types.map((variantType) => (
+              <div key={variantType.id}>
+                <label className="block text-xs sm:text-sm font-semibold text-gray-900 mb-2 sm:mb-3">
+                  {variantType.title}
+                  {variantType.is_mandatory && (
+                    <span className="text-red-500 ml-1">*</span>
+                  )}
+                </label>
+                <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                  {variantType.variants.map((variant) => (
+                    <button
+                      key={variant.id}
+                      onClick={() =>
+                        handleVariantSelect(variantType.id, variant.id)
+                      }
+                      className={`px-3 py-1.5 sm:px-5 sm:py-2.5 rounded-full text-xs sm:text-sm font-medium transition-all ${
+                        selectedVariants[variantType.id] === variant.id
+                          ? "bg-purple-600 text-white shadow-lg"
+                          : "bg-gray-100 text-gray-700 hover:bg-purple-100 hover:text-purple-700"
+                      }`}
+                    >
+                      {variant.name}
+                      {variant.price > 0 && (
+                        <span className="ml-1 opacity-75">
+                          +{currency}
+                          {variant.price}
+                        </span>
+                      )}
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-      )}
+            ))}
+          </div>
+        )}
 
       {/* Stock Status */}
       {showStock && (
@@ -308,7 +384,9 @@ const ProductDetail2: React.FC<ProductDetail2Props> = ({
           {product.quantity > 0 ? (
             <>
               <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 bg-green-500 rounded-full animate-pulse" />
-              <span className="text-sm sm:text-base text-green-700 font-medium">In Stock</span>
+              <span className="text-sm sm:text-base text-green-700 font-medium">
+                In Stock
+              </span>
               {product.quantity <= 10 && (
                 <span className="text-orange-600 text-xs sm:text-sm bg-orange-50 px-2 py-0.5 sm:py-1 rounded-full">
                   Only {product.quantity} left!
@@ -318,7 +396,9 @@ const ProductDetail2: React.FC<ProductDetail2Props> = ({
           ) : (
             <>
               <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 bg-red-500 rounded-full" />
-              <span className="text-sm sm:text-base text-red-700 font-medium">Out of Stock</span>
+              <span className="text-sm sm:text-base text-red-700 font-medium">
+                Out of Stock
+              </span>
             </>
           )}
         </div>
@@ -331,7 +411,7 @@ const ProductDetail2: React.FC<ProductDetail2Props> = ({
           {showAddToCart && (
             <button
               disabled={product.quantity === 0}
-              className="flex-1 py-3 sm:py-4 text-sm sm:text-base bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-xl sm:rounded-2xl hover:from-purple-700 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed disabled:shadow-none"
+              className="flex-1 py-3 sm:py-4 text-sm sm:text-base bg-linear-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-xl sm:rounded-2xl hover:from-purple-700 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed disabled:shadow-none"
             >
               Add to Cart
             </button>
@@ -341,9 +421,14 @@ const ProductDetail2: React.FC<ProductDetail2Props> = ({
               disabled={product.quantity === 0}
               onClick={() => {
                 const message = encodeURIComponent(
-                  `Hi, I'm interested in buying:\n\n*${product.name}*\nPrice: ${currency}${product.price?.toLocaleString()}\n\nPlease confirm availability.`
+                  `Hi, I'm interested in buying:\n\n*${
+                    product.name
+                  }*\nPrice: ${currency}${product.price?.toLocaleString()}\n\nPlease confirm availability.`
                 );
-                window.open(`https://wa.me/${whatsappNumber}?text=${message}`, "_blank");
+                window.open(
+                  `https://wa.me/${whatsappNumber}?text=${message}`,
+                  "_blank"
+                );
               }}
               className="flex-1 py-3 sm:py-4 text-sm sm:text-base bg-[#25D366] hover:bg-[#20BA5C] text-white font-semibold rounded-xl sm:rounded-2xl transition-all shadow-lg hover:shadow-xl disabled:bg-gray-300 disabled:cursor-not-allowed disabled:shadow-none flex items-center justify-center gap-2"
             >
@@ -380,7 +465,14 @@ const ProductDetail2: React.FC<ProductDetail2Props> = ({
         {showBuyNow && (
           <button
             disabled={product.quantity === 0}
-            className="w-full py-3 sm:py-4 text-sm sm:text-base bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-xl sm:rounded-2xl hover:from-orange-600 hover:to-red-600 transition-all shadow-lg hover:shadow-xl disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed disabled:shadow-none"
+            className="w-full py-3 sm:py-4 text-sm sm:text-base font-semibold rounded-xl sm:rounded-2xl transition-all shadow-lg hover:shadow-xl hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none"
+            style={{
+              background:
+                product.quantity === 0
+                  ? "#9CA3AF"
+                  : `linear-gradient(to right, ${buyNowGradientStart}, ${buyNowGradientEnd})`,
+              color: buyNowTextColor,
+            }}
           >
             Buy Now
           </button>
@@ -427,21 +519,23 @@ const ProductDetail2: React.FC<ProductDetail2Props> = ({
                   )}
                 </button>
               )}
-              {showSpecifications && product.custom_fields && Object.keys(product.custom_fields).length > 0 && (
-                <button
-                  onClick={() => setActiveTab("specs")}
-                  className={`px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-semibold transition-colors relative whitespace-nowrap ${
-                    activeTab === "specs"
-                      ? "text-purple-600"
-                      : "text-gray-500 hover:text-gray-700"
-                  }`}
-                >
-                  Specifications
-                  {activeTab === "specs" && (
-                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-purple-600" />
-                  )}
-                </button>
-              )}
+              {showSpecifications &&
+                product.custom_fields &&
+                Object.keys(product.custom_fields).length > 0 && (
+                  <button
+                    onClick={() => setActiveTab("specs")}
+                    className={`px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-semibold transition-colors relative whitespace-nowrap ${
+                      activeTab === "specs"
+                        ? "text-purple-600"
+                        : "text-gray-500 hover:text-gray-700"
+                    }`}
+                  >
+                    Specifications
+                    {activeTab === "specs" && (
+                      <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-purple-600" />
+                    )}
+                  </button>
+                )}
               {showShipping && (
                 <button
                   onClick={() => setActiveTab("shipping")}
@@ -462,7 +556,9 @@ const ProductDetail2: React.FC<ProductDetail2Props> = ({
             {/* Tab Content */}
             <div className="p-4 sm:p-6 lg:p-8">
               {activeTab === "description" && product.description && (
-                <div className="prose prose-sm sm:prose max-w-none text-gray-600">{product.description}</div>
+                <div className="prose prose-sm sm:prose max-w-none text-gray-600">
+                  {product.description}
+                </div>
               )}
 
               {activeTab === "specs" && product.custom_fields && (
@@ -472,8 +568,12 @@ const ProductDetail2: React.FC<ProductDetail2Props> = ({
                       key={key}
                       className="flex justify-between py-2 sm:py-3 px-3 sm:px-4 bg-gray-50 rounded-lg"
                     >
-                      <span className="text-xs sm:text-sm text-gray-600">{key}</span>
-                      <span className="text-xs sm:text-sm font-medium text-gray-900">{value}</span>
+                      <span className="text-xs sm:text-sm text-gray-600">
+                        {key}
+                      </span>
+                      <span className="text-xs sm:text-sm font-medium text-gray-900">
+                        {value}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -482,27 +582,46 @@ const ProductDetail2: React.FC<ProductDetail2Props> = ({
               {activeTab === "shipping" && (
                 <div className="space-y-3 sm:space-y-4">
                   <div className="flex items-start gap-2 sm:gap-3 p-3 sm:p-4 bg-blue-50 rounded-lg sm:rounded-xl">
-                    <svg className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <svg
+                      className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600 shrink-0 mt-0.5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
                     </svg>
-                    <p className="text-sm sm:text-base text-blue-800">{product.warranty || "30 days return policy"}</p>
+                    <p className="text-sm sm:text-base text-blue-800">
+                      {product.warranty || "30 days return policy"}
+                    </p>
                   </div>
-                  {!product.isApplyDefaultDeliveryCharge && product.specific_delivery_charges && (
-                    <div className="grid grid-cols-2 gap-2 sm:gap-4">
-                      <div className="p-3 sm:p-4 bg-gray-50 rounded-lg sm:rounded-xl">
-                        <p className="text-xs sm:text-sm text-gray-500 mb-0.5 sm:mb-1">Dhaka</p>
-                        <p className="text-base sm:text-lg font-bold text-gray-900">
-                          {currency}{product.specific_delivery_charges.Dhaka}
-                        </p>
+                  {!product.isApplyDefaultDeliveryCharge &&
+                    product.specific_delivery_charges && (
+                      <div className="grid grid-cols-2 gap-2 sm:gap-4">
+                        <div className="p-3 sm:p-4 bg-gray-50 rounded-lg sm:rounded-xl">
+                          <p className="text-xs sm:text-sm text-gray-500 mb-0.5 sm:mb-1">
+                            Dhaka
+                          </p>
+                          <p className="text-base sm:text-lg font-bold text-gray-900">
+                            {currency}
+                            {product.specific_delivery_charges.Dhaka}
+                          </p>
+                        </div>
+                        <div className="p-3 sm:p-4 bg-gray-50 rounded-lg sm:rounded-xl">
+                          <p className="text-xs sm:text-sm text-gray-500 mb-0.5 sm:mb-1">
+                            Outside Dhaka
+                          </p>
+                          <p className="text-base sm:text-lg font-bold text-gray-900">
+                            {currency}
+                            {product.specific_delivery_charges.Others}
+                          </p>
+                        </div>
                       </div>
-                      <div className="p-3 sm:p-4 bg-gray-50 rounded-lg sm:rounded-xl">
-                        <p className="text-xs sm:text-sm text-gray-500 mb-0.5 sm:mb-1">Outside Dhaka</p>
-                        <p className="text-base sm:text-lg font-bold text-gray-900">
-                          {currency}{product.specific_delivery_charges.Others}
-                        </p>
-                      </div>
-                    </div>
-                  )}
+                    )}
                 </div>
               )}
             </div>

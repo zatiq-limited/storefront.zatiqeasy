@@ -54,6 +54,9 @@ interface ProductDetail1Props {
     galleryPosition?: "left" | "right";
     thumbnailPosition?: "bottom" | "left" | "top" | "right";
     thumbnailSize?: "sm" | "md" | "lg";
+    buyNowGradientStart?: string;
+    buyNowGradientEnd?: string;
+    buyNowTextColor?: string;
   };
   product: Product;
   currency?: string;
@@ -82,6 +85,9 @@ const ProductDetail1: React.FC<ProductDetail1Props> = ({
     galleryPosition = "left",
     thumbnailPosition = "bottom",
     thumbnailSize = "md",
+    buyNowGradientStart = "#F97316",
+    buyNowGradientEnd = "#EF4444",
+    buyNowTextColor = "#FFFFFF",
   } = settings;
 
   const [mainImage, setMainImage] = useState(product.image_url);
@@ -332,7 +338,13 @@ const ProductDetail1: React.FC<ProductDetail1Props> = ({
         {showBuyNow && (
           <button
             disabled={product.quantity === 0}
-            className="w-full py-3 sm:py-4 text-sm sm:text-base bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-xl hover:from-orange-600 hover:to-red-600 transition-all shadow-md hover:shadow-lg disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed disabled:shadow-none"
+            className="w-full py-3 sm:py-4 text-sm sm:text-base font-semibold rounded-xl transition-all shadow-md hover:shadow-lg hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none"
+            style={{
+              background: product.quantity === 0
+                ? '#9CA3AF'
+                : `linear-gradient(to right, ${buyNowGradientStart}, ${buyNowGradientEnd})`,
+              color: buyNowTextColor,
+            }}
           >
             Buy Now
           </button>
