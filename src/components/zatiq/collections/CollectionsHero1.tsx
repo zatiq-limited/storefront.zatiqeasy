@@ -86,7 +86,7 @@ const CollectionsHero1: React.FC<CollectionsHero1Props> = ({
       )}
 
       {/* Content */}
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-28">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center max-w-4xl mx-auto">
           {/* Badge */}
           {badge && (
@@ -132,7 +132,7 @@ const CollectionsHero1: React.FC<CollectionsHero1Props> = ({
 
           {/* Stats */}
           {showStats && stats && stats.length > 0 && (
-            <div className="mt-12 sm:mt-16 pt-8 sm:pt-10 border-t border-white/10">
+            <div className="pt-8 sm:pt-10 border-t border-white/10">
               <div className="grid grid-cols-3 gap-4 sm:gap-8 max-w-xl mx-auto">
                 {stats.map((stat, index) => (
                   <div key={index} className="text-center">
