@@ -169,7 +169,7 @@ const Hero1: React.FC<Hero1Props> = ({
                 className={`relative w-full h-[480px] md:h-[600px] rounded-2xl overflow-hidden bg-linear-to-r ${slide.bgGradient}`}
               >
                 {/* Left Content Section */}
-                <div className="absolute left-1/2 -translate-x-1/2 top-8 text-center md:left-16 md:translate-x-0 md:top-auto md:bottom-32 md:text-left lg:left-28 lg:bottom-40 w-[320px] md:max-w-[450px] lg:max-w-[550px] z-10">
+                <div className="absolute left-1/2 -translate-x-1/2 top-8 text-center md:left-16 md:translate-x-0 md:top-auto md:bottom-32 md:text-left lg:left-28 lg:bottom-40 w-[320px] md:w-[450px] lg:w-[750px] z-10">
                   {/* Tagline */}
                   <p
                     className={`text-sm md:text-lg lg:text-xl font-normal leading-relaxed md:leading-7 lg:leading-[30px] mb-3 md:mb-5 lg:mb-6 transition-all duration-700 ${
@@ -184,7 +184,7 @@ const Hero1: React.FC<Hero1Props> = ({
 
                   {/* Title */}
                   <h1
-                    className={`text-[28px] md:text-5xl lg:text-6xl font-bold leading-tight md:leading-tight lg:leading-[1.1] tracking-tight uppercase mb-6 md:mb-10 lg:mb-12 transition-all duration-700 ${
+                    className={`text-[28px] md:text-5xl lg:text-6xl font-bold leading-tight md:leading-tight lg:leading-[1.1] tracking-tight uppercase mb-0 md:mb-10 lg:mb-12 transition-all duration-700 ${
                       index === currentSlide
                         ? "translate-y-0 opacity-100 delay-200"
                         : "translate-y-8 opacity-0"
@@ -200,13 +200,36 @@ const Hero1: React.FC<Hero1Props> = ({
                     )}
                   </h1>
 
-                </div>
-
-                {/* CTA Button - positioned separately for mobile bottom center */}
-                <div className="absolute left-1/2 -translate-x-1/2 bottom-20 md:left-16 md:translate-x-0 md:bottom-32 lg:left-28 lg:bottom-40 z-10">
+                  {/* CTA Button - Desktop/Tablet */}
                   <button
                     onClick={() => (window.location.href = slide.buttonLink)}
-                    className={`inline-flex items-center gap-1.5 md:gap-2 bg-[#F55266] hover:bg-[#E84258] text-white font-medium text-xs md:text-base leading-5 md:leading-6 px-4 py-2 md:px-6 md:py-3 rounded-lg transition-all shadow-md hover:shadow-lg hover:scale-105 active:scale-95 ${
+                    className={`hidden md:inline-flex items-center gap-2 bg-[#F55266] hover:bg-[#E84258] text-white font-medium text-base leading-6 px-6 py-3 rounded-lg transition-all shadow-md hover:shadow-lg hover:scale-105 active:scale-95 ${
+                      index === currentSlide
+                        ? "translate-y-0 opacity-100 delay-300"
+                        : "translate-y-8 opacity-0"
+                    }`}
+                  >
+                    <span>{slide.buttonText}</span>
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 18 18"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M12.75 4.59375H5.25C4.88756 4.59375 4.59375 4.88756 4.59375 5.25C4.59375 5.61244 4.88756 5.90625 5.25 5.90625H11.1657L4.78596 12.286C4.52968 12.5422 4.52968 12.9578 4.78596 13.214C5.04224 13.4703 5.45776 13.4703 5.71404 13.214L12.0938 6.83433V12.75C12.0938 13.1124 12.3876 13.4062 12.75 13.4062C13.1124 13.4062 13.4062 13.1124 13.4062 12.75V5.25C13.4062 5.06949 13.3334 4.906 13.2154 4.78735L13.2126 4.78457C13.15 4.72234 13.078 4.67533 13.0012 4.64355C12.9238 4.61146 12.839 4.59375 12.75 4.59375Z"
+                        fill="white"
+                      />
+                    </svg>
+                  </button>
+                </div>
+
+                {/* CTA Button - Mobile only (centered at bottom) */}
+                <div className="absolute left-1/2 -translate-x-1/2 bottom-20 z-10 md:hidden">
+                  <button
+                    onClick={() => (window.location.href = slide.buttonLink)}
+                    className={`inline-flex items-center gap-1.5 bg-[#F55266] hover:bg-[#E84258] text-white font-medium text-xs leading-5 px-4 py-2 rounded-lg transition-all shadow-md hover:shadow-lg hover:scale-105 active:scale-95 ${
                       index === currentSlide
                         ? "translate-y-0 opacity-100 delay-300"
                         : "translate-y-8 opacity-0"
@@ -219,7 +242,6 @@ const Hero1: React.FC<Hero1Props> = ({
                       viewBox="0 0 18 18"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
-                      className="md:w-[18px] md:h-[18px]"
                     >
                       <path
                         d="M12.75 4.59375H5.25C4.88756 4.59375 4.59375 4.88756 4.59375 5.25C4.59375 5.61244 4.88756 5.90625 5.25 5.90625H11.1657L4.78596 12.286C4.52968 12.5422 4.52968 12.9578 4.78596 13.214C5.04224 13.4703 5.45776 13.4703 5.71404 13.214L12.0938 6.83433V12.75C12.0938 13.1124 12.3876 13.4062 12.75 13.4062C13.1124 13.4062 13.4062 13.1124 13.4062 12.75V5.25C13.4062 5.06949 13.3334 4.906 13.2154 4.78735L13.2126 4.78457C13.15 4.72234 13.078 4.67533 13.0012 4.64355C12.9238 4.61146 12.839 4.59375 12.75 4.59375Z"
