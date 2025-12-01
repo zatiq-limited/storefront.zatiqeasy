@@ -25,6 +25,9 @@ interface RelatedProducts2Props {
     title?: string;
     subtitle?: string;
     columns?: number;
+    mobileColumns?: number;
+    tabletColumns?: number;
+    gap?: "sm" | "md" | "lg";
     cardStyle?: string;
     limit?: number;
   };
@@ -41,9 +44,19 @@ const RelatedProducts2: React.FC<RelatedProducts2Props> = ({
     title = "You May Also Like",
     subtitle = "Discover more products you'll love",
     columns = 4,
+    mobileColumns = 2,
+    tabletColumns = 3,
+    gap = "md",
     cardStyle = "product-card-1",
     limit = 8,
   } = settings;
+
+  // Gap classes
+  const gapClasses = {
+    sm: "gap-3 sm:gap-4",
+    md: "gap-4 sm:gap-5 lg:gap-6",
+    lg: "gap-5 sm:gap-6 lg:gap-8",
+  };
 
   const carouselRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -189,17 +202,34 @@ const RelatedProducts2: React.FC<RelatedProducts2Props> = ({
   const displayedProducts = products.slice(0, limit);
   const ProductCard = getComponent(cardStyle);
 
-  // Calculate card width based on columns
+  // Calculate responsive card width based on columns for different breakpoints
   const getCardWidth = () => {
-    const widthMap: Record<number, string> = {
+    const mobileWidthMap: Record<number, string> = {
       1: "w-full",
-      2: "w-[calc(50%-12px)]",
-      3: "w-[calc(33.333%-16px)]",
-      4: "w-[calc(25%-18px)]",
-      5: "w-[calc(20%-19.2px)]",
-      6: "w-[calc(16.666%-20px)]",
+      2: "w-[calc(50%-8px)]",
+      3: "w-[calc(33.333%-10px)]",
     };
-    return widthMap[columns] || "w-[calc(25%-18px)]";
+
+    const tabletWidthMap: Record<number, string> = {
+      1: "sm:w-full",
+      2: "sm:w-[calc(50%-10px)]",
+      3: "sm:w-[calc(33.333%-14px)]",
+    };
+
+    const desktopWidthMap: Record<number, string> = {
+      1: "lg:w-full",
+      2: "lg:w-[calc(50%-12px)]",
+      3: "lg:w-[calc(33.333%-16px)]",
+      4: "lg:w-[calc(25%-14px)]",
+      5: "lg:w-[calc(20%-16px)]",
+      6: "lg:w-[calc(16.666%-15px)]",
+    };
+
+    const mobileWidth = mobileWidthMap[mobileColumns] || "w-[calc(50%-8px)]";
+    const tabletWidth = tabletWidthMap[tabletColumns] || "sm:w-[calc(33.333%-14px)]";
+    const desktopWidth = desktopWidthMap[columns] || "lg:w-[calc(25%-18px)]";
+
+    return `${mobileWidth} ${tabletWidth} ${desktopWidth}`;
   };
 
   const mapProductToCardProps = (product: Product) => {
@@ -235,12 +265,12 @@ const RelatedProducts2: React.FC<RelatedProducts2Props> = ({
   };
 
   return (
-    <section className="py-16 bg-gradient-to-b from-gray-50 to-white">
+    <section className="py-8 sm:py-12 lg:py-16">
       <div className="max-w-[1440px] mx-auto px-4 2xl:px-0">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">{title}</h2>
-          {subtitle && <p className="text-gray-500 text-lg">{subtitle}</p>}
+        <div className="text-center mb-6 sm:mb-8 lg:mb-12">
+          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-2 sm:mb-3">{title}</h2>
+          {subtitle && <p className="text-gray-500 text-sm sm:text-base lg:text-lg">{subtitle}</p>}
         </div>
 
         {/* Carousel Container */}
@@ -253,14 +283,14 @@ const RelatedProducts2: React.FC<RelatedProducts2Props> = ({
           <button
             onClick={() => scrollTo("left")}
             disabled={!canScrollLeft}
-            className={`absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-12 h-12 rounded-full bg-white shadow-lg border border-gray-200 flex items-center justify-center transition-all duration-300 ${
+            className={`absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 sm:-translate-x-4 z-10 w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-full bg-white shadow-lg border border-gray-200 hidden sm:flex items-center justify-center transition-all duration-300 ${
               canScrollLeft
                 ? "opacity-0 group-hover:opacity-100 hover:scale-110 hover:border-purple-300 hover:shadow-xl"
                 : "opacity-0 cursor-not-allowed"
             }`}
             aria-label="Previous products"
           >
-            <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
@@ -268,15 +298,15 @@ const RelatedProducts2: React.FC<RelatedProducts2Props> = ({
           {/* Play/Pause Button */}
           <button
             onClick={toggleAutoPlay}
-            className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm shadow-lg border border-gray-200 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110 hover:border-purple-300"
+            className="absolute top-2 right-2 sm:top-4 sm:right-4 z-10 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/90 backdrop-blur-sm shadow-lg border border-gray-200 hidden sm:flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110 hover:border-purple-300"
             aria-label={isAutoPlaying ? "Pause autoplay" : "Start autoplay"}
           >
             {isAutoPlaying ? (
-              <svg className="w-5 h-5 text-gray-700" fill="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5 text-gray-700" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
               </svg>
             ) : (
-              <svg className="w-5 h-5 text-gray-700" fill="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5 text-gray-700" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M8 5v14l11-7z" />
               </svg>
             )}
@@ -289,7 +319,7 @@ const RelatedProducts2: React.FC<RelatedProducts2Props> = ({
             onMouseUp={handleMouseUp}
             onMouseLeave={handleMouseUp}
             onMouseMove={handleMouseMove}
-            className="flex overflow-x-auto gap-6 snap-x snap-mandatory scrollbar-hide pb-4 cursor-grab active:cursor-grabbing"
+            className={`flex overflow-x-auto ${gapClasses[gap]} snap-x snap-mandatory scrollbar-hide pb-4 cursor-grab active:cursor-grabbing`}
             style={{
               scrollbarWidth: "none",
               msOverflowStyle: "none",
@@ -299,13 +329,13 @@ const RelatedProducts2: React.FC<RelatedProducts2Props> = ({
               <a
                 key={product.id}
                 href={`/products/${product.slug || product.product_code?.toLowerCase() || product.id}`}
-                className={`group block flex-shrink-0 ${getCardWidth()} snap-start min-w-[200px]`}
+                className={`group block shrink-0 p-0.5 ${getCardWidth()} snap-start min-w-[140px] sm:min-w-[180px] lg:min-w-[200px]`}
               >
                 {ProductCard ? (
                   <ProductCard {...mapProductToCardProps(product)} />
                 ) : (
-                  <div className="bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-purple-200 transition-all duration-300 hover:shadow-xl hover:shadow-purple-100/50 transform hover:-translate-y-1 h-full">
-                    <div className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden relative">
+                  <div className="bg-white rounded-xl sm:rounded-2xl overflow-hidden border border-gray-100 hover:border-purple-200 transition-all duration-300 hover:shadow-xl hover:shadow-purple-100/50 transform hover:-translate-y-1 h-full">
+                    <div className="aspect-square bg-linear-to-br from-gray-50 to-gray-100 overflow-hidden relative">
                       <img
                         src={product.image_url}
                         alt={product.name}
@@ -313,39 +343,39 @@ const RelatedProducts2: React.FC<RelatedProducts2Props> = ({
                         loading="lazy"
                       />
                       {product.old_price && (
-                        <div className="absolute top-3 left-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-3 py-1 rounded-full text-xs font-bold">
+                        <div className="absolute top-2 left-2 sm:top-3 sm:left-3 bg-linear-to-r from-purple-600 to-indigo-600 text-white px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold">
                           {Math.round(((product.old_price - product.price) / product.old_price) * 100)}% OFF
                         </div>
                       )}
                       {/* Quick Add Button */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
-                        <button className="px-6 py-2.5 bg-white text-gray-900 rounded-full text-sm font-semibold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                      <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden sm:flex items-end justify-center pb-4 sm:pb-6">
+                        <button className="px-4 py-2 sm:px-6 sm:py-2.5 bg-white text-gray-900 rounded-full text-xs sm:text-sm font-semibold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
                           Quick Add
                         </button>
                       </div>
                     </div>
-                    <div className="p-5">
-                      <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 text-sm group-hover:text-purple-600 transition-colors">
+                    <div className="p-2.5 sm:p-3 lg:p-5">
+                      <h3 className="font-semibold text-gray-900 mb-1.5 sm:mb-2 line-clamp-2 text-xs sm:text-sm group-hover:text-purple-600 transition-colors">
                         {product.name}
                       </h3>
-                      <div className="flex items-baseline gap-2">
-                        <span className="text-lg font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+                      <div className="flex items-baseline gap-1.5 sm:gap-2">
+                        <span className="text-sm sm:text-base lg:text-lg font-bold bg-linear-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
                           {currency}{product.price?.toLocaleString()}
                         </span>
                         {product.old_price && (
-                          <span className="text-sm text-gray-400 line-through">
+                          <span className="text-[10px] sm:text-xs lg:text-sm text-gray-400 line-through">
                             {currency}{product.old_price?.toLocaleString()}
                           </span>
                         )}
                       </div>
                       {(product.review_summary?.average_rating || product.average_rating) && (
-                        <div className="flex items-center gap-1 mt-2">
+                        <div className="flex items-center gap-0.5 sm:gap-1 mt-1.5 sm:mt-2">
                           {Array.from({ length: 5 }).map((_, i) => {
                             const rating = product.review_summary?.average_rating || product.average_rating || 0;
                             return (
                               <svg
                                 key={i}
-                                className={`w-3.5 h-3.5 ${
+                                className={`w-2.5 h-2.5 sm:w-3 sm:h-3 lg:w-3.5 lg:h-3.5 ${
                                   i < Math.floor(rating) ? "text-yellow-400" : "text-gray-200"
                                 }`}
                                 fill="currentColor"
@@ -355,7 +385,7 @@ const RelatedProducts2: React.FC<RelatedProducts2Props> = ({
                               </svg>
                             );
                           })}
-                          <span className="text-xs text-gray-500 ml-1">({product.review_summary?.total_reviews || product.total_reviews || 0})</span>
+                          <span className="text-[10px] sm:text-xs text-gray-500 ml-0.5 sm:ml-1">({product.review_summary?.total_reviews || product.total_reviews || 0})</span>
                         </div>
                       )}
                     </div>
@@ -369,21 +399,21 @@ const RelatedProducts2: React.FC<RelatedProducts2Props> = ({
           <button
             onClick={() => scrollTo("right")}
             disabled={!canScrollRight}
-            className={`absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-12 h-12 rounded-full bg-white shadow-lg border border-gray-200 flex items-center justify-center transition-all duration-300 ${
+            className={`absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 sm:translate-x-4 z-10 w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-full bg-white shadow-lg border border-gray-200 hidden sm:flex items-center justify-center transition-all duration-300 ${
               canScrollRight
                 ? "opacity-0 group-hover:opacity-100 hover:scale-110 hover:border-purple-300 hover:shadow-xl"
                 : "opacity-0 cursor-not-allowed"
             }`}
             aria-label="Next products"
           >
-            <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
             </svg>
           </button>
         </div>
 
         {/* Scroll Indicators */}
-        <div className="flex justify-center gap-2 mt-8">
+        <div className="flex justify-center gap-1.5 sm:gap-2 mt-4 sm:mt-6 lg:mt-8">
           {Array.from({ length: Math.ceil(displayedProducts.length / columns) }).map((_, index) => (
             <button
               key={index}
@@ -408,13 +438,13 @@ const RelatedProducts2: React.FC<RelatedProducts2Props> = ({
         </div>
 
         {/* View All Button */}
-        <div className="text-center mt-12">
+        <div className="text-center mt-6 sm:mt-8 lg:mt-12">
           <a
             href="/products"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-full font-semibold hover:from-purple-700 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl"
+            className="inline-flex items-center gap-1.5 sm:gap-2 px-5 py-2.5 sm:px-6 sm:py-3 lg:px-8 lg:py-4 bg-linear-to-r from-purple-600 to-indigo-600 text-white rounded-full text-sm sm:text-base font-semibold hover:from-purple-700 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl"
           >
             View All Products
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
           </a>
