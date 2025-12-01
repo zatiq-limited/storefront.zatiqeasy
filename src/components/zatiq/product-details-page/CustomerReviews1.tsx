@@ -79,7 +79,7 @@ const CustomerReviews1: React.FC<CustomerReviews1Props> = ({
   };
 
   return (
-    <section className="py-12">
+    <section className="py-8 sm:py-12">
       <div className="max-w-[1440px] mx-auto px-4 2xl:px-0">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
