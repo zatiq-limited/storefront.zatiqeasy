@@ -36,7 +36,7 @@
         "enabled": true,
         "settings": {
           "columns": 4,
-          "cardStyle": "product-card-5",
+          "cardStyle": "product-card-1",
           "backgroundColor": "#ffffff"
         }
       }

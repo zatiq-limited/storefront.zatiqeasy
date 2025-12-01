@@ -169,7 +169,7 @@ const Hero1: React.FC<Hero1Props> = ({
                 className={`relative w-full h-[480px] md:h-[600px] rounded-2xl overflow-hidden bg-linear-to-r ${slide.bgGradient}`}
               >
                 {/* Left Content Section */}
-                <div className="absolute left-6 bottom-24 md:left-16 md:bottom-32 lg:left-28 lg:bottom-40 max-w-[280px] md:max-w-[400px] lg:max-w-[500px] z-10">
+                <div className="absolute left-1/2 -translate-x-1/2 top-8 text-center md:left-16 md:translate-x-0 md:top-auto md:bottom-32 md:text-left lg:left-28 lg:bottom-40 w-[320px] md:max-w-[450px] lg:max-w-[550px] z-10">
                   {/* Tagline */}
                   <p
                     className={`text-sm md:text-lg lg:text-xl font-normal leading-relaxed md:leading-7 lg:leading-[30px] mb-3 md:mb-5 lg:mb-6 transition-all duration-700 ${
@@ -184,7 +184,7 @@ const Hero1: React.FC<Hero1Props> = ({
 
                   {/* Title */}
                   <h1
-                    className={`text-[32px] md:text-5xl lg:text-6xl font-bold leading-tight md:leading-tight lg:leading-[1.1] tracking-tight uppercase mb-6 md:mb-10 lg:mb-12 transition-all duration-700 ${
+                    className={`text-[28px] md:text-5xl lg:text-6xl font-bold leading-tight md:leading-tight lg:leading-[1.1] tracking-tight uppercase mb-6 md:mb-10 lg:mb-12 transition-all duration-700 ${
                       index === currentSlide
                         ? "translate-y-0 opacity-100 delay-200"
                         : "translate-y-8 opacity-0"
@@ -200,10 +200,13 @@ const Hero1: React.FC<Hero1Props> = ({
                     )}
                   </h1>
 
-                  {/* CTA Button */}
+                </div>
+
+                {/* CTA Button - positioned separately for mobile bottom center */}
+                <div className="absolute left-1/2 -translate-x-1/2 bottom-20 md:left-16 md:translate-x-0 md:bottom-32 lg:left-28 lg:bottom-40 z-10">
                   <button
                     onClick={() => (window.location.href = slide.buttonLink)}
-                    className={`inline-flex items-center gap-2 bg-[#F55266] hover:bg-[#E84258] text-white font-medium text-sm md:text-base leading-6 px-5 py-2.5 md:px-6 md:py-3 rounded-lg transition-all shadow-md hover:shadow-lg hover:scale-105 active:scale-95 ${
+                    className={`inline-flex items-center gap-1.5 md:gap-2 bg-[#F55266] hover:bg-[#E84258] text-white font-medium text-xs md:text-base leading-5 md:leading-6 px-4 py-2 md:px-6 md:py-3 rounded-lg transition-all shadow-md hover:shadow-lg hover:scale-105 active:scale-95 ${
                       index === currentSlide
                         ? "translate-y-0 opacity-100 delay-300"
                         : "translate-y-8 opacity-0"
@@ -211,8 +214,8 @@ const Hero1: React.FC<Hero1Props> = ({
                   >
                     <span>{slide.buttonText}</span>
                     <svg
-                      width="16"
-                      height="16"
+                      width="14"
+                      height="14"
                       viewBox="0 0 18 18"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
@@ -265,7 +268,7 @@ const Hero1: React.FC<Hero1Props> = ({
             {/* Previous Button */}
             <button
               onClick={handlePrev}
-              className="pointer-events-auto w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/80 hover:bg-white shadow-lg flex items-center justify-center transition-all hover:scale-110 active:scale-95 lg:opacity-0 lg:hover:opacity-100"
+              className="pointer-events-auto w-10 h-10 md:w-12 md:h-12 rounded-full bg-transparent md:bg-white/80 hover:bg-white/20 md:hover:bg-white shadow-none md:shadow-lg flex items-center justify-center transition-all hover:scale-110 active:scale-95 lg:opacity-0 lg:hover:opacity-100"
               aria-label="Previous slide"
             >
               <svg
@@ -274,7 +277,7 @@ const Hero1: React.FC<Hero1Props> = ({
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                className="text-gray-800 hover:text-[#F55266] transition-colors"
+                className="text-white/70 md:text-gray-800 hover:text-white md:hover:text-[#F55266] transition-colors"
               >
                 <path
                   d="M15 18L9 12L15 6"
@@ -289,7 +292,7 @@ const Hero1: React.FC<Hero1Props> = ({
             {/* Next Button */}
             <button
               onClick={handleNext}
-              className="pointer-events-auto w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/80 hover:bg-white shadow-lg flex items-center justify-center transition-all hover:scale-110 active:scale-95 lg:opacity-0 lg:hover:opacity-100"
+              className="pointer-events-auto w-10 h-10 md:w-12 md:h-12 rounded-full bg-transparent md:bg-white/80 hover:bg-white/20 md:hover:bg-white shadow-none md:shadow-lg flex items-center justify-center transition-all hover:scale-110 active:scale-95 lg:opacity-0 lg:hover:opacity-100"
               aria-label="Next slide"
             >
               <svg
@@ -298,7 +301,7 @@ const Hero1: React.FC<Hero1Props> = ({
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                className="text-gray-800 hover:text-[#F55266] transition-colors"
+                className="text-white/70 md:text-gray-800 hover:text-white md:hover:text-[#F55266] transition-colors"
               >
                 <path
                   d="M9 18L15 12L9 6"
