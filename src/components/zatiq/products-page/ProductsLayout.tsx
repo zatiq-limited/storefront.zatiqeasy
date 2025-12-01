@@ -38,6 +38,10 @@ interface ProductsLayoutProps {
   paginationActiveColor?: string;
   paginationTextColor?: string;
 
+  // Product card button colors
+  cardButtonBgColor?: string;
+  cardButtonTextColor?: string;
+
   // Grid settings
   columns?: number;
   columnsTablet?: number;
@@ -111,6 +115,8 @@ const ProductsLayout: React.FC<ProductsLayoutProps> = (props) => {
     productCountFontSize = props.settings?.productCountFontSize ?? "text-xs",
     paginationActiveColor = props.settings?.paginationActiveColor ?? "#3B82F6",
     paginationTextColor = props.settings?.paginationTextColor ?? "#374151",
+    cardButtonBgColor = props.settings?.cardButtonBgColor ?? "#3B82F6",
+    cardButtonTextColor = props.settings?.cardButtonTextColor ?? "#FFFFFF",
     currency = props.currency ?? "BDT",
   } = props;
 
@@ -588,7 +594,11 @@ const ProductsLayout: React.FC<ProductsLayoutProps> = (props) => {
                     className="block"
                   >
                     {CardComponent ? (
-                      <CardComponent {...product} />
+                      <CardComponent
+                        {...product}
+                        buttonBgColor={cardButtonBgColor}
+                        buttonTextColor={cardButtonTextColor}
+                      />
                     ) : (
                       <div className="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all overflow-hidden">
                         <div className="aspect-square overflow-hidden bg-gray-100">

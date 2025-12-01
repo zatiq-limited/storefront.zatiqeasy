@@ -19,6 +19,8 @@ interface ProductCards7Props {
   sizes?: string[];
   quickAddEnabled?: boolean;
   buyNowEnabled?: boolean;
+  buttonBgColor?: string;
+  buttonTextColor?: string;
 }
 
 const ProductCards7: React.FC<ProductCards7Props> = ({
@@ -30,6 +32,8 @@ const ProductCards7: React.FC<ProductCards7Props> = ({
   hoverImage,
   colors = [],
   quickAddEnabled = true,
+  buttonBgColor = "#3B82F6",
+  buttonTextColor = "#FFFFFF",
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [selectedColor, setSelectedColor] = useState(0);
@@ -107,7 +111,10 @@ const ProductCards7: React.FC<ProductCards7Props> = ({
 
           {/* Add to Cart Button */}
           {quickAddEnabled && (
-            <button className="w-full h-11 border-none rounded-3xl bg-[#222934] text-white text-sm font-medium cursor-pointer transition-all duration-300 hover:bg-[#1A202C]">
+            <button
+              className="w-full h-11 border-none rounded-3xl text-sm font-medium cursor-pointer transition-all duration-300 hover:opacity-90"
+              style={{ backgroundColor: buttonBgColor, color: buttonTextColor }}
+            >
               Add to cart
             </button>
           )}

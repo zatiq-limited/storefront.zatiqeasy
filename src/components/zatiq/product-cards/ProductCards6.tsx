@@ -19,6 +19,8 @@ interface ProductCards6Props {
   sizes?: string[];
   quickAddEnabled?: boolean;
   buyNowEnabled?: boolean;
+  buttonBgColor?: string;
+  buttonTextColor?: string;
 }
 
 const ProductCards6: React.FC<ProductCards6Props> = ({
@@ -32,6 +34,8 @@ const ProductCards6: React.FC<ProductCards6Props> = ({
   reviewCount = 0,
   quickAddEnabled = true,
   buyNowEnabled = true,
+  buttonBgColor = "#3B82F6",
+  buttonTextColor = "#FFFFFF",
 }) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -107,7 +111,10 @@ const ProductCards6: React.FC<ProductCards6Props> = ({
         >
           {/* Add to Cart Button */}
           {quickAddEnabled && (
-            <button className="w-full h-14 rounded bg-white flex items-center justify-center cursor-pointer text-sm font-medium text-[#3B82F6] transition-all duration-300 leading-5 hover:bg-blue-50">
+            <button
+              className="w-full h-14 rounded flex items-center justify-center cursor-pointer text-sm font-medium transition-all duration-300 leading-5 hover:opacity-90"
+              style={{ backgroundColor: buttonBgColor, color: buttonTextColor }}
+            >
               Add to Cart
             </button>
           )}
