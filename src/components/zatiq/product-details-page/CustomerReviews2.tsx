@@ -75,7 +75,7 @@ const CustomerReviews2: React.FC<CustomerReviews2Props> = ({
   }));
 
   return (
-    <section className="py-12 bg-white">
+    <section className="py-8 sm:py-12 bg-white">
       <div className="max-w-[1440px] mx-auto px-4 2xl:px-0">
         {/* Header with Rating Summary */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
@@ -84,7 +84,7 @@ const CustomerReviews2: React.FC<CustomerReviews2Props> = ({
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">{title}</h2>
 
             {showRatingSummary && reviewSummary && (
-              <div className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl p-6">
+              <div className="bg-linear-to-br from-purple-50 to-indigo-50 rounded-2xl p-6">
                 <div className="text-5xl font-bold text-gray-900 mb-2">
                   {reviewSummary.average_rating.toFixed(1)}
                 </div>
@@ -113,14 +113,14 @@ const CustomerReviews2: React.FC<CustomerReviews2Props> = ({
 
           {/* Rating Distribution */}
           {showRatingSummary && (
-            <div className="lg:col-span-2 mt-13">
+            <div className="lg:col-span-2 mt-4 sm:mt-13">
               <div className="space-y-3">
                 {ratingCounts.map(({ rating, count, percentage }) => (
                   <div key={rating} className="flex items-center gap-3">
                     <span className="text-sm font-medium text-gray-600 w-8">{rating} ★</span>
                     <div className="flex-1 h-3 bg-gray-100 rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full transition-all"
+                        className="h-full bg-linear-to-r from-purple-500 to-indigo-500 rounded-full transition-all"
                         style={{ width: `${percentage}%` }}
                       />
                     </div>
@@ -142,7 +142,7 @@ const CustomerReviews2: React.FC<CustomerReviews2Props> = ({
               <div className="flex flex-col md:flex-row md:items-start gap-4">
                 {/* Avatar & Info */}
                 <div className="flex items-center md:items-start gap-4 md:w-48 shrink-0">
-                  <div className="w-12 h-12 bg-gradient-to-br from-purple-400 to-indigo-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                  <div className="w-12 h-12 bg-linear-to-br from-purple-400 to-indigo-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
                     {review.name?.charAt(0) || "U"}
                   </div>
                   <div>
@@ -215,7 +215,7 @@ const CustomerReviews2: React.FC<CustomerReviews2Props> = ({
         {/* Load More */}
         {reviews.length > limit && (
           <div className="text-center mt-10">
-            <button className="px-8 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-full font-semibold hover:from-purple-700 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl">
+            <button className="px-8 py-3 bg-linear-to-r from-purple-600 to-indigo-600 text-white rounded-full font-semibold hover:from-purple-700 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl">
               Load More Reviews
             </button>
           </div>
