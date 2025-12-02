@@ -5,7 +5,7 @@
     "sections": [
       {
         "id": "collections_hero",
-        "type": "collections-hero-1",
+        "type": "collections-hero-2",
         "enabled": true,
         "settings": {
           "title": "Discover Your Style",
@@ -30,7 +30,7 @@
       },
       {
         "id": "collections_grid_featured",
-        "type": "collections-grid-1",
+        "type": "collections-grid-2",
         "enabled": true,
         "settings": {
           "backgroundColor": "#f9fafb"
