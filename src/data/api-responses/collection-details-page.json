@@ -14,6 +14,17 @@
         }
       },
       {
+        "id": "collection_breadcrumb",
+        "type": "collection-breadcrumb-2",
+        "enabled": true,
+        "settings": {
+          "showHome": true,
+          "showCategory": true,
+          "showProductCount": true,
+          "backgroundColor": "#f9fafb"
+        }
+      },
+      {
         "id": "collection_banner",
         "type": "collection-banner-1",
         "enabled": true,
@@ -28,6 +39,34 @@
           "cardTagValue": "Arrival",
           "bannerButtonText": "Explore Collection",
           "bannerButtonLink": "/products"
+        }
+      },
+      {
+        "id": "collection_banner",
+        "type": "collection-banner-2",
+        "enabled": true,
+        "settings": {
+          "showBanner": true,
+          "showDescription": true,
+          "showProductCount": true,
+          "textPosition": "center",
+          "overlayOpacity": 0.6,
+          "rate": 4.9,
+          "cardTag": "New",
+          "cardTagValue": "Arrival",
+          "bannerButtonText": "Explore Collection",
+          "bannerButtonLink": "/products"
+        }
+      },
+      {
+        "id": "collection_products",
+        "type": "collection-products-1",
+        "enabled": true,
+        "settings": {
+          "columns": 4,
+          "columnsMobile": 2,
+          "cardStyle": "product-card-2",
+          "backgroundColor": "#ffffff"
         }
       },
       {
