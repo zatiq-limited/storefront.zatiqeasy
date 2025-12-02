@@ -31,6 +31,8 @@ interface CollectionProductsGridProps {
     columns?: number;
     columnsMobile?: 1 | 2;
     cardStyle?: string;
+    buttonBgColor?: string;
+    buttonTextColor?: string;
   };
 }
 
@@ -42,6 +44,8 @@ const CollectionProductsGrid: React.FC<CollectionProductsGridProps> = ({
     columns = 4,
     columnsMobile = 2,
     cardStyle = "product-card-1",
+    buttonBgColor = "#0c2c5f",
+    buttonTextColor = "#eff2f6",
   } = settings;
 
   // Get product card component from registry
@@ -97,6 +101,8 @@ const CollectionProductsGrid: React.FC<CollectionProductsGridProps> = ({
       rating: product.review_summary?.average_rating,
       reviewCount: product.review_summary?.total_reviews,
       quickAddEnabled: product.quantity > 0,
+      buttonBgColor,
+      buttonTextColor,
     };
   };
 
