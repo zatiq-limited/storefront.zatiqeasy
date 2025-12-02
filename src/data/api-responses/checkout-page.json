@@ -5,24 +5,17 @@
     "sections": [
       {
         "id": "checkout_hero",
-        "type": "checkout-hero-1",
+        "type": "checkout-hero-3",
+        "enabled": true,
         "settings": {
           "title": "Checkout",
-          "subtitle": "Complete your order",
-          "showBreadcrumb": true,
-          "showSteps": true,
-          "currentStep": 2,
-          "steps": [
-            { "id": 1, "name": "Cart", "icon": "shopping-cart" },
-            { "id": 2, "name": "Checkout", "icon": "credit-card" },
-            { "id": 3, "name": "Confirmation", "icon": "check-circle" }
-          ],
-          "backgroundGradient": "from-violet-50 via-purple-50 to-blue-50"
+          "showBreadcrumb": true
         }
       },
       {
         "id": "checkout_content",
-        "type": "checkout-content-1",
+        "type": "checkout-content-3",
+        "enabled": true,
         "settings": {
           "layout": "two-column",
           "stickyOrderSummary": true,
