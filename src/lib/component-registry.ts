@@ -105,6 +105,8 @@ import {
   CollectionBanner2,
   CollectionProducts1,
   CollectionProducts2,
+  CollectionSubcategories1,
+  CollectionSubcategories2,
 } from "@/components/zatiq/collection-details";
 
 // About Page Components
@@ -269,6 +271,8 @@ export const ZATIQ_COMPONENTS: Record<string, ComponentType<any>> = {
   "collection-banner-2": CollectionBanner2,
   "collection-products-1": CollectionProducts1,
   "collection-products-2": CollectionProducts2,
+  "collection-subcategories-1": CollectionSubcategories1,
+  "collection-subcategories-2": CollectionSubcategories2,
 
   // About Page Components (2 variants each)
   "about-hero-1": AboutHero1,

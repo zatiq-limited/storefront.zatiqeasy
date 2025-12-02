@@ -173,15 +173,49 @@ const CollectionProducts1: React.FC<CollectionProducts1Props> = ({
 
         {/* Products Grid */}
         {products.length > 0 ? (
-          <CollectionProductsGrid
-            products={products}
-            settings={{
-              ...settings,
-              columns: viewMode,
-              columnsMobile,
-              cardStyle,
-            }}
-          />
+          <>
+            <CollectionProductsGrid
+              products={products}
+              settings={{
+                ...settings,
+                columns: viewMode,
+                columnsMobile,
+                cardStyle,
+              }}
+            />
+
+            {/* Load More CTA */}
+            <div className="flex justify-center mt-10 sm:mt-16">
+              <a
+                href="/products"
+                className="group relative inline-flex items-center gap-3 bg-linear-to-r from-indigo-600 to-purple-600 text-white px-8 sm:px-10 py-2 sm:py-4 rounded-full font-semibold text-sm sm:text-lg shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 overflow-hidden"
+              >
+                {/* Animated Background */}
+                <span className="absolute inset-0 bg-linear-to-r from-purple-600 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+
+                {/* Content */}
+                <span className="relative z-10 flex items-center gap-3">
+                  View More Products
+                  <svg
+                    className="w-5 h-5 transform group-hover:translate-x-2 transition-transform duration-300"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M17 8l4 4m0 0l-4 4m4-4H3"
+                    />
+                  </svg>
+                </span>
+
+                {/* Shine Effect */}
+                <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-linear-to-r from-transparent via-white/20 to-transparent"></span>
+              </a>
+            </div>
+          </>
         ) : (
           /* Beautiful Empty State */
           <div className="text-center py-20">
@@ -228,38 +262,6 @@ const CollectionProducts1: React.FC<CollectionProducts1Props> = ({
             </a>
           </div>
         )}
-      </div>
-
-      {/* Load More CTA */}
-      <div className="flex justify-center mt-10 sm:mt-16">
-        <a
-          href="/products"
-          className="group relative inline-flex items-center gap-3 bg-linear-to-r from-indigo-600 to-purple-600 text-white px-8 sm:px-10 py-2 sm:py-4 rounded-full font-semibold text-sm sm:text-lg shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 overflow-hidden"
-        >
-          {/* Animated Background */}
-          <span className="absolute inset-0 bg-linear-to-r from-purple-600 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
-
-          {/* Content */}
-          <span className="relative z-10 flex items-center gap-3">
-            View More Products
-            <svg
-              className="w-5 h-5 transform group-hover:translate-x-2 transition-transform duration-300"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M17 8l4 4m0 0l-4 4m4-4H3"
-              />
-            </svg>
-          </span>
-
-          {/* Shine Effect */}
-          <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-linear-to-r from-transparent via-white/20 to-transparent"></span>
-        </a>
       </div>
     </section>
   );

@@ -22,6 +22,10 @@ interface Collection {
   product_count: number;
   is_active: boolean;
   serial: number;
+  parent?: {
+    id: number;
+    name: string;
+  } | null;
   created_at?: string;
   updated_at?: string;
   seo?: {
@@ -56,10 +60,22 @@ interface Product {
   }>;
 }
 
+interface Subcategory {
+  id: number;
+  name: string;
+  image_url?: string;
+  banner_url?: string;
+  description?: string;
+  product_count?: number;
+  serial?: number;
+  parent_id?: number;
+}
+
 interface CollectionDetailsPageRendererProps {
   sections: Section[];
   collection: Collection;
   products: Product[];
+  subcategories?: Subcategory[];
   className?: string;
 }
 
@@ -67,6 +83,7 @@ export default function CollectionDetailsPageRenderer({
   sections,
   collection,
   products,
+  subcategories = [],
   className = "",
 }: CollectionDetailsPageRendererProps) {
   const renderSection = (section: Section) => {
@@ -79,7 +96,10 @@ export default function CollectionDetailsPageRenderer({
     if (!Component) {
       if (import.meta.env.DEV) {
         return (
-          <div key={section.id} className="bg-yellow-50 border border-yellow-200 rounded p-4 my-4">
+          <div
+            key={section.id}
+            className="bg-yellow-50 border border-yellow-200 rounded p-4 my-4"
+          >
             <p className="text-yellow-800 font-semibold">
               Component not found: {section.type}
             </p>
@@ -96,13 +116,22 @@ export default function CollectionDetailsPageRenderer({
     };
 
     // Inject collection data for collection components
-    if (section.type.includes("collection-banner") || section.type.includes("collection-breadcrumb")) {
+    if (
+      section.type.includes("collection-banner") ||
+      section.type.includes("collection-breadcrumb")
+    ) {
       componentProps.collection = collection;
     }
 
     // Inject products data for collection products section
     if (section.type.includes("collection-products")) {
       componentProps.products = products;
+      componentProps.collection = collection;
+    }
+
+    // Inject subcategories data for collection subcategories section
+    if (section.type.includes("collection-subcategories")) {
+      componentProps.subcategories = subcategories;
       componentProps.collection = collection;
     }
 
