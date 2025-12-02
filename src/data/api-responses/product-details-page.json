@@ -14,18 +14,7 @@
         }
       },
       {
-        "id": "product_breadcrumb_2_1",
-        "type": "product-breadcrumb-2",
-        "settings": {
-          "showHome": true,
-          "showCategory": true,
-          "linkColor": "#6B7280",
-          "activeColor": "#2563EB",
-          "iconColor": "#9CA3AF"
-        }
-      },
-      {
-        "id": "product_detail_1_2",
+        "id": "product_detail_1_1",
         "type": "product-detail-1",
         "settings": {
           "showBrand": true,
@@ -43,52 +32,22 @@
           "galleryPosition": "left",
           "thumbnailPosition": "bottom",
           "thumbnailSize": "md",
-          "addToCartBgColor": "#111827",
+          "brandColor": "#2563EB",
+          "variantActiveColor": "#2563EB",
+          "addToCartBgColor": "#2563EB",
           "addToCartTextColor": "#FFFFFF",
-          "buyNowTextColor": "#FFFFFF",
-          "whatsappBgColor": "#16b14f",
-          "whatsappTextColor": "#FFFFFF",
-          "priceColor": "#111827",
-          "oldPriceColor": "#9CA3AF",
-          "discountBadgeColor": "#DC2626",
-          "buyNowGradientEnd": "#222dc3",
-          "buyNowGradientStart": "#344a79"
-        }
-      },
-      {
-        "id": "product_detail_2_3",
-        "type": "product-detail-2",
-        "settings": {
-          "showBrand": true,
-          "showSku": true,
-          "showRating": true,
-          "showStock": true,
-          "showVariants": true,
-          "showDescription": true,
-          "showSpecifications": true,
-          "showShipping": true,
-          "showAddToCart": true,
-          "showBuyNow": true,
-          "showWhatsAppBuy": true,
-          "showWishlist": true,
-          "galleryPosition": "left",
-          "thumbnailPosition": "left",
-          "thumbnailSize": "md",
-          "addToCartBgColor": "#7C3AED",
-          "addToCartTextColor": "#FFFFFF",
+          "buyNowGradientStart": "#7cf915",
+          "buyNowGradientEnd": "#4248f0",
           "buyNowTextColor": "#FFFFFF",
           "whatsappBgColor": "#25D366",
           "whatsappTextColor": "#FFFFFF",
-          "priceColor": "#7C3AED",
+          "priceColor": "#111827",
           "oldPriceColor": "#9CA3AF",
-          "discountBadgeColor": "#c72323",
-          "accentColor": "#7C3AED",
-          "buyNowGradientEnd": "#a6bd32",
-          "buyNowGradientStart": "#111827"
+          "discountBadgeColor": "#DC2626"
         }
       },
       {
-        "id": "customer_reviews_1_4",
+        "id": "customer_reviews_1_2",
         "type": "customer-reviews-1",
         "settings": {
           "title": "Customer Reviews",
@@ -104,24 +63,7 @@
         }
       },
       {
-        "id": "customer_reviews_2_5",
-        "type": "customer-reviews-2",
-        "settings": {
-          "title": "Customer Reviews",
-          "showRatingSummary": true,
-          "showReviewImages": true,
-          "limit": 6,
-          "titleColor": "#111827",
-          "starColor": "#FBBF24",
-          "cardBgColor": "#FFFFFF",
-          "textColor": "#4B5563",
-          "verifiedBadgeColor": "#059669",
-          "accentColor": "#7C3AED",
-          "progressBarColor": "#7C3AED"
-        }
-      },
-      {
-        "id": "related_products_1_6",
+        "id": "related_products_1_3",
         "type": "related-products-1",
         "settings": {
           "title": "You May Also Like",
@@ -129,36 +71,14 @@
           "mobileColumns": 2,
           "tabletColumns": 3,
           "gap": "md",
+          "cardDesign": "card-7",
           "limit": 8,
           "titleColor": "#111827",
           "priceColor": "#111827",
           "oldPriceColor": "#9CA3AF",
           "badgeColor": "#DC2626",
-          "buttonBgColor": "#111827",
-          "buttonTextColor": "#FFFFFF",
-          "cardDesign": "card-7"
-        }
-      },
-      {
-        "id": "related_products_2_7",
-        "type": "related-products-2",
-        "settings": {
-          "title": "You May Also Like",
-          "subtitle": "Discover more products you'll love",
-          "columns": 4,
-          "mobileColumns": 2,
-          "tabletColumns": 3,
-          "gap": "md",
-          "limit": 8,
-          "titleColor": "#111827",
-          "subtitleColor": "#6B7280",
-          "priceColor": "#7C3AED",
-          "oldPriceColor": "#9CA3AF",
-          "badgeColor": "#DC2626",
-          "buttonBgColor": "#352d43",
-          "buttonTextColor": "#FFFFFF",
-          "accentColor": "#173e7d",
-          "cardDesign": "card-8"
+          "buttonBgColor": "#103994",
+          "buttonTextColor": "#FFFFFF"
         }
       }
     ],

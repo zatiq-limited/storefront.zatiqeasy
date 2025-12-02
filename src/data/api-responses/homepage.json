@@ -55,21 +55,21 @@
         }
       },
       {
-        "id": "static_banner_3_1",
-        "type": "static-banner-3",
+        "id": "static_banner_1_1",
+        "type": "static-banner-1",
         "settings": {
-          "image": "https://i.ibb.co.com/hFFnFv7d/cfbb60dfce2e0d1d9e0cea50b2dd07f49c9ffa16.png",
+          "image": "https://i.ibb.co.com/5x6wzDWj/laptop-cover.webp",
           "imageMobile": "",
-          "title": "Best Discounts 2025",
+          "title": "Best Discounts\n2026",
           "description": "Salla Store provides you with everything you need, from electronics to home furniture, along with the best discounts on products. Shop now and enjoy all the discounts on products.",
           "buttonText": "Discover more",
           "buttonLink": "/collections/discounts",
           "secondaryButtonText": "",
           "secondaryButtonLink": "",
-          "textAlignment": "center",
+          "textAlignment": "right",
           "textColor": "#FFFFFF",
           "overlayColor": "#000000",
-          "overlayOpacity": 40,
+          "overlayOpacity": 5,
           "height": "medium",
           "titleFont": "sans",
           "descriptionFont": "sans"
@@ -82,7 +82,7 @@
           "maxCategories": 2,
           "selectedCategoryIds": "197013,181728",
           "showLabel": false,
-          "showProductImage": true,
+          "showProductImage": false,
           "overlayOpacity": 10,
           "defaultLabelText": "New Arrival",
           "defaultLabelColor": "#E77C40",
@@ -142,7 +142,7 @@
         "type": "category-4",
         "settings": {
           "maxCategories": 7,
-          "selectedCategoryIds": "197013,139924,181728,181727",
+          "selectedCategoryIds": "197013,139924,181727,181728",
           "showProductCount": true,
           "showBackground": true,
           "backgroundColor": "#F7F7F7",
@@ -152,7 +152,7 @@
           "countFont": "montserrat",
           "fontFamily": "inherit",
           "enableSlider": true,
-          "slidesPerView": 5,
+          "slidesPerView": 3,
           "slidesPerViewTablet": 4,
           "slidesPerViewMobile": 2,
           "autoplay": true,
@@ -202,25 +202,6 @@
             "productCount": 0
           },
           {
-            "id": 181728,
-            "label": "",
-            "title": "Bridal",
-            "name": "Bridal",
-            "subtitle": "With a clean, slow burn, it creates a calming atmosphere—ideal for meditation, relaxation, or cozy evenings at home.",
-            "count": "0 Products",
-            "image": "https://d10rvdv6rxomuk.cloudfront.net/shops/6485056309776519.png",
-            "backgroundImage": "https://d10rvdv6rxomuk.cloudfront.net/shops/6485056309776519.png",
-            "productImage": "https://d10rvdv6rxomuk.cloudfront.net/shops/4393469180734740.png",
-            "backgroundColor": "#E8F0FF",
-            "labelColor": "#E77C40",
-            "titleColor": "#252B42",
-            "subtitleColor": "#737373",
-            "linkColor": "#252B42",
-            "buttonText": "Explore Items",
-            "url": "/collections/181728",
-            "productCount": 0
-          },
-          {
             "id": 181727,
             "label": "",
             "title": "Festive 25",
@@ -230,13 +211,32 @@
             "image": "https://d10rvdv6rxomuk.cloudfront.net/shops/6485089364871511.png",
             "backgroundImage": "https://d10rvdv6rxomuk.cloudfront.net/shops/6485089364871511.png",
             "productImage": "https://d10rvdv6rxomuk.cloudfront.net/shops/4393448751989583.png",
-            "backgroundColor": "#FFF4E8",
+            "backgroundColor": "#E8F0FF",
             "labelColor": "#E77C40",
             "titleColor": "#252B42",
             "subtitleColor": "#737373",
             "linkColor": "#252B42",
             "buttonText": "Explore Items",
             "url": "/collections/181727",
+            "productCount": 0
+          },
+          {
+            "id": 181728,
+            "label": "",
+            "title": "Bridal",
+            "name": "Bridal",
+            "subtitle": "With a clean, slow burn, it creates a calming atmosphere—ideal for meditation, relaxation, or cozy evenings at home.",
+            "count": "0 Products",
+            "image": "https://d10rvdv6rxomuk.cloudfront.net/shops/6485056309776519.png",
+            "backgroundImage": "https://d10rvdv6rxomuk.cloudfront.net/shops/6485056309776519.png",
+            "productImage": "https://d10rvdv6rxomuk.cloudfront.net/shops/4393469180734740.png",
+            "backgroundColor": "#FFF4E8",
+            "labelColor": "#E77C40",
+            "titleColor": "#252B42",
+            "subtitleColor": "#737373",
+            "linkColor": "#252B42",
+            "buttonText": "Explore Items",
+            "url": "/collections/181728",
             "productCount": 0
           }
         ]
@@ -256,8 +256,8 @@
           "countFont": "montserrat",
           "fontFamily": "inherit",
           "enableSlider": true,
-          "slidesPerView": 5,
-          "slidesPerViewTablet": 4,
+          "slidesPerView": 3,
+          "slidesPerViewTablet": 3,
           "slidesPerViewMobile": 2,
           "autoplay": true,
           "autoplayDelay": 3000,
@@ -355,35 +355,13 @@
           "buttonText": "Buy Now",
           "buttonColor": "#2563eb",
           "bgColor": "#ffffff",
-          "selectedProductIds": "919106,919102,919100,858755",
+          "selectedProductIds": "919106,919102,901811,919100",
           "maxProducts": 4,
           "fontFamily": "inherit"
         }
       },
       {
-        "id": "special_offers_slider_4_6",
-        "type": "special-offers-slider-4",
-        "settings": {
-          "bgColor": "transparent",
-          "leftCardImage": "https://i.ibb.co.com/B2s1CxpY/8381449cda78484f78ab0e499626aff8f031bb85.jpg",
-          "leftCardTitle": "Smartphone\nBLU G91 Pro 2022",
-          "leftCardSubtitle": "Sale 20% off all store",
-          "leftCardButtonText": "Shop Now",
-          "leftCardButtonLink": "#",
-          "leftCardTitleColor": "#010F1C",
-          "leftCardTextColor": "#010F1C",
-          "rightCardImage": "https://i.ibb.co.com/NgXRg0g3/c1d56950ca32c579c48f4a92888c4a547802c115.jpg",
-          "rightCardTitle": "HyperX Cloud II\nWireless",
-          "rightCardDiscount": "Sale 35% off",
-          "rightCardButtonText": "Shop Now",
-          "rightCardButtonLink": "#",
-          "rightCardTitleColor": "#010F1C",
-          "rightCardTextColor": "#010F1C",
-          "fontFamily": "inherit"
-        }
-      },
-      {
-        "id": "badges_2_7",
+        "id": "badges_2_6",
         "type": "badges-2",
         "settings": {
           "showIcons": true,
@@ -429,7 +407,7 @@
         ]
       },
       {
-        "id": "reviews_3_8",
+        "id": "reviews_3_7",
         "type": "reviews-3",
         "settings": {
           "title": "Customer Reviews",
@@ -491,56 +469,85 @@
         ]
       },
       {
-        "id": "brands_1_9",
-        "type": "brands-1",
+        "id": "brands_2_8",
+        "type": "brands-2",
         "settings": {
-          "title": "Our Brand Partners",
+          "title": "Our Trusted Partners",
           "backgroundColor": "#FFFFFF",
           "titleColor": "#111827",
+          "descriptionColor": "#6B7280",
           "grayscale": true,
           "brand1Name": "Sony",
           "brand1Logo": "https://upload.wikimedia.org/wikipedia/commons/c/ca/Sony_logo.svg",
+          "brand1Description": "Leading innovation in electronics and entertainment.",
           "brand2Name": "Samsung",
           "brand2Logo": "https://upload.wikimedia.org/wikipedia/commons/2/24/Samsung_Logo.svg",
+          "brand2Description": "Pioneering the future of technology worldwide.",
           "brand3Name": "Apple",
           "brand3Logo": "https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg",
+          "brand3Description": "Think different with innovative products.",
           "brand4Name": "Microsoft",
           "brand4Logo": "https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg",
+          "brand4Description": "Empowering everyone to achieve more.",
           "brand5Name": "Google",
           "brand5Logo": "https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg",
+          "brand5Description": "Organizing the world's information.",
           "brand6Name": "Amazon",
           "brand6Logo": "https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg",
+          "brand6Description": "Earth's most customer-centric company.",
+          "brand7Name": "Netflix",
+          "brand7Logo": "https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg",
+          "brand7Description": "See what's next in streaming.",
+          "brand8Name": "Spotify",
+          "brand8Logo": "https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg",
+          "brand8Description": "Music for everyone, everywhere.",
           "fontFamily": "inherit"
         },
         "blocks": [
           {
             "name": "Sony",
-            "logo": "https://upload.wikimedia.org/wikipedia/commons/c/ca/Sony_logo.svg"
+            "logo": "https://upload.wikimedia.org/wikipedia/commons/c/ca/Sony_logo.svg",
+            "description": "Leading innovation in electronics and entertainment."
           },
           {
             "name": "Samsung",
-            "logo": "https://upload.wikimedia.org/wikipedia/commons/2/24/Samsung_Logo.svg"
+            "logo": "https://upload.wikimedia.org/wikipedia/commons/2/24/Samsung_Logo.svg",
+            "description": "Pioneering the future of technology worldwide."
           },
           {
             "name": "Apple",
-            "logo": "https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg"
+            "logo": "https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg",
+            "description": "Think different with innovative products."
           },
           {
             "name": "Microsoft",
-            "logo": "https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg"
+            "logo": "https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg",
+            "description": "Empowering everyone to achieve more."
           },
           {
             "name": "Google",
-            "logo": "https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg"
+            "logo": "https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg",
+            "description": "Organizing the world's information."
           },
           {
             "name": "Amazon",
-            "logo": "https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg"
+            "logo": "https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg",
+            "description": "Earth's most customer-centric company."
+          },
+          {
+            "name": "Netflix",
+            "logo": "https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg",
+            "description": "See what's next in streaming."
+          },
+          {
+            "name": "Spotify",
+            "logo": "https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg",
+            "description": "Music for everyone, everywhere."
           }
         ]
       },
       {
-        "id": "custom_sections_2_10",
+        "id": "custom_sections_2_9",
         "type": "custom-sections-2",
         "settings": {
           "sectionTitle": "Featured Products",
@@ -550,7 +557,7 @@
           "showButton": true,
           "titleAlignment": "left",
           "buttonPosition": "top-right",
-          "selectedProductIds": "",
+          "selectedProductIds": "919106,919102,919101,919098,858755,701692,864812,864819",
           "maxProducts": 8,
           "cardDesign": "card-7",
           "showAsSlider": true,
@@ -561,15 +568,173 @@
           "subtitleFont": "montserrat",
           "titleColor": "#181D25",
           "subtitleColor": "#666666",
-          "buttonColor": "#1F2937",
+          "buttonColor": "#1a71ea",
           "buttonTextColor": "#FFFFFF",
           "buttonRadius": 24,
           "backgroundColor": "#FFFFFF",
           "fontFamily": "inherit",
-          "cardButtonBgColor": "#102950",
+          "cardButtonBgColor": "#0d3e8c",
           "cardButtonTextColor": "#FFFFFF"
         },
-        "products": []
+        "products": [
+          {
+            "id": 919106,
+            "name": "Blush Rose Printed Tunic (Copy)",
+            "title": "Blush Rose Printed Tunic (Copy)",
+            "image": "https://d10rvdv6rxomuk.cloudfront.net/inventories/4394283312777116.png",
+            "images": [
+              "https://d10rvdv6rxomuk.cloudfront.net/inventories/4394283312777116.png"
+            ],
+            "selling_price": 630,
+            "price": 630,
+            "regular_price": 0,
+            "category": "Elements Of  Style",
+            "vendor": "Elements Of  Style",
+            "discount": null,
+            "badge": null,
+            "url": "/products/919106",
+            "rating": 0,
+            "reviewCount": 0
+          },
+          {
+            "id": 919102,
+            "name": "Olive Green Paisley Long Top (Copy)",
+            "title": "Olive Green Paisley Long Top (Copy)",
+            "image": "https://d10rvdv6rxomuk.cloudfront.net/inventories/4394530296548654.png",
+            "images": [
+              "https://d10rvdv6rxomuk.cloudfront.net/inventories/4394530296548654.png"
+            ],
+            "selling_price": 630,
+            "price": 630,
+            "regular_price": 0,
+            "category": "",
+            "vendor": "",
+            "discount": null,
+            "badge": null,
+            "url": "/products/919102",
+            "rating": 0,
+            "reviewCount": 0
+          },
+          {
+            "id": 919101,
+            "name": "Crimson Charm Embroidered Set (Copy)",
+            "title": "Crimson Charm Embroidered Set (Copy)",
+            "image": "https://d10rvdv6rxomuk.cloudfront.net/inventories/4394816307332467.png",
+            "images": [
+              "https://d10rvdv6rxomuk.cloudfront.net/inventories/4394816307332467.png"
+            ],
+            "selling_price": 630,
+            "price": 630,
+            "regular_price": 0,
+            "category": "",
+            "vendor": "",
+            "discount": null,
+            "badge": null,
+            "url": "/products/919101",
+            "rating": 0,
+            "reviewCount": 0
+          },
+          {
+            "id": 919098,
+            "name": "Grip (Copy)",
+            "title": "Grip (Copy)",
+            "image": "https://d10rvdv6rxomuk.cloudfront.net/inventories/4067292289849592.png",
+            "images": [
+              "https://d10rvdv6rxomuk.cloudfront.net/inventories/4067292289849592.png",
+              "https://d10rvdv6rxomuk.cloudfront.net/inventories/4067293121297745.png"
+            ],
+            "selling_price": 500,
+            "price": 500,
+            "regular_price": 0,
+            "category": "",
+            "vendor": "",
+            "discount": null,
+            "badge": null,
+            "url": "/products/919098",
+            "rating": 0,
+            "reviewCount": 0
+          },
+          {
+            "id": 858755,
+            "name": "Grip",
+            "title": "Grip",
+            "image": "https://d10rvdv6rxomuk.cloudfront.net/inventories/4067292289849592.png",
+            "images": [
+              "https://d10rvdv6rxomuk.cloudfront.net/inventories/4067292289849592.png",
+              "https://d10rvdv6rxomuk.cloudfront.net/inventories/4067293121297745.png"
+            ],
+            "selling_price": 500,
+            "price": 500,
+            "regular_price": 0,
+            "category": "",
+            "vendor": "",
+            "discount": null,
+            "badge": null,
+            "url": "/products/858755",
+            "rating": 0,
+            "reviewCount": 0
+          },
+          {
+            "id": 701692,
+            "name": "Pastel Mint Cotton Tunic with Lace",
+            "title": "Pastel Mint Cotton Tunic with Lace",
+            "image": "https://d10rvdv6rxomuk.cloudfront.net/inventories/4394076510536850.png",
+            "images": [
+              "https://d10rvdv6rxomuk.cloudfront.net/inventories/4394076510536850.png",
+              "https://d10rvdv6rxomuk.cloudfront.net/inventories/4394076641094630.png",
+              "https://d10rvdv6rxomuk.cloudfront.net/inventories/4394076581288865.png",
+              "https://d10rvdv6rxomuk.cloudfront.net/inventories/4394076558127779.png"
+            ],
+            "selling_price": 100,
+            "price": 100,
+            "regular_price": 0,
+            "category": "Hot Summer",
+            "vendor": "Hot Summer",
+            "discount": null,
+            "badge": null,
+            "url": "/products/701692",
+            "rating": 0,
+            "reviewCount": 0
+          },
+          {
+            "id": 864812,
+            "name": "Geometric Print Long Kurti",
+            "title": "Geometric Print Long Kurti",
+            "image": "https://d10rvdv6rxomuk.cloudfront.net/inventories/4394242510660428.png",
+            "images": [
+              "https://d10rvdv6rxomuk.cloudfront.net/inventories/4394242510660428.png"
+            ],
+            "selling_price": 630,
+            "price": 630,
+            "regular_price": 0,
+            "category": "",
+            "vendor": "",
+            "discount": null,
+            "badge": null,
+            "url": "/products/864812",
+            "rating": 0,
+            "reviewCount": 0
+          },
+          {
+            "id": 864819,
+            "name": "Mustard Yellow Floral Kurti",
+            "title": "Mustard Yellow Floral Kurti",
+            "image": "https://d10rvdv6rxomuk.cloudfront.net/inventories/4394412772150422.png",
+            "images": [
+              "https://d10rvdv6rxomuk.cloudfront.net/inventories/4394412772150422.png"
+            ],
+            "selling_price": 630,
+            "price": 630,
+            "regular_price": 0,
+            "category": "",
+            "vendor": "",
+            "discount": null,
+            "badge": null,
+            "url": "/products/864819",
+            "rating": 0,
+            "reviewCount": 0
+          }
+        ]
       }
     ],
     "seo": {

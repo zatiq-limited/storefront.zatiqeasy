@@ -30,6 +30,8 @@ interface RelatedProducts2Props {
     gap?: "sm" | "md" | "lg";
     cardDesign?: string;
     limit?: number;
+    buttonBgColor?: string;
+    buttonTextColor?: string;
   };
   products: Product[];
   currency?: string;
@@ -49,6 +51,8 @@ const RelatedProducts2: React.FC<RelatedProducts2Props> = ({
     gap = "md",
     cardDesign = "card-1",
     limit = 8,
+    buttonBgColor = "#7C3AED",
+    buttonTextColor = "#FFFFFF",
   } = settings;
 
   // Gap classes
@@ -265,6 +269,8 @@ const RelatedProducts2: React.FC<RelatedProducts2Props> = ({
       rating: rating,
       reviewCount: reviewCount,
       quickAddEnabled: true,
+      buttonBgColor: buttonBgColor,
+      buttonTextColor: buttonTextColor,
     };
   };
 

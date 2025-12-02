@@ -1,7 +1,7 @@
 {
   "success": true,
   "data": {
-    "id": "theme_custom_1764589504842",
+    "id": "theme_custom_1764653864397",
     "globalSettings": {
       "typography": {
         "fontFamily": "Inter",
@@ -39,19 +39,19 @@
           "background_color": "#FFFFFF",
           "text_color": "#000000",
           "sticky": true,
-          "fontFamily": "inherit",
+          "fontFamily": "Source Sans Pro",
           "menu_items": [
             {
               "label": "Home",
-              "url": "/home"
+              "url": "/"
             },
             {
               "label": "Products",
               "url": "/products"
             },
             {
-              "label": "Category",
-              "url": "/category"
+              "label": "Collections",
+              "url": "/collections"
             }
           ]
         },
@@ -81,7 +81,7 @@
           "facebookUrl": "facebook.com",
           "instagramUrl": "instagram.com",
           "twitterUrl": "twitter.com",
-          "linkedinUrl": "linkedIn.com",
+          "linkedinUrl": "linkedin.com",
           "column1Title": "My Account",
           "column1Link1Text": "My Orders",
           "column1Link1Url": "/orders",
