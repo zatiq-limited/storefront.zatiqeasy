@@ -55,7 +55,7 @@ const CollectionBanner1: React.FC<CollectionBanner1Props> = ({
   }[textPosition];
 
   return (
-    <section className="relative h-[70vh] min-h-[350px] sm:h-[60vh] sm:min-h-[400px] md:h-[70vh] md:min-h-[500px] lg:h-[80vh] lg:min-h-[600px] overflow-hidden bg-gray-900">
+    <section className="relative h-[50vh] min-h-[350px] sm:h-[60vh] sm:min-h-[400px] md:h-[70vh] md:min-h-[500px] lg:h-[80vh] lg:min-h-[600px] overflow-hidden bg-gray-900">
       {/* Parallax Background Image */}
       {showBanner && bannerImage && (
         <div

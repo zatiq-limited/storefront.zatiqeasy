@@ -52,11 +52,11 @@ const CollectionProducts2: React.FC<CollectionProducts2Props> = ({
   const onSaleCount = products.filter((p) => p.old_price && p.old_price > p.price).length;
 
   return (
-    <section className="py-16 md:py-20" style={{ backgroundColor }} id="products">
+    <section className="py-8 sm:py-16 md:py-20" style={{ backgroundColor }} id="products">
       <div className="max-w-[1440px] mx-auto px-4 2xl:px-0">
 
         {/* Modern Sticky Header Bar */}
-        <div className="mb-12">
+        <div className="sm:mb-12">
           {/* Title Row */}
           <div className="flex items-center justify-between mb-6">
             <div>
@@ -95,7 +95,7 @@ const CollectionProducts2: React.FC<CollectionProducts2Props> = ({
                   Showing <span className="font-semibold text-gray-900">{products.length}</span> of{" "}
                   <span className="font-semibold text-gray-900">{products.length}</span> products
                 </p>
-                <button className="group relative px-8 py-3 bg-white border-2 border-gray-900 rounded-full font-semibold hover:bg-gray-900 hover:text-white transition-all overflow-hidden">
+                <button className="group relative px-8 py-1.5 sm:py-3 bg-white border-2 border-gray-900 rounded-full font-semibold hover:bg-gray-900 hover:text-white transition-all overflow-hidden">
                   <span className="relative z-10">View All Products</span>
                   <div className="absolute inset-0 bg-gray-900 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></div>
                 </button>
