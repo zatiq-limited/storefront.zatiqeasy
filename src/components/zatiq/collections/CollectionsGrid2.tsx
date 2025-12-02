@@ -23,7 +23,7 @@ interface CollectionsGrid2Props {
 
 const CollectionsGrid2: React.FC<CollectionsGrid2Props> = ({
   collections = [],
-  backgroundColor = "#ffffff",
+  backgroundColor = "#000000",
   columns = 3,
 }) => {
   if (!collections || collections.length === 0) {
@@ -38,8 +38,8 @@ const CollectionsGrid2: React.FC<CollectionsGrid2Props> = ({
   }[columns] || "md:grid-cols-2 lg:grid-cols-3";
 
   return (
-    <section className="py-16 md:py-24" style={{ backgroundColor }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-16 md:py-24">
+      <div className="max-w-[1440px] mx-auto px-4 2xl:px-6">
         <div className={`grid grid-cols-1 ${gridClasses} gap-6 lg:gap-8`}>
           {collections.map((collection, index) => (
             <div
@@ -55,7 +55,7 @@ const CollectionsGrid2: React.FC<CollectionsGrid2Props> = ({
                 className="block relative overflow-hidden rounded-2xl bg-gray-100 shadow-md hover:shadow-xl transition-all duration-300"
               >
                 {/* Collection Image */}
-                <div className="relative aspect-[4/3] overflow-hidden">
+                <div className="relative aspect-4/3 overflow-hidden">
                   <img
                     src={collection.banner_url || collection.image_url}
                     alt={collection.name}
@@ -64,7 +64,7 @@ const CollectionsGrid2: React.FC<CollectionsGrid2Props> = ({
                   />
 
                   {/* Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+                  <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent"></div>
 
                   {/* Product Count Badge */}
                   <div className="absolute top-4 right-4 z-10">
@@ -116,7 +116,8 @@ const CollectionsGrid2: React.FC<CollectionsGrid2Props> = ({
                     <a
                       key={child.id}
                       href={`/collections/${child.id}`}
-                      className="flex-shrink-0 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-xs font-medium text-gray-700 transition-colors"
+                      className="shrink-0 px-3 py-1.5 rounded-full text-xs font-medium text-gray-700 transition-colors"
+                      style={{ backgroundColor: backgroundColor }}
                     >
                       {child.name}
                     </a>

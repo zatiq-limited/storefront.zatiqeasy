@@ -3,7 +3,7 @@
  * COLLECTION BANNER 1
  * ========================================
  * Immersive full-screen hero with parallax effect
- * Inspired by modern Shopify themes like Impulse & Prestige
+ * Fully responsive for mobile, tablet, and desktop
  */
 
 import React from "react";
@@ -55,7 +55,7 @@ const CollectionBanner1: React.FC<CollectionBanner1Props> = ({
   }[textPosition];
 
   return (
-    <section className="relative h-[85vh] min-h-[750px] overflow-hidden bg-gray-900">
+    <section className="relative h-[70vh] min-h-[350px] sm:h-[60vh] sm:min-h-[400px] md:h-[70vh] md:min-h-[500px] lg:h-[80vh] lg:min-h-[600px] overflow-hidden bg-gray-900">
       {/* Parallax Background Image */}
       {showBanner && bannerImage && (
         <div
@@ -67,7 +67,7 @@ const CollectionBanner1: React.FC<CollectionBanner1Props> = ({
         >
           {/* Elegant Gradient Overlay */}
           <div
-            className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black/0"
+            className="absolute inset-0 bg-linear-to-b from-black/40 via-black/20 to-black/50 md:from-transparent md:via-black/20 md:to-black/0"
             style={{ opacity: overlayOpacity }}
           />
           {/* Vignette Effect */}
@@ -85,19 +85,20 @@ const CollectionBanner1: React.FC<CollectionBanner1Props> = ({
       {/* Content Container */}
       <div className="relative h-full flex items-center">
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className={`flex flex-col ${textAlignClass} max-w-4xl ${textPosition === 'center' ? 'mx-auto' : ''}`}>
-
+          <div
+            className={`flex flex-col ${textAlignClass} max-w-full sm:max-w-xl md:max-w-2xl lg:max-w-3xl xl:max-w-4xl ${textPosition === "center" ? "mx-auto" : ""}`}
+          >
             {/* Animated Badge */}
             {collection.subtitle && (
               <div
-                className="inline-flex items-center backdrop-blur-md bg-white/10 border border-white/20 rounded-full px-5 py-2 mb-6"
+                className="inline-flex items-center backdrop-blur-md bg-white/10 border border-white/20 rounded-full px-3 py-1.5 sm:px-4 sm:py-2 md:px-5 md:py-2 mb-3 sm:mb-4 md:mb-6"
                 style={{ animation: "fadeInUp 0.8s ease-out" }}
               >
-                <span className="relative flex h-2 w-2 mr-3">
+                <span className="relative flex h-1.5 w-1.5 sm:h-2 sm:w-2 mr-2 sm:mr-3">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 sm:h-2 sm:w-2 bg-white"></span>
                 </span>
-                <span className="text-white text-sm font-medium tracking-wider uppercase">
+                <span className="text-white text-xs sm:text-sm font-medium tracking-wider uppercase">
                   {collection.subtitle}
                 </span>
               </div>
@@ -105,7 +106,7 @@ const CollectionBanner1: React.FC<CollectionBanner1Props> = ({
 
             {/* Title with Modern Typography */}
             <h1
-              className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold text-white mb-6 leading-tight tracking-tight"
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold text-white mb-2 sm:mb-3 md:mb-4 lg:mb-6 leading-tight tracking-tight"
               style={{
                 animation: "fadeInUp 0.8s ease-out 0.2s both",
                 textShadow: "0 4px 60px rgba(0,0,0,0.5)",
@@ -117,7 +118,7 @@ const CollectionBanner1: React.FC<CollectionBanner1Props> = ({
             {/* Description */}
             {showDescription && collection.description && (
               <p
-                className="text-white/90 text-lg sm:text-xl lg:text-2xl font-light max-w-2xl mb-10 leading-relaxed"
+                className="text-white/90 text-sm sm:text-base md:text-lg lg:text-xl font-light max-w-full sm:max-w-lg md:max-w-xl lg:max-w-2xl mb-4 sm:mb-6 md:mb-8 lg:mb-10 leading-relaxed line-clamp-2 sm:line-clamp-3 md:line-clamp-none"
                 style={{
                   animation: "fadeInUp 0.8s ease-out 0.4s both",
                   textShadow: "0 2px 20px rgba(0,0,0,0.5)",
@@ -129,19 +130,19 @@ const CollectionBanner1: React.FC<CollectionBanner1Props> = ({
 
             {/* Action Row */}
             <div
-              className={`flex flex-wrap gap-6 ${textPosition === 'center' ? 'justify-center' : ''}`}
+              className={`flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 md:gap-6 ${textPosition === "center" ? "justify-center items-center" : ""}`}
               style={{ animation: "fadeInUp 0.8s ease-out 0.6s both" }}
             >
               {/* Explore Button */}
               <a
                 href={bannerButtonLink}
-                className="group relative inline-flex items-center overflow-hidden rounded-full bg-white text-gray-900 px-8 py-4 font-semibold shadow-2xl transition-all hover:scale-105 hover:shadow-white/25"
+                className="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-white text-gray-900 px-5 py-2.5 sm:px-6 sm:py-3 md:px-8 md:py-4 text-sm sm:text-base font-semibold shadow-2xl transition-all hover:scale-105 hover:shadow-white/25 w-full sm:w-auto"
               >
-                <span className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <span className="relative z-10 flex items-center group-hover:text-white transition-colors">
+                <span className="absolute inset-0 bg-linear-to-r from-indigo-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <span className="relative z-10 flex items-center justify-center group-hover:text-white transition-colors">
                   {bannerButtonText}
                   <svg
-                    className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform"
+                    className="w-4 h-4 sm:w-5 sm:h-5 ml-2 transform group-hover:translate-x-1 transition-transform"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -158,9 +159,9 @@ const CollectionBanner1: React.FC<CollectionBanner1Props> = ({
 
               {/* Product Count Badge */}
               {showProductCount && collection.product_count !== undefined && (
-                <div className="inline-flex items-center backdrop-blur-md bg-black/20 border border-white/30 rounded-full px-6 py-4 text-white">
+                <div className="inline-flex items-center justify-center backdrop-blur-md bg-black/20 border border-white/30 rounded-full px-4 py-2.5 sm:px-5 sm:py-3 md:px-6 md:py-4 text-white text-sm sm:text-base w-full sm:w-auto">
                   <svg
-                    className="w-5 h-5 mr-3 opacity-80"
+                    className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 opacity-80"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -172,7 +173,9 @@ const CollectionBanner1: React.FC<CollectionBanner1Props> = ({
                       d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
                     />
                   </svg>
-                  <span className="font-semibold">{collection.product_count} Products</span>
+                  <span className="font-semibold">
+                    {collection.product_count} Products
+                  </span>
                 </div>
               )}
             </div>
@@ -180,15 +183,17 @@ const CollectionBanner1: React.FC<CollectionBanner1Props> = ({
         </div>
       </div>
 
-      {/* Scroll Indicator */}
+      {/* Scroll Indicator - Hidden on mobile */}
       <a
         href="#products"
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center text-black hover:text-white transition-colors"
+        className="hidden sm:flex absolute bottom-4 md:bottom-6 lg:bottom-8 left-1/2 -translate-x-1/2 flex-col items-center text-white/80 hover:text-white transition-colors"
         style={{ animation: "bounce 2s infinite" }}
       >
-        <span className="text-sm font-medium mb-2 tracking-wider uppercase">Scroll</span>
+        <span className="text-xs sm:text-sm font-medium mb-1 sm:mb-2 tracking-wider uppercase">
+          Scroll
+        </span>
         <svg
-          className="w-6 h-6"
+          className="w-5 h-5 sm:w-6 sm:h-6"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -203,7 +208,7 @@ const CollectionBanner1: React.FC<CollectionBanner1Props> = ({
       </a>
 
       {/* Decorative Bottom Fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent pointer-events-none" />
+      <div className="absolute bottom-0 left-0 right-0 h-12 sm:h-16 md:h-24 lg:h-32 bg-linear-to-t from-white/80 to-transparent pointer-events-none" />
 
       {/* Animations */}
       <style>{`
@@ -229,10 +234,10 @@ const CollectionBanner1: React.FC<CollectionBanner1Props> = ({
 
         @keyframes bounce {
           0%, 100% {
-            transform: translateY(0);
+            transform: translateX(-50%) translateY(0);
           }
           50% {
-            transform: translateY(-10px);
+            transform: translateX(-50%) translateY(-10px);
           }
         }
       `}</style>
