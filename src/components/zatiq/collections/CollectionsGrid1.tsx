@@ -50,7 +50,7 @@ const CollectionsGrid1: React.FC<CollectionsGrid1Props> = ({
                 {/* Collection Image Container */}
                 <div
                   className={`relative overflow-hidden ${
-                    index === 0 ? "aspect-[16/9]" : "aspect-[4/3]"
+                    index === 0 ? "aspect-12/9" : "aspect-4/3"
                   }`}
                 >
                   <img
@@ -64,7 +64,7 @@ const CollectionsGrid1: React.FC<CollectionsGrid1Props> = ({
                   />
 
                   {/* Dark Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-black/20"></div>
+                  <div className="absolute inset-0 bg-linear-to-t from-black/95 via-black/60 to-black/20"></div>
 
                   {/* Product Count Badge */}
                   <div className="absolute top-4 right-4 z-10">
@@ -136,7 +136,7 @@ const CollectionsGrid1: React.FC<CollectionsGrid1Props> = ({
                           loading="lazy"
                         />
                         {/* Dark overlay for text visibility */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent"></div>
+                        <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/50 to-transparent"></div>
 
                         {/* Text overlay on image */}
                         <div className="absolute bottom-0 left-0 right-0 p-3 z-10">
