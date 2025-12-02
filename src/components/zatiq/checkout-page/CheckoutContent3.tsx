@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Check } from "lucide-react";
+import { Check, AlertCircle, Tag } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
@@ -34,6 +34,15 @@ interface PaymentMethod {
   fee_type: string;
 }
 
+interface PromoCode {
+  promo_code: string;
+  type: string;
+  amount: number;
+  discount_amount: number;
+  applicable: boolean;
+  message: string;
+}
+
 interface CheckoutContent3Props {
   settings?: {
     showPromoCode?: boolean;
@@ -63,12 +72,50 @@ const CheckoutContent3: React.FC<CheckoutContent3Props> = ({
   );
   const [promoCode, setPromoCode] = useState("");
   const [orderNotes, setOrderNotes] = useState("");
+  const [appliedPromo, setAppliedPromo] = useState<PromoCode | null>(null);
+  const [promoError, setPromoError] = useState("");
+  const [isApplyingPromo, setIsApplyingPromo] = useState(false);
 
   // Calculate totals
   const subtotal = orderItems.reduce((sum, item) => sum + item.line_total, 0);
   const deliveryFee =
     deliveryOptions.find((opt) => opt.id === selectedDelivery)?.fee || 0;
-  const total = subtotal + deliveryFee;
+  const discount = appliedPromo?.discount_amount || 0;
+  const total = subtotal + deliveryFee - discount;
+
+  const handleApplyPromo = async () => {
+    if (!promoCode.trim()) return;
+
+    setIsApplyingPromo(true);
+    setPromoError("");
+
+    try {
+      // Call API to validate promo code
+      const apiUrl = import.meta.env.PUBLIC_API_URL || "http://localhost:3001";
+      const response = await fetch(`${apiUrl}/api/promo-code?code=${promoCode}`);
+      const data = await response.json();
+
+      if (data.success && data.data.promo_code.applicable) {
+        setAppliedPromo(data.data.promo_code);
+        setPromoError("");
+      } else {
+        setPromoError(data.data.promo_code.message || "Invalid promo code");
+        setAppliedPromo(null);
+      }
+    } catch (error) {
+      console.error("Promo code error:", error);
+      setPromoError("Failed to apply promo code");
+      setAppliedPromo(null);
+    } finally {
+      setIsApplyingPromo(false);
+    }
+  };
+
+  const handleRemovePromo = () => {
+    setAppliedPromo(null);
+    setPromoCode("");
+    setPromoError("");
+  };
 
   // Payment method icons
   const getPaymentIcon = (method: PaymentMethod) => {
@@ -433,17 +480,46 @@ const CheckoutContent3: React.FC<CheckoutContent3Props> = ({
                     Do you have a promo code?
                   </p>
                   <div className="flex gap-2">
-                    <Input
-                      type="text"
-                      value={promoCode}
-                      onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
-                      placeholder="Discount code / Promo code here"
-                      className="flex-1 h-10 border-gray-300 text-sm"
-                    />
-                    <button className="px-4 h-10 border border-blue-500 text-blue-500 rounded-md text-sm font-medium hover:bg-blue-50 transition-colors">
-                      Add
-                    </button>
+                    <div className="relative flex-1">
+                      <Tag className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <Input
+                        type="text"
+                        value={promoCode}
+                        onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
+                        placeholder="Discount code / Promo code here"
+                        disabled={!!appliedPromo}
+                        className="pl-9 flex-1 h-10 border-gray-300 text-sm"
+                      />
+                    </div>
+                    {appliedPromo ? (
+                      <button
+                        onClick={handleRemovePromo}
+                        className="px-4 h-10 bg-gray-200 text-gray-700 rounded-md text-sm font-medium hover:bg-gray-300 transition-colors"
+                      >
+                        Remove
+                      </button>
+                    ) : (
+                      <button
+                        onClick={handleApplyPromo}
+                        disabled={isApplyingPromo || !promoCode.trim()}
+                        className="px-4 h-10 border border-blue-500 text-blue-500 rounded-md text-sm font-medium hover:bg-blue-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {isApplyingPromo ? "..." : "Add"}
+                      </button>
+                    )}
                   </div>
+                  {appliedPromo && (
+                    <div className="mt-2 p-2 bg-green-50 border border-green-200 rounded-lg flex items-start gap-2">
+                      <Check className="w-4 h-4 text-green-600 mt-0.5 shrink-0" />
+                      <p className="text-xs text-green-700 flex-1">{appliedPromo.message}</p>
+                    </div>
+                  )}
+                  {promoError && (
+                    <div className="mt-2 p-2 bg-red-50 border border-red-200 rounded-lg flex items-start gap-2">
+                      <AlertCircle className="w-4 h-4 text-red-600 mt-0.5 shrink-0" />
+                      <p className="text-xs text-red-700 flex-1">{promoError}</p>
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -457,10 +533,12 @@ const CheckoutContent3: React.FC<CheckoutContent3Props> = ({
                     ৳{subtotal.toLocaleString()}
                   </span>
                 </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Discount</span>
-                  <span className="text-gray-900">৳0.00</span>
-                </div>
+                {discount > 0 && (
+                  <div className="flex justify-between text-sm">
+                    <span className="text-green-600">Discount</span>
+                    <span className="text-green-600">-৳{discount.toLocaleString()}</span>
+                  </div>
+                )}
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Shipping</span>
                   <span className="text-gray-900">
