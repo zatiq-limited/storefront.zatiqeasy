@@ -9,10 +9,23 @@
         "enabled": true,
         "settings": {
           "title": "Discover Your Style",
-          "subtitle": "Explore our handpicked collections crafted for every occasion and trend",
+          "subtitle": "Explore our handpicked collections crafted for every occasion and trend. From timeless classics to the latest trends, find pieces that define your unique style.",
           "badge": "Curated Collections",
-          "backgroundColor": "#000000",
-          "textColor": "#ffffff"
+          "badgeColor": "#ff6f61",
+          "buttonText": "Explore Collections",
+          "buttonLink": "/products",
+          "buttonBackgroundColor": "#ff6f61",
+          "buttonTextColor": "#ffffff",
+          "image": "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1200&q=80",
+          "backgroundColor": "#f8f9fa",
+          "textColor": "#1a1a1a",
+          "imagePosition": "left",
+          "showStats": true,
+          "stats": [
+            { "label": "Collections", "value": "50+" },
+            { "label": "Products", "value": "1000+" },
+            { "label": "Happy Customers", "value": "10K+" }
+          ]
         }
       },
       {

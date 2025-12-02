@@ -33,13 +33,13 @@
           "sidebarType": "products-sidebar-1",
           "sidebarPosition": "left",
           "showPagination": true,
-          "paginationType": "products-pagination-1",
+          "paginationType": "products-pagination-2",
           "productsPerPage": 20,
           "columns": 4,
           "columnsTablet": 2,
           "columnsMobile": 2,
           "gap": 6,
-          "cardType": "card-1",
+          "cardType": "card-7",
           "showSearch": true,
           "showSort": true,
           "showViewToggle": true,
@@ -56,50 +56,13 @@
           "sortFontSize": "text-sm",
           "productCountFontFamily": "inherit",
           "productCountFontSize": "text-xs",
-          "productCount": 128
-        }
-      },
-      {
-        "id": "static_banner_1_2",
-        "type": "static-banner-1",
-        "settings": {
-          "image": "https://i.ibb.co.com/5x6wzDWj/laptop-cover.webp",
-          "imageMobile": "",
-          "title": "Best Discounts\n2025",
-          "description": "Salla Store provides you with everything you need, from electronics to home furniture, along with the best discounts on products. Shop now and enjoy all the discounts on products.",
-          "buttonText": "Discover more",
-          "buttonLink": "/collections/discounts",
-          "secondaryButtonText": "",
-          "secondaryButtonLink": "",
-          "textAlignment": "right",
-          "textColor": "#FFFFFF",
-          "overlayColor": "#000000",
-          "overlayOpacity": 5,
-          "height": "medium",
-          "titleFont": "sans",
-          "descriptionFont": "sans"
-        }
-      },
-      {
-        "id": "special_offers_slider_4_3",
-        "type": "special-offers-slider-4",
-        "settings": {
-          "bgColor": "transparent",
-          "leftCardImage": "https://i.ibb.co.com/B2s1CxpY/8381449cda78484f78ab0e499626aff8f031bb85.jpg",
-          "leftCardTitle": "Smartphone\nBLU G91 Pro 2022",
-          "leftCardSubtitle": "Sale 20% off all store",
-          "leftCardButtonText": "Shop Now",
-          "leftCardButtonLink": "#",
-          "leftCardTitleColor": "#010F1C",
-          "leftCardTextColor": "#010F1C",
-          "rightCardImage": "https://i.ibb.co.com/NgXRg0g3/c1d56950ca32c579c48f4a92888c4a547802c115.jpg",
-          "rightCardTitle": "HyperX Cloud II\nWireless",
-          "rightCardDiscount": "Sale 35% off",
-          "rightCardButtonText": "Shop Now",
-          "rightCardButtonLink": "#",
-          "rightCardTitleColor": "#010F1C",
-          "rightCardTextColor": "#010F1C",
-          "fontFamily": "inherit"
+          "productCount": 128,
+          "paginationActiveColor": "#12418c",
+          "paginationTextColor": "#374151",
+          "cardButtonBgColor": "#082d68",
+          "cardButtonTextColor": "#FFFFFF",
+          "sidebarButtonBgColor": "#0b2c75",
+          "sidebarButtonTextColor": "#FFFFFF"
         }
       }
     ],

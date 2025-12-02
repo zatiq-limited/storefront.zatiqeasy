@@ -1,25 +1,21 @@
 {
   "success": true,
   "data": {
-    "page": {
-      "id": "product_details",
-      "name": "Product Details Page",
-      "description": "Single product page with gallery, variants, reviews"
-    },
+    "template": "productDetails",
     "sections": [
       {
-        "id": "product_breadcrumb",
+        "id": "product_breadcrumb_1_0",
         "type": "product-breadcrumb-1",
-        "enabled": true,
         "settings": {
           "showHome": true,
-          "showCategory": true
+          "showCategory": true,
+          "linkColor": "#6B7280",
+          "textColor": "#111827"
         }
       },
       {
-        "id": "product_detail",
+        "id": "product_detail_1_1",
         "type": "product-detail-1",
-        "enabled": true,
         "settings": {
           "showBrand": true,
           "showSku": true,
@@ -35,35 +31,73 @@
           "showWishlist": true,
           "galleryPosition": "left",
           "thumbnailPosition": "bottom",
-          "thumbnailSize": "sm"
+          "thumbnailSize": "md",
+          "brandColor": "#2563EB",
+          "variantActiveColor": "#2563EB",
+          "addToCartBgColor": "#2563EB",
+          "addToCartTextColor": "#FFFFFF",
+          "buyNowGradientStart": "#7cf915",
+          "buyNowGradientEnd": "#4248f0",
+          "buyNowTextColor": "#FFFFFF",
+          "whatsappBgColor": "#25D366",
+          "whatsappTextColor": "#FFFFFF",
+          "priceColor": "#111827",
+          "oldPriceColor": "#9CA3AF",
+          "discountBadgeColor": "#DC2626"
         }
       },
       {
-        "id": "customer_reviews",
-        "type": "customer-reviews-2",
-        "enabled": true,
+        "id": "customer_reviews_1_2",
+        "type": "customer-reviews-1",
         "settings": {
           "title": "Customer Reviews",
           "showRatingSummary": true,
           "showReviewImages": true,
           "columns": 3,
-          "limit": 6
+          "limit": 6,
+          "titleColor": "#111827",
+          "starColor": "#FBBF24",
+          "cardBgColor": "#FFFFFF",
+          "textColor": "#4B5563",
+          "verifiedBadgeColor": "#059669"
         }
       },
       {
-        "id": "related_products",
-        "type": "related-products-2",
-        "enabled": true,
+        "id": "related_products_1_3",
+        "type": "related-products-1",
         "settings": {
           "title": "You May Also Like",
           "columns": 4,
           "mobileColumns": 2,
-          "tabletColumns": 2,
-          "gap": "sm",
-          "cardStyle": "product-card-2",
-          "limit": 8
+          "tabletColumns": 3,
+          "gap": "md",
+          "cardDesign": "card-7",
+          "limit": 8,
+          "titleColor": "#111827",
+          "priceColor": "#111827",
+          "oldPriceColor": "#9CA3AF",
+          "badgeColor": "#DC2626",
+          "buttonBgColor": "#103994",
+          "buttonTextColor": "#FFFFFF"
         }
       }
-    ]
+    ],
+    "seo": {
+      "title": "Custom Theme Store",
+      "description": "",
+      "canonical": "",
+      "og": {
+        "title": "Custom Theme Store",
+        "description": "",
+        "image": "",
+        "type": "website"
+      },
+      "twitter": {
+        "card": "summary_large_image",
+        "title": "Custom Theme Store",
+        "description": "",
+        "image": ""
+      }
+    }
   }
 }

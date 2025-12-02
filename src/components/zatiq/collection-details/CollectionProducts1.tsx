@@ -47,7 +47,12 @@ const CollectionProducts1: React.FC<CollectionProducts1Props> = ({
   collection,
   settings = {},
 }) => {
-  const { backgroundColor = "#ffffff", columns = 4, columnsMobile = 2, cardStyle = "product-card-1" } = settings;
+  const {
+    backgroundColor = "#ffffff",
+    columns = 4,
+    columnsMobile = 2,
+    cardStyle = "product-card-1",
+  } = settings;
 
   // Initialize viewMode based on columns prop, default to 4
   const getInitialViewMode = (): 2 | 3 | 4 => {
@@ -60,9 +65,12 @@ const CollectionProducts1: React.FC<CollectionProducts1Props> = ({
   const [viewMode, setViewMode] = useState<2 | 3 | 4>(getInitialViewMode());
 
   return (
-    <section className="py-16 md:py-20" style={{ backgroundColor }} id="products">
+    <section
+      className="py-8 sm:py-16 md:py-20"
+      style={{ backgroundColor }}
+      id="products"
+    >
       <div className="max-w-[1440px] mx-auto px-4 2xl:px-0">
-
         {/* Header Section - Enhanced */}
         <div className="mb-12">
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-8">
@@ -82,17 +90,23 @@ const CollectionProducts1: React.FC<CollectionProducts1Props> = ({
             </div>
 
             {/* View Mode Toggle */}
-            <div className="flex items-center gap-4">
+            <div className="hidden lg:flex items-center gap-4">
               <span className="text-sm font-medium text-gray-600">View:</span>
               <div className="inline-flex items-center bg-gray-100 rounded-lg p-1">
                 <button
                   onClick={() => setViewMode(2)}
                   className={`p-2 rounded transition-colors ${
-                    viewMode === 2 ? "bg-white shadow-sm text-gray-900" : "text-gray-500 hover:text-gray-700"
+                    viewMode === 2
+                      ? "bg-white shadow-sm text-gray-900"
+                      : "text-gray-500 hover:text-gray-700"
                   }`}
                   aria-label="2 columns"
                 >
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <svg
+                    className="w-5 h-5"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
                     <rect x="3" y="3" width="8" height="18" rx="1" />
                     <rect x="13" y="3" width="8" height="18" rx="1" />
                   </svg>
@@ -100,11 +114,17 @@ const CollectionProducts1: React.FC<CollectionProducts1Props> = ({
                 <button
                   onClick={() => setViewMode(3)}
                   className={`p-2 rounded transition-colors ${
-                    viewMode === 3 ? "bg-white shadow-sm text-gray-900" : "text-gray-500 hover:text-gray-700"
+                    viewMode === 3
+                      ? "bg-white shadow-sm text-gray-900"
+                      : "text-gray-500 hover:text-gray-700"
                   }`}
                   aria-label="3 columns"
                 >
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <svg
+                    className="w-5 h-5"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
                     <rect x="2" y="3" width="6" height="18" rx="1" />
                     <rect x="9" y="3" width="6" height="18" rx="1" />
                     <rect x="16" y="3" width="6" height="18" rx="1" />
@@ -113,11 +133,17 @@ const CollectionProducts1: React.FC<CollectionProducts1Props> = ({
                 <button
                   onClick={() => setViewMode(4)}
                   className={`p-2 rounded transition-colors ${
-                    viewMode === 4 ? "bg-white shadow-sm text-gray-900" : "text-gray-500 hover:text-gray-700"
+                    viewMode === 4
+                      ? "bg-white shadow-sm text-gray-900"
+                      : "text-gray-500 hover:text-gray-700"
                   }`}
                   aria-label="4 columns"
                 >
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <svg
+                    className="w-5 h-5"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
                     <rect x="2" y="3" width="4.5" height="18" rx="1" />
                     <rect x="7" y="3" width="4.5" height="18" rx="1" />
                     <rect x="12" y="3" width="4.5" height="18" rx="1" />
@@ -159,7 +185,7 @@ const CollectionProducts1: React.FC<CollectionProducts1Props> = ({
         ) : (
           /* Beautiful Empty State */
           <div className="text-center py-20">
-            <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-indigo-100 to-purple-100 mb-6">
+            <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-linear-to-br from-indigo-100 to-purple-100 mb-6">
               <svg
                 className="w-12 h-12 text-indigo-600"
                 fill="none"
@@ -174,16 +200,24 @@ const CollectionProducts1: React.FC<CollectionProducts1Props> = ({
                 />
               </svg>
             </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">No Products Yet</h3>
+            <h3 className="text-2xl font-bold text-gray-900 mb-2">
+              No Products Yet
+            </h3>
             <p className="text-gray-600 mb-8 max-w-md mx-auto">
-              We're curating amazing products for this collection. Check back soon for exciting new arrivals!
+              We're curating amazing products for this collection. Check back
+              soon for exciting new arrivals!
             </p>
             <a
               href="/collections"
               className="inline-flex items-center gap-2 bg-gray-900 text-white px-6 py-3 rounded-full font-semibold hover:bg-gray-800 transition-colors"
             >
               <span>Browse Other Collections</span>
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -197,13 +231,13 @@ const CollectionProducts1: React.FC<CollectionProducts1Props> = ({
       </div>
 
       {/* Load More CTA */}
-      <div className="flex justify-center mt-16">
+      <div className="flex justify-center mt-10 sm:mt-16">
         <a
           href="/products"
-          className="group relative inline-flex items-center gap-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-10 py-4 rounded-full font-semibold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 overflow-hidden"
+          className="group relative inline-flex items-center gap-3 bg-linear-to-r from-indigo-600 to-purple-600 text-white px-8 sm:px-10 py-2 sm:py-4 rounded-full font-semibold text-sm sm:text-lg shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 overflow-hidden"
         >
           {/* Animated Background */}
-          <span className="absolute inset-0 bg-gradient-to-r from-purple-600 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+          <span className="absolute inset-0 bg-linear-to-r from-purple-600 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
 
           {/* Content */}
           <span className="relative z-10 flex items-center gap-3">
@@ -224,7 +258,7 @@ const CollectionProducts1: React.FC<CollectionProducts1Props> = ({
           </span>
 
           {/* Shine Effect */}
-          <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent"></span>
+          <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-linear-to-r from-transparent via-white/20 to-transparent"></span>
         </a>
       </div>
     </section>
