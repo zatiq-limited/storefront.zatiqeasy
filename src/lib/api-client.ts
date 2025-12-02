@@ -364,6 +364,23 @@ export async function getAboutPageData(): Promise<any> {
 }
 
 /**
+ * Get single product page data (complete product page with sections)
+ *
+ * Backend API: GET /api/storefront/v1/page/single-product
+ * Response: { success: true, data: { template, sections, product, seo } }
+ */
+export async function getSingleProductPageData(): Promise<any> {
+  try {
+    const response = await apiCall<any>(`/api/storefront/v1/page/single-product`);
+    console.log("[API] ✅ About page data loaded from API");
+    return response;
+  } catch (error) {
+    console.error("[API] ❌ About page API failed");
+    return null;
+  }
+}
+
+/**
  * Get contact page data
  *
  * Backend API: GET /api/storefront/v1/page/contact
