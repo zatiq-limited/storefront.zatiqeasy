@@ -75,10 +75,7 @@ const CollectionSubcategories2: React.FC<CollectionSubcategories2Props> = ({
   };
 
   return (
-    <section
-      className="py-8 sm:py-12 lg:py-16"
-      style={{ backgroundColor }}
-    >
+    <section className="py-8 sm:py-12 lg:py-16" style={{ backgroundColor }}>
       <div className="max-w-[1440px] mx-auto px-4 2xl:px-0 lg:px-8">
         {/* Section Title */}
         {showTitle && title && (
@@ -104,7 +101,7 @@ const CollectionSubcategories2: React.FC<CollectionSubcategories2Props> = ({
               }}
             >
               {/* Image */}
-              <div className="aspect-[4/3] relative overflow-hidden">
+              <div className="aspect-4/3 relative overflow-hidden">
                 {subcategory.image_url || subcategory.banner_url ? (
                   <img
                     src={subcategory.banner_url || subcategory.image_url}
@@ -113,7 +110,7 @@ const CollectionSubcategories2: React.FC<CollectionSubcategories2Props> = ({
                     loading="lazy"
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-200 to-gray-300">
+                  <div className="w-full h-full flex items-center justify-center bg-linear-to-br from-gray-200 to-gray-300">
                     <svg
                       className="w-16 h-16 text-gray-400"
                       fill="none"
@@ -132,7 +129,7 @@ const CollectionSubcategories2: React.FC<CollectionSubcategories2Props> = ({
 
                 {/* Gradient Overlay */}
                 <div
-                  className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent"
+                  className="absolute inset-0 bg-linear-to-t from-black via-black/30 to-transparent"
                   style={{ opacity: overlayOpacity }}
                 />
 
@@ -158,14 +155,15 @@ const CollectionSubcategories2: React.FC<CollectionSubcategories2Props> = ({
 
                   {/* Product Count & Arrow */}
                   <div className="flex items-center justify-between">
-                    {showProductCount && subcategory.product_count !== undefined && (
-                      <span
-                        className="text-sm opacity-80"
-                        style={{ color: cardTextColor }}
-                      >
-                        {subcategory.product_count} Products
-                      </span>
-                    )}
+                    {showProductCount &&
+                      subcategory.product_count !== undefined && (
+                        <span
+                          className="text-sm opacity-80"
+                          style={{ color: cardTextColor }}
+                        >
+                          {subcategory.product_count} Products
+                        </span>
+                      )}
 
                     {/* Arrow Icon */}
                     <div
@@ -191,16 +189,19 @@ const CollectionSubcategories2: React.FC<CollectionSubcategories2Props> = ({
                 </div>
 
                 {/* Product Count Badge (Top Right) */}
-                {showProductCount && subcategory.product_count !== undefined && (
-                  <div className="absolute top-3 right-3 z-10">
-                    <div className="bg-white/95 backdrop-blur-sm px-2.5 py-1 rounded-full shadow-md">
-                      <span className="text-xs font-bold text-gray-900">
-                        {subcategory.product_count}
-                      </span>
-                      <span className="text-xs text-gray-600 ml-1">items</span>
+                {showProductCount &&
+                  subcategory.product_count !== undefined && (
+                    <div className="absolute top-3 right-3 z-10">
+                      <div className="bg-white/95 backdrop-blur-sm px-2.5 py-1 rounded-full shadow-md">
+                        <span className="text-xs font-bold text-gray-900">
+                          {subcategory.product_count}
+                        </span>
+                        <span className="text-xs text-gray-600 ml-1">
+                          items
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
               </div>
             </a>
           ))}

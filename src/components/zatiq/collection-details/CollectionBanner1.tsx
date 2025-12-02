@@ -77,7 +77,7 @@ const CollectionBanner1: React.FC<CollectionBanner1Props> = ({
 
       {/* No Image Fallback - Modern Gradient */}
       {(!showBanner || !bannerImage) && (
-        <div className="absolute inset-0 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900">
+        <div className="absolute inset-0 bg-linear-to-br from-indigo-900 via-purple-900 to-pink-900">
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMzLjMxNCAwIDYgMi42ODYgNiA2cy0yLjY4NiA2LTYgNi02LTIuNjg2LTYtNiAyLjY4Ni02IDYtNnptMCAyYy0yLjIxIDAtNCAx Ljc5LTQgNHMxLjc5IDQgNCA0IDQtMS43OSA0LTQtMS43OS00LTQtNHptMCAyYzEuMTA1IDAgMiAuODk1IDIgMnMtLjg5NSAyLTIgMi0yLS44OTUtMi0yIC44OTUtMiAyLTJ6IiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIuMDUiLz48L2c+PC9zdmc+')] opacity-30" />
         </div>
       )}
@@ -86,7 +86,9 @@ const CollectionBanner1: React.FC<CollectionBanner1Props> = ({
       <div className="relative h-full flex items-center">
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div
-            className={`flex flex-col ${textAlignClass} max-w-full sm:max-w-xl md:max-w-2xl lg:max-w-3xl xl:max-w-4xl ${textPosition === "center" ? "mx-auto" : ""}`}
+            className={`flex flex-col ${textAlignClass} max-w-full sm:max-w-xl md:max-w-2xl lg:max-w-3xl xl:max-w-4xl ${
+              textPosition === "center" ? "mx-auto" : ""
+            }`}
           >
             {/* Animated Badge */}
             {collection.subtitle && (
@@ -130,7 +132,9 @@ const CollectionBanner1: React.FC<CollectionBanner1Props> = ({
 
             {/* Action Row */}
             <div
-              className={`flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 md:gap-6 ${textPosition === "center" ? "justify-center items-center" : ""}`}
+              className={`flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 md:gap-6 ${
+                textPosition === "center" ? "justify-center items-center" : ""
+              }`}
               style={{ animation: "fadeInUp 0.8s ease-out 0.6s both" }}
             >
               {/* Explore Button */}
