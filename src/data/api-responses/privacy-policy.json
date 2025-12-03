@@ -19,7 +19,7 @@
       },
       {
         "id": "privacy_content",
-        "type": "privacy-content-2",
+        "type": "privacy-content-1",
         "enabled": true,
         "settings": {
           "backgroundColor": "#FFFFFF",

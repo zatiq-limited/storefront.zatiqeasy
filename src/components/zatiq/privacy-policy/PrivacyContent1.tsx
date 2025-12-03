@@ -59,23 +59,68 @@ const PrivacyContent1: React.FC<PrivacyContent1Props> = ({
 
           {/* Content */}
           <div className="min-w-0">
-            {/* Mobile Table of Contents */}
-            <details className="lg:hidden mb-8 bg-gray-50 rounded-lg p-4">
-              <summary className="text-sm font-semibold cursor-pointer" style={{ color: accentColor }}>
-                Table of Contents
+            {/* Mobile Table of Contents - Sticky */}
+            <div className="lg:hidden sticky top-0 z-30 -mx-4 px-4 py-3 bg-white/95 backdrop-blur-sm border-b border-gray-100">
+              <details className="group">
+                <summary className="flex items-center justify-between w-full p-3 bg-white border border-gray-200 rounded-xl shadow-sm cursor-pointer hover:border-gray-300 transition-all">
+                <div className="flex items-center gap-3">
+                  <span
+                    className="flex items-center justify-center w-10 h-10 rounded-lg"
+                    style={{ backgroundColor: `${accentColor}15` }}
+                  >
+                    <svg
+                      className="w-5 h-5"
+                      style={{ color: accentColor }}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M4 6h16M4 12h16M4 18h7"
+                      />
+                    </svg>
+                  </span>
+                  <div>
+                    <p className="text-sm font-semibold text-gray-900">Table of Contents</p>
+                    <p className="text-xs text-gray-500">{blocks.length} sections</p>
+                  </div>
+                </div>
+                <svg
+                  className="w-5 h-5 text-gray-400 transition-transform group-open:rotate-180"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
               </summary>
-              <nav className="mt-4 space-y-2">
+              <nav className="mt-2 bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
                 {blocks.map((block, index) => (
                   <a
                     key={block.id}
                     href={`#section-${index}`}
-                    className="block text-sm text-gray-600 hover:text-gray-900 transition-colors py-1"
+                    className="flex items-center gap-3 px-4 py-3 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors border-b border-gray-100 last:border-b-0"
                   >
-                    {index + 1}. {block.settings.title}
+                    <span
+                      className="flex items-center justify-center w-6 h-6 rounded-full text-xs font-medium text-white shrink-0"
+                      style={{ backgroundColor: accentColor }}
+                    >
+                      {index + 1}
+                    </span>
+                    <span className="line-clamp-1">{block.settings.title}</span>
                   </a>
                 ))}
               </nav>
-            </details>
+              </details>
+            </div>
 
             {/* Content Sections */}
             <div className="space-y-10 md:space-y-12">
