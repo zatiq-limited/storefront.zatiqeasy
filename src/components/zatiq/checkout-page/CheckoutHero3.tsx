@@ -24,13 +24,6 @@ const CheckoutHero3: React.FC<CheckoutHero3Props> = ({
               <span className="hidden sm:inline">Home</span>
             </a>
             <ChevronRight className="w-4 h-4 text-gray-400" />
-            <a
-              href="/cart"
-              className="text-gray-500 hover:text-gray-700 transition-colors"
-            >
-              Cart
-            </a>
-            <ChevronRight className="w-4 h-4 text-gray-400" />
             <span className="text-gray-900 font-medium">{title}</span>
           </nav>
         )}
