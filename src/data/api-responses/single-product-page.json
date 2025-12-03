@@ -1,0 +1,574 @@
+{
+  "success": true,
+  "data": {
+    "template": "landing-features",
+    "sections": [
+      {
+        "id": "hero_1_0",
+        "type": "hero-1",
+        "settings": {
+          "slides": [
+            {
+              "tagline": "The new stylish collection",
+              "title": "NEW FALL",
+              "subtitle": "SEASON 2025",
+              "button_text": "Shop now",
+              "button_link": "/collections/fall-2025",
+              "image": "https://i.ibb.co.com/QFdRjZTW/hero-11.png",
+              "gradient_start": "#DAD4EC",
+              "gradient_end": "#F3E7E9",
+              "text_color": "#181D25",
+              "tagline_color": "#4E5562",
+              "button_color": "#F55266"
+            },
+            {
+              "tagline": "Trending this winter",
+              "title": "COZY",
+              "subtitle": "WINTER VIBES",
+              "button_text": "Explore collection",
+              "button_link": "/collections/winter-2025",
+              "image": "https://i.ibb.co.com/1pXs30c/hero-12.png",
+              "gradient_start": "#E5DDD5",
+              "gradient_end": "#E8DFE0",
+              "text_color": "#1A1A1A",
+              "tagline_color": "#5A5A5A",
+              "button_color": "#F55266"
+            },
+            {
+              "tagline": "Limited edition arrivals",
+              "title": "EXCLUSIVE",
+              "subtitle": "DESIGNER PICKS",
+              "button_text": "Shop exclusive",
+              "button_link": "/collections/exclusive",
+              "image": "https://i.ibb.co.com/bjxFXY3S/hero-13.png",
+              "gradient_start": "#F5E6D3",
+              "gradient_end": "#E9DDD4",
+              "text_color": "#2C2C2C",
+              "tagline_color": "#6B6B6B",
+              "button_color": "#F55266"
+            }
+          ],
+          "height": "medium",
+          "auto_advance": true,
+          "advance_interval": 5000,
+          "fontFamily": "inherit"
+        }
+      },
+      {
+        "id": "static_banner_1_0",
+        "type": "static-banner-1",
+        "settings": {
+          "image": "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=1200&q=80",
+          "imageMobile": "",
+          "title": "Why Shop With Us",
+          "description": "Discover the benefits that make your shopping experience exceptional. We're committed to providing you with the best online shopping experience through our customer-focused features and services.",
+          "buttonText": "Explore Features",
+          "buttonLink": "#features",
+          "secondaryButtonText": "",
+          "secondaryButtonLink": "",
+          "textAlignment": "center",
+          "textColor": "#FFFFFF",
+          "overlayColor": "#000000",
+          "overlayOpacity": 40,
+          "height": "medium",
+          "titleFont": "sans",
+          "descriptionFont": "sans"
+        }
+      },
+      {
+        "id": "badges_2_1",
+        "type": "badges-2",
+        "settings": {
+          "showIcons": true,
+          "backgroundColor": "#FFFFFF",
+          "iconColor": "#181D25",
+          "titleColor": "#111827",
+          "descriptionColor": "#6B7280",
+          "badge1Icon": "badge-check",
+          "badge1Title": "Quality First",
+          "badge1Description": "Every product is carefully selected and tested",
+          "badge2Icon": "sparkles",
+          "badge2Title": "Innovation",
+          "badge2Description": "Cutting-edge technology for best experience",
+          "badge3Icon": "heart",
+          "badge3Title": "Customer Focus",
+          "badge3Description": "Your satisfaction is our success",
+          "badge4Icon": "shield-check",
+          "badge4Title": "Secure Payment",
+          "badge4Description": "100% secure payment with SSL encryption",
+          "fontFamily": "inherit"
+        },
+        "blocks": [
+          {
+            "icon": "badge-check",
+            "title": "Quality First",
+            "description": "Every product is carefully selected and tested"
+          },
+          {
+            "icon": "sparkles",
+            "title": "Innovation",
+            "description": "Cutting-edge technology for best experience"
+          },
+          {
+            "icon": "heart",
+            "title": "Customer Focus",
+            "description": "Your satisfaction is our success"
+          },
+          {
+            "icon": "shield-check",
+            "title": "Secure Payment",
+            "description": "100% secure payment with SSL encryption"
+          }
+        ]
+      },
+      {
+        "id": "static_banner_1_2",
+        "type": "static-banner-1",
+        "settings": {
+          "image": "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1200&q=80",
+          "imageMobile": "",
+          "title": "Flexible Payment\nOptions",
+          "description": "We accept bKash, Nagad, Rocket, credit/debit cards (Visa, Mastercard, Amex), and cash on delivery. Choose your preferred payment method and shop with confidence.",
+          "buttonText": "View All Methods",
+          "buttonLink": "/pages/payment",
+          "secondaryButtonText": "",
+          "secondaryButtonLink": "",
+          "textAlignment": "left",
+          "textColor": "#FFFFFF",
+          "overlayColor": "#000000",
+          "overlayOpacity": 50,
+          "height": "medium",
+          "titleFont": "sans",
+          "descriptionFont": "sans"
+        }
+      },
+      {
+        "id": "brands_2_3",
+        "type": "brands-2",
+        "settings": {
+          "title": "Payment Methods We Accept",
+          "backgroundColor": "#F9FAFB",
+          "titleColor": "#111827",
+          "descriptionColor": "#6B7280",
+          "grayscale": false,
+          "brand1Name": "bKash",
+          "brand1Logo": "https://i.ibb.co.com/5W4mDXzk/bkash.png",
+          "brand1Description": "Pay with bKash mobile banking",
+          "brand2Name": "Nagad",
+          "brand2Logo": "https://i.ibb.co.com/tPDYMFvk/nagad.png",
+          "brand2Description": "Pay with Nagad mobile banking",
+          "brand3Name": "Mastercard",
+          "brand3Logo": "https://i.ibb.co.com/psTzX4Q/master.png",
+          "brand3Description": "Pay with Mastercard",
+          "brand4Name": "Visa",
+          "brand4Logo": "https://i.ibb.co.com/pBD3qRgZ/visa.png",
+          "brand4Description": "Pay with Visa card",
+          "brand5Name": "",
+          "brand5Logo": "",
+          "brand5Description": "",
+          "brand6Name": "",
+          "brand6Logo": "",
+          "brand6Description": "",
+          "brand7Name": "",
+          "brand7Logo": "",
+          "brand7Description": "",
+          "brand8Name": "",
+          "brand8Logo": "",
+          "brand8Description": "",
+          "fontFamily": "inherit"
+        },
+        "blocks": [
+          {
+            "name": "bKash",
+            "logo": "https://i.ibb.co.com/5W4mDXzk/bkash.png",
+            "description": "Pay with bKash mobile banking"
+          },
+          {
+            "name": "Nagad",
+            "logo": "https://i.ibb.co.com/tPDYMFvk/nagad.png",
+            "description": "Pay with Nagad mobile banking"
+          },
+          {
+            "name": "Mastercard",
+            "logo": "https://i.ibb.co.com/psTzX4Q/master.png",
+            "description": "Pay with Mastercard"
+          },
+          {
+            "name": "Visa",
+            "logo": "https://i.ibb.co.com/pBD3qRgZ/visa.png",
+            "description": "Pay with Visa card"
+          }
+        ]
+      },
+      {
+        "id": "badges_2_4",
+        "type": "badges-2",
+        "settings": {
+          "showIcons": true,
+          "backgroundColor": "#FFFFFF",
+          "iconColor": "#181D25",
+          "titleColor": "#111827",
+          "descriptionColor": "#6B7280",
+          "badge1Icon": "truck",
+          "badge1Title": "Standard Delivery",
+          "badge1Description": "৳60 - Delivery within 5-7 business days",
+          "badge2Icon": "zap",
+          "badge2Title": "Express Delivery",
+          "badge2Description": "৳120 - Delivery within 2-3 business days",
+          "badge3Icon": "package",
+          "badge3Title": "Same Day Delivery",
+          "badge3Description": "৳200 - Order before 12 PM for same day",
+          "badge4Icon": "gift",
+          "badge4Title": "Free Shipping",
+          "badge4Description": "On orders over ৳2000",
+          "fontFamily": "inherit"
+        },
+        "blocks": [
+          {
+            "icon": "truck",
+            "title": "Standard Delivery",
+            "description": "৳60 - Delivery within 5-7 business days"
+          },
+          {
+            "icon": "zap",
+            "title": "Express Delivery",
+            "description": "৳120 - Delivery within 2-3 business days"
+          },
+          {
+            "icon": "package",
+            "title": "Same Day Delivery",
+            "description": "৳200 - Order before 12 PM for same day"
+          },
+          {
+            "icon": "gift",
+            "title": "Free Shipping",
+            "description": "On orders over ৳2000"
+          }
+        ]
+      },
+      {
+        "id": "static_banner_1_5",
+        "type": "static-banner-1",
+        "settings": {
+          "image": "https://images.unsplash.com/photo-1556741175-b413da4baf72?w=1200&q=80",
+          "imageMobile": "",
+          "title": "Our Story\nThe Beginning",
+          "description": "Started our journey with a vision to revolutionize the e-commerce experience. What began as a small startup in 2010 quickly grew into a mission-driven company focused on delivering quality products and exceptional service to customers worldwide.",
+          "buttonText": "Learn more",
+          "buttonLink": "/pages/about",
+          "secondaryButtonText": "",
+          "secondaryButtonLink": "",
+          "textAlignment": "left",
+          "textColor": "#FFFFFF",
+          "overlayColor": "#000000",
+          "overlayOpacity": 30,
+          "height": "medium",
+          "titleFont": "sans",
+          "descriptionFont": "sans"
+        }
+      },
+      {
+        "id": "static_banner_1_6",
+        "type": "static-banner-1",
+        "settings": {
+          "image": "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=1200&q=80",
+          "imageMobile": "",
+          "title": "Growth & Expansion\nOur Journey",
+          "description": "Through dedication and innovation, we expanded to serve customers across multiple countries. Our product range grew significantly, and so did our team, bringing together talented individuals passionate about making a difference in the e-commerce industry.",
+          "buttonText": "Join our team",
+          "buttonLink": "/pages/careers",
+          "secondaryButtonText": "",
+          "secondaryButtonLink": "",
+          "textAlignment": "right",
+          "textColor": "#FFFFFF",
+          "overlayColor": "#000000",
+          "overlayOpacity": 35,
+          "height": "medium",
+          "titleFont": "sans",
+          "descriptionFont": "sans"
+        }
+      },
+      {
+        "id": "badges_2_7",
+        "type": "badges-2",
+        "settings": {
+          "showIcons": true,
+          "backgroundColor": "#1f2937",
+          "iconColor": "#FFFFFF",
+          "titleColor": "#FFFFFF",
+          "descriptionColor": "#D1D5DB",
+          "badge1Icon": "users",
+          "badge1Title": "50K+",
+          "badge1Description": "Happy Customers",
+          "badge2Icon": "shopping-bag",
+          "badge2Title": "10K+",
+          "badge2Description": "Products Available",
+          "badge3Icon": "heart",
+          "badge3Title": "98%",
+          "badge3Description": "Customer Satisfaction",
+          "badge4Icon": "headphones",
+          "badge4Title": "24/7",
+          "badge4Description": "Customer Support",
+          "fontFamily": "inherit"
+        },
+        "blocks": [
+          {
+            "icon": "users",
+            "title": "50K+",
+            "description": "Happy Customers"
+          },
+          {
+            "icon": "shopping-bag",
+            "title": "10K+",
+            "description": "Products Available"
+          },
+          {
+            "icon": "heart",
+            "title": "98%",
+            "description": "Customer Satisfaction"
+          },
+          {
+            "icon": "headphones",
+            "title": "24/7",
+            "description": "Customer Support"
+          }
+        ]
+      },
+      {
+        "id": "reviews_3_8",
+        "type": "reviews-3",
+        "settings": {
+          "title": "What Our Customers Say",
+          "subtitle": "Real experiences from real shoppers",
+          "backgroundColor": "#F9FAFB",
+          "titleColor": "#111827",
+          "cardBgColor": "#FFFFFF",
+          "textColor": "#374151",
+          "nameColor": "#111827",
+          "starColor": "#F97316",
+          "quoteColor": "#D1D5DB",
+          "autoplay": true,
+          "autoplaySpeed": 3000,
+          "showAvatar": true,
+          "showRating": true,
+          "review1Name": "Fatima Rahman",
+          "review1Rating": 5,
+          "review1Comment": "Outstanding service! The product quality exceeded my expectations, and the delivery was super fast. Will definitely shop here again.",
+          "review1Avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop",
+          "review2Name": "Karim Ahmed",
+          "review2Rating": 5,
+          "review2Comment": "Best online shopping experience I've had. The customer support team was incredibly helpful when I had questions about my order.",
+          "review2Avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop",
+          "review3Name": "Nusrat Jahan",
+          "review3Rating": 4,
+          "review3Comment": "Great variety of products and competitive prices. The return process was smooth and hassle-free. Highly recommended!",
+          "review3Avatar": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop",
+          "review4Name": "Shahid Islam",
+          "review4Rating": 5,
+          "review4Comment": "The payment options are very convenient, especially bKash and Nagad. Delivery was on time and packaging was excellent.",
+          "review4Avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop",
+          "fontFamily": "inherit"
+        },
+        "reviews": [
+          {
+            "name": "Fatima Rahman",
+            "rating": 5,
+            "comment": "Outstanding service! The product quality exceeded my expectations, and the delivery was super fast. Will definitely shop here again.",
+            "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop"
+          },
+          {
+            "name": "Karim Ahmed",
+            "rating": 5,
+            "comment": "Best online shopping experience I've had. The customer support team was incredibly helpful when I had questions about my order.",
+            "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop"
+          },
+          {
+            "name": "Nusrat Jahan",
+            "rating": 4,
+            "comment": "Great variety of products and competitive prices. The return process was smooth and hassle-free. Highly recommended!",
+            "avatar": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop"
+          },
+          {
+            "name": "Shahid Islam",
+            "rating": 5,
+            "comment": "The payment options are very convenient, especially bKash and Nagad. Delivery was on time and packaging was excellent.",
+            "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop"
+          }
+        ]
+      },
+      {
+        "id": "badges_2_9",
+        "type": "badges-2",
+        "settings": {
+          "showIcons": true,
+          "backgroundColor": "#FFFFFF",
+          "iconColor": "#181D25",
+          "titleColor": "#111827",
+          "descriptionColor": "#6B7280",
+          "badge1Icon": "refresh",
+          "badge1Title": "Easy Returns",
+          "badge1Description": "30-day hassle-free return policy",
+          "badge2Icon": "shield-check",
+          "badge2Title": "Quality Guarantee",
+          "badge2Description": "100% authentic products",
+          "badge3Icon": "phone",
+          "badge3Title": "24/7 Support",
+          "badge3Description": "Available via phone, email & chat",
+          "badge4Icon": "map-pin",
+          "badge4Title": "Track Order",
+          "badge4Description": "Real-time order tracking",
+          "fontFamily": "inherit"
+        },
+        "blocks": [
+          {
+            "icon": "refresh",
+            "title": "Easy Returns",
+            "description": "30-day hassle-free return policy"
+          },
+          {
+            "icon": "shield-check",
+            "title": "Quality Guarantee",
+            "description": "100% authentic products"
+          },
+          {
+            "icon": "phone",
+            "title": "24/7 Support",
+            "description": "Available via phone, email & chat"
+          },
+          {
+            "icon": "map-pin",
+            "title": "Track Order",
+            "description": "Real-time order tracking"
+          }
+        ]
+      },
+      {
+        "id": "static_banner_1_10",
+        "type": "static-banner-1",
+        "settings": {
+          "image": "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1200&q=80",
+          "imageMobile": "",
+          "title": "Ready to Start\nShopping?",
+          "description": "Join thousands of satisfied customers and experience the best online shopping. Browse our wide selection of quality products with fast delivery and secure payment.",
+          "buttonText": "Shop Now",
+          "buttonLink": "/products",
+          "secondaryButtonText": "Browse Collections",
+          "secondaryButtonLink": "/collections",
+          "textAlignment": "center",
+          "textColor": "#FFFFFF",
+          "overlayColor": "#000000",
+          "overlayOpacity": 45,
+          "height": "medium",
+          "titleFont": "sans",
+          "descriptionFont": "sans"
+        }
+      },
+      {
+        "id": "checkout_content",
+        "type": "checkout-content-3",
+        "enabled": true,
+        "settings": {
+          "showPromoCode": true,
+          "showOrderNotes": true,
+          "currency": "BDT"
+        }
+      }
+    ],
+    "currency": "BDT",
+    "payment_methods": [
+      {
+        "id": "bkash",
+        "name": "bKash",
+        "type": "mobile_banking",
+        "icon": "https://cdn.zatiq.com/payment-icons/bkash.svg",
+        "description": "Pay with bKash mobile banking",
+        "enabled": true,
+        "fee": 0,
+        "fee_type": "fixed"
+      },
+      {
+        "id": "nagad",
+        "name": "Nagad",
+        "type": "mobile_banking",
+        "icon": "https://cdn.zatiq.com/payment-icons/nagad.svg",
+        "description": "Pay with Nagad mobile banking",
+        "enabled": true,
+        "fee": 0,
+        "fee_type": "fixed"
+      },
+      {
+        "id": "rocket",
+        "name": "Rocket",
+        "type": "mobile_banking",
+        "icon": "https://cdn.zatiq.com/payment-icons/rocket.svg",
+        "description": "Pay with Rocket mobile banking",
+        "enabled": true,
+        "fee": 0,
+        "fee_type": "fixed"
+      },
+      {
+        "id": "card",
+        "name": "Credit/Debit Card",
+        "type": "card",
+        "icon": "https://cdn.zatiq.com/payment-icons/card.svg",
+        "description": "Pay with Visa, Mastercard, or Amex",
+        "enabled": true,
+        "fee": 0,
+        "fee_type": "fixed"
+      },
+      {
+        "id": "cod",
+        "name": "Cash on Delivery",
+        "type": "cod",
+        "icon": "https://cdn.zatiq.com/payment-icons/cod.svg",
+        "description": "Pay when you receive your order",
+        "enabled": true,
+        "fee": 50,
+        "fee_type": "fixed"
+      }
+    ],
+    "delivery_options": [
+      {
+        "id": "standard",
+        "name": "Standard Delivery",
+        "description": "Delivery within 5-7 business days",
+        "delivery_time": "5-7 days",
+        "fee": 60,
+        "enabled": true
+      },
+      {
+        "id": "express",
+        "name": "Express Delivery",
+        "description": "Delivery within 2-3 business days",
+        "delivery_time": "2-3 days",
+        "fee": 120,
+        "enabled": true
+      },
+      {
+        "id": "same_day",
+        "name": "Same Day Delivery",
+        "description": "Order before 12 PM for same day delivery",
+        "delivery_time": "Same day",
+        "fee": 200,
+        "enabled": true
+      }
+    ],
+    "seo": {
+      "title": "Features & Benefits | ZatiqEasy Bangladesh",
+      "description": "Experience hassle-free online shopping with flexible payment options (bKash, Nagad, Cards), fast delivery across Bangladesh, 30-day returns, and dedicated customer support.",
+      "canonical": "",
+      "og": {
+        "title": "Why Shop at ZatiqEasy - Premium Features & Benefits",
+        "description": "Multiple payment methods, fast delivery options, quality guarantee, and exceptional service. Discover what makes us different.",
+        "image": "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1200&h=630&fit=crop",
+        "type": "website"
+      },
+      "twitter": {
+        "card": "summary_large_image",
+        "title": "Features & Benefits | ZatiqEasy Bangladesh",
+        "description": "Multiple payment methods, fast delivery options, quality guarantee, and exceptional service.",
+        "image": "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1200&h=630&fit=crop"
+      }
+    }
+  }
+}
