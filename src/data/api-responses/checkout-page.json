@@ -5,7 +5,7 @@
     "sections": [
       {
         "id": "checkout_hero",
-        "type": "checkout-hero-3",
+        "type": "checkout-hero-1",
         "enabled": true,
         "settings": {
           "title": "Checkout",
@@ -14,7 +14,7 @@
       },
       {
         "id": "checkout_content",
-        "type": "checkout-content-3",
+        "type": "checkout-content-2",
         "enabled": true,
         "settings": {
           "layout": "two-column",
