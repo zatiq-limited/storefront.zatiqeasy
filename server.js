@@ -38,6 +38,7 @@ const db = {
   promoCode: loadJSON("promo-code.json"),
   contact: loadJSON("contact.json"),
   orderSuccess: loadJSON("order-success.json"),
+  privacyPolicy: loadJSON("privacy-policy.json"),
 };
 
 // Custom API routes
@@ -151,6 +152,11 @@ app.get("/api/storefront/v1/page/order-success", (req, res) => {
   res.json(db.orderSuccess);
 });
 
+// Privacy Policy page endpoint
+app.get("/api/storefront/v1/page/privacy-policy", (req, res) => {
+  res.json(db.privacyPolicy);
+});
+
 // Product list endpoint with query support
 app.get("/api/storefront/v1/products", (req, res) => {
   const { page = 1, per_page = 20, category, search, sort } = req.query;
@@ -210,6 +216,7 @@ app.get("/order", (_req, res) => res.json(db.order));
 app.get("/promo-code", (_req, res) => res.json(db.promoCode));
 app.get("/contact", (req, res) => res.json(db.contact));
 app.get("/order-success", (req, res) => res.json(db.orderSuccess));
+app.get("/privacy-policy", (req, res) => res.json(db.privacyPolicy));
 
 // Start server
 app.listen(PORT, () => {
@@ -237,6 +244,7 @@ app.listen(PORT, () => {
   console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/page/checkout           - Checkout page sections`);
   console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/page/contact            - Contact page sections`);
   console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/page/order-success      - Order success page sections`);
+  console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/page/privacy-policy     - Privacy policy page sections`);
   console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/page/product-details    - Product details page sections`);
   console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/page/single-product     - Single product page sections`);
   console.log(`   GET  http://localhost:${PORT}/api/promo-code?code=WELCOME10              - Validate promo code`);

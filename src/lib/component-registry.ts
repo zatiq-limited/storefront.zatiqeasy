@@ -140,6 +140,14 @@ import {
   ContactMap2,
 } from "@/components/zatiq/contact";
 
+// Privacy Policy Page Components
+import {
+  PrivacyHero1,
+  PrivacyHero2,
+  PrivacyContent1,
+  PrivacyContent2,
+} from "@/components/zatiq/privacy-policy";
+
 
 /**
  * Component Registry
@@ -296,6 +304,12 @@ export const ZATIQ_COMPONENTS: Record<string, ComponentType<any>> = {
   "contact-form-2": ContactForm2,
   "contact-map-1": ContactMap1,
   "contact-map-2": ContactMap2,
+
+  // Privacy Policy Page Components
+  "privacy-hero-1": PrivacyHero1,
+  "privacy-hero-2": PrivacyHero2,
+  "privacy-content-1": PrivacyContent1,
+  "privacy-content-2": PrivacyContent2,
 };
 
 /**
