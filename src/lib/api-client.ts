@@ -194,20 +194,30 @@ export async function getProductsPageData(params?: {
     console.log("[API] ✅ Products page data loaded from API");
     return response;
   } catch (error) {
-    console.error("[API] ❌ Products page API failed - falling back to local file");
+    console.error(
+      "[API] ❌ Products page API failed - falling back to local file"
+    );
     // Fallback to local products-page.json file
     try {
-      const localProductsPage = await import("../data/api-responses/products-page.json");
+      const localProductsPage = await import(
+        "../data/api-responses/products-page.json"
+      );
       console.log("[API] ✅ Products page data loaded from local file");
 
       // Handle different import structures
       const imported = localProductsPage.default || localProductsPage;
       const result = imported?.data || imported;
 
-      console.log("[API] Products page sections:", result?.sections?.length || 0);
+      console.log(
+        "[API] Products page sections:",
+        result?.sections?.length || 0
+      );
       return result;
     } catch (localError) {
-      console.error("[API] ❌ Local products-page.json also failed:", localError);
+      console.error(
+        "[API] ❌ Local products-page.json also failed:",
+        localError
+      );
       return null;
     }
   }
@@ -366,16 +376,18 @@ export async function getAboutPageData(): Promise<any> {
 /**
  * Get single product page data (complete product page with sections)
  *
- * Backend API: GET /api/storefront/v1/page/single-product
- * Response: { success: true, data: { template, sections, product, seo } }
+ * Backend API: GET /api/storefront/v1/page/single-product/:handle
+ * Response: { success: true, data: { template, sections, seo } }
  */
-export async function getSingleProductPageData(): Promise<any> {
+export async function getSingleProductPageData(handle?: string): Promise<any> {
   try {
-    const response = await apiCall<any>(`/api/storefront/v1/page/single-product`);
-    console.log("[API] ✅ About page data loaded from API");
+    const response = await apiCall<any>(
+      `/api/storefront/v1/page/single-product/${handle}`
+    );
+    console.log("[API] ✅ Single product page data loaded from API");
     return response;
   } catch (error) {
-    console.error("[API] ❌ About page API failed");
+    console.error("[API] ❌ Single product page API failed");
     return null;
   }
 }
@@ -405,7 +417,9 @@ export async function getContactPageData(): Promise<any> {
  */
 export async function getOrderSuccessPageData(): Promise<any> {
   try {
-    const response = await apiCall<any>(`/api/storefront/v1/page/order-success`);
+    const response = await apiCall<any>(
+      `/api/storefront/v1/page/order-success`
+    );
     console.log("[API] ✅ Order success page data loaded from API");
     return response;
   } catch (error) {

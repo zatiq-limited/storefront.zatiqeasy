@@ -186,8 +186,10 @@ app.get("/api/storefront/v1/page/product-details", (req, res) => {
   res.json(db.productDetailsPage);
 });
 
-// Single product page endpoint (complete product page with sections)
-app.get("/api/storefront/v1/page/single-product", (_req, res) => {
+// Single product page with handle in path (alternative endpoint)
+app.get("/api/storefront/v1/page/single-product/:handle", (req, res) => {
+  const { handle } = req.params;
+  // Return page sections - product data is combined on frontend
   res.json(db.singleProductPage);
 });
 

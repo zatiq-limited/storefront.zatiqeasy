@@ -90,6 +90,8 @@ export default function ComponentRenderer(props: ComponentRendererProps) {
       reviews: section.reviews,
       testimonials: section.testimonials,
       tabs: section.tabs,
+      // Pass through product if provided (for single product pages)
+      product: restProps.product,
     };
   } else {
     // Using direct props (theme.json style)
