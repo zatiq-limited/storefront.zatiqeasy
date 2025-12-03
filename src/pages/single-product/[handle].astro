@@ -55,7 +55,14 @@ if (!product) {
 }
 
 // Extract page data
-const { template = 'single-product', sections = [], seo = {} } = pageData;
+const {
+	template = 'single-product',
+	sections = [],
+	seo = {},
+	payment_methods = [],
+	delivery_options = [],
+	currency = 'BDT'
+} = pageData;
 
 // Build SEO data - use product data as fallback
 const pageTitle = seo?.title || product?.name || 'Product';
@@ -69,7 +76,14 @@ const pageImage = seo?.og?.image || product?.image_url || '';
 	image={pageImage}
 >
 	<main class="zatiq-single-product-page">
-		<SectionRenderer sections={sections} product={product} client:load />
+		<SectionRenderer
+			sections={sections}
+			product={product}
+			paymentMethods={payment_methods}
+			deliveryOptions={delivery_options}
+			currency={currency}
+			client:load
+		/>
 	</main>
 </Layout>
 

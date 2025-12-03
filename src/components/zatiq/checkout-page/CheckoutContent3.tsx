@@ -43,6 +43,18 @@ interface PromoCode {
   message: string;
 }
 
+interface Product {
+  id: number;
+  handle?: string;
+  name: string;
+  image_url: string;
+  images?: { url: string; alt?: string }[];
+  price: number;
+  compare_at_price?: number;
+  description?: string;
+  short_description?: string;
+}
+
 interface CheckoutContent3Props {
   settings?: {
     showPromoCode?: boolean;
@@ -50,6 +62,7 @@ interface CheckoutContent3Props {
     currency?: string;
   };
   orderItems?: OrderItem[];
+  product?: Product;
   deliveryOptions?: DeliveryOption[];
   paymentMethods?: PaymentMethod[];
   currency?: string;
@@ -58,11 +71,13 @@ interface CheckoutContent3Props {
 const CheckoutContent3: React.FC<CheckoutContent3Props> = ({
   settings = {},
   orderItems = [],
+  product,
   deliveryOptions = [],
   paymentMethods = [],
   currency = "BDT",
 }) => {
   const { showPromoCode = true, showOrderNotes = true } = settings;
+  const [quantity, setQuantity] = useState(1);
 
   const [selectedDelivery, setSelectedDelivery] = useState<string>(
     deliveryOptions.find((opt) => opt.enabled)?.id || ""
@@ -76,8 +91,20 @@ const CheckoutContent3: React.FC<CheckoutContent3Props> = ({
   const [promoError, setPromoError] = useState("");
   const [isApplyingPromo, setIsApplyingPromo] = useState(false);
 
+  // If product is provided (single product page), create order item from it
+  const effectiveOrderItems: OrderItem[] = product && orderItems.length === 0
+    ? [{
+        product_id: product.id,
+        product_name: product.name,
+        image_url: product.image_url || product.images?.[0]?.url || "",
+        quantity: quantity,
+        unit_price: product.price,
+        line_total: product.price * quantity,
+      }]
+    : orderItems;
+
   // Calculate totals
-  const subtotal = orderItems.reduce((sum, item) => sum + item.line_total, 0);
+  const subtotal = effectiveOrderItems.reduce((sum, item) => sum + item.line_total, 0);
   const deliveryFee =
     deliveryOptions.find((opt) => opt.id === selectedDelivery)?.fee || 0;
   const discount = appliedPromo?.discount_amount || 0;
@@ -441,7 +468,7 @@ const CheckoutContent3: React.FC<CheckoutContent3Props> = ({
             <div className="bg-white border border-gray-200 rounded-lg p-6 lg:sticky lg:top-6">
               {/* Order Items */}
               <div className="space-y-4 mb-6">
-                {orderItems.map((item) => (
+                {effectiveOrderItems.map((item) => (
                   <div
                     key={item.product_id}
                     className="flex gap-4 p-3 border border-gray-200 rounded-lg"
@@ -460,9 +487,28 @@ const CheckoutContent3: React.FC<CheckoutContent3Props> = ({
                       {item.variant && (
                         <p className="text-xs text-gray-500">{item.variant}</p>
                       )}
-                      <p className="text-xs text-gray-500 mt-1">
-                        Quantity: X{item.quantity}
-                      </p>
+                      {/* Show quantity controls for single product */}
+                      {product ? (
+                        <div className="flex items-center gap-2 mt-1">
+                          <button
+                            onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                            className="w-6 h-6 flex items-center justify-center rounded border border-gray-300 text-gray-600 hover:bg-gray-100"
+                          >
+                            -
+                          </button>
+                          <span className="text-sm font-medium w-6 text-center">{quantity}</span>
+                          <button
+                            onClick={() => setQuantity(quantity + 1)}
+                            className="w-6 h-6 flex items-center justify-center rounded border border-gray-300 text-gray-600 hover:bg-gray-100"
+                          >
+                            +
+                          </button>
+                        </div>
+                      ) : (
+                        <p className="text-xs text-gray-500 mt-1">
+                          Quantity: X{item.quantity}
+                        </p>
+                      )}
                     </div>
                     <div className="text-right shrink-0">
                       <p className="text-sm font-semibold text-gray-900">
@@ -527,7 +573,7 @@ const CheckoutContent3: React.FC<CheckoutContent3Props> = ({
               <div className="space-y-3 py-4 border-t border-gray-200">
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">
-                    Subtotal: {orderItems.length} items
+                    Subtotal: {effectiveOrderItems.length} {effectiveOrderItems.length === 1 ? 'item' : 'items'}
                   </span>
                   <span className="text-gray-900">
                     ৳{subtotal.toLocaleString()}

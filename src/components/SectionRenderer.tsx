@@ -14,6 +14,9 @@ interface SectionRendererProps {
   sections: Section[];
   className?: string;
   product?: any;
+  paymentMethods?: any[];
+  deliveryOptions?: any[];
+  currency?: string;
 }
 
 /**
@@ -24,6 +27,9 @@ export default function SectionRenderer({
   sections,
   className = "",
   product,
+  paymentMethods,
+  deliveryOptions,
+  currency,
 }: SectionRendererProps) {
   return (
     <div className={`zatiq-sections ${className}`}>
@@ -32,6 +38,9 @@ export default function SectionRenderer({
           key={section.id}
           section={section}
           product={product}
+          paymentMethods={paymentMethods}
+          deliveryOptions={deliveryOptions}
+          currency={currency}
           client="load"
         />
       ))}
