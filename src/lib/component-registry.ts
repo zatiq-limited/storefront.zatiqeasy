@@ -143,7 +143,9 @@ import {
 // Privacy Policy Page Components
 import {
   PrivacyHero1,
+  PrivacyHero2,
   PrivacyContent1,
+  PrivacyContent2,
 } from "@/components/zatiq/privacy-policy";
 
 
@@ -305,7 +307,9 @@ export const ZATIQ_COMPONENTS: Record<string, ComponentType<any>> = {
 
   // Privacy Policy Page Components
   "privacy-hero-1": PrivacyHero1,
+  "privacy-hero-2": PrivacyHero2,
   "privacy-content-1": PrivacyContent1,
+  "privacy-content-2": PrivacyContent2,
 };
 
 /**
