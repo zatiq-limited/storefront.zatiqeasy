@@ -359,12 +359,12 @@ export async function getCollectionsPageData(): Promise<any> {
 /**
  * Get about page data
  *
- * Backend API: GET /api/storefront/v1/page/about
+ * Backend API: GET /api/storefront/v1/page/about-us
  * Response: { success: true, data: { template, sections, seo } }
  */
 export async function getAboutPageData(): Promise<any> {
   try {
-    const response = await apiCall<any>(`/api/storefront/v1/page/about`);
+    const response = await apiCall<any>(`/api/storefront/v1/page/about-us`);
     console.log("[API] ✅ About page data loaded from API");
     return response;
   } catch (error) {
@@ -413,12 +413,12 @@ export async function getSingleProductPageData(handle?: string): Promise<any> {
 /**
  * Get contact page data
  *
- * Backend API: GET /api/storefront/v1/page/contact
+ * Backend API: GET /api/storefront/v1/page/contact-us
  * Response: { success: true, data: { template, sections, seo } }
  */
 export async function getContactPageData(): Promise<any> {
   try {
-    const response = await apiCall<any>(`/api/storefront/v1/page/contact`);
+    const response = await apiCall<any>(`/api/storefront/v1/page/contact-us`);
     console.log("[API] ✅ Contact page data loaded from API");
     return response;
   } catch (error) {

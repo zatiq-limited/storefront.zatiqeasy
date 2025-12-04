@@ -41,11 +41,11 @@ const db = {
   productDetailsPage: loadJSON("product-details-page.json"),
   collectionsPage: loadJSON("collections-page.json"),
   collectionDetailsPage: loadJSON("collection-details-page.json"),
-  about: loadJSON("about.json"),
+  aboutUs: loadJSON("about-us.json"),
   checkoutPage: loadJSON("checkout-page.json"),
   order: loadJSON("order.json"),
   promoCode: loadJSON("promo-code.json"),
-  contact: loadJSON("contact.json"),
+  contactUs: loadJSON("contact-us.json"),
   orderSuccess: loadJSON("order-success.json"),
   privacyPolicy: loadJSON("privacy-policy.json"),
 };
@@ -110,8 +110,8 @@ app.get("/api/storefront/v1/page/collections", (req, res) => {
 });
 
 // About page endpoint
-app.get("/api/storefront/v1/page/about", (req, res) => {
-  res.json(db.about);
+app.get("/api/storefront/v1/page/about-us", (req, res) => {
+  res.json(db.aboutUs);
 });
 
 // Checkout page endpoint (sections + order + payment methods combined)
@@ -152,8 +152,8 @@ app.get("/api/promo-code", (req, res) => {
   }
 });
 // Contact page endpoint
-app.get("/api/storefront/v1/page/contact", (req, res) => {
-  res.json(db.contact);
+app.get("/api/storefront/v1/page/contact-us", (req, res) => {
+  res.json(db.contactUs);
 });
 
 // Order Success page endpoint
@@ -228,11 +228,11 @@ app.get("/products-page", (req, res) => res.json(db.productsPage));
 app.get("/collections-page", (req, res) => res.json(db.collectionsPage));
 
 // Direct access routes (for debugging)
-app.get("/about", (_req, res) => res.json(db.about));
+app.get("/about", (_req, res) => res.json(db.aboutUs));
 app.get("/checkout", (_req, res) => res.json(db.checkoutPage));
 app.get("/order", (_req, res) => res.json(db.order));
 app.get("/promo-code", (_req, res) => res.json(db.promoCode));
-app.get("/contact", (req, res) => res.json(db.contact));
+app.get("/contact", (req, res) => res.json(db.contactUs));
 app.get("/order-success", (req, res) => res.json(db.orderSuccess));
 app.get("/privacy-policy", (req, res) => res.json(db.privacyPolicy));
 
@@ -258,9 +258,9 @@ app.listen(PORT, () => {
   console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/cart`);
   console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/page/products           - Products page sections`);
   console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/page/collections        - Collections page sections`);
-  console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/page/about              - About page sections`);
+  console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/page/about-us              - About page sections`);
   console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/page/checkout           - Checkout page sections`);
-  console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/page/contact            - Contact page sections`);
+  console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/page/contact-us            - Contact page sections`);
   console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/page/order-success      - Order success page sections`);
   console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/page/privacy-policy     - Privacy policy page sections`);
   console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/page/product-details    - Product details page sections`);

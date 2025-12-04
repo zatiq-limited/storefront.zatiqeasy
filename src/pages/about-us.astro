@@ -6,7 +6,7 @@
  *
  * Fetches data from API and renders sections dynamically
  *
- * Backend API Endpoint: GET /api/storefront/v1/page/about
+ * Backend API Endpoint: GET /api/storefront/v1/page/about-us
  */
 
 import Layout from '../layouts/main.astro';
@@ -18,7 +18,7 @@ const aboutPageData = await getAboutPageData();
 
 // Handle null case and extract data
 const pageData = aboutPageData?.data || aboutPageData || {};
-const { template = 'about', sections = [], seo = {} } = pageData;
+const { template = 'about-us', sections = [], seo = {} } = pageData;
 ---
 
 <Layout
