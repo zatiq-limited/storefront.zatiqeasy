@@ -1,4 +1,14 @@
 import React from "react";
+import { ChevronRight } from "lucide-react";
+
+interface BreadcrumbItem {
+  id: string;
+  type: string;
+  settings: {
+    label?: string;
+    link?: string;
+  };
+}
 
 interface ContactHero1Settings {
   backgroundColor?: string;
@@ -13,9 +23,13 @@ interface ContactHero1Settings {
 
 interface ContactHero1Props {
   settings?: ContactHero1Settings;
+  breadcrumbs?: BreadcrumbItem[];
 }
 
-const ContactHero1: React.FC<ContactHero1Props> = ({ settings = {} }) => {
+const ContactHero1: React.FC<ContactHero1Props> = ({
+  settings = {},
+  breadcrumbs = [],
+}) => {
   const {
     headline,
     subheadline,
@@ -44,6 +58,39 @@ const ContactHero1: React.FC<ContactHero1Props> = ({ settings = {} }) => {
             background: `linear-gradient(135deg, rgba(0, 0, 0, ${overlayOpacity}) 0%, rgba(0, 0, 0, ${overlayOpacity * 0.7}) 100%)`,
           }}
         />
+
+        {/* Breadcrumb - Upper Left */}
+        {breadcrumbs.length > 0 && (
+          <div className="absolute top-4 md:top-6 left-0 right-0 z-10">
+            <nav className="max-w-[1440px] mx-auto px-4 2xl:px-0">
+              <ol className="flex items-center gap-1 text-sm text-white/80">
+                {breadcrumbs.map((item, index) => (
+                  <React.Fragment key={item.id}>
+                    {index > 0 && (
+                      <li className="text-white/60">
+                        <ChevronRight className="w-3 h-3" />
+                      </li>
+                    )}
+                    <li>
+                      {item.settings.link ? (
+                        <a
+                          href={item.settings.link}
+                          className="uppercase tracking-wider text-xs font-medium hover:text-white transition-colors"
+                        >
+                          {item.settings.label}
+                        </a>
+                      ) : (
+                        <span className="uppercase tracking-wider text-xs font-medium text-white">
+                          {item.settings.label}
+                        </span>
+                      )}
+                    </li>
+                  </React.Fragment>
+                ))}
+              </ol>
+            </nav>
+          </div>
+        )}
 
         {/* Content */}
         <div className="relative z-10 h-full flex items-center justify-center">
