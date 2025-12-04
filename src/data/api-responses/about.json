@@ -136,7 +136,8 @@
           "backgroundColor": "#F9FAFB",
           "textColor": "#111827",
           "title": "Meet Our Team",
-          "subtitle": "The talented people behind our success"
+          "subtitle": "The talented people behind our success",
+          "borderRadius": "12px"
         },
         "blocks": [
           {
