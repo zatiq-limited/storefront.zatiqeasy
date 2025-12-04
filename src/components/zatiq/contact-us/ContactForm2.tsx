@@ -50,12 +50,60 @@ const ContactForm2: React.FC<ContactForm2Props> = ({ settings = {}, blocks = [] 
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [termsAccepted, setTermsAccepted] = useState(false);
 
-  // If no blocks provided, don't render
-  if (blocks.length === 0) return null;
+  // Default form fields when none provided
+  const defaultFields: FormField[] = [
+    {
+      id: "field_name",
+      type: "form_field",
+      settings: {
+        name: "name",
+        label: "Name",
+        type: "text",
+        placeholder: "Your Name",
+        required: true,
+      },
+    },
+    {
+      id: "field_email",
+      type: "form_field",
+      settings: {
+        name: "email",
+        label: "Email",
+        type: "email",
+        placeholder: "Your Email",
+        required: true,
+      },
+    },
+    {
+      id: "field_phone",
+      type: "form_field",
+      settings: {
+        name: "phone",
+        label: "Phone",
+        type: "tel",
+        placeholder: "Your Phone",
+        required: false,
+      },
+    },
+    {
+      id: "field_message",
+      type: "form_field",
+      settings: {
+        name: "message",
+        label: "Message",
+        type: "textarea",
+        placeholder: "Your Message",
+        required: true,
+        rows: 6,
+      },
+    },
+  ];
+
+  const displayFields = blocks.length > 0 ? blocks : defaultFields;
 
   // Separate textarea fields from other fields
-  const textareaFields = blocks.filter((field) => field.settings.type === "textarea");
-  const otherFields = blocks.filter((field) => field.settings.type !== "textarea");
+  const textareaFields = displayFields.filter((field) => field.settings.type === "textarea");
+  const otherFields = displayFields.filter((field) => field.settings.type !== "textarea");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

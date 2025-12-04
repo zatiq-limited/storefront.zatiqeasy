@@ -19,6 +19,7 @@ interface ContactHero1Settings {
   image?: string;
   overlayOpacity?: number;
   accentColor?: string;
+  showBreadcrumb?: boolean;
 }
 
 interface ContactHero1Props {
@@ -35,7 +36,16 @@ const ContactHero1: React.FC<ContactHero1Props> = ({
     subheadline,
     image,
     overlayOpacity = 0.5,
+    showBreadcrumb = true,
   } = settings;
+
+  // Default breadcrumbs when none provided
+  const defaultBreadcrumbs: BreadcrumbItem[] = [
+    { id: 'breadcrumb_1', type: 'breadcrumb_item', settings: { label: 'Home', link: '/' } },
+    { id: 'breadcrumb_2', type: 'breadcrumb_item', settings: { label: 'Contact' } },
+  ];
+
+  const displayBreadcrumbs = breadcrumbs.length > 0 ? breadcrumbs : defaultBreadcrumbs;
 
   // If no headline or image provided, don't render
   if (!headline && !image) return null;
@@ -60,11 +70,11 @@ const ContactHero1: React.FC<ContactHero1Props> = ({
         />
 
         {/* Breadcrumb - Upper Left */}
-        {breadcrumbs.length > 0 && (
+        {showBreadcrumb && displayBreadcrumbs.length > 0 && (
           <div className="absolute top-4 md:top-6 left-0 right-0 z-10">
             <nav className="max-w-[1440px] mx-auto px-4 2xl:px-0">
               <ol className="flex items-center gap-1 text-sm text-white/80">
-                {breadcrumbs.map((item, index) => (
+                {displayBreadcrumbs.map((item, index) => (
                   <React.Fragment key={item.id}>
                     {index > 0 && (
                       <li className="text-white/60">

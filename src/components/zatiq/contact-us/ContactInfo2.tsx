@@ -1,18 +1,5 @@
 import React from "react";
-import {
-  MapPin,
-  Phone,
-  Mail,
-  Clock,
-  MessageCircle,
-  Globe,
-  Building,
-  Headphones,
-  Facebook,
-  Twitter,
-  Linkedin,
-  Send,
-} from "lucide-react";
+import * as LucideIcons from "lucide-react";
 
 interface ContactItem {
   id: string;
@@ -53,6 +40,17 @@ interface ContactInfo2Settings {
   image?: string;
   showSocials?: boolean;
   showFeatures?: boolean;
+  // Individual social link settings
+  showFacebook?: boolean;
+  facebookUrl?: string;
+  showTwitter?: boolean;
+  twitterUrl?: string;
+  showLinkedin?: boolean;
+  linkedinUrl?: string;
+  showInstagram?: boolean;
+  instagramUrl?: string;
+  showTelegram?: boolean;
+  telegramUrl?: string;
 }
 
 interface ContactInfo2Props {
@@ -62,56 +60,73 @@ interface ContactInfo2Props {
   socials?: SocialLink[];
 }
 
-// Get lucide icon based on icon name
-const getIcon = (iconName?: string) => {
-  const iconClass = "w-5 h-5";
-  switch (iconName) {
-    case "location":
-    case "address":
-    case "map":
-      return <MapPin className={iconClass} />;
-    case "phone":
-    case "call":
-      return <Phone className={iconClass} />;
-    case "email":
-    case "mail":
-      return <Mail className={iconClass} />;
-    case "clock":
-    case "hours":
-    case "time":
-      return <Clock className={iconClass} />;
-    case "chat":
-    case "message":
-      return <MessageCircle className={iconClass} />;
-    case "website":
-    case "web":
-      return <Globe className={iconClass} />;
-    case "office":
-    case "building":
-      return <Building className={iconClass} />;
-    case "support":
-    case "help":
-      return <Headphones className={iconClass} />;
-    default:
-      return <MessageCircle className={iconClass} />;
+// Icon mapping helper - converts kebab-case to PascalCase and returns the icon component
+const getIcon = (iconName?: string, size = 20) => {
+  if (!iconName) return <LucideIcons.MapPin size={size} strokeWidth={1.5} />;
+
+  // Handle legacy icon names for backwards compatibility
+  const iconNameMap: Record<string, string> = {
+    location: "map-pin",
+    address: "map-pin",
+    map: "map-pin",
+    phone: "phone",
+    call: "phone",
+    email: "mail",
+    clock: "clock",
+    hours: "clock",
+    time: "clock",
+    chat: "message-circle",
+    message: "message-circle",
+    website: "globe",
+    web: "globe",
+    office: "building",
+    building: "building",
+    support: "headphones",
+    help: "headphones",
+  };
+
+  // Use mapped name if available, otherwise use original
+  const mappedName = iconNameMap[iconName] || iconName;
+
+  // Convert kebab-case to PascalCase (e.g., 'credit-card' -> 'CreditCard')
+  const pascalCase = mappedName
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join("");
+
+  // Get the icon component from lucide-react
+  const IconComponent = (
+    LucideIcons as Record<
+      string,
+      React.ComponentType<{ size?: number; strokeWidth?: number }>
+    >
+  )[pascalCase];
+
+  if (IconComponent) {
+    return <IconComponent size={size} strokeWidth={1.5} />;
   }
+
+  // Fallback to MapPin icon if not found
+  return <LucideIcons.MapPin size={size} strokeWidth={1.5} />;
 };
 
 // Get social icon
 const getSocialIcon = (platform?: string) => {
-  const iconClass = "w-4 h-4";
+  const size = 16;
   switch (platform?.toLowerCase()) {
     case "facebook":
-      return <Facebook className={iconClass} />;
+      return <LucideIcons.Facebook size={size} strokeWidth={1.5} />;
     case "twitter":
     case "x":
-      return <Twitter className={iconClass} />;
+      return <LucideIcons.Twitter size={size} strokeWidth={1.5} />;
     case "linkedin":
-      return <Linkedin className={iconClass} />;
+      return <LucideIcons.Linkedin size={size} strokeWidth={1.5} />;
+    case "instagram":
+      return <LucideIcons.Instagram size={size} strokeWidth={1.5} />;
     case "telegram":
-      return <Send className={iconClass} />;
+      return <LucideIcons.Send size={size} strokeWidth={1.5} />;
     default:
-      return <Globe className={iconClass} />;
+      return <LucideIcons.Globe size={size} strokeWidth={1.5} />;
   }
 };
 
@@ -130,7 +145,106 @@ const ContactInfo2: React.FC<ContactInfo2Props> = ({
     image = "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop",
     showSocials = true,
     showFeatures = true,
+    // Individual social link settings
+    showFacebook = true,
+    facebookUrl = "#",
+    showTwitter = true,
+    twitterUrl = "#",
+    showLinkedin = true,
+    linkedinUrl = "#",
+    showInstagram = false,
+    instagramUrl = "#",
+    showTelegram = false,
+    telegramUrl = "#",
   } = settings;
+
+  // Build socials array from individual settings
+  const builtSocials: SocialLink[] = [];
+  if (showFacebook && facebookUrl) {
+    builtSocials.push({
+      id: "social_facebook",
+      type: "social_link",
+      settings: { platform: "facebook", url: facebookUrl },
+    });
+  }
+  if (showTwitter && twitterUrl) {
+    builtSocials.push({
+      id: "social_twitter",
+      type: "social_link",
+      settings: { platform: "twitter", url: twitterUrl },
+    });
+  }
+  if (showLinkedin && linkedinUrl) {
+    builtSocials.push({
+      id: "social_linkedin",
+      type: "social_link",
+      settings: { platform: "linkedin", url: linkedinUrl },
+    });
+  }
+  if (showInstagram && instagramUrl) {
+    builtSocials.push({
+      id: "social_instagram",
+      type: "social_link",
+      settings: { platform: "instagram", url: instagramUrl },
+    });
+  }
+  if (showTelegram && telegramUrl) {
+    builtSocials.push({
+      id: "social_telegram",
+      type: "social_link",
+      settings: { platform: "telegram", url: telegramUrl },
+    });
+  }
+
+  // Use built socials if available, otherwise fall back to defaults
+  const defaultSocials: SocialLink[] = builtSocials.length > 0 ? builtSocials : [
+    {
+      id: "social_1",
+      type: "social_link",
+      settings: { platform: "facebook", url: "#" },
+    },
+    {
+      id: "social_2",
+      type: "social_link",
+      settings: { platform: "twitter", url: "#" },
+    },
+    {
+      id: "social_3",
+      type: "social_link",
+      settings: { platform: "linkedin", url: "#" },
+    },
+  ];
+
+  // Default features when none provided
+  const defaultFeatures: FeatureItem[] = [
+    {
+      id: "feature_1",
+      type: "feature_item",
+      settings: {
+        title: "Free Shipping",
+        description: "Free shipping on all orders over $100",
+      },
+    },
+    {
+      id: "feature_2",
+      type: "feature_item",
+      settings: {
+        title: "24/7 Support",
+        description: "Our support team is available around the clock",
+      },
+    },
+    {
+      id: "feature_3",
+      type: "feature_item",
+      settings: {
+        title: "Easy Returns",
+        description: "30-day hassle-free return policy",
+      },
+    },
+  ];
+
+  const displaySocials = socials.length > 0 ? socials : defaultSocials;
+  const displayFeatures = features.length > 0 ? features : defaultFeatures;
 
   // If no blocks provided, don't render
   if (blocks.length === 0) return null;
@@ -195,7 +309,10 @@ const ContactInfo2: React.FC<ContactInfo2Props> = ({
                       >
                         <span
                           dangerouslySetInnerHTML={{
-                            __html: (item.settings.content || "").replace(/\n/g, "<br/>"),
+                            __html: (item.settings.content || "").replace(
+                              /\n/g,
+                              "<br/>"
+                            ),
                           }}
                         />
                       </a>
@@ -204,7 +321,10 @@ const ContactInfo2: React.FC<ContactInfo2Props> = ({
                         className="text-base"
                         style={{ color: textColor }}
                         dangerouslySetInnerHTML={{
-                          __html: (item.settings.content || "").replace(/\n/g, "<br/>"),
+                          __html: (item.settings.content || "").replace(
+                            /\n/g,
+                            "<br/>"
+                          ),
                         }}
                       />
                     )}
@@ -214,9 +334,9 @@ const ContactInfo2: React.FC<ContactInfo2Props> = ({
             </div>
 
             {/* Social Links */}
-            {showSocials && socials.length > 0 && (
+            {showSocials && displaySocials.length > 0 && (
               <div className="flex items-center gap-4 mt-8 pt-6 border-t border-gray-100">
-                {socials.map((social) => (
+                {displaySocials.map((social) => (
                   <a
                     key={social.id}
                     href={social.settings.url || "#"}
@@ -233,9 +353,9 @@ const ContactInfo2: React.FC<ContactInfo2Props> = ({
         </div>
 
         {/* Features Section */}
-        {showFeatures && features.length > 0 && (
+        {showFeatures && displayFeatures.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 pt-16 border-t border-gray-100">
-            {features.map((feature) => (
+            {displayFeatures.map((feature) => (
               <div key={feature.id} className="text-center">
                 <h3
                   className="text-sm font-semibold uppercase tracking-wider mb-3"

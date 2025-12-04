@@ -1,14 +1,5 @@
 import React from "react";
-import {
-  MapPin,
-  Mail,
-  Clock,
-  MessageCircle,
-  Globe,
-  Building,
-  Headphones,
-  PhoneCall,
-} from "lucide-react";
+import * as LucideIcons from "lucide-react";
 
 interface ContactItem {
   id: string;
@@ -35,39 +26,49 @@ interface ContactInfo1Props {
   blocks?: ContactItem[];
 }
 
-// Get lucide icon based on icon name
-const getIcon = (iconName?: string) => {
-  const iconClass = "w-7 h-7";
-  switch (iconName) {
-    case "location":
-    case "address":
-    case "map":
-      return <MapPin className={iconClass} />;
-    case "phone":
-    case "call":
-      return <PhoneCall className={iconClass} />;
-    case "email":
-    case "mail":
-      return <Mail className={iconClass} />;
-    case "clock":
-    case "hours":
-    case "time":
-      return <Clock className={iconClass} />;
-    case "chat":
-    case "message":
-      return <MessageCircle className={iconClass} />;
-    case "website":
-    case "web":
-      return <Globe className={iconClass} />;
-    case "office":
-    case "building":
-      return <Building className={iconClass} />;
-    case "support":
-    case "help":
-      return <Headphones className={iconClass} />;
-    default:
-      return <MessageCircle className={iconClass} />;
+// Icon mapping helper - converts kebab-case to PascalCase and returns the icon component
+const getIcon = (iconName?: string, size = 28) => {
+  if (!iconName) return <LucideIcons.MapPin size={size} strokeWidth={1.5} />;
+
+  // Handle legacy icon names for backwards compatibility
+  const iconNameMap: Record<string, string> = {
+    location: "map-pin",
+    address: "map-pin",
+    map: "map-pin",
+    phone: "phone-call",
+    call: "phone-call",
+    email: "mail",
+    clock: "clock",
+    hours: "clock",
+    time: "clock",
+    chat: "message-circle",
+    message: "message-circle",
+    website: "globe",
+    web: "globe",
+    office: "building",
+    building: "building",
+    support: "headphones",
+    help: "headphones",
+  };
+
+  // Use mapped name if available, otherwise use original
+  const mappedName = iconNameMap[iconName] || iconName;
+
+  // Convert kebab-case to PascalCase (e.g., 'credit-card' -> 'CreditCard')
+  const pascalCase = mappedName
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join("");
+
+  // Get the icon component from lucide-react
+  const IconComponent = (LucideIcons as Record<string, React.ComponentType<{ size?: number; strokeWidth?: number }>>)[pascalCase];
+
+  if (IconComponent) {
+    return <IconComponent size={size} strokeWidth={1.5} />;
   }
+
+  // Fallback to MapPin icon if not found
+  return <LucideIcons.MapPin size={size} strokeWidth={1.5} />;
 };
 
 const ContactInfo1: React.FC<ContactInfo1Props> = ({ settings = {}, blocks = [] }) => {
