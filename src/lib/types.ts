@@ -35,6 +35,7 @@ export interface Section {
   reviews?: any[];
   testimonials?: any[];
   tabs?: any[];
+  breadcrumbs?: Block[];
 }
 
 export interface Block {

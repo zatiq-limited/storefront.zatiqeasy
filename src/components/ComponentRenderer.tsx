@@ -90,6 +90,7 @@ export default function ComponentRenderer(props: ComponentRendererProps) {
       reviews: section.reviews,
       testimonials: section.testimonials,
       tabs: section.tabs,
+      breadcrumbs: section.breadcrumbs,
       // Pass through product if provided (for single product pages)
       product: restProps.product,
       // Pass through checkout data (for checkout components)

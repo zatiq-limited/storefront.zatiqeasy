@@ -58,11 +58,10 @@ const ContactHero2: React.FC<ContactHero2Props> = ({
           }}
         />
 
-        {/* Content */}
-        <div className="relative z-10 h-full flex flex-col items-center justify-center px-4">
-          {/* Breadcrumb */}
-          {breadcrumbs.length > 0 && (
-            <nav className="mb-3">
+        {/* Breadcrumb - Upper Left */}
+        {breadcrumbs.length > 0 && (
+          <div className="absolute top-4 md:top-6 left-0 right-0 z-10">
+            <nav className="max-w-[1440px] mx-auto px-4 2xl:px-0">
               <ol className="flex items-center gap-1 text-sm text-white/80">
                 {breadcrumbs.map((item, index) => (
                   <React.Fragment key={item.id}>
@@ -89,8 +88,11 @@ const ContactHero2: React.FC<ContactHero2Props> = ({
                 ))}
               </ol>
             </nav>
-          )}
+          </div>
+        )}
 
+        {/* Content */}
+        <div className="relative z-10 h-full flex items-center justify-center px-4">
           {/* Headline */}
           {headline && (
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-white text-center">
