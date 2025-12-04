@@ -1,4 +1,14 @@
 import React from "react";
+import {
+  MapPin,
+  Mail,
+  Clock,
+  MessageCircle,
+  Globe,
+  Building,
+  Headphones,
+  PhoneCall,
+} from "lucide-react";
 
 interface ContactItem {
   id: string;
@@ -16,7 +26,8 @@ interface ContactInfo1Settings {
   textColor?: string;
   accentColor?: string;
   title?: string;
-  subtitle?: string;
+  titleStyle?: "normal" | "script";
+  iconBackgroundColor?: string;
 }
 
 interface ContactInfo1Props {
@@ -24,160 +35,129 @@ interface ContactInfo1Props {
   blocks?: ContactItem[];
 }
 
+// Get lucide icon based on icon name
+const getIcon = (iconName?: string) => {
+  const iconClass = "w-7 h-7";
+  switch (iconName) {
+    case "location":
+    case "address":
+    case "map":
+      return <MapPin className={iconClass} />;
+    case "phone":
+    case "call":
+      return <PhoneCall className={iconClass} />;
+    case "email":
+    case "mail":
+      return <Mail className={iconClass} />;
+    case "clock":
+    case "hours":
+    case "time":
+      return <Clock className={iconClass} />;
+    case "chat":
+    case "message":
+      return <MessageCircle className={iconClass} />;
+    case "website":
+    case "web":
+      return <Globe className={iconClass} />;
+    case "office":
+    case "building":
+      return <Building className={iconClass} />;
+    case "support":
+    case "help":
+      return <Headphones className={iconClass} />;
+    default:
+      return <MessageCircle className={iconClass} />;
+  }
+};
+
 const ContactInfo1: React.FC<ContactInfo1Props> = ({ settings = {}, blocks = [] }) => {
   const {
-    backgroundColor = "#FFFFFF",
-    textColor = "#111827",
-    accentColor = "#6366F1",
-    title = "Contact Information",
-    subtitle = "Reach out to us through any of these channels. We're always happy to help!",
+    backgroundColor,
+    textColor,
+    accentColor,
+    title,
+    titleStyle = "script",
+    iconBackgroundColor,
   } = settings;
 
-  const defaultBlocks: ContactItem[] = [
-    {
-      id: "1",
-      type: "contact_item",
-      settings: {
-        icon: "location",
-        title: "Visit Us",
-        content: "123 Business Avenue, Suite 500\nNew York, NY 10001",
-      },
-    },
-    {
-      id: "2",
-      type: "contact_item",
-      settings: {
-        icon: "phone",
-        title: "Call Us",
-        content: "+1 (555) 123-4567",
-        link: "tel:+15551234567",
-      },
-    },
-    {
-      id: "3",
-      type: "contact_item",
-      settings: {
-        icon: "email",
-        title: "Email Us",
-        content: "hello@company.com",
-        link: "mailto:hello@company.com",
-      },
-    },
-    {
-      id: "4",
-      type: "contact_item",
-      settings: {
-        icon: "clock",
-        title: "Working Hours",
-        content: "Mon - Fri: 9AM - 6PM\nSat - Sun: Closed",
-      },
-    },
-  ];
-
-  const items = blocks.length > 0 ? blocks : defaultBlocks;
-
-  const getIcon = (iconName?: string) => {
-    switch (iconName) {
-      case "location":
-        return (
-          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-          </svg>
-        );
-      case "phone":
-        return (
-          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-          </svg>
-        );
-      case "email":
-        return (
-          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-          </svg>
-        );
-      case "clock":
-        return (
-          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-        );
-      default:
-        return <span className="text-2xl">{iconName}</span>;
-    }
-  };
+  // If no blocks provided, don't render
+  if (blocks.length === 0) return null;
 
   return (
-    <section className="w-full pb-8 md:pb-14" style={{ backgroundColor }}>
-      <div className="max-w-[1200px] mx-auto px-4">
-        {/* Header */}
-        <div className="text-center mb-8">
+    <section
+      className="py-12 md:py-16 lg:py-20"
+      style={{ backgroundColor: backgroundColor || "#FFFFFF" }}
+    >
+      <div className="max-w-[1440px] mx-auto px-4 2xl:px-0">
+        {/* Title */}
+        {title && (
           <h2
-            className="text-2xl md:text-3xl font-bold mb-2"
-            style={{ color: textColor }}
+            className={`text-center mb-10 md:mb-14 ${
+              titleStyle === "script"
+                ? "font-serif italic text-3xl md:text-4xl"
+                : "font-bold text-2xl md:text-3xl lg:text-4xl"
+            }`}
+            style={{ color: textColor || "#111827" }}
           >
             {title}
           </h2>
-          <p className="text-gray-600 text-sm md:text-base max-w-xl mx-auto">{subtitle}</p>
-        </div>
+        )}
 
-        {/* Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {items.map((item, index) => (
-            <div
-              key={item.id}
-              className="group relative bg-white rounded-xl p-5 shadow-sm hover:shadow-lg transition-all duration-500 border border-gray-100 overflow-hidden"
-              style={{
-                animationDelay: `${index * 100}ms`,
-              }}
-            >
-              {/* Hover Background */}
+        {/* Contact Cards - Centered Grid */}
+        <div
+          className={`grid gap-8 md:gap-12 ${
+            blocks.length === 1
+              ? "grid-cols-1 max-w-md mx-auto"
+              : blocks.length === 2
+              ? "grid-cols-1 sm:grid-cols-2 max-w-2xl mx-auto"
+              : blocks.length === 3
+              ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto"
+              : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
+          }`}
+        >
+          {blocks.map((item) => (
+            <div key={item.id} className="flex flex-col items-center text-center">
+              {/* Icon Circle */}
               <div
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                className="flex items-center justify-center w-20 h-20 md:w-24 md:h-24 rounded-full mb-5"
                 style={{
-                  background: `linear-gradient(135deg, ${accentColor}08 0%, ${accentColor}15 100%)`,
-                }}
-              />
-
-              {/* Icon */}
-              <div
-                className="relative w-11 h-11 rounded-lg flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110"
-                style={{
-                  backgroundColor: `${accentColor}15`,
-                  color: accentColor,
+                  backgroundColor: iconBackgroundColor || "#F5F0EB",
+                  color: accentColor || "#8B4513",
                 }}
               >
                 {getIcon(item.settings.icon)}
               </div>
 
-              {/* Content */}
-              <div className="relative">
+              {/* Title */}
+              {item.settings.title && (
                 <h3
-                  className="text-base font-semibold mb-1"
-                  style={{ color: textColor }}
+                  className="text-sm font-semibold uppercase tracking-wider mb-2"
+                  style={{ color: textColor || "#111827" }}
                 >
                   {item.settings.title}
                 </h3>
-                {item.settings.link ? (
-                  <a
-                    href={item.settings.link}
-                    className="text-gray-600 whitespace-pre-line hover:opacity-70 transition-opacity"
-                  >
-                    {item.settings.content}
-                  </a>
-                ) : (
-                  <p className="text-gray-600 whitespace-pre-line leading-relaxed">
-                    {item.settings.content}
-                  </p>
-                )}
-              </div>
+              )}
 
-              {/* Corner Accent */}
-              <div
-                className="absolute -bottom-2 -right-2 w-20 h-20 rounded-full opacity-0 group-hover:opacity-20 transition-all duration-500 blur-2xl"
-                style={{ backgroundColor: accentColor }}
-              />
+              {/* Content */}
+              {item.settings.link ? (
+                <a
+                  href={item.settings.link}
+                  className="text-gray-600 hover:underline transition-colors text-sm md:text-base"
+                >
+                  <span
+                    dangerouslySetInnerHTML={{
+                      __html: (item.settings.content || "").replace(/\n/g, "<br/>"),
+                    }}
+                  />
+                </a>
+              ) : (
+                <p
+                  className="text-gray-600 text-sm md:text-base"
+                  dangerouslySetInnerHTML={{
+                    __html: (item.settings.content || "").replace(/\n/g, "<br/>"),
+                  }}
+                />
+              )}
             </div>
           ))}
         </div>

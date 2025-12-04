@@ -17,13 +17,14 @@ interface ContactForm2Settings {
   backgroundColor?: string;
   textColor?: string;
   title?: string;
-  subtitle?: string;
+  titleStyle?: "normal" | "script";
   submitButtonText?: string;
   submitButtonColor?: string;
   formEndpoint?: string;
   successMessage?: string;
   errorMessage?: string;
-  sideImage?: string;
+  showTermsCheckbox?: boolean;
+  termsText?: string;
 }
 
 interface ContactForm2Props {
@@ -33,44 +34,28 @@ interface ContactForm2Props {
 
 const ContactForm2: React.FC<ContactForm2Props> = ({ settings = {}, blocks = [] }) => {
   const {
-    backgroundColor = "#FFFFFF",
-    textColor = "#111827",
-    title = "Send us a message",
-    subtitle = "Fill out the form below and we'll get back to you within 24 hours.",
-    submitButtonText = "Send Message",
-    submitButtonColor = "#111827",
-    successMessage = "Thank you for your message. We'll be in touch soon.",
-    errorMessage = "Something went wrong. Please try again.",
-    sideImage = "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80",
+    backgroundColor,
+    textColor,
+    title,
+    titleStyle = "script",
+    submitButtonText,
+    submitButtonColor,
+    successMessage,
+    errorMessage,
+    showTermsCheckbox = false,
+    termsText,
   } = settings;
 
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [termsAccepted, setTermsAccepted] = useState(false);
 
-  const defaultFields: FormField[] = [
-    {
-      id: "1",
-      type: "form_field",
-      settings: { name: "name", label: "Name", type: "text", placeholder: "Your name", required: true },
-    },
-    {
-      id: "2",
-      type: "form_field",
-      settings: { name: "email", label: "Email", type: "email", placeholder: "your@email.com", required: true },
-    },
-    {
-      id: "3",
-      type: "form_field",
-      settings: { name: "subject", label: "Subject", type: "text", placeholder: "How can we help?", required: false },
-    },
-    {
-      id: "4",
-      type: "form_field",
-      settings: { name: "message", label: "Message", type: "textarea", placeholder: "Your message...", required: true, rows: 4 },
-    },
-  ];
+  // If no blocks provided, don't render
+  if (blocks.length === 0) return null;
 
-  const fields = blocks.length > 0 ? blocks : defaultFields;
+  // Separate textarea fields from other fields
+  const textareaFields = blocks.filter((field) => field.settings.type === "textarea");
+  const otherFields = blocks.filter((field) => field.settings.type !== "textarea");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -83,130 +68,177 @@ const ContactForm2: React.FC<ContactForm2Props> = ({ settings = {}, blocks = [] 
     setTimeout(() => {
       setStatus("success");
       setFormData({});
+      setTermsAccepted(false);
     }, 1500);
   };
 
   return (
-    <section className="w-full py-10 md:py-14" style={{ backgroundColor }}>
-      <div className="max-w-[1100px] mx-auto px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-          {/* Left Side - Image */}
-          <div className="relative rounded-lg overflow-hidden min-h-[300px] lg:min-h-full bg-gray-100">
-            <img
-              src={sideImage}
-              alt="Contact"
-              className="absolute inset-0 w-full h-full object-cover"
-            />
-            {/* Overlay with info */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-            <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-              <h3 className="text-lg font-semibold mb-2">Need immediate help?</h3>
-              <p className="text-sm text-white/80 mb-3">Our support team is available during business hours.</p>
-              <div className="flex items-center gap-4 text-sm">
-                <a href="tel:+15551234567" className="flex items-center gap-2 hover:text-white/80 transition-colors">
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
-                  </svg>
-                  (555) 123-4567
-                </a>
-              </div>
-            </div>
-          </div>
+    <section
+      className="py-12 md:py-16 lg:py-20"
+      style={{ backgroundColor: backgroundColor || "#F9FAFB" }}
+    >
+      <div className="max-w-[1440px] mx-auto px-4 2xl:px-0">
+        {/* Title */}
+        {title && (
+          <h2
+            className={`text-center mb-10 md:mb-14 ${
+              titleStyle === "script"
+                ? "font-serif italic text-3xl md:text-4xl"
+                : "font-bold text-2xl md:text-3xl lg:text-4xl"
+            }`}
+            style={{ color: textColor || "#111827" }}
+          >
+            {title}
+          </h2>
+        )}
 
-          {/* Right Side - Form */}
-          <div>
-            <div className="mb-6">
-              <h2
-                className="text-2xl md:text-3xl font-semibold mb-2"
-                style={{ color: textColor }}
+        {/* Form */}
+        {status === "success" ? (
+          <div className="max-w-2xl mx-auto text-center py-12">
+            <div className="w-16 h-16 rounded-full bg-green-100 mx-auto mb-4 flex items-center justify-center">
+              <svg
+                className="w-8 h-8 text-green-500"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
               >
-                {title}
-              </h2>
-              <p className="text-gray-600 text-sm">{subtitle}</p>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
             </div>
-
-            {status === "success" ? (
-              <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
-                <svg className="w-10 h-10 text-green-600 mx-auto mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <h3 className="text-lg font-semibold text-green-900 mb-1">Message Sent</h3>
-                <p className="text-green-700 text-sm">{successMessage}</p>
-                <button
-                  onClick={() => setStatus("idle")}
-                  className="mt-4 text-sm font-medium text-green-700 hover:text-green-800 underline"
-                >
-                  Send another message
-                </button>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-4">
-                {fields.map((field) => (
+            <h3
+              className="text-xl font-bold mb-2"
+              style={{ color: textColor || "#111827" }}
+            >
+              Message Sent!
+            </h3>
+            <p className="text-gray-600 mb-6">{successMessage}</p>
+            <button
+              onClick={() => setStatus("idle")}
+              className="px-6 py-3 rounded-lg font-medium text-white transition-opacity hover:opacity-90"
+              style={{ backgroundColor: submitButtonColor || "#8B4513" }}
+            >
+              Send Another Message
+            </button>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="max-w-5xl mx-auto">
+            <div className="grid md:grid-cols-2 gap-6 md:gap-8">
+              {/* Left Column - Text/Email/Tel Fields */}
+              <div className="space-y-4">
+                {otherFields.map((field) => (
                   <div key={field.id}>
-                    <label
-                      htmlFor={field.settings.name}
-                      className="block text-sm font-medium text-gray-700 mb-1.5"
-                    >
-                      {field.settings.label}
-                      {field.settings.required && <span className="text-red-500 ml-0.5">*</span>}
-                    </label>
-                    {field.settings.type === "textarea" ? (
-                      <textarea
-                        id={field.settings.name}
-                        name={field.settings.name}
-                        placeholder={field.settings.placeholder}
-                        required={field.settings.required}
-                        rows={field.settings.rows || 4}
-                        value={formData[field.settings.name || ""] || ""}
-                        onChange={handleChange}
-                        className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-shadow resize-none"
-                      />
-                    ) : (
-                      <input
-                        id={field.settings.name}
-                        name={field.settings.name}
-                        type={field.settings.type || "text"}
-                        placeholder={field.settings.placeholder}
-                        required={field.settings.required}
-                        value={formData[field.settings.name || ""] || ""}
-                        onChange={handleChange}
-                        className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-shadow"
-                      />
-                    )}
+                    <input
+                      id={field.settings.name}
+                      name={field.settings.name}
+                      type={field.settings.type || "text"}
+                      placeholder={field.settings.placeholder}
+                      required={field.settings.required}
+                      value={formData[field.settings.name || ""] || ""}
+                      onChange={handleChange}
+                      className="w-full px-5 py-4 border border-gray-300 bg-white focus:outline-none focus:border-gray-500 transition-colors text-sm"
+                      style={{ color: textColor || "#111827" }}
+                    />
                   </div>
                 ))}
 
-                {status === "error" && (
-                  <div className="p-3 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2">
-                    <svg className="w-4 h-4 text-red-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
-                    </svg>
-                    <p className="text-red-700 text-sm">{errorMessage}</p>
+                {/* Terms Checkbox */}
+                {showTermsCheckbox && termsText && (
+                  <div className="flex items-start gap-3 pt-2">
+                    <input
+                      type="checkbox"
+                      id="terms"
+                      checked={termsAccepted}
+                      onChange={(e) => setTermsAccepted(e.target.checked)}
+                      className="mt-1 w-4 h-4 border-gray-300 text-gray-900 focus:ring-gray-500"
+                    />
+                    <label
+                      htmlFor="terms"
+                      className="text-sm text-gray-500 leading-relaxed"
+                    >
+                      {termsText}
+                    </label>
                   </div>
                 )}
+              </div>
 
-                <button
-                  type="submit"
-                  disabled={status === "loading"}
-                  className="w-full py-3 px-4 rounded-lg text-white text-sm font-medium transition-colors disabled:opacity-60 disabled:cursor-not-allowed hover:opacity-90"
-                  style={{ backgroundColor: submitButtonColor }}
+              {/* Right Column - Textarea */}
+              <div className="flex flex-col">
+                {textareaFields.map((field) => (
+                  <textarea
+                    key={field.id}
+                    id={field.settings.name}
+                    name={field.settings.name}
+                    placeholder={field.settings.placeholder}
+                    required={field.settings.required}
+                    rows={field.settings.rows || 6}
+                    value={formData[field.settings.name || ""] || ""}
+                    onChange={handleChange}
+                    className="w-full h-full min-h-[200px] px-5 py-4 border border-gray-300 bg-white focus:outline-none focus:border-gray-500 transition-colors text-sm resize-none"
+                    style={{ color: textColor || "#111827" }}
+                  />
+                ))}
+
+                {/* Submit Button - Below Textarea on Right */}
+                <div className="flex justify-end mt-4">
+                  <button
+                    type="submit"
+                    disabled={status === "loading" || (showTermsCheckbox && !termsAccepted)}
+                    className="px-8 py-3.5 text-white font-medium transition-all duration-200 hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 uppercase tracking-wider text-sm"
+                    style={{ backgroundColor: submitButtonColor || "#8B4513" }}
+                  >
+                    {status === "loading" ? (
+                      <>
+                        <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          />
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          />
+                        </svg>
+                        Sending...
+                      </>
+                    ) : (
+                      <>{submitButtonText || "SEND MESSAGE"}</>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Error Message */}
+            {status === "error" && errorMessage && (
+              <div className="mt-4 p-4 bg-red-50 border border-red-200 flex items-center gap-2 max-w-5xl mx-auto">
+                <svg
+                  className="w-5 h-5 text-red-500 shrink-0"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
                 >
-                  {status === "loading" ? (
-                    <span className="flex items-center justify-center gap-2">
-                      <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                      </svg>
-                      Sending...
-                    </span>
-                  ) : (
-                    submitButtonText
-                  )}
-                </button>
-              </form>
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <p className="text-red-700 text-sm">{errorMessage}</p>
+              </div>
             )}
-          </div>
-        </div>
+          </form>
+        )}
       </div>
     </section>
   );
