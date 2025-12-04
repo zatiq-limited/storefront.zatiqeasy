@@ -4,30 +4,81 @@
     "template": "about",
     "sections": [
       {
-        "id": "about_hero",
+        "id": "about_hero_1_0",
         "type": "about-hero-1",
-        "enabled": true,
+        "settings": {
+          "backgroundColor": "#F9FAFB",
+          "textColor": "#111827",
+          "headline": "About Our Storys",
+          "subheadline": "Crafting Excellence Since 2010",
+          "description": "We're passionate about delivering quality products and exceptional service to our customers worldwide.",
+          "image": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200",
+          "overlayOpacity": 0.4
+        }
+      },
+      {
+        "id": "about_hero_2_1",
+        "type": "about-hero-2",
         "settings": {
           "backgroundColor": "#FFFFFF",
           "textColor": "#111827",
-          "headline": "Building Tomorrow's Solutions Today",
+          "headline": "Building Tomorrow's Solutions Todays",
           "subheadline": "Our Journey",
           "description": "From humble beginnings to becoming a leader in our industry, we've stayed true to our core values of innovation, quality, and customer satisfaction. Our team is dedicated to pushing boundaries and creating experiences that matter.",
           "buttonText": "Learn More",
           "buttonLink": "#story",
           "buttonColor": "#2563EB",
-          "image": "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&h=600&fit=crop",
+          "image": "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800",
           "imagePosition": "right"
         }
       },
       {
-        "id": "about_story",
+        "id": "about_story_1_2",
         "type": "about-story-1",
-        "enabled": true,
+        "settings": {
+          "backgroundColor": "#FFFFFF",
+          "textColor": "#111827",
+          "accentColor": "#2563EB",
+          "title": "Our Journeys",
+          "subtitle": "The milestones that shaped who we are today"
+        },
+        "blocks": [
+          {
+            "id": "story_1",
+            "type": "story_block",
+            "settings": {
+              "title": "The Beginning",
+              "description": "Started our journey with a vision to revolutionize the e-commerce experience. What began as a small startup quickly grew into a mission-driven company.",
+              "image": "https://images.unsplash.com/photo-1556761175-b413da4baf72?w=800&h=600&fit=crop"
+            }
+          },
+          {
+            "id": "story_2",
+            "type": "story_block",
+            "settings": {
+              "title": "Growth & Expansion",
+              "description": "Through dedication and innovation, we expanded to serve customers across multiple countries. Our product range grew significantly.",
+              "image": "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800&h=600&fit=crop"
+            }
+          },
+          {
+            "id": "story_3",
+            "type": "story_block",
+            "settings": {
+              "title": "Innovation & Technology",
+              "description": "We launched our innovative platform features and mobile app, making shopping more accessible and convenient.",
+              "image": "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&h=600&fit=crop"
+            }
+          }
+        ]
+      },
+      {
+        "id": "about_story_2_3",
+        "type": "about-story-2",
         "settings": {
           "backgroundColor": "#F9FAFB",
           "textColor": "#111827",
-          "title": "Our Story",
+          "title": "Our Storys",
           "subtitle": "The journey that defines us"
         },
         "blocks": [
@@ -35,41 +86,111 @@
             "id": "story_1",
             "type": "story_block",
             "settings": {
-              "image": "https://images.unsplash.com/photo-1556761175-b413da4baf72?w=800&h=600&fit=crop",
               "title": "The Beginning",
-              "description": "Started our journey with a vision to revolutionize the e-commerce experience. What began as a small startup in 2010 quickly grew into a mission-driven company focused on delivering quality products and exceptional service to customers worldwide."
+              "description": "Started our journey with a vision to revolutionize the e-commerce experience. What began as a small startup in 2010 quickly grew into a mission-driven company focused on delivering quality products.",
+              "image": "https://images.unsplash.com/photo-1556761175-b413da4baf72?w=800&h=600&fit=crop"
             }
           },
           {
             "id": "story_2",
             "type": "story_block",
             "settings": {
-              "image": "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800&h=600&fit=crop",
               "title": "Growth & Expansion",
-              "description": "Through dedication and innovation, we expanded to serve customers across multiple countries. Our product range grew significantly, and so did our team, bringing together talented individuals passionate about making a difference in the e-commerce industry."
+              "description": "Through dedication and innovation, we expanded to serve customers across multiple countries. Our product range grew significantly.",
+              "image": "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800&h=600&fit=crop"
             }
           },
           {
             "id": "story_3",
             "type": "story_block",
             "settings": {
-              "image": "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&h=600&fit=crop",
               "title": "Innovation & Technology",
-              "description": "We launched our innovative platform features and mobile app, making shopping more accessible and convenient. Our commitment to cutting-edge technology ensures our customers always have the best shopping experience possible."
+              "description": "We launched our innovative platform features and mobile app, making shopping more accessible and convenient.",
+              "image": "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&h=600&fit=crop"
             }
           }
         ]
       },
       {
-        "id": "about_team",
+        "id": "about_team_1_4",
+        "type": "about-team-1",
+        "settings": {
+          "backgroundColor": "#FFFFFF",
+          "textColor": "#111827",
+          "title": "Meet Our Teams",
+          "subtitle": "The talented people behind our success",
+          "borderRadius": "12px"
+        },
+        "blocks": [
+          {
+            "id": "team_1",
+            "type": "team_member",
+            "settings": {
+              "name": "Sarah Johnson",
+              "role": "CEO & Founder",
+              "image": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop&crop=faces",
+              "bio": "Visionary leader with 15+ years in e-commerce",
+              "social": {
+                "linkedin": "https://linkedin.com",
+                "twitter": "https://twitter.com",
+                "email": "sarah@example.com"
+              }
+            }
+          },
+          {
+            "id": "team_2",
+            "type": "team_member",
+            "settings": {
+              "name": "Michael Chen",
+              "role": "CTO",
+              "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=faces",
+              "bio": "Tech innovator driving our digital transformation",
+              "social": {
+                "linkedin": "https://linkedin.com",
+                "twitter": "https://twitter.com"
+              }
+            }
+          },
+          {
+            "id": "team_3",
+            "type": "team_member",
+            "settings": {
+              "name": "Emily Rodriguez",
+              "role": "Head of Design",
+              "image": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop&crop=faces",
+              "bio": "Creative designer crafting exceptional experiences",
+              "social": {
+                "linkedin": "https://linkedin.com",
+                "email": "emily@example.com"
+              }
+            }
+          },
+          {
+            "id": "team_4",
+            "type": "team_member",
+            "settings": {
+              "name": "David Kim",
+              "role": "Head of Marketing",
+              "image": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=faces",
+              "bio": "Marketing strategist connecting brands with customers",
+              "social": {
+                "twitter": "https://twitter.com",
+                "email": "david@example.com"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "about_team_2_5",
         "type": "about-team-2",
-        "enabled": true,
         "settings": {
           "backgroundColor": "#F9FAFB",
           "textColor": "#111827",
-          "title": "Meet Our Team",
-          "subtitle": "The talented people behind our success",
-          "borderRadius": "12px"
+          "accentColor": "#111827",
+          "title": "Our Legal Professionalsss",
+          "subtitle": "Legal Team",
+          "borderRadius": "8px"
         },
         "blocks": [
           {
@@ -133,12 +254,20 @@
       }
     ],
     "seo": {
-      "title": "About Us - Learn Our Story",
-      "description": "Discover the story behind our brand, our values, and the passionate team that makes it all possible.",
+      "title": "About Us - Custom Theme Store",
+      "description": "Learn more about our story.",
+      "canonical": "",
       "og": {
-        "title": "About Us",
-        "description": "Learn about our journey, values, and team",
-        "image": "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1200&h=630&fit=crop"
+        "title": "About Us - Custom Theme Store",
+        "description": "Learn more about our story.",
+        "image": "",
+        "type": "website"
+      },
+      "twitter": {
+        "card": "summary_large_image",
+        "title": "About Us - Custom Theme Store",
+        "description": "Learn more about our story.",
+        "image": ""
       }
     }
   }
