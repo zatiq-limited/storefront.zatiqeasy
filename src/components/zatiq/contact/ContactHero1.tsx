@@ -29,7 +29,7 @@ const ContactHero1: React.FC<ContactHero1Props> = ({ settings = {} }) => {
   return (
     <section className="relative w-full overflow-hidden">
       {/* Background Image */}
-      <div className="relative w-full h-[35vh]">
+      <div className="relative w-full h-[20vh] sm:h-[35vh]">
         {image && (
           <div
             className="absolute inset-0 bg-cover bg-center"
