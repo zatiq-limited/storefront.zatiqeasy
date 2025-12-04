@@ -117,7 +117,7 @@ import {
   AboutStory2,
   AboutTeam1,
   AboutTeam2,
-} from "@/components/zatiq/about";
+} from "@/components/zatiq/about-us";
 
 // Checkout Page Components
 import {
@@ -138,7 +138,7 @@ import {
   ContactForm2,
   ContactMap1,
   ContactMap2,
-} from "@/components/zatiq/contact";
+} from "@/components/zatiq/contact-us";
 
 // Privacy Policy Page Components
 import {
