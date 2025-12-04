@@ -88,7 +88,10 @@ const AboutStory1: React.FC<AboutStory1Props> = ({
                         alignment="right"
                       />
                     ) : (
-                      <ImageBlock milestone={milestone} accentColor={accentColor} />
+                      <ImageBlock
+                        milestone={milestone}
+                        accentColor={accentColor}
+                      />
                     )}
                   </div>
 
@@ -103,7 +106,10 @@ const AboutStory1: React.FC<AboutStory1Props> = ({
                   {/* Right Side */}
                   <div className={index % 2 === 0 ? "pl-16" : "order-1 pr-16"}>
                     {index % 2 === 0 ? (
-                      <ImageBlock milestone={milestone} accentColor={accentColor} />
+                      <ImageBlock
+                        milestone={milestone}
+                        accentColor={accentColor}
+                      />
                     ) : (
                       <ContentBlock
                         milestone={milestone}
@@ -134,7 +140,11 @@ const AboutStory1: React.FC<AboutStory1Props> = ({
                       alignment="left"
                     />
                     <div className="mt-5">
-                      <ImageBlock milestone={milestone} accentColor={accentColor} mobile />
+                      <ImageBlock
+                        milestone={milestone}
+                        accentColor={accentColor}
+                        mobile
+                      />
                     </div>
                   </div>
                 </div>
@@ -155,7 +165,6 @@ const ContentBlock: React.FC<{
 }> = ({ milestone, textColor, accentColor, alignment }) => {
   return (
     <div className={alignment === "right" ? "text-right" : "text-left"}>
-     
       {/* Title */}
       <h3
         className="text-xl sm:text-2xl lg:text-3xl font-bold mb-3"
@@ -186,7 +195,7 @@ const ImageBlock: React.FC<{
     <div
       className={`
         relative rounded-xl overflow-hidden
-        ${mobile ? "aspect-video" : "aspect-[4/3]"}
+        ${mobile ? "aspect-video" : "aspect-4/3"}
       `}
       style={{ backgroundColor: `${accentColor}08` }}
     >
