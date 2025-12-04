@@ -9,7 +9,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "api": "node server.js",
-    "dev:all": "pnpm run api & pnpm run dev"
+    "start": "pnpm run api & pnpm run dev"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.11",
