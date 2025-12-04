@@ -115,8 +115,6 @@ import {
   AboutHero2,
   AboutStory1,
   AboutStory2,
-  AboutValues1,
-  AboutValues2,
   AboutTeam1,
   AboutTeam2,
 } from "@/components/zatiq/about";
@@ -287,8 +285,6 @@ export const ZATIQ_COMPONENTS: Record<string, ComponentType<any>> = {
   "about-hero-2": AboutHero2,
   "about-story-1": AboutStory1,
   "about-story-2": AboutStory2,
-  "about-values-1": AboutValues1,
-  "about-values-2": AboutValues2,
   "about-team-1": AboutTeam1,
   "about-team-2": AboutTeam2,
 

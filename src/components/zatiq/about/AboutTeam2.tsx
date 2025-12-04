@@ -54,7 +54,7 @@ const AboutTeam2: React.FC<AboutTeam2Props> = ({
 
   return (
     <section
-      className="w-full py-16 md:py-20 lg:py-24"
+      className="w-full pb-16 md:pb-20 lg:pb-24"
       style={{ backgroundColor }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -1,54 +1,103 @@
 import React from "react";
+import { ChevronRight } from "lucide-react";
+
+interface BreadcrumbItem {
+  id: string;
+  type: string;
+  settings: {
+    label?: string;
+    link?: string;
+  };
+}
 
 interface ContactHero2Settings {
   backgroundColor?: string;
   textColor?: string;
   headline?: string;
-  subheadline?: string;
-  description?: string;
-  accentColor?: string;
+  image?: string;
+  overlayOpacity?: number;
+  overlayColor?: string;
 }
 
 interface ContactHero2Props {
   settings?: ContactHero2Settings;
+  breadcrumbs?: BreadcrumbItem[];
 }
 
-const ContactHero2: React.FC<ContactHero2Props> = ({ settings = {} }) => {
+const ContactHero2: React.FC<ContactHero2Props> = ({
+  settings = {},
+  breadcrumbs = [],
+}) => {
   const {
-    backgroundColor = "#FFFFFF",
-    textColor = "#111827",
-    headline = "Contact Us",
-    subheadline = "Get in Touch",
-    description = "Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.",
-    accentColor = "#111827",
+    headline,
+    image,
+    overlayOpacity = 0.5,
+    overlayColor = "#000000",
   } = settings;
 
+  // If no headline or image provided, don't render
+  if (!headline && !image) return null;
+
   return (
-    <section
-      className="w-full pt-12 pb-8 md:pt-16 md:pb-12"
-      style={{ backgroundColor }}
-    >
-      <div className="max-w-[800px] mx-auto px-4 text-center">
-        {/* Subheadline */}
-        <p
-          className="text-sm font-medium uppercase tracking-wider mb-3"
-          style={{ color: accentColor }}
-        >
-          {subheadline}
-        </p>
+    <section className="relative w-full">
+      {/* Background Image */}
+      <div className="relative w-full h-[200px] md:h-[280px] lg:h-[350px]">
+        {image && (
+          <div
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: `url(${image})` }}
+          />
+        )}
 
-        {/* Headline */}
-        <h1
-          className="text-3xl md:text-4xl lg:text-5xl font-semibold mb-4"
-          style={{ color: textColor }}
-        >
-          {headline}
-        </h1>
+        {/* Overlay */}
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundColor: overlayColor,
+            opacity: overlayOpacity,
+          }}
+        />
 
-        {/* Description */}
-        <p className="text-gray-600 text-base md:text-lg max-w-lg mx-auto leading-relaxed">
-          {description}
-        </p>
+        {/* Content */}
+        <div className="relative z-10 h-full flex flex-col items-center justify-center px-4">
+          {/* Breadcrumb */}
+          {breadcrumbs.length > 0 && (
+            <nav className="mb-3">
+              <ol className="flex items-center gap-1 text-sm text-white/80">
+                {breadcrumbs.map((item, index) => (
+                  <React.Fragment key={item.id}>
+                    {index > 0 && (
+                      <li className="text-white/60">
+                        <ChevronRight className="w-3 h-3" />
+                      </li>
+                    )}
+                    <li>
+                      {item.settings.link ? (
+                        <a
+                          href={item.settings.link}
+                          className="uppercase tracking-wider text-xs font-medium hover:text-white transition-colors"
+                        >
+                          {item.settings.label}
+                        </a>
+                      ) : (
+                        <span className="uppercase tracking-wider text-xs font-medium text-white">
+                          {item.settings.label}
+                        </span>
+                      )}
+                    </li>
+                  </React.Fragment>
+                ))}
+              </ol>
+            </nav>
+          )}
+
+          {/* Headline */}
+          {headline && (
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-white text-center">
+              {headline}
+            </h1>
+          )}
+        </div>
       </div>
     </section>
   );
