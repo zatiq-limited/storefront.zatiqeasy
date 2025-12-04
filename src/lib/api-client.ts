@@ -377,9 +377,13 @@ export async function getAboutPageData(): Promise<any> {
  * Get single product page data (complete product page with sections)
  *
  * Backend API: GET /api/storefront/v1/page/single-product/:handle
- * Response: { success: true, data: { template, sections, seo } }
+ * Response: { success: true, data: { template, product, sections, seo } }
+ *
+ * Fallback: Loads from local JSON file single-product-{handle}.json
  */
 export async function getSingleProductPageData(handle?: string): Promise<any> {
+  if (!handle) return null;
+
   try {
     const response = await apiCall<any>(
       `/api/storefront/v1/page/single-product/${handle}`
@@ -387,8 +391,22 @@ export async function getSingleProductPageData(handle?: string): Promise<any> {
     console.log("[API] ✅ Single product page data loaded from API");
     return response;
   } catch (error) {
-    console.error("[API] ❌ Single product page API failed");
-    return null;
+    console.error("[API] ❌ Single product page API failed - trying local file");
+
+    // Fallback to local JSON file for development
+    try {
+      const localFile = await import(
+        `../data/api-responses/single-product-${handle}.json`
+      );
+      console.log(`[API] ✅ Single product page loaded from local file: single-product-${handle}.json`);
+
+      // Handle different import structures
+      const imported = localFile.default || localFile;
+      return imported;
+    } catch (localError) {
+      console.error(`[API] ❌ Local file single-product-${handle}.json not found`);
+      return null;
+    }
   }
 }
 

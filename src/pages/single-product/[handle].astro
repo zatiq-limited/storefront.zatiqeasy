@@ -1,15 +1,18 @@
 ---
 /**
  * ========================================
- * SINGLE PRODUCT PAGE (DYNAMIC)
+ * SINGLE PRODUCT LANDING PAGE (DYNAMIC)
  * ========================================
  *
- * Dynamic single product page with custom sections from API
- * Similar to product details page but with landing page sections
+ * Dynamic single product landing page with custom sections from API
+ * The API returns complete page data including product info and sections
  *
- * Backend API Endpoints:
- * - GET /api/storefront/v1/page/single-product/:handle (page sections)
- * - GET /api/storefront/v1/products/:handle (product data)
+ * Backend API Endpoint:
+ * - GET /api/storefront/v1/page/single-product/:handle
+ *   Returns: { template, product_handle, product, sections, seo }
+ *
+ * Route: /single-product/:productId
+ * Example: /single-product/858755 loads single-product-858755.json from database
  */
 
 import Layout from '../../layouts/main.astro';
@@ -19,7 +22,7 @@ import { getSingleProductPageData } from '../../lib/api-client';
 // Enable server-side rendering for dynamic product pages
 export const prerender = false;
 
-// Get handle from URL
+// Get handle from URL (product ID)
 const { handle } = Astro.params;
 
 // Validate handle
@@ -27,30 +30,37 @@ if (!handle) {
 	return Astro.redirect('/404');
 }
 
-// Fetch page data and product data
+// Fetch single product landing page data (includes product + sections)
 let pageData: any = null;
 let product: any = null;
 
 try {
-	const API_BASE_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3001';
+	// Fetch complete page data from API
+	// The API returns the stored landing page JSON which includes product data
+	const singleProductPageData = await getSingleProductPageData(handle);
+	pageData = singleProductPageData?.data || singleProductPageData || null;
 
-	// Fetch product data
-	const productResponse = await fetch(`${API_BASE_URL}/api/storefront/v1/products/${handle}`);
-	const productResult = await productResponse.json();
-
-	if (productResult.success && productResult.data?.product) {
-		product = productResult.data.product;
+	// Product data is included in the page data from theme builder export
+	if (pageData) {
+		product = pageData?.product || null;
 	}
 
-	// Fetch page sections
-	const singleProductPageData = await getSingleProductPageData(handle);
-	pageData = singleProductPageData?.data || singleProductPageData || {};
+	// If product not in page data, try fetching separately as fallback
+	if (!product && pageData) {
+		const API_BASE_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3001';
+		const productResponse = await fetch(`${API_BASE_URL}/api/storefront/v1/products/${handle}`);
+		const productResult = await productResponse.json();
+
+		if (productResult.success && productResult.data?.product) {
+			product = productResult.data.product;
+		}
+	}
 } catch (error) {
 	console.error('[Single Product Page] Failed to load data:', error);
 }
 
-// Redirect to 404 if product not found
-if (!product) {
+// Redirect to 404 if no landing page exists for this product
+if (!pageData || Object.keys(pageData).length === 0) {
 	return Astro.redirect('/404');
 }
 
