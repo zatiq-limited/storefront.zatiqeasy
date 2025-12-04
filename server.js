@@ -29,6 +29,7 @@ const db = {
   category: loadJSON("category.json"),
   productsPage: loadJSON("products-page.json"),
   productDetailsPage: loadJSON("product-details-page.json"),
+  singleProductPage: loadJSON("single-product-page.json"),
   collectionsPage: loadJSON("collections-page.json"),
   collectionDetailsPage: loadJSON("collection-details-page.json"),
   about: loadJSON("about.json"),
@@ -191,6 +192,13 @@ app.get("/api/storefront/v1/page/product-details", (req, res) => {
   res.json(db.productDetailsPage);
 });
 
+// Single product page with handle in path (alternative endpoint)
+app.get("/api/storefront/v1/page/single-product/:handle", (req, res) => {
+  const { handle } = req.params;
+  // Return page sections - product data is combined on frontend
+  res.json(db.singleProductPage);
+});
+
 // Direct access routes (for debugging)
 app.get("/theme_init", (req, res) => res.json(db.theme_init));
 app.get("/homepage", (req, res) => res.json(db.homepage));
@@ -199,6 +207,7 @@ app.get("/product", (req, res) => res.json(db.product));
 app.get("/category", (req, res) => res.json(db.category));
 app.get("/products-page", (req, res) => res.json(db.productsPage));
 app.get("/collections-page", (req, res) => res.json(db.collectionsPage));
+app.get("/single-product", (req, res) => res.json(db.singleProductPage));
 
 // Direct access routes (for debugging)
 app.get("/about", (_req, res) => res.json(db.about));
@@ -237,6 +246,7 @@ app.listen(PORT, () => {
   console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/page/order-success      - Order success page sections`);
   console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/page/privacy-policy     - Privacy policy page sections`);
   console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/page/product-details    - Product details page sections`);
+  console.log(`   GET  http://localhost:${PORT}/api/storefront/v1/page/single-product     - Single product page sections`);
   console.log(`   GET  http://localhost:${PORT}/api/promo-code?code=WELCOME10              - Validate promo code`);
   console.log(`\n✨ Press Ctrl+C to stop\n`);
 });

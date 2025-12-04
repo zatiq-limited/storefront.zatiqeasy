@@ -26,7 +26,11 @@ interface CollectionBanner1Props {
     showDescription?: boolean;
     showProductCount?: boolean;
     textPosition?: "left" | "center" | "right";
+    height?: "small" | "medium" | "large";
     overlayOpacity?: number;
+    textColor?: string;
+    badgeBackgroundColor?: string;
+    badgeTextColor?: string;
     bannerButtonText?: string;
     bannerButtonLink?: string;
   };
@@ -41,7 +45,11 @@ const CollectionBanner1: React.FC<CollectionBanner1Props> = ({
     showDescription = true,
     showProductCount = true,
     textPosition = "center",
-    overlayOpacity = 0.4,
+    height = "medium",
+    overlayOpacity = 0.5,
+    textColor = "#ffffff",
+    badgeBackgroundColor = "#ffffff",
+    badgeTextColor = "#111827",
     bannerButtonText = "Explore Collection",
     bannerButtonLink = "/products",
   } = settings;
@@ -54,8 +62,14 @@ const CollectionBanner1: React.FC<CollectionBanner1Props> = ({
     right: "text-right items-end",
   }[textPosition];
 
+  const heightClasses = {
+    small: "h-[40vh] min-h-[300px] sm:h-[45vh] sm:min-h-[350px] md:h-[50vh] md:min-h-[400px] lg:h-[55vh] lg:min-h-[450px]",
+    medium: "h-[50vh] min-h-[350px] sm:h-[60vh] sm:min-h-[400px] md:h-[70vh] md:min-h-[500px] lg:h-[80vh] lg:min-h-[600px]",
+    large: "h-[60vh] min-h-[400px] sm:h-[70vh] sm:min-h-[500px] md:h-[80vh] md:min-h-[600px] lg:h-[90vh] lg:min-h-[700px]",
+  };
+
   return (
-    <section className="relative h-[50vh] min-h-[350px] sm:h-[60vh] sm:min-h-[400px] md:h-[70vh] md:min-h-[500px] lg:h-[80vh] lg:min-h-[600px] overflow-hidden bg-gray-900">
+    <section className={`relative ${heightClasses[height] || heightClasses.medium} overflow-hidden bg-gray-900`}>
       {/* Parallax Background Image */}
       {showBanner && bannerImage && (
         <div
@@ -77,7 +91,7 @@ const CollectionBanner1: React.FC<CollectionBanner1Props> = ({
 
       {/* No Image Fallback - Modern Gradient */}
       {(!showBanner || !bannerImage) && (
-        <div className="absolute inset-0 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900">
+        <div className="absolute inset-0 bg-linear-to-br from-indigo-900 via-purple-900 to-pink-900">
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMzLjMxNCAwIDYgMi42ODYgNiA2cy0yLjY4NiA2LTYgNi02LTIuNjg2LTYtNiAyLjY4Ni02IDYtNnptMCAyYy0yLjIxIDAtNCAx Ljc5LTQgNHMxLjc5IDQgNCA0IDQtMS43OSA0LTQtMS43OS00LTQtNHptMCAyYzEuMTA1IDAgMiAuODk1IDIgMnMtLjg5NSAyLTIgMi0yLS44OTUtMi0yIC44OTUtMiAyLTJ6IiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIuMDUiLz48L2c+PC9zdmc+')] opacity-30" />
         </div>
       )}
@@ -86,7 +100,9 @@ const CollectionBanner1: React.FC<CollectionBanner1Props> = ({
       <div className="relative h-full flex items-center">
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div
-            className={`flex flex-col ${textAlignClass} max-w-full sm:max-w-xl md:max-w-2xl lg:max-w-3xl xl:max-w-4xl ${textPosition === "center" ? "mx-auto" : ""}`}
+            className={`flex flex-col ${textAlignClass} max-w-full sm:max-w-xl md:max-w-2xl lg:max-w-3xl xl:max-w-4xl ${
+              textPosition === "center" ? "mx-auto" : ""
+            }`}
           >
             {/* Animated Badge */}
             {collection.subtitle && (
@@ -106,10 +122,11 @@ const CollectionBanner1: React.FC<CollectionBanner1Props> = ({
 
             {/* Title with Modern Typography */}
             <h1
-              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold text-white mb-2 sm:mb-3 md:mb-4 lg:mb-6 leading-tight tracking-tight"
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold mb-2 sm:mb-3 md:mb-4 lg:mb-6 leading-tight tracking-tight"
               style={{
                 animation: "fadeInUp 0.8s ease-out 0.2s both",
                 textShadow: "0 4px 60px rgba(0,0,0,0.5)",
+                color: textColor,
               }}
             >
               {collection.title}
@@ -118,10 +135,12 @@ const CollectionBanner1: React.FC<CollectionBanner1Props> = ({
             {/* Description */}
             {showDescription && collection.description && (
               <p
-                className="text-white/90 text-sm sm:text-base md:text-lg lg:text-xl font-light max-w-full sm:max-w-lg md:max-w-xl lg:max-w-2xl mb-4 sm:mb-6 md:mb-8 lg:mb-10 leading-relaxed line-clamp-2 sm:line-clamp-3 md:line-clamp-none"
+                className="text-sm sm:text-base md:text-lg lg:text-xl font-light max-w-full sm:max-w-lg md:max-w-xl lg:max-w-2xl mb-4 sm:mb-6 md:mb-8 lg:mb-10 leading-relaxed line-clamp-2 sm:line-clamp-3 md:line-clamp-none"
                 style={{
                   animation: "fadeInUp 0.8s ease-out 0.4s both",
                   textShadow: "0 2px 20px rgba(0,0,0,0.5)",
+                  color: textColor,
+                  opacity: 0.9,
                 }}
               >
                 {collection.description}
@@ -130,13 +149,19 @@ const CollectionBanner1: React.FC<CollectionBanner1Props> = ({
 
             {/* Action Row */}
             <div
-              className={`flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 md:gap-6 ${textPosition === "center" ? "justify-center items-center" : ""}`}
+              className={`flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 md:gap-6 ${
+                textPosition === "center" ? "justify-center items-center" : ""
+              }`}
               style={{ animation: "fadeInUp 0.8s ease-out 0.6s both" }}
             >
               {/* Explore Button */}
               <a
                 href={bannerButtonLink}
-                className="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-white text-gray-900 px-5 py-2.5 sm:px-6 sm:py-3 md:px-8 md:py-4 text-sm sm:text-base font-semibold shadow-2xl transition-all hover:scale-105 hover:shadow-white/25 w-full sm:w-auto"
+                className="group relative inline-flex items-center justify-center overflow-hidden rounded-full px-5 py-2.5 sm:px-6 sm:py-3 md:px-8 md:py-4 text-sm sm:text-base font-semibold shadow-2xl transition-all hover:scale-105 hover:shadow-white/25 w-full sm:w-auto"
+                style={{
+                  backgroundColor: badgeBackgroundColor,
+                  color: badgeTextColor,
+                }}
               >
                 <span className="absolute inset-0 bg-linear-to-r from-indigo-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 <span className="relative z-10 flex items-center justify-center group-hover:text-white transition-colors">
@@ -159,7 +184,13 @@ const CollectionBanner1: React.FC<CollectionBanner1Props> = ({
 
               {/* Product Count Badge */}
               {showProductCount && collection.product_count !== undefined && (
-                <div className="inline-flex items-center justify-center backdrop-blur-md bg-black/20 border border-white/30 rounded-full px-4 py-2.5 sm:px-5 sm:py-3 md:px-6 md:py-4 text-white text-sm sm:text-base w-full sm:w-auto">
+                <div
+                  className="inline-flex items-center justify-center backdrop-blur-md border border-white/30 rounded-full px-4 py-2.5 sm:px-5 sm:py-3 md:px-6 md:py-4 text-sm sm:text-base w-full sm:w-auto"
+                  style={{
+                    backgroundColor: `${badgeBackgroundColor}33`,
+                    color: textColor,
+                  }}
+                >
                   <svg
                     className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 opacity-80"
                     fill="none"

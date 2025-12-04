@@ -13,6 +13,10 @@ import type { Section } from "../lib/types";
 interface SectionRendererProps {
   sections: Section[];
   className?: string;
+  product?: any;
+  paymentMethods?: any[];
+  deliveryOptions?: any[];
+  currency?: string;
 }
 
 /**
@@ -22,11 +26,23 @@ interface SectionRendererProps {
 export default function SectionRenderer({
   sections,
   className = "",
+  product,
+  paymentMethods,
+  deliveryOptions,
+  currency,
 }: SectionRendererProps) {
   return (
     <div className={`zatiq-sections ${className}`}>
       {sections.map((section) => (
-        <ComponentRenderer key={section.id} section={section} client="load" />
+        <ComponentRenderer
+          key={section.id}
+          section={section}
+          product={product}
+          paymentMethods={paymentMethods}
+          deliveryOptions={deliveryOptions}
+          currency={currency}
+          client="load"
+        />
       ))}
     </div>
   );

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Check } from "lucide-react";
+import { Check, AlertCircle, Tag, QrCode } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
@@ -25,6 +25,7 @@ interface DeliveryOption {
 
 interface PaymentMethod {
   id: string;
+  gateway_mode: string;
   name: string;
   type: string;
   icon: string;
@@ -32,6 +33,33 @@ interface PaymentMethod {
   enabled: boolean;
   fee: number;
   fee_type: string;
+  // Self MFS specific fields
+  mfs_provider?: string;
+  mfs_type?: string;
+  mfs_phone?: string;
+  mfs_instruction?: string;
+  mfs_qr_image_url?: string;
+}
+
+interface PromoCode {
+  promo_code: string;
+  type: string;
+  amount: number;
+  discount_amount: number;
+  applicable: boolean;
+  message: string;
+}
+
+interface Product {
+  id: number;
+  handle?: string;
+  name: string;
+  image_url: string;
+  images?: { url: string; alt?: string }[];
+  price: number;
+  compare_at_price?: number;
+  description?: string;
+  short_description?: string;
 }
 
 interface CheckoutContent3Props {
@@ -41,6 +69,7 @@ interface CheckoutContent3Props {
     currency?: string;
   };
   orderItems?: OrderItem[];
+  product?: Product;
   deliveryOptions?: DeliveryOption[];
   paymentMethods?: PaymentMethod[];
   currency?: string;
@@ -49,11 +78,13 @@ interface CheckoutContent3Props {
 const CheckoutContent3: React.FC<CheckoutContent3Props> = ({
   settings = {},
   orderItems = [],
+  product,
   deliveryOptions = [],
   paymentMethods = [],
   currency = "BDT",
 }) => {
   const { showPromoCode = true, showOrderNotes = true } = settings;
+  const [quantity, setQuantity] = useState(1);
 
   const [selectedDelivery, setSelectedDelivery] = useState<string>(
     deliveryOptions.find((opt) => opt.enabled)?.id || ""
@@ -63,16 +94,131 @@ const CheckoutContent3: React.FC<CheckoutContent3Props> = ({
   );
   const [promoCode, setPromoCode] = useState("");
   const [orderNotes, setOrderNotes] = useState("");
+  const [appliedPromo, setAppliedPromo] = useState<PromoCode | null>(null);
+  const [promoError, setPromoError] = useState("");
+  const [isApplyingPromo, setIsApplyingPromo] = useState(false);
+
+  // If product is provided (single product page), create order item from it
+  const effectiveOrderItems: OrderItem[] =
+    product && orderItems.length === 0
+      ? [
+          {
+            product_id: product.id,
+            product_name: product.name,
+            image_url: product.image_url || product.images?.[0]?.url || "",
+            quantity: quantity,
+            unit_price: product.price,
+            line_total: product.price * quantity,
+          },
+        ]
+      : orderItems;
+
+  // Self MFS payment fields
+  const [paymentPhone, setPaymentPhone] = useState("");
+  const [trxId, setTrxId] = useState("");
+
+  // Get the selected payment method details
+  const selectedPaymentMethod = paymentMethods.find(
+    (pm) => pm.id === selectedPayment
+  );
 
   // Calculate totals
-  const subtotal = orderItems.reduce((sum, item) => sum + item.line_total, 0);
+  const subtotal = effectiveOrderItems.reduce(
+    (sum, item) => sum + item.line_total,
+    0
+  );
   const deliveryFee =
     deliveryOptions.find((opt) => opt.id === selectedDelivery)?.fee || 0;
-  const total = subtotal + deliveryFee;
+  const discount = appliedPromo?.discount_amount || 0;
+  const total = subtotal + deliveryFee - discount;
+
+  const handleApplyPromo = async () => {
+    if (!promoCode.trim()) return;
+
+    setIsApplyingPromo(true);
+    setPromoError("");
+
+    try {
+      // Call API to validate promo code
+      const apiUrl = import.meta.env.PUBLIC_API_URL || "http://localhost:3001";
+      const response = await fetch(
+        `${apiUrl}/api/promo-code?code=${promoCode}`
+      );
+      const data = await response.json();
+
+      if (data.success && data.data.promo_code.applicable) {
+        setAppliedPromo(data.data.promo_code);
+        setPromoError("");
+      } else {
+        setPromoError(data.data.promo_code.message || "Invalid promo code");
+        setAppliedPromo(null);
+      }
+    } catch (error) {
+      console.error("Promo code error:", error);
+      setPromoError("Failed to apply promo code");
+      setAppliedPromo(null);
+    } finally {
+      setIsApplyingPromo(false);
+    }
+  };
+
+  const handleRemovePromo = () => {
+    setAppliedPromo(null);
+    setPromoCode("");
+    setPromoError("");
+  };
 
   // Payment method icons
   const getPaymentIcon = (method: PaymentMethod) => {
-    if (method.id === "card") {
+    const gatewayMode = method.gateway_mode;
+    const iconBasePath = "/assets/icons/payment-gateway";
+
+    if (gatewayMode === "bkash") {
+      return (
+        <img
+          src={`${iconBasePath}/bKash-icon.svg`}
+          alt="bKash"
+          className="h-6 w-auto"
+        />
+      );
+    }
+    if (gatewayMode === "cod") {
+      return (
+        <img
+          src={`${iconBasePath}/cod-icon.svg`}
+          alt="Cash on Delivery"
+          className="h-6 w-auto"
+        />
+      );
+    }
+    if (gatewayMode === "nagad") {
+      return (
+        <img
+          src={`${iconBasePath}/nagad-icon.svg`}
+          alt="Nagad"
+          className="h-6 w-auto"
+        />
+      );
+    }
+    if (gatewayMode === "self_mfs") {
+      return (
+        <img
+          src={`${iconBasePath}/self-mfs-icon.svg`}
+          alt="Self MFS"
+          className="h-6 w-auto"
+        />
+      );
+    }
+    if (gatewayMode === "zatiq_seller_pay") {
+      return (
+        <img
+          src={`${iconBasePath}/seller-pay-icon.svg`}
+          alt="Zatiq Secure Purchase"
+          className="h-6 w-auto"
+        />
+      );
+    }
+    if (gatewayMode === "aamarpay" || method.type === "card") {
       return (
         <div className="flex items-center gap-1">
           <img
@@ -88,25 +234,12 @@ const CheckoutContent3: React.FC<CheckoutContent3Props> = ({
         </div>
       );
     }
-    if (method.id === "bkash") {
-      return (
-        <div className="bg-[#E2136E] text-white text-xs px-2 py-1 rounded font-medium">
-          bKash
-        </div>
-      );
-    }
-    if (method.id === "nagad") {
-      return (
-        <div className="bg-[#F6921E] text-white text-xs px-2 py-1 rounded font-medium">
-          নগদ
-        </div>
-      );
-    }
     return null;
   };
 
   // Card style for desktop
-  const cardStyle = "lg:bg-white lg:rounded-xl lg:border lg:border-gray-200 lg:p-6 lg:shadow-sm";
+  const cardStyle =
+    "lg:bg-white lg:rounded-xl lg:border lg:border-gray-200 lg:p-6 lg:shadow-sm";
 
   return (
     <section className="py-8 bg-gray-50 min-h-screen">
@@ -119,8 +252,18 @@ const CheckoutContent3: React.FC<CheckoutContent3Props> = ({
               {/* Contact Section */}
               <div className="mb-6">
                 <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                  <svg className="w-5 h-5 text-blue-600 hidden lg:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  <svg
+                    className="w-5 h-5 text-blue-600 hidden lg:block"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                    />
                   </svg>
                   Contact
                 </h2>
@@ -142,9 +285,24 @@ const CheckoutContent3: React.FC<CheckoutContent3Props> = ({
               {/* Shipping Section */}
               <div>
                 <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                  <svg className="w-5 h-5 text-blue-600 hidden lg:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <svg
+                    className="w-5 h-5 text-blue-600 hidden lg:block"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
                   </svg>
                   Shipping
                 </h2>
@@ -285,59 +443,21 @@ const CheckoutContent3: React.FC<CheckoutContent3Props> = ({
               </div>
             </div>
 
-            {/* Shipping Method */}
-            <div className={cardStyle}>
-              <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                <svg className="w-5 h-5 text-blue-600 hidden lg:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
-                </svg>
-                Shipping method
-              </h2>
-              <div className="border border-gray-200 rounded-lg overflow-hidden">
-                {deliveryOptions.map((option, index) => (
-                  <label
-                    key={option.id}
-                    className={cn(
-                      "flex items-start gap-3 p-4 cursor-pointer transition-colors",
-                      selectedDelivery === option.id
-                        ? "bg-blue-50"
-                        : "bg-white hover:bg-gray-50",
-                      index !== deliveryOptions.length - 1 &&
-                        "border-b border-gray-200"
-                    )}
-                  >
-                    <input
-                      type="radio"
-                      name="delivery"
-                      checked={selectedDelivery === option.id}
-                      onChange={() => setSelectedDelivery(option.id)}
-                      className="mt-1 w-4 h-4 text-blue-600"
-                    />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-900">
-                        {option.name}
-                      </p>
-                      {option.description && (
-                        <p className="text-xs text-gray-500 mt-0.5">
-                          {option.description}
-                        </p>
-                      )}
-                    </div>
-                    <span className="text-sm font-medium text-gray-900 shrink-0">
-                      {option.fee === 0
-                        ? "FREE"
-                        : `৳${option.fee.toLocaleString()}`}
-                    </span>
-                  </label>
-                ))}
-              </div>
-            </div>
-
             {/* Payment */}
             <div className={cardStyle}>
               <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                <svg className="w-5 h-5 text-blue-600 hidden lg:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                <svg
+                  className="w-5 h-5 text-blue-600 hidden lg:block"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+                  />
                 </svg>
                 Payment
               </h2>
@@ -375,6 +495,109 @@ const CheckoutContent3: React.FC<CheckoutContent3Props> = ({
                   </label>
                 ))}
               </div>
+
+              {/* Self MFS Details Section */}
+              {selectedPaymentMethod?.gateway_mode === "self_mfs" && (
+                <>
+                  <div className="mt-4 border border-gray-200 rounded-lg bg-gray-50 p-4">
+                    <div className="flex items-center gap-3 mb-3">
+                      {selectedPaymentMethod.mfs_provider === "bkash" ? (
+                        <img
+                          src="/assets/icons/payment-gateway/bKash-icon.svg"
+                          alt="bKash"
+                          className="h-6 w-auto"
+                        />
+                      ) : selectedPaymentMethod.mfs_provider === "nagad" ? (
+                        <img
+                          src="/assets/icons/payment-gateway/nagad-icon.svg"
+                          alt="Nagad"
+                          className="h-6 w-auto"
+                        />
+                      ) : (
+                        <img
+                          src="/assets/icons/payment-gateway/self-mfs-icon.svg"
+                          alt="Self MFS"
+                          className="h-6 w-auto"
+                        />
+                      )}
+                      <span className="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded">
+                        {selectedPaymentMethod.mfs_type === "personal"
+                          ? "Personal"
+                          : "Merchant"}
+                      </span>
+                    </div>
+
+                    {/* Phone Number */}
+                    {selectedPaymentMethod.mfs_phone && (
+                      <div className="mb-3">
+                        <p className="text-sm font-medium text-gray-700 mb-1">
+                          Send Money to:
+                        </p>
+                        <p className="text-lg font-semibold text-gray-900">
+                          {selectedPaymentMethod.mfs_phone}
+                        </p>
+                      </div>
+                    )}
+
+                    {/* Instructions */}
+                    {selectedPaymentMethod.mfs_instruction && (
+                      <div className="mb-3">
+                        <p className="text-sm font-medium text-gray-700 mb-1">
+                          Instructions:
+                        </p>
+                        <div className="text-sm text-gray-600 whitespace-pre-line bg-white p-3 rounded border border-gray-200">
+                          {selectedPaymentMethod.mfs_instruction}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* QR Code */}
+                    {selectedPaymentMethod.mfs_qr_image_url && (
+                      <div className="flex flex-col items-center">
+                        <p className="text-sm font-medium text-gray-700 mb-2 flex items-center gap-1">
+                          <QrCode className="w-4 h-4" />
+                          Scan QR Code
+                        </p>
+                        <img
+                          src={selectedPaymentMethod.mfs_qr_image_url}
+                          alt="QR Code"
+                          className="w-32 h-32 object-contain border border-gray-200 rounded-lg bg-white p-2"
+                        />
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Payment Phone and TrxID Input Fields */}
+                  <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Your Payment Phone Number{" "}
+                        <span className="text-red-500">*</span>
+                      </label>
+                      <Input
+                        type="tel"
+                        value={paymentPhone}
+                        onChange={(e) => setPaymentPhone(e.target.value)}
+                        placeholder="01XXXXXXXXX"
+                        className="h-11 border-gray-300"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        TrxID (Transaction ID){" "}
+                        <span className="text-red-500">*</span>
+                      </label>
+                      <Input
+                        type="text"
+                        value={trxId}
+                        onChange={(e) => setTrxId(e.target.value)}
+                        placeholder="e.g. ABC123XYZ456"
+                        className="h-11 border-gray-300"
+                      />
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
 
             {/* Billing Address */}
@@ -384,7 +607,9 @@ const CheckoutContent3: React.FC<CheckoutContent3Props> = ({
               </h2>
               <select className="w-full h-11 px-4 border border-gray-300 rounded-md bg-white text-gray-900 appearance-none cursor-pointer">
                 <option value="same">Same as shipping address</option>
-                <option value="different">Use a different billing address</option>
+                <option value="different">
+                  Use a different billing address
+                </option>
               </select>
             </div>
           </div>
@@ -394,7 +619,7 @@ const CheckoutContent3: React.FC<CheckoutContent3Props> = ({
             <div className="bg-white border border-gray-200 rounded-lg p-6 lg:sticky lg:top-6">
               {/* Order Items */}
               <div className="space-y-4 mb-6">
-                {orderItems.map((item) => (
+                {effectiveOrderItems.map((item) => (
                   <div
                     key={item.product_id}
                     className="flex gap-4 p-3 border border-gray-200 rounded-lg"
@@ -413,9 +638,32 @@ const CheckoutContent3: React.FC<CheckoutContent3Props> = ({
                       {item.variant && (
                         <p className="text-xs text-gray-500">{item.variant}</p>
                       )}
-                      <p className="text-xs text-gray-500 mt-1">
-                        Quantity: X{item.quantity}
-                      </p>
+                      {/* Show quantity controls for single product */}
+                      {product ? (
+                        <div className="flex items-center gap-2 mt-1">
+                          <button
+                            onClick={() =>
+                              setQuantity(Math.max(1, quantity - 1))
+                            }
+                            className="w-6 h-6 flex items-center justify-center rounded border border-gray-300 text-gray-600 hover:bg-gray-100"
+                          >
+                            -
+                          </button>
+                          <span className="text-sm font-medium w-6 text-center">
+                            {quantity}
+                          </span>
+                          <button
+                            onClick={() => setQuantity(quantity + 1)}
+                            className="w-6 h-6 flex items-center justify-center rounded border border-gray-300 text-gray-600 hover:bg-gray-100"
+                          >
+                            +
+                          </button>
+                        </div>
+                      ) : (
+                        <p className="text-xs text-gray-500 mt-1">
+                          Quantity: X{item.quantity}
+                        </p>
+                      )}
                     </div>
                     <div className="text-right shrink-0">
                       <p className="text-sm font-semibold text-gray-900">
@@ -433,17 +681,52 @@ const CheckoutContent3: React.FC<CheckoutContent3Props> = ({
                     Do you have a promo code?
                   </p>
                   <div className="flex gap-2">
-                    <Input
-                      type="text"
-                      value={promoCode}
-                      onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
-                      placeholder="Discount code / Promo code here"
-                      className="flex-1 h-10 border-gray-300 text-sm"
-                    />
-                    <button className="px-4 h-10 border border-blue-500 text-blue-500 rounded-md text-sm font-medium hover:bg-blue-50 transition-colors">
-                      Add
-                    </button>
+                    <div className="relative flex-1">
+                      <Tag className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <Input
+                        type="text"
+                        value={promoCode}
+                        onChange={(e) =>
+                          setPromoCode(e.target.value.toUpperCase())
+                        }
+                        placeholder="Discount code / Promo code here"
+                        disabled={!!appliedPromo}
+                        className="pl-9 flex-1 h-10 border-gray-300 text-sm"
+                      />
+                    </div>
+                    {appliedPromo ? (
+                      <button
+                        onClick={handleRemovePromo}
+                        className="px-4 h-10 bg-gray-200 text-gray-700 rounded-md text-sm font-medium hover:bg-gray-300 transition-colors"
+                      >
+                        Remove
+                      </button>
+                    ) : (
+                      <button
+                        onClick={handleApplyPromo}
+                        disabled={isApplyingPromo || !promoCode.trim()}
+                        className="px-4 h-10 border border-blue-500 text-blue-500 rounded-md text-sm font-medium hover:bg-blue-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {isApplyingPromo ? "..." : "Add"}
+                      </button>
+                    )}
                   </div>
+                  {appliedPromo && (
+                    <div className="mt-2 p-2 bg-green-50 border border-green-200 rounded-lg flex items-start gap-2">
+                      <Check className="w-4 h-4 text-green-600 mt-0.5 shrink-0" />
+                      <p className="text-xs text-green-700 flex-1">
+                        {appliedPromo.message}
+                      </p>
+                    </div>
+                  )}
+                  {promoError && (
+                    <div className="mt-2 p-2 bg-red-50 border border-red-200 rounded-lg flex items-start gap-2">
+                      <AlertCircle className="w-4 h-4 text-red-600 mt-0.5 shrink-0" />
+                      <p className="text-xs text-red-700 flex-1">
+                        {promoError}
+                      </p>
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -451,16 +734,21 @@ const CheckoutContent3: React.FC<CheckoutContent3Props> = ({
               <div className="space-y-3 py-4 border-t border-gray-200">
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">
-                    Subtotal: {orderItems.length} items
+                    Subtotal: {effectiveOrderItems.length}{" "}
+                    {effectiveOrderItems.length === 1 ? "item" : "items"}
                   </span>
                   <span className="text-gray-900">
                     ৳{subtotal.toLocaleString()}
                   </span>
                 </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Discount</span>
-                  <span className="text-gray-900">৳0.00</span>
-                </div>
+                {discount > 0 && (
+                  <div className="flex justify-between text-sm">
+                    <span className="text-green-600">Discount</span>
+                    <span className="text-green-600">
+                      -৳{discount.toLocaleString()}
+                    </span>
+                  </div>
+                )}
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Shipping</span>
                   <span className="text-gray-900">

@@ -28,20 +28,16 @@ const PrivacyHero1: React.FC<PrivacyHero1Props> = ({ settings = {} }) => {
   return (
     <section className="relative w-full overflow-hidden" style={{ backgroundColor }}>
       {/* Background Image with Overlay */}
-      <div className="relative w-full h-[280px] md:h-[320px] lg:h-[360px]">
+      <div className="relative w-full h-[280px] md:h-80 lg:h-[360px]">
         <img
           src={image}
           alt={headline}
           className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/50" />
-
-        {/* Content Overlay */}
-        <div className="relative z-10 h-full flex items-center">
-          <div className="max-w-[1440px] w-full mx-auto px-4 2xl:px-0">
-            {/* Breadcrumb */}
-            <nav className="mb-4">
-              <ol className="flex items-center gap-2 text-sm text-white/70">
+        <div className="absolute inset-0 bg-linear-to-r from-black/70 to-black/50" />
+        {/* Breadcrumb */}
+        <nav className="absolute top-2 left-0 right-0 z-20 max-w-[1440px] mx-auto px-4 2xl:px-0">
+          <ol className="flex items-center gap-2 text-sm text-white/70">
                 <li>
                   <a href="/" className="hover:text-white transition-colors">
                     Home
@@ -62,10 +58,12 @@ const PrivacyHero1: React.FC<PrivacyHero1Props> = ({ settings = {} }) => {
                     />
                   </svg>
                 </li>
-                <li className="text-white">{headline}</li>
-              </ol>
-            </nav>
-
+            <li className="text-white">{headline}</li>
+          </ol>
+        </nav>
+        {/* Content Overlay */}
+        <div className="relative z-10 h-full flex items-center">
+          <div className="max-w-[1440px] w-full mx-auto px-4 2xl:px-0">
             {/* Subheadline */}
             <p className="text-sm md:text-base font-medium text-blue-300 mb-2">
               {subheadline}

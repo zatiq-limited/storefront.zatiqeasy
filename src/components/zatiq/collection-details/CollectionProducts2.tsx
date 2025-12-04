@@ -38,6 +38,12 @@ interface CollectionProducts2Props {
     columns?: number;
     cardStyle?: string;
     backgroundColor?: string;
+    buttonBgColor?: string;
+    buttonTextColor?: string;
+    loadMoreButtonText?: string;
+    loadMoreBorderColor?: string;
+    loadMoreBgColor?: string;
+    loadMoreTextColor?: string;
   };
 }
 
@@ -46,7 +52,16 @@ const CollectionProducts2: React.FC<CollectionProducts2Props> = ({
   collection,
   settings = {},
 }) => {
-  const { backgroundColor = "#fafafa", cardStyle = "product-card-1" } = settings;
+  const {
+    backgroundColor = "#f9fafb",
+    cardStyle = "product-card-2",
+    buttonBgColor = "#0c2c5f",
+    buttonTextColor = "#eff2f6",
+    loadMoreButtonText = "View All Products",
+    loadMoreBorderColor = "#111827",
+    loadMoreBgColor = "#0c45c0",
+    loadMoreTextColor = "#111827",
+  } = settings;
 
   // Calculate stats
   const onSaleCount = products.filter((p) => p.old_price && p.old_price > p.price).length;
@@ -85,6 +100,8 @@ const CollectionProducts2: React.FC<CollectionProducts2Props> = ({
               settings={{
                 ...settings,
                 cardStyle,
+                buttonBgColor,
+                buttonTextColor,
               }}
             />
 
@@ -95,10 +112,22 @@ const CollectionProducts2: React.FC<CollectionProducts2Props> = ({
                   Showing <span className="font-semibold text-gray-900">{products.length}</span> of{" "}
                   <span className="font-semibold text-gray-900">{products.length}</span> products
                 </p>
-                <button className="group relative px-8 py-1.5 sm:py-3 bg-white border-2 border-gray-900 rounded-full font-semibold hover:bg-gray-900 hover:text-white transition-all overflow-hidden">
-                  <span className="relative z-10">View All Products</span>
-                  <div className="absolute inset-0 bg-gray-900 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></div>
-                </button>
+                <a
+                  href="/products"
+                  className="group relative px-8 py-1.5 sm:py-3 bg-white border-2 rounded-full font-semibold transition-all overflow-hidden"
+                  style={{
+                    borderColor: loadMoreBorderColor,
+                    color: loadMoreTextColor,
+                  }}
+                >
+                  <span className="relative z-10 group-hover:text-white transition-colors">
+                    {loadMoreButtonText}
+                  </span>
+                  <div
+                    className="absolute inset-0 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left"
+                    style={{ backgroundColor: loadMoreBgColor }}
+                  ></div>
+                </a>
               </div>
             </div>
           </div>

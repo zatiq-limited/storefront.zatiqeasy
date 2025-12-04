@@ -29,18 +29,48 @@ const CheckoutHero2: React.FC<CheckoutHero2Props> = ({
   const getStepIcon = (iconName: string) => {
     const icons: Record<string, React.ReactNode> = {
       "shopping-cart": (
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+        <svg
+          className="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+          />
         </svg>
       ),
       "credit-card": (
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+        <svg
+          className="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+          />
         </svg>
       ),
       "check-circle": (
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        <svg
+          className="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
         </svg>
       ),
     };
@@ -48,20 +78,21 @@ const CheckoutHero2: React.FC<CheckoutHero2Props> = ({
   };
 
   return (
-    <section className={`py-6 border-b border-gray-200 bg-linear-to-r ${backgroundGradient}`}>
+    <section
+      className={`py-6 border-b border-gray-200 bg-linear-to-r ${backgroundGradient}`}
+    >
       <div className="max-w-[1440px] mx-auto px-4 2xl:px-0">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           {/* Left - Title & Breadcrumb */}
           <div className="flex-1">
             {showBreadcrumb && (
               <nav className="flex items-center gap-2 text-xs mb-2">
-                <a href="/" className="flex items-center gap-1 text-blue-600 hover:text-blue-800 transition-colors">
+                <a
+                  href="/"
+                  className="flex items-center gap-1 text-blue-600 hover:text-blue-800 transition-colors"
+                >
                   <Home className="w-3.5 h-3.5" />
                   <span className="hidden sm:inline">Home</span>
-                </a>
-                <ChevronRight className="w-3.5 h-3.5 text-gray-400" />
-                <a href="/cart" className="text-blue-600 hover:text-blue-800 transition-colors">
-                  Cart
                 </a>
                 <ChevronRight className="w-3.5 h-3.5 text-gray-400" />
                 <span className="text-gray-600 font-medium">{title}</span>
@@ -72,9 +103,7 @@ const CheckoutHero2: React.FC<CheckoutHero2Props> = ({
                 {title}
               </h1>
               {subtitle && (
-                <p className="text-sm text-gray-600 mt-1">
-                  {subtitle}
-                </p>
+                <p className="text-sm text-gray-600 mt-1">{subtitle}</p>
               )}
             </div>
           </div>
@@ -94,7 +123,11 @@ const CheckoutHero2: React.FC<CheckoutHero2Props> = ({
                       className={`
                         flex items-center gap-2 px-3 py-2 rounded-lg border transition-all
                         ${isCompleted ? "bg-green-50 border-green-200" : ""}
-                        ${isCurrent ? "bg-blue-50 border-blue-300 shadow-md" : ""}
+                        ${
+                          isCurrent
+                            ? "bg-blue-50 border-blue-300 shadow-md"
+                            : ""
+                        }
                         ${isUpcoming ? "bg-gray-50 border-gray-200" : ""}
                       `}
                     >
@@ -108,8 +141,16 @@ const CheckoutHero2: React.FC<CheckoutHero2Props> = ({
                         `}
                       >
                         {isCompleted ? (
-                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          <svg
+                            className="w-4 h-4"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                              clipRule="evenodd"
+                            />
                           </svg>
                         ) : (
                           getStepIcon(step.icon)
@@ -134,7 +175,11 @@ const CheckoutHero2: React.FC<CheckoutHero2Props> = ({
                       <ChevronRight
                         className={`
                           w-4 h-4 hidden md:block
-                          ${step.id < currentStep ? "text-green-500" : "text-gray-400"}
+                          ${
+                            step.id < currentStep
+                              ? "text-green-500"
+                              : "text-gray-400"
+                          }
                         `}
                       />
                     )}

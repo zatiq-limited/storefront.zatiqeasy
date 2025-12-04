@@ -28,7 +28,14 @@ interface CollectionBanner2Props {
     showProductCount?: boolean;
     imagePosition?: "left" | "right";
     backgroundColor?: string;
-    rate?: number;
+    cardBackgroundColor?: string;
+    titleColor?: string;
+    descriptionColor?: string;
+    badgeBackgroundColor?: string;
+    badgeTextColor?: string;
+    buttonBackgroundColor?: string;
+    buttonTextColor?: string;
+    rate?: string;
     cardTag?: string;
     cardTagValue?: string;
     bannerButtonText?: string;
@@ -45,11 +52,18 @@ const CollectionBanner2: React.FC<CollectionBanner2Props> = ({
     showDescription = true,
     showProductCount = true,
     imagePosition = "right",
-    backgroundColor = "#fafafa",
-    rate = 4.9,
-    cardTag = "New",
-    cardTagValue = "Arrival",
-    bannerButtonText = "Explore Collection",
+    backgroundColor = "#f9fafb",
+    cardBackgroundColor = "#ffffff",
+    titleColor = "#111827",
+    descriptionColor = "#6b7280",
+    badgeBackgroundColor = "#ecfdf5",
+    badgeTextColor = "#059669",
+    buttonBackgroundColor = "#111827",
+    buttonTextColor = "#ffffff",
+    rate = "5",
+    cardTag = "New Available Products",
+    cardTagValue = "Check value",
+    bannerButtonText = "Explore Products",
     bannerButtonLink = "/products",
   } = settings;
 
@@ -89,9 +103,10 @@ const CollectionBanner2: React.FC<CollectionBanner2Props> = ({
 
               {/* Title - Extra Large Display */}
               <h1
-                className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-gray-900 mb-6 leading-[0.95] tracking-tight"
+                className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-6 leading-[0.95] tracking-tight"
                 style={{
                   animation: "fadeInLeft 1s ease-out 0.2s both",
+                  color: titleColor,
                 }}
               >
                 {collection.title}
@@ -100,9 +115,10 @@ const CollectionBanner2: React.FC<CollectionBanner2Props> = ({
               {/* Description */}
               {showDescription && collection.description && (
                 <p
-                  className="text-lg md:text-xl text-gray-600 mb-8 leading-relaxed max-w-xl"
+                  className="text-lg md:text-xl mb-8 leading-relaxed max-w-xl"
                   style={{
                     animation: "fadeInLeft 1s ease-out 0.4s both",
+                    color: descriptionColor,
                   }}
                 >
                   {collection.description}
@@ -115,9 +131,12 @@ const CollectionBanner2: React.FC<CollectionBanner2Props> = ({
                 style={{ animation: "fadeInLeft 1s ease-out 0.6s both" }}
               >
                 {showProductCount && collection.product_count !== undefined && (
-                  <div className="group relative backdrop-blur-xl bg-white/80 border border-gray-200/50 rounded-2xl px-6 py-4 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                  <div
+                    className="group relative backdrop-blur-xl border border-gray-200/50 rounded-2xl px-6 py-4 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                    style={{ backgroundColor: cardBackgroundColor }}
+                  >
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                      <div className="w-10 h-10 rounded-full bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
                         <svg
                           className="w-5 h-5 text-white"
                           fill="none"
@@ -133,10 +152,16 @@ const CollectionBanner2: React.FC<CollectionBanner2Props> = ({
                         </svg>
                       </div>
                       <div>
-                        <p className="text-2xl font-bold text-gray-900">
+                        <p
+                          className="text-2xl font-bold"
+                          style={{ color: titleColor }}
+                        >
                           {collection.product_count}
                         </p>
-                        <p className="text-xs text-gray-600 font-medium">
+                        <p
+                          className="text-xs font-medium"
+                          style={{ color: descriptionColor }}
+                        >
                           Products
                         </p>
                       </div>
@@ -144,11 +169,18 @@ const CollectionBanner2: React.FC<CollectionBanner2Props> = ({
                   </div>
                 )}
 
-                <div className="group relative backdrop-blur-xl bg-white/80 border border-gray-200/50 rounded-2xl px-6 py-4 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div
+                  className="group relative backdrop-blur-xl border border-gray-200/50 rounded-2xl px-6 py-4 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                  style={{ backgroundColor: cardBackgroundColor }}
+                >
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
+                    <div
+                      className="w-10 h-10 rounded-full flex items-center justify-center"
+                      style={{ backgroundColor: badgeBackgroundColor }}
+                    >
                       <svg
-                        className="w-5 h-5 text-white"
+                        className="w-5 h-5"
+                        style={{ color: badgeTextColor }}
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -162,19 +194,28 @@ const CollectionBanner2: React.FC<CollectionBanner2Props> = ({
                       </svg>
                     </div>
                     <div>
-                      <p className="text-2xl font-bold text-gray-900">
+                      <p
+                        className="text-2xl font-bold"
+                        style={{ color: titleColor }}
+                      >
                         {cardTag}
                       </p>
-                      <p className="text-xs text-gray-600 font-medium">
+                      <p
+                        className="text-xs font-medium"
+                        style={{ color: descriptionColor }}
+                      >
                         {cardTagValue}
                       </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="group relative backdrop-blur-xl bg-white/80 border border-gray-200/50 rounded-2xl px-6 py-4 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div
+                  className="group relative backdrop-blur-xl border border-gray-200/50 rounded-2xl px-6 py-4 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                  style={{ backgroundColor: cardBackgroundColor }}
+                >
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-full bg-linear-to-br from-amber-500 to-orange-600 flex items-center justify-center">
                       <svg
                         className="w-5 h-5 text-white"
                         fill="currentColor"
@@ -184,8 +225,18 @@ const CollectionBanner2: React.FC<CollectionBanner2Props> = ({
                       </svg>
                     </div>
                     <div>
-                      <p className="text-2xl font-bold text-gray-900">{rate}</p>
-                      <p className="text-xs text-gray-600 font-medium">Rated</p>
+                      <p
+                        className="text-2xl font-bold"
+                        style={{ color: titleColor }}
+                      >
+                        {rate}
+                      </p>
+                      <p
+                        className="text-xs font-medium"
+                        style={{ color: descriptionColor }}
+                      >
+                        Rated
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -194,8 +245,12 @@ const CollectionBanner2: React.FC<CollectionBanner2Props> = ({
               {/* CTA Button */}
               <a
                 href={bannerButtonLink}
-                className="group inline-flex items-center gap-3 bg-gray-900 text-white px-8 py-4 rounded-full font-semibold hover:bg-gray-800 transition-all duration-300 hover:gap-5 hover:pr-6"
-                style={{ animation: "fadeInLeft 1s ease-out 0.8s both" }}
+                className="group inline-flex items-center gap-3 px-8 py-4 rounded-full font-semibold hover:opacity-90 transition-all duration-300 hover:gap-5 hover:pr-6"
+                style={{
+                  animation: "fadeInLeft 1s ease-out 0.8s both",
+                  backgroundColor: buttonBackgroundColor,
+                  color: buttonTextColor,
+                }}
               >
                 <span>{bannerButtonText}</span>
                 <svg
@@ -232,7 +287,7 @@ const CollectionBanner2: React.FC<CollectionBanner2Props> = ({
                     className="w-full h-[500px] md:h-[600px] object-cover transform transition-transform duration-700 group-hover:scale-105"
                   />
                   {/* Gradient Overlay on Hover */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
                   {/* Floating Badge */}
                   {collection.imgTag && (
@@ -245,8 +300,8 @@ const CollectionBanner2: React.FC<CollectionBanner2Props> = ({
                 </div>
 
                 {/* Decorative Elements */}
-                <div className="absolute -top-4 -left-4 w-24 h-24 bg-gradient-to-br from-indigo-400 to-purple-500 rounded-full opacity-20 blur-3xl"></div>
-                <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-gradient-to-br from-pink-400 to-rose-500 rounded-full opacity-20 blur-3xl"></div>
+                <div className="absolute -top-4 -left-4 w-24 h-24 bg-linear-to-br from-indigo-400 to-purple-500 rounded-full opacity-20 blur-3xl"></div>
+                <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-linear-to-br from-pink-400 to-rose-500 rounded-full opacity-20 blur-3xl"></div>
               </div>
             </div>
           )}

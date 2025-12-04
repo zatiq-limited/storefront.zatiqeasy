@@ -5,7 +5,7 @@
     "sections": [
       {
         "id": "privacy_hero",
-        "type": "privacy-hero-1",
+        "type": "privacy-hero-2",
         "enabled": true,
         "settings": {
           "backgroundColor": "#F9FAFB",

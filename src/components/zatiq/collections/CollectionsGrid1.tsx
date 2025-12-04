@@ -30,7 +30,7 @@ const CollectionsGrid1: React.FC<CollectionsGrid1Props> = ({
 
   return (
     <section className="py-16 md:py-24">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[1440px] mx-auto px-4 2xl:px-0">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {collections.map((collection, index) => (
             <div
@@ -54,10 +54,7 @@ const CollectionsGrid1: React.FC<CollectionsGrid1Props> = ({
                   }`}
                 >
                   <img
-                    src={
-                      collection.banner_url ||
-                      collection.image_url
-                    }
+                    src={collection.banner_url || collection.image_url}
                     alt={collection.name}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     loading="lazy"
