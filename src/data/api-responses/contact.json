@@ -5,138 +5,72 @@
     "sections": [
       {
         "id": "contact_hero",
-        "type": "contact-hero-2",
+        "type": "contact-hero-1",
         "enabled": true,
         "settings": {
-          "backgroundColor": "#F9FAFB",
-          "textColor": "#111827",
-          "headline": "Get In Touch",
-          "subheadline": "Contact Us",
-          "description": "Have questions or need assistance? We're here to help. Reach out to us and our team will get back to you as soon as possible.",
-          "image": "https://images.unsplash.com/photo-1423666639041-f56000c27a9a?w=1200&h=600&fit=crop"
-        }
+          "headline": "Contact",
+          "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=1920&h=600&fit=crop",
+          "overlayOpacity": 0.5,
+          "overlayColor": "#000000"
+        },
+        "breadcrumbs": [
+          {
+            "id": "breadcrumb_1",
+            "type": "breadcrumb_item",
+            "settings": {
+              "label": "Home",
+              "link": "/"
+            }
+          },
+          {
+            "id": "breadcrumb_2",
+            "type": "breadcrumb_item",
+            "settings": {
+              "label": "Contact"
+            }
+          }
+        ]
       },
       {
         "id": "contact_info",
-        "type": "contact-info-2",
+        "type": "contact-info-1",
         "enabled": true,
         "settings": {
           "backgroundColor": "#FFFFFF",
           "textColor": "#111827",
-          "accentColor": "#2563EB",
-          "title": "Contact Information",
-          "subtitle": "Find us through any of these channels"
+          "accentColor": "#8B4513",
+          "title": "Quick support",
+          "titleStyle": "script",
+          "iconBackgroundColor": "#F5F0EB"
         },
         "blocks": [
           {
             "id": "info_1",
             "type": "contact_item",
             "settings": {
-              "icon": "📍",
-              "title": "Our Office",
-              "content": "123 Business Avenue, Suite 500\nNew York, NY 10001, USA"
+              "icon": "location",
+              "title": "Store Location",
+              "content": "14 Ringe lane, las vegas, nv, 89156 united states"
             }
           },
           {
             "id": "info_2",
             "type": "contact_item",
             "settings": {
-              "icon": "📞",
-              "title": "Phone",
-              "content": "+1 (555) 123-4567\n+1 (555) 987-6543"
+              "icon": "phone",
+              "title": "Contact Call",
+              "content": "+00-1234567890",
+              "link": "tel:+001234567890"
             }
           },
           {
             "id": "info_3",
             "type": "contact_item",
             "settings": {
-              "icon": "✉️",
-              "title": "Email",
-              "content": "info@example.com\nsupport@example.com"
-            }
-          },
-          {
-            "id": "info_4",
-            "type": "contact_item",
-            "settings": {
-              "icon": "🕐",
-              "title": "Business Hours",
-              "content": "Monday - Friday: 9:00 AM - 6:00 PM\nSaturday: 10:00 AM - 4:00 PM"
-            }
-          }
-        ]
-      },
-      {
-        "id": "contact_form",
-        "type": "contact-form-2",
-        "enabled": true,
-        "settings": {
-          "backgroundColor": "#F9FAFB",
-          "textColor": "#111827",
-          "accentColor": "#2563EB",
-          "title": "Send Us a Message",
-          "subtitle": "Fill out the form below and we'll get back to you within 24 hours",
-          "submitButtonText": "Send Message",
-          "submitButtonColor": "#2563EB",
-          "formEndpoint": "/api/contact",
-          "successMessage": "Thank you! Your message has been sent successfully.",
-          "errorMessage": "Oops! Something went wrong. Please try again."
-        },
-        "blocks": [
-          {
-            "id": "field_1",
-            "type": "form_field",
-            "settings": {
-              "name": "name",
-              "label": "Full Name",
-              "type": "text",
-              "placeholder": "Enter your full name",
-              "required": true
-            }
-          },
-          {
-            "id": "field_2",
-            "type": "form_field",
-            "settings": {
-              "name": "email",
-              "label": "Email Address",
-              "type": "email",
-              "placeholder": "Enter your email address",
-              "required": true
-            }
-          },
-          {
-            "id": "field_3",
-            "type": "form_field",
-            "settings": {
-              "name": "phone",
-              "label": "Phone Number",
-              "type": "tel",
-              "placeholder": "Enter your phone number",
-              "required": false
-            }
-          },
-          {
-            "id": "field_4",
-            "type": "form_field",
-            "settings": {
-              "name": "subject",
-              "label": "Subject",
-              "type": "text",
-              "placeholder": "What is this regarding?",
-              "required": true
-            }
-          },
-          {
-            "id": "field_5",
-            "type": "form_field",
-            "settings": {
-              "name": "message",
-              "label": "Message",
-              "type": "textarea",
-              "placeholder": "Write your message here...",
-              "required": true,
-              "rows": 5
+              "icon": "email",
+              "title": "Contact Mail",
+              "content": "demo@support.com",
+              "link": "mailto:demo@support.com"
             }
           }
         ]
@@ -146,12 +80,74 @@
         "type": "contact-map-2",
         "enabled": true,
         "settings": {
-          "backgroundColor": "#FFFFFF",
-          "title": "Find Us",
-          "subtitle": "Visit our office",
+          "backgroundColor": "#F9FAFB",
           "mapUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.1841902907894!2d-73.98570908459418!3d40.74881797932847!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1620000000000!5m2!1sen!2sus",
-          "height": "400px"
+          "height": "450px",
+          "rounded": true,
+          "shadow": true,
+          "contained": true
         }
+      },
+      {
+        "id": "contact_form",
+        "type": "contact-form-2",
+        "enabled": true,
+        "settings": {
+          "backgroundColor": "#F9FAFB",
+          "textColor": "#111827",
+          "title": "Keep in touch with us",
+          "titleStyle": "script",
+          "submitButtonText": "SEND MESSAGE",
+          "submitButtonColor": "#8B4513",
+          "formEndpoint": "/api/contact",
+          "successMessage": "Thank you! Your message has been sent successfully.",
+          "errorMessage": "Oops! Something went wrong. Please try again.",
+          "showTermsCheckbox": true,
+          "termsText": "I accept the terms & conditions and I understand that my data will be hold securely in accordance with the privacy policy."
+        },
+        "blocks": [
+          {
+            "id": "field_1",
+            "type": "form_field",
+            "settings": {
+              "name": "name",
+              "type": "text",
+              "placeholder": "Your full name",
+              "required": true
+            }
+          },
+          {
+            "id": "field_2",
+            "type": "form_field",
+            "settings": {
+              "name": "email",
+              "type": "email",
+              "placeholder": "Your email address",
+              "required": true
+            }
+          },
+          {
+            "id": "field_3",
+            "type": "form_field",
+            "settings": {
+              "name": "phone",
+              "type": "tel",
+              "placeholder": "Your mobile number",
+              "required": false
+            }
+          },
+          {
+            "id": "field_4",
+            "type": "form_field",
+            "settings": {
+              "name": "message",
+              "type": "textarea",
+              "placeholder": "Your message here...",
+              "required": true,
+              "rows": 8
+            }
+          }
+        ]
       }
     ],
     "seo": {
@@ -160,7 +156,7 @@
       "og": {
         "title": "Contact Us",
         "description": "Get in touch with our team for any questions or support",
-        "image": "https://images.unsplash.com/photo-1423666639041-f56000c27a9a?w=1200&h=630&fit=crop"
+        "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=1200&h=630&fit=crop"
       }
     }
   }
