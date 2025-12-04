@@ -131,19 +131,15 @@
             "links": [
               {
                 "text": "About Us",
-                "url": "/about"
+                "url": "/about-us"
+              },
+              {
+                "text": "Contact Us",
+                "url": "/contact-us"
               },
               {
                 "text": "Privacy Policy",
                 "url": "/privacy-policy"
-              },
-              {
-                "text": "Terms and Conditions",
-                "url": "/terms"
-              },
-              {
-                "text": "Technical Support",
-                "url": "/support"
               }
             ]
           }
