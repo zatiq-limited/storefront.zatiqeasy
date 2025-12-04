@@ -25,6 +25,7 @@ interface ComponentRendererProps {
   tabs?: any[];
   contact?: any;
   paymentIcons?: any[];
+  features?: any[];
   enabled?: boolean;
 
   // Global settings for font inheritance
@@ -91,6 +92,7 @@ export default function ComponentRenderer(props: ComponentRendererProps) {
       testimonials: section.testimonials,
       tabs: section.tabs,
       breadcrumbs: section.breadcrumbs,
+      features: section.features,
       // Pass through product if provided (for single product pages)
       product: restProps.product,
       // Pass through checkout data (for checkout components)
@@ -110,6 +112,7 @@ export default function ComponentRenderer(props: ComponentRendererProps) {
       tabs,
       contact,
       paymentIcons,
+      features,
       enabled,
       ...spreadProps
     } = restProps;
@@ -125,6 +128,7 @@ export default function ComponentRenderer(props: ComponentRendererProps) {
       tabs,
       contact,
       paymentIcons,
+      features,
     };
   }
 

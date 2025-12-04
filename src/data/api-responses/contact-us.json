@@ -116,6 +116,35 @@
               "link": "mailto:demo@support.com"
             }
           }
+        ],
+        "features": [
+          {
+            "id": "feature_1",
+            "type": "feature_item",
+            "showFeature": true,
+            "settings": {
+              "title": "Free Shipping",
+              "description": "Free shipping on all orders over $100"
+            }
+          },
+          {
+            "id": "feature_2",
+            "type": "feature_item",
+            "showFeature": true,
+            "settings": {
+              "title": "24/7 Support",
+              "description": "Our support team is available around the clock"
+            }
+          },
+          {
+            "id": "feature_3",
+            "type": "feature_item",
+            "showFeature": true,
+            "settings": {
+              "title": "Easy Returns",
+              "description": "30-day hassle-free return policy"
+            }
+          }
         ]
       },
       {

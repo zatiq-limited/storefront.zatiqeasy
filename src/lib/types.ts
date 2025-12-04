@@ -36,6 +36,7 @@ export interface Section {
   testimonials?: any[];
   tabs?: any[];
   breadcrumbs?: Block[];
+  features?: Block[];
 }
 
 export interface Block {

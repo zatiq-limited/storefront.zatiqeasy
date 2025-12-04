@@ -16,6 +16,7 @@ interface ContactItem {
 interface FeatureItem {
   id: string;
   type: string;
+  showFeature?: boolean;
   settings: {
     title?: string;
     description?: string;
@@ -215,36 +216,7 @@ const ContactInfo2: React.FC<ContactInfo2Props> = ({
     },
   ];
 
-  // Default features when none provided
-  const defaultFeatures: FeatureItem[] = [
-    {
-      id: "feature_1",
-      type: "feature_item",
-      settings: {
-        title: "Free Shipping",
-        description: "Free shipping on all orders over $100",
-      },
-    },
-    {
-      id: "feature_2",
-      type: "feature_item",
-      settings: {
-        title: "24/7 Support",
-        description: "Our support team is available around the clock",
-      },
-    },
-    {
-      id: "feature_3",
-      type: "feature_item",
-      settings: {
-        title: "Easy Returns",
-        description: "30-day hassle-free return policy",
-      },
-    },
-  ];
-
   const displaySocials = socials.length > 0 ? socials : defaultSocials;
-  const displayFeatures = features.length > 0 ? features : defaultFeatures;
 
   // If no blocks provided, don't render
   if (blocks.length === 0) return null;
@@ -353,9 +325,9 @@ const ContactInfo2: React.FC<ContactInfo2Props> = ({
         </div>
 
         {/* Features Section */}
-        {showFeatures && displayFeatures.length > 0 && (
+        {showFeatures && features.filter(f => f.showFeature !== false).length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 pt-16 border-t border-gray-100">
-            {displayFeatures.map((feature) => (
+            {features.filter(f => f.showFeature !== false).map((feature) => (
               <div key={feature.id} className="text-center">
                 <h3
                   className="text-sm font-semibold uppercase tracking-wider mb-3"
