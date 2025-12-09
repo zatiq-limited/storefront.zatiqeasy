@@ -10,7 +10,39 @@ interface MenuItem {
   url: string;
 }
 
+// Block from theme.json (menu items with title instead of label)
+interface MenuBlock {
+  wrapper?: string;
+  type?: string;
+  id?: string;
+  title?: string;
+  url?: string;
+  has_dropdown?: boolean;
+  dropdown_items?: Array<{
+    id?: string;
+    title?: string;
+    url?: string;
+  }>;
+}
+
+// Settings from theme.json (camelCase format)
+interface Navbar1Settings {
+  logo?: string;
+  logoWidth?: number;
+  searchPlaceholder?: string;
+  showSearch?: boolean;
+  showAccount?: boolean;
+  showWishlist?: boolean;
+  showCart?: boolean;
+  cartStyle?: string;
+  sticky?: boolean;
+  transparentOnHome?: boolean;
+  backgroundColor?: string;
+  textColor?: string;
+}
+
 interface Navbar1Props {
+  // Direct props (snake_case - legacy format)
   logo?: string;
   show_search?: boolean;
   show_cart?: boolean;
@@ -21,22 +53,37 @@ interface Navbar1Props {
   menu_items?: MenuItem[];
   search_placeholder?: string;
   fontFamily?: string;
+  // New props from theme.json
+  settings?: Navbar1Settings;
+  blocks?: MenuBlock[];
 }
 
 const Navbar1: React.FC<Navbar1Props> = ({
-  logo = defaultLogoImage,
-  show_search = true,
-  show_cart = true,
+  logo: logoProp,
+  show_search: showSearchProp,
+  show_cart: showCartProp,
   show_dark_mode = true,
-  background_color = "#FFFFFF",
-  text_color = "#000000",
-  sticky = false,
+  background_color: bgColorProp,
+  text_color: textColorProp,
+  sticky: stickyProp,
   menu_items,
-  search_placeholder = "Search for products or brands.....",
+  search_placeholder: searchPlaceholderProp,
   fontFamily,
+  settings = {},
+  blocks = [],
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
+
+  // Merge settings with direct props (direct props take precedence for backward compatibility)
+  const logo = logoProp ?? settings.logo ?? defaultLogoImage;
+  const showSearch = showSearchProp ?? settings.showSearch ?? true;
+  const showCart = showCartProp ?? settings.showCart ?? true;
+  const backgroundColor = bgColorProp ?? settings.backgroundColor ?? "#FFFFFF";
+  const textColor = textColorProp ?? settings.textColor ?? "#000000";
+  const isSticky = stickyProp ?? settings.sticky ?? false;
+  const searchPlaceholder = searchPlaceholderProp ?? settings.searchPlaceholder ?? "Search for products or brands.....";
+  const logoWidth = settings.logoWidth;
 
   // Default menu items if none provided
   const defaultMenuItems: MenuItem[] = [
@@ -47,8 +94,21 @@ const Navbar1: React.FC<Navbar1Props> = ({
     { label: "Apparels", url: "#" },
   ];
 
+  // Convert blocks to menu items format (title -> label)
+  const blocksAsMenuItems: MenuItem[] = blocks
+    .filter(block => block.title && block.url)
+    .map(block => ({
+      label: block.title!,
+      url: block.url!,
+    }));
+
+  // Priority: menu_items prop > blocks from theme.json > default
   const menuLinks =
-    menu_items && menu_items.length > 0 ? menu_items : defaultMenuItems;
+    menu_items && menu_items.length > 0
+      ? menu_items
+      : blocksAsMenuItems.length > 0
+      ? blocksAsMenuItems
+      : defaultMenuItems;
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -68,9 +128,9 @@ const Navbar1: React.FC<Navbar1Props> = ({
 
   return (
     <nav
-      className={`py-3 md:py-[18px] ${sticky ? "sticky top-0 z-50" : ""}`}
+      className={`py-3 md:py-[18px] ${isSticky ? "sticky top-0 z-50" : ""}`}
       style={{
-        backgroundColor: background_color,
+        backgroundColor: backgroundColor,
         fontFamily: fontFamily || undefined
       }}
     >
@@ -94,7 +154,7 @@ const Navbar1: React.FC<Navbar1Props> = ({
                 key={index}
                 href={item.url}
                 className="font-inter font-medium text-sm leading-[18px] transition-colors whitespace-nowrap hover:text-blue-600"
-                style={{ color: text_color }}
+                style={{ color: textColor }}
               >
                 {item.label}
               </a>
@@ -105,19 +165,19 @@ const Navbar1: React.FC<Navbar1Props> = ({
         {/* Right Section: Search, Dark Mode, Cart */}
         <div className="flex items-center gap-1 sm:gap-2 md:gap-5 shrink-0">
           {/* Search Bar - Desktop */}
-          {show_search && (
+          {showSearch && (
             <div className="hidden md:block relative w-[362px]">
               <Search className="w-6 h-6 text-gray-500 absolute left-2 top-2.5" />
               <input
                 type="text"
-                placeholder={search_placeholder}
+                placeholder={searchPlaceholder}
                 className="w-full h-11 px-4 pl-10 bg-gray-100 rounded-sm text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
           )}
 
           {/* Search Icon - Mobile */}
-          {show_search && (
+          {showSearch && (
             <button
               onClick={handleSearchClick}
               className="md:hidden p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg transition-colors shrink-0"
@@ -152,7 +212,7 @@ const Navbar1: React.FC<Navbar1Props> = ({
           )}
 
           {/* Shopping Cart */}
-          {show_cart && (
+          {showCart && (
             <button className="relative sm:p-1 hover:bg-gray-100 rounded-lg transition-colors shrink-0">
               <svg
                 width="24"
@@ -212,18 +272,18 @@ const Navbar1: React.FC<Navbar1Props> = ({
       {isMobileMenuOpen && (
         <div
           className="lg:hidden border-t border-gray-200"
-          style={{ backgroundColor: background_color }}
+          style={{ backgroundColor: backgroundColor }}
         >
           <div className="px-4 py-6">
             {/* Mobile Search Bar */}
-            {show_search && (
+            {showSearch && (
               <div className="mb-6">
                 <div className="relative">
                   <Search className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
                   <input
                     ref={searchInputRef}
                     type="text"
-                    placeholder={search_placeholder}
+                    placeholder={searchPlaceholder}
                     className="w-full px-4 py-3 pl-10 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
@@ -241,7 +301,7 @@ const Navbar1: React.FC<Navbar1Props> = ({
                       ? "border-b border-gray-100"
                       : ""
                   }`}
-                  style={{ color: text_color }}
+                  style={{ color: textColor }}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {item.label}

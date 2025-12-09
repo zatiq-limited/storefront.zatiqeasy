@@ -1,0 +1,33 @@
+{
+  "sections": [
+    {
+      "id": "section_1",
+      "type": "section-type",
+      "settings": {
+        "title": "Section title",
+        "subtitle": "Section subtitle",
+        "layout": "grid",
+        "columns": 3,
+        "font_family": "inherit"
+      },
+      "blocks": [
+        {
+          "wrapper": "div#block-1-wrapper.class-name",
+          "title": "Block title 1",
+          "type": "block-type",
+          "button_text": "Click me",
+          "button_link": "/path/to/page",
+          "...": "..."
+        },
+        {
+          "wrapper": "div#block-2-wrapper.class-name",
+          "title": "Block title 2",
+          "type": "block-type",
+          "button_text": "Learn more",
+          "button_link": "/path/to/another-page",
+          "...": "..."
+        }
+      ]
+    }
+  ]
+}

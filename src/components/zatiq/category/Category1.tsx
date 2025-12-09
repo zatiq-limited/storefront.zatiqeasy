@@ -9,11 +9,14 @@ interface Block {
   backgroundImage?: string;
   productImage?: string;
   labelColor?: string;
+  label_color?: string;
   titleColor?: string;
   subtitleColor?: string;
   linkColor?: string;
   buttonText?: string;
+  button_text?: string;
   url?: string;
+  button_link?: string;
 }
 
 interface Category1Settings {
@@ -56,11 +59,13 @@ const Category1: React.FC<Category1Props> = ({
     <div className="font-montserrat w-full max-w-[1440px] mx-auto px-4 2xl:px-0 mb-8 sm:mb-14">
       <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 lg:gap-8">
         {blocks.map((block, i) => {
-          const labelColor = block.labelColor || defaultLabelColor;
+          // Support both camelCase and snake_case from JSON
+          const labelColor = block.labelColor || block.label_color || defaultLabelColor;
           const titleColor = block.titleColor || defaultTitleColor;
           const subtitleColor = block.subtitleColor || defaultSubtitleColor;
           const linkColor = block.linkColor || defaultLinkColor;
-          const buttonText = block.buttonText || defaultButtonText;
+          const buttonText = block.buttonText || block.button_text || defaultButtonText;
+          const buttonLink = block.url || block.button_link || "#";
           const title = block.title || block.name || "";
 
           // Use backgroundImage if available, fallback to image
@@ -120,7 +125,7 @@ const Category1: React.FC<Category1Props> = ({
                   {/* Link */}
                   {buttonText && (
                     <a
-                      href={block.url || "#"}
+                      href={buttonLink}
                       className="font-bold inline-block hover:opacity-80 transition text-xs sm:text-sm underline leading-6 tracking-[0.2px]"
                       style={{ color: linkColor }}
                     >

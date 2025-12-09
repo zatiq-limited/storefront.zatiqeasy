@@ -10,10 +10,11 @@ import {
 
 // Component-specific types
 interface ReviewBlock {
-  name: string;
-  comment: string;
-  rating: number;
-  avatar: string;
+  name?: string;
+  author?: string;
+  comment?: string;
+  rating?: number;
+  avatar?: string;
 }
 
 interface Reviews3Settings {
@@ -35,13 +36,17 @@ interface Reviews3Settings {
 interface Reviews3Props {
   settings?: Reviews3Settings;
   reviews?: ReviewBlock[];
+  blocks?: ReviewBlock[];
 }
 
 const Reviews3: React.FC<Reviews3Props> = ({
   settings = {},
   reviews: reviewsProps = [],
+  blocks = [],
 }) => {
-  if (reviewsProps.length <= 0) return null;
+  // Support both reviews prop and blocks from JSON
+  const reviewsData = blocks.length > 0 ? blocks : reviewsProps;
+  if (reviewsData.length <= 0) return null;
 
   const {
     title = 'Customer Reviews',
@@ -59,7 +64,13 @@ const Reviews3: React.FC<Reviews3Props> = ({
     showRating = true,
   } = settings;
 
-  const reviews = reviewsProps;
+  // Normalize review data to handle both formats
+  const reviews = reviewsData.map((review) => ({
+    name: review.name || review.author || 'Anonymous',
+    comment: review.comment || '',
+    rating: review.rating || 5,
+    avatar: review.avatar || '',
+  }));
 
   // Carousel API state for custom navigation
   const [api, setApi] = React.useState<CarouselApi>();

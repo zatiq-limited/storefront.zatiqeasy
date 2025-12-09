@@ -1,15 +1,43 @@
 {
   "success": true,
   "data": {
-    "id": "theme_custom_1764660042212",
+    "id": "theme_zatiq_custom_1765258397553",
+    "version": "1.0.0",
     "globalSettings": {
-      "typography": {
-        "fontFamily": "Inter",
-        "headingFontFamily": "Inter"
-      },
       "colors": {
         "primary": "#3B82F6",
-        "secondary": "#6B7280"
+        "secondary": "#1E40AF",
+        "accent": "#f59e0b",
+        "background": "#FFFFFF",
+        "text": "#1F2937",
+        "error": "#ef4444",
+        "success": "#10b981"
+      },
+      "fonts": {
+        "heading": "DM Sans",
+        "body": "Source Sans Pro"
+      },
+      "borderRadius": {
+        "small": "0.25rem",
+        "medium": "0.5rem",
+        "large": "1rem",
+        "full": "9999px"
+      },
+      "componentStyles": {
+        "productCard": {
+          "imageRatio": "3:4",
+          "showSecondImage": true,
+          "showQuickAdd": true,
+          "showWishlist": true,
+          "showRating": true,
+          "showSalePercent": true,
+          "saleBadgeColor": "#ef4444"
+        },
+        "buttons": {
+          "primaryStyle": "filled",
+          "borderRadius": "medium",
+          "textTransform": "none"
+        }
       }
     },
     "globalSections": {
@@ -17,50 +45,63 @@
         "enabled": true,
         "type": "announcement-bar-1",
         "settings": {
-          "message": "For a limited time, enjoy a 50% discount on all our products!",
-          "icon_left": "🔥",
-          "icon_right": "🔥",
-          "gradient_start": "#50D1F6",
-          "gradient_end": "#B198FD",
-          "text_color": "#000000",
-          "font_weight": "bold",
-          "text_size": "sm",
-          "fontFamily": "inherit"
-        }
+          "dismissible": true,
+          "sticky": true
+        },
+        "blocks": [
+          {
+            "wrapper": "div#announcement-content.announcement-block",
+            "type": "announcement_content",
+            "id": "announcement_main",
+            "message": "For a limited time, enjoy a 50% discount on all our products!",
+            "icon_left": "🔥",
+            "icon_right": "🔥",
+            "gradient_start": "#50D1F6",
+            "gradient_end": "#B198FD",
+            "text_color": "#000000"
+          }
+        ]
       },
       "header": {
         "enabled": true,
         "type": "navbar-1",
         "settings": {
           "logo": "https://i.ibb.co.com/4ww2cHtc/Pasted-image.png",
-          "show_search": true,
-          "show_cart": true,
-          "show_dark_mode": true,
-          "background_color": "#FFFFFF",
-          "text_color": "#000000",
+          "logoWidth": 150,
+          "searchPlaceholder": "Search products...",
+          "showSearch": true,
+          "showAccount": true,
+          "showWishlist": true,
+          "showCart": true,
+          "cartStyle": "drawer",
           "sticky": true,
-          "fontFamily": "Source Sans Pro",
-          "menu_items": [
-            {
-              "label": "Home",
-              "url": "/"
-            },
-            {
-              "label": "Products",
-              "url": "/products"
-            },
-            {
-              "label": "Collections",
-              "url": "/collections"
-            }
-          ]
+          "transparentOnHome": false,
+          "backgroundColor": "#FFFFFF",
+          "textColor": "#111827"
         },
-        "blocks": []
-      },
-      "announcementAfterHeader": {
-        "enabled": false,
-        "type": "announcement-bar-1",
-        "settings": {}
+        "blocks": [
+          {
+            "wrapper": "div#menu-home.nav-item",
+            "type": "menu_item",
+            "id": "menu_1",
+            "title": "Home",
+            "url": "/"
+          },
+          {
+            "wrapper": "div#menu-products.nav-item",
+            "type": "menu_item",
+            "id": "menu_2",
+            "title": "Products",
+            "url": "/products"
+          },
+          {
+            "wrapper": "div#menu-collections.nav-item",
+            "type": "menu_item",
+            "id": "menu_3",
+            "title": "Collections",
+            "url": "/collections"
+          }
+        ]
       },
       "footer": {
         "enabled": true,
@@ -68,48 +109,18 @@
         "settings": {
           "backgroundColor": "#F9FAFB",
           "textColor": "#000000",
-          "bottomBarColor": "#1F2937",
           "logo": "https://i.ibb.co.com/4ww2cHtc/Pasted-image.png",
-          "description": "Digital Haven is a top-notch store offering a wide range of digital products at unbeatable prices from renowned global brands. Dive in now to discover fresh designs and take advantage of fantastic deals and discounts.",
-          "copyrightText": "All rights reserved for Zatiq Ltd © 2025",
-          "fontFamily": "inherit",
-          "contactTitle": "Contact us",
-          "whatsapp": "01533785541",
-          "mobile": "01533785541",
-          "email": "support@zatiq.com",
+          "showNewsletter": true,
           "showSocial": true,
-          "facebookUrl": "facebook.com",
-          "instagramUrl": "instagram.com",
-          "twitterUrl": "twitter.com",
-          "linkedinUrl": "linkedin.com",
-          "column1Title": "My Account",
-          "column1Link1Text": "My Orders",
-          "column1Link1Url": "/orders",
-          "column1Link2Text": "Shopping Cart",
-          "column1Link2Url": "/cart",
-          "column1Link3Text": "Favorites",
-          "column1Link3Url": "/favorites",
-          "column2Title": "Important Links",
-          "column2Link1Text": "About Us",
-          "column2Link1Url": "/about",
-          "column2Link2Text": "Privacy Policy",
-          "column2Link2Url": "/privacy",
-          "column2Link3Text": "Terms and Conditions",
-          "column2Link3Url": "/terms",
-          "column2Link4Text": "Technical Support",
-          "column2Link4Url": "/support",
           "showPaymentIcons": true,
-          "payment1Image": "https://i.ibb.co.com/5W4mDXzk/bkash.png",
-          "payment1Alt": "bKash",
-          "payment2Image": "https://i.ibb.co.com/tPDYMFvk/nagad.png",
-          "payment2Alt": "Nagad",
-          "payment3Image": "https://i.ibb.co.com/psTzX4Q/master.png",
-          "payment3Alt": "Mastercard",
-          "payment4Image": "https://i.ibb.co.com/pBD3qRgZ/visa.png",
-          "payment4Alt": "Visa"
+          "copyrightText": "All rights reserved for Zatiq Ltd © 2025",
+          "facebook": "facebook.com",
+          "instagram": "instagram.com"
         },
         "blocks": [
           {
+            "wrapper": "div#footer-my-account.footer-link-group",
+            "type": "link_group",
             "title": "My Account",
             "links": [
               {
@@ -127,19 +138,25 @@
             ]
           },
           {
+            "wrapper": "div#footer-important-links.footer-link-group",
+            "type": "link_group",
             "title": "Important Links",
             "links": [
               {
                 "text": "About Us",
-                "url": "/about-us"
-              },
-              {
-                "text": "Contact Us",
-                "url": "/contact-us"
+                "url": "/about"
               },
               {
                 "text": "Privacy Policy",
-                "url": "/privacy-policy"
+                "url": "/privacy"
+              },
+              {
+                "text": "Terms and Conditions",
+                "url": "/terms"
+              },
+              {
+                "text": "Technical Support",
+                "url": "/support"
               }
             ]
           }
@@ -177,22 +194,6 @@
       "collection": "collection-grid",
       "cart": "cart-drawer",
       "search": "search-results"
-    },
-    "componentStyles": {
-      "productCard": {
-        "imageRatio": "3:4",
-        "showSecondImage": true,
-        "showQuickAdd": true,
-        "showWishlist": true,
-        "showRating": true,
-        "showSalePercent": true,
-        "saleBadgeColor": "#ef4444"
-      },
-      "buttons": {
-        "primaryStyle": "filled",
-        "borderRadius": "medium",
-        "textTransform": "none"
-      }
     }
   }
 }

@@ -11,17 +11,74 @@ interface Card {
   textColor?: string;
 }
 
+// Block from homepage.json (snake_case format)
+interface PromoCardBlock {
+  position?: 'left' | 'right';
+  image?: string;
+  title?: string;
+  subtitle?: string;
+  discount?: string;
+  button_text?: string;
+  button_link?: string;
+  title_color?: string;
+  text_color?: string;
+}
+
+interface SpecialOffersSlider4Settings {
+  bgColor?: string;
+}
+
 interface SpecialOffersSlider4Props {
   leftCard?: Card;
   rightCard?: Card;
   bgColor?: string;
+  blocks?: PromoCardBlock[];
+  settings?: SpecialOffersSlider4Settings;
 }
 
 const SpecialOffersSlider4: React.FC<SpecialOffersSlider4Props> = ({
-  leftCard,
-  rightCard,
-  bgColor = 'transparent'
+  leftCard: leftCardProp,
+  rightCard: rightCardProp,
+  bgColor: bgColorProp,
+  blocks = [],
+  settings = {},
 }) => {
+  // Get bgColor from settings or direct prop
+  const bgColor = bgColorProp ?? settings.bgColor ?? 'transparent';
+
+  // Convert blocks to left/right cards if blocks are provided
+  let leftCard = leftCardProp;
+  let rightCard = rightCardProp;
+
+  if (blocks.length > 0) {
+    // Find left and right cards from blocks
+    const leftBlock = blocks.find(b => b.position === 'left') || blocks[0];
+    const rightBlock = blocks.find(b => b.position === 'right') || blocks[1];
+
+    if (leftBlock && !leftCard) {
+      leftCard = {
+        image: leftBlock.image || '',
+        title: leftBlock.title || '',
+        subtitle: leftBlock.subtitle,
+        discount: leftBlock.discount,
+        buttonText: leftBlock.button_text,
+        titleColor: leftBlock.title_color,
+        textColor: leftBlock.text_color,
+      };
+    }
+
+    if (rightBlock && !rightCard) {
+      rightCard = {
+        image: rightBlock.image || '',
+        title: rightBlock.title || '',
+        subtitle: rightBlock.subtitle,
+        discount: rightBlock.discount,
+        buttonText: rightBlock.button_text,
+        titleColor: rightBlock.title_color,
+        textColor: rightBlock.text_color,
+      };
+    }
+  }
   return (
     <div
       className="w-full pb-8 md:pb-14 px-4 font-roboto"

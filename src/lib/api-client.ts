@@ -144,8 +144,20 @@ export async function getTheme(shopId: string = SHOP_ID): Promise<any> {
     // Backend sends theme.json structure directly - no transformation needed
     return themeData;
   } catch (error) {
-    console.error("[API] ❌ Theme API failed - no data will be shown");
-    return null;
+    console.error("[API] ❌ Theme API failed - trying local file");
+
+    // Fallback to local JSON file for development
+    try {
+      const localFile = await import("../data/api-responses/theme.json");
+      console.log("[API] ✅ Theme loaded from local file");
+
+      // Handle different import structures
+      const imported = localFile.default || localFile;
+      return imported?.data || imported;
+    } catch (localError) {
+      console.error("[API] ❌ Local theme.json also failed:", localError);
+      return null;
+    }
   }
 }
 
@@ -161,8 +173,20 @@ export async function getHomepageData(): Promise<any> {
     console.log("[API] ✅ Homepage data loaded from API");
     return response;
   } catch (error) {
-    console.error("[API] ❌ Homepage API failed");
-    return null;
+    console.error("[API] ❌ Homepage API failed - trying local file");
+
+    // Fallback to local JSON file for development
+    try {
+      const localFile = await import("../data/api-responses/homepage.json");
+      console.log("[API] ✅ Homepage data loaded from local file");
+
+      // Handle different import structures
+      const imported = localFile.default || localFile;
+      return imported?.data || imported;
+    } catch (localError) {
+      console.error("[API] ❌ Local homepage.json also failed:", localError);
+      return null;
+    }
   }
 }
 

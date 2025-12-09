@@ -4,25 +4,28 @@
     "template": "products",
     "sections": [
       {
-        "id": "products_hero_1_0",
-        "type": "products-hero-1",
+        "id": "products_hero_2_0",
+        "type": "products-hero-2",
         "settings": {
           "title": "All Products",
           "description": "Discover our curated collection of premium products",
           "showBreadcrumb": true,
           "showProductCount": true,
-          "gradient_start": "#EBF4FF",
-          "gradient_end": "#F3E8FF",
+          "backgroundImage": "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1920&q=80",
+          "overlayColor": "#000000",
+          "overlayOpacity": 50,
+          "heroHeight": "h-[300px] md:h-[400px]",
           "titleFontFamily": "inherit",
-          "titleFontSize": "text-4xl md:text-5xl",
+          "titleFontSize": "text-4xl md:text-6xl",
           "titleFontWeight": "font-bold",
-          "titleColor": "#111827",
+          "titleColor": "#FFFFFF",
           "descriptionFontFamily": "inherit",
           "descriptionFontSize": "text-lg",
-          "descriptionColor": "#4B5563",
-          "breadcrumbColor": "#6B7280",
-          "productCountColor": "#6B7280",
-          "productCountFontSize": "text-sm"
+          "descriptionColor": "#FFFFFFCC",
+          "breadcrumbColor": "#FFFFFFCC",
+          "productCountColor": "#FFFFFF99",
+          "productCountFontSize": "text-sm",
+          "textAlign": "text-center md:text-left"
         }
       },
       {
@@ -33,7 +36,7 @@
           "sidebarType": "products-sidebar-1",
           "sidebarPosition": "left",
           "showPagination": true,
-          "paginationType": "products-pagination-2",
+          "paginationType": "products-pagination-1",
           "productsPerPage": 20,
           "columns": 4,
           "columnsTablet": 2,
@@ -57,30 +60,30 @@
           "productCountFontFamily": "inherit",
           "productCountFontSize": "text-xs",
           "productCount": 128,
-          "paginationActiveColor": "#12418c",
+          "paginationActiveColor": "#3B82F6",
           "paginationTextColor": "#374151",
-          "cardButtonBgColor": "#082d68",
+          "cardButtonBgColor": "#3B82F6",
           "cardButtonTextColor": "#FFFFFF",
-          "sidebarButtonBgColor": "#0b2c75",
+          "sidebarButtonBgColor": "#111827",
           "sidebarButtonTextColor": "#FFFFFF"
         }
       }
     ],
     "seo": {
       "title": "All Products - Custom Theme Store",
-      "description": "Browse our complete collection of products.",
-      "canonical": "",
+      "description": "Browse our complete collection of products. Find your perfect style.",
+      "canonical": "https://your-store.com/products",
       "og": {
         "title": "All Products - Custom Theme Store",
-        "description": "Browse our complete collection of products.",
-        "image": "",
+        "description": "Browse our complete collection of products",
+        "image": "https://your-store.com/products-og.jpg",
         "type": "website"
       },
       "twitter": {
         "card": "summary_large_image",
         "title": "All Products - Custom Theme Store",
-        "description": "Browse our complete collection of products.",
-        "image": ""
+        "description": "Browse our complete collection of products",
+        "image": "https://your-store.com/products-twitter.jpg"
       }
     }
   }

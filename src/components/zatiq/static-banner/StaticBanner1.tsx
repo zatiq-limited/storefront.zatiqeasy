@@ -1,5 +1,28 @@
 import React from "react";
 
+// Banner block from homepage.json (snake_case format)
+interface BannerBlock {
+  image?: string;
+  image_mobile?: string;
+  title?: string;
+  subtitle?: string;
+  description?: string;
+  button_text?: string;
+  button_link?: string;
+  secondary_button_text?: string;
+  secondary_button_link?: string;
+  text_alignment?: "left" | "center" | "right";
+  text_color?: string;
+  overlay_color?: string;
+  overlay_opacity?: number;
+}
+
+interface StaticBanner1Settings {
+  height?: "small" | "medium" | "large";
+  titleFont?: string;
+  descriptionFont?: string;
+}
+
 interface StaticBanner1Props {
   image?: string;
   imageMobile?: string;
@@ -15,24 +38,46 @@ interface StaticBanner1Props {
   overlayColor?: string;
   overlayOpacity?: number;
   height?: "small" | "medium" | "large";
+  // Support for JSON structure
+  blocks?: BannerBlock[];
+  settings?: StaticBanner1Settings;
 }
 
 const StaticBanner1: React.FC<StaticBanner1Props> = ({
-  image,
-  imageMobile,
-  title,
-  subtitle,
-  description,
-  buttonText,
-  buttonLink,
-  secondaryButtonText,
-  secondaryButtonLink,
-  textAlignment = "center",
-  textColor = "#FFFFFF",
-  overlayColor = "#000000",
-  overlayOpacity = 5,
+  image: imageProp,
+  imageMobile: imageMobileProp,
+  title: titleProp,
+  subtitle: subtitleProp,
+  description: descriptionProp,
+  buttonText: buttonTextProp,
+  buttonLink: buttonLinkProp,
+  secondaryButtonText: secondaryButtonTextProp,
+  secondaryButtonLink: secondaryButtonLinkProp,
+  textAlignment: textAlignmentProp = "center",
+  textColor: textColorProp = "#FFFFFF",
+  overlayColor: overlayColorProp = "#000000",
+  overlayOpacity: overlayOpacityProp = 5,
   height = "medium",
+  blocks = [],
+  settings = {},
 }) => {
+  // Get first block if available (banner typically has one block)
+  const block = blocks[0];
+
+  // Merge block data with direct props (direct props take precedence)
+  const image = imageProp ?? block?.image;
+  const imageMobile = imageMobileProp ?? block?.image_mobile;
+  const title = titleProp ?? block?.title;
+  const subtitle = subtitleProp ?? block?.subtitle;
+  const description = descriptionProp ?? block?.description;
+  const buttonText = buttonTextProp ?? block?.button_text;
+  const buttonLink = buttonLinkProp ?? block?.button_link;
+  const secondaryButtonText = secondaryButtonTextProp ?? block?.secondary_button_text;
+  const secondaryButtonLink = secondaryButtonLinkProp ?? block?.secondary_button_link;
+  const textAlignment = textAlignmentProp ?? block?.text_alignment ?? "center";
+  const textColor = textColorProp ?? block?.text_color ?? "#FFFFFF";
+  const overlayColor = overlayColorProp ?? block?.overlay_color ?? "#000000";
+  const overlayOpacity = overlayOpacityProp ?? block?.overlay_opacity ?? 5;
 
   return (
     <div className="relative w-full h-[450px] lg:h-[500px] xl:h-[524px] bg-black overflow-hidden mb-8 sm:mb-14">

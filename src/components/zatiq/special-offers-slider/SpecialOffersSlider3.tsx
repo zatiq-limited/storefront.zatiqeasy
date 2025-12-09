@@ -5,6 +5,24 @@ interface Image {
   alt?: string;
 }
 
+// Product block from homepage.json
+interface ProductBlock {
+  id?: string | number;
+  title?: string;
+  image?: string;
+  hover_image?: string;
+}
+
+interface SpecialOffersSlider3Settings {
+  title?: string;
+  titleHighlight?: string;
+  highlightColor?: string;
+  buttonText?: string;
+  buttonColor?: string;
+  buttonHoverColor?: string;
+  bgColor?: string;
+}
+
 interface SpecialOffersSlider3Props {
   title?: string;
   titleHighlight?: string;
@@ -13,19 +31,39 @@ interface SpecialOffersSlider3Props {
   buttonColor?: string;
   buttonHoverColor?: string;
   images?: Image[];
+  blocks?: ProductBlock[];
+  settings?: SpecialOffersSlider3Settings;
   bgColor?: string;
 }
 
 const SpecialOffersSlider3: React.FC<SpecialOffersSlider3Props> = ({
-  title = 'Buy Bottle now',
-  titleHighlight = '25% off',
-  highlightColor = '#2563eb',
-  buttonText = 'Buy Now',
-  buttonColor = '#2563eb',
-  buttonHoverColor = '#1d4ed8',
-  images = [],
-  bgColor = '#ffffff'
+  title: titleProp,
+  titleHighlight: titleHighlightProp,
+  highlightColor: highlightColorProp,
+  buttonText: buttonTextProp,
+  buttonColor: buttonColorProp,
+  buttonHoverColor: buttonHoverColorProp,
+  images: imagesProp = [],
+  blocks = [],
+  settings = {},
+  bgColor: bgColorProp,
 }) => {
+  // Merge settings with direct props (direct props take precedence)
+  const title = titleProp ?? settings.title ?? 'Buy Bottle now';
+  const titleHighlight = titleHighlightProp ?? settings.titleHighlight ?? '25% off';
+  const highlightColor = highlightColorProp ?? settings.highlightColor ?? '#2563eb';
+  const buttonText = buttonTextProp ?? settings.buttonText ?? 'Buy Now';
+  const buttonColor = buttonColorProp ?? settings.buttonColor ?? '#2563eb';
+  const buttonHoverColor = buttonHoverColorProp ?? settings.buttonHoverColor ?? '#1d4ed8';
+  const bgColor = bgColorProp ?? settings.bgColor ?? '#ffffff';
+
+  // Convert blocks to images format if blocks are provided
+  const images: Image[] = blocks.length > 0
+    ? blocks.map((block) => ({
+        src: block.image || '',
+        alt: block.title || 'Product',
+      }))
+    : imagesProp;
   const [isVisible, setIsVisible] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 

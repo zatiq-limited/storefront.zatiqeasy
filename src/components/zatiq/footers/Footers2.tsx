@@ -32,11 +32,17 @@ interface Footers2Settings {
   description?: string;
   copyrightText?: string;
   showSocial?: boolean;
+  // Support both formats: facebookUrl and facebook (shorthand from theme.json)
   facebookUrl?: string;
+  facebook?: string;
   instagramUrl?: string;
+  instagram?: string;
   twitterUrl?: string;
+  twitter?: string;
   linkedinUrl?: string;
+  linkedin?: string;
   fontFamily?: string;
+  showNewsletter?: boolean;
   // Contact settings (flat format)
   contactTitle?: string;
   whatsapp?: string;
@@ -95,10 +101,15 @@ const Footers2: React.FC<Footers2Props> = ({
     description = "Digital Haven is a top-notch store offering a wide range of digital products at unbeatable prices from renowned global brands. Dive in now to discover fresh designs and take advantage of fantastic deals and discounts.",
     copyrightText = "All rights reserved for Zatiq Ltd © 2025",
     showSocial = true,
-    facebookUrl = "#",
-    instagramUrl = "#",
-    twitterUrl = "#",
-    linkedinUrl = "#",
+    // Support both facebookUrl and facebook shorthand from theme.json
+    facebookUrl,
+    facebook,
+    instagramUrl,
+    instagram,
+    twitterUrl,
+    twitter,
+    linkedinUrl,
+    linkedin,
     fontFamily,
     // Flat format settings
     contactTitle,
@@ -133,6 +144,12 @@ const Footers2: React.FC<Footers2Props> = ({
     payment4Image,
     payment4Alt,
   } = settings;
+
+  // Resolve social URLs - support both facebookUrl and facebook shorthand formats
+  const resolvedFacebookUrl = facebookUrl || facebook;
+  const resolvedInstagramUrl = instagramUrl || instagram;
+  const resolvedTwitterUrl = twitterUrl || twitter;
+  const resolvedLinkedinUrl = linkedinUrl || linkedin;
 
   // Build menu columns from flat settings if blocks not provided
   const buildColumnsFromSettings = (): MenuColumn[] => {
@@ -289,33 +306,33 @@ const Footers2: React.FC<Footers2Props> = ({
                   Follow us on
                 </h4>
                 <div className="flex gap-3">
-                  {facebookUrl && (
+                  {resolvedFacebookUrl && (
                     <a
-                      href={facebookUrl}
+                      href={resolvedFacebookUrl}
                       className="text-gray-600 hover:text-gray-900"
                     >
                       <Facebook className="w-5 h-5" />
                     </a>
                   )}
-                  {instagramUrl && (
+                  {resolvedInstagramUrl && (
                     <a
-                      href={instagramUrl}
+                      href={resolvedInstagramUrl}
                       className="text-gray-600 hover:text-gray-900"
                     >
                       <Instagram className="w-5 h-5" />
                     </a>
                   )}
-                  {twitterUrl && (
+                  {resolvedTwitterUrl && (
                     <a
-                      href={twitterUrl}
+                      href={resolvedTwitterUrl}
                       className="text-gray-600 hover:text-gray-900"
                     >
                       <Twitter className="w-5 h-5" />
                     </a>
                   )}
-                  {linkedinUrl && (
+                  {resolvedLinkedinUrl && (
                     <a
-                      href={linkedinUrl}
+                      href={resolvedLinkedinUrl}
                       className="text-gray-600 hover:text-gray-900"
                     >
                       <Linkedin className="w-5 h-5" />

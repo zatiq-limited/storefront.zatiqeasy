@@ -56,15 +56,47 @@ interface CustomSectionsSettings {
   cardButtonTextColor?: string;
 }
 
+// Product block from homepage.json (snake_case format)
+interface ProductBlock {
+  id?: string | number;
+  title?: string;
+  name?: string;
+  image?: string;
+  hover_image?: string;
+  price?: number;
+  compare_price?: number;
+  vendor?: string;
+  badge?: string;
+  badge_color?: string;
+  rating?: number;
+  review_count?: number;
+}
+
 interface CustomSectionsProps {
   settings?: CustomSectionsSettings;
   products?: Product[];
+  blocks?: ProductBlock[];
 }
 
 const CustomSections: React.FC<CustomSectionsProps> = ({
   settings = {},
-  products = [],
+  products: productsProp = [],
+  blocks = [],
 }) => {
+  // Support both products prop and blocks from JSON
+  const products: Product[] = blocks.length > 0
+    ? blocks.map((block) => ({
+        id: block.id,
+        title: block.title || block.name,
+        image: block.image,
+        price: block.price,
+        comparePrice: block.compare_price,
+        vendor: block.vendor,
+        badge: block.badge,
+        rating: block.rating,
+        reviewCount: block.review_count,
+      }))
+    : productsProp;
   const {
     sectionTitle = "Featured Products",
     sectionSubtitle = "Handpicked items just for you",
