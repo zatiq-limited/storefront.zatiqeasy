@@ -1,0 +1,9 @@
+/**
+ * ========================================
+ * GLOBAL STYLES FOR NEXT.JS APP
+ * ========================================
+ * 
+ * Import main styles from the shared styles directory
+ */
+
+@import '../styles/global.css';

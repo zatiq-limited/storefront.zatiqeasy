@@ -39,7 +39,13 @@ interface ComponentRendererProps {
  * API response থেকে component type অনুযায়ী dynamic rendering করে
  */
 export default function ComponentRenderer(props: ComponentRendererProps) {
-  const { section, type: directType, client = "load", globalSettings, ...restProps } = props;
+  const {
+    section,
+    type: directType,
+    client = "load",
+    globalSettings,
+    ...restProps
+  } = props;
 
   // Determine if using section object or direct props
   const componentType = section?.type || directType;
@@ -76,27 +82,68 @@ export default function ComponentRenderer(props: ComponentRendererProps) {
     return null;
   }
 
+  // Helper: Convert snake_case to camelCase
+  const toCamelCase = (str: string): string => {
+    return str.replace(/_([a-z])/g, (_, letter) => letter.toUpperCase());
+  };
+
+  // Helper: Convert object keys from snake_case to camelCase
+  const convertKeysToCamelCase = (obj: any): any => {
+    if (Array.isArray(obj)) {
+      return obj.map((item) => convertKeysToCamelCase(item));
+    }
+    if (obj !== null && typeof obj === "object") {
+      return Object.keys(obj).reduce((acc: any, key) => {
+        const camelKey = toCamelCase(key);
+        acc[camelKey] = convertKeysToCamelCase(obj[key]);
+        return acc;
+      }, {});
+    }
+    return obj;
+  };
+
   // Prepare props for component
   let componentProps: any = {};
 
   if (section) {
     // Using section object (homepage.json style)
+    // Extract data from blocks[0].data if available (V3.0 Schema)
+    const blockData = section.blocks?.[0]?.data || {};
+
+    // Get settings with snake_case to camelCase conversion
+    const settingsRaw = section.settings || {};
+    const settingsCamel = convertKeysToCamelCase(settingsRaw);
+
+    // Get block data with snake_case to camelCase conversion
+    const blockDataCamel = convertKeysToCamelCase(blockData);
+
+    // Products can be at section level, block data level, or blocks[0].data.products
+    const products =
+      section.products || blockData.products || blockDataCamel.products || [];
+    const productsCamel = convertKeysToCamelCase(products);
+
     componentProps = {
-      ...section.settings,
-      settings: section.settings,
+      // Spread settings first (camelCase)
+      ...settingsCamel,
+      // Then spread block data (camelCase) - this may override settings
+      ...blockDataCamel,
+      // Keep original objects too for backward compatibility
+      settings: settingsRaw,
       blocks: section.blocks,
-      products: section.products,
-      posts: section.posts,
-      reviews: section.reviews,
-      testimonials: section.testimonials,
-      tabs: section.tabs,
+      // Products from various sources
+      products: productsCamel,
+      posts: section.posts || blockData.posts,
+      reviews: section.reviews || blockData.reviews,
+      testimonials: section.testimonials || blockData.testimonials,
+      tabs: section.tabs || blockData.tabs,
       breadcrumbs: section.breadcrumbs,
       // Pass through product if provided (for single product pages)
       product: restProps.product,
       // Pass through checkout data (for checkout components)
       paymentMethods: restProps.paymentMethods,
       deliveryOptions: restProps.deliveryOptions,
-      currency: restProps.currency,
+      currency:
+        settingsCamel.currency || blockDataCamel.currency || restProps.currency,
     };
   } else {
     // Using direct props (theme.json style)

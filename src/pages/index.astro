@@ -5,28 +5,39 @@
  * ========================================
  *
  * Fetches data from API and renders sections dynamically
+ * Uses BlockRenderer for V3.0 Schema rendering
  *
  * Backend API Endpoint: GET /api/storefront/v1/page/home
  */
 
-import Layout from '../layouts/main.astro';
-import SectionRenderer from '../components/SectionRenderer';
-import { getHomepageData } from '../lib/api-client';
+import Layout from "../layouts/main.astro";
+import BlockRenderer, { BlocksRenderer } from "../components/BlockRenderer";
+import { getHomepageData } from "../lib/api-client";
 
 // Fetch homepage data from API
 const homepageData = await getHomepageData();
 
 // Handle null case and extract data
 const pageData = homepageData?.data || homepageData || {};
-const { template = 'index', sections = [], seo = {} } = pageData;
+const { template = "index", sections = [], seo = {} } = pageData;
 ---
 
-<Layout 
-	title={seo?.title || 'Home'}
-	description={seo?.description}
-	image={seo?.og?.image}
+<Layout
+  title={seo?.title || "Home"}
+  description={seo?.description}
+  image={seo?.og?.image}
 >
-	<main class="zatiq-homepage">
-		<SectionRenderer sections={sections} client:load />
-	</main>
+  <main class="zatiq-homepage">
+    {
+      sections.map((section: any) => {
+        // Get the first block from each section (which contains the actual structure)
+        const block = section.blocks?.[0];
+        if (!block || !section.enabled) return null;
+
+        return (
+          <BlockRenderer block={block} data={block.data || {}} client:load />
+        );
+      })
+    }
+  </main>
 </Layout>
