@@ -1,9 +1,9 @@
 {
   "success": true,
   "data": {
-    "id": "theme_zatiq_custom_1765283969665",
+    "id": "theme_zatiq_custom_1765347145754",
     "version": "1.0.0",
-    "globalSettings": {
+    "global_settings": {
       "colors": {
         "primary": "#3B82F6",
         "secondary": "#6B7280",
@@ -17,30 +17,30 @@
         "heading": "Inter",
         "body": "Inter"
       },
-      "borderRadius": {
+      "border_radius": {
         "small": "0.25rem",
         "medium": "0.5rem",
         "large": "1rem",
         "full": "9999px"
       },
-      "componentStyles": {
-        "productCard": {
-          "imageRatio": "3:4",
-          "showSecondImage": true,
-          "showQuickAdd": true,
-          "showWishlist": true,
-          "showRating": true,
-          "showSalePercent": true,
-          "saleBadgeColor": "#ef4444"
+      "component_styles": {
+        "product_card": {
+          "image_ratio": "3:4",
+          "show_second_image": true,
+          "show_quick_add": true,
+          "show_wishlist": true,
+          "show_rating": true,
+          "show_sale_percent": true,
+          "sale_badge_color": "#ef4444"
         },
         "buttons": {
-          "primaryStyle": "filled",
-          "borderRadius": "medium",
-          "textTransform": "none"
+          "primary_style": "filled",
+          "border_radius": "medium",
+          "text_transform": "none"
         }
       }
     },
-    "globalSections": {
+    "global_sections": {
       "announcement": {
         "enabled": true,
         "type": "announcement-bar-2",
@@ -50,25 +50,33 @@
         },
         "blocks": [
           {
-            "wrapper": "div#announcement-bar-2-1765283969665",
+            "wrapper": "div#announcement-bar-2-1765347145754",
             "type": "announcement_content",
             "class": "max-w-[1440px] min-h-14 mx-auto flex items-center justify-between py-3 px-4",
             "style": {
-              "backgroundColor": "#23856D",
+              "background_color": "#23856D",
               "color": "#FFFFFF"
             },
             "data": {
               "phone": "01533785541",
-              "message": "Follow Us and get a chance to win 80% off",
+              "message": "Follow Us and get a chance to win 60% off",
               "background_color": "#23856D",
               "text_color": "#FFFFFF",
               "show_phone": true,
               "show_social": true,
-              "show_instagram": true,
-              "show_youtube": true,
-              "show_facebook": true,
-              "show_twitter": false,
-              "instagram_url": "instagram.com",
+              "social_icons": [
+                {
+                  "platform": "youtube",
+                  "url": "youtube.com",
+                  "show": true
+                },
+                {
+                  "platform": "facebook",
+                  "url": "facebook.com",
+                  "show": true
+                }
+              ],
+              "instagram_url": "#",
               "youtube_url": "youtube.com",
               "facebook_url": "facebook.com",
               "twitter_url": "#"
@@ -81,17 +89,22 @@
                   {
                     "wrapper": "div",
                     "class": "flex items-center gap-2",
-                    "showIf": "show_phone",
+                    "condition": {
+                      "field": "show_phone",
+                      "op": "equals",
+                      "value": true
+                    },
                     "blocks": [
                       {
                         "wrapper": "svg",
                         "class": "w-4 h-4",
-                        "type": "phone_icon"
+                        "type": "icon",
+                        "icon": "phone"
                       },
                       {
                         "wrapper": "span",
                         "class": "text-sm font-bold",
-                        "bindTo": "phone",
+                        "bind_content": "phone",
                         "content": "01533785541"
                       }
                     ]
@@ -107,15 +120,19 @@
                           {
                             "wrapper": "p",
                             "class": "text-sm font-bold",
-                            "bindTo": "message",
-                            "content": "Follow Us and get a chance to win 80% off"
+                            "bind_content": "message",
+                            "content": "Follow Us and get a chance to win 60% off"
                           }
                         ]
                       },
                       {
                         "wrapper": "div",
                         "class": "hidden sm:flex items-center gap-3",
-                        "showIf": "show_social",
+                        "condition": {
+                          "field": "show_social",
+                          "op": "equals",
+                          "value": true
+                        },
                         "blocks": [
                           {
                             "wrapper": "span",
@@ -123,43 +140,28 @@
                             "content": "Follow Us :"
                           },
                           {
-                            "wrapper": "a",
-                            "class": "hover:opacity-80 transition-opacity",
-                            "href": "instagram.com",
-                            "bindHref": "instagram_url",
-                            "blocks": [
-                              {
-                                "wrapper": "svg",
-                                "class": "w-4 h-4",
-                                "type": "instagram_icon"
-                              }
-                            ]
-                          },
-                          {
-                            "wrapper": "a",
-                            "class": "hover:opacity-80 transition-opacity",
-                            "href": "youtube.com",
-                            "bindHref": "youtube_url",
-                            "blocks": [
-                              {
-                                "wrapper": "svg",
-                                "class": "w-4 h-4",
-                                "type": "youtube_icon"
-                              }
-                            ]
-                          },
-                          {
-                            "wrapper": "a",
-                            "class": "hover:opacity-80 transition-opacity",
-                            "href": "facebook.com",
-                            "bindHref": "facebook_url",
-                            "blocks": [
-                              {
-                                "wrapper": "svg",
-                                "class": "w-4 h-4",
-                                "type": "facebook_icon"
-                              }
-                            ]
+                            "type": "repeater",
+                            "source": "social_icons",
+                            "iterator": "icon",
+                            "template": {
+                              "wrapper": "a",
+                              "class": "hover:opacity-80 transition-opacity",
+                              "bind_href": "icon.url",
+                              "events": {
+                                "on_click": {
+                                  "action": "navigate",
+                                  "target": "icon.url"
+                                }
+                              },
+                              "blocks": [
+                                {
+                                  "wrapper": "svg",
+                                  "class": "w-4 h-4",
+                                  "type": "icon",
+                                  "bind_icon": "icon.platform"
+                                }
+                              ]
+                            }
                           }
                         ]
                       }
@@ -176,25 +178,25 @@
         "type": "navbar-1",
         "settings": {
           "logo": "https://i.ibb.co.com/4ww2cHtc/Pasted-image.png",
-          "logoWidth": 150,
-          "searchPlaceholder": "Search products...",
-          "showSearch": true,
-          "showAccount": true,
-          "showWishlist": true,
-          "showCart": true,
-          "cartStyle": "drawer",
+          "logo_width": 150,
+          "search_placeholder": "Search products...",
+          "show_search": true,
+          "show_account": true,
+          "show_wishlist": true,
+          "show_cart": true,
+          "cart_style": "drawer",
           "sticky": true,
-          "transparentOnHome": false,
-          "backgroundColor": "#FFFFFF",
-          "textColor": "#111827"
+          "transparent_on_home": false,
+          "background_color": "#FFFFFF",
+          "text_color": "#000000"
         },
         "blocks": [
           {
-            "wrapper": "nav#navbar-1-1765283969665",
+            "wrapper": "nav#navbar-1-1765347145754",
             "type": "navbar_content",
             "class": "px-3 sm:px-4 md:px-8 lg:px-10 py-3 md:py-[18px] sticky top-0 z-50",
             "style": {
-              "backgroundColor": "#FFFFFF",
+              "background_color": "#FFFFFF",
               "color": "#000000"
             },
             "data": {
@@ -218,7 +220,8 @@
                   "label": "Collections",
                   "url": "/collections"
                 }
-              ]
+              ],
+              "cart_count": 0
             },
             "blocks": [
               {
@@ -232,11 +235,17 @@
                       {
                         "wrapper": "div",
                         "class": "flex items-center shrink-0",
+                        "events": {
+                          "on_click": {
+                            "action": "navigate",
+                            "target": "/"
+                          }
+                        },
                         "blocks": [
                           {
                             "wrapper": "img",
                             "class": "h-5 w-20 sm:h-6 sm:w-24 md:h-8 md:w-32",
-                            "bindSrc": "logo",
+                            "bind_src": "logo",
                             "src": "https://i.ibb.co.com/4ww2cHtc/Pasted-image.png",
                             "alt": "Logo"
                           }
@@ -247,33 +256,23 @@
                         "class": "hidden lg:flex items-center gap-8",
                         "blocks": [
                           {
-                            "wrapper": "a",
-                            "class": "hover:text-blue-600 font-inter font-medium text-sm leading-[18px] transition-colors whitespace-nowrap",
-                            "href": "/",
-                            "bindTo": "menu_items[0].label",
-                            "content": "Home",
-                            "style": {
-                              "color": "#000000"
-                            }
-                          },
-                          {
-                            "wrapper": "a",
-                            "class": "hover:text-blue-600 font-inter font-medium text-sm leading-[18px] transition-colors whitespace-nowrap",
-                            "href": "/products",
-                            "bindTo": "menu_items[1].label",
-                            "content": "Products",
-                            "style": {
-                              "color": "#000000"
-                            }
-                          },
-                          {
-                            "wrapper": "a",
-                            "class": "hover:text-blue-600 font-inter font-medium text-sm leading-[18px] transition-colors whitespace-nowrap",
-                            "href": "/collections",
-                            "bindTo": "menu_items[2].label",
-                            "content": "Collections",
-                            "style": {
-                              "color": "#000000"
+                            "type": "repeater",
+                            "source": "menu_items",
+                            "iterator": "item",
+                            "template": {
+                              "wrapper": "a",
+                              "class": "hover:text-blue-600 font-inter font-medium text-sm leading-[18px] transition-colors whitespace-nowrap",
+                              "bind_href": "item.url",
+                              "bind_content": "item.label",
+                              "style": {
+                                "color": "#000000"
+                              },
+                              "events": {
+                                "on_click": {
+                                  "action": "navigate",
+                                  "target": "item.url"
+                                }
+                              }
                             }
                           }
                         ]
@@ -287,31 +286,53 @@
                       {
                         "wrapper": "div",
                         "class": "hidden md:block relative w-[362px]",
-                        "showIf": "show_search",
+                        "condition": {
+                          "field": "show_search",
+                          "op": "equals",
+                          "value": true
+                        },
                         "blocks": [
                           {
                             "wrapper": "svg",
                             "class": "w-6 h-6 text-gray-500 absolute left-2 top-2.5",
-                            "type": "search_icon"
+                            "type": "icon",
+                            "icon": "search"
                           },
                           {
                             "wrapper": "input",
                             "class": "w-full h-11 px-4 pl-10 bg-gray-100 rounded-sm text-sm focus:outline-none focus:ring-2 focus:ring-blue-500",
-                            "type": "search_input",
-                            "placeholder": "Search for products or brands....."
+                            "type": "text_input",
+                            "placeholder": "Search for products or brands.....",
+                            "events": {
+                              "on_submit": {
+                                "action": "search",
+                                "target": "search_results"
+                              }
+                            }
                           }
                         ]
                       },
                       {
                         "wrapper": "button",
+                        "type": "icon_button",
                         "class": "md:hidden p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg transition-colors shrink-0",
-                        "showIf": "show_search",
-                        "type": "mobile_search_button",
+                        "condition": {
+                          "field": "show_search",
+                          "op": "equals",
+                          "value": true
+                        },
+                        "events": {
+                          "on_click": {
+                            "action": "toggle_drawer",
+                            "target": "mobile_menu"
+                          }
+                        },
                         "blocks": [
                           {
                             "wrapper": "svg",
                             "class": "w-4 h-4 sm:w-5 sm:h-5",
-                            "type": "search_icon",
+                            "type": "icon",
+                            "icon": "search",
                             "style": {
                               "color": "#000000"
                             }
@@ -320,46 +341,74 @@
                       },
                       {
                         "wrapper": "button",
+                        "type": "icon_button",
                         "class": "sm:p-1 hover:bg-gray-100 rounded-lg transition-colors shrink-0",
-                        "showIf": "show_dark_mode",
-                        "type": "dark_mode_button",
+                        "condition": {
+                          "field": "show_dark_mode",
+                          "op": "equals",
+                          "value": true
+                        },
+                        "events": {
+                          "on_click": {
+                            "action": "toggle_theme",
+                            "target": "dark_mode"
+                          }
+                        },
                         "blocks": [
                           {
                             "wrapper": "svg",
                             "class": "w-5 h-5",
-                            "type": "dark_mode_icon"
+                            "type": "icon",
+                            "icon": "moon"
                           }
                         ]
                       },
                       {
                         "wrapper": "button",
+                        "type": "icon_button",
                         "class": "relative sm:p-1 hover:bg-gray-100 rounded-lg transition-colors shrink-0",
-                        "showIf": "show_cart",
-                        "type": "cart_button",
+                        "condition": {
+                          "field": "show_cart",
+                          "op": "equals",
+                          "value": true
+                        },
+                        "events": {
+                          "on_click": {
+                            "action": "toggle_drawer",
+                            "target": "cart_drawer"
+                          }
+                        },
                         "blocks": [
                           {
                             "wrapper": "svg",
                             "class": "w-6 h-6",
-                            "type": "cart_icon"
+                            "type": "icon",
+                            "icon": "shopping_cart"
                           },
                           {
                             "wrapper": "span",
                             "class": "absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 w-4 h-4 md:w-5 md:h-5 bg-blue-600 text-white text-[9px] sm:text-[10px] md:text-xs rounded-full flex items-center justify-center font-medium",
-                            "bindTo": "cart_count",
+                            "bind_content": "cart_count",
                             "content": "0"
                           }
                         ]
                       },
                       {
                         "wrapper": "button",
+                        "type": "icon_button",
                         "class": "lg:hidden p-1 sm:p-2 hover:bg-gray-100 rounded-lg transition-colors shrink-0",
-                        "type": "hamburger_button",
+                        "events": {
+                          "on_click": {
+                            "action": "toggle_drawer",
+                            "target": "mobile_menu"
+                          }
+                        },
                         "blocks": [
                           {
-                            "wrapper": "img",
+                            "wrapper": "svg",
                             "class": "w-6 h-6 sm:w-6 sm:h-6",
-                            "src": "/assets/menu_icon.svg",
-                            "alt": "Menu"
+                            "type": "icon",
+                            "icon": "menu"
                           }
                         ]
                       }
@@ -369,8 +418,11 @@
               },
               {
                 "wrapper": "div",
+                "id": "mobile_menu",
                 "class": "lg:hidden border-t border-gray-200 bg-white",
-                "type": "mobile_menu",
+                "state": {
+                  "visible": false
+                },
                 "blocks": [
                   {
                     "wrapper": "div",
@@ -387,13 +439,20 @@
                               {
                                 "wrapper": "svg",
                                 "class": "w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2",
-                                "type": "search_icon"
+                                "type": "icon",
+                                "icon": "search"
                               },
                               {
                                 "wrapper": "input",
                                 "class": "w-full px-4 py-3 pl-10 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500",
-                                "type": "search_input",
-                                "placeholder": "Search for products or brands....."
+                                "type": "text_input",
+                                "placeholder": "Search for products or brands.....",
+                                "events": {
+                                  "on_submit": {
+                                    "action": "search",
+                                    "target": "search_results"
+                                  }
+                                }
                               }
                             ]
                           }
@@ -404,33 +463,23 @@
                         "class": "flex flex-col",
                         "blocks": [
                           {
-                            "wrapper": "a",
-                            "class": "hover:text-blue-600 py-3 text-center transition-colors border-b border-gray-100",
-                            "href": "/",
-                            "bindTo": "menu_items[0].label",
-                            "content": "Home",
-                            "style": {
-                              "color": "#000000"
-                            }
-                          },
-                          {
-                            "wrapper": "a",
-                            "class": "hover:text-blue-600 py-3 text-center transition-colors border-b border-gray-100",
-                            "href": "/products",
-                            "bindTo": "menu_items[1].label",
-                            "content": "Products",
-                            "style": {
-                              "color": "#000000"
-                            }
-                          },
-                          {
-                            "wrapper": "a",
-                            "class": "hover:text-blue-600 py-3 text-center transition-colors ",
-                            "href": "/collections",
-                            "bindTo": "menu_items[2].label",
-                            "content": "Collections",
-                            "style": {
-                              "color": "#000000"
+                            "type": "repeater",
+                            "source": "menu_items",
+                            "iterator": "item",
+                            "template": {
+                              "wrapper": "a",
+                              "class": "hover:text-blue-600 py-3 text-center transition-colors border-b border-gray-100 last:border-b-0",
+                              "bind_href": "item.url",
+                              "bind_content": "item.label",
+                              "style": {
+                                "color": "#000000"
+                              },
+                              "events": {
+                                "on_click": {
+                                  "action": "navigate",
+                                  "target": "item.url"
+                                }
+                              }
                             }
                           }
                         ]
@@ -447,36 +496,67 @@
         "enabled": true,
         "type": "footer-2",
         "settings": {
-          "showNewsletter": true,
-          "showSocial": true,
-          "showPaymentIcons": true
+          "show_newsletter": true,
+          "show_social": true,
+          "show_payment_icons": true
         },
         "blocks": [
           {
-            "wrapper": "footer#footer-2-1765283969665",
+            "wrapper": "footer#footer-2-1765347145754",
             "type": "footer_content",
             "class": "w-full overflow-hidden font-sans",
             "style": {
-              "backgroundColor": "#F9FAFB"
+              "background_color": "#F9FAFB"
             },
             "data": {
-              "backgroundColor": "#F9FAFB",
-              "textColor": "#000000",
-              "bottomBarColor": "#1F2937",
+              "background_color": "#F9FAFB",
+              "text_color": "#000000",
+              "bottom_bar_color": "#1F2937",
               "logo": "https://i.ibb.co.com/4ww2cHtc/Pasted-image.png",
               "description": "Digital Haven is a top-notch store offering a wide range of digital products at unbeatable prices from renowned global brands. Dive in now to discover fresh designs and take advantage of fantastic deals and discounts.",
-              "copyrightText": "All rights reserved for Zatiq Ltd © 2025",
-              "contactTitle": "Contact us",
+              "copyright_text": "All rights reserved for Zatiq Ltd © 2025",
+              "contact_title": "Contact us",
+              "contact_items": [
+                {
+                  "label": "WhatsApp",
+                  "value": "01533785541",
+                  "field": "whatsapp"
+                },
+                {
+                  "label": "Mobile",
+                  "value": "01533785541",
+                  "field": "mobile"
+                },
+                {
+                  "label": "Email",
+                  "value": "support@zatiq.com",
+                  "field": "email"
+                }
+              ],
               "whatsapp": "01533785541",
               "mobile": "01533785541",
               "email": "support@zatiq.com",
-              "showSocial": true,
-              "facebookUrl": "facebook.com",
-              "instagramUrl": "#",
-              "twitterUrl": "#",
-              "linkedinUrl": "linkedin.com",
-              "column1Title": "My Account",
-              "column1Links": [
+              "show_social": true,
+              "social_icons": [
+                {
+                  "platform": "facebook",
+                  "url": "facebook.com"
+                },
+                {
+                  "platform": "twitter",
+                  "url": "twitter.com"
+                },
+                {
+                  "platform": "linkedin",
+                  "url": "linkedin.com"
+                }
+              ],
+              "facebook_url": "facebook.com",
+              "instagram_url": "#",
+              "twitter_url": "twitter.com",
+              "linkedin_url": "linkedin.com",
+              "column1_title": "My Account",
+              "column1_links": [
                 {
                   "text": "My Orders",
                   "url": "/orders"
@@ -490,8 +570,8 @@
                   "url": "/favorites"
                 }
               ],
-              "column2Title": "Important Links",
-              "column2Links": [
+              "column2_title": "Important Links",
+              "column2_links": [
                 {
                   "text": "About Us",
                   "url": "/about"
@@ -509,8 +589,8 @@
                   "url": "/support"
                 }
               ],
-              "showPaymentIcons": true,
-              "paymentIcons": [
+              "show_payment_icons": true,
+              "payment_icons": [
                 {
                   "src": "https://i.ibb.co.com/5W4mDXzk/bkash.png",
                   "alt": "bKash"
@@ -534,7 +614,7 @@
                 "wrapper": "div",
                 "class": "w-full py-8 md:py-12 px-2 md:px-8",
                 "style": {
-                  "backgroundColor": "#F9FAFB",
+                  "background_color": "#F9FAFB",
                   "color": "#000000"
                 },
                 "blocks": [
@@ -553,7 +633,7 @@
                               {
                                 "wrapper": "img",
                                 "class": "h-8 max-w-full",
-                                "bindSrc": "logo",
+                                "bind_src": "logo",
                                 "src": "https://i.ibb.co.com/4ww2cHtc/Pasted-image.png",
                                 "alt": "Logo"
                               }
@@ -562,7 +642,7 @@
                           {
                             "wrapper": "p",
                             "class": "text-gray-600 text-sm leading-relaxed",
-                            "bindTo": "description",
+                            "bind_content": "description",
                             "content": "Digital Haven is a top-notch store offering a wide range of digital products at unbeatable prices from renowned global brands. Dive in now to discover fresh designs and take advantage of fantastic deals and discounts."
                           }
                         ]
@@ -582,7 +662,7 @@
                                   {
                                     "wrapper": "img",
                                     "class": "h-8 max-w-full",
-                                    "bindSrc": "logo",
+                                    "bind_src": "logo",
                                     "src": "https://i.ibb.co.com/4ww2cHtc/Pasted-image.png",
                                     "alt": "Logo"
                                   }
@@ -591,7 +671,7 @@
                               {
                                 "wrapper": "p",
                                 "class": "text-gray-600 text-sm leading-relaxed",
-                                "bindTo": "description",
+                                "bind_content": "description",
                                 "content": "Digital Haven is a top-notch store offering a wide range of digital products at unbeatable prices from renowned global brands. Dive in now to discover fresh designs and take advantage of fantastic deals and discounts."
                               }
                             ]
@@ -603,7 +683,7 @@
                               {
                                 "wrapper": "h3",
                                 "class": "text-xs md:text-sm lg:text-base font-semibold text-gray-900 mb-3 md:mb-4",
-                                "bindTo": "contactTitle",
+                                "bind_content": "contact_title",
                                 "content": "Contact us"
                               },
                               {
@@ -625,7 +705,7 @@
                                           {
                                             "wrapper": "p",
                                             "class": "wrap-break-word",
-                                            "bindTo": "whatsapp",
+                                            "bind_content": "whatsapp",
                                             "content": "01533785541"
                                           }
                                         ]
@@ -647,7 +727,7 @@
                                           {
                                             "wrapper": "p",
                                             "class": "wrap-break-word",
-                                            "bindTo": "mobile",
+                                            "bind_content": "mobile",
                                             "content": "01533785541"
                                           }
                                         ]
@@ -669,7 +749,7 @@
                                           {
                                             "wrapper": "p",
                                             "class": "wrap-break-word",
-                                            "bindTo": "email",
+                                            "bind_content": "email",
                                             "content": "support@zatiq.com"
                                           }
                                         ]
@@ -687,7 +767,7 @@
                               {
                                 "wrapper": "h3",
                                 "class": "text-xs md:text-sm lg:text-base font-semibold text-gray-900 mb-3 md:mb-4",
-                                "bindTo": "column1Title",
+                                "bind_content": "column1_title",
                                 "content": "My Account"
                               },
                               {
@@ -695,40 +775,26 @@
                                 "class": "space-y-2 md:space-y-3",
                                 "blocks": [
                                   {
-                                    "wrapper": "li",
-                                    "blocks": [
-                                      {
-                                        "wrapper": "a",
-                                        "class": "text-xs md:text-sm text-gray-600 hover:text-gray-900",
-                                        "href": "/orders",
-                                        "bindTo": "column1Links[0].text",
-                                        "content": "My Orders"
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "wrapper": "li",
-                                    "blocks": [
-                                      {
-                                        "wrapper": "a",
-                                        "class": "text-xs md:text-sm text-gray-600 hover:text-gray-900",
-                                        "href": "/cart",
-                                        "bindTo": "column1Links[1].text",
-                                        "content": "Shopping Cart"
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "wrapper": "li",
-                                    "blocks": [
-                                      {
-                                        "wrapper": "a",
-                                        "class": "text-xs md:text-sm text-gray-600 hover:text-gray-900",
-                                        "href": "/favorites",
-                                        "bindTo": "column1Links[2].text",
-                                        "content": "Favorites"
-                                      }
-                                    ]
+                                    "type": "repeater",
+                                    "source": "column1_links",
+                                    "iterator": "link",
+                                    "template": {
+                                      "wrapper": "li",
+                                      "blocks": [
+                                        {
+                                          "wrapper": "a",
+                                          "class": "text-xs md:text-sm text-gray-600 hover:text-gray-900",
+                                          "bind_href": "link.url",
+                                          "bind_content": "link.text",
+                                          "events": {
+                                            "on_click": {
+                                              "action": "navigate",
+                                              "target": "link.url"
+                                            }
+                                          }
+                                        }
+                                      ]
+                                    }
                                   }
                                 ]
                               }
@@ -741,7 +807,7 @@
                               {
                                 "wrapper": "h3",
                                 "class": "text-xs md:text-sm lg:text-base font-semibold text-gray-900 mb-3 md:mb-4",
-                                "bindTo": "column2Title",
+                                "bind_content": "column2_title",
                                 "content": "Important Links"
                               },
                               {
@@ -749,52 +815,26 @@
                                 "class": "space-y-2 md:space-y-3",
                                 "blocks": [
                                   {
-                                    "wrapper": "li",
-                                    "blocks": [
-                                      {
-                                        "wrapper": "a",
-                                        "class": "text-xs md:text-sm text-gray-600 hover:text-gray-900",
-                                        "href": "/about",
-                                        "bindTo": "column2Links[0].text",
-                                        "content": "About Us"
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "wrapper": "li",
-                                    "blocks": [
-                                      {
-                                        "wrapper": "a",
-                                        "class": "text-xs md:text-sm text-gray-600 hover:text-gray-900",
-                                        "href": "/privacy",
-                                        "bindTo": "column2Links[1].text",
-                                        "content": "Privacy Policy"
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "wrapper": "li",
-                                    "blocks": [
-                                      {
-                                        "wrapper": "a",
-                                        "class": "text-xs md:text-sm text-gray-600 hover:text-gray-900",
-                                        "href": "/terms",
-                                        "bindTo": "column2Links[2].text",
-                                        "content": "Terms and Conditions"
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "wrapper": "li",
-                                    "blocks": [
-                                      {
-                                        "wrapper": "a",
-                                        "class": "text-xs md:text-sm text-gray-600 hover:text-gray-900",
-                                        "href": "/support",
-                                        "bindTo": "column2Links[3].text",
-                                        "content": "Technical Support"
-                                      }
-                                    ]
+                                    "type": "repeater",
+                                    "source": "column2_links",
+                                    "iterator": "link",
+                                    "template": {
+                                      "wrapper": "li",
+                                      "blocks": [
+                                        {
+                                          "wrapper": "a",
+                                          "class": "text-xs md:text-sm text-gray-600 hover:text-gray-900",
+                                          "bind_href": "link.url",
+                                          "bind_content": "link.text",
+                                          "events": {
+                                            "on_click": {
+                                              "action": "navigate",
+                                              "target": "link.url"
+                                            }
+                                          }
+                                        }
+                                      ]
+                                    }
                                   }
                                 ]
                               }
@@ -803,7 +843,11 @@
                           {
                             "wrapper": "div",
                             "class": "hidden lg:block lg:order-5 lg:col-span-1",
-                            "showIf": "showSocial",
+                            "condition": {
+                              "field": "show_social",
+                              "op": "equals",
+                              "value": true
+                            },
                             "blocks": [
                               {
                                 "wrapper": "h4",
@@ -818,68 +862,31 @@
                                 "class": "flex gap-3",
                                 "blocks": [
                                   {
-                                    "wrapper": "a",
-                                    "class": "hover:opacity-80",
-                                    "href": "facebook.com",
-                                    "bindHref": "facebookUrl",
-                                    "blocks": [
-                                      {
-                                        "wrapper": "svg",
-                                        "class": "w-5 h-5",
-                                        "type": "facebook_icon",
-                                        "style": {
-                                          "color": "#000000"
+                                    "type": "repeater",
+                                    "source": "social_icons",
+                                    "iterator": "social",
+                                    "template": {
+                                      "wrapper": "a",
+                                      "class": "hover:opacity-80",
+                                      "bind_href": "social.url",
+                                      "events": {
+                                        "on_click": {
+                                          "action": "navigate",
+                                          "target": "social.url"
                                         }
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "wrapper": "a",
-                                    "class": "hover:opacity-80",
-                                    "href": "#",
-                                    "bindHref": "instagramUrl",
-                                    "blocks": [
-                                      {
-                                        "wrapper": "svg",
-                                        "class": "w-5 h-5",
-                                        "type": "instagram_icon",
-                                        "style": {
-                                          "color": "#000000"
+                                      },
+                                      "blocks": [
+                                        {
+                                          "wrapper": "svg",
+                                          "class": "w-5 h-5",
+                                          "type": "icon",
+                                          "bind_icon": "social.platform",
+                                          "style": {
+                                            "color": "#000000"
+                                          }
                                         }
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "wrapper": "a",
-                                    "class": "hover:opacity-80",
-                                    "href": "#",
-                                    "bindHref": "twitterUrl",
-                                    "blocks": [
-                                      {
-                                        "wrapper": "svg",
-                                        "class": "w-5 h-5",
-                                        "type": "twitter_icon",
-                                        "style": {
-                                          "color": "#000000"
-                                        }
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "wrapper": "a",
-                                    "class": "hover:opacity-80",
-                                    "href": "linkedin.com",
-                                    "bindHref": "linkedinUrl",
-                                    "blocks": [
-                                      {
-                                        "wrapper": "svg",
-                                        "class": "w-5 h-5",
-                                        "type": "linkedin_icon",
-                                        "style": {
-                                          "color": "#000000"
-                                        }
-                                      }
-                                    ]
+                                      ]
+                                    }
                                   }
                                 ]
                               }
@@ -890,7 +897,11 @@
                       {
                         "wrapper": "div",
                         "class": "mt-8 pt-6 border-t border-gray-200 lg:hidden",
-                        "showIf": "showSocial",
+                        "condition": {
+                          "field": "show_social",
+                          "op": "equals",
+                          "value": true
+                        },
                         "blocks": [
                           {
                             "wrapper": "h4",
@@ -905,68 +916,31 @@
                             "class": "flex gap-4",
                             "blocks": [
                               {
-                                "wrapper": "a",
-                                "class": "hover:opacity-80",
-                                "href": "facebook.com",
-                                "bindHref": "facebookUrl",
-                                "blocks": [
-                                  {
-                                    "wrapper": "svg",
-                                    "class": "w-5 h-5",
-                                    "type": "facebook_icon",
-                                    "style": {
-                                      "color": "#000000"
+                                "type": "repeater",
+                                "source": "social_icons",
+                                "iterator": "social",
+                                "template": {
+                                  "wrapper": "a",
+                                  "class": "hover:opacity-80",
+                                  "bind_href": "social.url",
+                                  "events": {
+                                    "on_click": {
+                                      "action": "navigate",
+                                      "target": "social.url"
                                     }
-                                  }
-                                ]
-                              },
-                              {
-                                "wrapper": "a",
-                                "class": "hover:opacity-80",
-                                "href": "#",
-                                "bindHref": "instagramUrl",
-                                "blocks": [
-                                  {
-                                    "wrapper": "svg",
-                                    "class": "w-5 h-5",
-                                    "type": "instagram_icon",
-                                    "style": {
-                                      "color": "#000000"
+                                  },
+                                  "blocks": [
+                                    {
+                                      "wrapper": "svg",
+                                      "class": "w-5 h-5",
+                                      "type": "icon",
+                                      "bind_icon": "social.platform",
+                                      "style": {
+                                        "color": "#000000"
+                                      }
                                     }
-                                  }
-                                ]
-                              },
-                              {
-                                "wrapper": "a",
-                                "class": "hover:opacity-80",
-                                "href": "#",
-                                "bindHref": "twitterUrl",
-                                "blocks": [
-                                  {
-                                    "wrapper": "svg",
-                                    "class": "w-5 h-5",
-                                    "type": "twitter_icon",
-                                    "style": {
-                                      "color": "#000000"
-                                    }
-                                  }
-                                ]
-                              },
-                              {
-                                "wrapper": "a",
-                                "class": "hover:opacity-80",
-                                "href": "linkedin.com",
-                                "bindHref": "linkedinUrl",
-                                "blocks": [
-                                  {
-                                    "wrapper": "svg",
-                                    "class": "w-5 h-5",
-                                    "type": "linkedin_icon",
-                                    "style": {
-                                      "color": "#000000"
-                                    }
-                                  }
-                                ]
+                                  ]
+                                }
                               }
                             ]
                           }
@@ -980,7 +954,7 @@
                 "wrapper": "div",
                 "class": "w-full py-4 px-4 md:px-8",
                 "style": {
-                  "backgroundColor": "#1F2937"
+                  "background_color": "#1F2937"
                 },
                 "blocks": [
                   {
@@ -990,41 +964,28 @@
                       {
                         "wrapper": "p",
                         "class": "text-white text-sm",
-                        "bindTo": "copyrightText",
+                        "bind_content": "copyright_text",
                         "content": "All rights reserved for Zatiq Ltd © 2025"
                       },
                       {
                         "wrapper": "div",
                         "class": "flex items-center gap-3",
-                        "showIf": "showPaymentIcons",
+                        "condition": {
+                          "field": "show_payment_icons",
+                          "op": "equals",
+                          "value": true
+                        },
                         "blocks": [
                           {
-                            "wrapper": "img",
-                            "class": "h-8 object-contain",
-                            "src": "https://i.ibb.co.com/5W4mDXzk/bkash.png",
-                            "alt": "bKash",
-                            "bindSrc": "paymentIcons[0].src"
-                          },
-                          {
-                            "wrapper": "img",
-                            "class": "h-8 object-contain",
-                            "src": "https://i.ibb.co.com/tPDYMFvk/nagad.png",
-                            "alt": "Nagad",
-                            "bindSrc": "paymentIcons[1].src"
-                          },
-                          {
-                            "wrapper": "img",
-                            "class": "h-8 object-contain",
-                            "src": "https://i.ibb.co.com/psTzX4Q/master.png",
-                            "alt": "Mastercard",
-                            "bindSrc": "paymentIcons[2].src"
-                          },
-                          {
-                            "wrapper": "img",
-                            "class": "h-8 object-contain",
-                            "src": "https://i.ibb.co.com/pBD3qRgZ/visa.png",
-                            "alt": "Visa",
-                            "bindSrc": "paymentIcons[3].src"
+                            "type": "repeater",
+                            "source": "payment_icons",
+                            "iterator": "payment",
+                            "template": {
+                              "wrapper": "img",
+                              "class": "h-8 object-contain",
+                              "bind_src": "payment.src",
+                              "bind_alt": "payment.alt"
+                            }
                           }
                         ]
                       }
