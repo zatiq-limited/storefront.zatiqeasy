@@ -112,8 +112,8 @@ export default function SwiperRenderer({
     .filter(Boolean)
     .join(" ");
 
-  // Build style
-  const style = convertStyleToCSS(block.style);
+  // Build style - pass data and context to resolve style bindings
+  const style = convertStyleToCSS(block.style, mergedData, context);
 
   // Convert snake_case config to Swiper format
   const swiperConfig = useMemo(() => {
@@ -124,9 +124,14 @@ export default function SwiperRenderer({
       modules.push(EffectFade);
     }
 
+    // When breakpoints are configured, the base slidesPerView should be 1 (mobile-first)
+    // The breakpoints will override for larger screens
+    const hasBreakpoints = config.breakpoints && Object.keys(config.breakpoints).length > 0;
+
     const swiperOptions: Record<string, unknown> = {
       modules,
-      slidesPerView: config.slides_per_view || 1,
+      // Use 1 as base when breakpoints exist (mobile-first), otherwise use config value
+      slidesPerView: hasBreakpoints ? 1 : (config.slides_per_view || 1),
       spaceBetween: config.space_between || 0,
       loop: config.loop ?? false,
     };
@@ -157,10 +162,17 @@ export default function SwiperRenderer({
     if (config.breakpoints) {
       const breakpoints: Record<number, Record<string, unknown>> = {};
       Object.entries(config.breakpoints).forEach(([key, value]) => {
-        breakpoints[Number(key)] = {
-          slidesPerView: value.slides_per_view,
-          spaceBetween: value.space_between,
-        };
+        const breakpointConfig: Record<string, unknown> = {};
+
+        // Only add properties that are defined
+        if (value.slides_per_view !== undefined) {
+          breakpointConfig.slidesPerView = value.slides_per_view;
+        }
+        if (value.space_between !== undefined) {
+          breakpointConfig.spaceBetween = value.space_between;
+        }
+
+        breakpoints[Number(key)] = breakpointConfig;
       });
       swiperOptions.breakpoints = breakpoints;
     }

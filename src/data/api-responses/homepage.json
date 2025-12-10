@@ -8,30 +8,30 @@
         "type": "special-offers-slider-1",
         "enabled": true,
         "settings": {
-          "title": "Special genji for you",
+          "title": "Special offers for you",
           "title_color": "#000000",
           "bg_color": "#DCEEE7",
           "button_text": "Shop now",
-          "button_color": "#0f2961",
+          "button_color": "#2563eb",
           "currency": "BDT",
           "enable_autoplay": true,
           "autoplay_delay": 3000,
           "slides_per_view": 3,
-          "selected_product_ids": "919106,901811,701692,864815,727279,864823",
+          "selected_product_ids": "938920,919106,919098,858755,869713,858737",
           "max_products": 6,
           "font_family": "inherit"
         },
         "blocks": [
           {
-            "wrapper": "section#special-offers-slider-1-1765369246314",
+            "wrapper": "section#special-offers-slider-1-1765391692684",
             "type": "special_offers_slider",
             "class": "w-full max-w-[1440px] mx-auto font-sans px-4 2xl:px-2 pb-8 md:pb-14",
             "data": {
-              "title": "Special genji for you",
+              "title": "Special offers for you",
               "title_color": "#000000",
               "bg_color": "#DCEEE7",
               "button_text": "Shop now",
-              "button_color": "#0f2961",
+              "button_color": "#2563eb",
               "button_hover_color": "#1d4ed8",
               "currency": "BDT",
               "enable_autoplay": true,
@@ -39,6 +39,17 @@
               "slides_per_view": 3,
               "max_products": 6,
               "products": [
+                {
+                  "id": "938920",
+                  "name": "বাংলা টেস্ট | Bangla Test",
+                  "image": "",
+                  "price": 100,
+                  "original_price": null,
+                  "formatted_price": "BDT 100",
+                  "formatted_original_price": null,
+                  "discount": null,
+                  "url": "/products/938920"
+                },
                 {
                   "id": "919106",
                   "name": "Blush Rose Printed Tunic (Copy)",
@@ -51,59 +62,48 @@
                   "url": "/products/919106"
                 },
                 {
-                  "id": "901811",
-                  "name": "T Shirt - White (Copy)",
-                  "image": "https://d10rvdv6rxomuk.cloudfront.net/inventories/5606198017699264.jpg",
-                  "price": 200,
+                  "id": "919098",
+                  "name": "Grip (Copy)",
+                  "image": "https://d10rvdv6rxomuk.cloudfront.net/inventories/4067292289849592.png",
+                  "price": 500,
                   "original_price": null,
-                  "formatted_price": "BDT 200",
+                  "formatted_price": "BDT 500",
                   "formatted_original_price": null,
                   "discount": null,
-                  "url": "/products/901811"
+                  "url": "/products/919098"
                 },
                 {
-                  "id": "701692",
-                  "name": "Pastel Mint Cotton Tunic with Lace",
-                  "image": "https://d10rvdv6rxomuk.cloudfront.net/inventories/4394076510536850.png",
+                  "id": "858755",
+                  "name": "Grip",
+                  "image": "https://d10rvdv6rxomuk.cloudfront.net/inventories/4067292289849592.png",
+                  "price": 500,
+                  "original_price": null,
+                  "formatted_price": "BDT 500",
+                  "formatted_original_price": null,
+                  "discount": null,
+                  "url": "/products/858755"
+                },
+                {
+                  "id": "869713",
+                  "name": "test image",
+                  "image": "https://d10rvdv6rxomuk.cloudfront.net/inventories/5183116118752977.png",
+                  "price": 39,
+                  "original_price": null,
+                  "formatted_price": "BDT 39",
+                  "formatted_original_price": null,
+                  "discount": null,
+                  "url": "/products/869713"
+                },
+                {
+                  "id": "858737",
+                  "name": "Push Notification",
+                  "image": "https://d10rvdv6rxomuk.cloudfront.net/inventories/298450743609716.png",
                   "price": 100,
                   "original_price": null,
                   "formatted_price": "BDT 100",
                   "formatted_original_price": null,
                   "discount": null,
-                  "url": "/products/701692"
-                },
-                {
-                  "id": "864815",
-                  "name": "Blush Rose Printed Tunic",
-                  "image": "https://d10rvdv6rxomuk.cloudfront.net/inventories/4394283312777116.png",
-                  "price": 630,
-                  "original_price": null,
-                  "formatted_price": "BDT 630",
-                  "formatted_original_price": null,
-                  "discount": null,
-                  "url": "/products/864815"
-                },
-                {
-                  "id": "727279",
-                  "name": "Emerald Green Printed Kurti",
-                  "image": "https://d10rvdv6rxomuk.cloudfront.net/inventories/4394039292811259.png",
-                  "price": 630,
-                  "original_price": null,
-                  "formatted_price": "BDT 630",
-                  "formatted_original_price": null,
-                  "discount": null,
-                  "url": "/products/727279"
-                },
-                {
-                  "id": "864823",
-                  "name": "Magenta Woven Cotton Kurti",
-                  "image": "https://d10rvdv6rxomuk.cloudfront.net/inventories/4394497314411067.png",
-                  "price": 630,
-                  "original_price": null,
-                  "formatted_price": "BDT 630",
-                  "formatted_original_price": null,
-                  "discount": null,
-                  "url": "/products/864823"
+                  "url": "/products/858737"
                 }
               ]
             },
@@ -115,7 +115,7 @@
                   "color": "#000000"
                 },
                 "bind_content": "title",
-                "content": "Special genji for you",
+                "content": "Special offers for you",
                 "condition": {
                   "field": "title",
                   "op": "not_empty",
@@ -261,7 +261,7 @@
                                   "wrapper": "button",
                                   "class": "text-white text-[12px] leading-4 font-medium tracking-[0%] py-2 px-4 rounded-md gap-1.5 transition-colors inline-flex items-center justify-center",
                                   "style": {
-                                    "background_color": "#0f2961"
+                                    "background_color": "#2563eb"
                                   },
                                   "bind_content": "button_text",
                                   "content": "Shop now",
@@ -295,11 +295,11 @@
         "type": "special-offers-slider-2",
         "enabled": true,
         "settings": {
-          "title": "Special bottle for you",
+          "title": "Special offers for you",
           "title_color": "#000000",
-          "bg_color": "#3de1a2",
+          "bg_color": "#DCEEE7",
           "button_text": "Shop now",
-          "button_color": "#183981",
+          "button_color": "#2563eb",
           "currency": "BDT",
           "enable_autoplay": true,
           "autoplay_delay": 3000,
@@ -308,21 +308,21 @@
           "countdown_days": 12,
           "countdown_hours": 10,
           "countdown_minutes": 12,
-          "selected_product_ids": "919103,919101,858755,864812,864833,864837",
+          "selected_product_ids": "919103,919101,919098,869713,864815,864819",
           "max_products": 6,
           "font_family": "inherit"
         },
         "blocks": [
           {
-            "wrapper": "section#special-offers-slider-2-1765369246314",
+            "wrapper": "section#special-offers-slider-2-1765391692684",
             "type": "special_offers_slider",
             "class": "w-full max-w-[1440px] mx-auto font-sans px-4 2xl:px-2 pb-8 md:pb-14",
             "data": {
-              "title": "Special bottle for you",
+              "title": "Special offers for you",
               "title_color": "#000000",
-              "bg_color": "#3de1a2",
+              "bg_color": "#DCEEE7",
               "button_text": "Shop now",
-              "button_color": "#183981",
+              "button_color": "#2563eb",
               "button_hover_color": "#1d4ed8",
               "currency": "BDT",
               "enable_autoplay": true,
@@ -359,48 +359,48 @@
                   "url": "/products/919101"
                 },
                 {
-                  "id": "858755",
-                  "name": "Grip",
+                  "id": "919098",
+                  "name": "Grip (Copy)",
                   "image": "https://d10rvdv6rxomuk.cloudfront.net/inventories/4067292289849592.png",
                   "price": 500,
                   "original_price": null,
                   "formatted_price": "BDT 500",
                   "formatted_original_price": null,
                   "discount": null,
-                  "url": "/products/858755"
+                  "url": "/products/919098"
                 },
                 {
-                  "id": "864812",
-                  "name": "Geometric Print Long Kurti",
-                  "image": "https://d10rvdv6rxomuk.cloudfront.net/inventories/4394242510660428.png",
+                  "id": "869713",
+                  "name": "test image",
+                  "image": "https://d10rvdv6rxomuk.cloudfront.net/inventories/5183116118752977.png",
+                  "price": 39,
+                  "original_price": null,
+                  "formatted_price": "BDT 39",
+                  "formatted_original_price": null,
+                  "discount": null,
+                  "url": "/products/869713"
+                },
+                {
+                  "id": "864815",
+                  "name": "Blush Rose Printed Tunic",
+                  "image": "https://d10rvdv6rxomuk.cloudfront.net/inventories/4394283312777116.png",
                   "price": 630,
                   "original_price": null,
                   "formatted_price": "BDT 630",
                   "formatted_original_price": null,
                   "discount": null,
-                  "url": "/products/864812"
+                  "url": "/products/864815"
                 },
                 {
-                  "id": "864833",
-                  "name": "Tropical Bloom Set",
-                  "image": "https://d10rvdv6rxomuk.cloudfront.net/inventories/4394756034981467.png",
+                  "id": "864819",
+                  "name": "Mustard Yellow Floral Kurti",
+                  "image": "https://d10rvdv6rxomuk.cloudfront.net/inventories/4394412772150422.png",
                   "price": 630,
                   "original_price": null,
                   "formatted_price": "BDT 630",
                   "formatted_original_price": null,
                   "discount": null,
-                  "url": "/products/864833"
-                },
-                {
-                  "id": "864837",
-                  "name": "Elegant Pastel Embroidered Set",
-                  "image": "https://d10rvdv6rxomuk.cloudfront.net/inventories/4394790471484301.png",
-                  "price": 630,
-                  "original_price": null,
-                  "formatted_price": "BDT 630",
-                  "formatted_original_price": null,
-                  "discount": null,
-                  "url": "/products/864837"
+                  "url": "/products/864819"
                 }
               ]
             },
@@ -412,7 +412,7 @@
                   "color": "#000000"
                 },
                 "bind_content": "title",
-                "content": "Special bottle for you",
+                "content": "Special offers for you",
                 "condition": {
                   "field": "title",
                   "op": "not_empty",
@@ -423,7 +423,7 @@
                 "wrapper": "div",
                 "class": "relative w-full max-w-[1440px] min-h-[542px] rounded-2xl py-6 px-4 md:px-9",
                 "style": {
-                  "background_color": "#3de1a2"
+                  "background_color": "#DCEEE7"
                 },
                 "blocks": [
                   {
@@ -558,7 +558,7 @@
                                   "wrapper": "button",
                                   "class": "text-white text-[12px] leading-4 font-medium tracking-[0%] py-2 px-4 rounded-md gap-1.5 transition-colors inline-flex items-center justify-center mb-4",
                                   "style": {
-                                    "background_color": "#183981"
+                                    "background_color": "#2563eb"
                                   },
                                   "bind_content": "button_text",
                                   "content": "Shop now",
@@ -641,49 +641,49 @@
         "type": "special-offers-slider-3",
         "enabled": true,
         "settings": {
-          "title": "Buy Bottle Zatiq",
-          "title_highlight": "35% off",
+          "title": "Buy Bottle now",
+          "title_highlight": "25% off",
           "highlight_color": "#2563eb",
           "button_text": "Buy Now",
-          "button_color": "#16326f",
+          "button_color": "#2563eb",
           "bg_color": "#ffffff",
-          "selected_product_ids": "869713,858755,890439,864812",
+          "selected_product_ids": "919103,901811,698726,864815",
           "max_products": 4,
           "font_family": "inherit"
         },
         "blocks": [
           {
-            "wrapper": "section#special-offers-slider-3-1765369246315",
+            "wrapper": "section#special-offers-slider-3-1765391692685",
             "type": "special_offers_artistic",
             "class": "w-full px-4 py-8 md:py-14",
             "style": {
               "background_color": "#ffffff"
             },
             "data": {
-              "title": "Buy Bottle Zatiq",
-              "title_highlight": "35% off",
+              "title": "Buy Bottle now",
+              "title_highlight": "25% off",
               "highlight_color": "#2563eb",
               "button_text": "Buy Now",
-              "button_color": "#16326f",
+              "button_color": "#2563eb",
               "button_hover_color": "#1d4ed8",
               "bg_color": "#ffffff",
               "font_family": "inherit",
               "images": [
                 {
-                  "src": "https://d10rvdv6rxomuk.cloudfront.net/inventories/5183116118752977.png",
-                  "alt": "test image"
+                  "src": "https://d10rvdv6rxomuk.cloudfront.net/inventories/51643212819055.png",
+                  "alt": "test image (Copy)"
                 },
                 {
-                  "src": "https://d10rvdv6rxomuk.cloudfront.net/inventories/4067292289849592.png",
-                  "alt": "Grip"
+                  "src": "https://d10rvdv6rxomuk.cloudfront.net/inventories/5606198017699264.jpg",
+                  "alt": "T Shirt - White (Copy)"
                 },
                 {
-                  "src": "https://d10rvdv6rxomuk.cloudfront.net/inventories/5606323815352334.jpg",
-                  "alt": "T Shirt - White"
+                  "src": "https://d10rvdv6rxomuk.cloudfront.net/inventories/4393995621210002.png",
+                  "alt": "Nikki Hand Crafts - best fit"
                 },
                 {
-                  "src": "https://d10rvdv6rxomuk.cloudfront.net/inventories/4394242510660428.png",
-                  "alt": "Geometric Print Long Kurti"
+                  "src": "https://d10rvdv6rxomuk.cloudfront.net/inventories/4394283312777116.png",
+                  "alt": "Blush Rose Printed Tunic"
                 }
               ]
             },
@@ -735,7 +735,7 @@
                               {
                                 "wrapper": "span",
                                 "bind_content": "title",
-                                "content": "Buy Bottle Zatiq"
+                                "content": "Buy Bottle now"
                               },
                               {
                                 "wrapper": "span",
@@ -758,7 +758,7 @@
                                       "color": "#2563eb"
                                     },
                                     "bind_content": "title_highlight",
-                                    "content": "35% off"
+                                    "content": "25% off"
                                   }
                                 ]
                               }
@@ -768,7 +768,7 @@
                             "wrapper": "button",
                             "class": "font-semibold py-3 px-6 rounded-3xl transition-colors text-base text-white",
                             "style": {
-                              "background_color": "#16326f"
+                              "background_color": "#2563eb"
                             },
                             "bind_content": "button_text",
                             "content": "Buy Now",
@@ -853,7 +853,7 @@
                               {
                                 "wrapper": "span",
                                 "bind_content": "title",
-                                "content": "Buy Bottle Zatiq"
+                                "content": "Buy Bottle now"
                               },
                               {
                                 "wrapper": "span",
@@ -876,7 +876,7 @@
                                       "color": "#2563eb"
                                     },
                                     "bind_content": "title_highlight",
-                                    "content": "35% off"
+                                    "content": "25% off"
                                   }
                                 ]
                               }
@@ -886,7 +886,7 @@
                             "wrapper": "button",
                             "class": "font-semibold py-3 px-6 rounded-3xl transition-colors text-base shadow-lg text-white",
                             "style": {
-                              "background_color": "#16326f"
+                              "background_color": "#2563eb"
                             },
                             "bind_content": "button_text",
                             "content": "Buy Now",
@@ -938,14 +938,14 @@
           "left_card_image": "https://i.ibb.co.com/B2s1CxpY/8381449cda78484f78ab0e499626aff8f031bb85.jpg",
           "left_card_title": "Smartphone\nBLU G91 Pro 2022",
           "left_card_subtitle": "Sale 20% off all store",
-          "left_card_button_text": "Buy Now",
+          "left_card_button_text": "Shop Nows",
           "left_card_button_link": "#",
           "left_card_title_color": "#010F1C",
           "left_card_text_color": "#010F1C",
           "right_card_image": "https://i.ibb.co.com/NgXRg0g3/c1d56950ca32c579c48f4a92888c4a547802c115.jpg",
           "right_card_title": "HyperX Cloud II\nWireless",
           "right_card_discount": "Sale 35% off",
-          "right_card_button_text": "Book Now",
+          "right_card_button_text": "Shop Nows",
           "right_card_button_link": "#",
           "right_card_title_color": "#010F1C",
           "right_card_text_color": "#010F1C",
@@ -953,7 +953,7 @@
         },
         "blocks": [
           {
-            "wrapper": "section#special-offers-slider-4-1765369246315",
+            "wrapper": "section#special-offers-slider-4-1765391692685",
             "type": "special_offers_promo",
             "class": "w-full py-8 md:py-14 px-4 font-roboto",
             "style": {
@@ -965,7 +965,7 @@
                 "image": "https://i.ibb.co.com/B2s1CxpY/8381449cda78484f78ab0e499626aff8f031bb85.jpg",
                 "title": "Smartphone\nBLU G91 Pro 2022",
                 "subtitle": "Sale 20% off all store",
-                "button_text": "Buy Now",
+                "button_text": "Shop Nows",
                 "button_link": "#",
                 "title_color": "#010F1C",
                 "text_color": "#010F1C"
@@ -974,7 +974,7 @@
                 "image": "https://i.ibb.co.com/NgXRg0g3/c1d56950ca32c579c48f4a92888c4a547802c115.jpg",
                 "title": "HyperX Cloud II\nWireless",
                 "discount": "Sale 35% off",
-                "button_text": "Book Now",
+                "button_text": "Shop Nows",
                 "button_link": "#",
                 "title_color": "#010F1C",
                 "text_color": "#010F1C"
@@ -1156,47 +1156,11 @@
           "height": "500px",
           "auto_play_interval": 5000,
           "enable_autoplay": true,
-          "slide1_background": "https://i.ibb.co.com/B2s1CxpY/8381449cda78484f78ab0e499626aff8f031bb85.jpg",
-          "slide1_category": "TABLET COLLECTION 2023",
-          "slide1_title": "Galaxy Tab S6 Lite\nAndroid Tablet",
-          "slide1_original_price": "$320",
-          "slide1_sale_price": "$288",
-          "slide1_button_text": "Shop now",
-          "slide1_button_link": "#",
-          "slide1_category_color": "#7E7E7E",
-          "slide1_title_color": "#070707",
-          "slide1_price_color": "#7E7E7E",
-          "slide1_button_bg_color": "#010F1C",
-          "slide1_button_text_color": "#FFFFFF",
-          "slide2_background": "https://i.ibb.co.com/B2s1CxpY/8381449cda78484f78ab0e499626aff8f031bb85.jpg",
-          "slide2_category": "SMARTPHONE COLLECTION 2024",
-          "slide2_title": "iPhone 15 Pro Max\nTitanium Design",
-          "slide2_original_price": "$1199",
-          "slide2_sale_price": "$999",
-          "slide2_button_text": "Order now",
-          "slide2_button_link": "#",
-          "slide2_category_color": "#7E7E7E",
-          "slide2_title_color": "#070707",
-          "slide2_price_color": "#7E7E7E",
-          "slide2_button_bg_color": "#010F1C",
-          "slide2_button_text_color": "#FFFFFF",
-          "slide3_background": "https://i.ibb.co.com/B2s1CxpY/8381449cda78484f78ab0e499626aff8f031bb85.jpg",
-          "slide3_category": "LAPTOP DEALS 2024",
-          "slide3_title": "MacBook Air M3\nUltra Thin & Light",
-          "slide3_original_price": "$1299",
-          "slide3_sale_price": "$1099",
-          "slide3_button_text": "Buy now",
-          "slide3_button_link": "#",
-          "slide3_category_color": "#7E7E7E",
-          "slide3_title_color": "#070707",
-          "slide3_price_color": "#7E7E7E",
-          "slide3_button_bg_color": "#010F1C",
-          "slide3_button_text_color": "#FFFFFF",
           "font_family": "inherit"
         },
         "blocks": [
           {
-            "wrapper": "section#special-offers-slider-5-1765369246315",
+            "wrapper": "section#special-offers-slider-5-1765391692685",
             "type": "special_offers_carousel",
             "class": "w-full py-8 md:py-14 px-4 font-roboto",
             "style": {
@@ -1211,7 +1175,7 @@
                 {
                   "background": "https://i.ibb.co.com/B2s1CxpY/8381449cda78484f78ab0e499626aff8f031bb85.jpg",
                   "category": "TABLET COLLECTION 2023",
-                  "title": "Galaxy Tab S6 Lite\nAndroid Tablet",
+                  "title": "Galaxy Tab S7 Lite\nAndroid Tablet",
                   "original_price": "$320",
                   "sale_price": "$288",
                   "button_text": "Shop now",
@@ -1219,7 +1183,7 @@
                   "category_color": "#7E7E7E",
                   "title_color": "#070707",
                   "price_color": "#7E7E7E",
-                  "button_bg_color": "#010F1C",
+                  "button_bg_color": "#271eae",
                   "button_text_color": "#FFFFFF"
                 },
                 {
@@ -1233,7 +1197,7 @@
                   "category_color": "#7E7E7E",
                   "title_color": "#070707",
                   "price_color": "#7E7E7E",
-                  "button_bg_color": "#010F1C",
+                  "button_bg_color": "#271eae",
                   "button_text_color": "#FFFFFF"
                 },
                 {
@@ -1247,7 +1211,7 @@
                   "category_color": "#7E7E7E",
                   "title_color": "#070707",
                   "price_color": "#7E7E7E",
-                  "button_bg_color": "#010F1C",
+                  "button_bg_color": "#271eae",
                   "button_text_color": "#FFFFFF"
                 }
               ],
@@ -1282,6 +1246,9 @@
                           "autoplay": {
                             "delay": 5000,
                             "disable_on_interaction": false
+                          },
+                          "pagination": {
+                            "clickable": true
                           }
                         },
                         "blocks": [
@@ -1404,34 +1371,6 @@
                                   ]
                                 }
                               ]
-                            }
-                          }
-                        ]
-                      },
-                      {
-                        "wrapper": "div",
-                        "class": "absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2 z-20",
-                        "condition": {
-                          "field": "slides.length",
-                          "op": "gt",
-                          "value": 1
-                        },
-                        "blocks": [
-                          {
-                            "type": "repeater",
-                            "source": "slides",
-                            "iterator": "slide",
-                            "index": "idx",
-                            "template": {
-                              "wrapper": "button",
-                              "class": "h-2 rounded-full transition-all",
-                              "bind_class": "idx === current_slide ? \"bg-[#010F1C] w-8\" : \"bg-gray-400 w-2\"",
-                              "events": {
-                                "on_click": {
-                                  "action": "slider_goto",
-                                  "target": "idx"
-                                }
-                              }
                             }
                           }
                         ]

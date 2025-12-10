@@ -91,10 +91,26 @@ export function parseWrapper(wrapper: string): ParsedWrapper {
   return { tag, id, classes };
 }
 
+// Common iterator prefixes used for binding detection
+const BINDING_PREFIXES = ['slide.', 'item.', 'product.', 'category.', 'review.', 'post.', 'brand.'];
+
+/**
+ * Check if a value is a binding path (e.g., 'slide.button_bg_color')
+ */
+function isBindingPath(value: unknown): boolean {
+  if (typeof value !== 'string') return false;
+  return BINDING_PREFIXES.some(prefix => value.startsWith(prefix));
+}
+
 /**
  * Convert snake_case style object to camelCase React CSSProperties
+ * Optionally resolves binding paths if data and context are provided
  */
-export function convertStyleToCSS(style?: BlockStyle): CSSProperties {
+export function convertStyleToCSS(
+  style?: BlockStyle,
+  data?: Record<string, unknown>,
+  context?: Record<string, unknown>
+): CSSProperties {
   if (!style) return {};
 
   const cssMap: Record<string, string> = {
@@ -133,8 +149,18 @@ export function convertStyleToCSS(style?: BlockStyle): CSSProperties {
     if (value === undefined || value === null) return;
 
     const cssKey = cssMap[key] || key;
+
+    // Check if value is a binding path and resolve it
+    let resolvedValue = value;
+    if (isBindingPath(value) && (data || context)) {
+      const bound = resolveBinding(value as string, data || {}, context || {});
+      if (bound !== undefined && bound !== null) {
+        resolvedValue = bound;
+      }
+    }
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (result as any)[cssKey] = value;
+    (result as any)[cssKey] = resolvedValue;
   });
 
   return result;

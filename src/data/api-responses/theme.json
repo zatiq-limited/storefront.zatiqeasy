@@ -1,7 +1,7 @@
 {
   "success": true,
   "data": {
-    "id": "theme_zatiq_custom_1765362192737",
+    "id": "theme_zatiq_custom_1765387340449",
     "version": "1.0.0",
     "global_settings": {
       "colors": {
@@ -43,50 +43,33 @@
     "global_sections": {
       "announcement": {
         "enabled": true,
-        "type": "announcement-bar-2",
+        "type": "announcement-bar-1",
         "settings": {
           "dismissible": true,
           "sticky": true
         },
         "blocks": [
           {
-            "wrapper": "div#announcement-bar-2-1765362192737",
+            "wrapper": "div#announcement-bar-1-1765387340448",
             "type": "announcement_marquee",
-            "class": "w-full overflow-hidden text-xs sm:text-sm",
+            "class": "w-full overflow-hidden font-bold text-xs sm:text-sm",
             "style": {
-              "background_color": "#23856D",
-              "color": "#FFFFFF"
+              "background": "linear-gradient(to right, #50D1F6, #B198FD)",
+              "color": "#000000"
             },
             "data": {
-              "phone": "01533785541",
-              "message": "Follow Us and get a chance to win 50% off",
-              "background_color": "#23856D",
-              "text_color": "#FFFFFF",
-              "show_phone": true,
-              "show_social": true,
-              "social_icons": [
-                {
-                  "platform": "instagram",
-                  "url": "instagram.com"
-                },
-                {
-                  "platform": "youtube",
-                  "url": "#"
-                },
-                {
-                  "platform": "facebook",
-                  "url": "facebook.com"
-                }
-              ],
-              "instagram_url": "instagram.com",
-              "youtube_url": "#",
-              "facebook_url": "facebook.com",
-              "twitter_url": "#"
+              "message": "For a limited time, enjoy a 20% discount on all our products!",
+              "icon_left": "🔥",
+              "icon_right": "🔥",
+              "gradient_start": "#50D1F6",
+              "gradient_end": "#B198FD",
+              "text_color": "#000000",
+              "font_weight": "bold"
             },
             "blocks": [
               {
                 "wrapper": "div",
-                "class": "py-2 px-2 sm:py-3 sm:px-4",
+                "class": "py-2 sm:py-3",
                 "blocks": [
                   {
                     "wrapper": "div",
@@ -101,261 +84,133 @@
                     "blocks": [
                       {
                         "wrapper": "div",
-                        "class": "flex items-center gap-4 px-2 sm:gap-8 sm:px-4 shrink-0",
+                        "class": "flex items-center gap-8 px-4 shrink-0",
                         "blocks": [
                           {
-                            "wrapper": "div",
-                            "class": "flex items-center gap-2",
-                            "blocks": [
-                              {
-                                "wrapper": "svg",
-                                "class": "w-4 h-4",
-                                "type": "icon",
-                                "icon": "phone"
-                              },
-                              {
-                                "wrapper": "span",
-                                "class": "font-bold whitespace-nowrap",
-                                "bind_content": "phone",
-                                "content": "01533785541"
-                              }
-                            ]
+                            "wrapper": "span",
+                            "bind_content": "icon_left",
+                            "content": "🔥"
                           },
                           {
                             "wrapper": "span",
-                            "class": "font-bold whitespace-nowrap",
+                            "class": "whitespace-nowrap",
                             "bind_content": "message",
-                            "content": "Follow Us and get a chance to win 50% off"
+                            "content": "For a limited time, enjoy a 20% discount on all our products!"
                           },
                           {
-                            "wrapper": "div",
-                            "class": "flex items-center gap-2",
-                            "blocks": [
-                              {
-                                "wrapper": "span",
-                                "class": "font-bold whitespace-nowrap",
-                                "content": "Follow Us:"
-                              },
-                              {
-                                "type": "repeater",
-                                "source": "social_icons",
-                                "iterator": "icon",
-                                "template": {
-                                  "wrapper": "a",
-                                  "class": "hover:opacity-80 transition-opacity",
-                                  "bind_href": "icon.url",
-                                  "events": {
-                                    "on_click": {
-                                      "action": "navigate",
-                                      "target": "icon.url"
-                                    }
-                                  },
-                                  "blocks": [
-                                    {
-                                      "wrapper": "svg",
-                                      "class": "w-4 h-4",
-                                      "type": "icon",
-                                      "bind_icon": "icon.platform"
-                                    }
-                                  ]
-                                }
-                              }
-                            ]
+                            "wrapper": "span",
+                            "bind_content": "icon_right",
+                            "content": "🔥"
                           }
                         ]
                       },
                       {
                         "wrapper": "div",
-                        "class": "flex items-center gap-4 px-2 sm:gap-8 sm:px-4 shrink-0",
+                        "class": "flex items-center gap-8 px-4 shrink-0",
                         "blocks": [
                           {
-                            "wrapper": "div",
-                            "class": "flex items-center gap-2",
-                            "blocks": [
-                              {
-                                "wrapper": "svg",
-                                "class": "w-4 h-4",
-                                "type": "icon",
-                                "icon": "phone"
-                              },
-                              {
-                                "wrapper": "span",
-                                "class": "font-bold whitespace-nowrap",
-                                "bind_content": "phone",
-                                "content": "01533785541"
-                              }
-                            ]
+                            "wrapper": "span",
+                            "bind_content": "icon_left",
+                            "content": "🔥"
                           },
                           {
                             "wrapper": "span",
-                            "class": "font-bold whitespace-nowrap",
+                            "class": "whitespace-nowrap",
                             "bind_content": "message",
-                            "content": "Follow Us and get a chance to win 50% off"
+                            "content": "For a limited time, enjoy a 20% discount on all our products!"
                           },
                           {
-                            "wrapper": "div",
-                            "class": "flex items-center gap-2",
-                            "blocks": [
-                              {
-                                "wrapper": "span",
-                                "class": "font-bold whitespace-nowrap",
-                                "content": "Follow Us:"
-                              },
-                              {
-                                "type": "repeater",
-                                "source": "social_icons",
-                                "iterator": "icon",
-                                "template": {
-                                  "wrapper": "a",
-                                  "class": "hover:opacity-80 transition-opacity",
-                                  "bind_href": "icon.url",
-                                  "events": {
-                                    "on_click": {
-                                      "action": "navigate",
-                                      "target": "icon.url"
-                                    }
-                                  },
-                                  "blocks": [
-                                    {
-                                      "wrapper": "svg",
-                                      "class": "w-4 h-4",
-                                      "type": "icon",
-                                      "bind_icon": "icon.platform"
-                                    }
-                                  ]
-                                }
-                              }
-                            ]
+                            "wrapper": "span",
+                            "bind_content": "icon_right",
+                            "content": "🔥"
                           }
                         ]
                       },
                       {
                         "wrapper": "div",
-                        "class": "flex items-center gap-4 px-2 sm:gap-8 sm:px-4 shrink-0",
+                        "class": "flex items-center gap-8 px-4 shrink-0",
                         "blocks": [
                           {
-                            "wrapper": "div",
-                            "class": "flex items-center gap-2",
-                            "blocks": [
-                              {
-                                "wrapper": "svg",
-                                "class": "w-4 h-4",
-                                "type": "icon",
-                                "icon": "phone"
-                              },
-                              {
-                                "wrapper": "span",
-                                "class": "font-bold whitespace-nowrap",
-                                "bind_content": "phone",
-                                "content": "01533785541"
-                              }
-                            ]
+                            "wrapper": "span",
+                            "bind_content": "icon_left",
+                            "content": "🔥"
                           },
                           {
                             "wrapper": "span",
-                            "class": "font-bold whitespace-nowrap",
+                            "class": "whitespace-nowrap",
                             "bind_content": "message",
-                            "content": "Follow Us and get a chance to win 50% off"
+                            "content": "For a limited time, enjoy a 20% discount on all our products!"
                           },
                           {
-                            "wrapper": "div",
-                            "class": "flex items-center gap-2",
-                            "blocks": [
-                              {
-                                "wrapper": "span",
-                                "class": "font-bold whitespace-nowrap",
-                                "content": "Follow Us:"
-                              },
-                              {
-                                "type": "repeater",
-                                "source": "social_icons",
-                                "iterator": "icon",
-                                "template": {
-                                  "wrapper": "a",
-                                  "class": "hover:opacity-80 transition-opacity",
-                                  "bind_href": "icon.url",
-                                  "events": {
-                                    "on_click": {
-                                      "action": "navigate",
-                                      "target": "icon.url"
-                                    }
-                                  },
-                                  "blocks": [
-                                    {
-                                      "wrapper": "svg",
-                                      "class": "w-4 h-4",
-                                      "type": "icon",
-                                      "bind_icon": "icon.platform"
-                                    }
-                                  ]
-                                }
-                              }
-                            ]
+                            "wrapper": "span",
+                            "bind_content": "icon_right",
+                            "content": "🔥"
                           }
                         ]
                       },
                       {
                         "wrapper": "div",
-                        "class": "flex items-center gap-4 px-2 sm:gap-8 sm:px-4 shrink-0",
+                        "class": "flex items-center gap-8 px-4 shrink-0",
                         "blocks": [
                           {
-                            "wrapper": "div",
-                            "class": "flex items-center gap-2",
-                            "blocks": [
-                              {
-                                "wrapper": "svg",
-                                "class": "w-4 h-4",
-                                "type": "icon",
-                                "icon": "phone"
-                              },
-                              {
-                                "wrapper": "span",
-                                "class": "font-bold whitespace-nowrap",
-                                "bind_content": "phone",
-                                "content": "01533785541"
-                              }
-                            ]
+                            "wrapper": "span",
+                            "bind_content": "icon_left",
+                            "content": "🔥"
                           },
                           {
                             "wrapper": "span",
-                            "class": "font-bold whitespace-nowrap",
+                            "class": "whitespace-nowrap",
                             "bind_content": "message",
-                            "content": "Follow Us and get a chance to win 50% off"
+                            "content": "For a limited time, enjoy a 20% discount on all our products!"
                           },
                           {
-                            "wrapper": "div",
-                            "class": "flex items-center gap-2",
-                            "blocks": [
-                              {
-                                "wrapper": "span",
-                                "class": "font-bold whitespace-nowrap",
-                                "content": "Follow Us:"
-                              },
-                              {
-                                "type": "repeater",
-                                "source": "social_icons",
-                                "iterator": "icon",
-                                "template": {
-                                  "wrapper": "a",
-                                  "class": "hover:opacity-80 transition-opacity",
-                                  "bind_href": "icon.url",
-                                  "events": {
-                                    "on_click": {
-                                      "action": "navigate",
-                                      "target": "icon.url"
-                                    }
-                                  },
-                                  "blocks": [
-                                    {
-                                      "wrapper": "svg",
-                                      "class": "w-4 h-4",
-                                      "type": "icon",
-                                      "bind_icon": "icon.platform"
-                                    }
-                                  ]
-                                }
-                              }
-                            ]
+                            "wrapper": "span",
+                            "bind_content": "icon_right",
+                            "content": "🔥"
+                          }
+                        ]
+                      },
+                      {
+                        "wrapper": "div",
+                        "class": "flex items-center gap-8 px-4 shrink-0",
+                        "blocks": [
+                          {
+                            "wrapper": "span",
+                            "bind_content": "icon_left",
+                            "content": "🔥"
+                          },
+                          {
+                            "wrapper": "span",
+                            "class": "whitespace-nowrap",
+                            "bind_content": "message",
+                            "content": "For a limited time, enjoy a 20% discount on all our products!"
+                          },
+                          {
+                            "wrapper": "span",
+                            "bind_content": "icon_right",
+                            "content": "🔥"
+                          }
+                        ]
+                      },
+                      {
+                        "wrapper": "div",
+                        "class": "flex items-center gap-8 px-4 shrink-0",
+                        "blocks": [
+                          {
+                            "wrapper": "span",
+                            "bind_content": "icon_left",
+                            "content": "🔥"
+                          },
+                          {
+                            "wrapper": "span",
+                            "class": "whitespace-nowrap",
+                            "bind_content": "message",
+                            "content": "For a limited time, enjoy a 20% discount on all our products!"
+                          },
+                          {
+                            "wrapper": "span",
+                            "bind_content": "icon_right",
+                            "content": "🔥"
                           }
                         ]
                       }
@@ -386,7 +241,7 @@
         },
         "blocks": [
           {
-            "wrapper": "nav#navbar-1-1765362192737",
+            "wrapper": "nav#navbar-1-1765387340449",
             "type": "navbar_content",
             "class": "px-3 sm:px-4 md:px-8 lg:px-10 py-3 md:py-[18px] sticky top-0 z-50",
             "style": {
@@ -403,16 +258,24 @@
               "sticky": true,
               "menu_items": [
                 {
-                  "label": "Home",
-                  "url": "/"
+                  "label": "Handbags",
+                  "url": "#"
                 },
                 {
-                  "label": "Products",
-                  "url": "/products"
+                  "label": "Watches",
+                  "url": "#"
                 },
                 {
-                  "label": "Collections",
-                  "url": "/collections"
+                  "label": "Skincare",
+                  "url": "#"
+                },
+                {
+                  "label": "Jewellery",
+                  "url": "#"
+                },
+                {
+                  "label": "Apparels",
+                  "url": "#"
                 }
               ],
               "cart_count": 0

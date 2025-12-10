@@ -210,7 +210,7 @@ function renderIcon(
       )
     : block.icon || "help";
 
-  const style = convertStyleToCSS(block.style);
+  const style = convertStyleToCSS(block.style, data, context);
 
   return (
     <IconRenderer icon={iconName} className={block.class || ""} style={style} />
@@ -238,8 +238,8 @@ function renderElement(
     .filter(Boolean)
     .join(" ");
 
-  // Build style
-  const style = convertStyleToCSS(block.style);
+  // Build style - pass data and context to resolve style bindings
+  const style = convertStyleToCSS(block.style, data, context);
 
   // Build props
   const props: Record<string, unknown> = {

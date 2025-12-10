@@ -71,8 +71,8 @@ export default function MarqueeRenderer({
     .filter(Boolean)
     .join(" ");
 
-  // Build style with animation
-  const baseStyle = convertStyleToCSS(block.style);
+  // Build style with animation - pass data and context to resolve style bindings
+  const baseStyle = convertStyleToCSS(block.style, mergedData, context);
 
   // Generate animation CSS
   const animationStyle = useMemo(() => {
