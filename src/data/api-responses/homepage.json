@@ -15,7 +15,7 @@
         },
         "blocks": [
           {
-            "wrapper": "section#hero-1-1765441490045",
+            "wrapper": "section#hero-1-1765453998144",
             "type": "hero_carousel",
             "class": "w-full px-4 pb-8 sm:pb-14 py-0 2xl:px-0 pt-2",
             "data": {
@@ -29,7 +29,7 @@
                   "id": 0,
                   "tagline": "The new stylish collection",
                   "title": "NEW FALL",
-                  "subtitle": "SEASON 2026",
+                  "subtitle": "SEASON 2025",
                   "button_text": "Shop now",
                   "button_link": "/collections/fall-2025",
                   "image": "https://i.ibb.co.com/QFdRjZTW/hero-11.png",
@@ -37,7 +37,8 @@
                   "gradient_end": "#F3E7E9",
                   "text_color": "#181D25",
                   "tagline_color": "#4E5562",
-                  "button_color": "#F55266"
+                  "button_color": "#F55266",
+                  "button_text_color": "#FFFFFF"
                 },
                 {
                   "id": 1,
@@ -51,7 +52,8 @@
                   "gradient_end": "#E8DFE0",
                   "text_color": "#1A1A1A",
                   "tagline_color": "#5A5A5A",
-                  "button_color": "#F55266"
+                  "button_color": "#F55266",
+                  "button_text_color": "#FFFFFF"
                 },
                 {
                   "id": 2,
@@ -65,7 +67,8 @@
                   "gradient_end": "#E9DDD4",
                   "text_color": "#2C2C2C",
                   "tagline_color": "#6B6B6B",
-                  "button_color": "#F55266"
+                  "button_color": "#F55266",
+                  "button_text_color": "#FFFFFF"
                 }
               ]
             },
@@ -73,7 +76,7 @@
               {
                 "wrapper": "div",
                 "type": "swiper",
-                "class": "w-full max-w-[1440px] mx-auto rounded-2xl overflow-hidden",
+                "class": "relative w-full max-w-[1440px] mx-auto rounded-2xl overflow-hidden",
                 "config": {
                   "loop": true,
                   "slides_per_view": 1,
@@ -86,6 +89,10 @@
                     "type": "progressbar"
                   }
                 },
+                "state": {
+                  "current_slide": 0,
+                  "is_animating": false
+                },
                 "blocks": [
                   {
                     "type": "repeater",
@@ -93,7 +100,7 @@
                     "iterator": "slide",
                     "template": {
                       "wrapper": "div",
-                      "class": "relative w-full h-[480px] md:h-[600px] overflow-hidden",
+                      "class": "relative w-full h-[400px] sm:h-[450px] md:h-[520px] overflow-hidden transition-opacity duration-500",
                       "bind_style": {
                         "background": {
                           "type": "gradient",
@@ -110,7 +117,7 @@
                             {
                               "wrapper": "p",
                               "class": "text-sm md:text-lg lg:text-xl font-normal leading-relaxed md:leading-7 lg:leading-[30px] mb-3 md:mb-5 lg:mb-6",
-                              "style": {
+                              "bind_style": {
                                 "color": "slide.tagline_color"
                               },
                               "bind_content": "slide.tagline",
@@ -123,7 +130,7 @@
                             {
                               "wrapper": "h1",
                               "class": "text-[28px] md:text-5xl lg:text-6xl font-bold leading-tight md:leading-tight lg:leading-[1.1] tracking-tight uppercase mb-0 md:mb-10 lg:mb-12",
-                              "style": {
+                              "bind_style": {
                                 "color": "slide.text_color"
                               },
                               "blocks": [
@@ -152,11 +159,11 @@
                             },
                             {
                               "wrapper": "button",
-                              "class": "hidden md:inline-flex items-center gap-2 text-white font-medium text-base leading-6 px-6 py-3 rounded-lg transition-all shadow-md hover:shadow-lg hover:scale-105 active:scale-95",
-                              "style": {
-                                "background_color": "slide.button_color"
+                              "class": "hidden md:inline-flex items-center gap-2 font-medium text-base leading-6 px-6 py-3 rounded-lg transition-all shadow-md hover:shadow-lg hover:scale-105 active:scale-95",
+                              "bind_style": {
+                                "background_color": "slide.button_color",
+                                "color": "slide.button_text_color"
                               },
-                              "bind_content": "slide.button_text",
                               "events": {
                                 "on_click": {
                                   "action": "navigate",
@@ -184,9 +191,10 @@
                           "blocks": [
                             {
                               "wrapper": "button",
-                              "class": "inline-flex items-center gap-1.5 text-white font-medium text-xs leading-5 px-4 py-2 rounded-lg transition-all shadow-md hover:shadow-lg hover:scale-105 active:scale-95",
-                              "style": {
-                                "background_color": "slide.button_color"
+                              "class": "inline-flex items-center gap-1.5 font-medium text-xs leading-5 px-4 py-2 rounded-lg transition-all shadow-md hover:shadow-lg hover:scale-105 active:scale-95",
+                              "bind_style": {
+                                "background_color": "slide.button_color",
+                                "color": "slide.button_text_color"
                               },
                               "events": {
                                 "on_click": {
@@ -228,50 +236,28 @@
               },
               {
                 "wrapper": "div",
-                "class": "absolute inset-0 flex items-center justify-between px-4 md:px-8 lg:px-12 z-20 pointer-events-none",
+                "class": "absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-1.5",
                 "condition": {
-                  "field": "show_arrows",
+                  "field": "show_indicators",
                   "op": "equals",
                   "value": true
                 },
                 "blocks": [
                   {
-                    "wrapper": "button",
-                    "type": "nav_button",
-                    "class": "pointer-events-auto w-10 h-10 md:w-12 md:h-12 rounded-full bg-transparent md:bg-white/80 hover:bg-white/20 md:hover:bg-white shadow-none md:shadow-lg flex items-center justify-center transition-all hover:scale-110 active:scale-95 lg:opacity-0 lg:hover:opacity-100",
-                    "events": {
-                      "on_click": {
-                        "action": "slider_prev",
-                        "target": "swiper"
+                    "type": "repeater",
+                    "source": "slides",
+                    "iterator": "indicator",
+                    "template": {
+                      "wrapper": "div",
+                      "class": "w-8 md:w-12 h-1 bg-white/60 hover:bg-white rounded-full overflow-hidden cursor-pointer transition-all duration-300",
+                      "events": {
+                        "on_click": {
+                          "action": "slider_goto",
+                          "target": "swiper",
+                          "index": "indicator.id"
+                        }
                       }
-                    },
-                    "blocks": [
-                      {
-                        "wrapper": "svg",
-                        "type": "icon",
-                        "icon": "chevron_left",
-                        "class": "w-5 h-5 text-white/70 md:text-gray-800"
-                      }
-                    ]
-                  },
-                  {
-                    "wrapper": "button",
-                    "type": "nav_button",
-                    "class": "pointer-events-auto w-10 h-10 md:w-12 md:h-12 rounded-full bg-transparent md:bg-white/80 hover:bg-white/20 md:hover:bg-white shadow-none md:shadow-lg flex items-center justify-center transition-all hover:scale-110 active:scale-95 lg:opacity-0 lg:hover:opacity-100",
-                    "events": {
-                      "on_click": {
-                        "action": "slider_next",
-                        "target": "swiper"
-                      }
-                    },
-                    "blocks": [
-                      {
-                        "wrapper": "svg",
-                        "type": "icon",
-                        "icon": "chevron_right",
-                        "class": "w-5 h-5 text-white/70 md:text-gray-800"
-                      }
-                    ]
+                    }
                   }
                 ]
               }
@@ -290,156 +276,266 @@
         },
         "blocks": [
           {
-            "wrapper": "section#hero-2-1765441490045",
+            "wrapper": "section#hero-2-1765453998144",
             "type": "hero_fullwidth",
-            "class": "w-full",
+            "class": "w-full px-4 pb-8 sm:pb-14 py-0 2xl:px-0 pt-2",
             "data": {
               "height": "large",
               "auto_advance": true,
               "advance_interval": 5000,
               "show_arrows": true,
               "show_indicators": true,
-              "overlay_opacity": 40,
               "slides": [
                 {
                   "id": 0,
-                  "title": "",
-                  "subtitle": "",
+                  "badge": "New Arrival",
+                  "heading": "Maximum impact",
                   "description": "Shop our collection of glamorous swimsuits and mix-and-match bikinis.",
                   "button_text": "Shop New Arrivals",
                   "button_link": "/collections/new-arrivals",
                   "image": "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1440&h=716&fit=crop&q=80",
-                  "text_color": "#FFFFFF",
-                  "button_color": "#F55266",
-                  "text_alignment": "center"
+                  "overlay_opacity": 20,
+                  "button_color": "#162d9c",
+                  "button_text_color": "#ece4e4",
+                  "heading_color": "#FFFFFF",
+                  "description_color": "#FFFFFF",
+                  "badge_color": "#FFFFFF",
+                  "badge_bg_color": "rgba(255,255,255,0.2)"
                 },
                 {
                   "id": 1,
-                  "title": "",
-                  "subtitle": "",
+                  "badge": "Summer Collection",
+                  "heading": "Beach Ready Vibes",
                   "description": "Discover the perfect pieces for your summer getaway and beachside adventures.",
                   "button_text": "Explore Collection",
                   "button_link": "/collections/summer",
                   "image": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1440&h=716&fit=crop&q=80",
-                  "text_color": "#FFFFFF",
-                  "button_color": "#F55266",
-                  "text_alignment": "center"
+                  "overlay_opacity": 30,
+                  "button_color": "#FFFFFF",
+                  "button_text_color": "#000000",
+                  "heading_color": "#FFFFFF",
+                  "description_color": "#FFFFFF",
+                  "badge_color": "#FFFFFF",
+                  "badge_bg_color": "rgba(255,255,255,0.2)"
                 },
                 {
                   "id": 2,
-                  "title": "",
-                  "subtitle": "",
+                  "badge": "Limited Edition",
+                  "heading": "Exclusive Designer Wear",
                   "description": "Luxury fashion pieces curated for those who appreciate timeless elegance.",
                   "button_text": "Shop Exclusive",
                   "button_link": "/collections/exclusive",
                   "image": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1440&h=716&fit=crop&q=80",
-                  "text_color": "#FFFFFF",
-                  "button_color": "#F55266",
-                  "text_alignment": "center"
+                  "overlay_opacity": 25,
+                  "button_color": "#FFFFFF",
+                  "button_text_color": "#000000",
+                  "heading_color": "#FFFFFF",
+                  "description_color": "#FFFFFF",
+                  "badge_color": "#FFFFFF",
+                  "badge_bg_color": "rgba(255,255,255,0.2)"
                 }
               ]
             },
             "blocks": [
               {
                 "wrapper": "div",
-                "type": "swiper",
-                "class": "w-full h-[600px] md:h-[800px]",
-                "config": {
-                  "effect": "fade",
-                  "fade_effect": {
-                    "cross_fade": true
-                  },
-                  "loop": true,
-                  "slides_per_view": 1,
-                  "autoplay": {
-                    "delay": 5000,
-                    "disable_on_interaction": false
-                  }
+                "class": "relative w-full max-w-[1440px] mx-auto rounded-2xl overflow-hidden",
+                "state": {
+                  "current_slide": 0,
+                  "is_animating": false
                 },
                 "blocks": [
                   {
-                    "type": "repeater",
-                    "source": "slides",
-                    "iterator": "slide",
-                    "template": {
-                      "wrapper": "div",
-                      "class": "relative w-full h-[600px] md:h-[800px]",
-                      "blocks": [
-                        {
-                          "wrapper": "img",
-                          "class": "absolute inset-0 w-full h-full object-cover",
-                          "bind_src": "slide.image",
-                          "bind_alt": "slide.title"
-                        },
-                        {
+                    "wrapper": "div",
+                    "type": "swiper",
+                    "class": "relative w-full h-[500px] sm:h-[600px] md:h-[700px] overflow-hidden",
+                    "config": {
+                      "effect": "fade",
+                      "fade_effect": {
+                        "cross_fade": true
+                      },
+                      "loop": true,
+                      "slides_per_view": 1,
+                      "autoplay": {
+                        "delay": 5000,
+                        "disable_on_interaction": false
+                      }
+                    },
+                    "blocks": [
+                      {
+                        "type": "repeater",
+                        "source": "slides",
+                        "iterator": "slide",
+                        "template": {
                           "wrapper": "div",
-                          "class": "absolute inset-0 bg-black",
-                          "style": {
-                            "opacity": 0.4
-                          }
-                        },
-                        {
-                          "wrapper": "div",
-                          "class": "relative z-10 h-full flex items-center justify-center px-4",
+                          "class": "relative w-full h-[500px] sm:h-[600px] md:h-[700px] transition-opacity duration-700 ease-in-out",
                           "blocks": [
                             {
+                              "wrapper": "img",
+                              "class": "absolute inset-0 w-full h-full object-cover",
+                              "bind_src": "slide.image",
+                              "bind_alt": "slide.heading"
+                            },
+                            {
                               "wrapper": "div",
-                              "class": "text-center max-w-3xl",
+                              "class": "absolute inset-0 bg-black",
+                              "bind_style": {
+                                "opacity": {
+                                  "expr": "slide.overlay_opacity / 100"
+                                }
+                              }
+                            },
+                            {
+                              "wrapper": "div",
+                              "class": "absolute inset-0 z-10 flex items-center justify-center px-4 sm:px-8",
                               "blocks": [
                                 {
-                                  "wrapper": "p",
-                                  "class": "text-sm md:text-lg uppercase tracking-widest mb-4",
-                                  "style": {
-                                    "color": "slide.text_color"
-                                  },
-                                  "bind_content": "slide.subtitle",
-                                  "condition": {
-                                    "field": "slide.subtitle",
-                                    "op": "not_empty",
-                                    "value": true
-                                  }
-                                },
-                                {
-                                  "wrapper": "h1",
-                                  "class": "text-4xl md:text-6xl lg:text-7xl font-bold mb-6",
-                                  "style": {
-                                    "color": "slide.text_color"
-                                  },
-                                  "bind_content": "slide.title"
-                                },
-                                {
-                                  "wrapper": "p",
-                                  "class": "text-lg md:text-xl mb-8",
-                                  "style": {
-                                    "color": "slide.text_color"
-                                  },
-                                  "bind_content": "slide.description",
-                                  "condition": {
-                                    "field": "slide.description",
-                                    "op": "not_empty",
-                                    "value": true
-                                  }
-                                },
-                                {
-                                  "wrapper": "button",
-                                  "class": "inline-flex items-center gap-2 text-white font-medium px-8 py-4 rounded-lg transition-all hover:scale-105",
-                                  "style": {
-                                    "background_color": "slide.button_color"
-                                  },
-                                  "bind_content": "slide.button_text",
-                                  "events": {
-                                    "on_click": {
-                                      "action": "navigate",
-                                      "target": "slide.button_link"
+                                  "wrapper": "div",
+                                  "class": "text-center max-w-3xl",
+                                  "blocks": [
+                                    {
+                                      "wrapper": "span",
+                                      "class": "inline-block backdrop-blur-sm text-xs sm:text-sm font-medium px-3 sm:px-4 py-1.5 sm:py-2 rounded-full mb-4 sm:mb-6 uppercase tracking-wider",
+                                      "bind_content": "slide.badge",
+                                      "bind_style": {
+                                        "color": "slide.badge_color",
+                                        "background_color": "slide.badge_bg_color"
+                                      },
+                                      "condition": {
+                                        "field": "slide.badge",
+                                        "op": "not_empty",
+                                        "value": true
+                                      }
+                                    },
+                                    {
+                                      "wrapper": "h1",
+                                      "class": "text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight",
+                                      "bind_content": "slide.heading",
+                                      "bind_style": {
+                                        "color": "slide.heading_color"
+                                      }
+                                    },
+                                    {
+                                      "wrapper": "p",
+                                      "class": "text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-2xl mx-auto",
+                                      "bind_content": "slide.description",
+                                      "bind_style": {
+                                        "color": "slide.description_color"
+                                      },
+                                      "condition": {
+                                        "field": "slide.description",
+                                        "op": "not_empty",
+                                        "value": true
+                                      }
+                                    },
+                                    {
+                                      "wrapper": "button",
+                                      "class": "min-w-40 min-h-10 sm:min-w-48 sm:min-h-14 px-4 inline-flex items-center justify-center hover:opacity-90 font-semibold text-base rounded transition-all hover:scale-105 active:scale-95",
+                                      "bind_style": {
+                                        "background_color": "slide.button_color",
+                                        "color": "slide.button_text_color"
+                                      },
+                                      "events": {
+                                        "on_click": {
+                                          "action": "navigate",
+                                          "target": "slide.button_link"
+                                        }
+                                      },
+                                      "blocks": [
+                                        {
+                                          "wrapper": "span",
+                                          "bind_content": "slide.button_text"
+                                        }
+                                      ]
                                     }
-                                  }
+                                  ]
                                 }
                               ]
                             }
                           ]
                         }
-                      ]
-                    }
+                      }
+                    ]
+                  },
+                  {
+                    "wrapper": "div",
+                    "class": "absolute inset-0 flex items-center justify-between px-4 md:px-8 lg:px-12 z-20 pointer-events-none",
+                    "condition": {
+                      "field": "show_arrows",
+                      "op": "equals",
+                      "value": true
+                    },
+                    "blocks": [
+                      {
+                        "wrapper": "button",
+                        "class": "pointer-events-auto w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/80 hover:bg-white shadow-lg text-gray-800 flex items-center justify-center transition-all hover:scale-110 active:scale-95",
+                        "events": {
+                          "on_click": {
+                            "action": "slider_prev",
+                            "target": "swiper"
+                          }
+                        },
+                        "blocks": [
+                          {
+                            "wrapper": "svg",
+                            "type": "icon",
+                            "icon": "chevron_left",
+                            "class": "w-5 h-5"
+                          }
+                        ]
+                      },
+                      {
+                        "wrapper": "button",
+                        "class": "pointer-events-auto w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/80 hover:bg-white shadow-lg text-gray-800 flex items-center justify-center transition-all hover:scale-110 active:scale-95",
+                        "events": {
+                          "on_click": {
+                            "action": "slider_next",
+                            "target": "swiper"
+                          }
+                        },
+                        "blocks": [
+                          {
+                            "wrapper": "svg",
+                            "type": "icon",
+                            "icon": "chevron_right",
+                            "class": "w-5 h-5"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "wrapper": "div",
+                    "class": "absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20",
+                    "condition": {
+                      "field": "show_indicators",
+                      "op": "equals",
+                      "value": true
+                    },
+                    "blocks": [
+                      {
+                        "type": "repeater",
+                        "source": "slides",
+                        "iterator": "indicator",
+                        "template": {
+                          "wrapper": "button",
+                          "class": "w-5 h-5 flex items-center justify-center group transition-all duration-300",
+                          "events": {
+                            "on_click": {
+                              "action": "slider_goto",
+                              "target": "swiper",
+                              "index": "indicator.id"
+                            }
+                          },
+                          "blocks": [
+                            {
+                              "wrapper": "div",
+                              "class": "w-2.5 h-2.5 rounded-full bg-white/70 hover:bg-white transition-all duration-200"
+                            }
+                          ]
+                        }
+                      }
+                    ]
                   }
                 ]
               }
@@ -458,84 +554,93 @@
         },
         "blocks": [
           {
-            "wrapper": "section#hero-3-1765441490045",
-            "type": "hero_split",
-            "class": "w-full",
-            "style": {
-              "background_color": "#F5F5F5"
-            },
+            "wrapper": "section#hero-3-1765453998144",
+            "type": "hero_inline_arrows",
+            "class": "w-full px-4 pb-8 sm:pb-14 py-0 2xl:px-0 pt-2",
             "data": {
               "height": "large",
               "auto_advance": true,
               "advance_interval": 5000,
               "show_arrows": true,
-              "image_position": "right",
-              "bg_color": "#F5F5F5",
+              "show_indicators": true,
               "slides": [
                 {
                   "id": 0,
-                  "tagline": "",
                   "title": "Best Discounts 2025",
                   "description": "Salla Store provides you with everything you need, from electronics to home furniture, along with the best discounts on products. Shop now and enjoy all the discounts on products.",
                   "button_text": "Discover more",
                   "button_link": "/collections/discounts",
                   "image": "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1440&h=558&fit=crop&q=80",
-                  "text_color": "#1A1A1A",
-                  "tagline_color": "#666666",
-                  "button_color": "#1A1A1A"
+                  "overlay_opacity": 40,
+                  "button_color": "#24408f",
+                  "button_text_color": "#FFFFFF",
+                  "title_color": "#e1b209",
+                  "description_color": "#80e619"
                 },
                 {
                   "id": 1,
-                  "tagline": "",
                   "title": "Electronics Mega Sale",
                   "description": "Upgrade your tech with our exclusive electronics collection. From smartphones to laptops, find cutting-edge technology at unbeatable prices. Limited time offers available.",
                   "button_text": "Shop Electronics",
                   "button_link": "/collections/electronics",
                   "image": "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=1440&h=558&fit=crop&q=80",
-                  "text_color": "#1A1A1A",
-                  "tagline_color": "#666666",
-                  "button_color": "#1A1A1A"
+                  "overlay_opacity": 40,
+                  "button_color": "#3465F0",
+                  "button_text_color": "#FFFFFF",
+                  "title_color": "#FFFFFF",
+                  "description_color": "#F8F8F8"
                 },
                 {
                   "id": 2,
-                  "tagline": "",
                   "title": "Home Furniture Deals",
                   "description": "Transform your living space with our premium furniture collection. Discover stylish and comfortable pieces that perfectly blend functionality with modern design aesthetics.",
                   "button_text": "Browse Furniture",
                   "button_link": "/collections/furniture",
                   "image": "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1440&h=558&fit=crop&q=80",
-                  "text_color": "#1A1A1A",
-                  "tagline_color": "#666666",
-                  "button_color": "#1A1A1A"
+                  "overlay_opacity": 40,
+                  "button_color": "#3465F0",
+                  "button_text_color": "#FFFFFF",
+                  "title_color": "#FFFFFF",
+                  "description_color": "#F8F8F8"
                 },
                 {
                   "id": 3,
-                  "tagline": "",
                   "title": "Fashion Essentials",
                   "description": "Elevate your wardrobe with our curated fashion collection. From casual wear to elegant outfits, find everything you need to express your unique style at amazing prices.",
                   "button_text": "Explore Fashion",
                   "button_link": "/collections/fashion",
                   "image": "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1440&h=558&fit=crop&q=80",
-                  "text_color": "#1A1A1A",
-                  "tagline_color": "#666666",
-                  "button_color": "#1A1A1A"
+                  "overlay_opacity": 40,
+                  "button_color": "#3465F0",
+                  "button_text_color": "#FFFFFF",
+                  "title_color": "#FFFFFF",
+                  "description_color": "#F8F8F8"
                 }
               ]
             },
             "blocks": [
               {
                 "wrapper": "div",
-                "class": "max-w-[1440px] mx-auto",
+                "class": "relative w-full max-w-[1440px] mx-auto rounded-2xl overflow-hidden",
+                "state": {
+                  "current_slide": 0,
+                  "is_animating": false
+                },
                 "blocks": [
                   {
                     "wrapper": "div",
                     "type": "swiper",
-                    "class": "w-full",
+                    "class": "relative w-full h-[500px] sm:h-[600px] md:h-[700px] overflow-hidden",
                     "config": {
+                      "effect": "fade",
+                      "fade_effect": {
+                        "cross_fade": true
+                      },
                       "loop": true,
                       "slides_per_view": 1,
                       "autoplay": {
-                        "delay": 5000
+                        "delay": 5000,
+                        "disable_on_interaction": false
                       }
                     },
                     "blocks": [
@@ -545,75 +650,151 @@
                         "iterator": "slide",
                         "template": {
                           "wrapper": "div",
-                          "class": "grid grid-cols-1 lg:grid-cols-2 gap-8 h-[600px] md:h-[800px] items-center px-4 lg:px-8",
+                          "class": "relative w-full h-[500px] sm:h-[600px] md:h-[700px] transition-opacity duration-700 ease-in-out",
                           "blocks": [
                             {
-                              "wrapper": "div",
-                              "class": "lg:order-1 flex flex-col justify-center py-12 lg:py-0",
-                              "blocks": [
-                                {
-                                  "wrapper": "p",
-                                  "class": "text-sm uppercase tracking-widest mb-4",
-                                  "style": {
-                                    "color": "slide.tagline_color"
-                                  },
-                                  "bind_content": "slide.tagline",
-                                  "condition": {
-                                    "field": "slide.tagline",
-                                    "op": "not_empty",
-                                    "value": true
-                                  }
-                                },
-                                {
-                                  "wrapper": "h1",
-                                  "class": "text-4xl md:text-5xl lg:text-6xl font-bold mb-6",
-                                  "style": {
-                                    "color": "slide.text_color"
-                                  },
-                                  "bind_content": "slide.title"
-                                },
-                                {
-                                  "wrapper": "p",
-                                  "class": "text-lg mb-8 max-w-lg",
-                                  "style": {
-                                    "color": "slide.text_color"
-                                  },
-                                  "bind_content": "slide.description",
-                                  "condition": {
-                                    "field": "slide.description",
-                                    "op": "not_empty",
-                                    "value": true
-                                  }
-                                },
-                                {
-                                  "wrapper": "button",
-                                  "class": "inline-flex items-center gap-2 font-medium px-8 py-4 rounded-lg transition-all hover:scale-105 text-white w-fit",
-                                  "style": {
-                                    "background_color": "slide.button_color"
-                                  },
-                                  "bind_content": "slide.button_text",
-                                  "events": {
-                                    "on_click": {
-                                      "action": "navigate",
-                                      "target": "slide.button_link"
-                                    }
-                                  }
-                                }
-                              ]
+                              "wrapper": "img",
+                              "class": "absolute inset-0 w-full h-full object-cover",
+                              "bind_src": "slide.image",
+                              "bind_alt": "slide.title"
                             },
                             {
                               "wrapper": "div",
-                              "class": "lg:order-2 h-full",
+                              "class": "absolute inset-0 bg-black",
+                              "bind_style": {
+                                "opacity": {
+                                  "expr": "slide.overlay_opacity / 100"
+                                }
+                              }
+                            },
+                            {
+                              "wrapper": "div",
+                              "class": "absolute inset-0 z-10 flex items-center justify-center px-4 sm:px-8",
                               "blocks": [
                                 {
-                                  "wrapper": "img",
-                                  "class": "w-full h-full object-cover rounded-2xl",
-                                  "bind_src": "slide.image",
-                                  "bind_alt": "slide.title"
+                                  "wrapper": "div",
+                                  "class": "text-center max-w-4xl",
+                                  "blocks": [
+                                    {
+                                      "wrapper": "h1",
+                                      "class": "text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight",
+                                      "bind_content": "slide.title",
+                                      "bind_style": {
+                                        "color": "slide.title_color"
+                                      }
+                                    },
+                                    {
+                                      "wrapper": "p",
+                                      "class": "text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-2xl mx-auto",
+                                      "bind_content": "slide.description",
+                                      "bind_style": {
+                                        "color": "slide.description_color"
+                                      },
+                                      "condition": {
+                                        "field": "slide.description",
+                                        "op": "not_empty",
+                                        "value": true
+                                      }
+                                    },
+                                    {
+                                      "wrapper": "button",
+                                      "class": "min-w-[200px] min-h-10 sm:min-h-14 px-4 hover:opacity-90 font-medium text-base rounded transition-all hover:scale-105 active:scale-95",
+                                      "bind_style": {
+                                        "background_color": "slide.button_color",
+                                        "color": "slide.button_text_color"
+                                      },
+                                      "events": {
+                                        "on_click": {
+                                          "action": "navigate",
+                                          "target": "slide.button_link"
+                                        }
+                                      },
+                                      "blocks": [
+                                        {
+                                          "wrapper": "span",
+                                          "bind_content": "slide.button_text"
+                                        }
+                                      ]
+                                    }
+                                  ]
                                 }
                               ]
                             }
                           ]
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "wrapper": "div",
+                    "class": "absolute inset-0 flex items-center justify-between px-4 md:px-8 lg:px-12 z-20 pointer-events-none",
+                    "condition": {
+                      "field": "show_arrows",
+                      "op": "equals",
+                      "value": true
+                    },
+                    "blocks": [
+                      {
+                        "wrapper": "button",
+                        "class": "pointer-events-auto w-[50px] h-[50px] sm:w-[60px] sm:h-[60px] rounded-full border border-[#EEEEEE] bg-transparent hover:bg-[#3465F0] text-[#EEEEEE] hover:text-white flex items-center justify-center transition-all hover:scale-110",
+                        "events": {
+                          "on_click": {
+                            "action": "slider_prev",
+                            "target": "swiper"
+                          }
+                        },
+                        "blocks": [
+                          {
+                            "wrapper": "svg",
+                            "type": "icon",
+                            "icon": "chevron_left",
+                            "class": "w-4 h-4"
+                          }
+                        ]
+                      },
+                      {
+                        "wrapper": "button",
+                        "class": "pointer-events-auto w-[50px] h-[50px] sm:w-[60px] sm:h-[60px] rounded-full border border-[#EEEEEE] bg-transparent hover:bg-[#3465F0] text-[#EEEEEE] hover:text-white flex items-center justify-center transition-all hover:scale-110",
+                        "events": {
+                          "on_click": {
+                            "action": "slider_next",
+                            "target": "swiper"
+                          }
+                        },
+                        "blocks": [
+                          {
+                            "wrapper": "svg",
+                            "type": "icon",
+                            "icon": "chevron_right",
+                            "class": "w-4 h-4"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "wrapper": "div",
+                    "class": "absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-2 sm:gap-3",
+                    "condition": {
+                      "field": "show_indicators",
+                      "op": "equals",
+                      "value": true
+                    },
+                    "blocks": [
+                      {
+                        "type": "repeater",
+                        "source": "slides",
+                        "iterator": "indicator",
+                        "template": {
+                          "wrapper": "button",
+                          "class": "w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-white/70 hover:bg-white transition-all duration-300",
+                          "events": {
+                            "on_click": {
+                              "action": "slider_goto",
+                              "target": "swiper",
+                              "index": "indicator.id"
+                            }
+                          }
                         }
                       }
                     ]
@@ -636,90 +817,249 @@
         },
         "blocks": [
           {
-            "wrapper": "section#hero-4-1765441490045",
-            "type": "hero_video",
-            "class": "relative w-full h-screen overflow-hidden",
+            "wrapper": "section#hero-4-1765453998144",
+            "type": "hero_colored_bg",
+            "class": "w-full px-4 pb-8 sm:pb-14 py-0 2xl:px-0 pt-2",
             "data": {
-              "height": "full",
-              "video_url": "",
-              "poster_image": "",
-              "title": "Welcome to Our Store",
-              "subtitle": "",
-              "description": "",
-              "button_text": "Shop Now",
-              "button_link": "/products",
-              "text_color": "#FFFFFF",
-              "button_color": "#F55266",
-              "overlay_opacity": 50,
-              "text_alignment": "center"
+              "height": "large",
+              "auto_advance": true,
+              "advance_interval": 5000,
+              "show_arrows": true,
+              "show_indicators": true,
+              "slides": [
+                {
+                  "id": 0,
+                  "tag": "SUMMER 2026",
+                  "heading": "NEW COLLECTION",
+                  "description": "We know how large objects will act,\nbut things on a small scale.",
+                  "button_text": "SHOP NOW",
+                  "button_link": "/collections/summer-2025",
+                  "image": "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1440&h=716&fit=crop&q=80",
+                  "button_color": "#111e55",
+                  "button_text_color": "#d5d818",
+                  "background_color": "#F5F5F5",
+                  "overlay_opacity": 30,
+                  "tag_color": "#0d3fc9",
+                  "heading_color": "#e1c50e",
+                  "description_color": "#df1111"
+                },
+                {
+                  "id": 1,
+                  "tag": "SPRING ARRIVALS",
+                  "heading": "FRESH STYLES",
+                  "description": "Discover the latest trends,\nPerfect for the new season.",
+                  "button_text": "EXPLORE NOW",
+                  "button_link": "/collections/spring-arrivals",
+                  "image": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1440&h=716&fit=crop&q=80",
+                  "button_color": "#01B7DF",
+                  "button_text_color": "#FFFFFF",
+                  "background_color": "#F5F5F5",
+                  "overlay_opacity": 30,
+                  "tag_color": "#3465F0",
+                  "heading_color": "#1A1A1A",
+                  "description_color": "#666666"
+                }
+              ]
             },
             "blocks": [
               {
-                "wrapper": "img",
-                "class": "absolute inset-0 w-full h-full object-cover",
-                "bind_src": "poster_image",
-                "bind_alt": "title"
-              },
-              {
                 "wrapper": "div",
-                "class": "absolute inset-0 bg-black",
-                "style": {
-                  "opacity": 0.5
-                }
-              },
-              {
-                "wrapper": "div",
-                "class": "relative z-10 h-full flex items-center justify-center px-4 lg:px-16",
+                "class": "relative w-full max-w-[1440px] mx-auto rounded-2xl overflow-hidden",
+                "state": {
+                  "current_slide": 0,
+                  "is_animating": false
+                },
                 "blocks": [
                   {
                     "wrapper": "div",
-                    "class": "text-center max-w-3xl",
+                    "type": "swiper",
+                    "class": "relative w-full h-[500px] sm:h-[600px] md:h-[700px] overflow-hidden",
+                    "config": {
+                      "loop": true,
+                      "slides_per_view": 1,
+                      "autoplay": {
+                        "delay": 5000,
+                        "disable_on_interaction": false
+                      }
+                    },
                     "blocks": [
                       {
-                        "wrapper": "p",
-                        "class": "text-sm md:text-lg uppercase tracking-widest mb-4",
-                        "style": {
-                          "color": "#FFFFFF"
-                        },
-                        "bind_content": "subtitle",
-                        "condition": {
-                          "field": "subtitle",
-                          "op": "not_empty",
-                          "value": true
+                        "type": "repeater",
+                        "source": "slides",
+                        "iterator": "slide",
+                        "template": {
+                          "wrapper": "div",
+                          "class": "relative w-full h-[500px] sm:h-[600px] md:h-[700px] transition-opacity duration-700 ease-in-out",
+                          "bind_style": {
+                            "background_color": "slide.background_color"
+                          },
+                          "blocks": [
+                            {
+                              "wrapper": "div",
+                              "class": "absolute inset-0",
+                              "blocks": [
+                                {
+                                  "wrapper": "img",
+                                  "class": "absolute inset-0 w-full h-full object-cover object-center",
+                                  "bind_src": "slide.image",
+                                  "bind_alt": "slide.heading"
+                                },
+                                {
+                                  "wrapper": "div",
+                                  "class": "absolute inset-0 bg-black",
+                                  "bind_style": {
+                                    "opacity": {
+                                      "expr": "slide.overlay_opacity / 100"
+                                    }
+                                  },
+                                  "condition": {
+                                    "field": "slide.overlay_opacity",
+                                    "op": "greater_than",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "wrapper": "div",
+                              "class": "absolute inset-0 z-10 flex items-center px-8 sm:px-12 md:px-16 lg:px-20",
+                              "blocks": [
+                                {
+                                  "wrapper": "div",
+                                  "class": "max-w-xl",
+                                  "blocks": [
+                                    {
+                                      "wrapper": "span",
+                                      "class": "inline-block text-xs sm:text-sm font-semibold uppercase tracking-wider mb-3 sm:mb-4",
+                                      "bind_content": "slide.tag",
+                                      "bind_style": {
+                                        "color": "slide.tag_color"
+                                      },
+                                      "condition": {
+                                        "field": "slide.tag",
+                                        "op": "not_empty",
+                                        "value": true
+                                      }
+                                    },
+                                    {
+                                      "wrapper": "h1",
+                                      "class": "text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight",
+                                      "bind_content": "slide.heading",
+                                      "bind_style": {
+                                        "color": "slide.heading_color"
+                                      }
+                                    },
+                                    {
+                                      "wrapper": "p",
+                                      "class": "text-base sm:text-lg mb-6 sm:mb-8 max-w-md",
+                                      "bind_content": "slide.description",
+                                      "bind_style": {
+                                        "color": "slide.description_color"
+                                      },
+                                      "condition": {
+                                        "field": "slide.description",
+                                        "op": "not_empty",
+                                        "value": true
+                                      }
+                                    },
+                                    {
+                                      "wrapper": "button",
+                                      "class": "min-w-[180px] sm:min-w-56 min-h-12 sm:min-h-16 text-lg sm:text-xl lg:text-2xl px-4 sm:px-6 leading-7 sm:leading-8 font-semibold sm:font-bold rounded transition-all hover:opacity-90 hover:scale-105 active:scale-95",
+                                      "bind_style": {
+                                        "background_color": "slide.button_color",
+                                        "color": "slide.button_text_color"
+                                      },
+                                      "events": {
+                                        "on_click": {
+                                          "action": "navigate",
+                                          "target": "slide.button_link"
+                                        }
+                                      },
+                                      "blocks": [
+                                        {
+                                          "wrapper": "span",
+                                          "bind_content": "slide.button_text"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
                         }
-                      },
+                      }
+                    ]
+                  },
+                  {
+                    "wrapper": "div",
+                    "class": "hidden sm:block",
+                    "condition": {
+                      "field": "show_arrows",
+                      "op": "equals",
+                      "value": true
+                    },
+                    "blocks": [
                       {
-                        "wrapper": "h1",
-                        "class": "text-4xl md:text-6xl lg:text-7xl font-bold mb-6",
-                        "style": {
-                          "color": "#FFFFFF"
+                        "wrapper": "button",
+                        "class": "absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white shadow-lg text-gray-800 hover:bg-gray-50 flex items-center justify-center transition-all hover:scale-110",
+                        "events": {
+                          "on_click": {
+                            "action": "slider_prev",
+                            "target": "swiper"
+                          }
                         },
-                        "bind_content": "title"
-                      },
-                      {
-                        "wrapper": "p",
-                        "class": "text-lg md:text-xl mb-8",
-                        "style": {
-                          "color": "#FFFFFF"
-                        },
-                        "bind_content": "description",
-                        "condition": {
-                          "field": "description",
-                          "op": "not_empty",
-                          "value": true
-                        }
+                        "blocks": [
+                          {
+                            "wrapper": "svg",
+                            "type": "icon",
+                            "icon": "chevron_left",
+                            "class": "w-5 h-5 md:w-6 md:h-6"
+                          }
+                        ]
                       },
                       {
                         "wrapper": "button",
-                        "class": "inline-flex items-center gap-2 text-white font-medium px-8 py-4 rounded-lg transition-all hover:scale-105",
-                        "style": {
-                          "background_color": "#F55266"
-                        },
-                        "bind_content": "button_text",
+                        "class": "absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white shadow-lg text-gray-800 hover:bg-gray-50 flex items-center justify-center transition-all hover:scale-110",
                         "events": {
                           "on_click": {
-                            "action": "navigate",
-                            "target": "button_link"
+                            "action": "slider_next",
+                            "target": "swiper"
+                          }
+                        },
+                        "blocks": [
+                          {
+                            "wrapper": "svg",
+                            "type": "icon",
+                            "icon": "chevron_right",
+                            "class": "w-5 h-5 md:w-6 md:h-6"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "wrapper": "div",
+                    "class": "absolute bottom-6 sm:bottom-8 left-8 sm:left-12 md:left-16 z-20 flex gap-2",
+                    "condition": {
+                      "field": "show_indicators",
+                      "op": "equals",
+                      "value": true
+                    },
+                    "blocks": [
+                      {
+                        "type": "repeater",
+                        "source": "slides",
+                        "iterator": "indicator",
+                        "template": {
+                          "wrapper": "button",
+                          "class": "w-8 sm:w-10 h-1 sm:h-1.5 rounded-sm bg-gray-600 hover:bg-gray-900 transition-all duration-300",
+                          "events": {
+                            "on_click": {
+                              "action": "slider_goto",
+                              "target": "swiper",
+                              "index": "indicator.id"
+                            }
                           }
                         }
                       }

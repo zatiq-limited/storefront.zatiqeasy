@@ -9,7 +9,7 @@
 
 "use client";
 
-import React, { useMemo, useRef, useCallback } from "react";
+import React, { useMemo, useRef, useCallback, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay, EffectFade } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
@@ -29,6 +29,131 @@ import type { Block, BlockRendererProps } from "../BlockRenderer";
 
 // Lazy import BlockRenderer to avoid circular dependency
 const BlockRenderer = React.lazy(() => import("../BlockRenderer"));
+
+// ============================================
+// Global Swiper Registry
+// ============================================
+// This allows navigation buttons outside the Swiper to control it
+
+const swiperRegistry: Map<string, SwiperType> = new Map();
+
+export function registerSwiper(id: string, swiper: SwiperType) {
+  swiperRegistry.set(id, swiper);
+}
+
+export function unregisterSwiper(id: string) {
+  swiperRegistry.delete(id);
+}
+
+export function getSwiperInstance(id: string): SwiperType | undefined {
+  return swiperRegistry.get(id);
+}
+
+// Global functions to control swipers from outside
+export function globalSliderPrev(target: string = "swiper") {
+  // Try to find a swiper by target name first
+  let swiper = swiperRegistry.get(target);
+
+  // If not found by exact name, try to find one that contains the target in its ID
+  if (!swiper) {
+    for (const [key, value] of swiperRegistry.entries()) {
+      if (key.includes(target) || target.includes(key.split("-")[0])) {
+        swiper = value;
+        break;
+      }
+    }
+  }
+
+  // Fallback to the most recently registered swiper
+  if (!swiper) {
+    const entries = Array.from(swiperRegistry.entries());
+    if (entries.length > 0) {
+      swiper = entries[entries.length - 1][1];
+    }
+  }
+
+  swiper?.slidePrev();
+}
+
+export function globalSliderNext(target: string = "swiper") {
+  // Try to find a swiper by target name first
+  let swiper = swiperRegistry.get(target);
+
+  // If not found by exact name, try to find one that contains the target in its ID
+  if (!swiper) {
+    for (const [key, value] of swiperRegistry.entries()) {
+      if (key.includes(target) || target.includes(key.split("-")[0])) {
+        swiper = value;
+        break;
+      }
+    }
+  }
+
+  // Fallback to the most recently registered swiper
+  if (!swiper) {
+    const entries = Array.from(swiperRegistry.entries());
+    if (entries.length > 0) {
+      swiper = entries[entries.length - 1][1];
+    }
+  }
+
+  swiper?.slideNext();
+}
+
+export function globalSliderGoto(index: number, target: string = "swiper") {
+  let swiper = swiperRegistry.get(target);
+
+  if (!swiper) {
+    for (const [key, value] of swiperRegistry.entries()) {
+      if (key.includes(target) || target.includes(key.split("-")[0])) {
+        swiper = value;
+        break;
+      }
+    }
+  }
+
+  if (!swiper) {
+    const entries = Array.from(swiperRegistry.entries());
+    if (entries.length > 0) {
+      swiper = entries[entries.length - 1][1];
+    }
+  }
+
+  swiper?.slideTo(index);
+}
+
+// Find swiper by looking at the DOM - finds the closest swiper to a given element
+export function findClosestSwiper(
+  element: HTMLElement | null
+): SwiperType | undefined {
+  if (!element) return undefined;
+
+  // Look for closest section with hero ID
+  const heroSection = element.closest('section[id^="hero-"]');
+  if (heroSection) {
+    const sectionId = heroSection.id;
+    // Try to find swiper registered with this section's ID pattern
+    for (const [key, swiper] of swiperRegistry.entries()) {
+      if (key.includes(sectionId.split("-").slice(0, 2).join("-"))) {
+        return swiper;
+      }
+    }
+  }
+
+  // Fallback: return the last registered swiper
+  const entries = Array.from(swiperRegistry.entries());
+  return entries.length > 0 ? entries[entries.length - 1][1] : undefined;
+}
+
+// Attach to window for global access
+if (typeof window !== "undefined") {
+  (window as unknown as Record<string, unknown>).__swiperRegistry = {
+    prev: globalSliderPrev,
+    next: globalSliderNext,
+    goto: globalSliderGoto,
+    get: getSwiperInstance,
+  };
+}
 
 export interface SwiperConfig {
   slides_per_view?: number;
@@ -113,11 +238,22 @@ export default function SwiperRenderer({
     .join(" ");
 
   // Build style - pass data and context to resolve style bindings (including bind_style for gradients)
-  const style = convertStyleToCSS(block.style, mergedData, context, block.bind_style as Record<string, unknown>);
+  const style = convertStyleToCSS(
+    block.style,
+    mergedData,
+    context,
+    block.bind_style as Record<string, unknown>
+  );
 
   // Convert snake_case config to Swiper format
   const swiperConfig = useMemo(() => {
-    const modules = [Navigation, Pagination, Autoplay];
+    // Only include modules that are actually needed
+    const modules = [Navigation, Autoplay];
+
+    // Add Pagination module only if pagination is configured
+    if (config.pagination) {
+      modules.push(Pagination);
+    }
 
     // Add effect module if using fade
     if (config.effect === "fade") {
@@ -126,12 +262,13 @@ export default function SwiperRenderer({
 
     // When breakpoints are configured, the base slidesPerView should be 1 (mobile-first)
     // The breakpoints will override for larger screens
-    const hasBreakpoints = config.breakpoints && Object.keys(config.breakpoints).length > 0;
+    const hasBreakpoints =
+      config.breakpoints && Object.keys(config.breakpoints).length > 0;
 
     const swiperOptions: Record<string, unknown> = {
       modules,
       // Use 1 as base when breakpoints exist (mobile-first), otherwise use config value
-      slidesPerView: hasBreakpoints ? 1 : (config.slides_per_view || 1),
+      slidesPerView: hasBreakpoints ? 1 : config.slides_per_view || 1,
       spaceBetween: config.space_between || 0,
       loop: config.loop ?? false,
     };
@@ -182,7 +319,7 @@ export default function SwiperRenderer({
       swiperOptions.navigation = true;
     }
 
-    // Pagination
+    // Pagination - explicitly disable if not configured
     if (config.pagination) {
       if (typeof config.pagination === "boolean") {
         swiperOptions.pagination = { clickable: true };
@@ -192,6 +329,9 @@ export default function SwiperRenderer({
           type: config.pagination.type || "bullets",
         };
       }
+    } else {
+      // Explicitly disable pagination to prevent any default behavior
+      swiperOptions.pagination = false;
     }
 
     return swiperOptions;
@@ -214,10 +354,66 @@ export default function SwiperRenderer({
     [eventHandlers]
   );
 
-  // Handle swiper instance
-  const onSwiper = useCallback((swiper: SwiperType) => {
-    swiperRef.current = swiper;
+  // Generate a unique ID for this swiper instance
+  const swiperId = useMemo(() => {
+    return (
+      id ||
+      block.id ||
+      `swiper-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+    );
+  }, [id, block.id]);
+
+  // Ref to store the container element for finding parent section
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Handle swiper instance and register globally
+  const onSwiper = useCallback(
+    (swiper: SwiperType) => {
+      swiperRef.current = swiper;
+      // Register this swiper instance globally so external buttons can control it
+      registerSwiper(swiperId, swiper);
+
+      // Also register with generic "swiper" key - but don't overwrite if it already exists
+      // This ensures the first swiper gets the "swiper" key
+      if (!swiperRegistry.has("swiper")) {
+        registerSwiper("swiper", swiper);
+      }
+
+      // Try to find parent section and register with section ID
+      // This allows arrows outside the swiper to find the correct swiper
+      if (containerRef.current) {
+        const section = containerRef.current.closest('section[id^="hero-"]');
+        if (section) {
+          registerSwiper(section.id, swiper);
+        }
+      }
+    },
+    [swiperId]
+  );
+
+  // Also register when the component mounts (in case onSwiper fired before ref was set)
+  useEffect(() => {
+    if (swiperRef.current && containerRef.current) {
+      const section = containerRef.current.closest('section[id^="hero-"]');
+      if (section) {
+        registerSwiper(section.id, swiperRef.current);
+      }
+    }
   }, []);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      unregisterSwiper(swiperId);
+      // Also unregister section-based key if it exists
+      if (containerRef.current) {
+        const section = containerRef.current.closest('section[id^="hero-"]');
+        if (section) {
+          unregisterSwiper(section.id);
+        }
+      }
+    };
+  }, [swiperId]);
 
   // Extract slides from blocks
   // Blocks might contain a repeater or direct slide elements
@@ -255,7 +451,12 @@ export default function SwiperRenderer({
     }
 
     return (
-      <div id={id || block.id} className={finalClassName} style={style}>
+      <div
+        ref={containerRef}
+        id={id || block.id}
+        className={finalClassName}
+        style={style}
+      >
         <Swiper {...swiperConfig} onSwiper={onSwiper}>
           {sourceArray.map((item, idx) => {
             const itemContext = {
@@ -285,7 +486,12 @@ export default function SwiperRenderer({
 
   // Direct slides - each child block is a slide
   return (
-    <div id={id || block.id} className={finalClassName} style={style}>
+    <div
+      ref={containerRef}
+      id={id || block.id}
+      className={finalClassName}
+      style={style}
+    >
       <Swiper {...swiperConfig} onSwiper={onSwiper}>
         {childBlocks.map((childBlock, index) => (
           <SwiperSlide key={generateBlockKey(childBlock, index)}>

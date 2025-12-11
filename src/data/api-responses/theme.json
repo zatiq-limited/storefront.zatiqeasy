@@ -1,7 +1,7 @@
 {
   "success": true,
   "data": {
-    "id": "theme_zatiq_custom_1765441490305",
+    "id": "theme_zatiq_custom_1765453998400",
     "version": "1.0.0",
     "global_settings": {
       "colors": {
@@ -50,7 +50,7 @@
         },
         "blocks": [
           {
-            "wrapper": "div#announcement-bar-1-1765441490305",
+            "wrapper": "div#announcement-bar-1-1765453998399",
             "type": "announcement_marquee",
             "class": "w-full overflow-hidden font-bold text-xs sm:text-sm",
             "style": {
@@ -241,7 +241,7 @@
         },
         "blocks": [
           {
-            "wrapper": "nav#navbar-1-1765441490305",
+            "wrapper": "nav#navbar-1-1765453998400",
             "type": "navbar_content",
             "class": "px-2 sm:px-4 md:px-8 lg:px-10 py-3 md:py-[18px] sticky top-0 z-50",
             "style": {

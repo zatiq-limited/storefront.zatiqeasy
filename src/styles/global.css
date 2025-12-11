@@ -180,6 +180,30 @@
 }
 
 /* Hero Carousel Swiper Progressbar Pagination */
+/* Hide ALL default Swiper pagination for hero sections (we use custom dot indicators) */
+[class*="hero"] .swiper-pagination,
+section[id^="hero-"] .swiper-pagination,
+[class*="hero"] .swiper-pagination-progressbar,
+section[id^="hero-"] .swiper-pagination-progressbar,
+[type="hero_fullwidth"] .swiper-pagination,
+[type="hero_fullwidth"] .swiper-pagination-progressbar,
+[class*="hero"] .swiper-pagination-bullets,
+section[id^="hero-"] .swiper-pagination-bullets,
+[class*="hero"] .swiper-pagination-bullet,
+section[id^="hero-"] .swiper-pagination-bullet {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* Hide Swiper pagination inside any section that starts with hero- id */
+section[id^="hero-"] .swiper .swiper-pagination,
+section[id^="hero-"] .swiper-pagination {
+  display: none !important;
+}
+
+/* Swiper progressbar pagination styling (for non-hero sections that explicitly use it) */
 .swiper-pagination-progressbar {
   position: absolute !important;
   left: 1.5rem !important;
