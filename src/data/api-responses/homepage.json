@@ -4,1064 +4,756 @@
     "template": "index",
     "sections": [
       {
-        "id": "hero_1_0",
-        "type": "hero-1",
+        "id": "static_banner_1_0",
+        "type": "static-banner-1",
         "enabled": true,
         "settings": {
           "height": "medium",
-          "auto_advance": true,
-          "advance_interval": 5000,
-          "font_family": "inherit"
+          "title_font": "sans",
+          "description_font": "sans"
         },
         "blocks": [
           {
-            "wrapper": "section#hero-1-1765453998144",
-            "type": "hero_carousel",
-            "class": "w-full px-4 pb-8 sm:pb-14 py-0 2xl:px-0 pt-2",
+            "wrapper": "section#static-banner-1-1765456078714",
+            "type": "static_banner",
+            "class": "w-full max-w-[1440px] mx-auto px-4 2xl:px-0 mb-8 sm:mb-14",
             "data": {
+              "image": "https://i.ibb.co.com/5x6wzDWj/laptop-cover.webp",
+              "image_mobile": "",
+              "title": "Best Discounts\n2025",
+              "subtitle": "",
+              "description": "Salla Store provides you with everything you need, from electronics to home furniture, along with the best discounts on products. Shop now and enjoy all the discounts on products.",
+              "button_text": "Discover more",
+              "button_link": "/collections/discounts",
+              "secondary_button_text": "",
+              "secondary_button_link": "",
+              "text_alignment": "right",
+              "text_color": "#FFFFFF",
+              "title_color": "#8778f7",
+              "description_color": "#3af820",
+              "button_color": "#173387",
+              "button_text_color": "#FFFFFF",
+              "overlay_color": "#000000",
+              "overlay_opacity": 5,
               "height": "medium",
-              "auto_advance": true,
-              "advance_interval": 5000,
-              "show_arrows": true,
-              "show_indicators": true,
-              "slides": [
-                {
-                  "id": 0,
-                  "tagline": "The new stylish collection",
-                  "title": "NEW FALL",
-                  "subtitle": "SEASON 2025",
-                  "button_text": "Shop now",
-                  "button_link": "/collections/fall-2025",
-                  "image": "https://i.ibb.co.com/QFdRjZTW/hero-11.png",
-                  "gradient_start": "#DAD4EC",
-                  "gradient_end": "#F3E7E9",
-                  "text_color": "#181D25",
-                  "tagline_color": "#4E5562",
-                  "button_color": "#F55266",
-                  "button_text_color": "#FFFFFF"
-                },
-                {
-                  "id": 1,
-                  "tagline": "Trending this winter",
-                  "title": "COZY",
-                  "subtitle": "WINTER VIBES",
-                  "button_text": "Explore collection",
-                  "button_link": "/collections/winter-2025",
-                  "image": "https://i.ibb.co.com/1pXs30c/hero-12.png",
-                  "gradient_start": "#E5DDD5",
-                  "gradient_end": "#E8DFE0",
-                  "text_color": "#1A1A1A",
-                  "tagline_color": "#5A5A5A",
-                  "button_color": "#F55266",
-                  "button_text_color": "#FFFFFF"
-                },
-                {
-                  "id": 2,
-                  "tagline": "Limited edition arrivals",
-                  "title": "EXCLUSIVE",
-                  "subtitle": "DESIGNER PICKS",
-                  "button_text": "Shop exclusive",
-                  "button_link": "/collections/exclusive",
-                  "image": "https://i.ibb.co.com/bjxFXY3S/hero-13.png",
-                  "gradient_start": "#F5E6D3",
-                  "gradient_end": "#E9DDD4",
-                  "text_color": "#2C2C2C",
-                  "tagline_color": "#6B6B6B",
-                  "button_color": "#F55266",
-                  "button_text_color": "#FFFFFF"
-                }
-              ]
+              "title_font": "sans",
+              "description_font": "sans"
             },
             "blocks": [
               {
                 "wrapper": "div",
-                "type": "swiper",
-                "class": "relative w-full max-w-[1440px] mx-auto rounded-2xl overflow-hidden",
-                "config": {
-                  "loop": true,
-                  "slides_per_view": 1,
-                  "autoplay": {
-                    "delay": 5000,
-                    "disable_on_interaction": false,
-                    "pause_on_mouse_enter": true
+                "type": "banner_container",
+                "class": "relative w-full h-[450px] lg:h-[500px] xl:h-[524px] rounded-2xl overflow-hidden",
+                "blocks": [
+                  {
+                    "wrapper": "img",
+                    "type": "background_image",
+                    "class": "absolute inset-0 w-full h-full object-cover",
+                    "bind_src": "image",
+                    "bind_alt": "title",
+                    "loading": "lazy"
                   },
-                  "pagination": {
-                    "type": "progressbar"
-                  }
-                },
-                "state": {
-                  "current_slide": 0,
-                  "is_animating": false
-                },
-                "blocks": [
                   {
-                    "type": "repeater",
-                    "source": "slides",
-                    "iterator": "slide",
-                    "template": {
-                      "wrapper": "div",
-                      "class": "relative w-full h-[400px] sm:h-[450px] md:h-[520px] overflow-hidden transition-opacity duration-500",
-                      "bind_style": {
-                        "background": {
-                          "type": "gradient",
-                          "direction": "to right",
-                          "start": "slide.gradient_start",
-                          "end": "slide.gradient_end"
-                        }
-                      },
-                      "blocks": [
-                        {
-                          "wrapper": "div",
-                          "class": "absolute left-1/2 -translate-x-1/2 top-8 text-center md:left-16 md:translate-x-0 md:top-auto md:bottom-32 md:text-left lg:left-28 lg:bottom-40 w-[320px] md:w-[450px] lg:w-[750px] z-10",
-                          "blocks": [
-                            {
-                              "wrapper": "p",
-                              "class": "text-sm md:text-lg lg:text-xl font-normal leading-relaxed md:leading-7 lg:leading-[30px] mb-3 md:mb-5 lg:mb-6",
-                              "bind_style": {
-                                "color": "slide.tagline_color"
-                              },
-                              "bind_content": "slide.tagline",
-                              "condition": {
-                                "field": "slide.tagline",
-                                "op": "not_empty",
-                                "value": true
-                              }
-                            },
-                            {
-                              "wrapper": "h1",
-                              "class": "text-[28px] md:text-5xl lg:text-6xl font-bold leading-tight md:leading-tight lg:leading-[1.1] tracking-tight uppercase mb-0 md:mb-10 lg:mb-12",
-                              "bind_style": {
-                                "color": "slide.text_color"
-                              },
-                              "blocks": [
-                                {
-                                  "wrapper": "span",
-                                  "bind_content": "slide.title"
-                                },
-                                {
-                                  "wrapper": "span",
-                                  "condition": {
-                                    "field": "slide.subtitle",
-                                    "op": "not_empty",
-                                    "value": true
-                                  },
-                                  "blocks": [
-                                    {
-                                      "wrapper": "br"
-                                    },
-                                    {
-                                      "wrapper": "span",
-                                      "bind_content": "slide.subtitle"
-                                    }
-                                  ]
-                                }
-                              ]
-                            },
-                            {
-                              "wrapper": "button",
-                              "class": "hidden md:inline-flex items-center gap-2 font-medium text-base leading-6 px-6 py-3 rounded-lg transition-all shadow-md hover:shadow-lg hover:scale-105 active:scale-95",
-                              "bind_style": {
-                                "background_color": "slide.button_color",
-                                "color": "slide.button_text_color"
-                              },
-                              "events": {
-                                "on_click": {
-                                  "action": "navigate",
-                                  "target": "slide.button_link"
-                                }
-                              },
-                              "blocks": [
-                                {
-                                  "wrapper": "span",
-                                  "bind_content": "slide.button_text"
-                                },
-                                {
-                                  "wrapper": "svg",
-                                  "type": "icon",
-                                  "icon": "arrow_up_right",
-                                  "class": "w-[18px] h-[18px]"
-                                }
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "wrapper": "div",
-                          "class": "absolute left-1/2 -translate-x-1/2 bottom-20 z-10 md:hidden",
-                          "blocks": [
-                            {
-                              "wrapper": "button",
-                              "class": "inline-flex items-center gap-1.5 font-medium text-xs leading-5 px-4 py-2 rounded-lg transition-all shadow-md hover:shadow-lg hover:scale-105 active:scale-95",
-                              "bind_style": {
-                                "background_color": "slide.button_color",
-                                "color": "slide.button_text_color"
-                              },
-                              "events": {
-                                "on_click": {
-                                  "action": "navigate",
-                                  "target": "slide.button_link"
-                                }
-                              },
-                              "blocks": [
-                                {
-                                  "wrapper": "span",
-                                  "bind_content": "slide.button_text"
-                                },
-                                {
-                                  "wrapper": "svg",
-                                  "type": "icon",
-                                  "icon": "arrow_up_right",
-                                  "class": "w-4 h-4"
-                                }
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "wrapper": "div",
-                          "class": "absolute right-4 md:right-8 lg:right-11 top-0 md:top-6 lg:top-8 bottom-0 flex items-end md:items-center",
-                          "blocks": [
-                            {
-                              "wrapper": "img",
-                              "class": "h-[80%] md:h-[95%] lg:h-full w-auto object-cover object-center",
-                              "bind_src": "slide.image",
-                              "bind_alt": "slide.title"
-                            }
-                          ]
-                        }
-                      ]
+                    "wrapper": "img",
+                    "type": "background_image_mobile",
+                    "class": "absolute inset-0 w-full h-full object-cover md:hidden",
+                    "bind_src": "image_mobile",
+                    "bind_alt": "title",
+                    "loading": "lazy",
+                    "condition": {
+                      "field": "image_mobile",
+                      "op": "not_empty",
+                      "value": true
                     }
-                  }
-                ]
-              },
-              {
-                "wrapper": "div",
-                "class": "absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-1.5",
-                "condition": {
-                  "field": "show_indicators",
-                  "op": "equals",
-                  "value": true
-                },
-                "blocks": [
+                  },
                   {
-                    "type": "repeater",
-                    "source": "slides",
-                    "iterator": "indicator",
-                    "template": {
-                      "wrapper": "div",
-                      "class": "w-8 md:w-12 h-1 bg-white/60 hover:bg-white rounded-full overflow-hidden cursor-pointer transition-all duration-300",
-                      "events": {
-                        "on_click": {
-                          "action": "slider_goto",
-                          "target": "swiper",
-                          "index": "indicator.id"
-                        }
+                    "wrapper": "div",
+                    "type": "overlay",
+                    "class": "absolute inset-0",
+                    "bind_style": {
+                      "background_color": "overlay_color",
+                      "opacity": {
+                        "field": "overlay_opacity",
+                        "transform": "divide_100"
                       }
                     }
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "id": "hero_2_1",
-        "type": "hero-2",
-        "enabled": true,
-        "settings": {
-          "auto_advance": true,
-          "advance_interval": 5000,
-          "font_family": "inherit"
-        },
-        "blocks": [
-          {
-            "wrapper": "section#hero-2-1765453998144",
-            "type": "hero_fullwidth",
-            "class": "w-full px-4 pb-8 sm:pb-14 py-0 2xl:px-0 pt-2",
-            "data": {
-              "height": "large",
-              "auto_advance": true,
-              "advance_interval": 5000,
-              "show_arrows": true,
-              "show_indicators": true,
-              "slides": [
-                {
-                  "id": 0,
-                  "badge": "New Arrival",
-                  "heading": "Maximum impact",
-                  "description": "Shop our collection of glamorous swimsuits and mix-and-match bikinis.",
-                  "button_text": "Shop New Arrivals",
-                  "button_link": "/collections/new-arrivals",
-                  "image": "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1440&h=716&fit=crop&q=80",
-                  "overlay_opacity": 20,
-                  "button_color": "#162d9c",
-                  "button_text_color": "#ece4e4",
-                  "heading_color": "#FFFFFF",
-                  "description_color": "#FFFFFF",
-                  "badge_color": "#FFFFFF",
-                  "badge_bg_color": "rgba(255,255,255,0.2)"
-                },
-                {
-                  "id": 1,
-                  "badge": "Summer Collection",
-                  "heading": "Beach Ready Vibes",
-                  "description": "Discover the perfect pieces for your summer getaway and beachside adventures.",
-                  "button_text": "Explore Collection",
-                  "button_link": "/collections/summer",
-                  "image": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1440&h=716&fit=crop&q=80",
-                  "overlay_opacity": 30,
-                  "button_color": "#FFFFFF",
-                  "button_text_color": "#000000",
-                  "heading_color": "#FFFFFF",
-                  "description_color": "#FFFFFF",
-                  "badge_color": "#FFFFFF",
-                  "badge_bg_color": "rgba(255,255,255,0.2)"
-                },
-                {
-                  "id": 2,
-                  "badge": "Limited Edition",
-                  "heading": "Exclusive Designer Wear",
-                  "description": "Luxury fashion pieces curated for those who appreciate timeless elegance.",
-                  "button_text": "Shop Exclusive",
-                  "button_link": "/collections/exclusive",
-                  "image": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1440&h=716&fit=crop&q=80",
-                  "overlay_opacity": 25,
-                  "button_color": "#FFFFFF",
-                  "button_text_color": "#000000",
-                  "heading_color": "#FFFFFF",
-                  "description_color": "#FFFFFF",
-                  "badge_color": "#FFFFFF",
-                  "badge_bg_color": "rgba(255,255,255,0.2)"
-                }
-              ]
-            },
-            "blocks": [
-              {
-                "wrapper": "div",
-                "class": "relative w-full max-w-[1440px] mx-auto rounded-2xl overflow-hidden",
-                "state": {
-                  "current_slide": 0,
-                  "is_animating": false
-                },
-                "blocks": [
-                  {
-                    "wrapper": "div",
-                    "type": "swiper",
-                    "class": "relative w-full h-[500px] sm:h-[600px] md:h-[700px] overflow-hidden",
-                    "config": {
-                      "effect": "fade",
-                      "fade_effect": {
-                        "cross_fade": true
-                      },
-                      "loop": true,
-                      "slides_per_view": 1,
-                      "autoplay": {
-                        "delay": 5000,
-                        "disable_on_interaction": false
-                      }
-                    },
-                    "blocks": [
-                      {
-                        "type": "repeater",
-                        "source": "slides",
-                        "iterator": "slide",
-                        "template": {
-                          "wrapper": "div",
-                          "class": "relative w-full h-[500px] sm:h-[600px] md:h-[700px] transition-opacity duration-700 ease-in-out",
-                          "blocks": [
-                            {
-                              "wrapper": "img",
-                              "class": "absolute inset-0 w-full h-full object-cover",
-                              "bind_src": "slide.image",
-                              "bind_alt": "slide.heading"
-                            },
-                            {
-                              "wrapper": "div",
-                              "class": "absolute inset-0 bg-black",
-                              "bind_style": {
-                                "opacity": {
-                                  "expr": "slide.overlay_opacity / 100"
-                                }
-                              }
-                            },
-                            {
-                              "wrapper": "div",
-                              "class": "absolute inset-0 z-10 flex items-center justify-center px-4 sm:px-8",
-                              "blocks": [
-                                {
-                                  "wrapper": "div",
-                                  "class": "text-center max-w-3xl",
-                                  "blocks": [
-                                    {
-                                      "wrapper": "span",
-                                      "class": "inline-block backdrop-blur-sm text-xs sm:text-sm font-medium px-3 sm:px-4 py-1.5 sm:py-2 rounded-full mb-4 sm:mb-6 uppercase tracking-wider",
-                                      "bind_content": "slide.badge",
-                                      "bind_style": {
-                                        "color": "slide.badge_color",
-                                        "background_color": "slide.badge_bg_color"
-                                      },
-                                      "condition": {
-                                        "field": "slide.badge",
-                                        "op": "not_empty",
-                                        "value": true
-                                      }
-                                    },
-                                    {
-                                      "wrapper": "h1",
-                                      "class": "text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight",
-                                      "bind_content": "slide.heading",
-                                      "bind_style": {
-                                        "color": "slide.heading_color"
-                                      }
-                                    },
-                                    {
-                                      "wrapper": "p",
-                                      "class": "text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-2xl mx-auto",
-                                      "bind_content": "slide.description",
-                                      "bind_style": {
-                                        "color": "slide.description_color"
-                                      },
-                                      "condition": {
-                                        "field": "slide.description",
-                                        "op": "not_empty",
-                                        "value": true
-                                      }
-                                    },
-                                    {
-                                      "wrapper": "button",
-                                      "class": "min-w-40 min-h-10 sm:min-w-48 sm:min-h-14 px-4 inline-flex items-center justify-center hover:opacity-90 font-semibold text-base rounded transition-all hover:scale-105 active:scale-95",
-                                      "bind_style": {
-                                        "background_color": "slide.button_color",
-                                        "color": "slide.button_text_color"
-                                      },
-                                      "events": {
-                                        "on_click": {
-                                          "action": "navigate",
-                                          "target": "slide.button_link"
-                                        }
-                                      },
-                                      "blocks": [
-                                        {
-                                          "wrapper": "span",
-                                          "bind_content": "slide.button_text"
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      }
-                    ]
                   },
                   {
                     "wrapper": "div",
-                    "class": "absolute inset-0 flex items-center justify-between px-4 md:px-8 lg:px-12 z-20 pointer-events-none",
-                    "condition": {
-                      "field": "show_arrows",
-                      "op": "equals",
-                      "value": true
-                    },
+                    "type": "content_container",
+                    "class": "relative z-10 h-full flex items-center justify-end px-6 md:px-12",
                     "blocks": [
                       {
-                        "wrapper": "button",
-                        "class": "pointer-events-auto w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/80 hover:bg-white shadow-lg text-gray-800 flex items-center justify-center transition-all hover:scale-110 active:scale-95",
-                        "events": {
-                          "on_click": {
-                            "action": "slider_prev",
-                            "target": "swiper"
-                          }
-                        },
+                        "wrapper": "div",
+                        "type": "content",
+                        "class": "max-w-[90%] md:max-w-[600px] text-right",
                         "blocks": [
                           {
-                            "wrapper": "svg",
-                            "type": "icon",
-                            "icon": "chevron_left",
-                            "class": "w-5 h-5"
-                          }
-                        ]
-                      },
-                      {
-                        "wrapper": "button",
-                        "class": "pointer-events-auto w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/80 hover:bg-white shadow-lg text-gray-800 flex items-center justify-center transition-all hover:scale-110 active:scale-95",
-                        "events": {
-                          "on_click": {
-                            "action": "slider_next",
-                            "target": "swiper"
-                          }
-                        },
-                        "blocks": [
-                          {
-                            "wrapper": "svg",
-                            "type": "icon",
-                            "icon": "chevron_right",
-                            "class": "w-5 h-5"
-                          }
-                        ]
-                      }
-                    ]
-                  },
-                  {
-                    "wrapper": "div",
-                    "class": "absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20",
-                    "condition": {
-                      "field": "show_indicators",
-                      "op": "equals",
-                      "value": true
-                    },
-                    "blocks": [
-                      {
-                        "type": "repeater",
-                        "source": "slides",
-                        "iterator": "indicator",
-                        "template": {
-                          "wrapper": "button",
-                          "class": "w-5 h-5 flex items-center justify-center group transition-all duration-300",
-                          "events": {
-                            "on_click": {
-                              "action": "slider_goto",
-                              "target": "swiper",
-                              "index": "indicator.id"
+                            "wrapper": "h2",
+                            "type": "title",
+                            "class": "font-bold text-3xl md:text-5xl lg:text-6xl mb-4 md:mb-6 whitespace-pre-line",
+                            "bind_content": "title",
+                            "content": "Best Discounts\n2025",
+                            "bind_style": {
+                              "color": "title_color",
+                              "font_family": "title_font"
+                            },
+                            "condition": {
+                              "field": "title",
+                              "op": "not_empty",
+                              "value": true
                             }
                           },
-                          "blocks": [
-                            {
-                              "wrapper": "div",
-                              "class": "w-2.5 h-2.5 rounded-full bg-white/70 hover:bg-white transition-all duration-200"
-                            }
-                          ]
-                        }
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "id": "hero_3_2",
-        "type": "hero-3",
-        "enabled": true,
-        "settings": {
-          "auto_advance": true,
-          "advance_interval": 5000,
-          "font_family": "inherit"
-        },
-        "blocks": [
-          {
-            "wrapper": "section#hero-3-1765453998144",
-            "type": "hero_inline_arrows",
-            "class": "w-full px-4 pb-8 sm:pb-14 py-0 2xl:px-0 pt-2",
-            "data": {
-              "height": "large",
-              "auto_advance": true,
-              "advance_interval": 5000,
-              "show_arrows": true,
-              "show_indicators": true,
-              "slides": [
-                {
-                  "id": 0,
-                  "title": "Best Discounts 2025",
-                  "description": "Salla Store provides you with everything you need, from electronics to home furniture, along with the best discounts on products. Shop now and enjoy all the discounts on products.",
-                  "button_text": "Discover more",
-                  "button_link": "/collections/discounts",
-                  "image": "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1440&h=558&fit=crop&q=80",
-                  "overlay_opacity": 40,
-                  "button_color": "#24408f",
-                  "button_text_color": "#FFFFFF",
-                  "title_color": "#e1b209",
-                  "description_color": "#80e619"
-                },
-                {
-                  "id": 1,
-                  "title": "Electronics Mega Sale",
-                  "description": "Upgrade your tech with our exclusive electronics collection. From smartphones to laptops, find cutting-edge technology at unbeatable prices. Limited time offers available.",
-                  "button_text": "Shop Electronics",
-                  "button_link": "/collections/electronics",
-                  "image": "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=1440&h=558&fit=crop&q=80",
-                  "overlay_opacity": 40,
-                  "button_color": "#3465F0",
-                  "button_text_color": "#FFFFFF",
-                  "title_color": "#FFFFFF",
-                  "description_color": "#F8F8F8"
-                },
-                {
-                  "id": 2,
-                  "title": "Home Furniture Deals",
-                  "description": "Transform your living space with our premium furniture collection. Discover stylish and comfortable pieces that perfectly blend functionality with modern design aesthetics.",
-                  "button_text": "Browse Furniture",
-                  "button_link": "/collections/furniture",
-                  "image": "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1440&h=558&fit=crop&q=80",
-                  "overlay_opacity": 40,
-                  "button_color": "#3465F0",
-                  "button_text_color": "#FFFFFF",
-                  "title_color": "#FFFFFF",
-                  "description_color": "#F8F8F8"
-                },
-                {
-                  "id": 3,
-                  "title": "Fashion Essentials",
-                  "description": "Elevate your wardrobe with our curated fashion collection. From casual wear to elegant outfits, find everything you need to express your unique style at amazing prices.",
-                  "button_text": "Explore Fashion",
-                  "button_link": "/collections/fashion",
-                  "image": "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1440&h=558&fit=crop&q=80",
-                  "overlay_opacity": 40,
-                  "button_color": "#3465F0",
-                  "button_text_color": "#FFFFFF",
-                  "title_color": "#FFFFFF",
-                  "description_color": "#F8F8F8"
-                }
-              ]
-            },
-            "blocks": [
-              {
-                "wrapper": "div",
-                "class": "relative w-full max-w-[1440px] mx-auto rounded-2xl overflow-hidden",
-                "state": {
-                  "current_slide": 0,
-                  "is_animating": false
-                },
-                "blocks": [
-                  {
-                    "wrapper": "div",
-                    "type": "swiper",
-                    "class": "relative w-full h-[500px] sm:h-[600px] md:h-[700px] overflow-hidden",
-                    "config": {
-                      "effect": "fade",
-                      "fade_effect": {
-                        "cross_fade": true
-                      },
-                      "loop": true,
-                      "slides_per_view": 1,
-                      "autoplay": {
-                        "delay": 5000,
-                        "disable_on_interaction": false
-                      }
-                    },
-                    "blocks": [
-                      {
-                        "type": "repeater",
-                        "source": "slides",
-                        "iterator": "slide",
-                        "template": {
-                          "wrapper": "div",
-                          "class": "relative w-full h-[500px] sm:h-[600px] md:h-[700px] transition-opacity duration-700 ease-in-out",
-                          "blocks": [
-                            {
-                              "wrapper": "img",
-                              "class": "absolute inset-0 w-full h-full object-cover",
-                              "bind_src": "slide.image",
-                              "bind_alt": "slide.title"
-                            },
-                            {
-                              "wrapper": "div",
-                              "class": "absolute inset-0 bg-black",
-                              "bind_style": {
-                                "opacity": {
-                                  "expr": "slide.overlay_opacity / 100"
-                                }
-                              }
-                            },
-                            {
-                              "wrapper": "div",
-                              "class": "absolute inset-0 z-10 flex items-center justify-center px-4 sm:px-8",
-                              "blocks": [
-                                {
-                                  "wrapper": "div",
-                                  "class": "text-center max-w-4xl",
-                                  "blocks": [
-                                    {
-                                      "wrapper": "h1",
-                                      "class": "text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight",
-                                      "bind_content": "slide.title",
-                                      "bind_style": {
-                                        "color": "slide.title_color"
-                                      }
-                                    },
-                                    {
-                                      "wrapper": "p",
-                                      "class": "text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-2xl mx-auto",
-                                      "bind_content": "slide.description",
-                                      "bind_style": {
-                                        "color": "slide.description_color"
-                                      },
-                                      "condition": {
-                                        "field": "slide.description",
-                                        "op": "not_empty",
-                                        "value": true
-                                      }
-                                    },
-                                    {
-                                      "wrapper": "button",
-                                      "class": "min-w-[200px] min-h-10 sm:min-h-14 px-4 hover:opacity-90 font-medium text-base rounded transition-all hover:scale-105 active:scale-95",
-                                      "bind_style": {
-                                        "background_color": "slide.button_color",
-                                        "color": "slide.button_text_color"
-                                      },
-                                      "events": {
-                                        "on_click": {
-                                          "action": "navigate",
-                                          "target": "slide.button_link"
-                                        }
-                                      },
-                                      "blocks": [
-                                        {
-                                          "wrapper": "span",
-                                          "bind_content": "slide.button_text"
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "wrapper": "div",
-                    "class": "absolute inset-0 flex items-center justify-between px-4 md:px-8 lg:px-12 z-20 pointer-events-none",
-                    "condition": {
-                      "field": "show_arrows",
-                      "op": "equals",
-                      "value": true
-                    },
-                    "blocks": [
-                      {
-                        "wrapper": "button",
-                        "class": "pointer-events-auto w-[50px] h-[50px] sm:w-[60px] sm:h-[60px] rounded-full border border-[#EEEEEE] bg-transparent hover:bg-[#3465F0] text-[#EEEEEE] hover:text-white flex items-center justify-center transition-all hover:scale-110",
-                        "events": {
-                          "on_click": {
-                            "action": "slider_prev",
-                            "target": "swiper"
-                          }
-                        },
-                        "blocks": [
                           {
-                            "wrapper": "svg",
-                            "type": "icon",
-                            "icon": "chevron_left",
-                            "class": "w-4 h-4"
-                          }
-                        ]
-                      },
-                      {
-                        "wrapper": "button",
-                        "class": "pointer-events-auto w-[50px] h-[50px] sm:w-[60px] sm:h-[60px] rounded-full border border-[#EEEEEE] bg-transparent hover:bg-[#3465F0] text-[#EEEEEE] hover:text-white flex items-center justify-center transition-all hover:scale-110",
-                        "events": {
-                          "on_click": {
-                            "action": "slider_next",
-                            "target": "swiper"
-                          }
-                        },
-                        "blocks": [
-                          {
-                            "wrapper": "svg",
-                            "type": "icon",
-                            "icon": "chevron_right",
-                            "class": "w-4 h-4"
-                          }
-                        ]
-                      }
-                    ]
-                  },
-                  {
-                    "wrapper": "div",
-                    "class": "absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-2 sm:gap-3",
-                    "condition": {
-                      "field": "show_indicators",
-                      "op": "equals",
-                      "value": true
-                    },
-                    "blocks": [
-                      {
-                        "type": "repeater",
-                        "source": "slides",
-                        "iterator": "indicator",
-                        "template": {
-                          "wrapper": "button",
-                          "class": "w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-white/70 hover:bg-white transition-all duration-300",
-                          "events": {
-                            "on_click": {
-                              "action": "slider_goto",
-                              "target": "swiper",
-                              "index": "indicator.id"
+                            "wrapper": "p",
+                            "type": "subtitle",
+                            "class": "text-lg md:text-xl mb-2",
+                            "bind_content": "subtitle",
+                            "content": "",
+                            "bind_style": {
+                              "color": "title_color"
+                            },
+                            "condition": {
+                              "field": "subtitle",
+                              "op": "not_empty",
+                              "value": true
                             }
-                          }
-                        }
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "id": "hero_4_3",
-        "type": "hero-4",
-        "enabled": true,
-        "settings": {
-          "background_color": "#7FC5D9",
-          "auto_advance": true,
-          "advance_interval": 5000,
-          "font_family": "inherit"
-        },
-        "blocks": [
-          {
-            "wrapper": "section#hero-4-1765453998144",
-            "type": "hero_colored_bg",
-            "class": "w-full px-4 pb-8 sm:pb-14 py-0 2xl:px-0 pt-2",
-            "data": {
-              "height": "large",
-              "auto_advance": true,
-              "advance_interval": 5000,
-              "show_arrows": true,
-              "show_indicators": true,
-              "slides": [
-                {
-                  "id": 0,
-                  "tag": "SUMMER 2026",
-                  "heading": "NEW COLLECTION",
-                  "description": "We know how large objects will act,\nbut things on a small scale.",
-                  "button_text": "SHOP NOW",
-                  "button_link": "/collections/summer-2025",
-                  "image": "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1440&h=716&fit=crop&q=80",
-                  "button_color": "#111e55",
-                  "button_text_color": "#d5d818",
-                  "background_color": "#F5F5F5",
-                  "overlay_opacity": 30,
-                  "tag_color": "#0d3fc9",
-                  "heading_color": "#e1c50e",
-                  "description_color": "#df1111"
-                },
-                {
-                  "id": 1,
-                  "tag": "SPRING ARRIVALS",
-                  "heading": "FRESH STYLES",
-                  "description": "Discover the latest trends,\nPerfect for the new season.",
-                  "button_text": "EXPLORE NOW",
-                  "button_link": "/collections/spring-arrivals",
-                  "image": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1440&h=716&fit=crop&q=80",
-                  "button_color": "#01B7DF",
-                  "button_text_color": "#FFFFFF",
-                  "background_color": "#F5F5F5",
-                  "overlay_opacity": 30,
-                  "tag_color": "#3465F0",
-                  "heading_color": "#1A1A1A",
-                  "description_color": "#666666"
-                }
-              ]
-            },
-            "blocks": [
-              {
-                "wrapper": "div",
-                "class": "relative w-full max-w-[1440px] mx-auto rounded-2xl overflow-hidden",
-                "state": {
-                  "current_slide": 0,
-                  "is_animating": false
-                },
-                "blocks": [
-                  {
-                    "wrapper": "div",
-                    "type": "swiper",
-                    "class": "relative w-full h-[500px] sm:h-[600px] md:h-[700px] overflow-hidden",
-                    "config": {
-                      "loop": true,
-                      "slides_per_view": 1,
-                      "autoplay": {
-                        "delay": 5000,
-                        "disable_on_interaction": false
-                      }
-                    },
-                    "blocks": [
-                      {
-                        "type": "repeater",
-                        "source": "slides",
-                        "iterator": "slide",
-                        "template": {
-                          "wrapper": "div",
-                          "class": "relative w-full h-[500px] sm:h-[600px] md:h-[700px] transition-opacity duration-700 ease-in-out",
-                          "bind_style": {
-                            "background_color": "slide.background_color"
                           },
-                          "blocks": [
-                            {
-                              "wrapper": "div",
-                              "class": "absolute inset-0",
-                              "blocks": [
-                                {
-                                  "wrapper": "img",
-                                  "class": "absolute inset-0 w-full h-full object-cover object-center",
-                                  "bind_src": "slide.image",
-                                  "bind_alt": "slide.heading"
+                          {
+                            "wrapper": "p",
+                            "type": "description",
+                            "class": "text-sm md:text-base mb-6 md:mb-10",
+                            "bind_content": "description",
+                            "content": "Salla Store provides you with everything you need, from electronics to home furniture, along with the best discounts on products. Shop now and enjoy all the discounts on products.",
+                            "bind_style": {
+                              "color": "description_color",
+                              "font_family": "description_font"
+                            },
+                            "condition": {
+                              "field": "description",
+                              "op": "not_empty",
+                              "value": true
+                            }
+                          },
+                          {
+                            "wrapper": "div",
+                            "type": "buttons_container",
+                            "class": "flex flex-wrap gap-4 justify-end",
+                            "blocks": [
+                              {
+                                "wrapper": "a",
+                                "type": "primary_button",
+                                "class": "inline-flex items-center justify-center min-w-40 md:min-w-[200px] min-h-12 md:min-h-14 px-8 rounded-lg font-medium transition-all hover:opacity-90",
+                                "bind_href": "button_link",
+                                "bind_content": "button_text",
+                                "content": "Discover more",
+                                "bind_style": {
+                                  "background_color": "button_color",
+                                  "color": "button_text_color"
                                 },
-                                {
-                                  "wrapper": "div",
-                                  "class": "absolute inset-0 bg-black",
-                                  "bind_style": {
-                                    "opacity": {
-                                      "expr": "slide.overlay_opacity / 100"
-                                    }
-                                  },
-                                  "condition": {
-                                    "field": "slide.overlay_opacity",
-                                    "op": "greater_than",
-                                    "value": 0
-                                  }
+                                "condition": {
+                                  "field": "button_text",
+                                  "op": "not_empty",
+                                  "value": true
                                 }
-                              ]
-                            },
-                            {
-                              "wrapper": "div",
-                              "class": "absolute inset-0 z-10 flex items-center px-8 sm:px-12 md:px-16 lg:px-20",
-                              "blocks": [
-                                {
-                                  "wrapper": "div",
-                                  "class": "max-w-xl",
-                                  "blocks": [
-                                    {
-                                      "wrapper": "span",
-                                      "class": "inline-block text-xs sm:text-sm font-semibold uppercase tracking-wider mb-3 sm:mb-4",
-                                      "bind_content": "slide.tag",
-                                      "bind_style": {
-                                        "color": "slide.tag_color"
-                                      },
-                                      "condition": {
-                                        "field": "slide.tag",
-                                        "op": "not_empty",
-                                        "value": true
-                                      }
-                                    },
-                                    {
-                                      "wrapper": "h1",
-                                      "class": "text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight",
-                                      "bind_content": "slide.heading",
-                                      "bind_style": {
-                                        "color": "slide.heading_color"
-                                      }
-                                    },
-                                    {
-                                      "wrapper": "p",
-                                      "class": "text-base sm:text-lg mb-6 sm:mb-8 max-w-md",
-                                      "bind_content": "slide.description",
-                                      "bind_style": {
-                                        "color": "slide.description_color"
-                                      },
-                                      "condition": {
-                                        "field": "slide.description",
-                                        "op": "not_empty",
-                                        "value": true
-                                      }
-                                    },
-                                    {
-                                      "wrapper": "button",
-                                      "class": "min-w-[180px] sm:min-w-56 min-h-12 sm:min-h-16 text-lg sm:text-xl lg:text-2xl px-4 sm:px-6 leading-7 sm:leading-8 font-semibold sm:font-bold rounded transition-all hover:opacity-90 hover:scale-105 active:scale-95",
-                                      "bind_style": {
-                                        "background_color": "slide.button_color",
-                                        "color": "slide.button_text_color"
-                                      },
-                                      "events": {
-                                        "on_click": {
-                                          "action": "navigate",
-                                          "target": "slide.button_link"
-                                        }
-                                      },
-                                      "blocks": [
-                                        {
-                                          "wrapper": "span",
-                                          "bind_content": "slide.button_text"
-                                        }
-                                      ]
-                                    }
-                                  ]
+                              },
+                              {
+                                "wrapper": "a",
+                                "type": "secondary_button",
+                                "class": "inline-flex items-center justify-center min-w-40 md:min-w-[200px] min-h-12 md:min-h-14 px-8 rounded-lg font-medium border-2 border-white/80 transition-all hover:bg-white/10",
+                                "bind_href": "secondary_button_link",
+                                "bind_content": "secondary_button_text",
+                                "content": "",
+                                "bind_style": {
+                                  "color": "text_color"
+                                },
+                                "condition": {
+                                  "field": "secondary_button_text",
+                                  "op": "not_empty",
+                                  "value": true
                                 }
-                              ]
-                            }
-                          ]
-                        }
+                              }
+                            ]
+                          }
+                        ]
                       }
                     ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "static_banner_2_1",
+        "type": "static-banner-2",
+        "enabled": true,
+        "settings": {
+          "height": "medium",
+          "title_font": "sans",
+          "description_font": "sans"
+        },
+        "blocks": [
+          {
+            "wrapper": "section#static-banner-2-1765456078715",
+            "type": "static_banner",
+            "class": "w-full max-w-[1440px] mx-auto px-4 2xl:px-0 mb-8 sm:mb-14",
+            "data": {
+              "image": "https://i.ibb.co.com/5x6wzDWj/laptop-cover.webp",
+              "image_mobile": "",
+              "title": "Summer Sale\n2025",
+              "subtitle": "",
+              "description": "Get ready for summer with our exclusive collection. Amazing deals on fashion, accessories, and more. Limited time offers on trending styles.",
+              "button_text": "Shop Summer Sale",
+              "button_link": "/collections/sale",
+              "secondary_button_text": "",
+              "secondary_button_link": "",
+              "text_alignment": "left",
+              "text_color": "#FFFFFF",
+              "title_color": "#e21d1d",
+              "description_color": "#FFFFFF",
+              "button_color": "#f03333",
+              "button_text_color": "#FFFFFF",
+              "overlay_color": "#000000",
+              "overlay_opacity": 5,
+              "height": "medium",
+              "title_font": "sans",
+              "description_font": "sans"
+            },
+            "blocks": [
+              {
+                "wrapper": "div",
+                "type": "banner_container",
+                "class": "relative w-full h-[450px] lg:h-[500px] xl:h-[524px] rounded-2xl overflow-hidden",
+                "blocks": [
+                  {
+                    "wrapper": "img",
+                    "type": "background_image",
+                    "class": "absolute inset-0 w-full h-full object-cover",
+                    "bind_src": "image",
+                    "bind_alt": "title",
+                    "loading": "lazy"
+                  },
+                  {
+                    "wrapper": "img",
+                    "type": "background_image_mobile",
+                    "class": "absolute inset-0 w-full h-full object-cover md:hidden",
+                    "bind_src": "image_mobile",
+                    "bind_alt": "title",
+                    "loading": "lazy",
+                    "condition": {
+                      "field": "image_mobile",
+                      "op": "not_empty",
+                      "value": true
+                    }
                   },
                   {
                     "wrapper": "div",
-                    "class": "hidden sm:block",
-                    "condition": {
-                      "field": "show_arrows",
-                      "op": "equals",
-                      "value": true
-                    },
+                    "type": "overlay",
+                    "class": "absolute inset-0",
+                    "bind_style": {
+                      "background_color": "overlay_color",
+                      "opacity": {
+                        "field": "overlay_opacity",
+                        "transform": "divide_100"
+                      }
+                    }
+                  },
+                  {
+                    "wrapper": "div",
+                    "type": "content_container",
+                    "class": "relative z-10 h-full flex items-center justify-start px-6 md:px-12",
                     "blocks": [
                       {
-                        "wrapper": "button",
-                        "class": "absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white shadow-lg text-gray-800 hover:bg-gray-50 flex items-center justify-center transition-all hover:scale-110",
-                        "events": {
-                          "on_click": {
-                            "action": "slider_prev",
-                            "target": "swiper"
-                          }
-                        },
+                        "wrapper": "div",
+                        "type": "content",
+                        "class": "max-w-[90%] md:max-w-[600px] text-left",
                         "blocks": [
                           {
-                            "wrapper": "svg",
-                            "type": "icon",
-                            "icon": "chevron_left",
-                            "class": "w-5 h-5 md:w-6 md:h-6"
+                            "wrapper": "h2",
+                            "type": "title",
+                            "class": "font-bold text-3xl md:text-5xl lg:text-6xl mb-3 md:mb-4 whitespace-pre-line",
+                            "bind_content": "title",
+                            "content": "Summer Sale\n2025",
+                            "bind_style": {
+                              "color": "title_color",
+                              "font_family": "title_font"
+                            },
+                            "condition": {
+                              "field": "title",
+                              "op": "not_empty",
+                              "value": true
+                            }
+                          },
+                          {
+                            "wrapper": "p",
+                            "type": "subtitle",
+                            "class": "text-lg md:text-xl mb-2",
+                            "bind_content": "subtitle",
+                            "content": "",
+                            "bind_style": {
+                              "color": "title_color"
+                            },
+                            "condition": {
+                              "field": "subtitle",
+                              "op": "not_empty",
+                              "value": true
+                            }
+                          },
+                          {
+                            "wrapper": "p",
+                            "type": "description",
+                            "class": "text-sm md:text-base mb-6 md:mb-8",
+                            "bind_content": "description",
+                            "content": "Get ready for summer with our exclusive collection. Amazing deals on fashion, accessories, and more. Limited time offers on trending styles.",
+                            "bind_style": {
+                              "color": "description_color",
+                              "font_family": "description_font"
+                            },
+                            "condition": {
+                              "field": "description",
+                              "op": "not_empty",
+                              "value": true
+                            }
+                          },
+                          {
+                            "wrapper": "div",
+                            "type": "buttons_container",
+                            "class": "flex flex-wrap gap-4 justify-start",
+                            "blocks": [
+                              {
+                                "wrapper": "a",
+                                "type": "primary_button",
+                                "class": "inline-flex items-center justify-center min-w-40 md:min-w-[200px] min-h-10 md:min-h-14 px-8 rounded-lg font-medium transition-all hover:opacity-90",
+                                "bind_href": "button_link",
+                                "bind_content": "button_text",
+                                "content": "Shop Summer Sale",
+                                "bind_style": {
+                                  "background_color": "button_color",
+                                  "color": "button_text_color"
+                                },
+                                "condition": {
+                                  "field": "button_text",
+                                  "op": "not_empty",
+                                  "value": true
+                                }
+                              },
+                              {
+                                "wrapper": "a",
+                                "type": "secondary_button",
+                                "class": "inline-flex items-center justify-center min-w-40 md:min-w-[200px] min-h-10 md:min-h-14 px-8 rounded-lg font-medium border-2 border-white/80 transition-all hover:bg-white/10",
+                                "bind_href": "secondary_button_link",
+                                "bind_content": "secondary_button_text",
+                                "content": "",
+                                "bind_style": {
+                                  "color": "text_color"
+                                },
+                                "condition": {
+                                  "field": "secondary_button_text",
+                                  "op": "not_empty",
+                                  "value": true
+                                }
+                              }
+                            ]
                           }
                         ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "static_banner_3_2",
+        "type": "static-banner-3",
+        "enabled": true,
+        "settings": {
+          "height": "medium",
+          "title_font": "sans",
+          "description_font": "sans"
+        },
+        "blocks": [
+          {
+            "wrapper": "section#static-banner-3-1765456078715",
+            "type": "static_banner",
+            "class": "w-full max-w-[1440px] mx-auto px-4 2xl:px-0 mb-8 sm:mb-14",
+            "data": {
+              "image": "https://i.ibb.co.com/hFFnFv7d/cfbb60dfce2e0d1d9e0cea50b2dd07f49c9ffa16.png",
+              "image_mobile": "",
+              "title": "Best Discounts 2025",
+              "subtitle": "",
+              "description": "Salla Store provides you with everything you need, from electronics to home furniture, along with the best discounts on products. Shop now and enjoy all the discounts on products.",
+              "button_text": "Discover more",
+              "button_link": "/collections/discounts",
+              "secondary_button_text": "",
+              "secondary_button_link": "",
+              "text_alignment": "center",
+              "text_color": "#FFFFFF",
+              "title_color": "#25d428",
+              "description_color": "#f31212",
+              "button_color": "#131b81",
+              "button_text_color": "#07d530",
+              "overlay_color": "#000000",
+              "overlay_opacity": 40,
+              "height": "medium",
+              "title_font": "sans",
+              "description_font": "sans"
+            },
+            "blocks": [
+              {
+                "wrapper": "div",
+                "type": "banner_container",
+                "class": "relative w-full h-[410px] lg:h-[440px] xl:h-[463px] rounded-2xl overflow-hidden",
+                "blocks": [
+                  {
+                    "wrapper": "img",
+                    "type": "background_image",
+                    "class": "absolute inset-0 w-full h-full object-cover",
+                    "bind_src": "image",
+                    "bind_alt": "title",
+                    "loading": "lazy"
+                  },
+                  {
+                    "wrapper": "img",
+                    "type": "background_image_mobile",
+                    "class": "absolute inset-0 w-full h-full object-cover md:hidden",
+                    "bind_src": "image_mobile",
+                    "bind_alt": "title",
+                    "loading": "lazy",
+                    "condition": {
+                      "field": "image_mobile",
+                      "op": "not_empty",
+                      "value": true
+                    }
+                  },
+                  {
+                    "wrapper": "div",
+                    "type": "overlay",
+                    "class": "absolute inset-0",
+                    "bind_style": {
+                      "background_color": "overlay_color",
+                      "opacity": {
+                        "field": "overlay_opacity",
+                        "transform": "divide_100"
+                      }
+                    }
+                  },
+                  {
+                    "wrapper": "div",
+                    "type": "content_container",
+                    "class": "relative z-10 h-full flex flex-col items-center justify-center px-4 md:px-8",
+                    "blocks": [
+                      {
+                        "wrapper": "div",
+                        "type": "content",
+                        "class": "max-w-[90%] md:max-w-[640px] text-center",
+                        "blocks": [
+                          {
+                            "wrapper": "h2",
+                            "type": "title",
+                            "class": "font-bold text-3xl md:text-5xl lg:text-[60px] mb-4 md:mb-7 whitespace-pre-line",
+                            "bind_content": "title",
+                            "content": "Best Discounts 2025",
+                            "bind_style": {
+                              "color": "title_color",
+                              "font_family": "title_font"
+                            },
+                            "condition": {
+                              "field": "title",
+                              "op": "not_empty",
+                              "value": true
+                            }
+                          },
+                          {
+                            "wrapper": "p",
+                            "type": "subtitle",
+                            "class": "text-lg md:text-xl mb-2",
+                            "bind_content": "subtitle",
+                            "content": "",
+                            "bind_style": {
+                              "color": "title_color"
+                            },
+                            "condition": {
+                              "field": "subtitle",
+                              "op": "not_empty",
+                              "value": true
+                            }
+                          },
+                          {
+                            "wrapper": "p",
+                            "type": "description",
+                            "class": "text-sm md:text-base leading-6 md:leading-[26px] mb-6 md:mb-9",
+                            "bind_content": "description",
+                            "content": "Salla Store provides you with everything you need, from electronics to home furniture, along with the best discounts on products. Shop now and enjoy all the discounts on products.",
+                            "bind_style": {
+                              "color": "description_color",
+                              "font_family": "description_font"
+                            },
+                            "condition": {
+                              "field": "description",
+                              "op": "not_empty",
+                              "value": true
+                            }
+                          },
+                          {
+                            "wrapper": "div",
+                            "type": "buttons_container",
+                            "class": "flex flex-wrap gap-4 justify-center",
+                            "blocks": [
+                              {
+                                "wrapper": "a",
+                                "type": "primary_button",
+                                "class": "inline-flex items-center justify-center py-3 md:py-[14px] px-8 md:px-11 rounded-lg font-medium text-sm md:text-[15px] transition-all hover:opacity-90",
+                                "bind_href": "button_link",
+                                "bind_content": "button_text",
+                                "content": "Discover more",
+                                "bind_style": {
+                                  "background_color": "button_color",
+                                  "color": "button_text_color"
+                                },
+                                "condition": {
+                                  "field": "button_text",
+                                  "op": "not_empty",
+                                  "value": true
+                                }
+                              },
+                              {
+                                "wrapper": "a",
+                                "type": "secondary_button",
+                                "class": "inline-flex items-center justify-center py-3 md:py-[14px] px-8 md:px-11 rounded-lg font-medium text-sm md:text-[15px] border-2 border-white/80 transition-all hover:bg-white/10",
+                                "bind_href": "secondary_button_link",
+                                "bind_content": "secondary_button_text",
+                                "content": "",
+                                "bind_style": {
+                                  "color": "text_color"
+                                },
+                                "condition": {
+                                  "field": "secondary_button_text",
+                                  "op": "not_empty",
+                                  "value": true
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "static_banner_4_3",
+        "type": "static-banner-4",
+        "enabled": true,
+        "settings": {
+          "height": "medium",
+          "title_font": "serif",
+          "tag_font": "sans",
+          "subtitle_font": "sans"
+        },
+        "blocks": [
+          {
+            "wrapper": "section#static-banner-4-1765456078715",
+            "type": "static_banner",
+            "class": "w-full max-w-[1440px] mx-auto px-4 2xl:px-0 mb-8 sm:mb-14",
+            "data": {
+              "image": "https://i.ibb.co.com/S7tRxXFV/5b7570c356e38425d2905221dd2394ba09b54a98.png",
+              "image_mobile": "",
+              "tag": "OUR VISION",
+              "title": "To empower women globally to\ncelebrate summer with\nconfidence.",
+              "subtitle": "Luxurious high quality pieces that are designed to last.",
+              "description": "",
+              "button_text": "",
+              "button_link": "",
+              "secondary_button_text": "",
+              "secondary_button_link": "",
+              "text_alignment": "center",
+              "tag_color": "#1ee8eb",
+              "text_color": "#270ced",
+              "title_color": "#23e730",
+              "subtitle_color": "#57da10",
+              "button_color": "#4169E1",
+              "button_text_color": "#FFFFFF",
+              "overlay_color": "#000000",
+              "overlay_opacity": 30,
+              "height": "medium",
+              "tag_font": "sans",
+              "title_font": "serif",
+              "subtitle_font": "sans"
+            },
+            "blocks": [
+              {
+                "wrapper": "div",
+                "type": "banner_container",
+                "class": "relative w-full h-[450px] md:h-[500px] lg:h-[550px] xl:h-[580px] rounded-2xl overflow-hidden",
+                "blocks": [
+                  {
+                    "wrapper": "img",
+                    "type": "background_image",
+                    "class": "absolute inset-0 w-full h-full object-cover",
+                    "bind_src": "image",
+                    "bind_alt": "title",
+                    "loading": "lazy"
+                  },
+                  {
+                    "wrapper": "img",
+                    "type": "background_image_mobile",
+                    "class": "absolute inset-0 w-full h-full object-cover md:hidden",
+                    "bind_src": "image_mobile",
+                    "bind_alt": "title",
+                    "loading": "lazy",
+                    "condition": {
+                      "field": "image_mobile",
+                      "op": "not_empty",
+                      "value": true
+                    }
+                  },
+                  {
+                    "wrapper": "div",
+                    "type": "gradient_overlay",
+                    "class": "absolute inset-0 bg-gradient-to-b from-black/20 via-black/10 to-black/30"
+                  },
+                  {
+                    "wrapper": "div",
+                    "type": "overlay",
+                    "class": "absolute inset-0",
+                    "bind_style": {
+                      "background_color": "overlay_color",
+                      "opacity": {
+                        "field": "overlay_opacity",
+                        "transform": "divide_100"
+                      }
+                    }
+                  },
+                  {
+                    "wrapper": "div",
+                    "type": "content_container",
+                    "class": "relative z-10 h-full flex flex-col items-center justify-center px-4 md:px-10 lg:px-20",
+                    "blocks": [
+                      {
+                        "wrapper": "span",
+                        "type": "tag",
+                        "class": "tracking-[0.2em] font-medium uppercase text-xs md:text-sm mb-4 md:mb-8",
+                        "bind_content": "tag",
+                        "content": "OUR VISION",
+                        "bind_style": {
+                          "color": "tag_color",
+                          "font_family": "tag_font"
+                        },
+                        "condition": {
+                          "field": "tag",
+                          "op": "not_empty",
+                          "value": true
+                        }
                       },
                       {
-                        "wrapper": "button",
-                        "class": "absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white shadow-lg text-gray-800 hover:bg-gray-50 flex items-center justify-center transition-all hover:scale-110",
-                        "events": {
-                          "on_click": {
-                            "action": "slider_next",
-                            "target": "swiper"
-                          }
+                        "wrapper": "h2",
+                        "type": "title",
+                        "class": "font-medium text-3xl md:text-5xl lg:text-6xl mb-4 md:mb-8 whitespace-pre-line max-w-[90%] md:max-w-[1100px] text-center",
+                        "bind_content": "title",
+                        "content": "To empower women globally to\ncelebrate summer with\nconfidence.",
+                        "bind_style": {
+                          "color": "title_color",
+                          "font_family": "title_font"
+                        },
+                        "condition": {
+                          "field": "title",
+                          "op": "not_empty",
+                          "value": true
+                        }
+                      },
+                      {
+                        "wrapper": "p",
+                        "type": "subtitle",
+                        "class": "text-sm md:text-lg lg:text-xl max-w-[90%] md:max-w-[800px] text-center",
+                        "bind_content": "subtitle",
+                        "content": "Luxurious high quality pieces that are designed to last.",
+                        "bind_style": {
+                          "color": "subtitle_color",
+                          "font_family": "subtitle_font"
+                        },
+                        "condition": {
+                          "field": "subtitle",
+                          "op": "not_empty",
+                          "value": true
+                        }
+                      },
+                      {
+                        "wrapper": "p",
+                        "type": "description",
+                        "class": "text-sm md:text-base mt-4 max-w-[90%] md:max-w-[700px] text-center",
+                        "bind_content": "description",
+                        "content": "",
+                        "bind_style": {
+                          "color": "subtitle_color"
+                        },
+                        "condition": {
+                          "field": "description",
+                          "op": "not_empty",
+                          "value": true
+                        }
+                      },
+                      {
+                        "wrapper": "div",
+                        "type": "buttons_container",
+                        "class": "flex flex-wrap gap-4 mt-8 justify-center md:justify-center",
+                        "condition": {
+                          "or": [
+                            {
+                              "field": "button_text",
+                              "op": "not_empty",
+                              "value": true
+                            },
+                            {
+                              "field": "secondary_button_text",
+                              "op": "not_empty",
+                              "value": true
+                            }
+                          ]
                         },
                         "blocks": [
                           {
-                            "wrapper": "svg",
-                            "type": "icon",
-                            "icon": "chevron_right",
-                            "class": "w-5 h-5 md:w-6 md:h-6"
-                          }
-                        ]
-                      }
-                    ]
-                  },
-                  {
-                    "wrapper": "div",
-                    "class": "absolute bottom-6 sm:bottom-8 left-8 sm:left-12 md:left-16 z-20 flex gap-2",
-                    "condition": {
-                      "field": "show_indicators",
-                      "op": "equals",
-                      "value": true
-                    },
-                    "blocks": [
-                      {
-                        "type": "repeater",
-                        "source": "slides",
-                        "iterator": "indicator",
-                        "template": {
-                          "wrapper": "button",
-                          "class": "w-8 sm:w-10 h-1 sm:h-1.5 rounded-sm bg-gray-600 hover:bg-gray-900 transition-all duration-300",
-                          "events": {
-                            "on_click": {
-                              "action": "slider_goto",
-                              "target": "swiper",
-                              "index": "indicator.id"
+                            "wrapper": "a",
+                            "type": "primary_button",
+                            "class": "inline-flex items-center justify-center min-w-40 md:min-w-[200px] min-h-12 md:min-h-[52px] px-8 md:px-10 rounded-lg font-medium text-sm md:text-base transition-all hover:opacity-90",
+                            "bind_href": "button_link",
+                            "bind_content": "button_text",
+                            "content": "",
+                            "bind_style": {
+                              "background_color": "button_color",
+                              "color": "button_text_color"
+                            },
+                            "condition": {
+                              "field": "button_text",
+                              "op": "not_empty",
+                              "value": true
+                            }
+                          },
+                          {
+                            "wrapper": "a",
+                            "type": "secondary_button",
+                            "class": "inline-flex items-center justify-center min-w-40 md:min-w-[200px] min-h-12 md:min-h-[52px] px-8 md:px-10 rounded-lg font-medium text-sm md:text-base border-2 border-white/80 transition-all hover:bg-white/10",
+                            "bind_href": "secondary_button_link",
+                            "bind_content": "secondary_button_text",
+                            "content": "",
+                            "bind_style": {
+                              "color": "text_color"
+                            },
+                            "condition": {
+                              "field": "secondary_button_text",
+                              "op": "not_empty",
+                              "value": true
                             }
                           }
-                        }
+                        ]
                       }
                     ]
                   }

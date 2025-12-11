@@ -173,6 +173,18 @@ function isExpressionConfig(value: unknown): value is { expr: string } {
 }
 
 /**
+ * Check if a value is a field + transform config object
+ * e.g., { field: "overlay_opacity", transform: "divide_100" }
+ */
+function isFieldTransformConfig(
+  value: unknown
+): value is { field: string; transform: string } {
+  if (!value || typeof value !== "object") return false;
+  const obj = value as Record<string, unknown>;
+  return typeof obj.field === "string" && typeof obj.transform === "string";
+}
+
+/**
  * Evaluate a simple expression with data bindings
  * Supports: slide.property / number, slide.property * number, etc.
  */
@@ -320,13 +332,42 @@ export function convertStyleToCSS(
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           (result as any)[cssKey] = evaluated;
         }
-      } else if (isBindingPath(value)) {
-        // Handle simple binding path
-        const bound = resolveBinding(
-          value as string,
+      } else if (isFieldTransformConfig(value)) {
+        // Handle field + transform config like { field: "overlay_opacity", transform: "divide_100" }
+        const fieldValue = resolveBinding(
+          value.field,
           data || {},
           context || {}
         );
+        if (
+          fieldValue !== undefined &&
+          fieldValue !== null &&
+          typeof fieldValue === "number"
+        ) {
+          let transformedValue: unknown = fieldValue;
+          switch (value.transform) {
+            case "divide_100":
+              transformedValue = fieldValue / 100;
+              break;
+            case "multiply_100":
+              transformedValue = fieldValue * 100;
+              break;
+            case "percent":
+              transformedValue = `${fieldValue}%`;
+              break;
+            case "px":
+              transformedValue = `${fieldValue}px`;
+              break;
+            default:
+              transformedValue = fieldValue;
+          }
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (result as any)[cssKey] = transformedValue;
+        }
+      } else if (typeof value === "string") {
+        // Handle any string value as a binding path in bind_style
+        // bind_style is explicitly for dynamic bindings, so any string is a data path
+        const bound = resolveBinding(value, data || {}, context || {});
         if (bound !== undefined && bound !== null) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           (result as any)[cssKey] = bound;
