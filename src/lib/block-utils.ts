@@ -103,15 +103,26 @@ function isBindingPath(value: unknown): boolean {
 }
 
 /**
+ * Check if a value is a gradient config object
+ */
+function isGradientConfig(value: unknown): value is { type: 'gradient'; direction?: string; start: string; end: string } {
+  if (!value || typeof value !== 'object') return false;
+  const obj = value as Record<string, unknown>;
+  return obj.type === 'gradient' && typeof obj.start === 'string' && typeof obj.end === 'string';
+}
+
+/**
  * Convert snake_case style object to camelCase React CSSProperties
  * Optionally resolves binding paths if data and context are provided
+ * Also handles bind_style for dynamic style bindings including gradients
  */
 export function convertStyleToCSS(
   style?: BlockStyle,
   data?: Record<string, unknown>,
-  context?: Record<string, unknown>
+  context?: Record<string, unknown>,
+  bindStyle?: Record<string, unknown>
 ): CSSProperties {
-  if (!style) return {};
+  if (!style && !bindStyle) return {};
 
   const cssMap: Record<string, string> = {
     background_color: 'backgroundColor',
@@ -145,23 +156,54 @@ export function convertStyleToCSS(
 
   const result: CSSProperties = {};
 
-  Object.entries(style).forEach(([key, value]) => {
-    if (value === undefined || value === null) return;
+  // Process regular style object
+  if (style) {
+    Object.entries(style).forEach(([key, value]) => {
+      if (value === undefined || value === null) return;
 
-    const cssKey = cssMap[key] || key;
+      const cssKey = cssMap[key] || key;
 
-    // Check if value is a binding path and resolve it
-    let resolvedValue = value;
-    if (isBindingPath(value) && (data || context)) {
-      const bound = resolveBinding(value as string, data || {}, context || {});
-      if (bound !== undefined && bound !== null) {
-        resolvedValue = bound;
+      // Check if value is a binding path and resolve it
+      let resolvedValue = value;
+      if (isBindingPath(value) && (data || context)) {
+        const bound = resolveBinding(value as string, data || {}, context || {});
+        if (bound !== undefined && bound !== null) {
+          resolvedValue = bound;
+        }
       }
-    }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (result as any)[cssKey] = resolvedValue;
-  });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (result as any)[cssKey] = resolvedValue;
+    });
+  }
+
+  // Process bind_style for dynamic bindings (gradients, etc.)
+  if (bindStyle && (data || context)) {
+    Object.entries(bindStyle).forEach(([key, value]) => {
+      if (value === undefined || value === null) return;
+
+      const cssKey = cssMap[key] || key;
+
+      // Handle gradient type
+      if (isGradientConfig(value)) {
+        const startColor = resolveBinding(value.start, data || {}, context || {});
+        const endColor = resolveBinding(value.end, data || {}, context || {});
+        const direction = value.direction || 'to right';
+
+        if (startColor && endColor) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (result as any)[cssKey] = `linear-gradient(${direction}, ${startColor}, ${endColor})`;
+        }
+      } else if (isBindingPath(value)) {
+        // Handle simple binding path
+        const bound = resolveBinding(value as string, data || {}, context || {});
+        if (bound !== undefined && bound !== null) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (result as any)[cssKey] = bound;
+        }
+      }
+    });
+  }
 
   return result;
 }

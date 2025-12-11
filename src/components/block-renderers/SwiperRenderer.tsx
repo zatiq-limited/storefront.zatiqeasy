@@ -112,8 +112,8 @@ export default function SwiperRenderer({
     .filter(Boolean)
     .join(" ");
 
-  // Build style - pass data and context to resolve style bindings
-  const style = convertStyleToCSS(block.style, mergedData, context);
+  // Build style - pass data and context to resolve style bindings (including bind_style for gradients)
+  const style = convertStyleToCSS(block.style, mergedData, context, block.bind_style as Record<string, unknown>);
 
   // Convert snake_case config to Swiper format
   const swiperConfig = useMemo(() => {

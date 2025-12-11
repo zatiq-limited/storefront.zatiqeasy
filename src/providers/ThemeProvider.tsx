@@ -14,7 +14,6 @@ import React, {
   useContext,
   useMemo,
   useState,
-  useCallback,
 } from "react";
 import { useRouter } from "next/navigation";
 import { BlocksRenderer, type Block } from "@/components/BlockRenderer";
@@ -120,9 +119,13 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         }
       },
       toggleDrawer: (target: string) => {
+        console.log("[ThemeProvider] toggleDrawer called with target:", target);
         switch (target) {
           case "mobile_menu":
-            setMobileMenuOpen((prev) => !prev);
+            setMobileMenuOpen((prev) => {
+              console.log("[ThemeProvider] mobileMenuOpen changing from", prev, "to", !prev);
+              return !prev;
+            });
             break;
           case "cart_drawer":
             setCartDrawerOpen((prev) => !prev);
@@ -195,6 +198,12 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     return { ...globalData, ...footer?.settings, ...blockData };
   }, [globalData, footer]);
 
+  // Drawer states to pass to BlocksRenderer for synchronization
+  const drawerStates = useMemo(() => ({
+    mobile_menu: mobileMenuOpen,
+    cart_drawer: cartDrawerOpen,
+  }), [mobileMenuOpen, cartDrawerOpen]);
+
   return (
     <ThemeContext.Provider value={contextValue}>
       <div
@@ -222,6 +231,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
               blocks={header.blocks}
               data={headerData}
               eventHandlers={eventHandlers}
+              externalDrawerStates={drawerStates}
             />
           </header>
         )}

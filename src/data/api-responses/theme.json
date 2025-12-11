@@ -1,7 +1,7 @@
 {
   "success": true,
   "data": {
-    "id": "theme_zatiq_custom_1765387340449",
+    "id": "theme_zatiq_custom_1765441490305",
     "version": "1.0.0",
     "global_settings": {
       "colors": {
@@ -50,7 +50,7 @@
         },
         "blocks": [
           {
-            "wrapper": "div#announcement-bar-1-1765387340448",
+            "wrapper": "div#announcement-bar-1-1765441490305",
             "type": "announcement_marquee",
             "class": "w-full overflow-hidden font-bold text-xs sm:text-sm",
             "style": {
@@ -241,9 +241,9 @@
         },
         "blocks": [
           {
-            "wrapper": "nav#navbar-1-1765387340449",
+            "wrapper": "nav#navbar-1-1765441490305",
             "type": "navbar_content",
-            "class": "px-3 sm:px-4 md:px-8 lg:px-10 py-3 md:py-[18px] sticky top-0 z-50",
+            "class": "px-2 sm:px-4 md:px-8 lg:px-10 py-3 md:py-[18px] sticky top-0 z-50",
             "style": {
               "background_color": "#FFFFFF",
               "color": "#000000"
@@ -258,24 +258,16 @@
               "sticky": true,
               "menu_items": [
                 {
-                  "label": "Handbags",
-                  "url": "#"
+                  "label": "Home",
+                  "url": "/"
                 },
                 {
-                  "label": "Watches",
-                  "url": "#"
+                  "label": "Products",
+                  "url": "/products"
                 },
                 {
-                  "label": "Skincare",
-                  "url": "#"
-                },
-                {
-                  "label": "Jewellery",
-                  "url": "#"
-                },
-                {
-                  "label": "Apparels",
-                  "url": "#"
+                  "label": "Collections",
+                  "url": "/collections"
                 }
               ],
               "cart_count": 0
@@ -283,189 +275,195 @@
             "blocks": [
               {
                 "wrapper": "div",
-                "class": "flex justify-between items-center gap-2",
+                "class": "max-w-[1440px] mx-auto w-full",
                 "blocks": [
                   {
                     "wrapper": "div",
-                    "class": "flex items-center gap-2 sm:gap-4 md:gap-10",
+                    "class": "flex justify-between items-center gap-2",
                     "blocks": [
                       {
                         "wrapper": "div",
-                        "class": "flex items-center shrink-0",
-                        "events": {
-                          "on_click": {
-                            "action": "navigate",
-                            "target": "/"
-                          }
-                        },
+                        "class": "flex items-center gap-2 sm:gap-4 md:gap-10",
                         "blocks": [
                           {
-                            "wrapper": "img",
-                            "class": "h-5 w-20 sm:h-6 sm:w-24 md:h-8 md:w-32",
-                            "bind_src": "logo",
-                            "src": "https://i.ibb.co.com/4ww2cHtc/Pasted-image.png",
-                            "alt": "Logo"
-                          }
-                        ]
-                      },
-                      {
-                        "wrapper": "div",
-                        "class": "hidden lg:flex items-center gap-8",
-                        "blocks": [
+                            "wrapper": "div",
+                            "class": "flex items-center shrink-0",
+                            "events": {
+                              "on_click": {
+                                "action": "navigate",
+                                "target": "/"
+                              }
+                            },
+                            "blocks": [
+                              {
+                                "wrapper": "img",
+                                "class": "h-5 w-20 sm:h-6 sm:w-24 md:h-8 md:w-32",
+                                "bind_src": "logo",
+                                "src": "https://i.ibb.co.com/4ww2cHtc/Pasted-image.png",
+                                "alt": "Logo"
+                              }
+                            ]
+                          },
                           {
-                            "type": "repeater",
-                            "source": "menu_items",
-                            "iterator": "item",
-                            "template": {
-                              "wrapper": "a",
-                              "class": "hover:text-blue-600 font-inter font-medium text-sm leading-[18px] transition-colors whitespace-nowrap",
-                              "bind_href": "item.url",
-                              "bind_content": "item.label",
-                              "style": {
-                                "color": "#000000"
-                              },
-                              "events": {
-                                "on_click": {
-                                  "action": "navigate",
-                                  "target": "item.url"
+                            "wrapper": "div",
+                            "class": "hidden lg:flex items-center gap-8",
+                            "blocks": [
+                              {
+                                "type": "repeater",
+                                "source": "menu_items",
+                                "iterator": "item",
+                                "template": {
+                                  "wrapper": "a",
+                                  "class": "hover:text-blue-600 font-inter font-medium text-sm leading-[18px] transition-colors whitespace-nowrap",
+                                  "bind_href": "item.url",
+                                  "bind_content": "item.label",
+                                  "style": {
+                                    "color": "#000000"
+                                  },
+                                  "events": {
+                                    "on_click": {
+                                      "action": "navigate",
+                                      "target": "item.url"
+                                    }
+                                  }
                                 }
                               }
-                            }
+                            ]
                           }
                         ]
-                      }
-                    ]
-                  },
-                  {
-                    "wrapper": "div",
-                    "class": "flex items-center gap-1 sm:gap-2 md:gap-5 shrink-0",
-                    "blocks": [
+                      },
                       {
                         "wrapper": "div",
-                        "class": "hidden md:block relative w-[362px]",
-                        "condition": {
-                          "field": "show_search",
-                          "op": "equals",
-                          "value": true
-                        },
+                        "class": "flex items-center gap-2 shrink-0",
                         "blocks": [
                           {
-                            "wrapper": "svg",
-                            "class": "w-6 h-6 text-gray-500 absolute left-2 top-2.5",
-                            "type": "icon",
-                            "icon": "search"
-                          },
-                          {
-                            "wrapper": "input",
-                            "class": "w-full h-11 px-4 pl-10 bg-gray-100 rounded-sm text-sm focus:outline-none focus:ring-2 focus:ring-blue-500",
-                            "type": "text_input",
-                            "placeholder": "Search for products or brands.....",
-                            "events": {
-                              "on_submit": {
-                                "action": "search",
-                                "target": "search_results"
+                            "wrapper": "div",
+                            "class": "hidden md:block relative w-[362px]",
+                            "condition": {
+                              "field": "show_search",
+                              "op": "equals",
+                              "value": true
+                            },
+                            "blocks": [
+                              {
+                                "wrapper": "svg",
+                                "class": "w-6 h-6 text-gray-500 absolute left-2 top-2.5",
+                                "type": "icon",
+                                "icon": "search"
+                              },
+                              {
+                                "wrapper": "input",
+                                "class": "w-full h-11 px-4 pl-10 bg-gray-100 rounded-sm text-sm focus:outline-none focus:ring-2 focus:ring-blue-500",
+                                "type": "text_input",
+                                "placeholder": "Search for products or brands.....",
+                                "events": {
+                                  "on_submit": {
+                                    "action": "search",
+                                    "target": "search_results"
+                                  }
+                                }
                               }
-                            }
-                          }
-                        ]
-                      },
-                      {
-                        "wrapper": "button",
-                        "type": "icon_button",
-                        "class": "md:hidden p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg transition-colors shrink-0",
-                        "condition": {
-                          "field": "show_search",
-                          "op": "equals",
-                          "value": true
-                        },
-                        "events": {
-                          "on_click": {
-                            "action": "toggle_drawer",
-                            "target": "mobile_menu"
-                          }
-                        },
-                        "blocks": [
-                          {
-                            "wrapper": "svg",
-                            "class": "w-4 h-4 sm:w-5 sm:h-5",
-                            "type": "icon",
-                            "icon": "search",
-                            "style": {
-                              "color": "#000000"
-                            }
-                          }
-                        ]
-                      },
-                      {
-                        "wrapper": "button",
-                        "type": "icon_button",
-                        "class": "sm:p-1 hover:bg-gray-100 rounded-lg transition-colors shrink-0",
-                        "condition": {
-                          "field": "show_dark_mode",
-                          "op": "equals",
-                          "value": true
-                        },
-                        "events": {
-                          "on_click": {
-                            "action": "toggle_theme",
-                            "target": "dark_mode"
-                          }
-                        },
-                        "blocks": [
-                          {
-                            "wrapper": "svg",
-                            "class": "w-5 h-5",
-                            "type": "icon",
-                            "icon": "moon"
-                          }
-                        ]
-                      },
-                      {
-                        "wrapper": "button",
-                        "type": "icon_button",
-                        "class": "relative sm:p-1 hover:bg-gray-100 rounded-lg transition-colors shrink-0",
-                        "condition": {
-                          "field": "show_cart",
-                          "op": "equals",
-                          "value": true
-                        },
-                        "events": {
-                          "on_click": {
-                            "action": "toggle_drawer",
-                            "target": "cart_drawer"
-                          }
-                        },
-                        "blocks": [
-                          {
-                            "wrapper": "svg",
-                            "class": "w-6 h-6",
-                            "type": "icon",
-                            "icon": "shopping_cart"
+                            ]
                           },
                           {
-                            "wrapper": "span",
-                            "class": "absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 w-4 h-4 md:w-5 md:h-5 bg-blue-600 text-white text-[9px] sm:text-[10px] md:text-xs rounded-full flex items-center justify-center font-medium",
-                            "bind_content": "cart_count",
-                            "content": "0"
-                          }
-                        ]
-                      },
-                      {
-                        "wrapper": "button",
-                        "type": "icon_button",
-                        "class": "lg:hidden p-1 sm:p-2 hover:bg-gray-100 rounded-lg transition-colors shrink-0",
-                        "events": {
-                          "on_click": {
-                            "action": "toggle_drawer",
-                            "target": "mobile_menu"
-                          }
-                        },
-                        "blocks": [
+                            "wrapper": "button",
+                            "type": "icon_button",
+                            "class": "md:hidden p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg transition-colors shrink-0",
+                            "condition": {
+                              "field": "show_search",
+                              "op": "equals",
+                              "value": true
+                            },
+                            "events": {
+                              "on_click": {
+                                "action": "toggle_drawer",
+                                "target": "mobile_menu"
+                              }
+                            },
+                            "blocks": [
+                              {
+                                "wrapper": "svg",
+                                "class": "w-4 h-4 sm:w-5 sm:h-5",
+                                "type": "icon",
+                                "icon": "search",
+                                "style": {
+                                  "color": "#000000"
+                                }
+                              }
+                            ]
+                          },
                           {
-                            "wrapper": "svg",
-                            "class": "w-6 h-6 sm:w-6 sm:h-6",
-                            "type": "icon",
-                            "icon": "menu"
+                            "wrapper": "button",
+                            "type": "icon_button",
+                            "class": "sm:p-1 hover:bg-gray-100 rounded-lg transition-colors shrink-0",
+                            "condition": {
+                              "field": "show_dark_mode",
+                              "op": "equals",
+                              "value": true
+                            },
+                            "events": {
+                              "on_click": {
+                                "action": "toggle_theme",
+                                "target": "dark_mode"
+                              }
+                            },
+                            "blocks": [
+                              {
+                                "wrapper": "svg",
+                                "class": "w-5 h-5",
+                                "type": "icon",
+                                "icon": "moon"
+                              }
+                            ]
+                          },
+                          {
+                            "wrapper": "button",
+                            "type": "icon_button",
+                            "class": "relative sm:p-1 hover:bg-gray-100 rounded-lg transition-colors shrink-0",
+                            "condition": {
+                              "field": "show_cart",
+                              "op": "equals",
+                              "value": true
+                            },
+                            "events": {
+                              "on_click": {
+                                "action": "toggle_drawer",
+                                "target": "cart_drawer"
+                              }
+                            },
+                            "blocks": [
+                              {
+                                "wrapper": "svg",
+                                "class": "w-6 h-6",
+                                "type": "icon",
+                                "icon": "shopping_cart"
+                              },
+                              {
+                                "wrapper": "span",
+                                "class": "absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 w-4 h-4 md:w-5 md:h-5 bg-blue-600 text-white text-[9px] sm:text-[10px] md:text-xs rounded-full flex items-center justify-center font-medium",
+                                "bind_content": "cart_count",
+                                "content": "0"
+                              }
+                            ]
+                          },
+                          {
+                            "wrapper": "button",
+                            "type": "icon_button",
+                            "class": "lg:hidden p-1 sm:p-2 hover:bg-gray-100 rounded-lg transition-colors shrink-0",
+                            "events": {
+                              "on_click": {
+                                "action": "toggle_drawer",
+                                "target": "mobile_menu"
+                              }
+                            },
+                            "blocks": [
+                              {
+                                "wrapper": "svg",
+                                "class": "w-6 h-6",
+                                "type": "icon",
+                                "icon": "menu"
+                              }
+                            ]
                           }
                         ]
                       }
@@ -476,18 +474,18 @@
               {
                 "wrapper": "div",
                 "id": "mobile_menu",
-                "class": "lg:hidden border-t border-gray-200 bg-white",
+                "class": "lg:hidden bg-white",
                 "state": {
                   "visible": false
                 },
                 "blocks": [
                   {
                     "wrapper": "div",
-                    "class": "px-4 py-6",
+                    "class": "px-3 py-3 max-h-[80vh] overflow-y-auto",
                     "blocks": [
                       {
                         "wrapper": "div",
-                        "class": "mb-6",
+                        "class": "mb-3",
                         "blocks": [
                           {
                             "wrapper": "div",
@@ -495,13 +493,13 @@
                             "blocks": [
                               {
                                 "wrapper": "svg",
-                                "class": "w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2",
+                                "class": "w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2",
                                 "type": "icon",
                                 "icon": "search"
                               },
                               {
                                 "wrapper": "input",
-                                "class": "w-full px-4 py-3 pl-10 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500",
+                                "class": "w-full h-9 px-4 pl-9 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500",
                                 "type": "text_input",
                                 "placeholder": "Search for products or brands.....",
                                 "events": {
@@ -525,7 +523,7 @@
                             "iterator": "item",
                             "template": {
                               "wrapper": "a",
-                              "class": "hover:text-blue-600 py-3 text-center transition-colors border-b border-gray-100 last:border-b-0",
+                              "class": "hover:text-blue-600 py-2.5 text-center transition-colors border-b border-gray-100 last:border-b-0",
                               "bind_href": "item.url",
                               "bind_content": "item.label",
                               "style": {
