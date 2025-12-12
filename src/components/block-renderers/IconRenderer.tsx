@@ -7,7 +7,7 @@
  * Maps icon names to Lucide React icons
  */
 
-import React from 'react';
+import React from "react";
 import {
   Search,
   ShoppingCart,
@@ -68,8 +68,14 @@ import {
   Grid,
   List,
   LayoutGrid,
+  // Additional icons for badges/trust badges
+  RotateCcw,
+  MessagesSquare,
+  BadgeCheck,
+  ShieldCheck,
+  Headphones,
   type LucideIcon,
-} from 'lucide-react';
+} from "lucide-react";
 
 // Icon name to component mapping
 const ICON_MAP: Record<string, LucideIcon> = {
@@ -182,6 +188,24 @@ const ICON_MAP: Record<string, LucideIcon> = {
   grid_view: LayoutGrid,
   list: List,
   list_view: List,
+
+  // Badge/Trust Badge Icons
+  rotate_ccw: RotateCcw,
+  return: RotateCcw,
+  refund: RotateCcw,
+  money_back: RotateCcw,
+  messages_square: MessagesSquare,
+  chat: MessagesSquare,
+  support: MessagesSquare,
+  customer_support: MessagesSquare,
+  badge_check: BadgeCheck,
+  verified: BadgeCheck,
+  quality: BadgeCheck,
+  shield_check: ShieldCheck,
+  warranty: ShieldCheck,
+  protection: ShieldCheck,
+  headphones: Headphones,
+  customer_service: Headphones,
 };
 
 export interface IconRendererProps {
@@ -198,14 +222,14 @@ export interface IconRendererProps {
  */
 export default function IconRenderer({
   icon,
-  className = '',
+  className = "",
   size,
   color,
   strokeWidth = 2,
   style,
 }: IconRendererProps) {
   // Normalize icon name (convert to lowercase and replace hyphens with underscores)
-  const normalizedIcon = icon?.toLowerCase().replace(/-/g, '_');
+  const normalizedIcon = icon?.toLowerCase().replace(/-/g, "_");
 
   const IconComponent = ICON_MAP[normalizedIcon];
 
@@ -233,7 +257,7 @@ export default function IconRenderer({
  * Check if an icon exists
  */
 export function hasIcon(icon: string): boolean {
-  const normalizedIcon = icon?.toLowerCase().replace(/-/g, '_');
+  const normalizedIcon = icon?.toLowerCase().replace(/-/g, "_");
   return normalizedIcon in ICON_MAP;
 }
 

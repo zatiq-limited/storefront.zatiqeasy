@@ -538,8 +538,17 @@ function renderIcon(
 
   const style = convertStyleToCSS(block.style, data, context, block.bind_style);
 
+  // Get icon size from block properties
+  const iconSize =
+    (block.icon_size as number) || (block.size as number) || undefined;
+
   return (
-    <IconRenderer icon={iconName} className={block.class || ""} style={style} />
+    <IconRenderer
+      icon={iconName}
+      className={block.class || ""}
+      style={style}
+      size={iconSize}
+    />
   );
 }
 
