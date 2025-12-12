@@ -5,11 +5,12 @@
  *
  * Handles V3.0 Schema marquee animation blocks
  * Creates smooth scrolling/sliding animation effect
+ * Supports configurable speed and pause on hover
  */
 
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useMemo, useState, createElement } from "react";
 import {
   parseWrapper,
   convertStyleToCSS,
@@ -37,7 +38,13 @@ export interface MarqueeRendererProps {
  *   wrapper: 'div',
  *   type: 'marquee',
  *   class: 'flex',
- *   animation: { type: 'marquee', direction: 'left', duration: 8, repeat: 'infinite' },
+ *   animation: {
+ *     type: 'marquee',
+ *     direction: 'left',
+ *     duration: 8,
+ *     repeat: 'infinite',
+ *     pause_on_hover: true
+ *   },
  *   blocks: [...]
  * }
  */
@@ -50,6 +57,9 @@ export default function MarqueeRenderer({
 }: MarqueeRendererProps) {
   const { animation, blocks = [] } = block;
 
+  // Track hover state for pause functionality
+  const [isPaused, setIsPaused] = useState(false);
+
   // Merge block.data with incoming data (block.data takes precedence)
   const mergedData = useMemo(() => {
     const blockData = (block.data as Record<string, unknown>) || {};
@@ -60,6 +70,7 @@ export default function MarqueeRenderer({
   const direction = animation?.direction || "left";
   const duration = animation?.duration || 8;
   const repeat = animation?.repeat || "infinite";
+  const pauseOnHover = animation?.pause_on_hover ?? true;
 
   // Parse wrapper
   const { tag, id, classes } = parseWrapper(block.wrapper || "div");
@@ -79,15 +90,42 @@ export default function MarqueeRenderer({
     const animationName =
       direction === "left" ? "marquee-left" : "marquee-right";
     const iterationCount = repeat === "infinite" ? "infinite" : repeat;
+    const playState = isPaused ? "paused" : "running";
 
     return {
       ...baseStyle,
       animation: `${animationName} ${duration}s linear ${iterationCount}`,
+      animationPlayState: playState,
     };
-  }, [baseStyle, direction, duration, repeat]);
+  }, [baseStyle, direction, duration, repeat, isPaused]);
 
-  // Create the wrapper element
-  const Tag = tag as keyof JSX.IntrinsicElements;
+  // Event handlers for pause on hover
+  const handleMouseEnter = pauseOnHover ? () => setIsPaused(true) : undefined;
+  const handleMouseLeave = pauseOnHover ? () => setIsPaused(false) : undefined;
+
+  // Build props for the element
+  const props: Record<string, unknown> = {
+    id: id || block.id,
+    className: finalClassName,
+    style: animationStyle,
+    onMouseEnter: handleMouseEnter,
+    onMouseLeave: handleMouseLeave,
+  };
+
+  // Children content
+  const children = (
+    <React.Suspense fallback={null}>
+      {blocks.map((childBlock, index) => (
+        <BlockRenderer
+          key={generateBlockKey(childBlock, index)}
+          block={childBlock}
+          data={mergedData}
+          context={context}
+          eventHandlers={eventHandlers}
+        />
+      ))}
+    </React.Suspense>
+  );
 
   return (
     <>
@@ -112,23 +150,7 @@ export default function MarqueeRenderer({
         }
       `}</style>
 
-      <Tag
-        id={id || block.id}
-        className={finalClassName}
-        style={animationStyle}
-      >
-        <React.Suspense fallback={null}>
-          {blocks.map((childBlock, index) => (
-            <BlockRenderer
-              key={generateBlockKey(childBlock, index)}
-              block={childBlock}
-              data={mergedData}
-              context={context}
-              eventHandlers={eventHandlers}
-            />
-          ))}
-        </React.Suspense>
-      </Tag>
+      {createElement(tag, props, children)}
     </>
   );
 }

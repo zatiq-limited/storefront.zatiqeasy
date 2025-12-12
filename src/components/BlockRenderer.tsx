@@ -64,6 +64,7 @@ export interface Block {
     direction?: string;
     duration?: number;
     repeat?: string;
+    pause_on_hover?: boolean;
   };
   state?: {
     visible?: boolean;
@@ -385,7 +386,7 @@ function BlockRendererInternal({
   // Handle cursor pointer for clickable elements
   if (block.events?.on_click) {
     props.style = {
-      ...((props.style as React.CSSProperties) || {}),
+      ...(props.style as React.CSSProperties),
       cursor: "pointer",
     };
   }
