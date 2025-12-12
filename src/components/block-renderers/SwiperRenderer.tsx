@@ -156,17 +156,27 @@ if (typeof window !== "undefined") {
 }
 
 export interface SwiperConfig {
+  // snake_case format (legacy)
   slides_per_view?: number;
   space_between?: number;
-  loop?: boolean;
-  effect?: "slide" | "fade" | "cube" | "coverflow" | "flip";
   fade_effect?: {
     cross_fade?: boolean;
   };
+  disable_on_interaction?: boolean;
+
+  // camelCase format (new export format)
+  slidesPerView?: number;
+  spaceBetween?: number;
+  disableOnInteraction?: boolean;
+
+  // Common properties
+  loop?: boolean;
+  effect?: "slide" | "fade" | "cube" | "coverflow" | "flip";
   autoplay?:
     | {
         delay?: number;
         disable_on_interaction?: boolean;
+        disableOnInteraction?: boolean;
       }
     | boolean;
   breakpoints?: Record<
@@ -174,6 +184,8 @@ export interface SwiperConfig {
     {
       slides_per_view?: number;
       space_between?: number;
+      slidesPerView?: number;
+      spaceBetween?: number;
     }
   >;
   navigation?: boolean;
@@ -245,7 +257,7 @@ export default function SwiperRenderer({
     block.bind_style as Record<string, unknown>
   );
 
-  // Convert snake_case config to Swiper format
+  // Convert snake_case config to Swiper format (supports both camelCase and snake_case)
   const swiperConfig = useMemo(() => {
     // Only include modules that are actually needed
     const modules = [Navigation, Autoplay];
@@ -260,16 +272,16 @@ export default function SwiperRenderer({
       modules.push(EffectFade);
     }
 
-    // When breakpoints are configured, the base slidesPerView should be 1 (mobile-first)
-    // The breakpoints will override for larger screens
-    const hasBreakpoints =
-      config.breakpoints && Object.keys(config.breakpoints).length > 0;
+    // Support both camelCase and snake_case formats
+    const baseSlidesPerView =
+      config.slidesPerView ?? config.slides_per_view ?? 1;
+    const baseSpaceBetween = config.spaceBetween ?? config.space_between ?? 0;
 
     const swiperOptions: Record<string, unknown> = {
       modules,
-      // Use 1 as base when breakpoints exist (mobile-first), otherwise use config value
-      slidesPerView: hasBreakpoints ? 1 : config.slides_per_view || 1,
-      spaceBetween: config.space_between || 0,
+      // Use the configured base slidesPerView (this is the mobile/smallest screen value)
+      slidesPerView: baseSlidesPerView,
+      spaceBetween: baseSpaceBetween,
       loop: config.loop ?? false,
     };
 
@@ -290,23 +302,29 @@ export default function SwiperRenderer({
       } else {
         swiperOptions.autoplay = {
           delay: config.autoplay.delay || 3000,
-          disableOnInteraction: config.autoplay.disable_on_interaction ?? false,
+          disableOnInteraction:
+            config.autoplay.disableOnInteraction ??
+            config.autoplay.disable_on_interaction ??
+            false,
         };
       }
     }
 
-    // Breakpoints
+    // Breakpoints - support both camelCase and snake_case
     if (config.breakpoints) {
       const breakpoints: Record<number, Record<string, unknown>> = {};
       Object.entries(config.breakpoints).forEach(([key, value]) => {
         const breakpointConfig: Record<string, unknown> = {};
 
-        // Only add properties that are defined
-        if (value.slides_per_view !== undefined) {
-          breakpointConfig.slidesPerView = value.slides_per_view;
+        // Support both camelCase (slidesPerView) and snake_case (slides_per_view)
+        const slidesPerView = value.slidesPerView ?? value.slides_per_view;
+        const spaceBetween = value.spaceBetween ?? value.space_between;
+
+        if (slidesPerView !== undefined) {
+          breakpointConfig.slidesPerView = slidesPerView;
         }
-        if (value.space_between !== undefined) {
-          breakpointConfig.spaceBetween = value.space_between;
+        if (spaceBetween !== undefined) {
+          breakpointConfig.spaceBetween = spaceBetween;
         }
 
         breakpoints[Number(key)] = breakpointConfig;

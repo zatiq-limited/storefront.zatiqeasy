@@ -164,6 +164,16 @@ function isGradientConfig(value: unknown): value is {
 }
 
 /**
+ * Check if a value is a URL config object for background images
+ * e.g., { type: "url", field: "category.background_image" }
+ */
+function isUrlConfig(value: unknown): value is { type: "url"; field: string } {
+  if (!value || typeof value !== "object") return false;
+  const obj = value as Record<string, unknown>;
+  return obj.type === "url" && typeof obj.field === "string";
+}
+
+/**
  * Check if a value is an expression config object
  */
 function isExpressionConfig(value: unknown): value is { expr: string } {
@@ -305,8 +315,22 @@ export function convertStyleToCSS(
 
       const cssKey = cssMap[key] || key;
 
-      // Handle gradient type
-      if (isGradientConfig(value)) {
+      // Handle URL type for background images
+      // e.g., { type: "url", field: "category.background_image" }
+      if (isUrlConfig(value)) {
+        const url = resolveBinding(value.field, data || {}, context || {});
+        if (url && typeof url === "string") {
+          // For background_image, wrap in url()
+          if (key === "background_image" || cssKey === "backgroundImage") {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (result as any)["backgroundImage"] = `url(${url})`;
+          } else {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (result as any)[cssKey] = `url(${url})`;
+          }
+        }
+      } else if (isGradientConfig(value)) {
+        // Handle gradient type
         const startColor = resolveBinding(
           value.start,
           data || {},

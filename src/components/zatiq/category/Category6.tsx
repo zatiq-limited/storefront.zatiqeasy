@@ -47,7 +47,7 @@ const Category6: React.FC<Category6Props> = ({ settings = {}, blocks = [] }) => 
 
   return (
     <div className="w-full max-w-[1440px] mx-auto px-4 2xl:px-0 pb-8 sm:pb-14">
-      <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
+      <div className="flex flex-col md:flex-row gap-4 md:gap-6">
         {blocks.map((category, i) => {
           const countColor = category.countColor || defaultCountColor;
           const titleColor = category.titleColor || defaultTitleColor;
