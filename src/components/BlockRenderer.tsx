@@ -362,6 +362,7 @@ function BlockRendererInternal({
       );
       if (handler) {
         switch (eventType) {
+          case "click":
           case "on_click":
             props.onClick = handler;
             break;
@@ -384,7 +385,7 @@ function BlockRendererInternal({
   }
 
   // Handle cursor pointer for clickable elements
-  if (block.events?.on_click) {
+  if (block.events?.on_click || block.events?.click) {
     props.style = {
       ...(props.style as React.CSSProperties),
       cursor: "pointer",

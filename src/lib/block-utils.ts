@@ -569,6 +569,7 @@ export function createEventHandler(
     case "search":
       return () => handlers.search?.(resolvedTarget);
 
+    case "sliderPrev": // camelCase alias
     case "slider_prev":
       return (e?: React.MouseEvent) => {
         // First try the handler passed from parent (works for elements inside Swiper)
@@ -590,7 +591,9 @@ export function createEventHandler(
           // If we have the event, try to find the swiper in the same section
           if (e?.currentTarget && swiperRegistry) {
             const element = e.currentTarget as HTMLElement;
-            const section = element.closest('section[id^="hero-"]');
+            const section = element.closest(
+              'section[id^="hero-"], section[id^="reviews-"]'
+            );
             if (section) {
               // Use section ID as target to find the right swiper
               const sectionId = section.id;
@@ -603,6 +606,7 @@ export function createEventHandler(
         }
       };
 
+    case "sliderNext": // camelCase alias
     case "slider_next":
       return (e?: React.MouseEvent) => {
         // First try the handler passed from parent (works for elements inside Swiper)
@@ -620,7 +624,9 @@ export function createEventHandler(
           // If we have the event, try to find the swiper in the same section
           if (e?.currentTarget && swiperRegistry) {
             const element = e.currentTarget as HTMLElement;
-            const section = element.closest('section[id^="hero-"]');
+            const section = element.closest(
+              'section[id^="hero-"], section[id^="reviews-"]'
+            );
             if (section) {
               // Use section ID as target to find the right swiper
               const sectionId = section.id;
@@ -651,7 +657,9 @@ export function createEventHandler(
           // If we have the event, try to find the swiper in the same section
           if (e?.currentTarget && swiperRegistry) {
             const element = e.currentTarget as HTMLElement;
-            const section = element.closest('section[id^="hero-"]');
+            const section = element.closest(
+              'section[id^="hero-"], section[id^="reviews-"]'
+            );
             if (section) {
               swiperRegistry.goto(index, section.id);
               return;

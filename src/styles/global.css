@@ -238,3 +238,25 @@ section[id^="hero-"] .swiper-pagination {
   background: rgba(255, 255, 255, 0.6) !important;
   border-radius: 9999px !important;
 }
+
+/* ============================================
+   Coverflow Effect - Opacity for non-active slides
+   Applies to any swiper using coverflow effect
+   ============================================ */
+.swiper-coverflow .swiper-slide {
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.swiper-coverflow .swiper-slide:not(.swiper-slide-active) {
+  opacity: 0.5;
+}
+
+.swiper-coverflow .swiper-slide.swiper-slide-active {
+  opacity: 1;
+}
+
+/* Also apply blur effect to non-active slides in coverflow */
+.swiper-coverflow .swiper-slide:not(.swiper-slide-active) > article,
+.swiper-coverflow .swiper-slide:not(.swiper-slide-active) > div {
+  filter: blur(0.5px);
+}

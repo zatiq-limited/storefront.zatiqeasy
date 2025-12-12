@@ -11,7 +11,13 @@
 
 import React, { useMemo, useRef, useCallback, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay, EffectFade } from "swiper/modules";
+import {
+  Navigation,
+  Pagination,
+  Autoplay,
+  EffectFade,
+  EffectCoverflow,
+} from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
 
 // Import Swiper styles
@@ -19,6 +25,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/effect-fade";
+import "swiper/css/effect-coverflow";
 
 import {
   parseWrapper,
@@ -163,11 +170,13 @@ export interface SwiperConfig {
     cross_fade?: boolean;
   };
   disable_on_interaction?: boolean;
+  centered_slides?: boolean;
 
   // camelCase format (new export format)
   slidesPerView?: number;
   spaceBetween?: number;
   disableOnInteraction?: boolean;
+  centeredSlides?: boolean;
 
   // Common properties
   loop?: boolean;
@@ -195,6 +204,22 @@ export interface SwiperConfig {
         clickable?: boolean;
         type?: "bullets" | "fraction" | "progressbar";
       };
+  // Coverflow effect options
+  coverflow_effect?: {
+    rotate?: number;
+    stretch?: number;
+    depth?: number;
+    modifier?: number;
+    slide_shadows?: boolean;
+    slideShadows?: boolean;
+  };
+  coverflowEffect?: {
+    rotate?: number;
+    stretch?: number;
+    depth?: number;
+    modifier?: number;
+    slideShadows?: boolean;
+  };
 }
 
 export interface SwiperRendererProps {
@@ -272,10 +297,17 @@ export default function SwiperRenderer({
       modules.push(EffectFade);
     }
 
+    // Add EffectCoverflow module if using coverflow
+    if (config.effect === "coverflow") {
+      modules.push(EffectCoverflow);
+    }
+
     // Support both camelCase and snake_case formats
     const baseSlidesPerView =
       config.slidesPerView ?? config.slides_per_view ?? 1;
     const baseSpaceBetween = config.spaceBetween ?? config.space_between ?? 0;
+    const centeredSlides =
+      config.centeredSlides ?? config.centered_slides ?? false;
 
     const swiperOptions: Record<string, unknown> = {
       modules,
@@ -283,6 +315,7 @@ export default function SwiperRenderer({
       slidesPerView: baseSlidesPerView,
       spaceBetween: baseSpaceBetween,
       loop: config.loop ?? false,
+      centeredSlides,
     };
 
     // Effect
@@ -291,6 +324,18 @@ export default function SwiperRenderer({
       if (config.effect === "fade" && config.fade_effect) {
         swiperOptions.fadeEffect = {
           crossFade: config.fade_effect.cross_fade ?? true,
+        };
+      }
+      // Coverflow effect configuration
+      if (config.effect === "coverflow") {
+        const coverflowConfig =
+          config.coverflowEffect ?? config.coverflow_effect ?? {};
+        swiperOptions.coverflowEffect = {
+          rotate: coverflowConfig.rotate ?? 0,
+          stretch: coverflowConfig.stretch ?? 0,
+          depth: coverflowConfig.depth ?? 100,
+          modifier: coverflowConfig.modifier ?? 2.5,
+          slideShadows: coverflowConfig.slideShadows ?? false,
         };
       }
     }
@@ -400,7 +445,9 @@ export default function SwiperRenderer({
       // Try to find parent section and register with section ID
       // This allows arrows outside the swiper to find the correct swiper
       if (containerRef.current) {
-        const section = containerRef.current.closest('section[id^="hero-"]');
+        const section = containerRef.current.closest(
+          'section[id^="hero-"], section[id^="reviews-"], section[id]'
+        );
         if (section) {
           registerSwiper(section.id, swiper);
         }
@@ -412,7 +459,9 @@ export default function SwiperRenderer({
   // Also register when the component mounts (in case onSwiper fired before ref was set)
   useEffect(() => {
     if (swiperRef.current && containerRef.current) {
-      const section = containerRef.current.closest('section[id^="hero-"]');
+      const section = containerRef.current.closest(
+        'section[id^="hero-"], section[id^="reviews-"], section[id]'
+      );
       if (section) {
         registerSwiper(section.id, swiperRef.current);
       }
@@ -425,7 +474,9 @@ export default function SwiperRenderer({
       unregisterSwiper(swiperId);
       // Also unregister section-based key if it exists
       if (containerRef.current) {
-        const section = containerRef.current.closest('section[id^="hero-"]');
+        const section = containerRef.current.closest(
+          'section[id^="hero-"], section[id^="reviews-"], section[id]'
+        );
         if (section) {
           unregisterSwiper(section.id);
         }
