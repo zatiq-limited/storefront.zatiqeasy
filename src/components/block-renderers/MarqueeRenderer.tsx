@@ -112,8 +112,8 @@ export default function MarqueeRenderer({
     onMouseLeave: handleMouseLeave,
   };
 
-  // Children content
-  const children = (
+  // Render children blocks
+  const renderChildren = () => (
     <React.Suspense fallback={null}>
       {blocks.map((childBlock, index) => (
         <BlockRenderer
@@ -125,6 +125,16 @@ export default function MarqueeRenderer({
         />
       ))}
     </React.Suspense>
+  );
+
+  // For seamless looping, we duplicate the content
+  // The animation moves -50%, so with 2 copies the loop is seamless
+  const children = (
+    <>
+      {renderChildren()}
+      {renderChildren()}
+      {renderChildren()}
+    </>
   );
 
   return (
