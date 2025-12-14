@@ -9,18 +9,6 @@
 
 import type { ComponentType } from "react";
 
-// Import all components from local zatiq components folder
-import { Hero1, Hero2, Hero3, Hero4 } from "@/components/zatiq/heroes";
-import { Navbar1, Navbar2, Navbar3, Navbar4 } from "@/components/zatiq/navbars";
-import {
-  Category1,
-  Category2,
-  Category3,
-  Category4,
-} from "@/components/zatiq/category";
-// Category5 and Category6 are default exports
-import Category5 from "@/components/zatiq/category/Category5";
-import Category6 from "@/components/zatiq/category/Category6";
 import {
   ProductCards1,
   ProductCards2,
@@ -31,28 +19,7 @@ import {
   ProductCards7,
   ProductCards8,
 } from "@/components/zatiq/product-cards";
-import { Footers1, Footers2 } from "@/components/zatiq/footers";
 import { Reviews1, Reviews2, Reviews3 } from "@/components/zatiq/reviews";
-import { Brands1, Brands2, Brands3, Brands4 } from "@/components/zatiq/brands";
-import {
-  SpecialOffersSlider1,
-  SpecialOffersSlider2,
-  SpecialOffersSlider3,
-  SpecialOffersSlider4,
-  SpecialOffersSlider5,
-} from "@/components/zatiq/special-offers-slider";
-import { Badges1, Badges2, Badges3 } from "@/components/zatiq/badges";
-import {
-  AnnouncementBar1,
-  AnnouncementBar2,
-  AnnouncementBar3,
-} from "@/components/zatiq/announcement-bars";
-import {
-  StaticBanner1,
-  StaticBanner2,
-  StaticBanner3,
-  StaticBanner4,
-} from "@/components/zatiq/static-banner";
 
 import {
   PaymentStatus1,
@@ -64,7 +31,6 @@ import {
   ProductCollection2,
 } from "@/components/zatiq/product-collection";
 import { SocialFeed1, SocialFeed2 } from "@/components/zatiq/social-feed";
-import { CustomSections } from "@/components/zatiq/custom-sections";
 import {
   ProductsHero1,
   ProductsHero2,
@@ -148,43 +114,11 @@ import {
   PrivacyContent2,
 } from "@/components/zatiq/privacy-policy";
 
-
 /**
  * Component Registry
  * API থেকে যে component-type আসবে সেই অনুযায়ী component render করার জন্য
  */
 export const ZATIQ_COMPONENTS: Record<string, ComponentType<any>> = {
-  // Announcement Bars (3 variants)
-  "announcement-bar-1": AnnouncementBar1,
-  "announcement-bar-2": AnnouncementBar2,
-  "announcement-bar-3": AnnouncementBar3,
-
-  // Navbars (4 variants)
-  "navbar-1": Navbar1,
-  "navbar-2": Navbar2,
-  "navbar-3": Navbar3,
-  "navbar-4": Navbar4,
-
-  // Heroes (4 variants)
-  "hero-1": Hero1,
-  "hero-2": Hero2,
-  "hero-3": Hero3,
-  "hero-4": Hero4,
-
-  // Static Banners (5 variants)
-  "static-banner-1": StaticBanner1,
-  "static-banner-2": StaticBanner2,
-  "static-banner-3": StaticBanner3,
-  "static-banner-4": StaticBanner4,
-
-  // Categories (6 variants)
-  "category-1": Category1,
-  "category-2": Category2,
-  "category-3": Category3,
-  "category-4": Category4,
-  "category-5": Category5,
-  "category-6": Category6,
-
   // Product Cards (8 variants)
   "product-card-1": ProductCards1,
   "product-card-2": ProductCards2,
@@ -195,32 +129,10 @@ export const ZATIQ_COMPONENTS: Record<string, ComponentType<any>> = {
   "product-card-7": ProductCards7,
   "product-card-8": ProductCards8,
 
-  // Special Offers Sliders (5 variants)
-  "special-offers-slider-1": SpecialOffersSlider1,
-  "special-offers-slider-2": SpecialOffersSlider2,
-  "special-offers-slider-3": SpecialOffersSlider3,
-  "special-offers-slider-4": SpecialOffersSlider4,
-  "special-offers-slider-5": SpecialOffersSlider5,
-
-  // Badges (3 variants)
-  "badges-1": Badges1,
-  "badges-2": Badges2,
-  "badges-3": Badges3,
-
   // Reviews (3 variants)
   "reviews-1": Reviews1,
   "reviews-2": Reviews2,
   "reviews-3": Reviews3,
-
-  // Brands (4 variants)
-  "brands-1": Brands1,
-  "brands-2": Brands2,
-  "brands-3": Brands3,
-  "brands-4": Brands4,
-
-  // Footers (2 variants)
-  "footer-1": Footers1,
-  "footer-2": Footers2,
 
   // Payment Status (2 variants)
   "payment-status-1": PaymentStatus1,
@@ -238,9 +150,6 @@ export const ZATIQ_COMPONENTS: Record<string, ComponentType<any>> = {
   "social-feed-1": SocialFeed1,
   "social-feed-2": SocialFeed2,
 
-  // Custom Sections (2 variants - same component, different settings)
-  "custom-sections-1": CustomSections,
-  "custom-sections-2": CustomSections,
   // Products Page Components
   "products-hero-1": ProductsHero1,
   "products-hero-2": ProductsHero2,
