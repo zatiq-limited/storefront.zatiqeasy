@@ -6,20 +6,20 @@
       {
         "id": "collections_hero_1_0",
         "type": "collections-hero-1",
+        "enabled": true,
         "settings": {
-          "title": "Discover Your Styles",
+          "title": "Discover Your Style",
           "subtitle": "Explore our handpicked collections crafted for every occasion and trend",
           "badge": "Curated Collections",
-          "badgeColor": "#e28279",
-          "backgroundColor": "#fcfcfc",
-          "textColor": "#050505",
-          "backgroundImage": "",
-          "overlayOpacity": 60,
-          "buttonText": "Shop Now",
-          "buttonLink": "/products",
-          "buttonBackgroundColor": "#ffffff",
-          "buttonTextColor": "#000000",
-          "showStats": true,
+          "badge_color": "#79e28b",
+          "background_color": "#fcfcfc",
+          "text_color": "#050505",
+          "overlay_opacity": 60,
+          "button_text": "Shop Now",
+          "button_link": "/products",
+          "button_background_color": "#ffffff",
+          "button_text_color": "#000000",
+          "show_stats": true,
           "stats": [
             {
               "label": "Collections",
@@ -27,7 +27,7 @@
             },
             {
               "label": "Products",
-              "value": "100+"
+              "value": "1000+"
             },
             {
               "label": "Happy Customers",
@@ -39,34 +39,27 @@
       {
         "id": "collections_grid_1_1",
         "type": "collections-grid-1",
+        "enabled": true,
         "settings": {
-          "backgroundColor": "#f9fafb"
-        }
-      },
-      {
-        "id": "collections_grid_2_2",
-        "type": "collections-grid-2",
-        "settings": {
-          "backgroundColor": "#ffffff",
-          "columns": 3
+          "background_color": "#f9fafb"
         }
       }
     ],
     "seo": {
       "title": "Collections - Custom Theme Store",
       "description": "Explore our curated collections.",
-      "canonical": "",
+      "canonical": "https://your-store.com/collections",
       "og": {
         "title": "Collections - Custom Theme Store",
-        "description": "Explore our curated collections.",
-        "image": "",
+        "description": "Explore our curated collections",
+        "image": "https://your-store.com/collections-og.jpg",
         "type": "website"
       },
       "twitter": {
         "card": "summary_large_image",
         "title": "Collections - Custom Theme Store",
-        "description": "Explore our curated collections.",
-        "image": ""
+        "description": "Explore our curated collections",
+        "image": "https://your-store.com/collections-twitter.jpg"
       }
     }
   }

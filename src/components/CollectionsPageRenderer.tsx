@@ -9,6 +9,7 @@
 import React from "react";
 import { getComponent } from "../lib/component-registry";
 import type { Section } from "../lib/types";
+import { convertSettingsKeys } from "../lib/settings-utils";
 
 interface Collection {
   id: number;
@@ -41,7 +42,10 @@ export default function CollectionsPageRenderer({
     if (!Component) {
       if (import.meta.env.DEV) {
         return (
-          <div key={section.id} className="bg-yellow-50 border border-yellow-200 rounded p-4 my-4">
+          <div
+            key={section.id}
+            className="bg-yellow-50 border border-yellow-200 rounded p-4 my-4"
+          >
             <p className="text-yellow-800 font-semibold">
               Component not found: {section.type}
             </p>
@@ -52,9 +56,12 @@ export default function CollectionsPageRenderer({
     }
 
     // Prepare props based on component type
+    // Convert snake_case settings to camelCase
+    const camelSettings = convertSettingsKeys(section.settings || {});
+
     let componentProps: any = {
-      ...section.settings,
-      settings: section.settings,
+      ...camelSettings,
+      settings: camelSettings,
       blocks: section.blocks,
     };
 
@@ -103,7 +110,9 @@ export default function CollectionsPageRenderer({
               />
             </svg>
           </div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-3">No Collections Yet</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-3">
+            No Collections Yet
+          </h2>
           <p className="text-gray-600 mb-8 text-lg">
             Our team is curating amazing collections. Check back soon!
           </p>
@@ -111,7 +120,12 @@ export default function CollectionsPageRenderer({
             href="/"
             className="inline-flex items-center gap-2 px-8 py-4 bg-black text-white font-semibold rounded-full hover:bg-gray-800 transition-colors"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"

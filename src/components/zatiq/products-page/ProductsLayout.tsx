@@ -26,105 +26,110 @@ interface Category {
   sub_categories?: Category[];
 }
 
-interface ProductsLayoutProps {
+/**
+ * Settings interface matching snake_case format from products-page.json
+ */
+interface ProductsLayoutSettings {
   // Sidebar settings
-  showSidebar?: boolean;
-  sidebarPosition?: "left" | "right";
-  sidebarType?: string;
-
+  show_sidebar?: boolean;
+  sidebar_position?: "left" | "right";
+  sidebar_type?: string;
   // Pagination settings
-  showPagination?: boolean;
-  paginationType?: string;
-  paginationActiveColor?: string;
-  paginationTextColor?: string;
-
-  // Product card button colors
-  cardButtonBgColor?: string;
-  cardButtonTextColor?: string;
-
-  // Sidebar button colors
-  sidebarButtonBgColor?: string;
-  sidebarButtonTextColor?: string;
-
+  show_pagination?: boolean;
+  pagination_type?: string;
+  products_per_page?: number;
+  pagination_active_color?: string;
+  pagination_text_color?: string;
   // Grid settings
   columns?: number;
-  columnsTablet?: number;
-  columnsMobile?: number;
+  columns_tablet?: number;
+  columns_mobile?: number;
   gap?: number;
-  cardType?: string;
-
+  card_type?: string;
   // Filter bar settings
-  showSearch?: boolean;
-  showSort?: boolean;
-  showViewToggle?: boolean;
-  defaultView?: "grid" | "list";
+  show_search?: boolean;
+  show_sort?: boolean;
+  show_view_toggle?: boolean;
+  default_view?: "grid" | "list";
   sticky?: boolean;
-
   // Colors
-  filterBarBgColor?: string;
-  searchBorderColor?: string;
-  sortBorderColor?: string;
-  productCountBgColor?: string;
-  productCountTextColor?: string;
-
+  filter_bar_bg_color?: string;
+  search_border_color?: string;
+  sort_border_color?: string;
+  product_count_bg_color?: string;
+  product_count_text_color?: string;
   // Font settings
-  searchFontFamily?: string;
-  searchFontSize?: string;
-  sortFontFamily?: string;
-  sortFontSize?: string;
-  productCountFontFamily?: string;
-  productCountFontSize?: string;
+  search_font_family?: string;
+  search_font_size?: string;
+  sort_font_family?: string;
+  sort_font_size?: string;
+  product_count_font_family?: string;
+  product_count_font_size?: string;
+  // Button colors
+  card_button_bg_color?: string;
+  card_button_text_color?: string;
+  sidebar_button_bg_color?: string;
+  sidebar_button_text_color?: string;
+  // View toggle colors
+  view_toggle_active_bg_color?: string;
+  view_toggle_active_icon_color?: string;
+  view_toggle_inactive_bg_color?: string;
+  view_toggle_inactive_icon_color?: string;
+}
 
+interface ProductsLayoutProps {
+  // Settings object (from JSON) - snake_case format
+  settings?: ProductsLayoutSettings;
   // Data
   products?: Product[];
   productCount?: number;
   currentSort?: string;
   currentSearch?: string;
-  productsPerPage?: number;
   categories?: Category[];
   currency?: string;
-
-  // Settings object (from JSON)
-  settings?: any;
 }
 
 const ProductsLayout: React.FC<ProductsLayoutProps> = (props) => {
-  // Extract settings from props or settings object
-  const {
-    showSidebar = props.settings?.showSidebar ?? true,
-    sidebarPosition = props.settings?.sidebarPosition ?? "left",
-    sidebarType = props.settings?.sidebarType ?? "products-sidebar-1",
-    showPagination = props.settings?.showPagination ?? true,
-    paginationType = props.settings?.paginationType ?? "products-pagination-1",
-    columns = props.settings?.columns ?? 4,
-    columnsTablet = props.settings?.columnsTablet ?? 2,
-    columnsMobile = props.settings?.columnsMobile ?? 2,
-    gap = props.settings?.gap ?? 6,
-    cardType = props.settings?.cardType ?? "card-1",
-    showSearch = props.settings?.showSearch ?? true,
-    showSort = props.settings?.showSort ?? true,
-    showViewToggle = props.settings?.showViewToggle ?? true,
-    defaultView = props.settings?.defaultView ?? "grid",
-    sticky = props.settings?.sticky ?? true,
-    filterBarBgColor = props.settings?.filterBarBgColor ?? "#FFFFFF",
-    searchBorderColor = props.settings?.searchBorderColor ?? "#E5E7EB",
-    sortBorderColor = props.settings?.sortBorderColor ?? "#E5E7EB",
-    productCountBgColor = props.settings?.productCountBgColor ?? "#F3F4F6",
-    productCountTextColor = props.settings?.productCountTextColor ?? "#111827",
-    searchFontFamily = props.settings?.searchFontFamily ?? "inherit",
-    searchFontSize = props.settings?.searchFontSize ?? "text-sm",
-    sortFontFamily = props.settings?.sortFontFamily ?? "inherit",
-    sortFontSize = props.settings?.sortFontSize ?? "text-sm",
-    productCountFontFamily = props.settings?.productCountFontFamily ?? "inherit",
-    productCountFontSize = props.settings?.productCountFontSize ?? "text-xs",
-    paginationActiveColor = props.settings?.paginationActiveColor ?? "#3B82F6",
-    paginationTextColor = props.settings?.paginationTextColor ?? "#374151",
-    cardButtonBgColor = props.settings?.cardButtonBgColor ?? "#3B82F6",
-    cardButtonTextColor = props.settings?.cardButtonTextColor ?? "#FFFFFF",
-    sidebarButtonBgColor = props.settings?.sidebarButtonBgColor ?? "#111827",
-    sidebarButtonTextColor = props.settings?.sidebarButtonTextColor ?? "#FFFFFF",
-    currency = props.currency ?? "BDT",
-  } = props;
+  const { settings = {} } = props;
+
+  // Extract settings with defaults (snake_case from JSON)
+  const showSidebar = settings.show_sidebar ?? true;
+  const sidebarPosition = settings.sidebar_position ?? "left";
+  const sidebarType = settings.sidebar_type ?? "products-sidebar-1";
+  const showPagination = settings.show_pagination ?? true;
+  const paginationType = settings.pagination_type ?? "products-pagination-1";
+  const columns = settings.columns ?? 4;
+  const columnsTablet = settings.columns_tablet ?? 2;
+  const columnsMobile = settings.columns_mobile ?? 2;
+  const gap = settings.gap ?? 6;
+  const cardType = settings.card_type ?? "card-1";
+  const showSearch = settings.show_search ?? true;
+  const showSort = settings.show_sort ?? true;
+  const showViewToggle = settings.show_view_toggle ?? true;
+  const defaultView = settings.default_view ?? "grid";
+  const sticky = settings.sticky ?? true;
+  const filterBarBgColor = settings.filter_bar_bg_color ?? "#FFFFFF";
+  const searchBorderColor = settings.search_border_color ?? "#E5E7EB";
+  const sortBorderColor = settings.sort_border_color ?? "#E5E7EB";
+  const productCountBgColor = settings.product_count_bg_color ?? "#F3F4F6";
+  const productCountTextColor = settings.product_count_text_color ?? "#111827";
+  const searchFontFamily = settings.search_font_family ?? "inherit";
+  const searchFontSize = settings.search_font_size ?? "text-sm";
+  const sortFontFamily = settings.sort_font_family ?? "inherit";
+  const sortFontSize = settings.sort_font_size ?? "text-sm";
+  const productCountFontFamily = settings.product_count_font_family ?? "inherit";
+  const productCountFontSize = settings.product_count_font_size ?? "text-xs";
+  const paginationActiveColor = settings.pagination_active_color ?? "#3B82F6";
+  const paginationTextColor = settings.pagination_text_color ?? "#374151";
+  const cardButtonBgColor = settings.card_button_bg_color ?? "#3B82F6";
+  const cardButtonTextColor = settings.card_button_text_color ?? "#FFFFFF";
+  const sidebarButtonBgColor = settings.sidebar_button_bg_color ?? "#111827";
+  const sidebarButtonTextColor = settings.sidebar_button_text_color ?? "#FFFFFF";
+  const viewToggleActiveBgColor = settings.view_toggle_active_bg_color ?? "#111827";
+  const viewToggleActiveIconColor = settings.view_toggle_active_icon_color ?? "#FFFFFF";
+  const viewToggleInactiveBgColor = settings.view_toggle_inactive_bg_color ?? "#F3F4F6";
+  const viewToggleInactiveIconColor = settings.view_toggle_inactive_icon_color ?? "#6B7280";
+  const currency = props.currency ?? "BDT";
 
   const products = props.products ?? [];
   const categories = props.categories ?? [];
@@ -308,11 +313,11 @@ const ProductsLayout: React.FC<ProductsLayoutProps> = (props) => {
     return result;
   }, [products, selectedCategories, searchValue, priceRange, sortValue]);
 
-  // Ensure productsPerPage is a stable number
+  // Ensure productsPerPage is a stable number (snake_case from JSON)
   const perPage = useMemo(() => {
-    const value = Number(props.settings?.productsPerPage);
+    const value = Number(settings.products_per_page);
     return isNaN(value) || value <= 0 ? 20 : value;
-  }, [props.settings?.productsPerPage]);
+  }, [settings.products_per_page]);
 
   // Pagination
   const totalProducts = filteredAndSortedProducts.length;
@@ -410,7 +415,7 @@ const ProductsLayout: React.FC<ProductsLayoutProps> = (props) => {
                     <div className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse" />
                     <p className={`${productCountFontSize} font-medium`} style={getProductCountFontStyle()}>
                       <span className="font-bold">{totalProducts}</span>
-                      <span className="text-gray-500 ml-1">items</span>
+                      <span className="ml-1">items</span>
                     </p>
                   </div>
                 )}
@@ -449,11 +454,11 @@ const ProductsLayout: React.FC<ProductsLayoutProps> = (props) => {
                   <div className="flex items-center gap-1 shrink-0">
                     <button
                       onClick={() => setCurrentView("grid")}
-                      className={`p-2 rounded-lg transition-all ${
-                        currentView === "grid"
-                          ? "bg-gray-900 text-white"
-                          : "hover:bg-gray-100 text-gray-500"
-                      }`}
+                      className="p-2 rounded-lg transition-all"
+                      style={{
+                        backgroundColor: currentView === "grid" ? viewToggleActiveBgColor : viewToggleInactiveBgColor,
+                        color: currentView === "grid" ? viewToggleActiveIconColor : viewToggleInactiveIconColor,
+                      }}
                       aria-label="Grid view"
                       title="Grid view"
                     >
@@ -468,11 +473,11 @@ const ProductsLayout: React.FC<ProductsLayoutProps> = (props) => {
                     </button>
                     <button
                       onClick={() => setCurrentView("list")}
-                      className={`p-2 rounded-lg transition-all ${
-                        currentView === "list"
-                          ? "bg-gray-900 text-white"
-                          : "hover:bg-gray-100 text-gray-500"
-                      }`}
+                      className="p-2 rounded-lg transition-all"
+                      style={{
+                        backgroundColor: currentView === "list" ? viewToggleActiveBgColor : viewToggleInactiveBgColor,
+                        color: currentView === "list" ? viewToggleActiveIconColor : viewToggleInactiveIconColor,
+                      }}
                       aria-label="List view"
                       title="List view"
                     >

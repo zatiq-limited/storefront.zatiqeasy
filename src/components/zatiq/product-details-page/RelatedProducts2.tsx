@@ -30,8 +30,14 @@ interface RelatedProducts2Props {
     gap?: "sm" | "md" | "lg";
     cardDesign?: string;
     limit?: number;
+    titleColor?: string;
+    subtitleColor?: string;
+    priceColor?: string;
+    oldPriceColor?: string;
+    badgeColor?: string;
     buttonBgColor?: string;
     buttonTextColor?: string;
+    accentColor?: string;
   };
   products: Product[];
   currency?: string;
@@ -51,8 +57,14 @@ const RelatedProducts2: React.FC<RelatedProducts2Props> = ({
     gap = "md",
     cardDesign = "card-1",
     limit = 8,
+    titleColor = "#111827",
+    subtitleColor = "#6B7280",
+    priceColor = "#111827",
+    oldPriceColor = "#9CA3AF",
+    badgeColor = "#DC2626",
     buttonBgColor = "#7C3AED",
     buttonTextColor = "#FFFFFF",
+    accentColor = "#2563EB",
   } = settings;
 
   // Gap classes
@@ -205,7 +217,7 @@ const RelatedProducts2: React.FC<RelatedProducts2Props> = ({
 
   const displayedProducts = products.slice(0, limit);
   // Convert cardDesign format (e.g., 'card-1') to component registry format (e.g., 'product-card-1')
-  const cardComponentName = cardDesign.startsWith('card-')
+  const cardComponentName = cardDesign.startsWith("card-")
     ? `product-${cardDesign}`
     : cardDesign;
   const ProductCard = getComponent(cardComponentName);
@@ -234,7 +246,8 @@ const RelatedProducts2: React.FC<RelatedProducts2Props> = ({
     };
 
     const mobileWidth = mobileWidthMap[mobileColumns] || "w-[calc(50%-8px)]";
-    const tabletWidth = tabletWidthMap[tabletColumns] || "sm:w-[calc(33.333%-14px)]";
+    const tabletWidth =
+      tabletWidthMap[tabletColumns] || "sm:w-[calc(33.333%-14px)]";
     const desktopWidth = desktopWidthMap[columns] || "lg:w-[calc(25%-18px)]";
 
     return `${mobileWidth} ${tabletWidth} ${desktopWidth}`;
@@ -250,12 +263,17 @@ const RelatedProducts2: React.FC<RelatedProducts2Props> = ({
     }
 
     // Get rating from review_summary or direct fields
-    const rating = product.review_summary?.average_rating || product.average_rating;
-    const reviewCount = product.review_summary?.total_reviews || product.total_reviews;
+    const rating =
+      product.review_summary?.average_rating || product.average_rating;
+    const reviewCount =
+      product.review_summary?.total_reviews || product.total_reviews;
 
     return {
       id: product.id,
-      handle: product.slug || product.product_code?.toLowerCase() || String(product.id),
+      handle:
+        product.slug ||
+        product.product_code?.toLowerCase() ||
+        String(product.id),
       title: product.name,
       subtitle: product.short_description,
       vendor: product.brand,
@@ -279,8 +297,14 @@ const RelatedProducts2: React.FC<RelatedProducts2Props> = ({
       <div className="max-w-[1440px] mx-auto px-4 2xl:px-0">
         {/* Header */}
         <div className="text-center mb-6 sm:mb-8 lg:mb-12">
-          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-2 sm:mb-3">{title}</h2>
-          {subtitle && <p className="text-gray-500 text-sm sm:text-base lg:text-lg">{subtitle}</p>}
+          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-2 sm:mb-3">
+            {title}
+          </h2>
+          {subtitle && (
+            <p className="text-gray-500 text-sm sm:text-base lg:text-lg">
+              {subtitle}
+            </p>
+          )}
         </div>
 
         {/* Carousel Container */}
@@ -300,8 +324,18 @@ const RelatedProducts2: React.FC<RelatedProducts2Props> = ({
             }`}
             aria-label="Previous products"
           >
-            <svg className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
+            <svg
+              className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-gray-700"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2.5}
+                d="M15 19l-7-7 7-7"
+              />
             </svg>
           </button>
 
@@ -312,11 +346,19 @@ const RelatedProducts2: React.FC<RelatedProducts2Props> = ({
             aria-label={isAutoPlaying ? "Pause autoplay" : "Start autoplay"}
           >
             {isAutoPlaying ? (
-              <svg className="w-4 h-4 sm:w-5 sm:h-5 text-gray-700" fill="currentColor" viewBox="0 0 24 24">
+              <svg
+                className="w-4 h-4 sm:w-5 sm:h-5 text-gray-700"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
               </svg>
             ) : (
-              <svg className="w-4 h-4 sm:w-5 sm:h-5 text-gray-700" fill="currentColor" viewBox="0 0 24 24">
+              <svg
+                className="w-4 h-4 sm:w-5 sm:h-5 text-gray-700"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path d="M8 5v14l11-7z" />
               </svg>
             )}
@@ -338,7 +380,11 @@ const RelatedProducts2: React.FC<RelatedProducts2Props> = ({
             {displayedProducts.map((product) => (
               <a
                 key={product.id}
-                href={`/products/${product.slug || product.product_code?.toLowerCase() || product.id}`}
+                href={`/products/${
+                  product.slug ||
+                  product.product_code?.toLowerCase() ||
+                  product.id
+                }`}
                 className={`group block shrink-0 p-0.5 ${getCardWidth()} snap-start min-w-[140px] sm:min-w-[180px] lg:min-w-[200px]`}
               >
                 {ProductCard ? (
@@ -354,7 +400,12 @@ const RelatedProducts2: React.FC<RelatedProducts2Props> = ({
                       />
                       {product.old_price && (
                         <div className="absolute top-2 left-2 sm:top-3 sm:left-3 bg-linear-to-r from-purple-600 to-indigo-600 text-white px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold">
-                          {Math.round(((product.old_price - product.price) / product.old_price) * 100)}% OFF
+                          {Math.round(
+                            ((product.old_price - product.price) /
+                              product.old_price) *
+                              100
+                          )}
+                          % OFF
                         </div>
                       )}
                       {/* Quick Add Button */}
@@ -370,23 +421,31 @@ const RelatedProducts2: React.FC<RelatedProducts2Props> = ({
                       </h3>
                       <div className="flex items-baseline gap-1.5 sm:gap-2">
                         <span className="text-sm sm:text-base lg:text-lg font-bold bg-linear-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
-                          {currency}{product.price?.toLocaleString()}
+                          {currency}
+                          {product.price?.toLocaleString()}
                         </span>
                         {product.old_price && (
                           <span className="text-[10px] sm:text-xs lg:text-sm text-gray-400 line-through">
-                            {currency}{product.old_price?.toLocaleString()}
+                            {currency}
+                            {product.old_price?.toLocaleString()}
                           </span>
                         )}
                       </div>
-                      {(product.review_summary?.average_rating || product.average_rating) && (
+                      {(product.review_summary?.average_rating ||
+                        product.average_rating) && (
                         <div className="flex items-center gap-0.5 sm:gap-1 mt-1.5 sm:mt-2">
                           {Array.from({ length: 5 }).map((_, i) => {
-                            const rating = product.review_summary?.average_rating || product.average_rating || 0;
+                            const rating =
+                              product.review_summary?.average_rating ||
+                              product.average_rating ||
+                              0;
                             return (
                               <svg
                                 key={i}
                                 className={`w-2.5 h-2.5 sm:w-3 sm:h-3 lg:w-3.5 lg:h-3.5 ${
-                                  i < Math.floor(rating) ? "text-yellow-400" : "text-gray-200"
+                                  i < Math.floor(rating)
+                                    ? "text-yellow-400"
+                                    : "text-gray-200"
                                 }`}
                                 fill="currentColor"
                                 viewBox="0 0 20 20"
@@ -395,7 +454,13 @@ const RelatedProducts2: React.FC<RelatedProducts2Props> = ({
                               </svg>
                             );
                           })}
-                          <span className="text-[10px] sm:text-xs text-gray-500 ml-0.5 sm:ml-1">({product.review_summary?.total_reviews || product.total_reviews || 0})</span>
+                          <span className="text-[10px] sm:text-xs text-gray-500 ml-0.5 sm:ml-1">
+                            (
+                            {product.review_summary?.total_reviews ||
+                              product.total_reviews ||
+                              0}
+                            )
+                          </span>
                         </div>
                       )}
                     </div>
@@ -416,20 +481,33 @@ const RelatedProducts2: React.FC<RelatedProducts2Props> = ({
             }`}
             aria-label="Next products"
           >
-            <svg className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+            <svg
+              className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-gray-700"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2.5}
+                d="M9 5l7 7-7 7"
+              />
             </svg>
           </button>
         </div>
 
         {/* Scroll Indicators */}
         <div className="flex justify-center gap-1.5 sm:gap-2 mt-4 sm:mt-6 lg:mt-8">
-          {Array.from({ length: Math.ceil(displayedProducts.length / columns) }).map((_, index) => (
+          {Array.from({
+            length: Math.ceil(displayedProducts.length / columns),
+          }).map((_, index) => (
             <button
               key={index}
               onClick={() => {
                 if (carouselRef.current) {
-                  const scrollAmount = carouselRef.current.clientWidth * 0.9 * index;
+                  const scrollAmount =
+                    carouselRef.current.clientWidth * 0.9 * index;
                   carouselRef.current.scrollTo({
                     left: scrollAmount,
                     behavior: "smooth",
@@ -454,8 +532,18 @@ const RelatedProducts2: React.FC<RelatedProducts2Props> = ({
             className="inline-flex items-center gap-1.5 sm:gap-2 px-5 py-2.5 sm:px-6 sm:py-3 lg:px-8 lg:py-4 bg-linear-to-r from-purple-600 to-indigo-600 text-white rounded-full text-sm sm:text-base font-semibold hover:from-purple-700 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl"
           >
             View All Products
-            <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            <svg
+              className="w-4 h-4 sm:w-5 sm:h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M17 8l4 4m0 0l-4 4m4-4H3"
+              />
             </svg>
           </a>
         </div>

@@ -9,6 +9,7 @@
 import React from "react";
 import { getComponent } from "../lib/component-registry";
 import type { Section } from "../lib/types";
+import { convertSettingsKeys } from "../lib/settings-utils";
 
 interface Review {
   id: number;
@@ -85,7 +86,10 @@ export default function ProductDetailsPageRenderer({
     if (!Component) {
       if (import.meta.env.DEV) {
         return (
-          <div key={section.id} className="bg-yellow-50 border border-yellow-200 rounded p-4 my-4">
+          <div
+            key={section.id}
+            className="bg-yellow-50 border border-yellow-200 rounded p-4 my-4"
+          >
             <p className="text-yellow-800 font-semibold">
               Component not found: {section.type}
             </p>
@@ -96,13 +100,19 @@ export default function ProductDetailsPageRenderer({
     }
 
     // Prepare props based on component type
+    // Convert snake_case settings to camelCase
+    const camelSettings = convertSettingsKeys(section.settings || {});
+
     let componentProps: any = {
-      ...section.settings,
-      settings: section.settings,
+      ...camelSettings,
+      settings: camelSettings,
     };
 
     // Inject product data for product detail components
-    if (section.type.includes("product-detail") || section.type.includes("product-breadcrumb")) {
+    if (
+      section.type.includes("product-detail") ||
+      section.type.includes("product-breadcrumb")
+    ) {
       componentProps.product = product;
     }
 

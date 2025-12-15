@@ -54,9 +54,15 @@ interface ProductDetail2Props {
     galleryPosition?: "left" | "right";
     thumbnailPosition?: "bottom" | "left" | "right" | "top";
     thumbnailSize?: "sm" | "md" | "lg";
+    accentColor?: string;
     buyNowGradientStart?: string;
     buyNowGradientEnd?: string;
     buyNowTextColor?: string;
+    whatsappBgColor?: string;
+    whatsappTextColor?: string;
+    priceColor?: string;
+    oldPriceColor?: string;
+    discountBadgeColor?: string;
   };
   product: Product;
   currency?: string;
@@ -85,9 +91,15 @@ const ProductDetail2: React.FC<ProductDetail2Props> = ({
     galleryPosition = "left",
     thumbnailPosition = "left",
     thumbnailSize = "md",
-    buyNowGradientStart = "#F97316",
-    buyNowGradientEnd = "#EF4444",
+    accentColor = "#2563EB",
+    buyNowGradientStart = "#D946EF",
+    buyNowGradientEnd = "#2563EB",
     buyNowTextColor = "#FFFFFF",
+    whatsappBgColor = "#25D366",
+    whatsappTextColor = "#FFFFFF",
+    priceColor = "#7C3AED",
+    oldPriceColor = "#9CA3AF",
+    discountBadgeColor = "#7C3AED",
   } = settings;
 
   const [mainImage, setMainImage] = useState(product.image_url);
@@ -223,7 +235,10 @@ const ProductDetail2: React.FC<ProductDetail2Props> = ({
             className="w-full h-full object-cover"
           />
           {discountPercent > 0 && (
-            <div className="absolute top-2 left-2 sm:top-4 sm:left-4 bg-linear-to-r from-purple-600 to-indigo-600 text-white px-2.5 py-1 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-bold shadow-lg">
+            <div
+              className="absolute top-2 left-2 sm:top-4 sm:left-4 text-white px-2.5 py-1 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-bold shadow-lg"
+              style={{ backgroundColor: discountBadgeColor }}
+            >
               {discountPercent}% OFF
             </div>
           )}
@@ -318,12 +333,18 @@ const ProductDetail2: React.FC<ProductDetail2Props> = ({
 
       {/* Price */}
       <div className="flex items-baseline flex-wrap gap-2 sm:gap-4 py-3 sm:py-4 border-y border-gray-100">
-        <span className="text-2xl sm:text-3xl md:text-4xl font-bold bg-linear-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+        <span
+          className="text-2xl sm:text-3xl md:text-4xl font-bold"
+          style={{ color: priceColor }}
+        >
           {currency}
           {product.price?.toLocaleString()}
         </span>
         {product.old_price && (
-          <span className="text-base sm:text-lg md:text-xl text-gray-400 line-through">
+          <span
+            className="text-base sm:text-lg md:text-xl line-through"
+            style={{ color: oldPriceColor }}
+          >
             {currency}
             {product.old_price?.toLocaleString()}
           </span>
@@ -411,7 +432,11 @@ const ProductDetail2: React.FC<ProductDetail2Props> = ({
           {showAddToCart && (
             <button
               disabled={product.quantity === 0}
-              className="flex-1 py-3 sm:py-4 text-sm sm:text-base bg-linear-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-xl sm:rounded-2xl hover:from-purple-700 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed disabled:shadow-none"
+              className="flex-1 py-3 sm:py-4 text-sm sm:text-base text-white font-semibold rounded-xl sm:rounded-2xl transition-all shadow-lg hover:shadow-xl hover:opacity-90 disabled:bg-gray-300 disabled:cursor-not-allowed disabled:shadow-none"
+              style={{
+                backgroundColor:
+                  product.quantity === 0 ? "#9CA3AF" : accentColor,
+              }}
             >
               Add to Cart
             </button>
@@ -430,7 +455,12 @@ const ProductDetail2: React.FC<ProductDetail2Props> = ({
                   "_blank"
                 );
               }}
-              className="flex-1 py-3 sm:py-4 text-sm sm:text-base bg-[#25D366] hover:bg-[#20BA5C] text-white font-semibold rounded-xl sm:rounded-2xl transition-all shadow-lg hover:shadow-xl disabled:bg-gray-300 disabled:cursor-not-allowed disabled:shadow-none flex items-center justify-center gap-2"
+              className="flex-1 py-3 sm:py-4 text-sm sm:text-base font-semibold rounded-xl sm:rounded-2xl transition-all shadow-lg hover:shadow-xl hover:opacity-90 disabled:bg-gray-300 disabled:cursor-not-allowed disabled:shadow-none flex items-center justify-center gap-2"
+              style={{
+                backgroundColor:
+                  product.quantity === 0 ? "#9CA3AF" : whatsappBgColor,
+                color: whatsappTextColor,
+              }}
             >
               <svg
                 className="w-4 h-4 sm:w-5 sm:h-5"
@@ -443,9 +473,13 @@ const ProductDetail2: React.FC<ProductDetail2Props> = ({
             </button>
           )}
           {showWishlist && (
-            <button className="p-3 sm:p-4 border-2 border-gray-200 rounded-xl sm:rounded-2xl hover:border-pink-500 hover:bg-pink-50 transition-all group">
+            <button
+              className="p-3 sm:p-4 border-2 rounded-xl sm:rounded-2xl hover:bg-opacity-10 transition-all group"
+              style={{ borderColor: accentColor }}
+            >
               <svg
-                className="w-5 h-5 sm:w-6 sm:h-6 text-gray-400 group-hover:text-pink-500 transition-colors"
+                className="w-5 h-5 sm:w-6 sm:h-6 transition-colors"
+                style={{ color: accentColor }}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
