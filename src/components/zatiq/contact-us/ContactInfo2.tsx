@@ -96,7 +96,7 @@ const getIcon = (iconName?: string, size = 20) => {
 
   // Get the icon component from lucide-react
   const IconComponent = (
-    LucideIcons as Record<
+    LucideIcons as unknown as Record<
       string,
       React.ComponentType<{ size?: number; strokeWidth?: number }>
     >

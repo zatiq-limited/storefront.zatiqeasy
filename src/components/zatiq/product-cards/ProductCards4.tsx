@@ -21,9 +21,33 @@ interface ProductCards4Props {
   buyNowEnabled?: boolean;
   buttonBgColor?: string;
   buttonTextColor?: string;
+  variantId?: string;
+  maxQuantity?: number;
+  isAddingToCart?: boolean;
+  onAddToCart?: (item: {
+    variantId: string;
+    productId: string;
+    title: string;
+    variantTitle: string;
+    price: number;
+    quantity: number;
+    image: string;
+    maxQuantity: number;
+  }) => void;
+  onBuyNow?: (item: {
+    variantId: string;
+    productId: string;
+    title: string;
+    variantTitle: string;
+    price: number;
+    quantity: number;
+    image: string;
+    maxQuantity: number;
+  }) => void;
 }
 
 const ProductCards4: React.FC<ProductCards4Props> = ({
+  id,
   title = "Product Title",
   subtitle,
   price,
@@ -37,8 +61,36 @@ const ProductCards4: React.FC<ProductCards4Props> = ({
   buyNowEnabled = true,
   buttonBgColor = "#3B82F6",
   buttonTextColor = "#FFFFFF",
+  variantId,
+  maxQuantity = 99,
+  isAddingToCart = false,
+  onAddToCart,
+  onBuyNow,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+
+  const getCartItem = () => ({
+    variantId: variantId || String(id) || "default",
+    productId: String(id) || "default",
+    title: title,
+    variantTitle: subtitle || "Default",
+    price: price || 0,
+    quantity: 1,
+    image: image,
+    maxQuantity: maxQuantity,
+  });
+
+  const handleAddToCart = () => {
+    if (onAddToCart && price !== undefined) {
+      onAddToCart(getCartItem());
+    }
+  };
+
+  const handleBuyNow = () => {
+    if (onBuyNow && price !== undefined) {
+      onBuyNow(getCartItem());
+    }
+  };
 
   return (
     <div className="font-poppins w-full h-full">
@@ -100,25 +152,39 @@ const ProductCards4: React.FC<ProductCards4Props> = ({
               {(quickAddEnabled || buyNowEnabled) && (
                 <div className="flex sm:hidden gap-1.5">
                   {quickAddEnabled && (
-                    <button className="w-8 h-8 rounded-full bg-[#3B82F6] flex items-center justify-center cursor-pointer transition-all duration-300 active:scale-95 shadow-md">
-                      <svg
-                        className="w-4 h-4 text-white"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.707 15.293C4.077 15.923 4.523 17 5.414 17H17M17 17C15.895 17 15 17.895 15 19C15 20.105 15.895 21 17 21C18.105 21 19 20.105 19 19C19 17.895 18.105 17 17 17ZM9 19C9 20.105 8.105 21 7 21C5.895 21 5 20.105 5 19C5 17.895 5.895 17 7 17C8.105 17 9 17.895 9 19Z"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
+                    <button
+                      onClick={handleAddToCart}
+                      disabled={isAddingToCart}
+                      className="w-8 h-8 rounded-full bg-[#3B82F6] flex items-center justify-center cursor-pointer transition-all duration-300 active:scale-95 shadow-md disabled:opacity-50"
+                    >
+                      {isAddingToCart ? (
+                        <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                      ) : (
+                        <svg
+                          className="w-4 h-4 text-white"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.707 15.293C4.077 15.923 4.523 17 5.414 17H17M17 17C15.895 17 15 17.895 15 19C15 20.105 15.895 21 17 21C18.105 21 19 20.105 19 19C19 17.895 18.105 17 17 17ZM9 19C9 20.105 8.105 21 7 21C5.895 21 5 20.105 5 19C5 17.895 5.895 17 7 17C8.105 17 9 17.895 9 19Z"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      )}
                     </button>
                   )}
                   {buyNowEnabled && (
-                    <button className="w-8 h-8 rounded-full bg-[#F55157] flex items-center justify-center cursor-pointer transition-all duration-300 active:scale-95 shadow-md">
+                    <button
+                      onClick={handleBuyNow}
+                      className="w-8 h-8 rounded-full bg-[#F55157] flex items-center justify-center cursor-pointer transition-all duration-300 active:scale-95 shadow-md"
+                    >
                       <svg
                         className="w-4 h-4 text-white"
                         viewBox="0 0 24 24"
@@ -150,16 +216,21 @@ const ProductCards4: React.FC<ProductCards4Props> = ({
           {/* Add to Cart Button */}
           {quickAddEnabled && (
             <button
-              className="w-full h-14 border border-[#3B82F6] rounded flex items-center justify-center cursor-pointer text-base font-medium transition-all duration-300 leading-6 hover:opacity-90"
+              onClick={handleAddToCart}
+              disabled={isAddingToCart}
+              className="w-full h-14 border border-[#3B82F6] rounded flex items-center justify-center cursor-pointer text-base font-medium transition-all duration-300 leading-6 hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
               style={{ backgroundColor: buttonBgColor, color: buttonTextColor }}
             >
-              Add to Cart
+              {isAddingToCart ? "Adding..." : "Add to Cart"}
             </button>
           )}
 
           {/* Buy Now Button */}
           {buyNowEnabled && (
-            <button className="w-full h-12 lg:h-14 border border-[#3B82F6] rounded bg-white flex items-center justify-center cursor-pointer text-sm lg:text-base font-medium text-[#3B82F6] transition-all duration-300 leading-6 hover:bg-gray-50">
+            <button
+              onClick={handleBuyNow}
+              className="w-full h-12 lg:h-14 border border-[#3B82F6] rounded bg-white flex items-center justify-center cursor-pointer text-sm lg:text-base font-medium text-[#3B82F6] transition-all duration-300 leading-6 hover:bg-gray-50"
+            >
               Buy Now
             </button>
           )}

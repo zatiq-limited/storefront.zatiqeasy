@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * ========================================
  * CHECKOUT PAGE RENDERER
@@ -127,7 +129,7 @@ export default function CheckoutPageRenderer({
     const Component = getComponent(section.type);
 
     if (!Component) {
-      if (import.meta.env.DEV) {
+      if (process.env.DEV) {
         return (
           <div key={section.id} className="bg-yellow-50 border border-yellow-200 rounded p-4 my-4">
             <p className="text-yellow-800 font-semibold">

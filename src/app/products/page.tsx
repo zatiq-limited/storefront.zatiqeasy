@@ -3,107 +3,46 @@
  * PRODUCTS PAGE
  * ========================================
  *
- * Route: /products
- * Uses Settings-Based approach (not Block Renderer)
- *
- * Note: Announcement, Header, and Footer are automatically rendered
- * by ThemeProvider in layout.tsx
+ * Products listing page with filtering, sorting, and pagination
  */
 
-'use client';
+import { getProductsPageData } from "@/api/server";
+import ProductsPageRenderer from "@/components/ProductsPageRenderer";
 
-import React, { useMemo } from 'react';
-import { useTheme } from '@/providers/ThemeProvider';
-
-// Import page JSON (settings only, no blocks)
-import productsPageJson from '@/data/api-responses/products-page.json';
-// Import mock data for products and categories
-import productsData from '@/data/api-responses/products.json';
-import categoriesData from '@/data/api-responses/category.json';
-
-// Import Settings-Based components
-import { ProductsHero1, ProductsHero2, ProductsLayout } from '@/components/zatiq/products-page';
-
-// Types for sections
-interface PageSection {
-  id: string;
-  type: string;
-  enabled?: boolean;
-  settings: Record<string, unknown>;
+interface PageProps {
+  searchParams: Promise<{
+    page?: string;
+    category?: string;
+    sort?: string;
+    search?: string;
+  }>;
 }
 
-export default function ProductsPage() {
-  const { globalData } = useTheme();
+export default async function ProductsPage({ searchParams }: PageProps) {
+  const params = await searchParams;
+  const page = Number(params.page) || 1;
+  const category = params.category || "";
+  const sort = params.sort || "";
+  const search = params.search || "";
 
-  // Extract sections from JSON
-  const sections = useMemo(() => {
-    if (!productsPageJson?.success || !productsPageJson?.data?.sections) {
-      return [];
-    }
-    return productsPageJson.data.sections.filter(
-      (section: PageSection) => section.enabled !== false
-    );
-  }, []);
-
-  // Extract products and categories from mock data
-  const products = useMemo(() => {
-    return productsData?.data?.products || [];
-  }, []);
-
-  const categories = useMemo(() => {
-    return categoriesData?.data?.categories || [];
-  }, []);
-
-  // Find specific sections by type
-  const heroSection = useMemo(() => {
-    return sections.find((s: PageSection) => s.type.startsWith('products-hero'));
-  }, [sections]);
-
-  const layoutSection = useMemo(() => {
-    return sections.find((s: PageSection) => s.type === 'products-layout');
-  }, [sections]);
-
-  if (sections.length === 0) {
-    return (
-      <div className="min-h-[50vh] flex items-center justify-center">
-        <p className="text-red-500">Failed to load products page data</p>
-      </div>
-    );
-  }
-
-  // Render hero component based on type
-  const renderHero = () => {
-    if (!heroSection) return null;
-
-    const heroProps = {
-      settings: heroSection.settings,
-      productCount: products.length,
-    };
-
-    switch (heroSection.type) {
-      case 'products-hero-1':
-        return <ProductsHero1 {...heroProps} />;
-      case 'products-hero-2':
-        return <ProductsHero2 {...heroProps} />;
-      default:
-        return <ProductsHero1 {...heroProps} />;
-    }
-  };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const pageData = await getProductsPageData({ page, category, sort: sort as any, search });
 
   return (
-    <div className="zatiq-page zatiq-page-products">
-      {/* Hero Section */}
-      {renderHero()}
-
-      {/* Products Layout Section */}
-      {layoutSection && (
-        <ProductsLayout
-          settings={layoutSection.settings as any}
-          products={products}
-          categories={categories}
-          currency={globalData?.currency as string || 'BDT'}
-        />
-      )}
-    </div>
+    <ProductsPageRenderer
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      sections={(pageData?.sections || []) as any}
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      products={(pageData?.products || []) as any}
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      pagination={(pageData?.pagination || null) as any}
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      filters={(pageData?.filters || {}) as any}
+    />
   );
 }
+
+export const metadata = {
+  title: "Products | Zatiq Store",
+  description: "Browse our collection of products",
+};

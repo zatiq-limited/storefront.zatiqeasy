@@ -7,20 +7,18 @@
  * এখন static data return করছে
  *
  * Backend Integration:
- * 1. .env file এ PUBLIC_API_URL set করুন
+ * 1. .env.local file এ NEXT_PUBLIC_API_URL set করুন
  * 2. USE_MOCK_DATA=false set করুন real API use করার জন্য
  * 3. Backend developer কে API_DOCUMENTATION.md share করুন
  */
 
-import { mockTheme, mockShopConfig } from "../data/mock-theme";
-import { mockProducts, mockCollections } from "../data/mock-products";
 import type { ZatiqTheme, ShopConfig, Product, Collection } from "./types";
 
-// Environment Configuration
-const API_BASE_URL = import.meta.env.PUBLIC_API_URL || "http://localhost:3001";
-const SHOP_ID = import.meta.env.PUBLIC_SHOP_ID || "shop_demo_12345";
-const API_KEY = import.meta.env.PUBLIC_API_KEY || "";
-const USE_MOCK_DATA = import.meta.env.PUBLIC_USE_MOCK_DATA === "true"; // Default: false (use real API)
+// Environment Configuration - Next.js style
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+const SHOP_ID = process.env.NEXT_PUBLIC_SHOP_ID || "shop_demo_12345";
+const API_KEY = process.env.NEXT_PUBLIC_API_KEY || "";
+const USE_MOCK_DATA = process.env.NEXT_PUBLIC_USE_MOCK_DATA === "true";
 
 /**
  * Custom API Error Class
@@ -106,9 +104,6 @@ async function apiCall<T>(endpoint: string, options?: RequestInit): Promise<T> {
 
 /**
  * Get shop configuration
- *
- * Backend API: GET /api/storefront/v1/init
- * Response: { success: true, data: { shop: ShopConfig, session: {...} } }
  */
 export async function getShopConfig(
   shopId: string = SHOP_ID
@@ -127,31 +122,22 @@ export async function getShopConfig(
 
 /**
  * Get active theme
- *
- * Backend API: GET /api/storefront/v1/theme
- * Response: { success: true, data: ZatiqTheme }
  */
 export async function getTheme(shopId: string = SHOP_ID): Promise<any> {
-  // Only call API - backend returns theme.json structure
-  // Backend must send: { globalSections: { announcement, header, footer }, templates, componentStyles }
   try {
     console.log("[API] Calling theme endpoint...");
     const themeData = await apiCall<any>(
       `/api/storefront/v1/theme?shopId=${shopId}`
     );
     console.log("[API] ✅ Theme loaded from API");
-
-    // Backend sends theme.json structure directly - no transformation needed
     return themeData;
   } catch (error) {
     console.error("[API] ❌ Theme API failed - trying local file");
 
     // Fallback to local JSON file for development
     try {
-      const localFile = await import("../data/api-responses/theme.json");
+      const localFile = await import("@data/api-responses/theme.json");
       console.log("[API] ✅ Theme loaded from local file");
-
-      // Handle different import structures
       const imported = localFile.default || localFile;
       return imported?.data || imported;
     } catch (localError) {
@@ -163,9 +149,6 @@ export async function getTheme(shopId: string = SHOP_ID): Promise<any> {
 
 /**
  * Get homepage data
- *
- * Backend API: GET /api/storefront/v1/page/home
- * Response: { success: true, data: { template, sections, seo } }
  */
 export async function getHomepageData(): Promise<any> {
   try {
@@ -175,12 +158,9 @@ export async function getHomepageData(): Promise<any> {
   } catch (error) {
     console.error("[API] ❌ Homepage API failed - trying local file");
 
-    // Fallback to local JSON file for development
     try {
-      const localFile = await import("../data/api-responses/homepage.json");
+      const localFile = await import("@data/api-responses/homepage.json");
       console.log("[API] ✅ Homepage data loaded from local file");
-
-      // Handle different import structures
       const imported = localFile.default || localFile;
       return imported?.data || imported;
     } catch (localError) {
@@ -192,9 +172,6 @@ export async function getHomepageData(): Promise<any> {
 
 /**
  * Get products page data (sections + products)
- *
- * Backend API: GET /api/storefront/v1/page/products
- * Response: { success: true, data: { template, sections, products, pagination, seo } }
  */
 export async function getProductsPageData(params?: {
   page?: number;
@@ -221,17 +198,13 @@ export async function getProductsPageData(params?: {
     console.error(
       "[API] ❌ Products page API failed - falling back to local file"
     );
-    // Fallback to local products-page.json file
     try {
       const localProductsPage = await import(
-        "../data/api-responses/products-page.json"
+        "@data/api-responses/products-page.json"
       );
       console.log("[API] ✅ Products page data loaded from local file");
-
-      // Handle different import structures
       const imported = localProductsPage.default || localProductsPage;
       const result = imported?.data || imported;
-
       console.log(
         "[API] Products page sections:",
         result?.sections?.length || 0
@@ -248,10 +221,7 @@ export async function getProductsPageData(params?: {
 }
 
 /**
- * Get checkout page data (sections + order + payment methods)
- *
- * Backend API: GET /api/storefront/v1/page/checkout
- * Response: { success: true, data: { template, sections, order, delivery_options, payment_methods, currency, seo } }
+ * Get checkout page data
  */
 export async function getCheckoutPageData(): Promise<any> {
   try {
@@ -266,9 +236,6 @@ export async function getCheckoutPageData(): Promise<any> {
 
 /**
  * Get page data
- *
- * Backend API: GET /api/storefront/v1/page/:pageType
- * Response: { success: true, data: { template: Template, pageData: {...} } }
  */
 export async function getPageData(
   pageType: "index" | "product" | "collection" | "cart",
@@ -288,9 +255,6 @@ export async function getPageData(
 
 /**
  * Get products
- *
- * Backend API: GET /api/storefront/v1/products
- * Response: { success: true, data: { products: Product[], pagination: {...} } }
  */
 export async function getProducts(params?: {
   page?: number;
@@ -325,9 +289,6 @@ export async function getProducts(params?: {
 
 /**
  * Get single product
- *
- * Backend API: GET /api/storefront/v1/products/:handle
- * Response: { success: true, data: Product }
  */
 export async function getProduct(handle: string): Promise<Product | null> {
   try {
@@ -344,9 +305,6 @@ export async function getProduct(handle: string): Promise<Product | null> {
 
 /**
  * Get featured products
- *
- * Backend API: GET /api/storefront/v1/products/featured
- * Response: { success: true, data: Product[] }
  */
 export async function getFeaturedProducts(
   limit: number = 8
@@ -364,10 +322,7 @@ export async function getFeaturedProducts(
 }
 
 /**
- * Get collections page data (sections + collections)
- *
- * Backend API: GET /api/storefront/v1/page/collections
- * Response: { success: true, data: { template, sections, collections, seo } }
+ * Get collections page data
  */
 export async function getCollectionsPageData(): Promise<any> {
   try {
@@ -382,9 +337,6 @@ export async function getCollectionsPageData(): Promise<any> {
 
 /**
  * Get about page data
- *
- * Backend API: GET /api/storefront/v1/page/about-us
- * Response: { success: true, data: { template, sections, seo } }
  */
 export async function getAboutPageData(): Promise<any> {
   try {
@@ -398,12 +350,7 @@ export async function getAboutPageData(): Promise<any> {
 }
 
 /**
- * Get single product page data (complete product page with sections)
- *
- * Backend API: GET /api/storefront/v1/page/single-product/:handle
- * Response: { success: true, data: { template, product, sections, seo } }
- *
- * Fallback: Loads from local JSON file single-product-{handle}.json
+ * Get single product page data
  */
 export async function getSingleProductPageData(handle?: string): Promise<any> {
   if (!handle) return null;
@@ -417,18 +364,16 @@ export async function getSingleProductPageData(handle?: string): Promise<any> {
   } catch (error) {
     console.error("[API] ❌ Single product page API failed - trying local file");
 
-    // Fallback to local JSON file for development
     try {
+      // Dynamic import for local fallback
       const localFile = await import(
-        `../data/api-responses/single-product-${handle}.json`
+        `@data/api-responses/single-product-${handle}.json`
       );
-      console.log(`[API] ✅ Single product page loaded from local file: single-product-${handle}.json`);
-
-      // Handle different import structures
+      console.log(`[API] ✅ Single product page loaded from local file`);
       const imported = localFile.default || localFile;
       return imported;
     } catch (localError) {
-      console.error(`[API] ❌ Local file single-product-${handle}.json not found`);
+      console.error(`[API] ❌ Local file not found`);
       return null;
     }
   }
@@ -436,9 +381,6 @@ export async function getSingleProductPageData(handle?: string): Promise<any> {
 
 /**
  * Get contact page data
- *
- * Backend API: GET /api/storefront/v1/page/contact-us
- * Response: { success: true, data: { template, sections, seo } }
  */
 export async function getContactPageData(): Promise<any> {
   try {
@@ -453,9 +395,6 @@ export async function getContactPageData(): Promise<any> {
 
 /**
  * Get order success page data
- *
- * Backend API: GET /api/storefront/v1/page/order-success
- * Response: { success: true, data: { template, sections, seo } }
  */
 export async function getOrderSuccessPageData(): Promise<any> {
   try {
@@ -472,9 +411,6 @@ export async function getOrderSuccessPageData(): Promise<any> {
 
 /**
  * Get privacy policy page data
- *
- * Backend API: GET /api/storefront/v1/page/privacy-policy
- * Response: { success: true, data: { template, sections, seo } }
  */
 export async function getPrivacyPolicyPageData(): Promise<any> {
   try {
@@ -489,9 +425,6 @@ export async function getPrivacyPolicyPageData(): Promise<any> {
 
 /**
  * Get collections
- *
- * Backend API: GET /api/storefront/v1/collections
- * Response: { success: true, data: Collection[] }
  */
 export async function getCollections(): Promise<Collection[]> {
   try {
@@ -508,9 +441,6 @@ export async function getCollections(): Promise<Collection[]> {
 
 /**
  * Get single collection
- *
- * Backend API: GET /api/storefront/v1/collections/:handle
- * Response: { success: true, data: { collection: Collection, products: Product[] } }
  */
 export async function getCollection(
   handle: string
@@ -529,9 +459,6 @@ export async function getCollection(
 
 /**
  * Get single collection with products
- *
- * Backend API: GET /api/storefront/v1/collections/:handle
- * Response: { success: true, data: { collection: Collection, products: Product[] } }
  */
 export async function getCollectionWithProducts(
   handle: string
@@ -550,9 +477,6 @@ export async function getCollectionWithProducts(
 
 /**
  * Search products
- *
- * Backend API: GET /api/storefront/v1/search?q=:query
- * Response: { success: true, data: Product[] }
  */
 export async function searchProducts(query: string): Promise<Product[]> {
   try {
@@ -582,9 +506,6 @@ function setCartToken(token: string): void {
 
 /**
  * Get cart
- *
- * Backend API: GET /api/storefront/v1/cart
- * Response: { success: true, data: { id, items, itemCount, total } }
  */
 export async function getCart(): Promise<any> {
   try {
@@ -606,9 +527,6 @@ export async function getCart(): Promise<any> {
 
 /**
  * Create new cart
- *
- * Backend API: POST /api/storefront/v1/cart
- * Response: { success: true, data: { id, token, items: [] } }
  */
 export async function createCart(): Promise<any> {
   try {
@@ -629,9 +547,6 @@ export async function createCart(): Promise<any> {
 
 /**
  * Add to cart
- *
- * Backend API: POST /api/storefront/v1/cart/add
- * Response: { success: true, data: { cart: {...} } }
  */
 export async function addToCart(
   variantId: string,
@@ -654,9 +569,6 @@ export async function addToCart(
 
 /**
  * Update cart item
- *
- * Backend API: PUT /api/storefront/v1/cart/update
- * Response: { success: true, data: { cart: {...} } }
  */
 export async function updateCartItem(
   lineItemId: string,
@@ -679,9 +591,6 @@ export async function updateCartItem(
 
 /**
  * Remove from cart
- *
- * Backend API: DELETE /api/storefront/v1/cart/remove
- * Response: { success: true, data: { cart: {...} } }
  */
 export async function removeFromCart(lineItemId: string): Promise<any> {
   try {

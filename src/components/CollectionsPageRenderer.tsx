@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * ========================================
  * COLLECTIONS PAGE RENDERER
@@ -40,7 +42,7 @@ export default function CollectionsPageRenderer({
     const Component = getComponent(section.type);
 
     if (!Component) {
-      if (import.meta.env.DEV) {
+      if (process.env.DEV) {
         return (
           <div
             key={section.id}

@@ -105,7 +105,7 @@ const CheckoutContent1: React.FC<CheckoutContent1Props> = ({
 
     try {
       // Call API to validate promo code
-      const apiUrl = import.meta.env.PUBLIC_API_URL || "http://localhost:3001";
+      const apiUrl = process.env.PUBLIC_API_URL || "http://localhost:3001";
       const response = await fetch(
         `${apiUrl}/api/promo-code?code=${promoCode}`
       );

@@ -1,42 +1,45 @@
 /**
  * ========================================
- * HOME PAGE
+ * HOMEPAGE
  * ========================================
  *
- * Route: /
- * Content: Sections from homepage.json
- *
- * Note: Announcement, Header, and Footer are automatically rendered
- * by ThemeProvider in layout.tsx
+ * Fetches data from API and renders sections dynamically
+ * Uses BlockRenderer for V3.0 Schema rendering
  */
 
-'use client';
+import { getHomepageData } from "@/api/server";
+import { HomepageClient } from "./HomepageClient";
 
-import React from 'react';
-import DynamicPageRenderer, { extractPageData } from '@/components/DynamicPageRenderer';
-import { useTheme } from '@/providers/ThemeProvider';
+export default async function HomePage() {
+  // Fetch homepage data from API
+  const homepageData = await getHomepageData();
 
-// Import page JSON
-import homepageJson from '@/data/api-responses/homepage.json';
-
-export default function HomePage() {
-  const { globalData, eventHandlers } = useTheme();
-
-  // Extract page data
-  const page = extractPageData(homepageJson as any);
-
-  if (!page) {
-    return (
-      <div className="min-h-[50vh] flex items-center justify-center">
-        <p className="text-red-500">Failed to load homepage data</p>
-      </div>
-    );
-  }
+  // Handle null case and extract data
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const pageData = (homepageData as any)?.data || homepageData || {};
+  const sections = pageData?.sections || [];
 
   return (
-    <DynamicPageRenderer
-      page={page}
-      globalData={globalData}
-    />
+    <main className="zatiq-homepage">
+      <HomepageClient sections={sections} />
+    </main>
   );
+}
+
+// Dynamic metadata based on SEO from API
+export async function generateMetadata() {
+  const homepageData = await getHomepageData();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const data = homepageData as any;
+  const seo = data?.seo || data?.data?.seo || {};
+
+  return {
+    title: seo?.title || "Home | Zatiq Store",
+    description: seo?.description || "Shop the latest fashion trends",
+    openGraph: {
+      title: seo?.og?.title || seo?.title || "Home | Zatiq Store",
+      description: seo?.og?.description || seo?.description,
+      images: seo?.og?.image ? [seo.og.image] : [],
+    },
+  };
 }

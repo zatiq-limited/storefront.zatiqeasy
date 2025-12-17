@@ -510,7 +510,7 @@ export default function SwiperRenderer({
     }
 
     if (sourceArray.length === 0) {
-      if (import.meta.env.DEV) {
+      if (process.env.DEV) {
         console.warn(`SwiperRenderer: Source "${source}" not found or empty`, {
           data: mergedData,
           context,
