@@ -803,3 +803,11 @@ export const config = {
 4. **Analytics**: Add Vercel Analytics
 5. **Authentication**: Integrate NextAuth.js when needed
 6. **PWA**: Add service worker for offline support
+
+---
+
+## Related Documentation
+
+- **Theme Rendering**: `THEME_RENDERING_DOCS.md` (this project)
+- **Theme Builder System**: `/merchant-panel/THEME_BUILDER_DOCUMENTATION.md`
+- **Theme Builder Quick Ref**: `/merchant-panel/lib/modules/theme-builder/CLAUDE.md`
