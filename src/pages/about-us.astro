@@ -5,12 +5,13 @@
  * ========================================
  *
  * Fetches data from API and renders sections dynamically
+ * Uses BlockRenderer for V3.0 Schema rendering
  *
  * Backend API Endpoint: GET /api/storefront/v1/page/about-us
  */
 
 import Layout from '../layouts/main.astro';
-import SectionRenderer from '../components/SectionRenderer';
+import BlockRenderer from '../components/BlockRenderer';
 import { getAboutPageData } from '../lib/api-client';
 
 // Fetch about page data from API
@@ -18,7 +19,7 @@ const aboutPageData = await getAboutPageData();
 
 // Handle null case and extract data
 const pageData = aboutPageData?.data || aboutPageData || {};
-const { template = 'about-us', sections = [], seo = {} } = pageData;
+const { template = 'about', sections = [], seo = {} } = pageData;
 ---
 
 <Layout
@@ -27,6 +28,16 @@ const { template = 'about-us', sections = [], seo = {} } = pageData;
 	image={seo?.og?.image}
 >
 	<main class="zatiq-about-page">
-		<SectionRenderer sections={sections} client:load />
+		{
+			sections.map((section: any) => {
+				// Get the first block from each section (which contains the actual structure)
+				const block = section.blocks?.[0];
+				if (!block || !section.enabled) return null;
+
+				return (
+					<BlockRenderer block={block} data={block.data || {}} client:load />
+				);
+			})
+		}
 	</main>
 </Layout>
