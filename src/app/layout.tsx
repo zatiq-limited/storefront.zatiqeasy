@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { QueryProvider } from "@/providers/QueryProvider";
+import ThemeLayout from "@/app/_layouts/theme/layout";
 
 export const metadata: Metadata = {
   title: "Zatiq Store",
@@ -15,7 +16,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <QueryProvider>{children}</QueryProvider>
+        <QueryProvider>
+          <ThemeLayout>{children}</ThemeLayout>
+        </QueryProvider>
       </body>
     </html>
   );

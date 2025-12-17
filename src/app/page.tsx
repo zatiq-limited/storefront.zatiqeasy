@@ -1,28 +1,48 @@
 "use client";
 
-import { useTheme, useHomepage } from "@/hooks";
-import { useThemeStore } from "@/stores/themeStore";
+import { useHomepage } from "@/hooks";
 import { useHomepageStore } from "@/stores/homepageStore";
+import BlockRenderer from "@/components/BlockRenderer";
 
 export default function HomePage() {
-  const { theme } = useThemeStore();
   const { homepage } = useHomepageStore();
-  const { isLoading: themeLoading, error: themeError } = useTheme();
-  const { isLoading: homeLoading, error: homeError } = useHomepage();
+  const { isLoading, error } = useHomepage();
 
-  if (themeLoading || homeLoading) {
-    return <main><p>Loading...</p></main>;
+  if (isLoading) {
+    return (
+      <main className="flex items-center justify-center min-h-[50vh]">
+        <p>Loading...</p>
+      </main>
+    );
   }
 
-  if (themeError || homeError) {
-    return <main><p>Error loading data</p></main>;
+  if (error) {
+    return (
+      <main className="flex items-center justify-center min-h-[50vh]">
+        <p>Error loading homepage data</p>
+      </main>
+    );
   }
+
+  // Extract sections from homepage data
+  const pageData = (homepage as Record<string, unknown>)?.data || homepage || {};
+  const sections = (pageData as Record<string, unknown>)?.sections || [];
 
   return (
-    <main>
-      <h1>Hello World</h1>
-      <p>Theme loaded: {theme ? "Yes" : "No"}</p>
-      <p>Homepage data loaded: {homepage ? "Yes" : "No"}</p>
+    <main className="zatiq-homepage">
+      {(sections as Array<Record<string, unknown>>).map((section, index) => {
+        // Get the first block from each section
+        const block = (section.blocks as Array<Record<string, unknown>>)?.[0];
+        if (!block || !section.enabled) return null;
+
+        return (
+          <BlockRenderer
+            key={(section.id as string) || `section-${index}`}
+            block={block as import("@/components/BlockRenderer").Block}
+            data={(block.data as Record<string, unknown>) || {}}
+          />
+        );
+      })}
     </main>
   );
 }
