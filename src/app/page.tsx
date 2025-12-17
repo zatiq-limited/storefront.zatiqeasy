@@ -25,7 +25,8 @@ export default function HomePage() {
   }
 
   // Extract sections from homepage data
-  const pageData = (homepage as Record<string, unknown>)?.data || homepage || {};
+  const pageData =
+    (homepage as Record<string, unknown>)?.data || homepage || {};
   const sections = (pageData as Record<string, unknown>)?.sections || [];
 
   return (
