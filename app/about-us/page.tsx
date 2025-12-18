@@ -1,12 +1,12 @@
 "use client";
 
-import { useHomepage } from "@/hooks";
-import { useHomepageStore } from "@/stores/homepageStore";
+import { useAboutUs } from "@/hooks";
+import { useAboutUsStore } from "@/stores/aboutUsStore";
 import BlockRenderer from "@/components/renderers/block-renderer";
 
-export default function HomePage() {
-  const { homepage } = useHomepageStore();
-  const { isLoading, error } = useHomepage();
+export default function AboutUsPage() {
+  const { aboutUs } = useAboutUsStore();
+  const { isLoading, error } = useAboutUs();
 
   if (isLoading) {
     return (
@@ -19,18 +19,17 @@ export default function HomePage() {
   if (error) {
     return (
       <main className="flex items-center justify-center min-h-[50vh]">
-        <p>Error loading homepage data</p>
+        <p>Error loading about us page</p>
       </main>
     );
   }
 
-  // Extract sections from homepage data
-  const pageData =
-    (homepage as Record<string, unknown>)?.data || homepage || {};
+  // Extract sections from aboutUs data
+  const pageData = (aboutUs as Record<string, unknown>)?.data || aboutUs || {};
   const sections = (pageData as Record<string, unknown>)?.sections || [];
 
   return (
-    <main className="zatiq-homepage">
+    <main className="zatiq-about-us-page">
       {(sections as Array<Record<string, unknown>>).map((section, index) => {
         // Get the first block from each section
         const block = (section.blocks as Array<Record<string, unknown>>)?.[0];
