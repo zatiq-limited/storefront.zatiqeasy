@@ -1,0 +1,193 @@
+{
+  "success": true,
+  "data": {
+    "template": "collection",
+    "sections": [
+      {
+        "id": "collections_hero_1_0",
+        "type": "collections-hero-1",
+        "enabled": true,
+        "settings": {
+          "title": "Discover Your Style",
+          "subtitle": "Explore our handpicked collections crafted for every occasion and trend",
+          "badge": "Curated Collections",
+          "show_breadcrumb": true,
+          "show_collection_count": true,
+          "show_stats": true,
+          "gradient_start": "#EBF4FF",
+          "gradient_end": "#F3E8FF",
+          "badge_color": "#e28279",
+          "badge_bg_color": "#e2827920",
+          "title_color": "#111827",
+          "subtitle_color": "#4B5563",
+          "breadcrumb_color": "#6B7280",
+          "collection_count_color": "#6B7280",
+          "button_background_color": "#111827",
+          "button_text_color": "#FFFFFF",
+          "stat_value_color": "#111827",
+          "stat_label_color": "#6B7280",
+          "button_text": "Shop Now",
+          "button_link": "/products",
+          "title_font_family": "inherit",
+          "title_font_size": "text-4xl md:text-5xl",
+          "title_font_weight": "font-bold",
+          "subtitle_font_family": "inherit",
+          "subtitle_font_size": "text-lg",
+          "badge_font_family": "inherit",
+          "badge_font_size": "text-sm",
+          "stat_value_font_size": "text-3xl md:text-4xl",
+          "stat_label_font_size": "text-sm",
+          "stats": [
+            {
+              "label": "Collections",
+              "value": "50+"
+            },
+            {
+              "label": "Products",
+              "value": "1000+"
+            },
+            {
+              "label": "Happy Customers",
+              "value": "10K+"
+            }
+          ]
+        }
+      },
+      {
+        "id": "collections_hero_2_1",
+        "type": "collections-hero-2",
+        "enabled": true,
+        "settings": {
+          "title": "Discover Your Style",
+          "subtitle": "Explore our handpicked collections crafted for every occasion and trend",
+          "badge": "New Season",
+          "show_breadcrumb": true,
+          "show_collection_count": true,
+          "show_stats": true,
+          "image": "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1200&q=80",
+          "image_position": "right",
+          "hero_height": "h-[400px] md:h-[500px]",
+          "background_color": "#f8f9fa",
+          "badge_color": "#ff6f61",
+          "badge_bg_color": "#ff6f6120",
+          "title_color": "#1a1a1a",
+          "subtitle_color": "#4B5563",
+          "breadcrumb_color": "#6B7280",
+          "collection_count_color": "#6B7280",
+          "button_background_color": "#ff6f61",
+          "button_text_color": "#ffffff",
+          "stat_value_color": "#1a1a1a",
+          "stat_label_color": "#6B7280",
+          "button_text": "Explore Collections",
+          "button_link": "/products",
+          "title_font_family": "inherit",
+          "title_font_size": "text-3xl md:text-5xl",
+          "title_font_weight": "font-bold",
+          "subtitle_font_family": "inherit",
+          "subtitle_font_size": "text-lg",
+          "badge_font_family": "inherit",
+          "badge_font_size": "text-sm",
+          "stat_value_font_size": "text-2xl md:text-3xl",
+          "stat_label_font_size": "text-sm",
+          "stats": [
+            {
+              "label": "Collections",
+              "value": "50+"
+            },
+            {
+              "label": "Products",
+              "value": "1000+"
+            },
+            {
+              "label": "Happy Customers",
+              "value": "10K+"
+            }
+          ]
+        }
+      },
+      {
+        "id": "collections_grid_1_2",
+        "type": "collections-grid-1",
+        "enabled": true,
+        "settings": {
+          "columns": 3,
+          "columns_tablet": 2,
+          "columns_mobile": 1,
+          "gap": 6,
+          "card_type": "collection-card-1",
+          "show_product_count": true,
+          "show_description": true,
+          "show_featured_large": true,
+          "background_color": "#f9fafb",
+          "card_bg_color": "#FFFFFF",
+          "card_title_color": "#111827",
+          "card_description_color": "#6B7280",
+          "card_count_color": "#6B7280",
+          "card_count_bg_color": "#F3F4F6",
+          "card_hover_border_color": "#3B82F6",
+          "card_overlay_color": "#000000",
+          "card_overlay_opacity": 40,
+          "card_title_font_family": "inherit",
+          "card_title_font_size": "text-lg md:text-xl",
+          "card_title_font_weight": "font-bold",
+          "card_description_font_family": "inherit",
+          "card_description_font_size": "text-sm",
+          "card_count_font_family": "inherit",
+          "card_count_font_size": "text-sm"
+        }
+      },
+      {
+        "id": "collections_grid_2_3",
+        "type": "collections-grid-2",
+        "enabled": true,
+        "settings": {
+          "columns": 3,
+          "columns_tablet": 2,
+          "columns_mobile": 1,
+          "gap": 6,
+          "card_type": "collection-card-2",
+          "card_aspect_ratio": "aspect-[4/3]",
+          "show_product_count": true,
+          "show_description": true,
+          "show_view_button": true,
+          "background_color": "#ffffff",
+          "card_bg_color": "#FFFFFF",
+          "card_title_color": "#111827",
+          "card_description_color": "#6B7280",
+          "card_count_color": "#FFFFFF",
+          "card_count_bg_color": "#00000080",
+          "card_hover_border_color": "#3B82F6",
+          "card_overlay_color": "#000000",
+          "card_overlay_opacity": 30,
+          "view_button_color": "#FFFFFF",
+          "view_button_hover_color": "#3B82F6",
+          "card_title_font_family": "inherit",
+          "card_title_font_size": "text-lg md:text-xl",
+          "card_title_font_weight": "font-bold",
+          "card_description_font_family": "inherit",
+          "card_description_font_size": "text-sm",
+          "card_count_font_family": "inherit",
+          "card_count_font_size": "text-xs",
+          "view_button_font_size": "text-sm"
+        }
+      }
+    ],
+    "seo": {
+      "title": "Collections - Custom Theme Store",
+      "description": "Explore our curated collections.",
+      "canonical": "https://your-store.com/collections",
+      "og": {
+        "title": "Collections - Custom Theme Store",
+        "description": "Explore our curated collections",
+        "image": "https://your-store.com/collections-og.jpg",
+        "type": "website"
+      },
+      "twitter": {
+        "card": "summary_large_image",
+        "title": "Collections - Custom Theme Store",
+        "description": "Explore our curated collections",
+        "image": "https://your-store.com/collections-twitter.jpg"
+      }
+    }
+  }
+}
