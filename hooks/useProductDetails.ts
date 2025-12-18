@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useCallback } from "react";
 import { useProductDetailsStore } from "@/stores/productDetailsStore";
-import type { Product, Variant } from "@/stores/productsStore";
+import type { Product } from "@/stores/productsStore";
 
 interface ProductResponse {
   success: boolean;
@@ -167,7 +167,9 @@ export function useProductDetails(handle: string) {
     const product = productQuery.data?.data?.product;
     if (!product?.variant_types?.length) return true;
 
-    const mandatoryTypes = product.variant_types.filter((vt) => vt.is_mandatory);
+    const mandatoryTypes = product.variant_types.filter(
+      (vt) => vt.is_mandatory
+    );
     return mandatoryTypes.every((vt) => selectedVariants[vt.id]);
   }, [productQuery.data, selectedVariants]);
 
