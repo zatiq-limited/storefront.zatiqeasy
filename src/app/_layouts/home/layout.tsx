@@ -1,1 +1,0 @@
-// For future if needed different layout for homepage
