@@ -14,13 +14,8 @@ import CollectionsPageRenderer from "@/components/renderers/page-renderer/collec
 import type { Section } from "@/lib/types";
 
 export default function CollectionsPage() {
-  const {
-    collections,
-    sections,
-    isLoading,
-    isPageConfigLoading,
-    error,
-  } = useCollections();
+  const { collections, sections, isLoading, isPageConfigLoading, error } =
+    useCollections();
 
   // Show loading state while page config is loading
   if (isPageConfigLoading) {
