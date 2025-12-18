@@ -215,6 +215,7 @@ export function convertStyleToCSS(
 
   const cssMap: Record<string, string> = {
     background_color: "backgroundColor",
+    background_image: "backgroundImage",
     border_color: "borderColor",
     border_radius: "borderRadius",
     border_width: "borderWidth",
