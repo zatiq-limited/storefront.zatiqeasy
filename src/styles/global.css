@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&family=Roboto:wght@400;500;700&family=Volkhov:wght@400;700&display=swap');
+
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -43,6 +45,13 @@
 
 :root {
   --radius: 0.625rem;
+
+  /* Font Families */
+  --font-family-inter: 'Inter', sans-serif;
+  --font-family-montserrat: 'Montserrat', sans-serif;
+  --font-family-poppins: 'Poppins', sans-serif;
+  --font-family-roboto: 'Roboto', sans-serif;
+  --font-family-volkhov: 'Volkhov', serif;
   --background: oklch(1 0 0);
   --foreground: oklch(0.13 0.028 261.692);
   --card: oklch(1 0 0);
@@ -117,4 +126,137 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Marquee Animations */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100% - var(--gap)));
+  }
+}
+
+@keyframes marquee-vertical {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(calc(-100% - var(--gap)));
+  }
+}
+
+@layer utilities {
+  .animate-marquee {
+    animation: marquee var(--duration) linear infinite;
+  }
+  .animate-marquee-vertical {
+    animation: marquee-vertical var(--duration) linear infinite;
+  }
+
+  /* Font Utility Classes */
+  .font-inter {
+    font-family: 'Inter', sans-serif;
+  }
+  .font-montserrat {
+    font-family: 'Montserrat', sans-serif;
+  }
+  .font-poppins {
+    font-family: 'Poppins', sans-serif;
+  }
+  .font-roboto {
+    font-family: 'Roboto', sans-serif;
+  }
+  .font-volkhov {
+    font-family: 'Volkhov', serif;
+  }
+}
+
+/* Marquee content gap */
+.marquee-content {
+  gap: var(--gap);
+  padding-right: var(--gap);
+}
+
+/* Hero Carousel Swiper Progressbar Pagination */
+/* Hide ALL default Swiper pagination for hero sections (we use custom dot indicators) */
+[class*="hero"] .swiper-pagination,
+section[id^="hero-"] .swiper-pagination,
+[class*="hero"] .swiper-pagination-progressbar,
+section[id^="hero-"] .swiper-pagination-progressbar,
+[type="hero_fullwidth"] .swiper-pagination,
+[type="hero_fullwidth"] .swiper-pagination-progressbar,
+[class*="hero"] .swiper-pagination-bullets,
+section[id^="hero-"] .swiper-pagination-bullets,
+[class*="hero"] .swiper-pagination-bullet,
+section[id^="hero-"] .swiper-pagination-bullet {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* Hide Swiper pagination inside any section that starts with hero- id */
+section[id^="hero-"] .swiper .swiper-pagination,
+section[id^="hero-"] .swiper-pagination {
+  display: none !important;
+}
+
+/* Swiper progressbar pagination styling (for non-hero sections that explicitly use it) */
+.swiper-pagination-progressbar {
+  position: absolute !important;
+  left: 1.5rem !important;
+  right: 1.5rem !important;
+  bottom: 2.5rem !important;
+  top: auto !important;
+  width: auto !important;
+  height: 2px !important;
+  background: rgba(255, 255, 255, 0.2) !important;
+  border-radius: 9999px !important;
+  z-index: 20 !important;
+}
+
+@media (min-width: 768px) {
+  .swiper-pagination-progressbar {
+    left: 4rem !important;
+    right: 4rem !important;
+    bottom: 3rem !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .swiper-pagination-progressbar {
+    left: 7rem !important;
+    right: 7rem !important;
+    bottom: 3.5rem !important;
+    height: 4px !important;
+  }
+}
+
+.swiper-pagination-progressbar .swiper-pagination-progressbar-fill {
+  background: rgba(255, 255, 255, 0.6) !important;
+  border-radius: 9999px !important;
+}
+
+/* ============================================
+   Coverflow Effect - Opacity for non-active slides
+   Applies to any swiper using coverflow effect
+   ============================================ */
+.swiper-coverflow .swiper-slide {
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.swiper-coverflow .swiper-slide:not(.swiper-slide-active) {
+  opacity: 0.5;
+}
+
+.swiper-coverflow .swiper-slide.swiper-slide-active {
+  opacity: 1;
+}
+
+/* Also apply blur effect to non-active slides in coverflow */
+.swiper-coverflow .swiper-slide:not(.swiper-slide-active) > article,
+.swiper-coverflow .swiper-slide:not(.swiper-slide-active) > div {
+  filter: blur(0.5px);
 }

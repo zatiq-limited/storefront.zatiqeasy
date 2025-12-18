@@ -1,0 +1,108 @@
+{
+  "success": true,
+  "data": {
+    "template": "product-details",
+    "sections": [
+      {
+        "id": "product_breadcrumb_2_0",
+        "type": "product-breadcrumb-2",
+        "enabled": true,
+        "settings": {
+          "show_home": true,
+          "show_category": true,
+          "link_color": "#6B7280",
+          "active_color": "#2563EB",
+          "icon_color": "#9CA3AF"
+        }
+      },
+      {
+        "id": "product_detail_2_1",
+        "type": "product-detail-2",
+        "enabled": true,
+        "settings": {
+          "show_brand": true,
+          "show_sku": true,
+          "show_rating": true,
+          "show_stock": true,
+          "show_variants": true,
+          "show_description": true,
+          "show_specifications": true,
+          "show_shipping": true,
+          "show_add_to_cart": true,
+          "show_buy_now": true,
+          "show_whats_app_buy": true,
+          "show_wishlist": true,
+          "gallery_position": "left",
+          "thumbnail_position": "left",
+          "thumbnail_size": "md",
+          "accent_color": "#ed4040",
+          "buy_now_gradient_start": "#d315f9",
+          "buy_now_gradient_end": "#2a43a7",
+          "buy_now_text_color": "#FFFFFF",
+          "whatsapp_bg_color": "#d425bd",
+          "whatsapp_text_color": "#FFFFFF",
+          "price_color": "#7C3AED",
+          "old_price_color": "#9CA3AF",
+          "discount_badge_color": "#7C3AED"
+        }
+      },
+      {
+        "id": "customer_reviews_2_2",
+        "type": "customer-reviews-2",
+        "enabled": true,
+        "settings": {
+          "title": "Customer Reviews",
+          "show_rating_summary": true,
+          "show_review_images": true,
+          "limit": 6,
+          "title_color": "#111827",
+          "star_color": "#FBBF24",
+          "card_bg_color": "#FFFFFF",
+          "text_color": "#4B5563",
+          "verified_badge_color": "#059669",
+          "accent_color": "#65ed40",
+          "progress_bar_color": "#ed8e40"
+        }
+      },
+      {
+        "id": "related_products_2_3",
+        "type": "related-products-2",
+        "enabled": true,
+        "settings": {
+          "title": "You May Also Preffer",
+          "subtitle": "Discover more products you'll love",
+          "columns": 4,
+          "mobile_columns": 2,
+          "tablet_columns": 3,
+          "gap": "md",
+          "card_design": "card-1",
+          "limit": 8,
+          "title_color": "#1950c8",
+          "subtitle_color": "#04e600",
+          "price_color": "#0f1266",
+          "old_price_color": "#d1ad10",
+          "badge_color": "#DC2626",
+          "button_bg_color": "#10307a",
+          "button_text_color": "#FFFFFF",
+          "accent_color": "#17287d"
+        }
+      }
+    ],
+    "seo": {
+      "title": "Product Details - Custom Theme Store",
+      "description": "View product details and specifications.",
+      "og": {
+        "title": "Product Details",
+        "description": "View product details and specifications",
+        "image": "https://your-store.com/product-og.jpg",
+        "type": "product"
+      },
+      "twitter": {
+        "card": "summary_large_image",
+        "title": "Product Details",
+        "description": "View product details and specifications",
+        "image": "https://your-store.com/product-twitter.jpg"
+      }
+    }
+  }
+}

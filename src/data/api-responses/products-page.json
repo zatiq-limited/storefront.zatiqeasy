@@ -1,0 +1,119 @@
+{
+  "success": true,
+  "data": {
+    "template": "products",
+    "sections": [
+      {
+        "id": "products_hero_1_0",
+        "type": "products-hero-1",
+        "enabled": true,
+        "settings": {
+          "title": "All Productsss",
+          "description": "Discover our created collection of premium products",
+          "show_breadcrumb": true,
+          "show_product_count": true,
+          "gradient_start": "#EBF4FF",
+          "gradient_end": "#b8ecb1",
+          "title_font_family": "inherit",
+          "title_font_size": "text-4xl md:text-5xl",
+          "title_font_weight": "font-bold",
+          "title_color": "#d05143",
+          "description_font_family": "inherit",
+          "description_font_size": "text-lg",
+          "description_color": "#125cc4",
+          "breadcrumb_color": "#205bcf",
+          "product_count_color": "#6B7280",
+          "product_count_font_size": "text-sm"
+        }
+      },
+      {
+        "id": "products_hero_2_1",
+        "type": "products-hero-2",
+        "enabled": true,
+        "settings": {
+          "title": "All Products",
+          "description": "Discover our created collection of premium products",
+          "show_breadcrumb": true,
+          "show_product_count": true,
+          "background_image": "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1920&q=80",
+          "overlay_color": "#000000",
+          "overlay_opacity": 50,
+          "hero_height": "h-[300px] md:h-[400px]",
+          "title_font_family": "inherit",
+          "title_font_size": "text-4xl md:text-6xl",
+          "title_font_weight": "font-bold",
+          "title_color": "#54e052",
+          "description_font_family": "inherit",
+          "description_font_size": "text-lg",
+          "description_color": "#a7c21e",
+          "breadcrumb_color": "#2cc968",
+          "product_count_color": "#FFFFFF99",
+          "product_count_font_size": "text-sm",
+          "text_align": "text-center md:text-left"
+        }
+      },
+      {
+        "id": "products_layout_2",
+        "type": "products-layout",
+        "enabled": true,
+        "settings": {
+          "show_sidebar": true,
+          "sidebar_type": "products-sidebar-1",
+          "sidebar_position": "left",
+          "show_pagination": true,
+          "pagination_type": "products-pagination-1",
+          "products_per_page": 2,
+          "columns": "3",
+          "columns_tablet": 2,
+          "columns_mobile": 1,
+          "gap": 6,
+          "card_type": "card-7",
+          "show_search": true,
+          "show_sort": true,
+          "show_view_toggle": true,
+          "default_view": "grid",
+          "sticky": true,
+          "filter_bar_bg_color": "#8dbce8",
+          "search_border_color": "#e75136",
+          "sort_border_color": "#c63939",
+          "product_count_bg_color": "#b6d058",
+          "product_count_text_color": "#0d57ce",
+          "search_font_family": "inherit",
+          "search_font_size": "text-sm",
+          "sort_font_family": "inherit",
+          "sort_font_size": "text-sm",
+          "product_count_font_family": "inherit",
+          "product_count_font_size": "text-xs",
+          "product_count": 128,
+          "pagination_active_color": "#19396b",
+          "pagination_text_color": "#892291",
+          "card_button_bg_color": "#193b85",
+          "card_button_text_color": "#9dbd28",
+          "sidebar_button_bg_color": "#193b85",
+          "sidebar_button_text_color": "#f27d7d",
+          "view_toggle_active_bg_color": "#193b85",
+          "view_toggle_active_icon_color": "#FFFFFF",
+          "view_toggle_inactive_bg_color": "#F3F4F6",
+          "view_toggle_inactive_icon_color": "#6B7280"
+        }
+      }
+    ],
+    "seo": {
+      "title": "All Products - Custom Theme Store",
+      "description": "Browse our complete collection of products. Find your perfect style.",
+      "canonical": "https://your-store.com/products",
+      "og": {
+        "title": "All Products - Custom Theme Store",
+        "description": "Browse our complete collection of products",
+        "image": "https://your-store.com/products-og.jpg",
+        "type": "website"
+      },
+      "twitter": {
+        "card": "summary_large_image",
+        "title": "All Products - Custom Theme Store",
+        "description": "Browse our complete collection of products",
+        "image": "https://your-store.com/products-twitter.jpg"
+      }
+    }
+  }
+}
