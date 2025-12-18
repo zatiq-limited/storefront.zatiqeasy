@@ -2158,3 +2158,304 @@ The hybrid architecture allows shops to choose between:
 - **Static Themes:** Pre-built, optimized themes with consistent UX
 
 Both options share the same underlying infrastructure (stores, hooks, utilities), ensuring maintainability and code reuse.
+
+---
+
+## Updated Migration Plan - Current State Analysis (2024)
+
+### Current Migration Status
+
+**✅ COMPLETED:**
+- Theme Builder system with BlockRenderer V3.0
+- 16 product card variants with proper naming conventions
+- Core Zustand stores (cart, checkout, analytics, shop, theme, homepage, products, productDetails, aboutUs)
+- Product and collection display systems
+- API integration layer with TanStack React Query
+- Mock data structure for development
+
+**❌ MISSING - TO BE MIGRATED:**
+- Cart UI components (cartStore exists but no UI)
+- Checkout flow components (checkoutStore exists but incomplete UI)
+- Payment gateway integrations (all 5: bKash, Nagad, AamarPay, COD, Self MFS)
+- Static themes (Basic, Premium, Aurora, Luxura, Sellora)
+- Landing page themes (Arcadia, Nirvana, Grip)
+- E-commerce pages (cart, checkout, receipt, order tracking)
+- Analytics integration (Facebook Pixel, GTM, TikTok)
+- Internationalization (Bengali language support)
+
+### Current Component Structure
+The project follows kebab-case naming conventions:
+```
+components/
+├── cart/                    # MISSING - needs creation
+├── checkout/               # MISSING - needs creation
+├── payments/                # MISSING - needs creation
+├── themes/                  # EXISTS - needs extension with static themes
+├── products/                # ✅ COMPLETE
+│   └── product-cards/       # 16 variants (product-card-1.tsx)
+├── collections/             # ✅ COMPLETE
+├── renderers/                # ✅ COMPLETE
+│   ├── block-renderer/
+│   └── page-renderer/
+└── ui/                      # ✅ COMPLETE (shadcn components)
+```
+
+### User Preferences
+- **Payment Gateways**: All 5 gateways (bKash, Nagad, AamarPay, COD, Self MFS) - HIGH PRIORITY
+- **Theme System**: Hybrid approach (Builder + Static) - MEDIUM PRIORITY
+- **Component Naming**: Maintain kebab-case (e.g., `cart-floating-btn`)
+
+---
+
+## Migration Implementation Plan
+
+### Phase 1: Core Cart System (Priority: IMMEDIATE)
+**Duration**: 2-3 days
+**Components to Create**:
+```
+components/cart/
+├── cart-floating-btn/
+│   ├── cart-counter-btn.tsx       # Mobile floating button with counter
+│   ├── cart-footer-btn.tsx         # Desktop footer cart button
+│   └── cart-total-price-counter.tsx # Price display component
+├── cart-management-modal/
+│   ├── index.tsx                  # Main cart modal
+│   ├── cart-item.tsx              # Individual cart item component
+│   └── cart-summary.tsx            # Cart totals and summary
+└── index.ts
+```
+
+**Integration Points**:
+- ✅ `stores/cartStore.ts` - Already complete with full functionality
+- ✅ Existing product card components
+- Add responsive design (mobile floating, desktop persistent)
+- Implement variant selection in cart items
+
+### Phase 2: Complete Checkout Flow (Priority: IMMEDIATE)
+**Duration**: 3-4 days
+**Components to Create**:
+```
+components/checkout/
+├── checkout-form.tsx              # Main checkout form container
+├── contact-section.tsx            # Customer contact information
+├── shipping-address-section.tsx   # Address form with validation
+├── delivery-zone-section.tsx       # Bangladesh location zones
+├── payment-options-section.tsx     # All 5 payment gateway components
+├── order-summary-section.tsx       # Order review and totals
+└── index.ts
+```
+
+**Pages to Create**:
+```
+app/(shop)/
+├── cart/page.tsx                    # Dedicated shopping cart page
+├── checkout/page.tsx                # Checkout flow page
+├── payment-confirm/page.tsx         # Payment success/error page
+└── receipt/[orderId]/page.tsx       # Order receipt page
+```
+
+**Integration Points**:
+- ✅ `stores/checkoutStore.ts` - Extend existing implementation
+- Bangladesh division/district/upazila location data
+- Connect with cartStore for order items
+- Form validation with react-hook-form
+
+### Phase 3: All Payment Gateway Integrations (Priority: HIGH)
+**Duration**: 4-5 days
+**Components to Create**:
+```
+components/payments/
+├── payment-method-selector.tsx      # Choose payment method
+├── gateways/
+│   ├── bkash-payment.tsx          # bKash mobile payment
+│   ├── nagad-payment.tsx          # Nagad mobile payment
+│   ├── aamarpay-payment.tsx       # AamarPay web payment
+│   ├── self-mfs-payment.tsx       # Custom MFS integration
+│   └── cod-payment.tsx            # Cash on delivery
+├── payment-processing.tsx           # Payment status handling
+└── index.ts
+```
+
+**Technical Requirements**:
+- Bangladesh-specific payment methods
+- OTP verification where required
+- Payment status polling and callbacks
+- Error handling and retry mechanisms
+- Analytics tracking for all transactions
+
+### Phase 4: Static Themes Migration (Priority: MEDIUM)
+**Duration**: 5-7 days
+**Theme Structure**:
+```
+components/themes/
+├── basic/
+│   ├── basic-header.tsx
+│   ├── basic-footer.tsx
+│   ├── basic-product-card.tsx
+│   ├── basic-home-page.tsx
+│   ├── basic-products-page.tsx
+│   └── index.ts
+├── premium/
+├── aurora/
+├── luxura/
+└── sellora/
+```
+
+**Implementation Notes**:
+- Each theme as complete, self-contained component set
+- Compatible with existing BlockRenderer system
+- Theme selector component to switch between themes
+- Maintain builder system alongside static themes
+- Follow existing kebab-case naming
+
+### Phase 5: Landing Page Themes (Priority: MEDIUM)
+**Duration**: 3-4 days
+**Landing Pages to Migrate**:
+```
+components/landing-pages/
+├── arcadia/
+│   ├── arcadia-hero.tsx
+│   ├── arcadia-featured.tsx
+│   └── arcadia-products.tsx
+├── nirvana/
+│   ├── nirvana-hero.tsx
+│   ├── nirvana-features.tsx
+│   └── nirvana-content.tsx
+└── grip/
+    ├── grip-hero.tsx
+    ├── grip-embedded-checkout.tsx
+    └── grip-auto-add-cart.tsx
+```
+
+**Special Features**:
+- Grip theme includes auto-add to cart functionality
+- Embedded checkout forms in landing pages
+- Product-specific, single-product focus
+- Integration with existing cart and checkout systems
+
+### Phase 6: Analytics Integration (Priority: LOW)
+**Duration**: 2-3 days
+**Components to Create**:
+```
+components/analytics/
+├── facebook-pixel.tsx              # Facebook Pixel events
+├── google-tag-manager.tsx           # GTM integration
+├── tiktok-pixel.tsx                # TikTok advertising
+└── index.ts
+
+hooks/
+└── use-analytics.ts                 # Analytics tracking hooks
+```
+
+**Integration Points**:
+- ✅ `stores/analyticsStore.ts` - Framework exists
+- Track: PageView, AddToCart, InitiateCheckout, Purchase
+- Bangladesh market specific events
+- E-commerce conversion tracking
+
+### Phase 7: Internationalization (Priority: LOW)
+**Duration**: 2-3 days
+**Files to Create**:
+```
+messages/
+├── en.json                         # English translations
+└── bn.json                         # Bengali translations
+
+components/
+└── language-switcher.tsx            # Language toggle component
+
+lib/
+└── i18n-config.ts                  # i18n configuration
+```
+
+**Implementation Notes**:
+- Leverage existing `next-intl` dependency
+- Bangladesh primary language support (Bengali)
+- Language switcher component
+- Translate all user-facing components
+
+## Technical Implementation Details
+
+### Naming Convention Compliance
+All new components MUST follow kebab-case:
+- ✅ `cart-floating-btn` (not `CartFloatingButton`)
+- ✅ `checkout-form` (not `CheckoutForm`)
+- ✅ `bkash-payment` (not `BkashPayment`)
+- ✅ `basic-header` (not `BasicHeader`)
+
+### Store Integration Strategy
+1. **Cart Store**: ✅ Complete - only needs UI components
+2. **Checkout Store**: ✅ Basic exists - needs full checkout flow
+3. **Analytics Store**: ✅ Framework exists - needs integration
+4. **Theme Store**: ✅ Integrated with builder - extend for static themes
+
+### Hybrid Theme System Architecture
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    ZATIQ STOREFRONT                      │
+├─────────────────────────────────────────────────────────────┤
+│  ┌─────────────────────┐     ┌─────────────────────────────┐   │
+│  │   THEME BUILDER     │     │     STATIC THEMES           │   │
+│  │   (JSON-Driven)     │     │   (Pre-built Components)    │   │
+│  ├─────────────────────┤     ├─────────────────────────────┤   │
+│  │ - BlockRenderer     │     │ - Basic                     │   │
+│  │ - Dynamic sections  │     │ - Premium                   │   │
+│  │ - API-configured    │     │ - Aurora                    │   │
+│  │ - Full flexibility  │     │ - Luxura                    │   │
+│  │                     │     │ - Sellora                   │   │
+│  └─────────────────────┘     └─────────────────────────────┘   │
+│             │                           │                       │
+│             └───────────┬───────────────┘                       │
+│                         ▼                                       │
+│              ┌─────────────────────────────────┴─────┐            │
+│              │       COMPONENT REGISTRY            │            │
+│              │  Theme Builder | Static Themes |   │        │
+│              └─────────────────────────────────────────┘            │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### File Migration Path Matrix
+| Source (storefront.zatiqeasy.com) | Target (storefront.zatiqeasy.dev) | Priority |
+|-----------------------------------|---------------------------------------|----------|
+| `/src/www/e-commerce/components/cart/` | `/components/cart/` | HIGH |
+| `/src/www/e-commerce/modules/order/` | `/components/checkout/` | HIGH |
+| `/src/www/e-commerce/themes/basic/` | `/components/themes/basic/` | MEDIUM |
+| `/src/www/e-commerce/themes/premium/` | `/components/themes/premium/` | MEDIUM |
+| `/src/www/e-commerce/themes/aurora/` | `/components/themes/aurora/ | MEDIUM |
+| `/src/www/e-commerce/themes/luxura/` | `/components/themes/luxura/ | MEDIUM |
+| `/src/www/e-commerce/themes/sellora/` | `/components/themes/sellora/ | MEDIUM |
+| `/src/www/e-commerce/modules/single-page/` | `/components/landing-pages/` | MEDIUM |
+| `/src/lib/utils/fpixel.util.ts` | `/components/analytics/facebook-pixel.tsx` | LOW |
+| `/src/www/context/` | Convert to Zustand stores | LOW |
+
+## Success Metrics
+
+### Functional Requirements
+- ✅ Complete e-commerce workflow (Add to Cart → Checkout → Payment → Order Confirmation)
+- ✅ All 5 payment gateways functional (bKash, Nagad, AamarPay, COD, Self MFS)
+- ✅ Theme selector allowing choice between builder and static themes
+- ✅ All static themes (Basic, Premium, Aurora, Luxura, Sellora) fully functional
+- ✅ Landing page themes (Arcadia, Nirdvana, Grip) with embedded checkout
+
+### Technical Requirements
+- ✅ Zero breaking changes to existing theme builder functionality
+- ✅ All components follow kebab-case naming convention
+- ✅ TypeScript type safety maintained throughout
+- ✅ Performance optimized (bundle size analysis)
+
+### User Experience
+- ✅ Seamless cart management with responsive design
+- ✅ Intuitive checkout flow with multiple payment options
+- ✅ Professional theme selection and switching
+- ✅ Bangladesh-specific payment methods fully integrated
+- ✅ Mobile-first responsive design throughout
+
+## Implementation Timeline
+
+**Week 1**: Cart UI components + basic checkout flow
+**Week 2**: Payment gateway integrations + testing
+**Week 3**: Static themes migration + theme selector
+**Week 4**: Landing pages + analytics integration + i18n support
+**Week 5**: Testing, optimization, and deployment
+
+This updated plan provides a clear, phased approach to complete the Zatiq storefront migration while maintaining existing functionality and following established coding conventions.
