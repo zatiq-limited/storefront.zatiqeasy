@@ -3,3 +3,4 @@ export * from "./useHomepage";
 export * from "./useProducts";
 export * from "./useProductDetails";
 export * from "./useAboutUs";
+export * from "./useCollections";
