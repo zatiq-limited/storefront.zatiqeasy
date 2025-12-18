@@ -75,16 +75,6 @@ import {
   CollectionSubcategories2,
 } from "@/components/zatiq/collection-details";
 
-// About Page Components
-import {
-  AboutHero1,
-  AboutHero2,
-  AboutStory1,
-  AboutStory2,
-  AboutTeam1,
-  AboutTeam2,
-} from "@/components/zatiq/about-us";
-
 // Checkout Page Components
 import {
   CheckoutHero1,
@@ -188,14 +178,6 @@ export const ZATIQ_COMPONENTS: Record<string, ComponentType<any>> = {
   "collection-products-2": CollectionProducts2,
   "collection-subcategories-1": CollectionSubcategories1,
   "collection-subcategories-2": CollectionSubcategories2,
-
-  // About Page Components (2 variants each)
-  "about-hero-1": AboutHero1,
-  "about-hero-2": AboutHero2,
-  "about-story-1": AboutStory1,
-  "about-story-2": AboutStory2,
-  "about-team-1": AboutTeam1,
-  "about-team-2": AboutTeam2,
 
   // Checkout Page Components (2 variants each)
   "checkout-hero-1": CheckoutHero1,

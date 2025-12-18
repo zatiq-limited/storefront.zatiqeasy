@@ -1,7 +1,4 @@
-'use client';
-
 import React from "react";
-import { useRouter, useSearchParams, usePathname } from "next/navigation";
 
 interface ProductsPagination1Props {
   settings?: {
@@ -30,10 +27,6 @@ const ProductsPagination1: React.FC<ProductsPagination1Props> = ({
   activeColor = "#3B82F6",
   textColor = "#374151",
 }) => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-
   const {
     showPageNumbers = true,
     showPrevNext = true,
@@ -53,10 +46,9 @@ const ProductsPagination1: React.FC<ProductsPagination1Props> = ({
     if (onPageChange) {
       onPageChange(page);
     } else {
-      // Use Next.js router for client-side navigation
-      const params = new URLSearchParams(searchParams.toString());
-      params.set("page", page.toString());
-      router.push(`${pathname}?${params.toString()}`);
+      const url = new URL(window.location.href);
+      url.searchParams.set("page", page.toString());
+      window.location.href = url.toString();
     }
   };
 

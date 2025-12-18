@@ -1,5 +1,3 @@
-'use client';
-
 /**
  * ========================================
  * COLLECTION PRODUCTS 2
@@ -8,8 +6,7 @@
  * Inspired by Pinterest and modern e-commerce platforms
  */
 
-import React from "react";
-import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 import CollectionProductsGrid from "./CollectionProductsGrid";
 
 interface Product {
@@ -55,8 +52,6 @@ const CollectionProducts2: React.FC<CollectionProducts2Props> = ({
   collection,
   settings = {},
 }) => {
-  const router = useRouter();
-
   const {
     backgroundColor = "#f9fafb",
     cardStyle = "product-card-2",
@@ -159,7 +154,7 @@ const CollectionProducts2: React.FC<CollectionProducts2Props> = ({
               Try adjusting your filters or check back later for new arrivals
             </p>
             <button
-              onClick={() => router.push("/collections")}
+              onClick={() => window.location.href = "/collections"}
               className="text-indigo-600 hover:text-indigo-700 font-semibold"
             >
               Go back to Collections

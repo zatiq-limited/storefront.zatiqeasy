@@ -1,5 +1,3 @@
-'use client';
-
 /**
  * ========================================
  * PRODUCTS PAGE RENDERER
@@ -67,7 +65,7 @@ export default function ProductsPageRenderer({
     const Component = getComponent(section.type);
 
     if (!Component) {
-      if (process.env.DEV) {
+      if (import.meta.env.DEV) {
         return (
           <div key={section.id} className="bg-yellow-50 border border-yellow-200 rounded p-4 my-4">
             <p className="text-yellow-800 font-semibold">

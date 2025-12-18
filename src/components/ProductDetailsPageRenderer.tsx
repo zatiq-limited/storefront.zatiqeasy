@@ -1,5 +1,3 @@
-'use client';
-
 /**
  * ========================================
  * PRODUCT DETAILS PAGE RENDERER
@@ -86,7 +84,7 @@ export default function ProductDetailsPageRenderer({
     const Component = getComponent(section.type);
 
     if (!Component) {
-      if (process.env.DEV) {
+      if (import.meta.env.DEV) {
         return (
           <div
             key={section.id}

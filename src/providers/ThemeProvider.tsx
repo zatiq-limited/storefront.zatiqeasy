@@ -1,5 +1,3 @@
-'use client';
-
 /**
  * ========================================
  * THEME PROVIDER
@@ -7,20 +5,18 @@
  *
  * Global theme provider that wraps the app with ThemeLayout
  * Handles loading theme.json and provides theme context to all pages
- * Uses Zustand stores for UI state and cart management
  */
+
+"use client";
 
 import React, {
   createContext,
   useContext,
   useMemo,
-  useCallback,
+  useState,
 } from "react";
 import { useRouter } from "next/navigation";
 import { BlocksRenderer, type Block } from "@/components/BlockRenderer";
-import { useUIStore } from "@/stores/ui.store";
-import { useCartStore } from "@/stores/cart.store";
-import { useUserPreferencesStore } from "@/stores/user-preferences.store";
 
 // Import theme JSON
 import themeJson from "@/data/api-responses/theme.json";
@@ -84,30 +80,13 @@ export function useTheme() {
 /**
  * Theme Provider Component
  * Wraps the entire app and provides global theme data and handlers
- * Uses Zustand for state management instead of local state
  */
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-
-  // UI Store state and actions
-  const mobileMenuOpen = useUIStore((state) => state.mobileMenuOpen);
-  const setMobileMenuOpen = useUIStore((state) => state.setMobileMenuOpen);
-  const cartDrawerOpen = useUIStore((state) => state.cartDrawerOpen);
-  const setCartDrawerOpen = useUIStore((state) => state.setCartDrawerOpen);
-  const toggleMobileMenu = useUIStore((state) => state.toggleMobileMenu);
-  const toggleCartDrawer = useUIStore((state) => state.toggleCartDrawer);
-  const toggleSearchDrawer = useUIStore((state) => state.toggleSearchDrawer);
-
-  // User Preferences Store state and actions
-  const darkMode = useUserPreferencesStore((state) => state.darkMode);
-  const toggleDarkMode = useUserPreferencesStore((state) => state.toggleDarkMode);
-
-  // Cart Store for cart count
-  const cartItems = useCartStore((state) => state.items);
-  const cartCount = useMemo(
-    () => cartItems.reduce((acc, item) => acc + item.quantity, 0),
-    [cartItems]
-  );
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [cartDrawerOpen, setCartDrawerOpen] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
 
   // Extract theme data
   const theme = useMemo(() => {
@@ -140,35 +119,31 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         }
       },
       toggleDrawer: (target: string) => {
+        console.log("[ThemeProvider] toggleDrawer called with target:", target);
         switch (target) {
           case "mobile_menu":
-            toggleMobileMenu();
+            setMobileMenuOpen((prev) => {
+              console.log("[ThemeProvider] mobileMenuOpen changing from", prev, "to", !prev);
+              return !prev;
+            });
             break;
           case "cart_drawer":
-            toggleCartDrawer();
-            break;
-          case "search_drawer":
-            toggleSearchDrawer();
+            setCartDrawerOpen((prev) => !prev);
             break;
           default:
             console.log("Toggle drawer:", target);
         }
       },
       toggleTheme: () => {
-        toggleDarkMode();
+        setDarkMode((prev) => !prev);
+        document.documentElement.classList.toggle("dark");
       },
       search: (query: string) => {
         router.push(`/search?q=${encodeURIComponent(query)}`);
       },
     }),
-    [router, toggleMobileMenu, toggleCartDrawer, toggleSearchDrawer, toggleDarkMode]
+    [router]
   );
-
-  // setCartCount is a no-op now since cart is managed by Zustand
-  const setCartCount = useCallback(() => {
-    // Cart count is now computed from Zustand store
-    // This is kept for backwards compatibility
-  }, []);
 
   const contextValue = useMemo(
     () => ({
@@ -188,12 +163,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       globalData,
       eventHandlers,
       mobileMenuOpen,
-      setMobileMenuOpen,
       cartDrawerOpen,
-      setCartDrawerOpen,
       darkMode,
       cartCount,
-      setCartCount,
     ]
   );
 

@@ -1,5 +1,3 @@
-'use client';
-
 /**
  * ========================================
  * BLOCK RENDERER
@@ -277,14 +275,9 @@ function BlockRendererInternal({
   );
 
   // Build props
-  // Add suppressHydrationWarning for elements with dynamic styles to prevent
-  // hydration mismatches due to color format differences (hex vs rgb) or
-  // font-family resolution differences between server and client
-  const hasDynamicStyles = Object.keys(style).length > 0 || block.bind_style;
   const props: Record<string, unknown> = {
     className: finalClassName || undefined,
     style: Object.keys(style).length > 0 ? style : undefined,
-    ...(hasDynamicStyles && { suppressHydrationWarning: true }),
   };
 
   // Add id if present
@@ -318,12 +311,6 @@ function BlockRendererInternal({
           resolveBinding(block.bind_src, mergedData, context) || block.src || ""
         )
       : block.src || "";
-
-    // Don't render img with empty src - it causes browser to re-download the page
-    if (!src) {
-      return null;
-    }
-
     props.src = src;
 
     const alt = block.bind_alt
@@ -377,15 +364,7 @@ function BlockRendererInternal({
         switch (eventType) {
           case "click":
           case "on_click":
-            // For anchor tags with navigate action, prevent default to enable client-side navigation
-            if (tag === "a" && eventConfig.action === "navigate") {
-              props.onClick = (e: React.MouseEvent) => {
-                e.preventDefault();
-                handler();
-              };
-            } else {
-              props.onClick = handler;
-            }
+            props.onClick = handler;
             break;
           case "on_hover":
           case "on_mouse_enter":

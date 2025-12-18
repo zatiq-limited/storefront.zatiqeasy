@@ -1,5 +1,3 @@
-'use client';
-
 /**
  * ========================================
  * DYNAMIC PAGE RENDERER

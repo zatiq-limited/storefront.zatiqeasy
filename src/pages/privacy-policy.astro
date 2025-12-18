@@ -1,0 +1,32 @@
+---
+/**
+ * ========================================
+ * PRIVACY POLICY PAGE
+ * ========================================
+ *
+ * Fetches data from API and renders sections dynamically
+ *
+ * Backend API Endpoint: GET /api/storefront/v1/page/privacy-policy
+ */
+
+import Layout from '../layouts/main.astro';
+import SectionRenderer from '../components/SectionRenderer';
+import { getPrivacyPolicyPageData } from '../lib/api-client';
+
+// Fetch privacy policy page data from API
+const privacyPolicyPageData = await getPrivacyPolicyPageData();
+
+// Handle null case and extract data
+const pageData = privacyPolicyPageData?.data || privacyPolicyPageData || {};
+const { template = 'privacy-policy', sections = [], seo = {} } = pageData;
+---
+
+<Layout
+	title={seo?.title || 'Privacy Policy'}
+	description={seo?.description}
+	image={seo?.og?.image}
+>
+	<main class="zatiq-privacy-policy-page">
+		<SectionRenderer sections={sections} client:load />
+	</main>
+</Layout>

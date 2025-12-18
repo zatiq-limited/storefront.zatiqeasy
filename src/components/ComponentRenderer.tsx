@@ -1,5 +1,3 @@
-'use client';
-
 /**
  * ========================================
  * COMPONENT RENDERER
@@ -69,7 +67,7 @@ export default function ComponentRenderer(props: ComponentRendererProps) {
 
   // Component not found - show error in development
   if (!Component) {
-    if (process.env.DEV) {
+    if (import.meta.env.DEV) {
       return (
         <div className="bg-red-50 border border-red-200 rounded p-4 my-4">
           <p className="text-red-800 font-semibold">
@@ -110,7 +108,7 @@ export default function ComponentRenderer(props: ComponentRendererProps) {
   if (section) {
     // Using section object (homepage.json style)
     // Extract data from blocks[0].data if available (V3.0 Schema)
-    const blockData = (section.blocks?.[0] as any)?.data || {};
+    const blockData = section.blocks?.[0]?.data || {};
 
     // Get settings with snake_case to camelCase conversion
     const settingsRaw = section.settings || {};

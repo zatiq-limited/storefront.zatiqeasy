@@ -1,0 +1,1991 @@
+{
+  "success": true,
+  "data": {
+    "template": "index",
+    "sections": [
+      {
+        "id": "hero_main",
+        "type": "hero-1",
+        "settings": {
+          "autoPlay": true,
+          "autoPlaySpeed": 5000,
+          "showArrows": true,
+          "showIndicators": true
+        },
+        "blocks": [
+          {
+            "id": "slide-1",
+            "tagline": "Winter Collection 2025",
+            "title": "ELEGANCE MEETS",
+            "subtitle": "COMFORT",
+            "buttonText": "Shop Now",
+            "buttonLink": "/collections/winter",
+            "imageUrl": "/assets/hero/hero-11.png",
+            "bgGradient": "from-purple-100 to-pink-100",
+            "textColor": "#1F2937",
+            "taglineColor": "#6B7280"
+          },
+          {
+            "id": "slide-2",
+            "tagline": "Trending this winter",
+            "title": "COZY",
+            "subtitle": "WINTER VIBES",
+            "buttonText": "Explore collection",
+            "buttonLink": "/collections/winter-2025",
+            "imageUrl": "/assets/hero/hero-12.png",
+            "imageAlt": "Model in winter fashion collection",
+            "bgGradient": "from-[#E5DDD5] to-[#E8DFE0]",
+            "textColor": "#1A1A1A",
+            "taglineColor": "#5A5A5A"
+          },
+          {
+            "id": "slide-3",
+            "tagline": "Limited edition arrivals",
+            "title": "EXCLUSIVE",
+            "subtitle": "DESIGNER PICKS",
+            "buttonText": "Shop exclusive",
+            "buttonLink": "/collections/exclusive",
+            "imageUrl": "/assets/hero/hero-13.png",
+            "imageAlt": "Exclusive designer fashion collection",
+            "bgGradient": "from-[#F5E6D3] to-[#E9DDD4]",
+            "textColor": "#2C2C2C",
+            "taglineColor": "#6B6B6B"
+          }
+        ]
+      },
+      {
+        "id": "hero_centered",
+        "type": "hero-2",
+        "settings": {
+          "autoPlay": true,
+          "autoPlaySpeed": 5000,
+          "showArrows": true,
+          "showIndicators": true
+        },
+        "blocks": [
+          {
+            "id": "hero2-slide-1",
+            "badge": "New Arrival",
+            "heading": "Maximum impact",
+            "description": "Shop our collection of glamorous swimsuits and mix-and-match bikinis.",
+            "buttonText": "Shop New Arrivals",
+            "buttonLink": "/collections/new-arrivals",
+            "imageUrl": "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1440&h=716&fit=crop&q=80",
+            "imageAlt": "Fashion collection showcase",
+            "overlayOpacity": "opacity-20"
+          },
+          {
+            "id": "hero2-slide-2",
+            "badge": "Summer Collection",
+            "heading": "Beach Ready Vibes",
+            "description": "Discover the perfect pieces for your summer getaway and beachside adventures.",
+            "buttonText": "Explore Collection",
+            "buttonLink": "/collections/summer",
+            "imageUrl": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1440&h=716&fit=crop&q=80",
+            "imageAlt": "Summer fashion collection",
+            "overlayOpacity": "opacity-30"
+          },
+          {
+            "id": "hero2-slide-3",
+            "badge": "Limited Edition",
+            "heading": "Exclusive Designer Wear",
+            "description": "Luxury fashion pieces curated for those who appreciate timeless elegance.",
+            "buttonText": "Shop Exclusive",
+            "buttonLink": "/collections/exclusive",
+            "imageUrl": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1440&h=716&fit=crop&q=80",
+            "imageAlt": "Exclusive designer fashion",
+            "overlayOpacity": "opacity-25"
+          }
+        ]
+      },
+      {
+        "id": "hero_with_side_arrows",
+        "type": "hero-3",
+        "settings": {
+          "autoPlay": true,
+          "autoPlaySpeed": 5000,
+          "showArrows": true,
+          "showIndicators": true
+        },
+        "blocks": [
+          {
+            "id": "hero3-slide-1",
+            "title": "Best Discounts 2025",
+            "description": "Salla Store provides you with everything you need, from electronics to home furniture, along with the best discounts on products. Shop now and enjoy all the discounts on products.",
+            "buttonText": "Discover more",
+            "buttonLink": "/collections/discounts",
+            "imageUrl": "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1440&h=558&fit=crop&q=80",
+            "imageAlt": "Shopping store with best discounts"
+          },
+          {
+            "id": "hero3-slide-2",
+            "title": "Electronics Mega Sale",
+            "description": "Upgrade your tech with our exclusive electronics collection. From smartphones to laptops, find cutting-edge technology at unbeatable prices. Limited time offers available.",
+            "buttonText": "Shop Electronics",
+            "buttonLink": "/collections/electronics",
+            "imageUrl": "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=1440&h=558&fit=crop&q=80",
+            "imageAlt": "Electronics collection on sale"
+          },
+          {
+            "id": "hero3-slide-3",
+            "title": "Home Furniture Deals",
+            "description": "Transform your living space with our premium furniture collection. Discover stylish and comfortable pieces that perfectly blend functionality with modern design aesthetics.",
+            "buttonText": "Browse Furniture",
+            "buttonLink": "/collections/furniture",
+            "imageUrl": "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1440&h=558&fit=crop&q=80",
+            "imageAlt": "Modern home furniture collection"
+          },
+          {
+            "id": "hero3-slide-4",
+            "title": "Fashion Essentials",
+            "description": "Elevate your wardrobe with our curated fashion collection. From casual wear to elegant outfits, find everything you need to express your unique style at amazing prices.",
+            "buttonText": "Explore Fashion",
+            "buttonLink": "/collections/fashion",
+            "imageUrl": "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1440&h=558&fit=crop&q=80",
+            "imageAlt": "Fashion clothing collection"
+          }
+        ]
+      },
+      {
+        "id": "hero_left_aligned",
+        "type": "hero-4",
+        "settings": {
+          "autoPlay": true,
+          "autoPlaySpeed": 5000,
+          "showArrows": true,
+          "showIndicators": true
+        },
+        "blocks": [
+          {
+            "id": "hero4-slide-1",
+            "tag": "SUMMER 2025",
+            "heading": "NEW COLLECTION",
+            "description": "We know how large objects will act,\nbut things on a small scale.",
+            "buttonText": "SHOP NOW",
+            "buttonLink": "/collections/summer-2025",
+            "imageUrl": "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1440&h=716&fit=crop&q=80",
+            "imageAlt": "Summer 2025 Collection"
+          },
+          {
+            "id": "hero4-slide-2",
+            "tag": "SPRING ARRIVALS",
+            "heading": "FRESH STYLES",
+            "description": "Discover the latest trends,\nPerfect for the new season.",
+            "buttonText": "EXPLORE NOW",
+            "buttonLink": "/collections/spring-arrivals",
+            "imageUrl": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1440&h=716&fit=crop&q=80",
+            "imageAlt": "Spring Arrivals Collection"
+          }
+        ]
+      },
+      {
+        "id": "featured_categories",
+        "type": "category-1",
+        "settings": {
+          "title": "Shop by Category",
+          "subtitle": "Find what you're looking for",
+          "layout": "grid",
+          "columns": 3
+        },
+        "blocks": [
+          {
+            "label": "Ends Today",
+            "title": "Elements Of Style",
+            "subtitle": "Top Ten Products of the Week",
+            "image": "assets/category/c-11.png",
+            "labelColor": "#E77C40",
+            "titleColor": "#252B42",
+            "subtitleColor": "#737373",
+            "linkColor": "#252B42",
+            "buttonText": "Explore Items",
+            "url": "#"
+          },
+          {
+            "label": "Your Space",
+            "title": "Unique Life",
+            "subtitle": "Top Ten Products of the Week",
+            "image": "assets/category/c-12.png",
+            "labelColor": "#ECECEC",
+            "titleColor": "#FFFFFF",
+            "subtitleColor": "#FFFFFF",
+            "linkColor": "#FFFFFF",
+            "buttonText": "Explore Items",
+            "url": "#"
+          },
+          {
+            "label": "Your Space",
+            "title": "Unique Life",
+            "subtitle": "Top Ten Products of the Week",
+            "image": "assets/category/c-12.png",
+            "labelColor": "#ECECEC",
+            "titleColor": "#FFFFFF",
+            "subtitleColor": "#FFFFFF",
+            "linkColor": "#FFFFFF",
+            "buttonText": "Explore Items",
+            "url": "#"
+          }
+        ]
+      },
+      {
+        "id": "categories_right_aligned",
+        "type": "category-2",
+        "settings": {
+          "title": "Featured Collections",
+          "subtitle": "Discover our curated selections"
+        },
+        "blocks": [
+          {
+            "label": "Ends Today",
+            "title": "Elements\nStyle",
+            "linkText": "Explore Items",
+            "textColor": "#252B42",
+            "titleColor": "#252B42",
+            "labelColor": "#737373",
+            "image": "assets/category/c-21.png",
+            "url": "/collections/elements-style"
+          },
+          {
+            "label": "Your Space",
+            "title": "Unique Life",
+            "linkText": "Explore Items",
+            "textColor": "#252B42",
+            "titleColor": "#252B42",
+            "labelColor": "#737373",
+            "image": "assets/category/c-22.png",
+            "url": "/collections/unique-life"
+          }
+        ]
+      },
+      {
+        "id": "categories_text_left",
+        "type": "category-3",
+        "settings": {
+          "title": "Style Categories",
+          "subtitle": "Browse by style"
+        },
+        "blocks": [
+          {
+            "label": "Ends Today",
+            "title": "Elements\nStyle",
+            "linkText": "Explore Items",
+            "titleColor": "#252B42",
+            "labelColor": "#E77C40",
+            "image": "assets/category/c-31.png",
+            "url": "/collections/elements"
+          },
+          {
+            "label": "Limited Time",
+            "title": "Modern\nLiving",
+            "linkText": "Shop Now",
+            "titleColor": "#252B42",
+            "labelColor": "#E77C40",
+            "image": "assets/category/c-32.png",
+            "url": "/collections/modern"
+          },
+          {
+            "label": "Your Space",
+            "title": "Unique Life",
+            "linkText": "Explore Items",
+            "titleColor": "#252B42",
+            "labelColor": "#E77C40",
+            "image": "assets/category/c-32.png",
+            "url": "/collections/unique"
+          }
+        ]
+      },
+      {
+        "id": "categories_circular",
+        "type": "category-4",
+        "settings": {
+          "title": "Shop by Category",
+          "subtitle": "Browse our electronics collection"
+        },
+        "blocks": [
+          {
+            "name": "Headphones",
+            "count": "15 Products",
+            "image": "assets/category/c-41.png",
+            "titleColor": "#181D25",
+            "subtitleColor": "#666666",
+            "url": "/collections/headphones"
+          },
+          {
+            "name": "Smart Watches",
+            "count": "14 Products",
+            "image": "assets/category/c-42.png",
+            "titleColor": "#181D25",
+            "subtitleColor": "#666666",
+            "url": "/collections/smart-watches"
+          },
+          {
+            "name": "Mobile Phones",
+            "count": "120 Products",
+            "image": "assets/category/c-43.png",
+            "titleColor": "#181D25",
+            "subtitleColor": "#666666",
+            "url": "/collections/phones"
+          },
+          {
+            "name": "Earbuds",
+            "count": "110 Products",
+            "image": "assets/category/c-44.png",
+            "titleColor": "#181D25",
+            "subtitleColor": "#666666",
+            "url": "/collections/earbuds"
+          },
+          {
+            "name": "Monitors",
+            "count": "80 Products",
+            "image": "assets/category/c-43.png",
+            "titleColor": "#181D25",
+            "subtitleColor": "#666666",
+            "url": "/collections/monitors"
+          },
+          {
+            "name": "Laptops",
+            "count": "75 Products",
+            "image": "assets/category/c-42.png",
+            "titleColor": "#181D25",
+            "subtitleColor": "#666666",
+            "url": "/collections/laptops"
+          },
+          {
+            "name": "Accessories",
+            "count": "200 Products",
+            "image": "assets/category/c-41.png",
+            "titleColor": "#181D25",
+            "subtitleColor": "#666666",
+            "url": "/collections/accessories"
+          }
+        ]
+      },
+      {
+        "id": "categories_home",
+        "type": "category-5",
+        "settings": {
+          "title": "Home & Living",
+          "subtitle": "Shop by room"
+        },
+        "blocks": [
+          {
+            "name": "Bedroom",
+            "image": "assets/category/c-51.png",
+            "titleColor": "#181D25",
+            "url": "/collections/bedroom"
+          },
+          {
+            "name": "Living room",
+            "image": "assets/category/c-52.png",
+            "titleColor": "#181D25",
+            "url": "/collections/living-room"
+          },
+          {
+            "name": "Bathroom",
+            "image": "assets/category/c-53.png",
+            "titleColor": "#181D25",
+            "url": "/collections/bathroom"
+          },
+          {
+            "name": "Decoration",
+            "image": "assets/category/c-54.png",
+            "titleColor": "#181D25",
+            "url": "/collections/decoration"
+          },
+          {
+            "name": "Office",
+            "image": "assets/category/c-52.png",
+            "titleColor": "#181D25",
+            "url": "/collections/office"
+          },
+          {
+            "name": "Kitchen",
+            "image": "assets/category/c-51.png",
+            "titleColor": "#181D25",
+            "url": "/collections/kitchen"
+          }
+        ]
+      },
+      {
+        "id": "categories_food",
+        "type": "category-6",
+        "settings": {
+          "title": "Fresh Food Categories",
+          "subtitle": "Quality ingredients for your table"
+        },
+        "blocks": [
+          {
+            "count": "124 products",
+            "subtitle": "124 products",
+            "title": "Only fresh fish to your table",
+            "linkText": "Shop now",
+            "image": "assets/category/c-61.png",
+            "countColor": "#4E5562",
+            "titleColor": "#181D25",
+            "linkColor": "#222934",
+            "url": "/collections/fresh-fish"
+          },
+          {
+            "count": "97 products",
+            "subtitle": "97 products",
+            "title": "Products for the Easter table",
+            "linkText": "Shop now",
+            "image": "assets/category/c-62.png",
+            "countColor": "#4E5562",
+            "titleColor": "#181D25",
+            "linkColor": "#222934",
+            "url": "/collections/easter"
+          },
+          {
+            "count": "28 products",
+            "subtitle": "28 products",
+            "title": "Berries from the garden",
+            "linkText": "Shop now",
+            "image": "assets/category/c-63.png",
+            "countColor": "#4E5562",
+            "titleColor": "#181D25",
+            "linkColor": "#222934",
+            "url": "/collections/berries"
+          }
+        ]
+      },
+      {
+        "id": "featured_products_grid",
+        "type": "product-collection-2",
+        "settings": {
+          "title": "Featured Products",
+          "subtitle": "Hand-picked styles just for you",
+          "curatedTag":"Curated Selection",
+          "titleColor": "#181D25",
+          "subtitleColor": "#666666",
+          "viewAllText": "View All",
+          "viewAllLink": "/collections/featured",
+          "productCardType": "product-card-8",
+          "viewTotalProducts": 6,
+          "columns": 4,
+          "columnsMobile": 2,
+          "bgColor": "#FFFFFF",
+          "showViewAll": true
+        },
+        "products": [
+          {
+            "id": "prod_001",
+            "handle": "classic-white-shirt",
+            "title": "Classic White Shirt",
+            "subtitle": "Timeless wardrobe essential, Timeless wardrobe essential",
+            "vendor": "ZatiqStyle",
+            "price": 2500.0,
+            "comparePrice": 3500.0,
+            "currency": "BDT",
+            "image": "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=800&q=80",
+            "hoverImage": "https://images.unsplash.com/photo-1620012253295-c15cc3e65df4?w=800&q=80",
+            "badge": "Sale",
+            "badgeColor": "#ef4444",
+            "rating": 4.5,
+            "reviewCount": 23,
+            "colors": ["green", "light-blue"],
+            "sizes": ["S", "M", "L", "XL"],
+            "quickAddEnabled": true,
+            "buyNowEnabled": true
+          },
+          {
+            "id": "prod_002",
+            "handle": "elegant-black-dress",
+            "title": "Elegant Black Dress",
+            "subtitle": "Sophisticated evening glamour",
+            "vendor": "ZatiqStyle",
+            "price": 4500.0,
+            "comparePrice": 5500.0,
+            "currency": "BDT",
+            "image": "https://images.unsplash.com/photo-1618886614638-80e3c103d31a?w=800&q=80",
+            "hoverImage": "https://images.unsplash.com/photo-1622519407650-3df9883f76a5?w=800&q=80",
+            "badge": "New",
+            "badgeColor": "#3b82f6",
+            "rating": 4.8,
+            "reviewCount": 18,
+            "colors": ["black"],
+            "sizes": ["XS", "S", "M", "L"],
+            "quickAddEnabled": true,
+            "buyNowEnabled": true
+          },
+          {
+            "id": "prod_003",
+            "handle": "mens-denim-jeans",
+            "title": "Men's Denim Jeans",
+            "subtitle": "Premium quality everyday wear",
+            "vendor": "ZatiqDenim",
+            "price": 3200.0,
+            "comparePrice": 4200.0,
+            "currency": "BDT",
+            "image": "https://images.unsplash.com/photo-1542272604-787c3835535d?w=800&q=80",
+            "hoverImage": "https://images.unsplash.com/photo-1604176354204-9268737828e4?w=800&q=80",
+            "badge": "24% Off",
+            "badgeColor": "#f59e0b",
+            "rating": 4.3,
+            "reviewCount": 45,
+            "colors": ["blue", "black", "light-blue"],
+            "sizes": ["30", "32", "34", "36"],
+            "quickAddEnabled": true,
+            "buyNowEnabled": true
+          },
+          {
+            "id": "prod_004",
+            "handle": "womens-summer-floral-dress",
+            "title": "Women's Summer Floral Dress",
+            "subtitle": "Breezy floral elegance",
+            "vendor": "ZatiqStyle",
+            "price": 3800.0,
+            "comparePrice": null,
+            "currency": "BDT",
+            "image": "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=800&q=80",
+            "hoverImage": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800&q=80",
+            "badge": "New",
+            "badgeColor": "#3b82f6",
+            "rating": 4.6,
+            "reviewCount": 28,
+            "colors": ["pink", "floral-blue"],
+            "sizes": ["S", "M", "L", "XL"],
+            "quickAddEnabled": true,
+            "buyNowEnabled": true
+          },
+          {
+            "id": "prod_005",
+            "handle": "casual-t-shirt",
+            "title": "Casual T-Shirt",
+            "subtitle": "Comfort meets style",
+            "vendor": "ZatiqBasics",
+            "price": 1200.0,
+            "comparePrice": 1800.0,
+            "currency": "BDT",
+            "image": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80",
+            "hoverImage": "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800&q=80",
+            "badge": "Bestseller",
+            "badgeColor": "#10b981",
+            "rating": 4.4,
+            "reviewCount": 89,
+            "colors": ["black", "green", "navy", "gray"],
+            "sizes": ["S", "M", "L", "XL", "XXL"],
+            "quickAddEnabled": true,
+            "buyNowEnabled": true
+          },
+          {
+            "id": "prod_006",
+            "handle": "leather-handbag",
+            "title": "Leather Handbag",
+            "subtitle": "Luxurious everyday accessory",
+            "vendor": "ZatiqLux",
+            "price": 6500.0,
+            "comparePrice": 8500.0,
+            "currency": "BDT",
+            "image": "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=800&q=80",
+            "hoverImage": "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=800&q=80",
+            "badge": "Sale",
+            "badgeColor": "#ef4444",
+            "rating": 4.7,
+            "reviewCount": 32,
+            "colors": ["brown", "black", "beige"],
+            "sizes": [],
+            "quickAddEnabled": true,
+            "buyNowEnabled": true
+          },
+          {
+            "id": "prod_007",
+            "handle": "mens-formal-blazer",
+            "title": "Men's Formal Blazer",
+            "subtitle": "Sharp and sophisticated look",
+            "vendor": "ZatiqStyle",
+            "price": 8500.0,
+            "comparePrice": 12000.0,
+            "currency": "BDT",
+            "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80",
+            "hoverImage": "https://images.unsplash.com/photo-1593030761757-71fae45fa0e7?w=800&q=80",
+            "badge": "29% Off",
+            "badgeColor": "#f59e0b",
+            "rating": 4.6,
+            "reviewCount": 67,
+            "colors": ["navy", "black", "charcoal"],
+            "sizes": ["S", "M", "L", "XL", "XXL"],
+            "quickAddEnabled": true,
+            "buyNowEnabled": true
+          },
+          {
+            "id": "prod_008",
+            "handle": "mens-polo-shirt",
+            "title": "Premium Polo Shirt",
+            "subtitle": "Classic casual refinement",
+            "vendor": "ZatiqBasics",
+            "price": 1800.0,
+            "comparePrice": 2500.0,
+            "currency": "BDT",
+            "image": "https://images.unsplash.com/photo-1610384104075-e05c8cf200c3?w=800&q=80",
+            "hoverImage": "https://images.unsplash.com/photo-1586363104862-3a5e2ab60d99?w=800&q=80",
+            "badge": "Sale",
+            "badgeColor": "#ef4444",
+            "rating": 4.5,
+            "reviewCount": 112,
+            "colors": ["green", "navy", "red", "green"],
+            "sizes": ["S", "M", "L", "XL"],
+            "quickAddEnabled": true,
+            "buyNowEnabled": true
+          },
+          {
+            "id": "prod_009",
+            "handle": "mens-chino-pants",
+            "title": "Slim Fit Chino Pants",
+            "subtitle": "Modern tailored comfort",
+            "vendor": "ZatiqDenim",
+            "price": 2800.0,
+            "comparePrice": 3500.0,
+            "currency": "BDT",
+            "image": "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=800&q=80",
+            "hoverImage": "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=800&q=80",
+            "badge": "20% Off",
+            "badgeColor": "#f59e0b",
+            "rating": 4.4,
+            "reviewCount": 89,
+            "colors": ["khaki", "navy", "olive", "black"],
+            "sizes": ["30", "32", "34", "36", "38"],
+            "quickAddEnabled": true,
+            "buyNowEnabled": true
+          },
+          {
+            "id": "prod_010",
+            "handle": "mens-leather-jacket",
+            "title": "Classic Leather Jacket",
+            "subtitle": "Iconic premium outerwear",
+            "vendor": "ZatiqLux",
+            "price": 15000.0,
+            "comparePrice": 20000.0,
+            "currency": "BDT",
+            "image": "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=800&q=80",
+            "hoverImage": "https://images.unsplash.com/photo-1520975954732-35dd22299614?w=800&q=80",
+            "badge": "Premium",
+            "badgeColor": "#8b5cf6",
+            "rating": 4.9,
+            "reviewCount": 156,
+            "colors": ["black", "brown"],
+            "sizes": ["S", "M", "L", "XL"],
+            "quickAddEnabled": true,
+            "buyNowEnabled": true
+          },
+          {
+            "id": "prod_011",
+            "handle": "mens-casual-hoodie",
+            "title": "Comfort Fit Hoodie",
+            "subtitle": "Cozy streetwear staple",
+            "vendor": "ZatiqBasics",
+            "price": 2200.0,
+            "comparePrice": null,
+            "currency": "BDT",
+            "image": "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&q=80",
+            "hoverImage": "https://images.unsplash.com/photo-1578768079052-aa76e52ff62e?w=800&q=80",
+            "badge": "New",
+            "badgeColor": "#3b82f6",
+            "rating": 4.3,
+            "reviewCount": 45,
+            "colors": ["gray", "black", "navy", "burgundy"],
+            "sizes": ["S", "M", "L", "XL", "XXL"],
+            "quickAddEnabled": true,
+            "buyNowEnabled": true
+          }
+        ]
+      },
+      {
+        "id": "promotional_banner",
+        "type": "static-banner-1",
+        "settings": {
+          "image": "assets/banner/banner-1.png",
+          "imageMobile": "assets/banner/banner-1.png",
+          "title": "Best Discounts\n2025",
+          "subtitle": "",
+          "description": "Salla Store provides you with everything you need, from electronics to home furniture, along with the best discounts on products. Shop now and enjoy all the discounts on products.",
+          "buttonText": "Discover more",
+          "buttonLink": "#",
+          "secondaryButtonText": "",
+          "secondaryButtonLink": "",
+          "textAlignment": "center",
+          "textColor": "#FFFFFF",
+          "overlayColor": "#000000",
+          "overlayOpacity": 5,
+          "height": "medium"
+        }
+      },
+      {
+        "id": "promotional_banner_2",
+        "type": "static-banner-2",
+        "settings": {
+          "image": "assets/banner/banner-2.png",
+          "imageMobile": "assets/banner/banner-2.png",
+          "title": "Summer Sale\n2025",
+          "subtitle": "",
+          "description": "Get ready for summer with our exclusive collection. Amazing deals on fashion, accessories, and more. Limited time offers on trending styles.",
+          "buttonText": "Shop Summer Sale",
+          "buttonLink": "/collections/summer-sale",
+          "secondaryButtonText": "",
+          "secondaryButtonLink": "",
+          "textAlignment": "left",
+          "textColor": "#FFFFFF",
+          "overlayColor": "#000000",
+          "overlayOpacity": 5,
+          "height": "medium"
+        }
+      },
+      {
+        "id": "promotional_banner_3",
+        "type": "static-banner-3",
+        "settings": {
+          "image": "assets/banner/banner-3.png",
+          "imageMobile": "assets/banner/banner-3.png",
+          "title": "Best Discounts 2025",
+          "subtitle": "",
+          "description": "Salla Store provides you with everything you need, from electronics to home furniture, along with the best discounts on products. Shop now and enjoy all the discounts on products.",
+          "buttonText": "Discover more",
+          "buttonLink": "#",
+          "secondaryButtonText": "",
+          "secondaryButtonLink": "",
+          "textAlignment": "center",
+          "textColor": "#FFFFFF",
+          "overlayColor": "#000000",
+          "overlayOpacity": 40,
+          "height": "medium"
+        }
+      },
+      {
+        "id": "promotional_banner_4",
+        "type": "static-banner-4",
+        "settings": {
+          "image": "assets/banner/banner-4.png",
+          "imageMobile": "assets/banner/banner-4.png",
+          "title": "To empower women globally to\ncelebrate summer with\nconfidence.",
+          "subtitle": "OUR VISION",
+          "description": "Luxurious high quality pieces that are designed to last.",
+          "buttonText": "",
+          "buttonLink": "",
+          "secondaryButtonText": "",
+          "secondaryButtonLink": "",
+          "textAlignment": "center",
+          "textColor": "#FFFFFF",
+          "overlayColor": "",
+          "overlayOpacity": 0,
+          "height": "medium"
+        }
+      },
+      {
+        "id": "special_offers",
+        "type": "special-offers-slider-1",
+        "enabled": true,
+        "settings": {
+          "title": "Special offers for you",
+          "titleColor": "#000000",
+          "bgColor": "#DCEEE7"
+        },
+        "products": [
+          {
+            "id": 1,
+            "name": "Polarized sunglasses for men",
+            "price": 56.0,
+            "originalPrice": 80.0,
+            "discount": "-30% off",
+            "image": "/assets/SpecialOfferSlider/sunglass.png",
+            "buttonText": "Shop now",
+            "url": "/products/polarized-sunglasses"
+          },
+          {
+            "id": 2,
+            "name": "Wireless Bluetooth Headphones",
+            "price": 89.99,
+            "originalPrice": 129.99,
+            "discount": "-31% off",
+            "image": "/assets/SpecialOfferSlider/sunglass.png",
+            "buttonText": "Shop now",
+            "url": "/products/bluetooth-headphones"
+          },
+          {
+            "id": 3,
+            "name": "Designer Watch Collection",
+            "price": 149.0,
+            "originalPrice": 250.0,
+            "discount": "-40% off",
+            "image": "/assets/SpecialOfferSlider/sunglass.png",
+            "buttonText": "Shop now",
+            "url": "/products/designer-watch"
+          },
+          {
+            "id": 4,
+            "name": "Premium Leather Wallet",
+            "price": 45.0,
+            "originalPrice": 75.0,
+            "discount": "-40% off",
+            "image": "/assets/SpecialOfferSlider/sunglass.png",
+            "buttonText": "Shop now",
+            "url": "/products/leather-wallet"
+          }
+        ]
+      },
+      {
+        "id": "special_offers",
+        "type": "special-offers-slider-2",
+        "enabled": true,
+        "settings": {
+          "title": "Special offers for you",
+          "titleColor": "#000000",
+          "bgColor": "#DCEEE7"
+        },
+        "products": [
+          {
+            "id": 1,
+            "name": "Polarized sunglasses for men",
+            "price": 56.0,
+            "originalPrice": 80.0,
+            "discount": "-30% off",
+            "image": "/assets/SpecialOfferSlider/sunglass.png",
+            "buttonText": "Shop now",
+            "url": "/products/polarized-sunglasses",
+            "countdown": {
+              "days": 12,
+              "hours": 10,
+              "minutes": 12
+            }
+          },
+          {
+            "id": 2,
+            "name": "Wireless Bluetooth Headphones",
+            "price": 89.99,
+            "originalPrice": 129.99,
+            "discount": "-31% off",
+            "image": "/assets/SpecialOfferSlider/sunglass.png",
+            "buttonText": "Shop now",
+            "url": "/products/bluetooth-headphones",
+            "countdown": {
+              "days": 12,
+              "hours": 10,
+              "minutes": 12
+            }
+          },
+          {
+            "id": 3,
+            "name": "Designer Watch Collection",
+            "price": 149.0,
+            "originalPrice": 250.0,
+            "discount": "-40% off",
+            "image": "/assets/SpecialOfferSlider/sunglass.png",
+            "buttonText": "Shop now",
+            "url": "/products/designer-watch",
+            "countdown": {
+              "days": 12,
+              "hours": 10,
+              "minutes": 12
+            }
+          },
+          {
+            "id": 4,
+            "name": "Premium Leather Wallet",
+            "price": 45.0,
+            "originalPrice": 75.0,
+            "discount": "-40% off",
+            "image": "/assets/SpecialOfferSlider/sunglass.png",
+            "buttonText": "Shop now",
+            "url": "/products/leather-wallet",
+            "countdown": {
+              "days": 12,
+              "hours": 10,
+              "minutes": 12
+            }
+          }
+        ]
+      },
+      {
+        "id": "special_offers_3",
+        "type": "special-offers-slider-3",
+        "enabled": true,
+        "settings": {
+          "title": "Buy Bottle now",
+          "titleHighlight": "25% off",
+          "highlightColor": "#2563eb",
+          "buttonText": "Buy Now",
+          "buttonColor": "#2563eb",
+          "buttonHoverColor": "#1d4ed8",
+          "bgColor": "#ffffff",
+          "images": [
+            {
+              "src": "/assets/spOffer/sp1.png",
+              "alt": "Premium Water Bottle"
+            },
+            {
+              "src": "/assets/spOffer/sp2.png",
+              "alt": "Sports Bottle Collection"
+            },
+            {
+              "src": "/assets/spOffer/sp3.png",
+              "alt": "Insulated Bottle"
+            },
+            {
+              "src": "/assets/spOffer/sp4.png",
+              "alt": "Eco-Friendly Bottle"
+            }
+          ]
+        }
+      },
+      {
+        "id": "special_offers_4",
+        "type": "special-offers-slider-4",
+        "enabled": true,
+        "settings": {
+          "bgColor": "transparent",
+          "leftCard": {
+            "image": "/assets/spOffer/image-left.jpg",
+            "subtitle": "Sale 20% off all store",
+            "title": "Smartphone\nBLU G91 Pro 2022",
+            "buttonText": "Shop Now",
+            "titleColor": "#010F1C",
+            "textColor": "#010F1C"
+          },
+          "rightCard": {
+            "image": "/assets/spOffer/image-right.jpg",
+            "title": "HyperX Cloud II\nWireless",
+            "discount": "Sale 35% off",
+            "buttonText": "Shop Now",
+            "titleColor": "#010F1C",
+            "textColor": "#010F1C"
+          }
+        }
+      },
+      {
+        "id": "special_offers_5",
+        "type": "special-offers-slider-5",
+        "enabled": true,
+        "settings": {
+          "autoPlayInterval": 3000,
+          "height": "500px",
+          "bgColor": "transparent",
+          "slides": [
+            {
+              "background": "/assets/spOffer/Container.png",
+              "category": "TABLET COLLECTION 2023",
+              "title": "Galaxy Tab S6 Lite\nAndroid Tablet",
+              "originalPrice": "$320",
+              "salePrice": "$288",
+              "buttonText": "Shop now",
+              "altText": "Galaxy Tab S6 Lite Android Tablet",
+              "categoryColor": "#7E7E7E",
+              "titleColor": "#070707",
+              "priceColor": "#7E7E7E",
+              "buttonBgColor": "#010F1C",
+              "buttonTextColor": "#FFFFFF"
+            },
+            {
+              "background": "/assets/spOffer/image-left.jpg",
+              "category": "SMARTPHONE DEALS 2023",
+              "title": "Smartphone\nBLU G91 Pro 2022",
+              "originalPrice": "$299",
+              "salePrice": "$239",
+              "buttonText": "Shop now",
+              "altText": "Smartphone BLU G91 Pro 2022",
+              "categoryColor": "#7E7E7E",
+              "titleColor": "#070707",
+              "priceColor": "#7E7E7E",
+              "buttonBgColor": "#010F1C",
+              "buttonTextColor": "#FFFFFF"
+            },
+            {
+              "background": "/assets/spOffer/image-right.jpg",
+              "category": "SMARTPHONE DEALS 2023",
+              "title": "Smartphone\nBLU G91 Pro 2022",
+              "originalPrice": "$299",
+              "salePrice": "$239",
+              "buttonText": "Shop now",
+              "altText": "Smartphone BLU G91 Pro 2022",
+              "categoryColor": "#7E7E7E",
+              "titleColor": "#070707",
+              "priceColor": "#7E7E7E",
+              "buttonBgColor": "#010F1C",
+              "buttonTextColor": "#FFFFFF"
+            }
+          ]
+        }
+      },
+      {
+        "id": "product_tabs",
+        "type": "product-tabs-1",
+        "settings": {
+          "title": "Curated Collections",
+          "subtitle": "Discover our handpicked selections",
+          "tabAlignment": "center",
+          "productCardType": "product-card-5",
+          "viewTotalProducts": 4,
+          "columns": 4,
+          "columnsMobile": 2
+        },
+        "tabs": [
+          {
+            "id": "new_arrivals",
+            "label": "New Arrivals",
+            "products": [
+              {
+                "id": "tab_prod_001",
+                "handle": "floral-summer-dress",
+                "title": "Floral Summer Dress",
+                "subtitle": "Light & breezy style",
+                "vendor": "ZatiqStyle",
+                "price": 3200.0,
+                "comparePrice": null,
+                "currency": "BDT",
+                "image": "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=800&q=80",
+                "hoverImage": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800&q=80",
+                "badge": "New",
+                "badgeColor": "#3b82f6",
+                "rating": 4.7,
+                "reviewCount": 12,
+                "colors": ["pink", "blue"],
+                "sizes": ["S", "M", "L"],
+                "quickAddEnabled": true,
+                "buyNowEnabled": true
+              },
+              {
+                "id": "tab_prod_002",
+                "handle": "mens-linen-shirt",
+                "title": "Men's Linen Shirt",
+                "subtitle": "Breathable comfort",
+                "vendor": "ZatiqBasics",
+                "price": 2800.0,
+                "comparePrice": null,
+                "currency": "BDT",
+                "image": "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=800&q=80",
+                "hoverImage": "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=800&q=80",
+                "badge": "New",
+                "badgeColor": "#3b82f6",
+                "rating": 4.5,
+                "reviewCount": 8,
+                "colors": ["white", "beige", "light-blue"],
+                "sizes": ["M", "L", "XL"],
+                "quickAddEnabled": true,
+                "buyNowEnabled": true
+              },
+              {
+                "id": "tab_prod_003",
+                "handle": "womens-cotton-blouse",
+                "title": "Women's Cotton Blouse",
+                "subtitle": "Elegant everyday wear",
+                "vendor": "ZatiqStyle",
+                "price": 2200.0,
+                "comparePrice": null,
+                "currency": "BDT",
+                "image": "https://images.unsplash.com/photo-1551163943-3f6a855d1153?w=800&q=80",
+                "hoverImage": "https://images.unsplash.com/photo-1518622358385-8ea7d0794bf6?w=800&q=80",
+                "badge": "New",
+                "badgeColor": "#3b82f6",
+                "rating": 4.6,
+                "reviewCount": 15,
+                "colors": ["white", "cream"],
+                "sizes": ["XS", "S", "M", "L"],
+                "quickAddEnabled": true,
+                "buyNowEnabled": true
+              },
+              {
+                "id": "tab_prod_004",
+                "handle": "slim-fit-trousers",
+                "title": "Slim Fit Trousers",
+                "subtitle": "Modern tailored fit",
+                "vendor": "ZatiqDenim",
+                "price": 3500.0,
+                "comparePrice": null,
+                "currency": "BDT",
+                "image": "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=800&q=80",
+                "hoverImage": "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=800&q=80",
+                "badge": "New",
+                "badgeColor": "#3b82f6",
+                "rating": 4.4,
+                "reviewCount": 22,
+                "colors": ["navy", "black", "khaki"],
+                "sizes": ["30", "32", "34", "36"],
+                "quickAddEnabled": true,
+                "buyNowEnabled": true
+              },
+              {
+                "id": "tab_prod_013",
+                "handle": "ribbed-knit-sweater",
+                "title": "Ribbed Knit Sweater",
+                "subtitle": "Cozy winter essential",
+                "vendor": "ZatiqStyle",
+                "price": 4200.0,
+                "comparePrice": null,
+                "currency": "BDT",
+                "image": "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=800&q=80",
+                "hoverImage": "https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=800&q=80",
+                "badge": "New",
+                "badgeColor": "#3b82f6",
+                "rating": 4.8,
+                "reviewCount": 19,
+                "colors": ["cream", "burgundy", "forest-green"],
+                "sizes": ["S", "M", "L"],
+                "quickAddEnabled": true,
+                "buyNowEnabled": true
+              },
+              {
+                "id": "tab_prod_014",
+                "handle": "oversized-denim-jacket",
+                "title": "Oversized Denim Jacket",
+                "subtitle": "Street style statement",
+                "vendor": "ZatiqDenim",
+                "price": 5500.0,
+                "comparePrice": null,
+                "currency": "BDT",
+                "image": "https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=800&q=80",
+                "hoverImage": "https://images.unsplash.com/photo-1551537482-f2075a1d41f2?w=800&q=80",
+                "badge": "New",
+                "badgeColor": "#3b82f6",
+                "rating": 4.6,
+                "reviewCount": 34,
+                "colors": ["light-wash", "dark-wash"],
+                "sizes": ["S", "M", "L", "XL"],
+                "quickAddEnabled": true,
+                "buyNowEnabled": true
+              },
+              {
+                "id": "tab_prod_015",
+                "handle": "pleated-midi-skirt",
+                "title": "Pleated Midi Skirt",
+                "subtitle": "Elegant feminine flow",
+                "vendor": "ZatiqStyle",
+                "price": 2900.0,
+                "comparePrice": null,
+                "currency": "BDT",
+                "image": "https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?w=800&q=80",
+                "hoverImage": "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=800&q=80",
+                "badge": "New",
+                "badgeColor": "#3b82f6",
+                "rating": 4.5,
+                "reviewCount": 27,
+                "colors": ["black", "olive", "dusty-rose"],
+                "sizes": ["XS", "S", "M", "L"],
+                "quickAddEnabled": true,
+                "buyNowEnabled": true
+              }
+            ]
+          },
+          {
+            "id": "best_sellers",
+            "label": "Best Sellers",
+            "products": [
+              {
+                "id": "tab_prod_005",
+                "handle": "classic-polo-shirt",
+                "title": "Classic Polo Shirt",
+                "subtitle": "Timeless casual style",
+                "vendor": "ZatiqBasics",
+                "price": 1800.0,
+                "comparePrice": 2200.0,
+                "currency": "BDT",
+                "image": "https://images.unsplash.com/photo-1610384104075-e05c8cf200c3?w=800&q=80",
+                "hoverImage": "https://images.unsplash.com/photo-1586363104862-3a5e2ab60d99?w=800&q=80",
+                "badge": "Bestseller",
+                "badgeColor": "#10b981",
+                "rating": 4.8,
+                "reviewCount": 156,
+                "colors": ["navy", "white", "red"],
+                "sizes": ["S", "M", "L", "XL"],
+                "quickAddEnabled": true,
+                "buyNowEnabled": true
+              },
+              {
+                "id": "tab_prod_006",
+                "handle": "womens-skinny-jeans",
+                "title": "Women's Skinny Jeans",
+                "subtitle": "Perfect everyday fit",
+                "vendor": "ZatiqDenim",
+                "price": 3400.0,
+                "comparePrice": 4000.0,
+                "currency": "BDT",
+                "image": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=800&q=80",
+                "hoverImage": "https://images.unsplash.com/photo-1582418702059-97ebafb35d09?w=800&q=80",
+                "badge": "Bestseller",
+                "badgeColor": "#10b981",
+                "rating": 4.7,
+                "reviewCount": 203,
+                "colors": ["blue", "black", "gray"],
+                "sizes": ["26", "28", "30", "32"],
+                "quickAddEnabled": true,
+                "buyNowEnabled": true
+              },
+              {
+                "id": "tab_prod_007",
+                "handle": "cotton-crew-tee",
+                "title": "Cotton Crew Neck Tee",
+                "subtitle": "Essential wardrobe basic",
+                "vendor": "ZatiqBasics",
+                "price": 1200.0,
+                "comparePrice": 1500.0,
+                "currency": "BDT",
+                "image": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80",
+                "hoverImage": "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800&q=80",
+                "badge": "Bestseller",
+                "badgeColor": "#10b981",
+                "rating": 4.6,
+                "reviewCount": 312,
+                "colors": ["white", "black", "gray", "navy"],
+                "sizes": ["S", "M", "L", "XL", "XXL"],
+                "quickAddEnabled": true,
+                "buyNowEnabled": true
+              },
+              {
+                "id": "tab_prod_008",
+                "handle": "canvas-tote-bag",
+                "title": "Canvas Tote Bag",
+                "subtitle": "Versatile everyday carry",
+                "vendor": "ZatiqLux",
+                "price": 1600.0,
+                "comparePrice": 2000.0,
+                "currency": "BDT",
+                "image": "https://images.unsplash.com/photo-1544816155-12df9643f363?w=800&q=80",
+                "hoverImage": "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=800&q=80",
+                "badge": "Bestseller",
+                "badgeColor": "#10b981",
+                "rating": 4.5,
+                "reviewCount": 89,
+                "colors": ["beige", "black"],
+                "sizes": [],
+                "quickAddEnabled": true,
+                "buyNowEnabled": true
+              },
+              {
+                "id": "tab_prod_017",
+                "handle": "athletic-joggers",
+                "title": "Athletic Joggers",
+                "subtitle": "Performance meets comfort",
+                "vendor": "ZatiqBasics",
+                "price": 2400.0,
+                "comparePrice": 2900.0,
+                "currency": "BDT",
+                "image": "https://images.unsplash.com/photo-1552902865-b72c031ac5ea?w=800&q=80",
+                "hoverImage": "https://images.unsplash.com/photo-1556906781-9a412961c28c?w=800&q=80",
+                "badge": "Bestseller",
+                "badgeColor": "#10b981",
+                "rating": 4.7,
+                "reviewCount": 245,
+                "colors": ["black", "gray", "navy"],
+                "sizes": ["S", "M", "L", "XL"],
+                "quickAddEnabled": true,
+                "buyNowEnabled": true
+              },
+              {
+                "id": "tab_prod_018",
+                "handle": "wrap-maxi-dress",
+                "title": "Wrap Maxi Dress",
+                "subtitle": "Effortless elegance",
+                "vendor": "ZatiqStyle",
+                "price": 4800.0,
+                "comparePrice": 5800.0,
+                "currency": "BDT",
+                "image": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800&q=80",
+                "hoverImage": "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=800&q=80",
+                "badge": "Bestseller",
+                "badgeColor": "#10b981",
+                "rating": 4.9,
+                "reviewCount": 187,
+                "colors": ["burgundy", "emerald", "black"],
+                "sizes": ["XS", "S", "M", "L"],
+                "quickAddEnabled": true,
+                "buyNowEnabled": true
+              },
+              {
+                "id": "tab_prod_019",
+                "handle": "structured-blazer",
+                "title": "Structured Blazer",
+                "subtitle": "Professional power piece",
+                "vendor": "ZatiqStyle",
+                "price": 7200.0,
+                "comparePrice": 8500.0,
+                "currency": "BDT",
+                "image": "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&q=80",
+                "hoverImage": "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=800&q=80",
+                "badge": "Bestseller",
+                "badgeColor": "#10b981",
+                "rating": 4.8,
+                "reviewCount": 134,
+                "colors": ["black", "charcoal", "camel"],
+                "sizes": ["S", "M", "L", "XL"],
+                "quickAddEnabled": true,
+                "buyNowEnabled": true
+              },
+              {
+                "id": "tab_prod_020",
+                "handle": "minimalist-watch",
+                "title": "Minimalist Leather Watch",
+                "subtitle": "Timeless sophistication",
+                "vendor": "ZatiqLux",
+                "price": 5500.0,
+                "comparePrice": 6500.0,
+                "currency": "BDT",
+                "image": "https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=800&q=80",
+                "hoverImage": "https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?w=800&q=80",
+                "badge": "Bestseller",
+                "badgeColor": "#10b981",
+                "rating": 4.6,
+                "reviewCount": 298,
+                "colors": ["brown", "black"],
+                "sizes": [],
+                "quickAddEnabled": true,
+                "buyNowEnabled": true
+              }
+            ]
+          },
+          {
+            "id": "on_sale",
+            "label": "On Sale",
+            "products": [
+              {
+                "id": "tab_prod_009",
+                "handle": "winter-wool-coat",
+                "title": "Winter Wool Coat",
+                "subtitle": "Premium warmth & style",
+                "vendor": "ZatiqLux",
+                "price": 8500.0,
+                "comparePrice": 12000.0,
+                "currency": "BDT",
+                "image": "https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=800&q=80",
+                "hoverImage": "https://images.unsplash.com/photo-1548624313-0396c75e4b1a?w=800&q=80",
+                "badge": "29% Off",
+                "badgeColor": "#ef4444",
+                "rating": 4.9,
+                "reviewCount": 67,
+                "colors": ["camel", "gray", "black"],
+                "sizes": ["S", "M", "L", "XL"],
+                "quickAddEnabled": true,
+                "buyNowEnabled": true
+              },
+              {
+                "id": "tab_prod_010",
+                "handle": "leather-belt",
+                "title": "Genuine Leather Belt",
+                "subtitle": "Classic accessory essential",
+                "vendor": "ZatiqLux",
+                "price": 1800.0,
+                "comparePrice": 2500.0,
+                "currency": "BDT",
+                "image": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&q=80",
+                "hoverImage": "https://images.unsplash.com/photo-1585856331426-d7a22430a07a?w=800&q=80",
+                "badge": "28% Off",
+                "badgeColor": "#ef4444",
+                "rating": 4.4,
+                "reviewCount": 134,
+                "colors": ["brown", "black"],
+                "sizes": ["32", "34", "36", "38"],
+                "quickAddEnabled": true,
+                "buyNowEnabled": true
+              },
+              {
+                "id": "tab_prod_011",
+                "handle": "casual-sneakers",
+                "title": "Casual Canvas Sneakers",
+                "subtitle": "Comfortable all-day wear",
+                "vendor": "ZatiqBasics",
+                "price": 2800.0,
+                "comparePrice": 3800.0,
+                "currency": "BDT",
+                "image": "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=800&q=80",
+                "hoverImage": "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=800&q=80",
+                "badge": "26% Off",
+                "badgeColor": "#ef4444",
+                "rating": 4.3,
+                "reviewCount": 178,
+                "colors": ["white", "black", "navy"],
+                "sizes": ["40", "41", "42", "43", "44"],
+                "quickAddEnabled": true,
+                "buyNowEnabled": true
+              },
+              {
+                "id": "tab_prod_012",
+                "handle": "silk-scarf",
+                "title": "Silk Print Scarf",
+                "subtitle": "Luxurious accent piece",
+                "vendor": "ZatiqLux",
+                "price": 2200.0,
+                "comparePrice": 3200.0,
+                "currency": "BDT",
+                "image": "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?w=800&q=80",
+                "hoverImage": "https://images.unsplash.com/photo-1584030373081-f37b7bb4fa8e?w=800&q=80",
+                "badge": "31% Off",
+                "badgeColor": "#ef4444",
+                "rating": 4.6,
+                "reviewCount": 56,
+                "colors": ["floral", "geometric"],
+                "sizes": [],
+                "quickAddEnabled": true,
+                "buyNowEnabled": true
+              },
+              {
+                "id": "tab_prod_021",
+                "handle": "quilted-puffer-jacket",
+                "title": "Quilted Puffer Jacket",
+                "subtitle": "Warm & lightweight",
+                "vendor": "ZatiqStyle",
+                "price": 6800.0,
+                "comparePrice": 9500.0,
+                "currency": "BDT",
+                "image": "https://images.unsplash.com/photo-1544923246-77307dd628b8?w=800&q=80",
+                "hoverImage": "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=800&q=80",
+                "badge": "28% Off",
+                "badgeColor": "#ef4444",
+                "rating": 4.7,
+                "reviewCount": 92,
+                "colors": ["black", "olive", "burgundy"],
+                "sizes": ["S", "M", "L", "XL"],
+                "quickAddEnabled": true,
+                "buyNowEnabled": true
+              },
+              {
+                "id": "tab_prod_022",
+                "handle": "suede-ankle-boots",
+                "title": "Suede Ankle Boots",
+                "subtitle": "Versatile footwear classic",
+                "vendor": "ZatiqLux",
+                "price": 4500.0,
+                "comparePrice": 6200.0,
+                "currency": "BDT",
+                "image": "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=800&q=80",
+                "hoverImage": "https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?w=800&q=80",
+                "badge": "27% Off",
+                "badgeColor": "#ef4444",
+                "rating": 4.5,
+                "reviewCount": 143,
+                "colors": ["tan", "black", "gray"],
+                "sizes": ["36", "37", "38", "39", "40", "41"],
+                "quickAddEnabled": true,
+                "buyNowEnabled": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "customer_reviews_1",
+        "type": "reviews-1",
+        "settings": {
+          "title": "Happy customers",
+          "autoplay": true,
+          "autoplaySpeed": 3000
+        },
+        "reviews": [
+          {
+            "name": "Victoria Gardner",
+            "rating": 5,
+            "comment": "Very satisfied with the bag! A wonderful shopper, not too big and not too small, but as it should be 👌 The bag looks more expensive than it costs.",
+            "image": "/assets/Review/image.png"
+          },
+          {
+            "name": "Alexandra D.",
+            "rating": 5,
+            "comment": "A wonderful compact bag, holds a lot of things, good tailoring, smooth seams, strong fittings, good quality.",
+            "image": "/assets/Review/image2.png"
+          },
+          {
+            "name": "Jenny Wilson",
+            "rating": 4,
+            "comment": "Elegant blouse and the color is very nice, the seams are neat. 🎁 Excellent quality fabric, for summer weather is very good because the fabric is light and does not stick to the body.",
+            "image": "/assets/Review/image3.png"
+          },
+          {
+            "name": "Alexandra D.",
+            "rating": 5,
+            "comment": "A wonderful compact bag, holds a lot of things, good tailoring, smooth seams, strong fittings, good quality.",
+            "image": "/assets/Review/image2.png"
+          },
+          {
+            "name": "Jenny Wilson",
+            "rating": 4,
+            "comment": "Elegant blouse and the color is very nice, the seams are neat. 🎁 Excellent quality fabric, for summer weather is very good because the fabric is light and does not stick to the body.",
+            "image": "/assets/Review/image3.png"
+          }
+        ]
+      },
+      {
+        "id": "customer_reviews_2",
+        "type": "reviews-2",
+        "settings": {
+          "title": "This Is What Our Customers Say",
+          "subtitle": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Scelerisque duis",
+          "autoplay": true,
+          "autoplaySpeed": 2000
+        },
+        "testimonials": [
+          {
+            "name": "James K.",
+            "role": "Traveler",
+            "text": "You won't regret it. I would like to personally thank you for your outstanding product. Absolutely wonderful!",
+            "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop"
+          },
+          {
+            "name": "Alex P.",
+            "role": "Designer",
+            "text": "I was looking for. Thank you for making it pleasant and most of all hassle free! All is great.",
+            "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop"
+          },
+          {
+            "name": "Evan W.",
+            "role": "Founder",
+            "text": "Exactly what I needed for my project. Outstanding quality and amazing customer service throughout.",
+            "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop"
+          },
+          {
+            "name": "Sarah M.",
+            "role": "Business Owner",
+            "text": "Exceptional service and product quality. Would highly recommend to anyone looking for premium solutions.",
+            "avatar": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop"
+          },
+          {
+            "name": "Mike T.",
+            "role": "Developer",
+            "text": "Best purchase I made this year. The attention to detail is remarkable and the support team is fantastic.",
+            "avatar": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop"
+          }
+        ]
+      },
+      {
+        "id": "customer_reviews_3",
+        "type": "reviews-3",
+        "settings": {
+          "title": "Customer Opinions",
+          "subtitle": "We are showcasing some user opinions and comments",
+          "autoplay": true,
+          "autoplaySpeed": 3000
+        },
+        "reviews": [
+          {
+            "name": "Amina Rahman",
+            "comment": "The portable Bluetooth speaker delivers surprisingly powerful sound for its size. Perfect for outdoor use. I just wish the charging time was a bit shorter. Overall, a solid buy for casual music lovers.",
+            "rating": 4,
+            "avatar": "/assets/avatar/a1.jpg"
+          },
+          {
+            "name": "Liam Ahmed",
+            "comment": "The smart home camera has decent video quality during the day, but night vision isn't very clear. Setup was easy, but I had some trouble with the app notifications. It does the job, but not perfect.",
+            "rating": 4,
+            "avatar": "/assets/avatar/a2.jpg"
+          },
+          {
+            "name": "Sofia Islam",
+            "comment": "I bought the smartwatch mainly for fitness tracking, and it works well for steps and heart rate. But the battery barely lasts two days, which is disappointing. I hope future updates improve the performance.",
+            "rating": 5,
+            "avatar": "/assets/avatar/a3.jpg"
+          },
+          {
+            "name": "Amina Rahman",
+            "comment": "The portable Bluetooth speaker delivers surprisingly powerful sound for its size. Perfect for outdoor use. I just wish the charging time was a bit shorter. Overall, a solid buy for casual music lovers.",
+            "rating": 4,
+            "avatar": "/assets/avatar/a1.jpg"
+          },
+          {
+            "name": "Liam Ahmed",
+            "comment": "The smart home camera has decent video quality during the day, but night vision isn't very clear. Setup was easy, but I had some trouble with the app notifications. It does the job, but not perfect.",
+            "rating": 4,
+            "avatar": "/assets/avatar/a2.jpg"
+          }
+        ]
+      },
+      {
+        "id": "instagram_feed",
+        "type": "social-feed-1",
+        "settings": {
+          "title": "Follow Us @demofashion",
+          "subtitle": "Tag us to be featured",
+          "source": "instagram",
+          "username": "demofashion",
+          "limit": 8,
+          "columns": 4,
+          "columnsMobile": 2,
+          "showLikes": true
+        },
+        "posts": [
+          {
+            "id": "ig_001",
+            "image": "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=500&h=500&fit=crop&q=80",
+            "caption": "New arrivals dropping tomorrow! 🔥",
+            "likes": 1234,
+            "link": "https://instagram.com/p/abc123"
+          },
+          {
+            "id": "ig_002",
+            "image": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=500&h=500&fit=crop&q=80",
+            "caption": "Winter styles to keep you cozy ❄️",
+            "likes": 987,
+            "link": "https://instagram.com/p/def456"
+          },
+          {
+            "id": "ig_003",
+            "image": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=500&h=500&fit=crop&q=80",
+            "caption": "Accessorize your look with our latest collection ✨",
+            "likes": 765,
+            "link": "https://instagram.com/p/ghi789"
+          },
+          {
+            "id": "ig_004",
+            "image": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=500&h=500&fit=crop&q=80",
+            "caption": "Sustainable fashion never looked so good 🌿",
+            "likes": 432,
+            "link": "https://instagram.com/p/jkl012"
+          },
+          {
+            "id": "ig_003",
+            "image": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=500&h=500&fit=crop&q=80",
+            "caption": "Accessorize your look with our latest collection ✨",
+            "likes": 765,
+            "link": "https://instagram.com/p/ghi789"
+          },
+          {
+            "id": "ig_004",
+            "image": "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=500&h=500&fit=crop&q=80",
+            "caption": "Sustainable fashion never looked so good 🌿",
+            "likes": 432,
+            "link": "https://instagram.com/p/jkl012"
+          },
+          {
+            "id": "ig_003",
+            "image": "https://images.unsplash.com/photo-1445205170230-053b83016050?w=500&h=500&fit=crop&q=80",
+            "caption": "Accessorize your look with our latest collection ✨",
+            "likes": 765,
+            "link": "https://instagram.com/p/ghi789"
+          },
+          {
+            "id": "ig_004",
+            "image": "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=500&h=500&fit=crop&q=80",
+            "caption": "Sustainable fashion never looked so good 🌿",
+            "likes": 432,
+            "link": "https://instagram.com/p/jkl012"
+          }
+        ]
+      },
+      {
+        "id": "facebook_feed",
+        "type": "social-feed-2",
+        "settings": {
+          "title": "Connect with Us on Facebook",
+          "subtitle": "Join our community",
+          "source": "facebook",
+          "username": "demofashion",
+          "pageName": "Demo Fashion Store",
+          "limit": 8,
+          "columns": 4,
+          "columnsMobile": 2,
+          "showLikes": true
+        },
+        "posts": [
+          {
+            "id": "fb_001",
+            "image": "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600&h=400&fit=crop&q=80",
+            "caption": "🎉 New Collection Alert! Discover our latest winter arrivals that blend comfort with style. Shop now and get 20% off on your first purchase!",
+            "likes": 2543,
+            "comments": 156,
+            "shares": 89,
+            "link": "https://facebook.com/demofashion/posts/123"
+          },
+          {
+            "id": "fb_002",
+            "image": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&h=400&fit=crop&q=80",
+            "caption": "Weekend Vibes ✨ Looking for the perfect outfit? Check out our exclusive designer collection that's making waves this season!",
+            "likes": 1876,
+            "comments": 92,
+            "shares": 45,
+            "link": "https://facebook.com/demofashion/posts/124"
+          },
+          {
+            "id": "fb_003",
+            "image": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&h=400&fit=crop&q=80",
+            "caption": "Customer Love 💕 Thank you for all the amazing reviews! Your support means everything to us. Keep sharing your style stories!",
+            "likes": 3421,
+            "comments": 234,
+            "shares": 127,
+            "link": "https://facebook.com/demofashion/posts/125"
+          },
+          {
+            "id": "fb_004",
+            "image": "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&h=400&fit=crop&q=80",
+            "caption": "Flash Sale Alert! 🔥 48 hours only - Up to 50% off on selected items. Don't miss out on these incredible deals!",
+            "likes": 4567,
+            "comments": 389,
+            "shares": 256,
+            "link": "https://facebook.com/demofashion/posts/126"
+          },
+          {
+            "id": "fb_005",
+            "image": "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=600&h=400&fit=crop&q=80",
+            "caption": "Style Tips Tuesday 💫 How to layer your outfits like a pro this winter. Swipe through for our expert styling guide!",
+            "likes": 1932,
+            "comments": 78,
+            "shares": 34,
+            "link": "https://facebook.com/demofashion/posts/127"
+          },
+          {
+            "id": "fb_006",
+            "image": "https://images.unsplash.com/photo-1445205170230-053b83016050?w=600&h=400&fit=crop&q=80",
+            "caption": "Behind the Scenes 🎬 Take a peek at our latest photoshoot! Creating magic with our talented team. Stay tuned for more!",
+            "likes": 2134,
+            "comments": 112,
+            "shares": 67,
+            "link": "https://facebook.com/demofashion/posts/128"
+          },
+          {
+            "id": "fb_002",
+            "image": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&h=400&fit=crop&q=80",
+            "caption": "Weekend Vibes ✨ Looking for the perfect outfit? Check out our exclusive designer collection that's making waves this season!",
+            "likes": 1876,
+            "comments": 92,
+            "shares": 45,
+            "link": "https://facebook.com/demofashion/posts/124"
+          },
+          {
+            "id": "fb_003",
+            "image": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&h=400&fit=crop&q=80",
+            "caption": "Customer Love 💕 Thank you for all the amazing reviews! Your support means everything to us. Keep sharing your style stories!",
+            "likes": 3421,
+            "comments": 234,
+            "shares": 127,
+            "link": "https://facebook.com/demofashion/posts/125"
+          }
+        ]
+      },
+      {
+        "id": "brand_logos_1",
+        "type": "brands-1",
+        "settings": {
+          "title": "Shop by brand",
+          "backgroundColor": "#FFFFFF",
+          "columns": 6,
+          "columnsMobile": 2
+        },
+        "blocks": [
+          {
+            "name": "Sony",
+            "logo": "/assets/Brands/sony.png"
+          },
+          {
+            "name": "Skullcandy",
+            "logo": "/assets/Brands/Skullcandy.png"
+          },
+          {
+            "name": "Bose",
+            "logo": "/assets/Brands/Bose.png"
+          },
+          {
+            "name": "Oppo",
+            "logo": "/assets/Brands/oppo.png"
+          },
+          {
+            "name": "Panasonic",
+            "logo": "/assets/Brands/parasonic.png"
+          },
+          {
+            "name": "Samsung",
+            "logo": "/assets/Brands/samsung.png"
+          }
+        ]
+      },
+      {
+        "id": "brand_logos_2",
+        "type": "brands-2",
+        "settings": {
+          "title": "Shop by brand",
+          "backgroundColor": "#FFFFFF",
+          "columns": 4,
+          "columnsMobile": 2
+        },
+        "blocks": [
+          {
+            "name": "Sony",
+            "logo": "/assets/Brands/sony.png",
+            "description": "Get your best looking smile now!"
+          },
+          {
+            "name": "Skullcandy",
+            "logo": "/assets/Brands/Skullcandy.png",
+            "description": "DentalCare is most focused in helping you discover your most beautiful smile"
+          },
+          {
+            "name": "Bose",
+            "logo": "/assets/Brands/Bose.png",
+            "description": "Overcame any hurdle or any other problem."
+          },
+          {
+            "name": "Oppo",
+            "logo": "/assets/Brands/oppo.png",
+            "description": "Overcame any hurdle or any other problem."
+          },
+          {
+            "name": "Samsung",
+            "logo": "/assets/Brands/samsung.png",
+            "description": "Get your best looking smile now!"
+          },
+          {
+            "name": "Philips",
+            "logo": "/assets/Brands/Philips.png",
+            "description": "DentalCare is most focused in helping you discover your most beautiful smile"
+          },
+          {
+            "name": "Oracle",
+            "logo": "/assets/Brands/oracle.png",
+            "description": "Overcame any hurdle or any other problem."
+          },
+          {
+            "name": "Dell",
+            "logo": "/assets/Brands/Dell.png",
+            "description": "Overcame any hurdle or any other problem."
+          }
+        ]
+      },
+      {
+        "id": "brand_logos_3",
+        "type": "brands-3",
+        "settings": {
+          "title": "Shop by brand",
+          "backgroundColor": "#FFFFFF"
+        },
+        "blocks": [
+          {
+            "name": "Zara",
+            "image": "/src/assets/image/Brands/D/Zara.png"
+          },
+          {
+            "name": "Brooks",
+            "image": "/src/assets/image/Brands/D/brooks.png"
+          },
+          {
+            "name": "FILA",
+            "image": "/src/assets/image/Brands/D/FILA.png"
+          },
+          {
+            "name": "Adidas",
+            "image": "/src/assets/image/Brands/D/adidas.png"
+          },
+          {
+            "name": "Hermes",
+            "image": "/src/assets/image/Brands/D/hermes.png"
+          },
+          {
+            "name": "Dior",
+            "image": "/src/assets/image/Brands/D/Dior.png"
+          },
+          {
+            "name": "New Balance",
+            "image": "/src/assets/image/Brands/D/NB.png"
+          },
+          {
+            "name": "Puma",
+            "image": "/src/assets/image/Brands/D/Puma.png"
+          },
+          {
+            "name": "H&M",
+            "image": "/src/assets/image/Brands/D/H&M.png"
+          }
+        ]
+      },
+      {
+        "id": "trust_badges_1",
+        "type": "badges-1",
+        "settings": {
+          "backgroundColor": "#F9FAFB",
+          "columns": 4,
+          "columnsMobile": 2
+        },
+        "blocks": [
+          {
+            "icon": "truck",
+            "title": "Free Shipping & Returns",
+            "description": "For all orders over $199.00"
+          },
+          {
+            "icon": "credit-card",
+            "title": "Secure Payment",
+            "description": "We ensure secure payment"
+          },
+          {
+            "icon": "rotate-ccw",
+            "title": "Money Back Guarantee",
+            "description": "Returning money 30 days"
+          },
+          {
+            "icon": "messages-square",
+            "title": "24/7 Customer Support",
+            "description": "Friendly customer support"
+          }
+        ]
+      },
+      {
+        "id": "trust_badges_2",
+        "type": "badges-2",
+        "settings": {
+          "backgroundColor": "#FFFFFF",
+          "columns": 4,
+          "columnsMobile": 2
+        },
+        "blocks": [
+          {
+            "icon": "badge-check",
+            "title": "High Quality",
+            "description": "crafted from top materials"
+          },
+          {
+            "icon": "shield-check",
+            "title": "Warranty Protection",
+            "description": "Over 2 years"
+          },
+          {
+            "icon": "truck",
+            "title": "Free Shipping",
+            "description": "Order over 150 $"
+          },
+          {
+            "icon": "headphones",
+            "title": "24 / 7 Support",
+            "description": "Dedicated support"
+          }
+        ]
+      },
+      {
+        "id": "trust_badges",
+        "type": "badges-3",
+        "settings": {
+          "backgroundColor": "#F9FAFB",
+          "columns": 4,
+          "columnsMobile": 2
+        },
+        "blocks": [
+          {
+            "icon": "truck",
+            "title": "Free Worldwide Shipping",
+            "description": "On orders over $100"
+          },
+          {
+            "icon": "shield-check",
+            "title": "Secure Payment",
+            "description": "100% secure transactions"
+          },
+          {
+            "icon": "refresh",
+            "title": "Easy Returns",
+            "description": "30 days return policy"
+          },
+          {
+            "icon": "headphones",
+            "title": "24/7 Support",
+            "description": "Dedicated support team"
+          }
+        ]
+      }
+    ],
+    "seo": {
+      "title": "Demo Fashion Store - Latest Fashion Trends & Styles",
+      "description": "Shop the latest fashion trends. Free shipping on orders over $100. New arrivals daily.",
+      "canonical": "https://demo-store.zatiq.com",
+      "og": {
+        "title": "Demo Fashion Store",
+        "description": "Your destination for the latest fashion",
+        "image": "https://cdn.zatiq.com/seo/homepage-og.jpg",
+        "type": "website"
+      },
+      "twitter": {
+        "card": "summary_large_image",
+        "title": "Demo Fashion Store",
+        "description": "Your destination for the latest fashion",
+        "image": "https://cdn.zatiq.com/seo/homepage-twitter.jpg"
+      }
+    }
+  }
+}
