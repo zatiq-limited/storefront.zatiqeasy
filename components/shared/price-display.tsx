@@ -58,7 +58,9 @@ export function PriceDisplay({
   return (
     <div
       className={cn(
-        layout === "inline" ? "flex items-center gap-1 sm:gap-2" : "flex flex-col",
+        layout === "inline"
+          ? "flex items-center gap-1 sm:gap-2"
+          : "flex flex-col",
         className
       )}
     >

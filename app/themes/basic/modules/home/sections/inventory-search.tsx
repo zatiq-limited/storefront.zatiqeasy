@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useProductsStore } from '@/stores/productsStore';
-import { Search, X } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useProductsStore } from "@/stores/productsStore";
+import { Search, X } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface InventorySearchProps {
   className?: string;
@@ -19,12 +19,8 @@ export function InventorySearch({ className }: InventorySearchProps) {
   const searchParams = useSearchParams();
 
   // Get inventory state from Zustand store
-  const {
-    searchQuery,
-    setSearchQuery,
-    setCurrentPage,
-    filteredProducts
-  } = useProductsStore();
+  const { searchQuery, setSearchQuery, setCurrentPage, filteredProducts } =
+    useProductsStore();
 
   const [isSearchInputFocused, setIsSearchInputFocused] = useState(false);
 
@@ -37,32 +33,32 @@ export function InventorySearch({ className }: InventorySearchProps) {
     const params = new URLSearchParams(searchParams);
 
     // Remove specific query params
-    params.delete('category');
-    params.delete('product');
-    params.delete('shopId');
+    params.delete("category");
+    params.delete("product");
+    params.delete("shopId");
 
     // Add search param if not empty
     if (search.trim()) {
-      params.set('search', search);
+      params.set("search", search);
     } else {
-      params.delete('search');
+      params.delete("search");
     }
 
     // Update URL
-    const newUrl = params.toString() ? `?${params.toString()}` : '';
+    const newUrl = params.toString() ? `?${params.toString()}` : "";
     router.replace(newUrl, { scroll: false });
   };
 
   // Clear search
   const onClearSearch = () => {
-    setSearchQuery('');
+    setSearchQuery("");
     setCurrentPage(1);
 
     // Update URL without search param
     const params = new URLSearchParams(searchParams);
-    params.delete('search');
+    params.delete("search");
 
-    const newUrl = params.toString() ? `?${params.toString()}` : '';
+    const newUrl = params.toString() ? `?${params.toString()}` : "";
     router.replace(newUrl, { scroll: false });
   };
 
@@ -76,7 +72,7 @@ export function InventorySearch({ className }: InventorySearchProps) {
             "ring-1 ring-gray-200 hover:ring-blue-500 dark:hover:ring-blue-400",
             "dark:bg-gray-800/80 dark:ring-gray-700",
             {
-              "ring-2 ring-blue-500 dark:ring-blue-400": isSearchInputFocused
+              "ring-2 ring-blue-500 dark:ring-blue-400": isSearchInputFocused,
             }
           )}
         >
@@ -117,7 +113,7 @@ export function InventorySearch({ className }: InventorySearchProps) {
             <div
               className={cn(
                 "w-10 h-10 flex items-center justify-center rounded-lg",
-                "bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700",
+                "bg-linear-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700",
                 "transition-transform duration-200 hover:scale-105"
               )}
             >
@@ -129,7 +125,8 @@ export function InventorySearch({ className }: InventorySearchProps) {
         {/* Search Results Count */}
         {searchQuery && (
           <div className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-            {filteredProducts.length} {filteredProducts.length === 1 ? 'item' : 'items'} found
+            {filteredProducts.length}{" "}
+            {filteredProducts.length === 1 ? "item" : "items"} found
           </div>
         )}
       </div>

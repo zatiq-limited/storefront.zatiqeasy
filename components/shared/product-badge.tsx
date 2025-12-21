@@ -36,7 +36,8 @@ const positionClasses: Record<BadgePosition, string> = {
   "top-left": "top-2 left-2 sm:top-3 sm:left-3 lg:top-4 lg:left-4",
   "top-right": "top-2 right-2 sm:top-3 sm:right-3 lg:top-4 lg:right-4",
   "bottom-left": "bottom-2 left-2 sm:bottom-3 sm:left-3 lg:bottom-4 lg:left-4",
-  "bottom-right": "bottom-2 right-2 sm:bottom-3 sm:right-3 lg:bottom-4 lg:right-4",
+  "bottom-right":
+    "bottom-2 right-2 sm:bottom-3 sm:right-3 lg:bottom-4 lg:right-4",
 };
 
 // Size classes

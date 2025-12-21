@@ -1,26 +1,47 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
-import Image from 'next/image';
-import { useCartStore } from '@/stores';
-import { useProductsStore } from '@/stores/productsStore';
-import { useShopStore } from '@/stores/shopStore';
+import { useState } from "react";
+import { useParams } from "next/navigation";
+import Image from "next/image";
+import { useCartStore } from "@/stores";
+import { useProductsStore } from "@/stores/productsStore";
+import { useShopStore } from "@/stores/shopStore";
 import {
   ShoppingCart,
   ZoomIn,
-  Play,
   Download,
   Share2,
   Heart,
   Star,
   Minus,
-  Plus
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { ProductSkeleton } from '../../../../../components/skeletons/product-skeleton';
-import { HeightAnimation } from '../../../../../components/animations/height-animation';
-// import { RelatedProducts } from '../../../../../components/product/related-products';
+  Plus,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { HeightAnimation } from "@/app/components/animations/height-animation";
+import type { VariantType, Variant, Product } from "@/stores/productsStore";
+import type { VariantsState } from "@/types/cart.types";
+
+// Extend Window interface for Facebook Pixel
+declare global {
+  interface Window {
+    fbq?: (
+      track: string,
+      event: string,
+      data?: Record<string, unknown>
+    ) => void;
+  }
+}
+
+// Shop theme settings interface
+interface ShopThemeSettings {
+  enable_product_image_download?: boolean;
+  [key: string]: unknown;
+}
+
+// Extended product with optional brand_name
+interface ProductWithBrand extends Product {
+  brand_name?: string;
+}
 
 /**
  * Product Details Component
@@ -34,46 +55,92 @@ export function ProductDetails() {
   const { addProduct } = useCartStore();
   const { shopDetails } = useShopStore();
 
-  // State
+  // State - using productId as key to reset state when product changes (React recommended pattern)
+  const [prevProductId, setPrevProductId] = useState(productId);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [isImageLightboxOpen, setIsImageLightboxOpen] = useState(false);
-  const [selectedVariant, setSelectedVariant] = useState<Record<string, any>>({});
+  const [selectedVariant, setSelectedVariant] = useState<
+    Record<string | number, Variant>
+  >({});
+
+  // Reset state when productId changes (React pattern: derive state from props during render)
+  if (productId !== prevProductId) {
+    setPrevProductId(productId);
+    setQuantity(1);
+    setSelectedImageIndex(0);
+    setSelectedVariant({});
+  }
 
   // Get product
   const product = productId ? getProductById(productId as string) : null;
   const isLoading = inventoryLoading || !product;
 
   // Currency
-  const currency = shopDetails?.currency_code === 'BDT' ? 'Tk' : shopDetails?.currency_code || '$';
+  const currency =
+    shopDetails?.currency_code === "BDT"
+      ? "Tk"
+      : shopDetails?.currency_code || "$";
 
-  // Reset quantity when product changes
-  useEffect(() => {
-    if (product) {
-      setQuantity(1);
-      setSelectedImageIndex(0);
-      setSelectedVariant({});
+  // Convert selected variants to VariantsState format for cart
+  const buildVariantsState = (): VariantsState => {
+    const variantsState: VariantsState = {};
+
+    for (const [variantTypeId, variant] of Object.entries(selectedVariant)) {
+      if (variant) {
+        // Find the variant type to get the name
+        const variantType = product?.variant_types?.find(
+          (vt) => String(vt.id) === String(variantTypeId)
+        );
+
+        variantsState[variantTypeId] = {
+          variant_type_id: Number(variantTypeId),
+          variant_id: variant.id,
+          price: variant.price,
+          variant_name: variant.name,
+          variant_type_name: variantType?.title,
+          image_url: variant.image_url ?? undefined,
+        };
+      }
     }
-  }, [product]);
+
+    return variantsState;
+  };
 
   // Handle add to cart
   const handleAddToCart = () => {
     if (!product) return;
 
-    addProduct({
+    // Build cart product with all required fields for CartProduct type
+    const cartProduct = {
       ...product,
+      id: Number(product.id),
+      shop_id: product.shop_id ?? 0,
+      old_price: product.old_price ?? product.price,
+      is_active: product.is_active ?? true,
+      has_variant: product.has_variant ?? false,
+      categories: product.categories ?? [],
+      variant_types: product.variant_types ?? [],
+      stocks: product.stocks ?? [],
+      is_stock_manage_by_variant: product.is_stock_manage_by_variant ?? false,
+      reviews: product.reviews ?? [],
+      total_inventory_sold: 0,
       qty: quantity,
-      selectedVariants: selectedVariant as any
-    } as any);
+      selectedVariants: buildVariantsState(),
+    };
 
-    // Track analytics if available
-    if (typeof window !== 'undefined' && (window as any).fbq) {
-      (window as any).fbq('track', 'AddToCart', {
+    // Type assertion needed due to minor type differences between Product and InventoryProduct
+    // (e.g., Review.images: string[] | null vs string[] | undefined)
+    addProduct(cartProduct as Parameters<typeof addProduct>[0]);
+
+    // Track analytics if available (Facebook Pixel)
+    if (typeof window !== "undefined" && window.fbq) {
+      window.fbq("track", "AddToCart", {
         content_name: product.name,
         content_ids: [product.id],
-        content_type: 'product',
+        content_type: "product",
         value: product.price,
-        currency: shopDetails?.currency_code || 'USD'
+        currency: shopDetails?.currency_code || "USD",
       });
     }
   };
@@ -88,23 +155,23 @@ export function ProductDetails() {
   // Handle image download
   const handleDownloadImage = async (imageUrl: string, index: number) => {
     // Check if image download is enabled (if property exists in shop settings)
-    const shopTheme = shopDetails?.shop_theme as any;
+    const shopTheme = shopDetails?.shop_theme as ShopThemeSettings | undefined;
     if (shopTheme?.enable_product_image_download === false) return;
 
     try {
       const response = await fetch(imageUrl);
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
-      link.download = `${product?.name || 'product'}-image-${index + 1}.jpg`;
+      link.download = `${product?.name || "product"}-image-${index + 1}.jpg`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Download failed:', error);
-      alert('Failed to download image. Please try again.');
+      console.error("Download failed:", error);
+      alert("Failed to download image. Please try again.");
     }
   };
 
@@ -116,7 +183,10 @@ export function ProductDetails() {
             <div className="aspect-square bg-gray-200 rounded-lg"></div>
             <div className="grid grid-cols-4 gap-2">
               {[...Array(4)].map((_, i) => (
-                <div key={i} className="aspect-square bg-gray-200 rounded"></div>
+                <div
+                  key={i}
+                  className="aspect-square bg-gray-200 rounded"
+                ></div>
               ))}
             </div>
           </div>
@@ -133,7 +203,7 @@ export function ProductDetails() {
 
   if (!product) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
+      <div className="flex items-center justify-center min-h-100">
         <div className="text-center">
           <p className="text-gray-500">Product not found</p>
         </div>
@@ -149,7 +219,11 @@ export function ProductDetails() {
           {/* Main Image */}
           <div className="relative aspect-square overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800">
             <Image
-              src={product.images?.[selectedImageIndex] || product.image_url || '/placeholder-product.png'}
+              src={
+                product.images?.[selectedImageIndex] ||
+                product.image_url ||
+                "/placeholder-product.png"
+              }
               alt={product.name}
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"
@@ -168,7 +242,12 @@ export function ProductDetails() {
 
               {product.images?.[selectedImageIndex] && (
                 <button
-                  onClick={() => handleDownloadImage(product.images![selectedImageIndex], selectedImageIndex)}
+                  onClick={() =>
+                    handleDownloadImage(
+                      product.images![selectedImageIndex],
+                      selectedImageIndex
+                    )
+                  }
                   className="w-10 h-10 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white dark:hover:bg-gray-800 transition-colors"
                 >
                   <Download className="w-5 h-5" />
@@ -237,7 +316,9 @@ export function ProductDetails() {
                     key={i}
                     className={cn(
                       "w-5 h-5",
-                      i < 4 ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
+                      i < 4
+                        ? "fill-yellow-400 text-yellow-400"
+                        : "text-gray-300"
                     )}
                   />
                 ))}
@@ -258,7 +339,8 @@ export function ProductDetails() {
                     {currency} {product.old_price.toFixed(2)}
                   </span>
                   <span className="bg-green-100 text-green-800 text-sm font-medium px-2 py-1 rounded">
-                    Save {(product.old_price - product.price).toFixed(2)} {currency}
+                    Save {(product.old_price - product.price).toFixed(2)}{" "}
+                    {currency}
                   </span>
                 </>
               )}
@@ -269,7 +351,8 @@ export function ProductDetails() {
           <HeightAnimation>
             <div className="prose prose-sm dark:prose-invert max-w-none">
               <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                {product.description || 'No description available for this product.'}
+                {product.description ||
+                  "No description available for this product."}
               </p>
             </div>
           </HeightAnimation>
@@ -278,19 +361,21 @@ export function ProductDetails() {
           {product.variant_types && product.variant_types.length > 0 && (
             <div className="space-y-4">
               <h3 className="text-lg font-semibold">Select Options</h3>
-              {product.variant_types.map((variant: any) => (
+              {product.variant_types.map((variant: VariantType) => (
                 <div key={variant.id} className="space-y-2">
                   <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                    {variant.name}
+                    {variant.title}
                   </label>
                   <div className="flex flex-wrap gap-2">
-                    {variant.options?.map((option: any) => (
+                    {variant.variants?.map((option: Variant) => (
                       <button
                         key={option.id}
-                        onClick={() => setSelectedVariant(prev => ({
-                          ...prev,
-                          [variant.id]: option
-                        }))}
+                        onClick={() =>
+                          setSelectedVariant((prev) => ({
+                            ...prev,
+                            [variant.id]: option,
+                          }))
+                        }
                         className={cn(
                           "px-4 py-2 rounded-lg border transition-colors",
                           selectedVariant[variant.id]?.id === option.id
@@ -298,7 +383,7 @@ export function ProductDetails() {
                             : "border-gray-300 hover:border-gray-400"
                         )}
                       >
-                        {option.value}
+                        {option.name}
                       </button>
                     ))}
                   </div>
@@ -321,12 +406,13 @@ export function ProductDetails() {
                 >
                   <Minus className="w-4 h-4" />
                 </button>
-                <span className="w-16 text-center font-medium">
-                  {quantity}
-                </span>
+                <span className="w-16 text-center font-medium">{quantity}</span>
                 <button
                   onClick={() => handleQuantityChange(quantity + 1)}
-                  disabled={product.quantity !== undefined && quantity >= product.quantity}
+                  disabled={
+                    product.quantity !== undefined &&
+                    quantity >= product.quantity
+                  }
                   className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50"
                 >
                   <Plus className="w-4 h-4" />
@@ -360,15 +446,19 @@ export function ProductDetails() {
             <dl className="grid grid-cols-2 gap-4 text-sm">
               <div>
                 <dt className="text-gray-600 dark:text-gray-400">SKU</dt>
-                <dd className="font-medium">{product.sku || 'N/A'}</dd>
+                <dd className="font-medium">{product.sku || "N/A"}</dd>
               </div>
               <div>
                 <dt className="text-gray-600 dark:text-gray-400">Category</dt>
-                <dd className="font-medium">{product.categories?.[0]?.name || 'Uncategorized'}</dd>
+                <dd className="font-medium">
+                  {product.categories?.[0]?.name || "Uncategorized"}
+                </dd>
               </div>
               <div>
                 <dt className="text-gray-600 dark:text-gray-400">Brand</dt>
-                <dd className="font-medium">{(product as any).brand_name || 'N/A'}</dd>
+                <dd className="font-medium">
+                  {(product as ProductWithBrand).brand_name || "N/A"}
+                </dd>
               </div>
               <div>
                 <dt className="text-gray-600 dark:text-gray-400">Shipping</dt>
@@ -379,11 +469,6 @@ export function ProductDetails() {
         </div>
       </div>
 
-      {/* Related Products */}
-      {/* <div className="mt-16">
-        <RelatedProducts productId={String(product.id)} />
-      </div> */}
-
       {/* Image Lightbox Modal */}
       {isImageLightboxOpen && (
         <div
@@ -392,7 +477,11 @@ export function ProductDetails() {
         >
           <div className="relative max-w-4xl max-h-full">
             <Image
-              src={product.images?.[selectedImageIndex] || product.image_url || '/placeholder-product.png'}
+              src={
+                product.images?.[selectedImageIndex] ||
+                product.image_url ||
+                "/placeholder-product.png"
+              }
               alt={product.name}
               width={1200}
               height={1200}

@@ -1,19 +1,21 @@
 "use client";
 
-import React, { useState, useMemo } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import Image from 'next/image';
-import { useCartStore } from '@/stores';
-import { useProductsStore, Product } from '@/stores/productsStore';
-import { useShopStore } from '@/stores/shopStore';
-import { ShoppingCart, Zap, AlertCircle } from 'lucide-react';
-import { cn, titleCase } from '@/lib/utils';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Pagination } from '../../../../../components/pagination';
-import { ProductSkeleton } from '../../../../../components/skeletons/product-skeleton';
-import { LazyAnimation } from '../../../../../components/animations/lazy-animation';
-import { CartQtyControl } from '@/components/cart/shared/CartQtyControl';
-import { ROUTES } from '@/lib/constants';
+import { useState, useMemo } from "react";
+import { useRouter } from "next/navigation";
+import type { Product, VariantType } from "@/stores/productsStore";
+import Image from "next/image";
+import { useCartStore } from "@/stores";
+import { useProductsStore } from "@/stores/productsStore";
+import type { VariantState } from "@/types/cart.types";
+import { useShopStore } from "@/stores/shopStore";
+import { ShoppingCart, Zap, AlertCircle } from "lucide-react";
+import { cn, titleCase } from "@/lib/utils";
+import { motion, AnimatePresence } from "framer-motion";
+import { Pagination } from "@/app/components/pagination";
+import { ProductSkeleton } from "@/app/components/skeletons/product-skeleton";
+import { LazyAnimation } from "@/app/components/animations/lazy-animation";
+import { CartQtyControl } from "@/components/cart/shared/cart-qty-control";
+import { ROUTES } from "@/lib/constants";
 
 // Constants
 const MAX_PRODUCTS_PER_PAGE = 12;
@@ -26,7 +28,7 @@ interface ProductCardProps {
   old_price?: number | null;
   image_url?: string;
   images?: string[];
-  variant_types?: any[];
+  variant_types?: VariantType[];
   quantity?: number;
   has_variant?: boolean;
   onNavigate: () => void;
@@ -38,9 +40,9 @@ interface ProductCardProps {
  * Displays product grid with sorting and pagination
  */
 export function InventoryProducts() {
-  const [selectedProduct, setSelectedProduct] = useState<any>(null);
+  // Note: selectedProduct state is set but not read - kept for future variant selector modal
+  const [, setSelectedProduct] = useState<Product | null>(null);
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   // Get inventory state using direct selectors (avoiding getter issues)
   const products = useProductsStore((state) => state.products);
@@ -49,57 +51,55 @@ export function InventoryProducts() {
   const setFilters = useProductsStore((state) => state.setFilters);
 
   // Compute filtered products in the component
-  const { filteredProducts, totalPages, currentPage, sortOption } = useMemo(() => {
-    let filtered = [...products];
+  const { filteredProducts, totalPages, currentPage, sortOption } =
+    useMemo(() => {
+      let filtered = [...products];
 
-    // Apply search filter
-    if (filters.search) {
-      filtered = filtered.filter(product =>
-        product.name.toLowerCase().includes(filters.search!.toLowerCase())
-      );
-    }
+      // Apply search filter
+      if (filters.search) {
+        filtered = filtered.filter((product) =>
+          product.name.toLowerCase().includes(filters.search!.toLowerCase())
+        );
+      }
 
-    // Apply category filter
-    if (filters.category) {
-      filtered = filtered.filter(product =>
-        String(product.category_id) === String(filters.category) ||
-        product.categories?.some(cat => String(cat.id) === String(filters.category))
-      );
-    }
+      // Apply category filter
+      if (filters.category) {
+        filtered = filtered.filter(
+          (product) =>
+            String(product.category_id) === String(filters.category) ||
+            product.categories?.some(
+              (cat) => String(cat.id) === String(filters.category)
+            )
+        );
+      }
 
-    // Apply sorting
-    switch (filters.sort) {
-      case 'price-asc':
-        filtered = filtered.sort((a, b) => a.price - b.price);
-        break;
-      case 'price-desc':
-        filtered = filtered.sort((a, b) => b.price - a.price);
-        break;
-      case 'name-asc':
-        filtered = filtered.sort((a, b) => a.name.localeCompare(b.name));
-        break;
-      case 'name-desc':
-        filtered = filtered.sort((a, b) => b.name.localeCompare(a.name));
-        break;
-    }
+      // Apply sorting
+      switch (filters.sort) {
+        case "price-asc":
+          filtered = filtered.sort((a, b) => a.price - b.price);
+          break;
+        case "price-desc":
+          filtered = filtered.sort((a, b) => b.price - a.price);
+          break;
+        case "name-asc":
+          filtered = filtered.sort((a, b) => a.name.localeCompare(b.name));
+          break;
+        case "name-desc":
+          filtered = filtered.sort((a, b) => b.name.localeCompare(a.name));
+          break;
+      }
 
-    return {
-      filteredProducts: filtered,
-      totalPages: Math.ceil(filtered.length / MAX_PRODUCTS_PER_PAGE),
-      currentPage: filters.page,
-      sortOption: filters.sort
-    };
-  }, [products, filters]);
+      return {
+        filteredProducts: filtered,
+        totalPages: Math.ceil(filtered.length / MAX_PRODUCTS_PER_PAGE),
+        currentPage: filters.page,
+        sortOption: filters.sort,
+      };
+    }, [products, filters]);
 
   // Setters
   const setCurrentPage = (page: number) => setFilters({ page });
   const setSortOption = (sort: string) => setFilters({ sort, page: 1 });
-
-  // Get cart state
-  const { addProduct, updateQuantity, getProductsByInventoryId } = useCartStore();
-
-  // Get shop state
-  const { shopDetails } = useShopStore();
 
   // Navigate to product details
   const navigateProductDetails = (id: string | number) => {
@@ -127,7 +127,7 @@ export function InventoryProducts() {
         {filteredProducts && filteredProducts.length > 0 ? (
           <div>
             {/* Header with category name and sort */}
-            <div className="px-4 h-[55px] bg-white dark:bg-gray-800 rounded-xl mb-3 border border-gray-200 dark:border-gray-600 flex items-center justify-between">
+            <div className="px-4 h-13.75 bg-white dark:bg-gray-800 rounded-xl mb-3 border border-gray-200 dark:border-gray-600 flex items-center justify-between">
               <h2 className="font-medium text-gray-900 dark:text-gray-300 truncate w-[45%]">
                 All Products
               </h2>
@@ -136,7 +136,7 @@ export function InventoryProducts() {
                 <select
                   onChange={handleSort}
                   value={sortOption}
-                  className="border border-gray-300 rounded-lg px-2 py-2 text-sm w-[122px] bg-transparent dark:bg-gray-700 dark:border-gray-600"
+                  className="border border-gray-300 rounded-lg px-2 py-2 text-sm w-30.5 bg-transparent dark:bg-gray-700 dark:border-gray-600"
                 >
                   <option value="">Default</option>
                   <option value="price-asc">Price (Low &gt; High)</option>
@@ -179,10 +179,11 @@ export function InventoryProducts() {
                 ))}
               </div>
             ) : (
-              <div className="flex flex-col items-center gap-3 mt-[121px] text-sm text-gray-600 dark:text-gray-400 max-w-[184px] mx-auto">
+              <div className="flex flex-col items-center gap-3 mt-30 text-sm text-gray-600 dark:text-gray-400 max-w-46 mx-auto">
                 <AlertCircle className="w-12 h-12 text-gray-400" />
                 <p className="text-center tracking-[-0.56px]">
-                  No item is currently available in this category. Hope we can add it soon.
+                  No item is currently available in this category. Hope we can
+                  add it soon.
                 </p>
               </div>
             )}
@@ -207,10 +208,15 @@ function ProductCard({
   quantity = 0,
   has_variant = false,
   onNavigate,
-  onSelectProduct
+  onSelectProduct,
 }: ProductCardProps) {
   const router = useRouter();
-  const { addProduct, updateQuantity, removeProduct, getProductsByInventoryId } = useCartStore();
+  const {
+    addProduct,
+    updateQuantity,
+    removeProduct,
+    getProductsByInventoryId,
+  } = useCartStore();
   const { shopDetails } = useShopStore();
 
   // Get quantity in cart for this product
@@ -219,27 +225,36 @@ function ProductCard({
   const isStockOut = quantity <= 0;
 
   // Product image URL
-  const productImage = images?.[0] || image_url || '/placeholder-product.svg';
+  const productImage = images?.[0] || image_url || "/placeholder-product.svg";
 
   // Currency
-  const currency = shopDetails?.currency_code === 'BDT' ? 'Tk' : shopDetails?.currency_code || '$';
+  const currency =
+    shopDetails?.currency_code === "BDT"
+      ? "Tk"
+      : shopDetails?.currency_code || "$";
 
   // Calculate discount
   const validOldPrice = old_price ?? undefined;
-  const discount = validOldPrice && validOldPrice > price ? validOldPrice - price : 0;
+  const discount =
+    validOldPrice && validOldPrice > price ? validOldPrice - price : 0;
 
   // Calculate max stock for cart item
   const getMaxStock = () => {
     const currentCartItem = cartProducts[0];
     if (!currentCartItem) return quantity;
 
-    if (currentCartItem.is_stock_manage_by_variant && currentCartItem.stocks?.length > 0) {
-      const selectedVariantIds = Object.values(currentCartItem.selectedVariants || {})
-        .filter((v) => v)
-        .map((v: any) => v.variant_id);
+    if (
+      currentCartItem.is_stock_manage_by_variant &&
+      currentCartItem.stocks?.length > 0
+    ) {
+      const selectedVariantIds = Object.values(
+        currentCartItem.selectedVariants || {}
+      )
+        .filter((v): v is VariantState => Boolean(v))
+        .map((v) => v.variant_id);
 
       if (selectedVariantIds.length > 0) {
-        const matchingStock = currentCartItem.stocks.find((stock: any) =>
+        const matchingStock = currentCartItem.stocks.find((stock) =>
           selectedVariantIds.every((variantId: number) =>
             stock.combination.includes(`${variantId}`)
           )
@@ -251,7 +266,8 @@ function ProductCard({
   };
 
   const maxStock = getMaxStock();
-  const isCartIncrementDisabled = isStockOut || (typeof maxStock === 'number' && quantityInCart >= maxStock);
+  const isCartIncrementDisabled =
+    isStockOut || (typeof maxStock === "number" && quantityInCart >= maxStock);
 
   // Add to cart handler
   const handleAddToCart = (e: React.MouseEvent) => {
@@ -262,6 +278,7 @@ function ProductCard({
       return;
     }
 
+    // Type assertion needed due to type differences between Product and InventoryProduct
     addProduct({
       id: Number(id),
       shop_id: 0,
@@ -280,8 +297,8 @@ function ProductCard({
       reviews: [],
       total_inventory_sold: 0,
       qty: 1,
-      selectedVariants: {}
-    } as any);
+      selectedVariants: {},
+    } as Parameters<typeof addProduct>[0]);
   };
 
   // Buy now handler
@@ -293,6 +310,7 @@ function ProductCard({
       return;
     }
 
+    // Type assertion needed due to type differences between Product and InventoryProduct
     addProduct({
       id: Number(id),
       shop_id: 0,
@@ -311,8 +329,8 @@ function ProductCard({
       reviews: [],
       total_inventory_sold: 0,
       qty: 1,
-      selectedVariants: {}
-    } as any);
+      selectedVariants: {},
+    } as Parameters<typeof addProduct>[0]);
 
     router.push(ROUTES.CHECKOUT);
   };
@@ -413,10 +431,12 @@ function ProductCard({
       </div>
 
       {/* Product Info */}
-      <div className={cn(
-        "px-4 py-3 flex flex-col items-center justify-between",
-        name && name.length <= 20 ? "gap-4" : "gap-1"
-      )}>
+      <div
+        className={cn(
+          "px-4 py-3 flex flex-col items-center justify-between",
+          name && name.length <= 20 ? "gap-4" : "gap-1"
+        )}
+      >
         {/* Price */}
         <div className="flex items-center gap-2">
           {validOldPrice && validOldPrice > price && (
