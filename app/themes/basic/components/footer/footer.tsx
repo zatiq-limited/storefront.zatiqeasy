@@ -7,7 +7,7 @@ import { useShopStore } from "@/stores";
 import {
   socialIcons,
   type Sociallinks,
-} from "@/app/assets/icons/social-links-svg-icon";
+} from "@/components/shared/icons/social-links-svg-icon";
 import { isSubscribed } from "@/lib/utils/subscription-utils";
 
 /**
