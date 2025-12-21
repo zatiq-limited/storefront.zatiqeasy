@@ -1,0 +1,78 @@
+{
+  "seo": {
+    "title": "Collection Details | Zatiq Easy Store",
+    "description": "Browse our curated collection of products with filters and sorting options"
+  },
+  "sections": [
+    {
+      "id": "collection_breadcrumb",
+      "type": "collection-breadcrumb-1",
+      "enabled": true,
+      "settings": {
+        "show_home": true,
+        "show_collections": true,
+        "show_product_count": true,
+        "background_color": "#ffffff",
+        "text_color": "#6b7280",
+        "active_color": "#111827"
+      }
+    },
+    {
+      "id": "collection_banner",
+      "type": "collection-banner-1",
+      "enabled": true,
+      "settings": {
+        "show_banner": true,
+        "show_description": true,
+        "show_product_count": true,
+        "text_position": "center",
+        "height": "medium",
+        "overlay_opacity": "0.5",
+        "text_color": "#ffffff",
+        "badge_background_color": "#ffffff",
+        "badge_text_color": "#111827",
+        "banner_button_text": "Explore Collection",
+        "banner_button_link": "#products"
+      }
+    },
+    {
+      "id": "collection_subcategories",
+      "type": "collection-subcategories-1",
+      "enabled": true,
+      "settings": {
+        "title": "Shop by Category",
+        "show_title": true,
+        "columns": "6",
+        "columns_mobile": "3",
+        "columns_tablet": "4",
+        "show_product_count": true,
+        "background_color": "#ffffff",
+        "title_color": "#181D25",
+        "text_color": "#374151",
+        "hover_color": "#7c3aed"
+      }
+    },
+    {
+      "id": "collection_products",
+      "type": "collection-products-1",
+      "enabled": true,
+      "settings": {
+        "card_style": "product-card-1",
+        "columns": "3",
+        "columns_mobile": "1",
+        "columns_tablet": "2",
+        "show_filters": true,
+        "show_sorting": true,
+        "show_pagination": true,
+        "products_per_page": "12",
+        "background_color": "#ffffff",
+        "button_bg_color": "#0c2c5f",
+        "button_text_color": "#eff2f6",
+        "load_more_button_text": "View More Products",
+        "load_more_gradient_from": "#4f46e5",
+        "load_more_gradient_to": "#9333ea",
+        "load_more_text_color": "#ffffff"
+      }
+    }
+  ]
+}
