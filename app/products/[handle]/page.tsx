@@ -9,7 +9,7 @@
 
 "use client";
 
-import { use } from "react";
+import { use, useEffect } from "react";
 import { useProductDetails } from "@/hooks";
 import ProductDetailsPageRenderer from "@/components/renderers/page-renderer/product-details-page-renderer";
 import type { Section } from "@/lib/types";
@@ -21,6 +21,15 @@ interface ProductPageProps {
 
 export default function ProductPage({ params }: ProductPageProps) {
   const { handle } = use(params);
+
+  // Scroll to top when component mounts or handle changes
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
+  }, [handle]);
 
   const {
     product,

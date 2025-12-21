@@ -13,11 +13,12 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
   const { handle } = await params;
 
   // In production, this would fetch from a database
-  // For now, we check if handle matches product id or slug
+  // For now, we check if handle matches product id, slug, or product_code
   const productFromList = productsData.data?.products?.find(
     (p) =>
       p.id.toString() === handle ||
-      p.name.toLowerCase().replace(/\s+/g, "-") === handle.toLowerCase()
+      p.name.toLowerCase().replace(/\s+/g, "-") === handle.toLowerCase() ||
+      p.product_code?.toLowerCase() === handle.toLowerCase()
   );
 
   // Use detailed product data if handle matches, otherwise use from list
@@ -26,7 +27,8 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
   if (
     handle === "1" ||
     handle === "classic-white-shirt" ||
-    handle === productData.data?.product?.id?.toString()
+    handle === productData.data?.product?.id?.toString() ||
+    handle === productData.data?.product?.product_code?.toLowerCase()
   ) {
     product = productData.data?.product;
   } else if (productFromList) {
