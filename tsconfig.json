@@ -27,23 +27,25 @@
       "@/*": [
         "./*"
       ],
-      "@components/*": [
-        "./components/*",
-        "./app/components/*"
+      "@/components/*": [
+        "./components/*"
       ],
-      "@lib/*": [
-        "./lib/*",
-        "./app/lib/*"
+      "@/ui/*": [
+        "./components/ui/*"
       ],
-      "@data/*": [
-        "./data/*",
-        "./app/data/*"
+      "@/features/*": [
+        "./components/features/*"
       ],
-      "@providers/*": [
-        "./providers/*",
-        "./app/providers/*"
+      "@/lib/*": [
+        "./lib/*"
       ],
-      "@themes/*": [
+      "@/data/*": [
+        "./data/*"
+      ],
+      "@/providers/*": [
+        "./providers/*"
+      ],
+      "@/themes/*": [
         "./app/themes/*"
       ]
     }

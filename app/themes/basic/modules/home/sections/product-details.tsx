@@ -17,7 +17,7 @@ import {
   Plus,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { HeightAnimation } from "@/app/components/animations/height-animation";
+import { HeightAnimation } from "@/components/shared/animations/height-animation";
 import type { VariantType, Variant, Product } from "@/stores/productsStore";
 import type { VariantsState } from "@/types/cart.types";
 

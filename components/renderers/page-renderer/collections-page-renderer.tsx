@@ -16,7 +16,7 @@ import {
   CollectionsHero2,
   CollectionsGrid1,
   CollectionsGrid2,
-} from "@/components/collections";
+} from "@/features/collections";
 import Link from "next/link";
 
 interface CollectionsPageRendererProps {

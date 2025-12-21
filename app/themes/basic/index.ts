@@ -109,8 +109,8 @@ export const BasicTheme: StaticTheme = {
     // FooterLinks: () => import('./components/footer/footer-links'),
 
     // Animation components
-    HeightAnimation: () => import('../../components/animations/height-animation'),
-    LazyAnimation: () => import('../../components/animations/lazy-animation'),
+    HeightAnimation: () => import('@/components/shared/animations/height-animation'),
+    LazyAnimation: () => import('@/components/shared/animations/lazy-animation'),
 
     // Modal components (not yet created)
     // Modal: () => import('@/components/modal/modal'),

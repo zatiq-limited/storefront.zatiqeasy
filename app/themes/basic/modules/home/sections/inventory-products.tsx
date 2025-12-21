@@ -11,10 +11,10 @@ import { useShopStore } from "@/stores/shopStore";
 import { ShoppingCart, Zap, AlertCircle } from "lucide-react";
 import { cn, titleCase } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
-import { Pagination } from "@/app/components/pagination";
-import { ProductSkeleton } from "@/app/components/skeletons/product-skeleton";
-import { LazyAnimation } from "@/app/components/animations/lazy-animation";
-import { CartQtyControl } from "@/components/cart/shared/cart-qty-control";
+import { Pagination } from "@/components/pagination";
+import { ProductSkeleton } from "@/components/shared/skeletons/product-skeleton";
+import { LazyAnimation } from "@/components/shared/animations/lazy-animation";
+import { CartQtyControl } from "@/features/cart/shared/cart-qty-control";
 import { ROUTES } from "@/lib/constants";
 
 // Constants

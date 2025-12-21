@@ -1,10 +1,14 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
-import { useParams, useSearchParams, useRouter } from 'next/navigation';
-import { useShopStore, useProductsStore } from '@/stores';
-import { BasicCategoryPage } from '@/app/themes/basic/modules/home/basic-category-page';
-import { fetchShopProfile, fetchShopInventories, fetchShopCategories } from '@/lib/api/shop';
+import React, { useEffect, useState } from "react";
+import { useParams, useSearchParams, useRouter } from "next/navigation";
+import { useShopStore, useProductsStore } from "@/stores";
+import { BasicCategoryPage } from "@/app/themes/basic/modules/home/basic-category-page";
+import {
+  fetchShopProfile,
+  fetchShopInventories,
+  fetchShopCategories,
+} from "@/lib/api/shop";
 
 // Loading component
 const LoadingFallback = () => (
@@ -14,10 +18,18 @@ const LoadingFallback = () => (
 );
 
 // Error component
-const ErrorComponent = ({ error, retry }: { error: string; retry: () => void }) => (
+const ErrorComponent = ({
+  error,
+  retry,
+}: {
+  error: string;
+  retry: () => void;
+}) => (
   <div className="min-h-screen flex items-center justify-center">
     <div className="text-center">
-      <h2 className="text-2xl font-bold text-gray-900 mb-4">Error Loading Category</h2>
+      <h2 className="text-2xl font-bold text-gray-900 mb-4">
+        Error Loading Category
+      </h2>
       <p className="text-gray-600 mb-4">{error}</p>
       <button
         onClick={retry}
@@ -41,13 +53,12 @@ function CategoryPageContent({ shopId, categoryId }: CategoryPageContentProps) {
   const router = useRouter();
 
   // Get stores
-  const { setShopDetails, shopDetails } = useShopStore();
-  const { setProducts, setFilters, setCategories, categories } = useProductsStore();
+  const { setShopDetails } = useShopStore();
+  const { setProducts, setFilters, setCategories } = useProductsStore();
 
   // Add URL params if not present (like old project)
   useEffect(() => {
-    const selectedCategory = searchParams.get('selected_category');
-    const categoryIdParam = searchParams.get('category_id');
+    const selectedCategory = searchParams.get("selected_category");
 
     if (categoryId && !selectedCategory) {
       // Add params to URL like old project does
@@ -65,33 +76,33 @@ function CategoryPageContent({ shopId, categoryId }: CategoryPageContentProps) {
 
         // Fetch shop profile data from backend API
         const shopProfile = await fetchShopProfile({
-          shop_id: shopId
+          shop_id: shopId,
         });
 
         if (!shopProfile) {
-          throw new Error('Shop not found');
+          throw new Error("Shop not found");
         }
 
         // Initialize shop store with real data
         setShopDetails({
           ...shopProfile,
           id: Number(shopProfile.id),
-          shop_name: shopProfile.shop_name ?? '',
-          currency_code: shopProfile.currency_code || 'BDT',
-          country_currency: shopProfile.country_currency || 'BDT',
-          shop_email: shopProfile.shop_email ?? '',
-          shop_phone: shopProfile.shop_phone ?? '',
-          shop_uuid: shopProfile.shop_uuid ?? '',
+          shop_name: shopProfile.shop_name ?? "",
+          currency_code: shopProfile.currency_code || "BDT",
+          country_currency: shopProfile.country_currency || "BDT",
+          shop_email: shopProfile.shop_email ?? "",
+          shop_phone: shopProfile.shop_phone ?? "",
+          shop_uuid: shopProfile.shop_uuid ?? "",
           hasPixelAccess: shopProfile.hasPixelAccess ?? false,
           hasGTMAccess: shopProfile.hasGTMAccess ?? false,
           hasTikTokPixelAccess: shopProfile.hasTikTokPixelAccess ?? false,
           baseUrl: `/merchant/${shopId}`,
-          shopCurrencySymbol: shopProfile.currency_code === 'BDT' ? '৳' : '$'
+          shopCurrencySymbol: shopProfile.currency_code === "BDT" ? "৳" : "$",
         } as any);
 
         // Fetch products from backend API
         const products = await fetchShopInventories({
-          shop_uuid: shopProfile.shop_uuid
+          shop_uuid: shopProfile.shop_uuid,
         });
 
         if (products && products.length > 0) {
@@ -108,16 +119,15 @@ function CategoryPageContent({ shopId, categoryId }: CategoryPageContentProps) {
 
         // Fetch categories from backend API
         const fetchedCategories = await fetchShopCategories({
-          shop_uuid: shopProfile.shop_uuid
+          shop_uuid: shopProfile.shop_uuid,
         });
 
         if (fetchedCategories) {
           setCategories(fetchedCategories);
         }
-
       } catch (err) {
-        console.error('Failed to load shop:', err);
-        setError(err instanceof Error ? err.message : 'Failed to load shop');
+        console.error("Failed to load shop:", err);
+        setError(err instanceof Error ? err.message : "Failed to load shop");
       } finally {
         setIsLoading(false);
       }
@@ -130,9 +140,9 @@ function CategoryPageContent({ shopId, categoryId }: CategoryPageContentProps) {
 
   // Update filters when URL params change (without reloading data)
   useEffect(() => {
-    const selectedCategoryParam = searchParams.get('selected_category');
-    const categoryParam = searchParams.get('category');
-    const searchParam = searchParams.get('search');
+    const selectedCategoryParam = searchParams.get("selected_category");
+    const categoryParam = searchParams.get("category");
+    const searchParam = searchParams.get("search");
 
     // Use selected_category if available, otherwise fall back to category or categoryId from path
     const filterCategory = selectedCategoryParam || categoryParam || categoryId;
@@ -141,7 +151,7 @@ function CategoryPageContent({ shopId, categoryId }: CategoryPageContentProps) {
       page: 1,
       category: filterCategory,
       search: searchParam,
-      sort: 'newest'
+      sort: "newest",
     });
   }, [searchParams, setFilters, categoryId]);
 
@@ -152,16 +162,18 @@ function CategoryPageContent({ shopId, categoryId }: CategoryPageContentProps) {
 
   // Handle error state
   if (error) {
-    return <ErrorComponent error={error} retry={() => window.location.reload()} />;
+    return (
+      <ErrorComponent error={error} retry={() => window.location.reload()} />
+    );
   }
-
-  // Get category info for title
-  const category = categories.find(cat => String(cat.id) === categoryId);
 
   // Return category page with Basic theme
   return (
-    <div data-theme="basic" className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <BasicCategoryPage categoryName={category?.name} />
+    <div
+      data-theme="basic"
+      className="min-h-screen bg-gray-50 dark:bg-gray-900"
+    >
+      <BasicCategoryPage />
     </div>
   );
 }
@@ -173,11 +185,21 @@ export default function CategoryPage() {
   const categoryId = params?.category as string;
 
   if (!shopId) {
-    return <ErrorComponent error="Shop ID is required" retry={() => window.location.reload()} />;
+    return (
+      <ErrorComponent
+        error="Shop ID is required"
+        retry={() => window.location.reload()}
+      />
+    );
   }
 
   if (!categoryId) {
-    return <ErrorComponent error="Category ID is required" retry={() => window.location.reload()} />;
+    return (
+      <ErrorComponent
+        error="Category ID is required"
+        retry={() => window.location.reload()}
+      />
+    );
   }
 
   return <CategoryPageContent shopId={shopId} categoryId={categoryId} />;

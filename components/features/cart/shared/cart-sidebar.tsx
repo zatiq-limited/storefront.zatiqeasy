@@ -3,7 +3,7 @@
 import { useCartStore, selectCartProducts } from "@/stores";
 import { Button } from "@/components/ui/button";
 import { X, ShoppingCart } from "lucide-react";
-import { CartItem, CartSummary } from "@/components/cart";
+import { CartItem, CartSummary } from "@/features/cart";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 

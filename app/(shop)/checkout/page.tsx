@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowLeft, Shield, Truck, RefreshCw } from "lucide-react";
-import { CheckoutForm } from "@/components/checkout";
+import { CheckoutForm } from "@/features/checkout";
 
 export default function CheckoutPage() {
   return (

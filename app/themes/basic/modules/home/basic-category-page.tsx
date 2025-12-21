@@ -4,16 +4,16 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useShopStore } from "@/stores";
 import { useCartTotals } from "../../hooks";
-import { CartFloatingBtn } from "@/components/cart/cart-floating-btn";
+import { CartFloatingBtn } from "@/features/cart/cart-floating-btn";
 
 // Dynamic imports for better performance
 const CategoryHorizontalList = dynamic(
-  () => import("@/app/components/category/category-horizontal-list"),
+  () => import("@/features/category/category-horizontal-list"),
   { ssr: false }
 );
 
 const SidebarCategory = dynamic(
-  () => import("@/app/components/category/sidebar-category"),
+  () => import("@/features/category/sidebar-category"),
   { ssr: false }
 );
 

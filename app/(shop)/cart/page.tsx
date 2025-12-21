@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useCartStore, selectCartProducts } from "@/stores";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ShoppingCart } from "lucide-react";
-import { CartItem, CartSummary } from "@/components/cart";
+import { CartItem, CartSummary } from "@/features/cart";
 
 export default function CartPage() {
   const cartProducts = useCartStore(selectCartProducts);

@@ -4,7 +4,7 @@ import { useShopStore } from "@/stores";
 import { motion, AnimatePresence } from "framer-motion";
 import { ShoppingCart } from "lucide-react";
 import { CartTotalPriceCounter } from "./cart-total-price-counter";
-import { LazyAnimation } from "@/app/components/animations/lazy-animation";
+import { LazyAnimation } from "@/components/shared/animations/lazy-animation";
 
 const variants = {
   hide: { x: 200, opacity: 0 },
@@ -65,10 +65,10 @@ export const CartCounterBtn = ({
             variants={variants}
             transition={{ duration: 0.25 }}
             onClick={onClick}
-            className="fixed top-[167px] right-[17px] z-50 min-w-[65px] rounded-lg overflow-hidden shadow-zatiq-blue bg-white dark:bg-black-27 cursor-pointer"
+            className="fixed top-41.75 right-4.25 z-50 min-w-16.25 rounded-lg overflow-hidden shadow-zatiq-blue bg-white dark:bg-black-27 cursor-pointer"
           >
             {/* Cart Icon Section */}
-            <div className="px-[13px] py-[10px] bg-blue-zatiq flex flex-col gap-1 items-center">
+            <div className="px-3.25 py-2.5 bg-blue-zatiq flex flex-col gap-1 items-center">
               <CartIconComponent />
               <span className="text-sm font-medium text-white dark:text-black-18">
                 {totalProducts} item
@@ -76,9 +76,8 @@ export const CartCounterBtn = ({
             </div>
 
             {/* Price Section */}
-            <div className="py-1 px-2 bg-blue-zatiq/15 dark:bg-black-zatiq text-xs font-bold text-center leading-[24px] text-blue-zatiq">
-              {currency}{" "}
-              <CartTotalPriceCounter totalPrice={totalPrice} />
+            <div className="py-1 px-2 bg-blue-zatiq/15 dark:bg-black-zatiq text-xs font-bold text-center leading-6 text-blue-zatiq">
+              {currency} <CartTotalPriceCounter totalPrice={totalPrice} />
             </div>
           </motion.button>
         )}

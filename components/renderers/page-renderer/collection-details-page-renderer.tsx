@@ -20,7 +20,7 @@ import {
   CollectionProducts2,
   CollectionSubcategories1,
   CollectionSubcategories2,
-} from "@/components/collection-details";
+} from "@/features/collection-details";
 import { convertSettingsKeys } from "@/lib/settings-utils";
 
 interface CollectionDetailsPageRendererProps {
@@ -77,10 +77,7 @@ export default function CollectionDetailsPageRenderer({
             data-section-id={section.id}
             data-section-type={section.type}
           >
-            <CollectionBanner1
-              settings={settings}
-              collection={collection}
-            />
+            <CollectionBanner1 settings={settings} collection={collection} />
           </div>
         );
 
@@ -91,10 +88,7 @@ export default function CollectionDetailsPageRenderer({
             data-section-id={section.id}
             data-section-type={section.type}
           >
-            <CollectionBanner2
-              settings={settings}
-              collection={collection}
-            />
+            <CollectionBanner2 settings={settings} collection={collection} />
           </div>
         );
 
