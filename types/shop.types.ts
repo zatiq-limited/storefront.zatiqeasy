@@ -5,6 +5,7 @@ export interface ShopProfile {
   id: number;
   shop_uuid: string;
   shop_name: string;
+  shop_email?: string;
   shop_phone: string;
   image_url?: string;
   favicon_url?: string;
@@ -16,9 +17,12 @@ export interface ShopProfile {
   payment_methods?: string[];
   country_code: string;
   country_currency: string;
+  currency_code?: string;
+  shopCurrencySymbol?: string;
   baseUrl: string;
   baseFullUrl: string;
   shop_theme: ShopTheme;
+  theme_color?: ThemeColor;
 
   // Analytics
   hasPixelAccess?: boolean;
@@ -51,6 +55,10 @@ export interface SocialLinks {
   tiktok?: string;
   linkedin?: string;
   whatsapp?: string;
+}
+
+export interface ThemeColor {
+  primary_color?: string;
 }
 
 // Shop Theme

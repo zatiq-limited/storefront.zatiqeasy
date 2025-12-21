@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useCartStore, useCheckoutStore } from "@/stores";
+import { useCartStore, useCheckoutStore, selectCartProducts, selectSubtotal } from "@/stores";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -15,7 +15,7 @@ import { OrderSummarySection } from "./order-summary-section";
 import { Loader2, ShoppingCart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { createOrder } from "@/lib/payments/api";
-import { PaymentType } from "@/lib/payments/types";
+import { PaymentType, OrderStatus } from "@/lib/payments/types";
 import { validatePhoneNumber } from "@/lib/payments/utils";
 
 interface CheckoutFormProps {
@@ -72,17 +72,36 @@ export function CheckoutForm({ className, onSubmit }: CheckoutFormProps) {
       }
 
       // Prepare order items (matching old project structure)
-      const receiptItems = cartProducts.map(item => ({
-        product_id: item.id,
-        product_handle: item.handle || item.id,
-        product_name: item.name,
-        variant_id: item.variantId,
-        variant_name: item.variantName,
-        quantity: item.quantity,
-        unit_price: item.price,
-        total_price: item.price * item.quantity,
-        product_image: item.image,
-      }));
+      const receiptItems = cartProducts.map(item => {
+        // Get variant info from selectedVariants
+        const variantValues = Object.values(item.selectedVariants || {});
+        const firstVariant = variantValues[0];
+        const variantNames = variantValues.map(v => v.variant_name).join(', ');
+
+        return {
+          product_id: String(item.id),
+          product_handle: item.handle || String(item.id),
+          product_name: item.name,
+          variant_id: firstVariant?.variant_id ? String(firstVariant.variant_id) : undefined,
+          variant_name: variantNames || undefined,
+          quantity: item.qty,
+          unit_price: item.price,
+          total_price: item.price * item.qty,
+          product_image: item.image_url,
+        };
+      });
+
+      // Convert payment method string to PaymentType enum
+      const paymentMethodToType = (method: string): PaymentType => {
+        const mapping: Record<string, PaymentType> = {
+          'cod': PaymentType.COD,
+          'bkash': PaymentType.BKASH,
+          'nagad': PaymentType.NAGAD,
+          'aamarpay': PaymentType.AAMARPAY,
+          'self_mfs': PaymentType.SELF_MFS,
+        };
+        return mapping[method] || PaymentType.COD;
+      };
 
       // Create order payload (exact match to old project)
       const orderPayload = {
@@ -93,11 +112,11 @@ export function CheckoutForm({ className, onSubmit }: CheckoutFormProps) {
         delivery_charge: deliveryCharge,
         tax_amount: 0,
         total_amount: grandTotal,
-        payment_type: checkoutState.selectedPaymentMethod || PaymentType.COD,
+        payment_type: paymentMethodToType(checkoutState.selectedPaymentMethod || 'cod'),
         pay_now_amount: grandTotal,
         receipt_items: receiptItems,
-        type: "Online",
-        status: "Order Placed",
+        type: "Online" as const,
+        status: OrderStatus.ORDER_PLACED,
         note: orderNote,
       };
 

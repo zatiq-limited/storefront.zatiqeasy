@@ -30,9 +30,12 @@ interface CheckoutState {
   discountAmount: number;
 
   // Customer
+  customerName: string;
+  customerEmail: string;
   fullPhoneNumber: string;
   countryCallingCode: string;
   isPhoneVerified: boolean;
+  fullAddress: string;
 
   // Terms
   acceptedTerms: boolean;
@@ -61,9 +64,12 @@ interface CheckoutActions {
   clearPromoCode: () => void;
 
   // Customer
+  setCustomerName: (name: string) => void;
+  setCustomerEmail: (email: string) => void;
   setFullPhoneNumber: (phone: string) => void;
   setCountryCallingCode: (code: string) => void;
   setIsPhoneVerified: (verified: boolean) => void;
+  setFullAddress: (address: string) => void;
 
   // Terms
   setAcceptedTerms: (accepted: boolean) => void;
@@ -91,9 +97,12 @@ const initialState: CheckoutState = {
   promoCodeSearch: '',
   promoCodeMessage: '',
   discountAmount: 0,
+  customerName: '',
+  customerEmail: '',
   fullPhoneNumber: '',
   countryCallingCode: '+880',
   isPhoneVerified: false,
+  fullAddress: '',
   acceptedTerms: false,
   currentStep: 1,
 };
@@ -159,11 +168,17 @@ export const useCheckoutStore = create<CheckoutState & CheckoutActions>(
       }),
 
     // Customer actions
+    setCustomerName: (name) => set({ customerName: name }),
+
+    setCustomerEmail: (email) => set({ customerEmail: email }),
+
     setFullPhoneNumber: (phone) => set({ fullPhoneNumber: phone }),
 
     setCountryCallingCode: (code) => set({ countryCallingCode: code }),
 
     setIsPhoneVerified: (verified) => set({ isPhoneVerified: verified }),
+
+    setFullAddress: (address) => set({ fullAddress: address }),
 
     // Terms
     setAcceptedTerms: (accepted) => set({ acceptedTerms: accepted }),

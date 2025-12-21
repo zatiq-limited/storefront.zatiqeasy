@@ -1,6 +1,6 @@
 "use client";
 
-import { useCartStore } from "@/stores";
+import { useCartStore, selectCartProducts } from "@/stores";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { CartItem } from "./cart-item";

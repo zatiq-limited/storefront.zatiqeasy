@@ -3,10 +3,10 @@ import { getReceiptDetails } from '@/lib/payments/api';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { receiptId: string } }
+  { params }: { params: Promise<{ receiptId: string }> }
 ) {
   try {
-    const { receiptId } = params;
+    const { receiptId } = await params;
 
     // Validate receipt ID
     if (!receiptId || receiptId.length < 5) {

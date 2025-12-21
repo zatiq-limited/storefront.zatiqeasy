@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { useCartStore, type CartProduct } from "@/stores";
+import { useCartStore } from "@/stores";
+import type { CartProduct } from "@/types";
 import { Minus, Plus, Trash2, Image as ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";

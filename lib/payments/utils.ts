@@ -75,7 +75,7 @@ export const getPaymentStatusText = (status: PaymentStatus): string => {
  * Get payment status color
  */
 export const getPaymentStatusColor = (status: PaymentStatus): string => {
-  const colors: Record<PaymentStatus, string> => {
+  const colors: Record<PaymentStatus, string> = {
     [PaymentStatus.PENDING]: '#ff9800', // Orange
     [PaymentStatus.PROCESSING]: '#2196f3', // Blue
     [PaymentStatus.SUCCESS]: '#4caf50', // Green

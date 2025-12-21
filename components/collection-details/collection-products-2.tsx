@@ -14,12 +14,19 @@ interface CollectionProducts2Props {
   isLoading?: boolean;
 }
 
+interface SettingsType {
+  showFilters?: boolean;
+  showSorting?: boolean;
+  showPagination?: boolean;
+  columns?: number;
+}
+
 export default function CollectionProducts2({
   settings = {},
   collection,
   isLoading = false,
 }: CollectionProducts2Props) {
-  const s = convertSettingsKeys(settings);
+  const s = convertSettingsKeys<SettingsType>(settings);
 
   return (
     <section id="products" style={{ backgroundColor: "#f9fafb" }}>

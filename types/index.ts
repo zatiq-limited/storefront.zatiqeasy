@@ -18,3 +18,6 @@ export * from './analytics.types';
 
 // Landing page types
 export * from './landing-page.types';
+
+// Theme types
+export * from './theme';

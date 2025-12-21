@@ -7,8 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Smartphone, CheckCircle, Loader2, ExternalLink } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { PaymentType } from "@/lib/payments/types";
-import { processPayment, formatPrice } from "@/lib/payments/api";
-import { parsePaymentError } from "@/lib/payments/utils";
+import { processPayment } from "@/lib/payments/api";
+import { parsePaymentError, formatPrice } from "@/lib/payments/utils";
 
 interface BkashPaymentProps {
   amount: number;

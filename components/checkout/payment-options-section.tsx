@@ -60,7 +60,7 @@ export function PaymentOptionsSection({ className }: PaymentOptionsSectionProps)
       <CardContent>
         <RadioGroup
           value={selectedPaymentMethod}
-          onValueChange={(value) => setSelectedPaymentMethod(value as any)}
+          onValueChange={(value: string) => setSelectedPaymentMethod(value as any)}
           className="space-y-3"
         >
           {paymentMethods.map((method) => {

@@ -13,7 +13,7 @@ interface CodPaymentProps {
   customerInfo?: {
     name: string;
     phone: string;
-    address: string;
+    address?: string;
   };
   onConfirmOrder?: () => void;
   className?: string;

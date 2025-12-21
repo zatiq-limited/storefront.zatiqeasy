@@ -1,7 +1,13 @@
 import { CreateOrderPayload, OrderResponse, ReceiptDetails, PaymentType, OrderStatus, PaymentStatus, ApiResponse } from '@/lib/payments/types';
 import { createOrder, getReceiptDetails } from '@/lib/payments/api';
 import { formatPrice, validatePhoneNumber } from '@/lib/payments/utils';
-import { CartStore } from '@/stores/cartStore';
+import type { CartProduct } from '@/types';
+
+// Cart interface for order creation
+interface CartInput {
+  items: CartProduct[];
+  getTotal: () => number;
+}
 
 /**
  * Order Manager - Handles order creation and management
@@ -24,7 +30,7 @@ export class OrderManager {
    * Create a new order from cart
    */
   async createOrderFromCart(
-    cart: CartStore,
+    cart: CartInput,
     checkoutData: {
       customerName: string;
       customerPhone: string;
@@ -66,17 +72,24 @@ export class OrderManager {
       const totalAmount = subtotal + deliveryCharge + taxAmount;
 
       // Prepare order items
-      const receiptItems = cart.items.map(item => ({
-        product_id: item.id,
-        product_handle: item.handle || item.id,
-        product_name: item.name,
-        variant_id: item.variantId,
-        variant_name: item.variantName,
-        quantity: item.quantity,
-        unit_price: item.price,
-        total_price: item.price * item.quantity,
-        product_image: item.image,
-      }));
+      const receiptItems = cart.items.map(item => {
+        // Get variant info from selectedVariants if exists
+        const variantEntries = Object.values(item.selectedVariants || {});
+        const variantName = variantEntries.map(v => v.variant_name).join(', ') || '';
+        const variantId = variantEntries.length > 0 ? variantEntries[0].variant_id : undefined;
+
+        return {
+          product_id: String(item.id),
+          product_handle: (item as any).handle || String(item.id),
+          product_name: item.name,
+          variant_id: variantId ? String(variantId) : undefined,
+          variant_name: variantName,
+          quantity: item.qty,
+          unit_price: item.price,
+          total_price: item.price * item.qty,
+          product_image: item.image_url,
+        };
+      });
 
       // Create order payload
       const orderPayload: CreateOrderPayload = {

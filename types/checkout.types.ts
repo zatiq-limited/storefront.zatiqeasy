@@ -57,6 +57,7 @@ export interface CheckoutActions {
 export type PaymentMethod =
   | 'cod'
   | 'bkash'
+  | 'nagad'
   | 'aamarpay'
   | 'partial_payment'
   | 'zatiq_seller_pay'

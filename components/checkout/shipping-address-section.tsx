@@ -1,6 +1,6 @@
 "use client";
 
-import { useCheckoutStore } from "@/stores";
+import { useCheckoutStore, selectAvailableDistricts, selectAvailableUpazilas } from "@/stores";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { MapPin } from "lucide-react";
@@ -72,10 +72,12 @@ function DeliveryZoneSelection() {
     setSelectedDistrict,
     setSelectedUpazila,
     setSelectedDeliveryZone,
-    availableDistricts,
-    availableUpazilas,
     divisions,
   } = useCheckoutStore();
+
+  // Use selectors for computed values
+  const availableDistricts = useCheckoutStore(selectAvailableDistricts);
+  const availableUpazilas = useCheckoutStore(selectAvailableUpazilas);
 
   return (
     <div className="space-y-4">

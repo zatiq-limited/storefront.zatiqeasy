@@ -46,11 +46,67 @@
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
+
+  /* Dynamic theme colors (set via JavaScript from shop theme) */
+  --color-blue-zatiq: var(--primary-color);
+  --color-blue-zatiq-10: var(--primary-color-10);
+  --color-blue-zatiq-15: var(--primary-color-15);
+  --color-blue-zatiq-25: var(--primary-color-25);
+  --color-blue-zatiq-50: var(--primary-color-50);
+  --color-blue-zatiq-75: var(--primary-color-75);
+
+  /* Shadow variables */
+  --shadow-zatiq-blue: 0px 0px 8px 0px var(--primary-color-50);
+  --shadow-luxura-header: 0px 6px 30px 0px rgba(0, 0, 0, 0.12);
+
+  /* Black color variants */
+  --color-black-zatiq: #383838;
+  --color-black-2: #4A4A4A;
+  --color-black-3: #CDCDCD;
+  --color-black-4: #E8E8E8;
+  --color-black-1-1: #16151A;
+  --color-black-1-2: #1F1E25;
+  --color-black-18: #18181B;
+  --color-black-27: #272727;
+  --color-black-3f: #3f3f46;
+  --color-black-disabled: #AFAFAF;
+
+  /* Landing page theme colors */
+  --color-landing-primary: var(--landing-primary-color);
+  --color-landing-primary-10: var(--landing-primary-color-10);
+  --color-landing-primary-15: var(--landing-primary-color-15);
+  --color-landing-primary-25: var(--landing-primary-color-25);
+  --color-landing-primary-50: var(--landing-primary-color-50);
+  --color-landing-secondary: var(--landing-secondary-color);
+  --color-landing-secondary-10: var(--landing-secondary-color-10);
+  --color-landing-secondary-15: var(--landing-secondary-color-15);
+  --color-landing-secondary-25: var(--landing-secondary-color-25);
+  --color-landing-secondary-50: var(--landing-secondary-color-50);
 }
 
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
+
+  /* Default theme colors (will be overwritten by shop theme) */
+  --primary-color: #2563EB;
+  --primary-color-10: rgba(37, 99, 235, 0.1);
+  --primary-color-15: rgba(37, 99, 235, 0.15);
+  --primary-color-25: rgba(37, 99, 235, 0.25);
+  --primary-color-50: rgba(37, 99, 235, 0.5);
+  --primary-color-75: rgba(37, 99, 235, 0.75);
+
+  /* Landing page default colors */
+  --landing-primary-color: #2563EB;
+  --landing-primary-color-10: rgba(37, 99, 235, 0.1);
+  --landing-primary-color-15: rgba(37, 99, 235, 0.15);
+  --landing-primary-color-25: rgba(37, 99, 235, 0.25);
+  --landing-primary-color-50: rgba(37, 99, 235, 0.5);
+  --landing-secondary-color: #1E40AF;
+  --landing-secondary-color-10: rgba(30, 64, 175, 0.1);
+  --landing-secondary-color-15: rgba(30, 64, 175, 0.15);
+  --landing-secondary-color-25: rgba(30, 64, 175, 0.25);
+  --landing-secondary-color-50: rgba(30, 64, 175, 0.5);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
@@ -123,6 +179,9 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+  .container {
+    @apply mx-auto px-4 md:px-6 lg:px-8;
   }
 }
 

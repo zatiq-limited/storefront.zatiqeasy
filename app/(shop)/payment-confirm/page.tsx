@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useCartStore, useCheckoutStore } from "@/stores";
+import { useCartStore, useCheckoutStore, selectSubtotal } from "@/stores";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -11,9 +11,11 @@ import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, ArrowRight, Smartphone, CreditCard, Wallet } from "lucide-react";
 import Link from "next/link";
 
+type PaymentMethodType = "bkash" | "nagad" | "aamarpay" | "cod";
+
 export default function PaymentConfirmPage() {
   const { selectedPaymentMethod } = useCheckoutStore();
-  const [paymentMethod, setPaymentMethod] = useState(selectedPaymentMethod || "bkash");
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethodType>((selectedPaymentMethod as PaymentMethodType) || "bkash");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [transactionId, setTransactionId] = useState("");
 
@@ -30,7 +32,13 @@ export default function PaymentConfirmPage() {
     }).format(price);
   };
 
-  const paymentMethods = [
+  const paymentMethods: Array<{
+    value: PaymentMethodType;
+    label: string;
+    icon: any;
+    color: string;
+    instructions: string[];
+  }> = [
     {
       value: "bkash",
       label: "bKash",
@@ -111,7 +119,7 @@ export default function PaymentConfirmPage() {
                 <CardTitle>Select Payment Method</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod}>
+                <RadioGroup value={paymentMethod} onValueChange={(value) => setPaymentMethod(value as PaymentMethodType)}>
                   {paymentMethods.map((method) => {
                     const Icon = method.icon;
                     return (
@@ -202,9 +210,11 @@ export default function PaymentConfirmPage() {
                   Confirm Payment
                 </Button>
               )}
-              <Button variant="outline" size="lg" asChild>
-                <Link href="/checkout">Cancel</Link>
-              </Button>
+              <Link href="/checkout">
+                <Button variant="outline" size="lg">
+                  Cancel
+                </Button>
+              </Link>
             </div>
           </div>
 

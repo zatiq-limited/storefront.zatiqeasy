@@ -24,7 +24,7 @@ export default function CollectionBreadcrumb2({
     <nav
       className="sticky top-0 z-40 backdrop-blur-lg border-b"
       style={{
-        backgroundColor: s.backgroundColor || "rgba(255, 255, 255, 0.8)",
+        backgroundColor: (s.backgroundColor as string) || "rgba(255, 255, 255, 0.8)",
       }}
     >
       <div className="container mx-auto px-4 py-4">

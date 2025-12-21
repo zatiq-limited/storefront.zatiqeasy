@@ -1,85 +1,69 @@
 "use client";
 
-import { useCartStore } from "@/stores";
-import { ShoppingCart } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { useShopStore } from "@/stores";
+import { motion, AnimatePresence } from "framer-motion";
+import { CartTotalPriceCounter } from "./cart-total-price-counter";
+import { LazyAnimation } from "@/app/components/animations/lazy-animation";
+
+const variants = {
+  hide: { y: "100%", opacity: 0 },
+  show: { y: 0, opacity: 1 },
+};
 
 interface CartFooterBtnProps {
-  className?: string;
-  showTotal?: boolean;
-  totalPosition?: "left" | "right";
-  size?: "sm" | "md" | "lg";
-  variant?: "default" | "outline" | "secondary";
-  onClick?: () => void;
+  onClick: () => void;
+  totalProducts: number;
+  totalPrice: number;
+  showCartFloatingBtn: boolean;
 }
 
-export function CartFooterBtn({
-  className,
-  showTotal = true,
-  totalPosition = "right",
-  size = "md",
-  variant = "default",
+/**
+ * CartFooterBtn Component
+ * Matches old project's implementation from CartFooterBtn.tsx
+ * Mobile sticky footer button
+ */
+export const CartFooterBtn = ({
   onClick,
-}: CartFooterBtnProps) {
-  const totalItems = useCartStore(selectTotalItems);
-  const subtotal = useCartStore(selectSubtotal);
-  const cartIsEmpty = useCartStore(selectCartIsEmpty);
-
-  const sizeClasses = {
-    sm: "h-10 px-3 text-sm",
-    md: "h-12 px-4",
-    lg: "h-14 px-6 text-lg",
-  };
-
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("en-BD", {
-      style: "currency",
-      currency: "BDT",
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(price);
-  };
-
-  if (cartIsEmpty) {
-    return (
-      <Button
-        variant={variant}
-        size={size}
-        className={cn(
-          "w-full justify-start",
-          sizeClasses[size],
-          className
-        )}
-        onClick={onClick}
-        disabled
-      >
-        <ShoppingCart className="mr-2 h-4 w-4" />
-        Cart is empty
-      </Button>
-    );
-  }
+  totalProducts,
+  totalPrice,
+  showCartFloatingBtn,
+}: CartFooterBtnProps) => {
+  const { shopDetails } = useShopStore();
+  const currency = shopDetails?.currency_code || "BDT";
 
   return (
-    <Button
-      variant={variant}
-      size={size}
-      className={cn(
-        "w-full justify-between",
-        sizeClasses[size],
-        className
-      )}
-      onClick={onClick}
-    >
-      <div className="flex items-center">
-        <ShoppingCart className="mr-2 h-4 w-4" />
-        <span className="font-medium">
-          {totalItems} {totalItems === 1 ? "item" : "items"}
-        </span>
-      </div>
-      {showTotal && (
-        <span className="font-bold">{formatPrice(subtotal)}</span>
-      )}
-    </Button>
+    <LazyAnimation>
+      <AnimatePresence>
+        {showCartFloatingBtn && (
+          <motion.div
+            initial="hide"
+            animate="show"
+            exit="hide"
+            variants={variants}
+            transition={{ duration: 0.25 }}
+            className="p-3 bg-white dark:bg-black-18 max-w-md w-full sticky left-0 bottom-0 rounded-t-xl shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] z-[100]"
+          >
+            <button
+              onClick={onClick}
+              className="bg-blue-zatiq rounded-lg text-white w-full flex items-center justify-between p-3"
+            >
+              {/* Product Count Badge */}
+              <div className="px-[6px] py-[4px] bg-white rounded-full text-[#4A4A4A] font-bold text-[10px]">
+                {totalProducts}
+              </div>
+
+              {/* Cart Text */}
+              <div className="grow text-center">
+                View your cart ({currency}{" "}
+                <CartTotalPriceCounter totalPrice={totalPrice} />)
+              </div>
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </LazyAnimation>
   );
-}
+};
+
+// Also export as named for backwards compatibility
+export { CartFooterBtn as default };

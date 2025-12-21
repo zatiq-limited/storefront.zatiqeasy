@@ -15,11 +15,17 @@ interface CollectionSubcategories2Props {
   collection: Collection;
 }
 
+interface SettingsType {
+  showTitle?: boolean;
+  title?: string;
+  showProductCount?: boolean;
+}
+
 export default function CollectionSubcategories2({
   settings = {},
   collection,
 }: CollectionSubcategories2Props) {
-  const s = convertSettingsKeys(settings);
+  const s = convertSettingsKeys<SettingsType>(settings);
 
   const subcategories = collection.children || [];
 

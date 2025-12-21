@@ -130,7 +130,7 @@ export function SelfMfsPayment({
 
           <div className="space-y-2">
             <Label htmlFor="mfs-provider">Select Provider</Label>
-            <Select value={selectedProvider} onValueChange={setSelectedProvider}>
+            <Select value={selectedProvider} onValueChange={(value: string | null) => value && setSelectedProvider(value)}>
               <SelectTrigger>
                 <SelectValue placeholder="Choose your mobile banking service" />
               </SelectTrigger>

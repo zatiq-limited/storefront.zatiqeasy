@@ -1,6 +1,6 @@
 "use client";
 
-import { useCartStore } from "@/stores";
+import { useCartStore, selectSubtotal, selectTotalItems, selectCartIsEmpty } from "@/stores";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";

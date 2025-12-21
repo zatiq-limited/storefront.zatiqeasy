@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { CreateOrderPayload, OrderResponse, PaymentType } from '@/lib/payments/types';
+import { CreateOrderPayload, OrderResponse, PaymentType, OrderStatus } from '@/lib/payments/types';
 import { createOrder } from '@/lib/payments/api';
 
 export async function POST(request: NextRequest) {
@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
       advance_payment_amount: body.advance_payment_amount ? Number(body.advance_payment_amount) : undefined,
       receipt_items: body.receipt_items,
       type: 'Online',
-      status: 'Order Placed',
+      status: OrderStatus.ORDER_PLACED,
       note: body.note,
     };
 

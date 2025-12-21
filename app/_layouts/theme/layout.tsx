@@ -17,6 +17,7 @@
 
 import { useTheme } from "@/hooks";
 import { useThemeStore } from "@/stores/themeStore";
+import { usePathname } from "next/navigation";
 import BlockRenderer, {
   type Block,
 } from "@/components/renderers/block-renderer";
@@ -52,6 +53,10 @@ interface ThemeData {
 export default function ThemeLayout({ children }: ThemeLayoutProps) {
   const { theme } = useThemeStore();
   const { isLoading, error } = useTheme();
+  const pathname = usePathname();
+
+  // Check if we're on a static theme route (merchant pages use static themes)
+  const isStaticThemeRoute = pathname?.startsWith('/merchant/');
 
   // Extract theme data with proper typing
   const themeRaw = theme as ThemeData | null;
@@ -95,41 +100,51 @@ export default function ThemeLayout({ children }: ThemeLayoutProps) {
 
   return (
     <>
-      {/* Announcement Bar */}
-      {announcement?.enabled && announcementBlock && (
-        <BlockRenderer
-          block={announcementBlock}
-          data={(announcementBlock.data as Record<string, unknown>) || {}}
-        />
-      )}
+      {/* Only render theme builder header/footer for non-static theme routes */}
+      {!isStaticThemeRoute && (
+        <>
+          {/* Announcement Bar */}
+          {announcement?.enabled && announcementBlock && (
+            <BlockRenderer
+              block={announcementBlock}
+              data={(announcementBlock.data as Record<string, unknown>) || {}}
+            />
+          )}
 
-      {/* Header/Navbar */}
-      {header?.enabled && headerBlock && (
-        <BlockRenderer
-          block={headerBlock}
-          data={(headerBlock.data as Record<string, unknown>) || {}}
-        />
-      )}
+          {/* Header/Navbar */}
+          {header?.enabled && headerBlock && (
+            <BlockRenderer
+              block={headerBlock}
+              data={(headerBlock.data as Record<string, unknown>) || {}}
+            />
+          )}
 
-      {/* Announcement After Header */}
-      {announcementAfterHeader?.enabled && announcementAfterHeaderBlock && (
-        <BlockRenderer
-          block={announcementAfterHeaderBlock}
-          data={
-            (announcementAfterHeaderBlock.data as Record<string, unknown>) || {}
-          }
-        />
+          {/* Announcement After Header */}
+          {announcementAfterHeader?.enabled && announcementAfterHeaderBlock && (
+            <BlockRenderer
+              block={announcementAfterHeaderBlock}
+              data={
+                (announcementAfterHeaderBlock.data as Record<string, unknown>) || {}
+              }
+            />
+          )}
+        </>
       )}
 
       {/* Main Content */}
       <div className="main-content">{children}</div>
 
-      {/* Footer */}
-      {footer?.enabled && footerBlock && (
-        <BlockRenderer
-          block={footerBlock}
-          data={(footerBlock.data as Record<string, unknown>) || {}}
-        />
+      {/* Only render theme builder footer for non-static theme routes */}
+      {!isStaticThemeRoute && (
+        <>
+          {/* Footer */}
+          {footer?.enabled && footerBlock && (
+            <BlockRenderer
+              block={footerBlock}
+              data={(footerBlock.data as Record<string, unknown>) || {}}
+            />
+          )}
+        </>
       )}
     </>
   );

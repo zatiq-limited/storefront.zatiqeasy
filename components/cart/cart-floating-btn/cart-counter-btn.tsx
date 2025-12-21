@@ -1,73 +1,91 @@
 "use client";
 
-import { useCartStore } from "@/stores";
+import { useShopStore } from "@/stores";
+import { motion, AnimatePresence } from "framer-motion";
 import { ShoppingCart } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { CartTotalPriceCounter } from "./cart-total-price-counter";
+import { LazyAnimation } from "@/app/components/animations/lazy-animation";
+
+const variants = {
+  hide: { x: 200, opacity: 0 },
+  show: { x: 0, opacity: 1 },
+};
 
 interface CartCounterBtnProps {
-  className?: string;
-  showCount?: boolean;
-  countPosition?: "top-right" | "bottom-right";
-  size?: "sm" | "md" | "lg";
-  variant?: "default" | "outline" | "ghost";
+  totalProducts: number;
+  totalPrice: number;
+  onClick: () => void;
+  showCartFloatingBtn: boolean;
+  theme?: "Basic" | "Premium" | "Aurora" | "Luxura" | "Sellora";
 }
 
-export function CartCounterBtn({
-  className,
-  showCount = true,
-  countPosition = "top-right",
-  size = "md",
-  variant = "default",
-}: CartCounterBtnProps) {
-  const totalItems = useCartStore(selectTotalItems);
-  const cartIsEmpty = useCartStore(selectCartIsEmpty);
+/**
+ * CartCounterBtn Component
+ * Matches old project's implementation from CartCounterBtn.tsx
+ * Desktop floating button positioned on the right side
+ */
+export const CartCounterBtn = ({
+  totalProducts,
+  totalPrice,
+  onClick,
+  showCartFloatingBtn,
+  theme = "Basic",
+}: CartCounterBtnProps) => {
+  const { shopDetails } = useShopStore();
+  const isDark = shopDetails?.shop_theme?.theme_mode === "dark";
+  const currency = shopDetails?.currency_code || "BDT";
 
-  const sizeClasses = {
-    sm: "h-8 w-8",
-    md: "h-10 w-10",
-    lg: "h-12 w-12",
-  };
-
-  const iconSizes = {
-    sm: "h-4 w-4",
-    md: "h-5 w-5",
-    lg: "h-6 w-6",
-  };
-
-  const variantClasses = {
-    default: "bg-primary text-primary-foreground hover:bg-primary/90",
-    outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
-    ghost: "hover:bg-accent hover:text-accent-foreground",
-  };
-
-  const countPositionClasses = {
-    "top-right": "-top-2 -right-2",
-    "bottom-right": "-bottom-2 -right-2",
+  // Cart Icon based on theme (matching old project)
+  const CartIconComponent = () => {
+    switch (theme) {
+      case "Aurora":
+      case "Luxura":
+      case "Premium":
+        return (
+          <ShoppingCart
+            className="w-6 h-6"
+            fill={isDark ? "#222" : "#fff"}
+            stroke={isDark ? "#222" : "#fff"}
+          />
+        );
+      case "Basic":
+      default:
+        return <ShoppingCart className="w-6 h-6 text-white" />;
+    }
   };
 
   return (
-    <div className="relative">
-      <button
-        className={cn(
-          "relative rounded-full flex items-center justify-center transition-colors",
-          sizeClasses[size],
-          variantClasses[variant],
-          className
-        )}
-        aria-label="Shopping cart"
-      >
-        <ShoppingCart className={iconSizes[size]} />
-        {showCount && !cartIsEmpty && totalItems > 0 && (
-          <span
-            className={cn(
-              "absolute flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-xs font-medium text-destructive-foreground",
-              countPositionClasses[countPosition]
-            )}
+    <LazyAnimation>
+      <AnimatePresence>
+        {showCartFloatingBtn && (
+          <motion.button
+            initial="hide"
+            animate="show"
+            exit="hide"
+            variants={variants}
+            transition={{ duration: 0.25 }}
+            onClick={onClick}
+            className="fixed top-[167px] right-[17px] z-50 min-w-[65px] rounded-lg overflow-hidden shadow-zatiq-blue bg-white dark:bg-black-27 cursor-pointer"
           >
-            {totalItems > 99 ? "99+" : totalItems}
-          </span>
+            {/* Cart Icon Section */}
+            <div className="px-[13px] py-[10px] bg-blue-zatiq flex flex-col gap-1 items-center">
+              <CartIconComponent />
+              <span className="text-sm font-medium text-white dark:text-black-18">
+                {totalProducts} item
+              </span>
+            </div>
+
+            {/* Price Section */}
+            <div className="py-1 px-2 bg-blue-zatiq/15 dark:bg-black-zatiq text-xs font-bold text-center leading-[24px] text-blue-zatiq">
+              {currency}{" "}
+              <CartTotalPriceCounter totalPrice={totalPrice} />
+            </div>
+          </motion.button>
         )}
-      </button>
-    </div>
+      </AnimatePresence>
+    </LazyAnimation>
   );
-}
+};
+
+// Also export as named for backwards compatibility
+export { CartCounterBtn as default };
