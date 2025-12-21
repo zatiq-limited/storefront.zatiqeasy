@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import Image from "next/image";
 import { convertSettingsKeys } from "@/lib/settings-utils";
 
 interface ContactInfo2Settings {
@@ -40,10 +40,10 @@ interface ContactInfo2Props {
 }
 
 export default function ContactInfo2({ settings = {} }: ContactInfo2Props) {
-  const s = convertSettingsKeys<ContactInfo2Settings>(settings);
+  const s = convertSettingsKeys(settings as Record<string, unknown>) as ContactInfo2Settings;
 
   const renderIcon = (iconName: string) => {
-    const icons: Record<string, JSX.Element> = {
+    const icons: Record<string, React.ReactElement> = {
       'map-pin': (
         <svg className="w-6 h-6 mt-1 flex-shrink-0" fill="none" stroke={s.accentColor || '#111827'} strokeWidth="2" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -104,10 +104,13 @@ export default function ContactInfo2({ settings = {} }: ContactInfo2Props) {
           {/* Image */}
           <div className="order-2 lg:order-1">
             {s.image && (
-              <img
+              <Image
                 src={s.image}
                 alt="Contact Us"
+                width={600}
+                height={400}
                 className="w-full h-auto rounded-lg shadow-lg"
+                style={{ objectFit: 'cover' }}
               />
             )}
           </div>

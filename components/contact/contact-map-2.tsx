@@ -16,7 +16,7 @@ interface ContactMap2Props {
 }
 
 export default function ContactMap2({ settings = {} }: ContactMap2Props) {
-  const s = convertSettingsKeys<ContactMap2Settings>(settings);
+  const s = convertSettingsKeys(settings as Record<string, unknown>) as ContactMap2Settings;
 
   const containerClass = s.contained ? 'container mx-auto px-4 sm:px-6 lg:px-8' : '';
   const mapClasses = [

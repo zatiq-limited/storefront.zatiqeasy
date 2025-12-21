@@ -22,6 +22,8 @@ interface ContactInfo1Settings {
   info3Title?: string;
   info3Content?: string;
   info3Link?: string;
+  // Allow additional properties for dynamic access
+  [key: string]: string | undefined;
 }
 
 interface ContactInfo1Props {
@@ -63,7 +65,7 @@ const getIcon = (iconName?: string, size = 28, color?: string) => {
     .join("");
 
   // Get the icon component from lucide-react
-  const IconComponent = (LucideIcons as any)[pascalCase];
+  const IconComponent = (LucideIcons as unknown as Record<string, React.ComponentType<{ size?: number; strokeWidth?: number; color?: string }>>)[pascalCase];
 
   if (IconComponent) {
     return <IconComponent size={size} strokeWidth={1.5} color={color} />;
@@ -95,7 +97,7 @@ const ContactInfoItems = [
 ];
 
 export default function ContactInfo1({ settings = {} }: ContactInfo1Props) {
-  const s = convertSettingsKeys<ContactInfo1Settings>(settings) as any;
+  const s = convertSettingsKeys(settings as Record<string, unknown>) as ContactInfo1Settings;
 
   return (
     <section

@@ -22,7 +22,7 @@ interface ContactForm1Props {
 }
 
 export default function ContactForm1({ settings = {} }: ContactForm1Props) {
-  const s = convertSettingsKeys<ContactForm1Settings>(settings);
+  const s = convertSettingsKeys(settings as Record<string, unknown>) as ContactForm1Settings;
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [termsAccepted, setTermsAccepted] = useState(false);

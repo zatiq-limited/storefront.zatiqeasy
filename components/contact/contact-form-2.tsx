@@ -21,7 +21,7 @@ interface ContactForm2Props {
 }
 
 export default function ContactForm2({ settings = {} }: ContactForm2Props) {
-  const s = convertSettingsKeys<ContactForm2Settings>(settings);
+  const s = convertSettingsKeys(settings as Record<string, unknown>) as ContactForm2Settings;
   const [formData, setFormData] = useState({
     name: '',
     email: '',

@@ -14,7 +14,7 @@ interface ContactMap1Props {
 }
 
 export default function ContactMap1({ settings = {} }: ContactMap1Props) {
-  const s = convertSettingsKeys<ContactMap1Settings>(settings);
+  const s = convertSettingsKeys(settings as Record<string, unknown>) as ContactMap1Settings;
 
   return (
     <section

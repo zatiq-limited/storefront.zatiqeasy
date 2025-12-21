@@ -1,6 +1,7 @@
 "use client";
 
 import { convertSettingsKeys } from "@/lib/settings-utils";
+import Image from "next/image";
 import Link from "next/link";
 
 interface ContactHero2Settings {
@@ -16,17 +17,19 @@ interface ContactHero2Props {
 }
 
 export default function ContactHero2({ settings = {} }: ContactHero2Props) {
-  const s = convertSettingsKeys<ContactHero2Settings>(settings);
+  const s = convertSettingsKeys(settings as Record<string, unknown>) as ContactHero2Settings;
 
   return (
     <section className="relative h-[400px] md:h-[500px] lg:h-[600px] flex items-center justify-center overflow-hidden">
       {/* Background Image */}
       <div className="absolute inset-0">
         {s.image && (
-          <img
+          <Image
             src={s.image}
             alt={s.headline || "Contact Hero"}
-            className="w-full h-full object-cover"
+            fill
+            className="object-cover"
+            priority
           />
         )}
         <div

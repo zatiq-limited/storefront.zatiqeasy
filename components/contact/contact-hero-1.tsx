@@ -21,7 +21,7 @@ interface ContactHero1Props {
 }
 
 export default function ContactHero1({ settings = {} }: ContactHero1Props) {
-  const s = convertSettingsKeys<ContactHero1Settings>(settings);
+  const s = convertSettingsKeys(settings as Record<string, unknown>) as ContactHero1Settings;
 
   // If no headline or image provided, don't render
   if (!s.headline && !s.image) return null;
