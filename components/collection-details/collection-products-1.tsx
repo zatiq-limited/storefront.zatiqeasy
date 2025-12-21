@@ -48,7 +48,7 @@ export default function CollectionProducts1({
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Filters Sidebar */}
           {s.showFilters && (
-            <aside className="lg:w-64 flex-shrink-0">
+            <aside className="lg:w-64 shrink-0">
               <div className="sticky top-24 space-y-6">
                 <div>
                   <h3 className="font-semibold text-lg mb-4">Filters</h3>
@@ -61,9 +61,7 @@ export default function CollectionProducts1({
                     </div>
                     <div>
                       <label className="text-sm font-medium">Price Range</label>
-                      <div className="mt-2">
-                        {/* Price filter */}
-                      </div>
+                      <div className="mt-2">{/* Price filter */}</div>
                     </div>
                   </div>
                 </div>
@@ -101,7 +99,9 @@ export default function CollectionProducts1({
                 ))
               ) : (
                 <div className="col-span-full text-center py-12">
-                  <p className="text-gray-500">Products will be displayed here</p>
+                  <p className="text-gray-500">
+                    Products will be displayed here
+                  </p>
                 </div>
               )}
             </div>

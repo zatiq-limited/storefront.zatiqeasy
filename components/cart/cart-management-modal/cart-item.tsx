@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { useCartStore } from "@/stores";
 import type { CartProduct } from "@/types";
 import { Minus, Plus, Trash2, Image as ImageIcon } from "lucide-react";
@@ -81,11 +82,13 @@ export function CartItem({
       )}
     >
       {showImage && (
-        <div className="flex-shrink-0">
+        <div className="shrink-0">
           {product.image_url ? (
-            <img
+            <Image
               src={product.image_url}
               alt={product.name}
+              width={compact ? 48 : 64}
+              height={compact ? 48 : 64}
               className={cn(
                 "rounded object-cover border",
                 compact ? "h-12 w-12" : "h-16 w-16"
@@ -107,10 +110,12 @@ export function CartItem({
       <div className="flex-1 min-w-0">
         <div className="flex justify-between items-start">
           <div className="flex-1 min-w-0">
-            <h3 className={cn(
-              "font-medium truncate",
-              compact ? "text-sm" : "text-base"
-            )}>
+            <h3
+              className={cn(
+                "font-medium truncate",
+                compact ? "text-sm" : "text-base"
+              )}
+            >
               {product.name}
             </h3>
             {renderVariantDisplay()}
@@ -143,7 +148,7 @@ export function CartItem({
               >
                 <Minus className="h-3 w-3" />
               </Button>
-              <span className="px-3 text-sm font-medium min-w-[2rem] text-center">
+              <span className="px-3 text-sm font-medium min-w-8 text-center">
                 {product.qty}
               </span>
               <Button

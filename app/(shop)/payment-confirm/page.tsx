@@ -8,14 +8,23 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, ArrowRight, Smartphone, CreditCard, Wallet } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Smartphone,
+  CreditCard,
+  Wallet,
+  type LucideIcon,
+} from "lucide-react";
 import Link from "next/link";
 
 type PaymentMethodType = "bkash" | "nagad" | "aamarpay" | "cod";
 
 export default function PaymentConfirmPage() {
   const { selectedPaymentMethod } = useCheckoutStore();
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethodType>((selectedPaymentMethod as PaymentMethodType) || "bkash");
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethodType>(
+    (selectedPaymentMethod as PaymentMethodType) || "bkash"
+  );
   const [phoneNumber, setPhoneNumber] = useState("");
   const [transactionId, setTransactionId] = useState("");
 
@@ -35,7 +44,7 @@ export default function PaymentConfirmPage() {
   const paymentMethods: Array<{
     value: PaymentMethodType;
     label: string;
-    icon: any;
+    icon: LucideIcon;
     color: string;
     instructions: string[];
   }> = [
@@ -50,8 +59,8 @@ export default function PaymentConfirmPage() {
         "Enter merchant bKash number: 01XXXXXXXXX",
         "Enter the amount: " + formatPrice(total),
         "Enter your bKash PIN",
-        "Keep the transaction ID for confirmation"
-      ]
+        "Keep the transaction ID for confirmation",
+      ],
     },
     {
       value: "nagad",
@@ -64,8 +73,8 @@ export default function PaymentConfirmPage() {
         "Enter merchant Nagad number: 01XXXXXXXXX",
         "Enter the amount: " + formatPrice(total),
         "Enter your Nagad PIN",
-        "Keep the transaction ID for confirmation"
-      ]
+        "Keep the transaction ID for confirmation",
+      ],
     },
     {
       value: "aamarpay",
@@ -77,8 +86,8 @@ export default function PaymentConfirmPage() {
         "You will be redirected to secure payment gateway",
         "Select your preferred payment method",
         "Complete the payment process",
-        "You will be redirected back after payment"
-      ]
+        "You will be redirected back after payment",
+      ],
     },
     {
       value: "cod",
@@ -89,19 +98,24 @@ export default function PaymentConfirmPage() {
         "No advance payment required",
         "Pay when you receive your order",
         "Keep exact amount ready for smooth delivery",
-        "Check your order before accepting"
-      ]
-    }
+        "Check your order before accepting",
+      ],
+    },
   ];
 
-  const selectedMethodDetails = paymentMethods.find(m => m.value === paymentMethod);
+  const selectedMethodDetails = paymentMethods.find(
+    (m) => m.value === paymentMethod
+  );
 
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <Link href="/checkout" className="inline-flex items-center text-muted-foreground hover:text-foreground mb-4">
+          <Link
+            href="/checkout"
+            className="inline-flex items-center text-muted-foreground hover:text-foreground mb-4"
+          >
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Checkout
           </Link>
@@ -119,7 +133,12 @@ export default function PaymentConfirmPage() {
                 <CardTitle>Select Payment Method</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <RadioGroup value={paymentMethod} onValueChange={(value) => setPaymentMethod(value as PaymentMethodType)}>
+                <RadioGroup
+                  value={paymentMethod}
+                  onValueChange={(value) =>
+                    setPaymentMethod(value as PaymentMethodType)
+                  }
+                >
                   {paymentMethods.map((method) => {
                     const Icon = method.icon;
                     return (
@@ -128,13 +147,21 @@ export default function PaymentConfirmPage() {
                         className="flex items-center space-x-3 rounded-lg border p-4 cursor-pointer hover:bg-muted/50"
                         onClick={() => setPaymentMethod(method.value)}
                       >
-                        <RadioGroupItem value={method.value} id={method.value} />
+                        <RadioGroupItem
+                          value={method.value}
+                          id={method.value}
+                        />
                         <div className="flex items-center space-x-3 flex-1">
-                          <div className={`p-2 rounded ${method.color} bg-opacity-10`}>
+                          <div
+                            className={`p-2 rounded ${method.color} bg-opacity-10`}
+                          >
                             <Icon className="h-5 w-5" />
                           </div>
                           <div>
-                            <Label htmlFor={method.value} className="font-medium cursor-pointer">
+                            <Label
+                              htmlFor={method.value}
+                              className="font-medium cursor-pointer"
+                            >
                               {method.label}
                             </Label>
                           </div>
@@ -156,14 +183,16 @@ export default function PaymentConfirmPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    {selectedMethodDetails.instructions.map((instruction, index) => (
-                      <div key={index} className="flex items-start gap-3">
-                        <span className="flex-shrink-0 w-6 h-6 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-xs font-medium">
-                          {index + 1}
-                        </span>
-                        <span className="text-sm">{instruction}</span>
-                      </div>
-                    ))}
+                    {selectedMethodDetails.instructions.map(
+                      (instruction, index) => (
+                        <div key={index} className="flex items-start gap-3">
+                          <span className="shrink-0 w-6 h-6 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-xs font-medium">
+                            {index + 1}
+                          </span>
+                          <span className="text-sm">{instruction}</span>
+                        </div>
+                      )
+                    )}
                   </div>
 
                   {paymentMethod !== "cod" && paymentMethod !== "aamarpay" && (
@@ -171,7 +200,9 @@ export default function PaymentConfirmPage() {
                       <Separator />
                       <div className="grid md:grid-cols-2 gap-4">
                         <div className="space-y-2">
-                          <Label htmlFor="payment-phone">Your Mobile Number</Label>
+                          <Label htmlFor="payment-phone">
+                            Your Mobile Number
+                          </Label>
                           <Input
                             id="payment-phone"
                             placeholder="Enter your mobile number"
@@ -231,7 +262,9 @@ export default function PaymentConfirmPage() {
                     <span>{formatPrice(subtotal)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Delivery Charge</span>
+                    <span className="text-muted-foreground">
+                      Delivery Charge
+                    </span>
                     <span>{formatPrice(deliveryCharge)}</span>
                   </div>
                 </div>

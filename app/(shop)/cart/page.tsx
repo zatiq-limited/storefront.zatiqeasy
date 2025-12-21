@@ -5,7 +5,6 @@ import { useCartStore, selectCartProducts } from "@/stores";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ShoppingCart } from "lucide-react";
 import { CartItem, CartSummary } from "@/components/cart";
-import { Separator } from "@/components/ui/separator";
 
 export default function CartPage() {
   const cartProducts = useCartStore(selectCartProducts);
@@ -23,7 +22,7 @@ export default function CartPage() {
           <div className="space-y-2">
             <h1 className="text-2xl font-semibold">Your cart is empty</h1>
             <p className="text-muted-foreground">
-              Looks like you haven't added anything to your cart yet.
+              Looks like you haven&apos;t added anything to your cart yet.
             </p>
           </div>
 
@@ -49,7 +48,10 @@ export default function CartPage() {
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-6xl mx-auto">
         <div className="mb-8">
-          <Link href="/" className="inline-flex items-center text-muted-foreground hover:text-foreground mb-4">
+          <Link
+            href="/"
+            className="inline-flex items-center text-muted-foreground hover:text-foreground mb-4"
+          >
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Home
           </Link>

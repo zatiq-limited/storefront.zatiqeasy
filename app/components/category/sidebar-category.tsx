@@ -16,7 +16,10 @@ interface SidebarCategoryProps {
  * Matches old project's implementation from sidebar-category.tsx
  * Uses parent_id from categories for navigation (like CategoryHorizontalList)
  */
-export function SidebarCategory({ setShowMobileNav, isBasic }: SidebarCategoryProps) {
+export function SidebarCategory({
+  setShowMobileNav,
+  isBasic,
+}: SidebarCategoryProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -27,7 +30,8 @@ export function SidebarCategory({ setShowMobileNav, isBasic }: SidebarCategoryPr
 
   // URL params - matching old project and CategoryHorizontalList
   const categoryIdParam = searchParams.get("category_id"); // Parent category for navigation
-  const selectedCategory = searchParams.get("selected_category") || searchParams.get("category");
+  const selectedCategory =
+    searchParams.get("selected_category") || searchParams.get("category");
 
   // Page detection
   const isProductsPage = pathname.endsWith("products");
@@ -53,7 +57,10 @@ export function SidebarCategory({ setShowMobileNav, isBasic }: SidebarCategoryPr
 
   // Build URL with params
   const buildUrl = useCallback(
-    (params: { category_id?: string | null; selected_category?: string | null }) => {
+    (params: {
+      category_id?: string | null;
+      selected_category?: string | null;
+    }) => {
       const url = new URL(baseUrl || "/", window.location.origin);
 
       if (params.category_id) {
@@ -79,16 +86,20 @@ export function SidebarCategory({ setShowMobileNav, isBasic }: SidebarCategoryPr
       if (hasSubcategories) {
         // Has subcategories - drill down
         // ONLY set category_id for navigation, DON'T set selected_category (no product filtering yet)
-        router.push(buildUrl({
-          category_id: String(category.id),
-          selected_category: null // Don't filter products when drilling down
-        }));
+        router.push(
+          buildUrl({
+            category_id: String(category.id),
+            selected_category: null, // Don't filter products when drilling down
+          })
+        );
       } else {
         // No subcategories (leaf) - filter products, keep current navigation
-        router.push(buildUrl({
-          category_id: categoryIdParam,
-          selected_category: String(category.id) // Filter products by this category
-        }));
+        router.push(
+          buildUrl({
+            category_id: categoryIdParam,
+            selected_category: String(category.id), // Filter products by this category
+          })
+        );
         setShowMobileNav?.(false);
       }
     },
@@ -103,10 +114,12 @@ export function SidebarCategory({ setShowMobileNav, isBasic }: SidebarCategoryPr
         (cat) => String(cat.id) === String(currentRootCategory.parent_id)
       );
       if (parentCategory) {
-        router.push(buildUrl({
-          category_id: String(parentCategory.id),
-          selected_category: String(parentCategory.id)
-        }));
+        router.push(
+          buildUrl({
+            category_id: String(parentCategory.id),
+            selected_category: String(parentCategory.id),
+          })
+        );
       } else {
         router.push(baseUrl || "/");
       }
@@ -121,7 +134,9 @@ export function SidebarCategory({ setShowMobileNav, isBasic }: SidebarCategoryPr
     (category: Category | null) => {
       if (category) {
         // Include URL params like old project does
-        router.push(`${baseUrl}/categories/${category.id}?selected_category=${category.id}&category_id=${category.id}`);
+        router.push(
+          `${baseUrl}/categories/${category.id}?selected_category=${category.id}&category_id=${category.id}`
+        );
         setShowMobileNav?.(false);
       } else {
         router.push(`${baseUrl}/categories`);
@@ -145,7 +160,9 @@ export function SidebarCategory({ setShowMobileNav, isBasic }: SidebarCategoryPr
     <div>
       {/* Header when no root category selected */}
       {!currentRootCategory?.id && (
-        <div className={`hover:bg-gray-200 ${isProductsPage ? "bg-gray-200" : ""}`}>
+        <div
+          className={`hover:bg-gray-200 ${isProductsPage ? "bg-gray-200" : ""}`}
+        >
           <div className="px-5 py-4 bg-gray-100 dark:bg-white flex items-center">
             <span className="w-full font-bold text-lg">{`Category List`}</span>
           </div>
@@ -153,7 +170,9 @@ export function SidebarCategory({ setShowMobileNav, isBasic }: SidebarCategoryPr
             onClick={handleAllProductsClick}
             className="pl-7 py-4 pr-5 border-t last:border-b flex justify-between items-center cursor-pointer"
           >
-            <p className="text-sm font-semibold text-foreground">All products</p>
+            <p className="text-sm font-semibold text-foreground">
+              All products
+            </p>
           </div>
         </div>
       )}
@@ -162,7 +181,7 @@ export function SidebarCategory({ setShowMobileNav, isBasic }: SidebarCategoryPr
       {currentRootCategory && (
         <div className="px-3 py-4 bg-gray-100 flex items-center">
           <button
-            className="h-7 w-7 min-w-[28px] flex justify-center items-center bg-gray-200 cursor-pointer rounded-full"
+            className="h-7 w-7 min-w-7 flex justify-center items-center bg-gray-200 cursor-pointer rounded-full"
             onClick={handleBackBtn}
           >
             <ChevronLeft className="text-black h-5" />
@@ -210,7 +229,7 @@ export function SidebarCategory({ setShowMobileNav, isBasic }: SidebarCategoryPr
               {item.name}
             </p>
             {hasSubcategories && (
-              <button className="h-7 w-7 min-w-[28px] flex justify-center items-center bg-gray-200 cursor-pointer rounded-full">
+              <button className="h-7 w-7 min-w-7 flex justify-center items-center bg-gray-200 cursor-pointer rounded-full">
                 <ChevronRight className="text-black h-5" />
               </button>
             )}

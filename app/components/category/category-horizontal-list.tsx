@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useMemo, useCallback } from "react";
+import { useMemo, useCallback } from "react";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useProductsStore, Category } from "@/stores/productsStore";
+import { useProductsStore } from "@/stores/productsStore";
 import { useShopStore } from "@/stores";
 import { ArrowLeftCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -12,7 +12,6 @@ import { FallbackImage } from "@/components/ui/fallback-image";
 interface CategoryHorizontalListProps {
   className?: string;
   fromCategory?: boolean;
-  isBasic?: boolean;
 }
 
 /**
@@ -25,7 +24,6 @@ interface CategoryHorizontalListProps {
 export function CategoryHorizontalList({
   className,
   fromCategory,
-  isBasic,
 }: CategoryHorizontalListProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -36,7 +34,8 @@ export function CategoryHorizontalList({
 
   // URL params - matching old project
   const categoryIdParam = searchParams.get("category_id"); // Parent category for navigation
-  const selectedCategory = searchParams.get("selected_category") || searchParams.get("category"); // For filtering
+  const selectedCategory =
+    searchParams.get("selected_category") || searchParams.get("category"); // For filtering
 
   // Get current root category from URL (derived from category_id param)
   const currentRootCategory = useMemo(() => {
@@ -58,7 +57,10 @@ export function CategoryHorizontalList({
 
   // Build URL with params
   const buildUrl = useCallback(
-    (params: { category_id?: string | null; selected_category?: string | null }) => {
+    (params: {
+      category_id?: string | null;
+      selected_category?: string | null;
+    }) => {
       const url = new URL(baseUrl || "/", window.location.origin);
 
       if (params.category_id) {
@@ -75,7 +77,7 @@ export function CategoryHorizontalList({
 
   // Handle category selection - matching old project's handleSelectCategory
   const handleSelectCategory = useCallback(
-    (categoryId: string | number | null, isFromCategoryOrBasic?: boolean) => {
+    (categoryId: string | number | null) => {
       // Go back to parent (id === -1)
       if (categoryId === -1) {
         if (currentRootCategory?.parent_id) {
@@ -84,10 +86,12 @@ export function CategoryHorizontalList({
             (cat) => String(cat.id) === String(currentRootCategory.parent_id)
           );
           if (parentCategory) {
-            router.push(buildUrl({
-              category_id: String(parentCategory.id),
-              selected_category: String(parentCategory.id)
-            }));
+            router.push(
+              buildUrl({
+                category_id: String(parentCategory.id),
+                selected_category: String(parentCategory.id),
+              })
+            );
           } else {
             router.push(baseUrl || "/");
           }
@@ -119,22 +123,33 @@ export function CategoryHorizontalList({
         if (hasSubcategories) {
           // Has subcategories - drill down to show them
           // ONLY set category_id for navigation, DON'T set selected_category (no product filtering yet)
-          router.push(buildUrl({
-            category_id: categoryIdStr,
-            selected_category: null // Don't filter products when drilling down
-          }));
+          router.push(
+            buildUrl({
+              category_id: categoryIdStr,
+              selected_category: null, // Don't filter products when drilling down
+            })
+          );
         } else {
           // No subcategories (leaf) - filter products, keep current navigation
-          router.push(buildUrl({
-            category_id: categoryIdParam, // Keep current parent
-            selected_category: categoryIdStr // Filter products by this category
-          }));
+          router.push(
+            buildUrl({
+              category_id: categoryIdParam, // Keep current parent
+              selected_category: categoryIdStr, // Filter products by this category
+            })
+          );
         }
       } else {
         router.push(buildUrl({ selected_category: categoryIdStr }));
       }
     },
-    [baseUrl, categories, currentRootCategory, categoryIdParam, router, buildUrl]
+    [
+      baseUrl,
+      categories,
+      currentRootCategory,
+      categoryIdParam,
+      router,
+      buildUrl,
+    ]
   );
 
   if (!categories.length) {
@@ -142,128 +157,127 @@ export function CategoryHorizontalList({
   }
 
   return (
-    <div>
-      <div className={cn("w-full", className)}>
-        <div className="flex overflow-y-hidden overflow-x-auto pb-2 gap-[6px] md:pb-0 scroll-mb-1 category-x-scrollbar">
-          {/* Show "All [Parent Category]" card with back button when viewing subcategories */}
-          {currentRootCategory?.id ? (
-            !fromCategory && (
-              <div
-                key={currentRootCategory.id}
-                className={cn(
-                  "w-[100px] min-w-[100px]! md:w-[150px] md:min-w-[150px]! aspect-square relative cursor-pointer rounded-lg outline-solid outline-4 m-1 md:m-2",
-                  {
-                    "outline-blue-zatiq":
-                      selectedCategory === String(currentRootCategory.id),
-                    "outline-white":
-                      selectedCategory !== String(currentRootCategory.id),
-                  }
-                )}
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  // Click on "All [Category]" filters by this category
-                  router.push(buildUrl({
-                    category_id: String(currentRootCategory.id),
-                    selected_category: String(currentRootCategory.id)
-                  }));
-                }}
-              >
-                <FallbackImage
-                  src={currentRootCategory.image_url ?? ""}
-                  alt="image"
-                  height={310}
-                  width={310}
-                  className="h-full w-full rounded-lg object-cover"
-                />
-                <div className="absolute bottom-0 w-full bg-gradient-to-t from-black/80 to-transparent pt-5 pl-2 lg:pl-3 pb-1 lg:pb-2 rounded-lg">
-                  <h3 className="bottom-2 lg:bottom-3 text-white text-sm md:text-base font-medium line-clamp-2 leading-none">
-                    All {currentRootCategory.name}
-                  </h3>
-                </div>
-                {/* Back button */}
-                <div
-                  className="absolute top-1 left-1 md:top-2 md:left-3 text-red-500"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    handleSelectCategory(-1, fromCategory || isBasic);
-                  }}
-                >
-                  <ArrowLeftCircle className="w-5 md:w-6" />
-                </div>
-              </div>
-            )
-          ) : (
-            /* "All products/categories" card - shown when viewing root categories */
+    <div className={cn("w-full", className)}>
+      <div className="flex overflow-y-hidden overflow-x-auto pb-2 gap-1.5 md:pb-0 scroll-mb-1 category-x-scrollbar">
+        {/* Show "All [Parent Category]" card with back button when viewing subcategories */}
+        {currentRootCategory?.id ? (
+          !fromCategory && (
             <div
-              key="all"
+              key={currentRootCategory.id}
               className={cn(
-                "w-[100px] bg-blue-zatiq/25 min-w-[100px]! md:w-[150px] md:min-w-[150px]! aspect-square relative cursor-pointer rounded-lg outline-solid outline-4 m-1 md:m-2",
-                {
-                  "outline-blue-zatiq": !selectedCategory,
-                  "outline-gray-500 dark:outline-black-2": selectedCategory,
-                }
-              )}
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                handleSelectCategory(null, fromCategory || isBasic);
-              }}
-            >
-              {shopDetails?.image_url ? (
-                <Image
-                  src={shopDetails.image_url}
-                  alt="image"
-                  height={310}
-                  width={310}
-                  className="h-full w-full rounded-lg object-cover"
-                />
-              ) : (
-                <div className="h-full w-full rounded-lg bg-transparent" />
-              )}
-              <div className="absolute bottom-0 w-full bg-gradient-to-t from-black/50 to-transparent pt-5 pl-2 lg:pl-3 pb-1 lg:pb-2 rounded-lg">
-                <h3 className="bottom-2 text-white text-[16px] md:text-[28px] font-medium whitespace-pre-line">
-                  {fromCategory ? "All\ncategories" : "All\nproducts"}
-                </h3>
-              </div>
-            </div>
-          )}
-
-          {/* Category/Subcategory cards */}
-          {categoryList?.map((category) => (
-            <div
-              key={category.id}
-              className={cn(
-                "w-[100px] min-w-[100px]! md:w-[150px] md:min-w-[150px]! aspect-square relative cursor-pointer rounded-lg outline-solid outline-4 m-1 md:m-2",
+                "w-25 min-w-25! md:w-37.5 md:min-w-37.5! aspect-square relative cursor-pointer rounded-lg outline-solid outline-4 m-1 md:m-2",
                 {
                   "outline-blue-zatiq":
-                    selectedCategory === String(category.id),
-                  "outline-gray-500 dark:outline-black-2":
-                    selectedCategory !== String(category.id),
+                    selectedCategory === String(currentRootCategory.id),
+                  "outline-white":
+                    selectedCategory !== String(currentRootCategory.id),
                 }
               )}
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                handleSelectCategory(category.id, fromCategory || isBasic);
+                // Click on "All [Category]" filters by this category
+                router.push(
+                  buildUrl({
+                    category_id: String(currentRootCategory.id),
+                    selected_category: String(currentRootCategory.id),
+                  })
+                );
               }}
             >
               <FallbackImage
-                src={category.image_url ?? ""}
+                src={currentRootCategory.image_url ?? ""}
                 alt="image"
                 height={310}
                 width={310}
                 className="h-full w-full rounded-lg object-cover"
               />
-              <div className="absolute bottom-0 w-full bg-gradient-to-t from-black/80 to-transparent pt-5 pl-2 lg:pl-3 pb-1 lg:pb-2 rounded-lg">
+              <div className="absolute bottom-0 w-full bg-linear-to-t from-black/80 to-transparent pt-5 pl-2 lg:pl-3 pb-1 lg:pb-2 rounded-lg">
                 <h3 className="bottom-2 lg:bottom-3 text-white text-sm md:text-base font-medium line-clamp-2 leading-none">
-                  {category.name}
+                  All {currentRootCategory.name}
                 </h3>
               </div>
+              {/* Back button */}
+              <div
+                className="absolute top-1 left-1 md:top-2 md:left-3 text-red-500"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleSelectCategory(-1);
+                }}
+              >
+                <ArrowLeftCircle className="w-5 md:w-6" />
+              </div>
             </div>
-          ))}
-        </div>
+          )
+        ) : (
+          /* "All products/categories" card - shown when viewing root categories */
+          <div
+            key="all"
+            className={cn(
+              "w-25 bg-blue-zatiq/25 min-w-25! md:w-37.5 md:min-w-37.5! aspect-square relative cursor-pointer rounded-lg outline-solid outline-4 m-1 md:m-2",
+              {
+                "outline-blue-zatiq": !selectedCategory,
+                "outline-gray-500 dark:outline-black-2": selectedCategory,
+              }
+            )}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleSelectCategory(null);
+            }}
+          >
+            {shopDetails?.image_url ? (
+              <Image
+                src={shopDetails.image_url}
+                alt="image"
+                height={310}
+                width={310}
+                className="h-full w-full rounded-lg object-cover"
+              />
+            ) : (
+              <div className="h-full w-full rounded-lg bg-transparent" />
+            )}
+            <div className="absolute bottom-0 w-full bg-linear-to-t from-black/50 to-transparent pt-5 pl-2 lg:pl-3 pb-1 lg:pb-2 rounded-lg">
+              <h3 className="bottom-2 text-white text-[16px] md:text-[28px] font-medium whitespace-pre-line">
+                {fromCategory ? "All\ncategories" : "All\nproducts"}
+              </h3>
+            </div>
+          </div>
+        )}
+
+        {/* Category/Subcategory cards */}
+        {categoryList?.map((category) => (
+          <div
+            key={category.id}
+            className={cn(
+              "w-25 min-w-25! md:w-37.5 md:min-w-37.5! aspect-square relative cursor-pointer rounded-lg outline-solid outline-4 m-1 md:m-2",
+              {
+                "outline-blue-zatiq": selectedCategory === String(category.id),
+                "outline-gray-500 dark:outline-black-2":
+                  selectedCategory !== String(category.id),
+              }
+            )}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleSelectCategory(category.id);
+            }}
+          >
+            <FallbackImage
+              src={category.image_url ?? ""}
+              alt="image"
+              height={310}
+              width={310}
+              className="h-full w-full rounded-lg object-cover"
+            />
+            <div className="absolute bottom-0 w-full bg-linear-to-t from-black/80 to-transparent pt-5 pl-2 lg:pl-3 pb-1 lg:pb-2 rounded-lg">
+              <h3 className="bottom-2 lg:bottom-3 text-white text-sm md:text-base font-medium line-clamp-2 leading-none">
+                {category.name}
+              </h3>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

@@ -1,67 +1,92 @@
 "use client";
 
-import { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
-import { Loader2, Download, Share2, ArrowLeft, ExternalLink, Package, Truck, CheckCircle } from 'lucide-react';
-import { getReceiptDetails, downloadReceipt } from '@/lib/payments/api';
-import { PaymentStatus, PaymentType, OrderStatus } from '@/lib/payments/types';
-import { formatPrice, getPaymentStatusText, getPaymentStatusColor, getOrderStatusText, getOrderStatusColor } from '@/lib/payments/utils';
-import { orderManager } from '@/lib/orders/order-manager';
+import { useEffect, useState, useCallback } from "react";
+import Image from "next/image";
+import { useParams, useRouter } from "next/navigation";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import {
+  Loader2,
+  Download,
+  Share2,
+  ArrowLeft,
+  ExternalLink,
+  Package,
+  Truck,
+  CheckCircle,
+} from "lucide-react";
+import { getReceiptDetails, downloadReceipt } from "@/lib/payments/api";
+import {
+  PaymentStatus,
+  OrderStatus,
+  type ReceiptDetails,
+  type OrderItem,
+} from "@/lib/payments/types";
+import {
+  formatPrice,
+  getPaymentStatusText,
+  getPaymentStatusColor,
+  getOrderStatusText,
+  getOrderStatusColor,
+} from "@/lib/payments/utils";
+import { orderManager } from "@/lib/orders/order-manager";
 
 export default function ReceiptPage() {
   const params = useParams();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [orderDetails, setOrderDetails] = useState<any>(null);
+  const [orderDetails, setOrderDetails] = useState<ReceiptDetails | null>(null);
   const [downloading, setDownloading] = useState(false);
 
   const receiptId = params.receiptId as string;
 
-  useEffect(() => {
-    if (!receiptId) {
-      setError('Receipt ID not found');
-      setLoading(false);
-      return;
-    }
-
-    fetchReceiptDetails();
-  }, [receiptId]);
-
-  const fetchReceiptDetails = async () => {
+  const fetchReceiptDetails = useCallback(async () => {
     try {
       const response = await getReceiptDetails(receiptId);
       if (response.success && response.data) {
         setOrderDetails(response.data);
       } else {
-        setError(response.error || 'Failed to fetch receipt details');
+        setError(response.error || "Failed to fetch receipt details");
       }
-    } catch (err: any) {
-      setError(err.message || 'Something went wrong');
+    } catch (err: unknown) {
+      const message =
+        err instanceof Error ? err.message : "Something went wrong";
+      setError(message);
     } finally {
       setLoading(false);
     }
-  };
+  }, [receiptId]);
+
+  useEffect(() => {
+    if (!receiptId) {
+      setError("Receipt ID not found");
+      setLoading(false);
+      return;
+    }
+
+    fetchReceiptDetails();
+  }, [receiptId, fetchReceiptDetails]);
 
   const handleDownloadReceipt = async () => {
     setDownloading(true);
     try {
       const blob = await downloadReceipt(receiptId);
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
       a.download = `receipt-${receiptId}.pdf`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
-    } catch (err: any) {
-      setError(err.message || 'Failed to download receipt');
+    } catch (err: unknown) {
+      const message =
+        err instanceof Error ? err.message : "Failed to download receipt";
+      setError(message);
     } finally {
       setDownloading(false);
     }
@@ -70,7 +95,7 @@ export default function ReceiptPage() {
   const handleShareWhatsApp = () => {
     if (orderDetails) {
       const url = orderManager.generateWhatsAppMessage(orderDetails);
-      window.open(url, '_blank');
+      window.open(url, "_blank");
     }
   };
 
@@ -98,14 +123,17 @@ export default function ReceiptPage() {
       <div className="min-h-screen bg-gray-50 py-12 px-4">
         <div className="max-w-2xl mx-auto">
           <Alert variant="destructive">
-            <AlertDescription>{error || 'Receipt not found'}</AlertDescription>
+            <AlertDescription>{error || "Receipt not found"}</AlertDescription>
           </Alert>
         </div>
       </div>
     );
   }
 
-  const subtotal = orderDetails.receipt_items.reduce((sum: number, item: any) => sum + item.total_price, 0);
+  const subtotal = orderDetails.receipt_items.reduce(
+    (sum: number, item: OrderItem) => sum + item.total_price,
+    0
+  );
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -124,14 +152,12 @@ export default function ReceiptPage() {
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
               <h1 className="text-2xl font-bold">Order Receipt</h1>
-              <p className="text-gray-600">Receipt ID: {orderDetails.receipt_id}</p>
+              <p className="text-gray-600">
+                Receipt ID: {orderDetails.receipt_id}
+              </p>
             </div>
             <div className="flex gap-2">
-              <Button
-                variant="outline"
-                onClick={handleShareWhatsApp}
-                size="sm"
-              >
+              <Button variant="outline" onClick={handleShareWhatsApp} size="sm">
                 <Share2 className="mr-2 h-4 w-4" />
                 Share
               </Button>
@@ -142,7 +168,7 @@ export default function ReceiptPage() {
                 size="sm"
               >
                 <Download className="mr-2 h-4 w-4" />
-                {downloading ? 'Downloading...' : 'Download'}
+                {downloading ? "Downloading..." : "Download"}
               </Button>
             </div>
           </div>
@@ -154,7 +180,10 @@ export default function ReceiptPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 {getOrderStatusIcon(orderDetails.status)}
-                Order Status: <span style={{ color: getOrderStatusColor(orderDetails.status) }}>
+                Order Status:{" "}
+                <span
+                  style={{ color: getOrderStatusColor(orderDetails.status) }}
+                >
                   {getOrderStatusText(orderDetails.status)}
                 </span>
               </CardTitle>
@@ -165,8 +194,10 @@ export default function ReceiptPage() {
                 <span className="text-gray-600">Payment Status:</span>
                 <Badge
                   style={{
-                    backgroundColor: getPaymentStatusColor(orderDetails.payment_status),
-                    color: 'white'
+                    backgroundColor: getPaymentStatusColor(
+                      orderDetails.payment_status
+                    ),
+                    color: "white",
                   }}
                 >
                   {getPaymentStatusText(orderDetails.payment_status)}
@@ -176,7 +207,9 @@ export default function ReceiptPage() {
               {orderDetails.transaction_id && (
                 <div className="flex items-center justify-between">
                   <span className="text-gray-600">Transaction ID:</span>
-                  <span className="font-mono">{orderDetails.transaction_id}</span>
+                  <span className="font-mono">
+                    {orderDetails.transaction_id}
+                  </span>
                 </div>
               )}
 
@@ -201,7 +234,9 @@ export default function ReceiptPage() {
                   </div>
                   <div>
                     <span className="text-gray-600">Address:</span>
-                    <p className="font-medium">{orderDetails.customer_address}</p>
+                    <p className="font-medium">
+                      {orderDetails.customer_address}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -212,29 +247,36 @@ export default function ReceiptPage() {
               <div>
                 <h3 className="font-medium mb-3">Order Items</h3>
                 <div className="space-y-3">
-                  {orderDetails.receipt_items.map((item: any, index: number) => (
-                    <div key={index} className="flex items-center gap-3">
-                      {item.product_image && (
-                        <img
-                          src={item.product_image}
-                          alt={item.product_name}
-                          className="w-16 h-16 object-cover rounded"
-                        />
-                      )}
-                      <div className="flex-1">
-                        <h4 className="font-medium">{item.product_name}</h4>
-                        {item.variant_name && (
-                          <p className="text-sm text-gray-600">{item.variant_name}</p>
+                  {orderDetails.receipt_items.map(
+                    (item: OrderItem, index: number) => (
+                      <div key={index} className="flex items-center gap-3">
+                        {item.product_image && (
+                          <Image
+                            src={item.product_image}
+                            alt={item.product_name}
+                            width={64}
+                            height={64}
+                            className="w-16 h-16 object-cover rounded"
+                          />
                         )}
-                        <p className="text-sm text-gray-600">
-                          Qty: {item.quantity} × {formatPrice(item.unit_price)}
+                        <div className="flex-1">
+                          <h4 className="font-medium">{item.product_name}</h4>
+                          {item.variant_name && (
+                            <p className="text-sm text-gray-600">
+                              {item.variant_name}
+                            </p>
+                          )}
+                          <p className="text-sm text-gray-600">
+                            Qty: {item.quantity} ×{" "}
+                            {formatPrice(item.unit_price)}
+                          </p>
+                        </div>
+                        <p className="font-medium">
+                          {formatPrice(item.total_price)}
                         </p>
                       </div>
-                      <p className="font-medium">
-                        {formatPrice(item.total_price)}
-                      </p>
-                    </div>
-                  ))}
+                    )
+                  )}
                 </div>
               </div>
 
@@ -295,7 +337,7 @@ export default function ReceiptPage() {
               <CardContent>
                 <div className="space-y-4">
                   <div className="flex gap-3">
-                    <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                    <CheckCircle className="h-5 w-5 text-green-500 shrink-0 mt-0.5" />
                     <div>
                       <p className="font-medium text-sm">Order Placed</p>
                       <p className="text-xs text-gray-600">
@@ -306,11 +348,15 @@ export default function ReceiptPage() {
 
                   {orderDetails.payment_status === PaymentStatus.SUCCESS && (
                     <div className="flex gap-3">
-                      <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                      <CheckCircle className="h-5 w-5 text-green-500 shrink-0 mt-0.5" />
                       <div>
                         <p className="font-medium text-sm">Payment Confirmed</p>
                         <p className="text-xs text-gray-600">
-                          {orderDetails.paid_at ? new Date(orderDetails.paid_at).toLocaleString() : 'N/A'}
+                          {orderDetails.payment_details?.paid_at
+                            ? new Date(
+                                orderDetails.payment_details.paid_at
+                              ).toLocaleString()
+                            : "N/A"}
                         </p>
                       </div>
                     </div>
@@ -318,27 +364,31 @@ export default function ReceiptPage() {
 
                   {orderDetails.status === OrderStatus.PROCESSING && (
                     <div className="flex gap-3">
-                      <Package className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" />
+                      <Package className="h-5 w-5 text-blue-500 shrink-0 mt-0.5" />
                       <div>
                         <p className="font-medium text-sm">Order Processing</p>
-                        <p className="text-xs text-gray-600">Your order is being prepared</p>
+                        <p className="text-xs text-gray-600">
+                          Your order is being prepared
+                        </p>
                       </div>
                     </div>
                   )}
 
                   {orderDetails.status === OrderStatus.SHIPPED && (
                     <div className="flex gap-3">
-                      <Truck className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" />
+                      <Truck className="h-5 w-5 text-blue-500 shrink-0 mt-0.5" />
                       <div>
                         <p className="font-medium text-sm">Order Shipped</p>
-                        <p className="text-xs text-gray-600">Your order is on the way</p>
+                        <p className="text-xs text-gray-600">
+                          Your order is on the way
+                        </p>
                       </div>
                     </div>
                   )}
 
                   {orderDetails.status === OrderStatus.DELIVERED && (
                     <div className="flex gap-3">
-                      <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                      <CheckCircle className="h-5 w-5 text-green-500 shrink-0 mt-0.5" />
                       <div>
                         <p className="font-medium text-sm">Order Delivered</p>
                         <p className="text-xs text-gray-600">
