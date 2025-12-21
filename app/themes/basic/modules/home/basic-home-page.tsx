@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { useCartStore, useShopStore } from "@/stores";
+import { useShopStore } from "@/stores";
+import { useCartTotals } from "../../hooks";
 
 // Dynamic imports for better performance (matching old project pattern)
 const CategoryHorizontalList = dynamic(
@@ -46,22 +47,10 @@ export function BasicHomePage({ initialProductId }: BasicHomePageProps) {
   // Get shop details
   const { shopDetails } = useShopStore();
 
-  // Get cart state directly from store (avoiding selector caching issues)
-  const products = useCartStore((state) => state.products);
+  // Get cart totals using shared hook
+  const { totalPrice, totalProducts, hasItems } = useCartTotals();
 
-  // Calculate values in useMemo to avoid recalculation on every render
-  const { totalPrice, totalProducts } = useMemo(() => {
-    const productList = Object.values(products);
-    return {
-      totalPrice: productList.reduce((sum, p) => sum + p.price * p.qty, 0),
-      totalProducts: productList.reduce((sum, p) => sum + p.qty, 0),
-    };
-  }, [products]);
-
-  // Determine if white-labeled (from old project logic)
-  const isWhiteLeveled =
-    typeof window !== "undefined" &&
-    !window.location.pathname.includes("/merchant/");
+  // Determine base URL for navigation
   const baseUrl = shopDetails?.baseUrl || "/";
 
   return (
@@ -102,7 +91,7 @@ export function BasicHomePage({ initialProductId }: BasicHomePageProps) {
         onClick={() => {
           router.push(`${baseUrl}/checkout`);
         }}
-        showCartFloatingBtn={totalProducts > 0}
+        showCartFloatingBtn={hasItems}
         totalPrice={totalPrice}
         totalProducts={totalProducts}
         theme="Basic"

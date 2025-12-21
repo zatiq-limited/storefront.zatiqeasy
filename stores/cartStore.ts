@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
+import { persist, createJSONStorage, devtools } from 'zustand/middleware';
 import { nanoid } from 'nanoid';
 import type { CartProduct, VariantsState, OrderStatus } from '@/types';
 
@@ -31,8 +31,9 @@ interface CartActions {
 const CART_EXPIRY_HOURS = 24;
 
 export const useCartStore = create<CartState & CartActions>()(
-  persist(
-    (set, get) => ({
+  devtools(
+    persist(
+      (set, get) => ({
       // Initial state
       products: {},
       cartExpiry: null,
@@ -172,14 +173,16 @@ export const useCartStore = create<CartState & CartActions>()(
       getProductsByInventoryId: (inventoryId) =>
         Object.values(get().products).filter((p) => p.id === inventoryId),
     }),
-    {
-      name: 'zatiq-cart',
-      storage: createJSONStorage(() => localStorage),
-      partialize: (state) => ({
-        products: state.products,
-        cartExpiry: state.cartExpiry,
-      }),
-    }
+      {
+        name: 'zatiq-cart',
+        storage: createJSONStorage(() => localStorage),
+        partialize: (state) => ({
+          products: state.products,
+          cartExpiry: state.cartExpiry,
+        }),
+      }
+    ),
+    { name: 'CartStore' }
   )
 );
 

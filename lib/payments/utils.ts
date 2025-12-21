@@ -174,27 +174,75 @@ export const generateTransactionId = (paymentType: PaymentType): string => {
 };
 
 /**
- * Parse payment error message
+ * Type guard for error with message property
  */
-export const parsePaymentError = (error: any): string => {
-  if (typeof error === 'string') {
+const isErrorWithMessage = (error: unknown): error is { message: string } => {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "message" in error &&
+    typeof (error as { message: unknown }).message === "string"
+  );
+};
+
+/**
+ * Type guard for axios-like error with response
+ */
+const isAxiosError = (
+  error: unknown
+): error is { response?: { data?: { message?: string } }; message?: string } => {
+  return typeof error === "object" && error !== null && "response" in error;
+};
+
+/**
+ * Extract error message from API/axios errors
+ */
+export const getApiErrorMessage = (
+  error: unknown,
+  fallback = "An unexpected error occurred"
+): string => {
+  if (typeof error === "string") {
     return error;
   }
 
-  if (error?.message) {
+  if (isAxiosError(error)) {
+    return error.response?.data?.message || error.message || fallback;
+  }
+
+  if (isErrorWithMessage(error)) {
     return error.message;
   }
 
-  if (error?.error) {
-    if (typeof error.error === 'string') {
-      return error.error;
+  return fallback;
+};
+
+/**
+ * Parse payment error message
+ */
+export const parsePaymentError = (error: unknown): string => {
+  if (typeof error === "string") {
+    return error;
+  }
+
+  if (isErrorWithMessage(error)) {
+    return error.message;
+  }
+
+  if (
+    typeof error === "object" &&
+    error !== null &&
+    "error" in error
+  ) {
+    const errObj = error as { error: unknown };
+    if (typeof errObj.error === "string") {
+      return errObj.error;
     }
-    if (error.error.message) {
-      return error.error.message;
+    if (isErrorWithMessage(errObj.error)) {
+      return errObj.error.message;
     }
   }
 
-  return 'Payment failed. Please try again.';
+  return "Payment failed. Please try again.";
 };
 
 /**

@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist, createJSONStorage, devtools } from 'zustand/middleware';
 import type {
   Division,
   District,
@@ -107,12 +108,14 @@ const initialState: CheckoutState = {
   currentStep: 1,
 };
 
-export const useCheckoutStore = create<CheckoutState & CheckoutActions>(
-  (set) => ({
-    ...initialState,
+export const useCheckoutStore = create<CheckoutState & CheckoutActions>()(
+  devtools(
+    persist(
+      (set) => ({
+        ...initialState,
 
-    // Location actions
-    setSelectedDivision: (division) =>
+        // Location actions
+        setSelectedDivision: (division) =>
       set({
         selectedDivision: division,
         selectedDistrict: '',
@@ -195,7 +198,34 @@ export const useCheckoutStore = create<CheckoutState & CheckoutActions>(
 
     // Reset
     resetCheckout: () => set(initialState),
-  })
+      }),
+      {
+        name: 'zatiq-checkout',
+        storage: createJSONStorage(() => localStorage),
+        // Only persist customer data and location - not transient state
+        partialize: (state) => ({
+          // Customer info (persisted across sessions)
+          customerName: state.customerName,
+          customerEmail: state.customerEmail,
+          fullPhoneNumber: state.fullPhoneNumber,
+          countryCallingCode: state.countryCallingCode,
+          fullAddress: state.fullAddress,
+          // Location selection (persisted)
+          selectedDivision: state.selectedDivision,
+          selectedDistrict: state.selectedDistrict,
+          selectedUpazila: state.selectedUpazila,
+          selectedDeliveryZone: state.selectedDeliveryZone,
+          // Excluded from persistence:
+          // - divisions, districts, upazilas (loaded from API)
+          // - promoCode, promoCodeSearch, promoCodeMessage, discountAmount (transient)
+          // - currentStep, acceptedTerms, isPhoneVerified (session-only)
+          // - selectedPaymentMethod, isFullOnlinePayment (session-only)
+        }),
+        version: 1,
+      }
+    ),
+    { name: 'CheckoutStore' }
+  )
 );
 
 // Selectors

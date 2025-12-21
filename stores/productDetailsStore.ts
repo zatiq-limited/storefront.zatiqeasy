@@ -6,6 +6,18 @@ interface SelectedVariants {
   [variantTypeId: number]: Variant;
 }
 
+// Type for the store state
+type ProductDetailsStoreState = Pick<
+  ProductDetailsState,
+  | "product"
+  | "isLoading"
+  | "error"
+  | "productDetailsPageConfig"
+  | "selectedVariants"
+  | "quantity"
+  | "computedPrice"
+>;
+
 interface ProductDetailsState {
   // Current product
   product: Product | null;
@@ -106,3 +118,18 @@ export const useProductDetailsStore = create<ProductDetailsState>()(
     { name: "product-details-store" }
   )
 );
+
+// Selectors - use these to prevent unnecessary re-renders
+export const selectProduct = (state: ProductDetailsStoreState) => state.product;
+export const selectIsLoading = (state: ProductDetailsStoreState) =>
+  state.isLoading;
+export const selectError = (state: ProductDetailsStoreState) => state.error;
+export const selectSelectedVariants = (state: ProductDetailsStoreState) =>
+  state.selectedVariants;
+export const selectQuantity = (state: ProductDetailsStoreState) =>
+  state.quantity;
+export const selectComputedPrice = (state: ProductDetailsStoreState) =>
+  state.computedPrice;
+export const selectProductDetailsPageConfig = (
+  state: ProductDetailsStoreState
+) => state.productDetailsPageConfig;

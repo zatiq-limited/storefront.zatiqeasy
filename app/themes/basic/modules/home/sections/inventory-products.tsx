@@ -13,6 +13,7 @@ import { Pagination } from '../../../../../components/pagination';
 import { ProductSkeleton } from '../../../../../components/skeletons/product-skeleton';
 import { LazyAnimation } from '../../../../../components/animations/lazy-animation';
 import { CartQtyControl } from '@/components/cart/shared/CartQtyControl';
+import { ROUTES } from '@/lib/constants';
 
 // Constants
 const MAX_PRODUCTS_PER_PAGE = 12;
@@ -102,16 +103,13 @@ export function InventoryProducts() {
 
   // Navigate to product details
   const navigateProductDetails = (id: string | number) => {
-    router.push(`/products/${id}`);
+    router.push(ROUTES.PRODUCT_DETAIL(String(id)));
   };
 
   // Handle sort change
   const handleSort = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSortOption(e.target.value);
   };
-
-  // Debug: Log products count
-  console.log('[InventoryProducts] Products count:', products.length, 'Filtered:', filteredProducts.length);
 
   // Get current page products
   const currentProducts = useMemo(() => {
@@ -316,7 +314,7 @@ function ProductCard({
       selectedVariants: {}
     } as any);
 
-    router.push('/checkout');
+    router.push(ROUTES.CHECKOUT);
   };
 
   // Increment quantity handler
@@ -371,7 +369,15 @@ function ProductCard({
       {/* Product Image */}
       <div
         role="button"
+        tabIndex={0}
         onClick={onNavigate}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            onNavigate();
+          }
+        }}
+        aria-label={`View ${name} details`}
         className="relative cursor-pointer"
       >
         <div className="relative w-full h-48 sm:h-52 overflow-hidden">

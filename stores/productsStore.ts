@@ -285,3 +285,25 @@ export const useProductsStore = create<ProductsState>()(
     { name: "products-store" }
   )
 );
+
+// Type for state selectors
+type ProductsStoreState = Pick<
+  ProductsState,
+  | "products"
+  | "categories"
+  | "pagination"
+  | "filters"
+  | "isLoading"
+  | "error"
+  | "productsPageConfig"
+>;
+
+// Selectors - use these to prevent unnecessary re-renders
+export const selectProducts = (state: ProductsStoreState) => state.products;
+export const selectCategories = (state: ProductsStoreState) => state.categories;
+export const selectPagination = (state: ProductsStoreState) => state.pagination;
+export const selectFilters = (state: ProductsStoreState) => state.filters;
+export const selectIsLoading = (state: ProductsStoreState) => state.isLoading;
+export const selectError = (state: ProductsStoreState) => state.error;
+export const selectProductsPageConfig = (state: ProductsStoreState) =>
+  state.productsPageConfig;

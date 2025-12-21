@@ -10,6 +10,7 @@ import {
   PaymentStatus
 } from './types';
 import { createEncryptedPayload, decryptApiResponse } from './encryption';
+import { getApiErrorMessage } from './utils';
 
 // Base URL for payment API (matching the old project)
 const PAYMENT_API_BASE = process.env.NEXT_PUBLIC_PAYMENT_API_URL || 'https://easybill.zatiq.tech/api/v1';
@@ -28,8 +29,8 @@ export const createOrder = async (payload: CreateOrderPayload): Promise<OrderRes
         'Content-Type': 'application/json',
         'Device-Type': 'Web',
         'Application-Type': 'Online_Shop',
-        'Referer': process.env.NEXT_PUBLIC_APP_URL || window.location.origin,
-        'User-Agent': navigator.userAgent,
+        // Note: Referer and User-Agent are forbidden headers in browsers
+        // They are automatically set by the browser
       },
     });
 
@@ -54,11 +55,11 @@ export const createOrder = async (payload: CreateOrderPayload): Promise<OrderRes
       success: true,
       data: decryptedData,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Create order error:', error);
     return {
       success: false,
-      error: error.response?.data?.message || error.message || 'Failed to create order',
+      error: getApiErrorMessage(error, 'Failed to create order'),
     };
   }
 };
@@ -86,11 +87,11 @@ export const processPayment = async (payload: PaymentProcessPayload): Promise<Pa
       success: true,
       data: decryptedData,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Process payment error:', error);
     return {
       success: false,
-      error: error.response?.data?.message || error.message || 'Failed to process payment',
+      error: getApiErrorMessage(error, 'Failed to process payment'),
     };
   }
 };
@@ -114,11 +115,11 @@ export const getReceiptDetails = async (receiptId: string): Promise<ApiResponse<
       success: true,
       data: decryptedData,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Get receipt details error:', error);
     return {
       success: false,
-      error: error.response?.data?.message || error.message || 'Failed to get receipt details',
+      error: getApiErrorMessage(error, 'Failed to get receipt details'),
     };
   }
 };
@@ -137,9 +138,9 @@ export const downloadReceipt = async (receiptId: string): Promise<Blob> => {
     });
 
     return response.data;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Download receipt error:', error);
-    throw new Error(error.response?.data?.message || error.message || 'Failed to download receipt');
+    throw new Error(getApiErrorMessage(error, 'Failed to download receipt'));
   }
 };
 
@@ -149,7 +150,7 @@ export const downloadReceipt = async (receiptId: string): Promise<Blob> => {
 export const checkPaymentStatus = async (receiptId: string): Promise<ApiResponse<{
   status: PaymentStatus;
   transaction_id?: string;
-  payment_details?: any;
+  payment_details?: Record<string, unknown>;
 }>> => {
   try {
     const response = await apiClient.get(`${PAYMENT_API_BASE}/payments/status/${receiptId}`, {
@@ -166,11 +167,11 @@ export const checkPaymentStatus = async (receiptId: string): Promise<ApiResponse
       success: true,
       data: decryptedData,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Check payment status error:', error);
     return {
       success: false,
-      error: error.response?.data?.message || error.message || 'Failed to check payment status',
+      error: getApiErrorMessage(error, 'Failed to check payment status'),
     };
   }
 };
@@ -194,11 +195,11 @@ export const handlePaymentWebhook = async (
       success: true,
       data: response.data,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Handle webhook error:', error);
     return {
       success: false,
-      error: error.response?.data?.message || error.message || 'Failed to handle webhook',
+      error: getApiErrorMessage(error, 'Failed to handle webhook'),
     };
   }
 };
@@ -226,11 +227,11 @@ export const retryPayment = async (receiptId: string): Promise<PaymentProcessRes
 
     // Process payment
     return await processPayment(paymentPayload);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Retry payment error:', error);
     return {
       success: false,
-      error: error.message || 'Failed to retry payment',
+      error: getApiErrorMessage(error, 'Failed to retry payment'),
     };
   }
 };
@@ -253,11 +254,11 @@ export const cancelOrder = async (receiptId: string, reason?: string): Promise<A
       success: true,
       data: response.data,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Cancel order error:', error);
     return {
       success: false,
-      error: error.response?.data?.message || error.message || 'Failed to cancel order',
+      error: getApiErrorMessage(error, 'Failed to cancel order'),
     };
   }
 };

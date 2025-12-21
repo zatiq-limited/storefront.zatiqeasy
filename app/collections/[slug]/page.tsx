@@ -11,9 +11,13 @@ import { notFound } from "next/navigation";
 import collectionsData from "@/data/api-responses/collections.json";
 import collectionDetailsPageData from "@/data/api-responses/collection-details-page.json";
 import CollectionDetailsPageRenderer from "@/components/renderers/page-renderer/collection-details-page-renderer";
+import type { Collection } from "@/hooks/useCollections";
 
 // Find collection by slug (including nested search)
-const findCollectionBySlug = (collections: any[], slug: string): any => {
+const findCollectionBySlug = (
+  collections: Collection[],
+  slug: string
+): Collection | null => {
   for (const collection of collections) {
     if (collection.slug === slug) {
       return collection;
@@ -28,13 +32,12 @@ const findCollectionBySlug = (collections: any[], slug: string): any => {
 };
 
 interface CollectionPageProps {
-  params: {
-    slug: string;
-  };
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateMetadata({ params }: CollectionPageProps): Promise<Metadata> {
-  const collection = findCollectionBySlug(collectionsData.data.collections, params.slug);
+  const { slug } = await params;
+  const collection = findCollectionBySlug(collectionsData.data.collections, slug);
 
   if (!collection) {
     return {
@@ -54,7 +57,8 @@ export async function generateMetadata({ params }: CollectionPageProps): Promise
 }
 
 export default async function CollectionPage({ params }: CollectionPageProps) {
-  const collection = findCollectionBySlug(collectionsData.data.collections, params.slug);
+  const { slug } = await params;
+  const collection = findCollectionBySlug(collectionsData.data.collections, slug);
 
   if (!collection) {
     notFound();

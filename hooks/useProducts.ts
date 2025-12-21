@@ -6,6 +6,7 @@ import {
   type Product,
   type Pagination,
 } from "@/stores/productsStore";
+import { CACHE_TIMES, DEFAULT_QUERY_OPTIONS, API_ROUTES } from "@/lib/constants";
 
 interface ProductsResponse {
   success: boolean;
@@ -43,14 +44,14 @@ function buildQueryString(filters: ProductFilters): string {
 // Fetch products with filters
 async function fetchProducts(filters: ProductFilters): Promise<ProductsResponse> {
   const queryString = buildQueryString(filters);
-  const res = await fetch(`/api/storefront/v1/products?${queryString}`);
+  const res = await fetch(`${API_ROUTES.PRODUCTS}?${queryString}`);
   if (!res.ok) throw new Error("Failed to fetch products");
   return res.json();
 }
 
 // Fetch products page configuration
 async function fetchProductsPageConfig(): Promise<ProductsPageConfigResponse> {
-  const res = await fetch("/api/storefront/v1/page/products");
+  const res = await fetch(API_ROUTES.PAGE_PRODUCTS);
   if (!res.ok) throw new Error("Failed to fetch products page config");
   return res.json();
 }
@@ -70,9 +71,8 @@ export function useProducts() {
   const productsQuery = useQuery({
     queryKey: ["products", filters],
     queryFn: () => fetchProducts(filters),
-    staleTime: 1000 * 60, // 1 minute - enables shallow caching
-    gcTime: 1000 * 60 * 5, // 5 minutes - keep in cache
-    refetchOnWindowFocus: false, // Prevent unnecessary refetches
+    ...CACHE_TIMES.PRODUCTS,
+    ...DEFAULT_QUERY_OPTIONS,
     placeholderData: (previousData) => previousData, // Keep previous data while fetching
   });
 
@@ -80,9 +80,8 @@ export function useProducts() {
   const pageConfigQuery = useQuery({
     queryKey: ["products-page-config"],
     queryFn: fetchProductsPageConfig,
-    staleTime: 1000 * 60 * 5, // 5 minutes
-    gcTime: 1000 * 60 * 30, // 30 minutes
-    refetchOnWindowFocus: false,
+    ...CACHE_TIMES.PAGE_CONFIG,
+    ...DEFAULT_QUERY_OPTIONS,
   });
 
   // Sync products to store
