@@ -1,73 +1,223 @@
 /**
  * ========================================
- * COLLECTION DETAIL PAGE
+ * COLLECTION DETAILS PAGE
  * ========================================
  *
- * Dynamic collection page showing collection details, subcategories, and products
+ * Single collection page with dynamic sections
+ * Uses React Query for caching and follows product details pattern
  */
 
-import { Metadata } from "next";
-import { notFound } from "next/navigation";
-import collectionsData from "@/data/api-responses/collections.json";
-import collectionDetailsPageData from "@/data/api-responses/collection-details-page.json";
-import CollectionDetailsPageRenderer from "@/components/renderers/page-renderer/collection-details-page-renderer";
+"use client";
 
-// Find collection by slug (including nested search)
-const findCollectionBySlug = (collections: any[], slug: string): any => {
-  for (const collection of collections) {
-    if (collection.slug === slug) {
-      return collection;
-    }
-    // Search in children recursively
-    if (collection.children) {
-      const found = findCollectionBySlug(collection.children, slug);
-      if (found) return found;
-    }
-  }
-  return null;
-};
+import { use } from "react";
+import { useEffect } from "react";
+import { useCollectionDetails } from "@/hooks";
+import CollectionDetailsPageRenderer from "@/components/renderers/page-renderer/collection-details-page-renderer";
+import type { Section } from "@/lib/types";
+import Link from "next/link";
 
 interface CollectionPageProps {
-  params: {
-    slug: string;
-  };
+  params: Promise<{ slug: string }>;
 }
 
-export async function generateMetadata({ params }: CollectionPageProps): Promise<Metadata> {
-  const collection = findCollectionBySlug(collectionsData.data.collections, params.slug);
+export default function CollectionPage({ params }: CollectionPageProps) {
+  const { slug } = use(params);
 
-  if (!collection) {
-    return {
-      title: "Collection Not Found",
-    };
+  // Scroll to top when component mounts or slug changes
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
+  }, [slug]);
+
+  const {
+    collection,
+    sections,
+    isLoading,
+    isPageConfigLoading,
+    error,
+    notFound,
+  } = useCollectionDetails(slug);
+
+  // Show loading state
+  if (isLoading || isPageConfigLoading) {
+    return (
+      <main className="flex items-center justify-center min-h-[50vh]">
+        <div className="flex flex-col items-center gap-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <p className="text-gray-600">Loading collection...</p>
+        </div>
+      </main>
+    );
   }
 
-  return {
-    title: `${collection.name} | Zatiq Easy Store`,
-    description: collection.description || `Browse ${collection.name} collection`,
-    openGraph: {
-      title: collection.name,
-      description: collection.description,
-      images: collection.image_url ? [collection.image_url] : [],
+  // Show 404 state
+  if (notFound || !collection) {
+    return (
+      <main className="flex items-center justify-center min-h-[50vh]">
+        <div className="text-center">
+          <svg
+            className="w-24 h-24 text-gray-300 mx-auto mb-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1.5}
+              d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Collection Not Found
+          </h1>
+          <p className="text-gray-600 mb-6">
+            The collection you&apos;re looking for doesn&apos;t exist or has been
+            removed.
+          </p>
+          <Link
+            href="/collections"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M10 19l-7-7m0 0l7-7m-7 7h18"
+              />
+            </svg>
+            Back to Collections
+          </Link>
+        </div>
+      </main>
+    );
+  }
+
+  // Show error state
+  if (error && !notFound) {
+    return (
+      <main className="flex items-center justify-center min-h-[50vh]">
+        <div className="text-center">
+          <svg
+            className="w-16 h-16 text-red-400 mx-auto mb-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+            />
+          </svg>
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">
+            Error loading collection
+          </h2>
+          <p className="text-gray-600 mb-4">Please try again later</p>
+          <Link
+            href="/collections"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
+          >
+            Back to Collections
+          </Link>
+        </div>
+      </main>
+    );
+  }
+
+  // Default sections if none provided
+  const defaultSections: Section[] = [
+    {
+      id: "collection_breadcrumb",
+      type: "collection-breadcrumb-1",
+      enabled: true,
+      settings: {
+        show_home: true,
+        show_collections: true,
+        show_product_count: true,
+        background_color: "#ffffff",
+        text_color: "#6b7280",
+        active_color: "#111827",
+      },
     },
-  };
-}
+    {
+      id: "collection_banner",
+      type: "collection-banner-1",
+      enabled: true,
+      settings: {
+        show_banner: true,
+        show_description: true,
+        show_product_count: true,
+        text_position: "center",
+        height: "medium",
+        overlay_opacity: "0.5",
+        text_color: "#ffffff",
+        badge_background_color: "#ffffff",
+        badge_text_color: "#111827",
+        banner_button_text: "Explore Collection",
+        banner_button_link: "#products",
+      },
+    },
+    {
+      id: "collection_subcategories",
+      type: "collection-subcategories-1",
+      enabled: collection.children && collection.children.length > 0,
+      settings: {
+        title: "Shop by Category",
+        show_title: true,
+        columns: "6",
+        columns_mobile: "3",
+        columns_tablet: "4",
+        show_product_count: true,
+        background_color: "#ffffff",
+        title_color: "#181D25",
+        text_color: "#374151",
+        hover_color: "#7c3aed",
+      },
+    },
+    {
+      id: "collection_products",
+      type: "collection-products-1",
+      enabled: true,
+      settings: {
+        card_style: "product-card-1",
+        columns: "3",
+        columns_mobile: "1",
+        columns_tablet: "2",
+        show_filters: true,
+        show_sorting: true,
+        show_pagination: true,
+        products_per_page: "12",
+        background_color: "#ffffff",
+        button_bg_color: "#0c2c5f",
+        button_text_color: "#eff2f6",
+        load_more_button_text: "View More Products",
+        load_more_gradient_from: "#4f46e5",
+        load_more_gradient_to: "#9333ea",
+        load_more_text_color: "#ffffff",
+      },
+    },
+  ];
 
-export default async function CollectionPage({ params }: CollectionPageProps) {
-  const collection = findCollectionBySlug(collectionsData.data.collections, params.slug);
-
-  if (!collection) {
-    notFound();
-  }
-
-  const sections = collectionDetailsPageData.sections;
+  const pageSections =
+    sections.length > 0 ? (sections as Section[]) : defaultSections;
 
   return (
     <main className="zatiq-collection-details-page min-h-screen">
       <CollectionDetailsPageRenderer
-        sections={sections}
+        sections={pageSections}
         collection={collection}
-        isLoading={false}
+        isLoading={isLoading}
       />
     </main>
   );

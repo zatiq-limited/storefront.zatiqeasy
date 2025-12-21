@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import type { Section } from "@/lib/types";
 
 // Collection type from collections.json
@@ -13,38 +14,49 @@ export interface Collection {
   children?: Collection[];
 }
 
-// Collection details page config response
-interface CollectionDetailsPageConfig {
-  seo: {
-    title: string;
-    description: string;
+interface CollectionResponse {
+  success: boolean;
+  data: {
+    collection: Collection;
   };
-  sections: Section[];
 }
 
-// Fetch collection by slug
-async function fetchCollectionBySlug(slug: string): Promise<Collection> {
-  const response = await fetch(`/api/storefront/v1/collections/${slug}`);
-  if (!response.ok) {
+interface CollectionDetailsPageConfigResponse {
+  sections: Array<{
+    id: string;
+    type: string;
+    enabled: boolean;
+    settings: Record<string, unknown>;
+  }>;
+}
+
+// Fetch single collection by slug
+async function fetchCollection(slug: string): Promise<CollectionResponse> {
+  const res = await fetch(`/api/storefront/v1/collections/${slug}`);
+  if (!res.ok) {
+    if (res.status === 404) {
+      throw new Error("Collection not found");
+    }
     throw new Error("Failed to fetch collection");
   }
-  return response.json();
+  return res.json();
 }
 
 // Fetch collection details page configuration
-async function fetchCollectionDetailsPageConfig(): Promise<CollectionDetailsPageConfig> {
-  const response = await fetch("/api/storefront/v1/page/collection-details");
-  if (!response.ok) {
-    throw new Error("Failed to fetch collection details page config");
-  }
-  return response.json();
+async function fetchCollectionDetailsPageConfig(): Promise<CollectionDetailsPageConfigResponse> {
+  const res = await fetch("/api/storefront/v1/page/collection-details");
+  if (!res.ok) throw new Error("Failed to fetch collection details page config");
+  return res.json();
 }
 
 export function useCollectionDetails(slug: string) {
+  const [error, setError] = useState<string | null>(null);
+  const [notFound, setNotFound] = useState(false);
+
   // Collection query
   const collectionQuery = useQuery({
     queryKey: ["collection", slug],
-    queryFn: () => fetchCollectionBySlug(slug),
+    queryFn: () => fetchCollection(slug),
     enabled: !!slug,
     staleTime: 1000 * 60, // 1 minute
     gcTime: 1000 * 60 * 5, // 5 minutes
@@ -60,12 +72,27 @@ export function useCollectionDetails(slug: string) {
     refetchOnWindowFocus: false,
   });
 
+  // Handle errors and not found
+  useEffect(() => {
+    if (collectionQuery.error) {
+      const errorMessage = (collectionQuery.error as Error).message;
+      if (errorMessage.includes("not found")) {
+        setNotFound(true);
+      } else {
+        setError(errorMessage);
+      }
+    } else {
+      setError(null);
+      setNotFound(false);
+    }
+  }, [collectionQuery.error]);
+
   return {
-    collection: collectionQuery.data,
+    collection: collectionQuery.data?.data?.collection,
     sections: pageConfigQuery.data?.sections || [],
-    seo: pageConfigQuery.data?.seo,
-    isLoading: collectionQuery.isLoading || pageConfigQuery.isLoading,
+    isLoading: collectionQuery.isLoading,
     isPageConfigLoading: pageConfigQuery.isLoading,
-    error: collectionQuery.error || pageConfigQuery.error,
+    error,
+    notFound,
   };
 }
