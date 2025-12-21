@@ -1,5 +1,5 @@
-import { apiClient } from '../configs/api.config';
-import { encryptData, decryptData } from '../payments/encryption';
+import { apiClient } from "../configs/api.config";
+import { encryptData, decryptData } from "../payments/encryption";
 
 export interface ShopProfile {
   id: string | number;
@@ -81,7 +81,9 @@ export async function fetchShopProfile(params: {
     }
     return null;
   } catch (error) {
-    console.error('Error fetching shop profile:', error);
+    if (process.env.NODE_ENV === "development") {
+      console.error("Error fetching shop profile:", error);
+    }
     return null;
   }
 }
@@ -107,13 +109,17 @@ export async function fetchShopInventories(params: {
       payload: encryptedPayload,
     });
 
-    console.log('[API] Raw response:', res.data);
+    if (process.env.NODE_ENV === "development") {
+      console.log("[API] Raw response:", res.data);
+    }
 
     // Decrypt the response (matching old project)
     if (res.data) {
       try {
         const decryptedData = decryptData(res.data);
-        console.log('[API] Decrypted data:', decryptedData);
+        if (process.env.NODE_ENV === "development") {
+          console.log("[API] Decrypted data:", decryptedData);
+        }
         // Check if data exists in decrypted response
         if (decryptedData?.data) {
           return decryptedData.data;
@@ -121,7 +127,9 @@ export async function fetchShopInventories(params: {
         return null;
       } catch (decryptError) {
         // If decryption fails, try direct response (for non-encrypted APIs)
-        console.log('[API] Response not encrypted, using direct data');
+        if (process.env.NODE_ENV === "development") {
+          console.log("[API] Response not encrypted, using direct data");
+        }
         if (res.data?.data) {
           return res.data.data;
         }
@@ -130,7 +138,9 @@ export async function fetchShopInventories(params: {
     }
     return null;
   } catch (error) {
-    console.error('[API] Error fetching shop inventories:', error);
+    if (process.env.NODE_ENV === "development") {
+      console.error("[API] Error fetching shop inventories:", error);
+    }
     return null;
   }
 }
@@ -156,7 +166,9 @@ export async function fetchShopCategories(params: {
     }
     return null;
   } catch (error) {
-    console.error('Error fetching shop categories:', error);
+    if (process.env.NODE_ENV === "development") {
+      console.error("Error fetching shop categories:", error);
+    }
     return null;
   }
 }

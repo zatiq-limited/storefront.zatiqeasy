@@ -1,7 +1,16 @@
-import { CreateOrderPayload, OrderResponse, ReceiptDetails, PaymentType, OrderStatus, PaymentStatus, ApiResponse } from '@/lib/payments/types';
-import { createOrder, getReceiptDetails } from '@/lib/payments/api';
-import { formatPrice, validatePhoneNumber } from '@/lib/payments/utils';
-import type { CartProduct } from '@/types';
+import {
+  CreateOrderPayload,
+  OrderResponse,
+  ReceiptDetails,
+  PaymentType,
+  OrderStatus,
+  PaymentStatus,
+  ApiResponse,
+} from "@/lib/payments/types";
+import { createOrder, getReceiptDetails } from "@/lib/payments/api";
+import { formatPrice } from "@/lib/payments/utils";
+import { validatePhoneNumber, calculateDeliveryCharge } from "@/lib/utils";
+import type { CartProduct } from "@/types";
 
 // Cart interface for order creation
 interface CartInput {
@@ -46,15 +55,15 @@ export class OrderManager {
     try {
       // Validate inputs
       if (!validatePhoneNumber(checkoutData.customerPhone)) {
-        throw new Error('Please enter a valid phone number');
+        throw new Error("Please enter a valid phone number");
       }
 
       if (cart.items.length === 0) {
-        throw new Error('Your cart is empty');
+        throw new Error("Your cart is empty");
       }
 
       // Calculate delivery charge
-      const deliveryCharge = this.calculateDeliveryCharge(
+      const deliveryCharge = calculateDeliveryCharge(
         checkoutData.customerAddress,
         checkoutData.deliveryChargeInsideDhaka,
         checkoutData.deliveryChargeOutsideDhaka
@@ -72,11 +81,13 @@ export class OrderManager {
       const totalAmount = subtotal + deliveryCharge + taxAmount;
 
       // Prepare order items
-      const receiptItems = cart.items.map(item => {
+      const receiptItems = cart.items.map((item) => {
         // Get variant info from selectedVariants if exists
         const variantEntries = Object.values(item.selectedVariants || {});
-        const variantName = variantEntries.map(v => v.variant_name).join(', ') || '';
-        const variantId = variantEntries.length > 0 ? variantEntries[0].variant_id : undefined;
+        const variantName =
+          variantEntries.map((v) => v.variant_name).join(", ") || "";
+        const variantId =
+          variantEntries.length > 0 ? variantEntries[0].variant_id : undefined;
 
         return {
           product_id: String(item.id),
@@ -103,7 +114,7 @@ export class OrderManager {
         payment_type: checkoutData.paymentType,
         pay_now_amount: totalAmount, // Pay full amount for now
         receipt_items: receiptItems,
-        type: 'Online',
+        type: "Online",
         status: OrderStatus.ORDER_PLACED,
         note: checkoutData.note,
       };
@@ -111,10 +122,13 @@ export class OrderManager {
       // Create order with retry mechanism
       return await this.createOrderWithRetry(orderPayload);
     } catch (error) {
-      console.error('Create order from cart error:', error);
+      if (process.env.NODE_ENV === "development") {
+        console.error("Create order from cart error:", error);
+      }
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Failed to create order',
+        error:
+          error instanceof Error ? error.message : "Failed to create order",
       };
     }
   }
@@ -122,7 +136,9 @@ export class OrderManager {
   /**
    * Create order with retry mechanism
    */
-  private async createOrderWithRetry(payload: CreateOrderPayload): Promise<OrderResponse> {
+  private async createOrderWithRetry(
+    payload: CreateOrderPayload
+  ): Promise<OrderResponse> {
     try {
       const response = await createOrder(payload);
       this.retryCount = 0; // Reset retry count on success
@@ -130,9 +146,15 @@ export class OrderManager {
     } catch (error) {
       this.retryCount++;
       if (this.retryCount < this.maxRetries) {
-        console.warn(`Order creation failed, retrying... (${this.retryCount}/${this.maxRetries})`);
+        if (process.env.NODE_ENV === "development") {
+          console.warn(
+            `Order creation failed, retrying... (${this.retryCount}/${this.maxRetries})`
+          );
+        }
         // Wait before retry
-        await new Promise(resolve => setTimeout(resolve, 1000 * this.retryCount));
+        await new Promise((resolve) =>
+          setTimeout(resolve, 1000 * this.retryCount)
+        );
         return this.createOrderWithRetry(payload);
       }
       throw error;
@@ -150,7 +172,9 @@ export class OrderManager {
       }
       return null;
     } catch (error) {
-      console.error('Get order details error:', error);
+      if (process.env.NODE_ENV === "development") {
+        console.error("Get order details error:", error);
+      }
       return null;
     }
   }
@@ -167,7 +191,10 @@ export class OrderManager {
       paymentType: receipt.payment_type,
       status: receipt.status,
       paymentStatus: receipt.payment_status,
-      subtotal: receipt.receipt_items.reduce((sum, item) => sum + item.total_price, 0),
+      subtotal: receipt.receipt_items.reduce(
+        (sum, item) => sum + item.total_price,
+        0
+      ),
       deliveryCharge: receipt.delivery_charge,
       taxAmount: receipt.tax_amount,
       totalAmount: receipt.total_amount,
@@ -180,45 +207,28 @@ export class OrderManager {
   }
 
   /**
-   * Calculate delivery charge based on address
-   */
-  private calculateDeliveryCharge(
-    address: string,
-    insideDhakaCharge: number,
-    outsideDhakaCharge: number
-  ): number {
-    const dhakaAreas = [
-      'dhaka', 'mirpur', 'dhanmondi', 'gulshan', 'banani', 'uttara', 'mohammadpur',
-      'farmgate', 'shahbagh', 'new market', 'azampur', 'kawran bazar', 'bashundhara',
-      'baridhara', 'badda', 'khilgaon', 'malibagh', 'mogbazar', 'tejgaon'
-    ];
-
-    const addressLower = address.toLowerCase();
-    const isInsideDhaka = dhakaAreas.some(area => addressLower.includes(area));
-
-    return isInsideDhaka ? insideDhakaCharge : outsideDhakaCharge;
-  }
-
-  /**
    * Format order status for display
    */
   formatOrderStatus(status: OrderStatus): string {
-    return status.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
+    return status.replace("_", " ").replace(/\b\w/g, (l) => l.toUpperCase());
   }
 
   /**
    * Check if order can be cancelled
    */
   canCancelOrder(status: OrderStatus, paymentStatus: string): boolean {
-    const cancelableStatuses = [OrderStatus.ORDER_PLACED, OrderStatus.PROCESSING];
-    return cancelableStatuses.includes(status) && paymentStatus !== 'success';
+    const cancelableStatuses = [
+      OrderStatus.ORDER_PLACED,
+      OrderStatus.PROCESSING,
+    ];
+    return cancelableStatuses.includes(status) && paymentStatus !== "success";
   }
 
   /**
    * Check if order can be retried for payment
    */
   canRetryPayment(status: OrderStatus, paymentStatus: string): boolean {
-    return status === OrderStatus.ORDER_PLACED && paymentStatus === 'pending';
+    return status === OrderStatus.ORDER_PLACED && paymentStatus === "pending";
   }
 
   /**
@@ -285,34 +295,40 @@ Track your order: ${this.generateReceiptUrl(orderSummary.receiptId)}
       if (!order) {
         return {
           success: false,
-          error: 'Order not found',
+          error: "Order not found",
         };
       }
 
       // Update payment status via API
-      const response = await fetch(`${process.env.NEXT_PUBLIC_PAYMENT_API_URL}/api/v1/live/updatePaymentStatus`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Device-Type': 'Server',
-          'Application-Type': 'Webhook_Handler',
-        },
-        body: JSON.stringify({
-          receipt_id: data.receiptId,
-          payment_type: data.paymentType,
-          transaction_id: data.transactionId,
-          payment_status: data.status,
-          amount: data.amount,
-          gateway_response: data.gatewayResponse,
-        }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_PAYMENT_API_URL}/api/v1/live/updatePaymentStatus`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Device-Type": "Server",
+            "Application-Type": "Webhook_Handler",
+          },
+          body: JSON.stringify({
+            receipt_id: data.receiptId,
+            payment_type: data.paymentType,
+            transaction_id: data.transactionId,
+            payment_status: data.status,
+            amount: data.amount,
+            gateway_response: data.gatewayResponse,
+          }),
+        }
+      );
 
       const result = await response.json();
 
       if (response.ok) {
         // TODO: Send notifications to customer
         if (data.status === PaymentStatus.SUCCESS) {
-          await this.sendPaymentConfirmationNotification(order, data.transactionId);
+          await this.sendPaymentConfirmationNotification(
+            order,
+            data.transactionId
+          );
         }
 
         return {
@@ -322,14 +338,19 @@ Track your order: ${this.generateReceiptUrl(orderSummary.receiptId)}
       } else {
         return {
           success: false,
-          error: result.message || 'Failed to update payment status',
+          error: result.message || "Failed to update payment status",
         };
       }
     } catch (error) {
-      console.error('Update payment status error:', error);
+      if (process.env.NODE_ENV === "development") {
+        console.error("Update payment status error:", error);
+      }
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Failed to update payment status',
+        error:
+          error instanceof Error
+            ? error.message
+            : "Failed to update payment status",
       };
     }
   }
@@ -337,10 +358,17 @@ Track your order: ${this.generateReceiptUrl(orderSummary.receiptId)}
   /**
    * Send payment confirmation notification
    */
-  private async sendPaymentConfirmationNotification(order: ReceiptDetails, transactionId: string) {
+  private async sendPaymentConfirmationNotification(
+    order: ReceiptDetails,
+    transactionId: string
+  ) {
     try {
       // TODO: Implement notification system (SMS/Email)
-      console.log(`Payment confirmed for order ${order.receipt_id} with transaction ${transactionId}`);
+      if (process.env.NODE_ENV === "development") {
+        console.log(
+          `Payment confirmed for order ${order.receipt_id} with transaction ${transactionId}`
+        );
+      }
 
       // For now, just log the notification
       const notification = {
@@ -351,9 +379,13 @@ Track your order: ${this.generateReceiptUrl(orderSummary.receiptId)}
         timestamp: new Date().toISOString(),
       };
 
-      console.log('Payment confirmation notification:', notification);
+      if (process.env.NODE_ENV === "development") {
+        console.log("Payment confirmation notification:", notification);
+      }
     } catch (error) {
-      console.error('Send notification error:', error);
+      if (process.env.NODE_ENV === "development") {
+        console.error("Send notification error:", error);
+      }
     }
   }
 }
@@ -362,4 +394,5 @@ Track your order: ${this.generateReceiptUrl(orderSummary.receiptId)}
 export const orderManager = OrderManager.getInstance();
 
 // Re-export for webhook usage
-export const updateOrderPaymentStatus = orderManager.updateOrderPaymentStatus.bind(orderManager);
+export const updateOrderPaymentStatus =
+  orderManager.updateOrderPaymentStatus.bind(orderManager);

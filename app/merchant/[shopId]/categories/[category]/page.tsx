@@ -1,14 +1,14 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
-import { useShopStore, useProductsStore } from "@/stores";
+import { useProductsStore } from "@/stores";
 import { BasicCategoryPage } from "@/app/themes/basic/modules/home/basic-category-page";
 import {
-  fetchShopProfile,
-  fetchShopInventories,
-  fetchShopCategories,
-} from "@/lib/api/shop";
+  useShopProfile,
+  useShopInventories,
+  useShopCategories,
+} from "@/hooks";
 
 // Loading component
 const LoadingFallback = () => (
@@ -47,96 +47,45 @@ interface CategoryPageContentProps {
 }
 
 function CategoryPageContent({ shopId, categoryId }: CategoryPageContentProps) {
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const searchParams = useSearchParams();
   const router = useRouter();
+  const { setFilters } = useProductsStore();
 
-  // Get stores
-  const { setShopDetails } = useShopStore();
-  const { setProducts, setFilters, setCategories } = useProductsStore();
+  // Fetch shop profile using React Query hook (auto-syncs to store)
+  const {
+    data: shopProfile,
+    isLoading: isProfileLoading,
+    isError: isProfileError,
+    error: profileError,
+    refetch: refetchProfile,
+  } = useShopProfile({ shopId });
+
+  // Fetch inventories when shop profile is available
+  const {
+    isLoading: isInventoriesLoading,
+    isError: isInventoriesError,
+  } = useShopInventories(
+    { shopUuid: shopProfile?.shop_uuid ?? "" },
+    { enabled: !!shopProfile?.shop_uuid }
+  );
+
+  // Fetch categories when shop profile is available
+  const {
+    isLoading: isCategoriesLoading,
+  } = useShopCategories(
+    { shopUuid: shopProfile?.shop_uuid ?? "" },
+    { enabled: !!shopProfile?.shop_uuid }
+  );
 
   // Add URL params if not present (like old project)
   useEffect(() => {
     const selectedCategory = searchParams.get("selected_category");
 
     if (categoryId && !selectedCategory) {
-      // Add params to URL like old project does
       const newUrl = `/merchant/${shopId}/categories/${categoryId}?selected_category=${categoryId}&category_id=${categoryId}`;
       router.replace(newUrl);
     }
   }, [categoryId, searchParams, shopId, router]);
-
-  // Load shop data (only on initial load or shopId change)
-  useEffect(() => {
-    const loadShopData = async () => {
-      try {
-        setIsLoading(true);
-        setError(null);
-
-        // Fetch shop profile data from backend API
-        const shopProfile = await fetchShopProfile({
-          shop_id: shopId,
-        });
-
-        if (!shopProfile) {
-          throw new Error("Shop not found");
-        }
-
-        // Initialize shop store with real data
-        setShopDetails({
-          ...shopProfile,
-          id: Number(shopProfile.id),
-          shop_name: shopProfile.shop_name ?? "",
-          currency_code: shopProfile.currency_code || "BDT",
-          country_currency: shopProfile.country_currency || "BDT",
-          shop_email: shopProfile.shop_email ?? "",
-          shop_phone: shopProfile.shop_phone ?? "",
-          shop_uuid: shopProfile.shop_uuid ?? "",
-          hasPixelAccess: shopProfile.hasPixelAccess ?? false,
-          hasGTMAccess: shopProfile.hasGTMAccess ?? false,
-          hasTikTokPixelAccess: shopProfile.hasTikTokPixelAccess ?? false,
-          baseUrl: `/merchant/${shopId}`,
-          shopCurrencySymbol: shopProfile.currency_code === "BDT" ? "৳" : "$",
-        } as any);
-
-        // Fetch products from backend API
-        const products = await fetchShopInventories({
-          shop_uuid: shopProfile.shop_uuid,
-        });
-
-        if (products && products.length > 0) {
-          // Sort products: in-stock items first, out-of-stock items at the end
-          const sortedProducts = [...products].sort((a, b) => {
-            const aInStock = (a.quantity ?? 0) > 0;
-            const bInStock = (b.quantity ?? 0) > 0;
-            if (aInStock === bInStock) return 0;
-            return aInStock ? -1 : 1;
-          });
-
-          setProducts(sortedProducts as any);
-        }
-
-        // Fetch categories from backend API
-        const fetchedCategories = await fetchShopCategories({
-          shop_uuid: shopProfile.shop_uuid,
-        });
-
-        if (fetchedCategories) {
-          setCategories(fetchedCategories);
-        }
-      } catch (err) {
-        console.error("Failed to load shop:", err);
-        setError(err instanceof Error ? err.message : "Failed to load shop");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    if (shopId) {
-      loadShopData();
-    }
-  }, [shopId, setShopDetails, setProducts, setCategories]);
 
   // Update filters when URL params change (without reloading data)
   useEffect(() => {
@@ -144,7 +93,6 @@ function CategoryPageContent({ shopId, categoryId }: CategoryPageContentProps) {
     const categoryParam = searchParams.get("category");
     const searchParam = searchParams.get("search");
 
-    // Use selected_category if available, otherwise fall back to category or categoryId from path
     const filterCategory = selectedCategoryParam || categoryParam || categoryId;
 
     setFilters({
@@ -155,15 +103,25 @@ function CategoryPageContent({ shopId, categoryId }: CategoryPageContentProps) {
     });
   }, [searchParams, setFilters, categoryId]);
 
+  // Determine overall loading state
+  const isLoading = isProfileLoading ||
+    (shopProfile && (isInventoriesLoading || isCategoriesLoading));
+
   // Handle loading state
   if (isLoading) {
     return <LoadingFallback />;
   }
 
   // Handle error state
-  if (error) {
+  if (isProfileError || isInventoriesError) {
+    const errorMessage = profileError instanceof Error
+      ? profileError.message
+      : "Failed to load shop";
     return (
-      <ErrorComponent error={error} retry={() => window.location.reload()} />
+      <ErrorComponent
+        error={errorMessage}
+        retry={() => refetchProfile()}
+      />
     );
   }
 

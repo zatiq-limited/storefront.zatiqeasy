@@ -1,7 +1,8 @@
 /**
  * Basic Theme Hooks
- * Shared hooks for the basic theme components
+ * Re-exports from shared hooks for backward compatibility
+ * New code should import directly from @/hooks
  */
 
-export { useCartTotals } from './useCartTotals';
-export { usePriceFormatting } from './usePriceFormatting';
+export { useCartTotals } from '@/hooks';
+export { usePriceFormatting } from '@/hooks';

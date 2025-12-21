@@ -12,6 +12,7 @@ interface PriceFormattingOptions {
 
 /**
  * Hook for consistent price formatting across the application
+ * Common hook for all themes (Basic, Aurora, Sellora, etc.)
  * Uses shop currency settings and provides utility functions
  */
 export function usePriceFormatting() {
@@ -20,8 +21,8 @@ export function usePriceFormatting() {
   // Get currency symbol based on shop settings
   const currency = useMemo(() => {
     const currencyCode = shopDetails?.currency_code;
-    if (currencyCode === 'BDT') return 'Tk';
-    return currencyCode || '$';
+    if (currencyCode === "BDT") return "Tk";
+    return currencyCode || "$";
   }, [shopDetails?.currency_code]);
 
   // Format a price with currency
@@ -29,7 +30,9 @@ export function usePriceFormatting() {
     (price: number, options: PriceFormattingOptions = {}) => {
       const { decimals = 2, includeCurrency = true } = options;
       const formattedNumber = Number(price.toFixed(decimals)).toLocaleString();
-      return includeCurrency ? `${currency} ${formattedNumber}` : formattedNumber;
+      return includeCurrency
+        ? `${currency} ${formattedNumber}`
+        : formattedNumber;
     },
     [currency]
   );

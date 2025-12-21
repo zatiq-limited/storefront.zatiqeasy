@@ -5,7 +5,7 @@ import { useCartStore } from "@/stores";
 
 /**
  * Hook to calculate cart totals
- * Extracted from basic-home-page and basic-category-page to avoid duplication
+ * Common hook for all themes (Basic, Aurora, Sellora, etc.)
  */
 export function useCartTotals() {
   // Get cart products directly from store

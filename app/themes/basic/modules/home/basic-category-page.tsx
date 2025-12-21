@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useShopStore } from "@/stores";
-import { useCartTotals } from "../../hooks";
+import { useCartTotals } from "@/hooks";
 import { CartFloatingBtn } from "@/features/cart/cart-floating-btn";
 
 // Dynamic imports for better performance

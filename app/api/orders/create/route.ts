@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { CreateOrderPayload, OrderResponse, PaymentType, OrderStatus } from '@/lib/payments/types';
 import { createOrder } from '@/lib/payments/api';
+import { validatePhoneNumber } from '@/lib/utils';
 
 export async function POST(request: NextRequest) {
   try {
@@ -39,8 +40,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate phone number
-    const phoneRegex = /^(01[3-9]\d{8})$/;
-    if (!phoneRegex.test(body.customer_phone)) {
+    if (!validatePhoneNumber(body.customer_phone)) {
       return NextResponse.json(
         { success: false, error: 'Invalid phone number format' },
         { status: 400 }
