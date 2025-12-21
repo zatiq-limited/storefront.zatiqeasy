@@ -1,17 +1,14 @@
 "use client";
 
-import React from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
+import Link from "next/link";
+import Image from "next/image";
+import { Mail, MapPin, Phone, ChevronRight } from "lucide-react";
+import { useShopStore } from "@/stores";
 import {
-  Mail,
-  MapPin,
-  Phone,
-  Clock,
-  ChevronRight
-} from 'lucide-react';
-import { useShopStore } from '@/stores';
-import { socialIcons, type Sociallinks } from '@/app/assets/icons/social-links-svg-icon';
+  socialIcons,
+  type Sociallinks,
+} from "@/app/assets/icons/social-links-svg-icon";
+import { isSubscribed } from "@/lib/utils/subscription-utils";
 
 /**
  * Basic Footer Component
@@ -20,22 +17,24 @@ import { socialIcons, type Sociallinks } from '@/app/assets/icons/social-links-s
 export function BasicFooter() {
   const { shopDetails } = useShopStore();
 
-  const socialLinks = Object.entries(shopDetails?.social_links || {}).map(([key, value]) => {
-    const Icon = socialIcons[key as keyof Sociallinks];
-    if (!value || !Icon || typeof value !== "string") return null;
+  const socialLinks = Object.entries(shopDetails?.social_links || {}).map(
+    ([key, value]) => {
+      const Icon = socialIcons[key as keyof Sociallinks];
+      if (!value || !Icon || typeof value !== "string") return null;
 
-    const href = value.startsWith("http") ? value : `https://${value}`;
-    return (
-      <Link
-        key={key}
-        href={href}
-        target="_blank"
-        className="text-gray-700 dark:text-gray-300 hover:text-blue-zatiq transition-colors duration-200"
-      >
-        <Icon className="w-8 h-8" />
-      </Link>
-    );
-  });
+      const href = value.startsWith("http") ? value : `https://${value}`;
+      return (
+        <Link
+          key={key}
+          href={href}
+          target="_blank"
+          className="text-gray-700 dark:text-gray-300 hover:text-blue-zatiq transition-colors duration-200"
+        >
+          <Icon className="w-8 h-8" />
+        </Link>
+      );
+    }
+  );
 
   const policyLinks = [
     "about-us",
@@ -43,13 +42,6 @@ export function BasicFooter() {
     "terms-and-conditions",
     "return-and-cancellation-policy",
   ];
-
-  // Check if shop is subscribed (simplified version - in old project this checks subscription)
-  const isSubscribed = (shopDetails: any) => {
-    // This is a placeholder - in the old project this checks against subscription data
-    // For now, we'll assume all shops need the "Powered by" link
-    return false;
-  };
 
   const baseUrl = shopDetails?.baseUrl || "/";
 
@@ -64,9 +56,9 @@ export function BasicFooter() {
                 <Image
                   height={60}
                   width={200}
-                  alt={shopDetails?.shop_name || 'Shop'}
+                  alt={shopDetails?.shop_name || "Shop"}
                   src={shopDetails.image_url}
-                  className="h-[40px] w-auto max-w-[180px] object-contain transition-all duration-300 hover:opacity-80 hover:scale-110 hover:rotate-1 cursor-pointer"
+                  className="h-10 w-auto max-w-45 object-contain transition-all duration-300 hover:opacity-80 hover:scale-110 hover:rotate-1 cursor-pointer"
                 />
               </Link>
             )}
@@ -116,7 +108,9 @@ export function BasicFooter() {
               {shopDetails?.address && (
                 <div className="flex items-start space-x-2">
                   <MapPin className="w-4 h-4 mt-0.5" />
-                  <span className="whitespace-pre-line">{shopDetails.address}</span>
+                  <span className="whitespace-pre-line">
+                    {shopDetails.address}
+                  </span>
                 </div>
               )}
               {/* Business hours - commented out like in old project */}
@@ -131,7 +125,8 @@ export function BasicFooter() {
         {/* Copyright */}
         <div className="mt-12 pt-6 border-t border-gray-200 dark:border-gray-800 text-center text-sm text-gray-500 dark:text-gray-400">
           <p>
-            © {new Date().getFullYear()} - Copyright {shopDetails?.shop_name || 'Shop'}
+            © {new Date().getFullYear()} - Copyright{" "}
+            {shopDetails?.shop_name || "Shop"}
           </p>
           {!isSubscribed(shopDetails) && (
             <Link

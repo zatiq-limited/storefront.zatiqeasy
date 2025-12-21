@@ -45,6 +45,17 @@ export interface ShopProfile {
 
   // Social
   social_links?: SocialLinks;
+
+  // Subscription
+  created_at?: string;
+  subscription?: ShopSubscription;
+}
+
+export interface ShopSubscription {
+  easybill?: {
+    plan_id: number;
+    end_date?: string;
+  };
 }
 
 export interface SocialLinks {

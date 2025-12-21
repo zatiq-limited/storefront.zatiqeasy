@@ -1,16 +1,10 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import {
-  ShoppingCart,
-  Mail,
-  Phone,
-  Globe,
-  Search,
-} from "lucide-react";
+import { ShoppingCart, Mail, Phone, Globe, Search } from "lucide-react";
 import {
   useCartStore,
   useShopStore,
@@ -19,7 +13,6 @@ import {
 } from "@/stores";
 import { cn } from "@/lib/utils";
 import TopbarMessage from "../core/topbar-message";
-import { socialIcons, type Sociallinks } from "@/app/assets/icons/social-links-svg-icon";
 
 /**
  * Basic Header Component
@@ -39,6 +32,7 @@ export function BasicHeader() {
   const [langValue, setLangValue] = useState(
     shopDetails?.default_language_code || "en"
   );
+  const [isLangInitialized, setIsLangInitialized] = useState(false);
 
   // Handle scroll effect
   useEffect(() => {
@@ -50,11 +44,14 @@ export function BasicHeader() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Handle language change
-  useEffect(() => {
+  // Initialize language from localStorage (only runs once on mount)
+  if (!isLangInitialized && typeof window !== "undefined") {
     const storedLang = localStorage.getItem("locale");
-    if (storedLang) setLangValue(storedLang);
-  }, []);
+    if (storedLang && storedLang !== langValue) {
+      setLangValue(storedLang);
+    }
+    setIsLangInitialized(true);
+  }
 
   const handleLanguageChange = () => {
     const newLang = langValue === "en" ? "bn" : "en";
@@ -79,28 +76,6 @@ export function BasicHeader() {
       );
     }
   };
-
-  // Generate social links similar to old project
-  const socialLinks = Object.entries(shopDetails?.social_links || {}).map(
-    ([key, value]) => {
-      const Icon = socialIcons[key as keyof Sociallinks];
-      if (!value || !Icon || typeof value !== "string") return null;
-
-      const href = value.startsWith("http") ? value : `https://${value}`;
-      return (
-        <Link
-          key={key}
-          href={href}
-          target="_blank"
-          className="flex items-center"
-        >
-          <div className="w-7 h-6 flex items-center justify-center bg-blue-zatiq rounded-full transition-all duration-100 hover:scale-105 hover:bg-gray-800 dark:hover:bg-blue-zatiq-75">
-            <Icon className="w-4 h-4" />
-          </div>
-        </Link>
-      );
-    }
-  );
 
   return (
     <header
@@ -178,10 +153,7 @@ export function BasicHeader() {
                     href={`mailto:${shopDetails.shop_email}`}
                     className="transition-all duration-100 hover:scale-125 hover:text-gray-600 dark:hover:text-blue-zatiq"
                   >
-                    <Mail
-                      size={16}
-                      className="md:size-[18px] transition-colors"
-                    />
+                    <Mail size={16} className="md:size-4.5 transition-colors" />
                   </Link>
                 </li>
               )}
@@ -193,7 +165,7 @@ export function BasicHeader() {
                   >
                     <Phone
                       size={16}
-                      className="md:size-[18px] transition-colors"
+                      className="md:size-4.5 transition-colors"
                     />
                   </Link>
                 </li>
@@ -220,7 +192,7 @@ export function BasicHeader() {
             >
               <ShoppingCart size={20} className="md:size-5" />
               {totalItems > 0 && (
-                <span className="absolute -top-0 -right-0 bg-red-500 text-white text-[9px] md:text-[10px] font-bold w-3 h-3 md:w-4 md:h-4 rounded-full flex items-center justify-center">
+                <span className="absolute top-0 right-0 bg-red-500 text-white text-[9px] md:text-[10px] font-bold w-3 h-3 md:w-4 md:h-4 rounded-full flex items-center justify-center">
                   {totalItems}
                 </span>
               )}
