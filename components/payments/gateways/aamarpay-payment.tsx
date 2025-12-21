@@ -2,15 +2,17 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CreditCard, CheckCircle, Loader2, ExternalLink } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { PaymentType } from "@/lib/payments/types";
+import { processPayment } from "@/lib/payments/api";
+import { formatPrice, parsePaymentError } from "@/lib/payments/utils";
 
 interface AamarpayPaymentProps {
   amount: number;
+  receiptId: string;
   customerInfo?: {
     name: string;
     email?: string;
@@ -19,58 +21,60 @@ interface AamarpayPaymentProps {
   };
   onPaymentSuccess?: (transactionId: string) => void;
   onPaymentError?: (error: Error) => void;
+  onPaymentRedirect?: (paymentUrl: string) => void;
   className?: string;
 }
 
 export function AamarpayPayment({
   amount,
+  receiptId,
   customerInfo,
   onPaymentSuccess,
   onPaymentError,
+  onPaymentRedirect,
   className,
 }: AamarpayPaymentProps) {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
   const [error, setError] = useState("");
-
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("en-BD", {
-      style: "currency",
-      currency: "BDT",
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(price);
-  };
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const handlePayment = async () => {
     setIsProcessing(true);
     setError("");
 
     try {
-      // Simulate AamarPay API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Process payment through API
+      const paymentResponse = await processPayment({
+        receipt_id: receiptId,
+        pay_now_amount: amount,
+        redirect_root_url: window.location.origin + '/payment-confirm',
+      });
 
-      // In a real implementation, this would redirect to AamarPay's payment gateway
-      const mockTransactionId = "AMP" + Date.now();
+      if (paymentResponse.success && paymentResponse.data?.payment_url) {
+        // Show redirecting state
+        setIsRedirecting(true);
 
-      // Simulate payment gateway redirect
-      setIsRedirecting(true);
+        // Delay for UX to show redirecting animation
+        await new Promise(resolve => setTimeout(resolve, 2000));
 
-      await new Promise(resolve => setTimeout(resolve, 3000));
-
-      setIsSuccess(true);
-      onPaymentSuccess?.(mockTransactionId);
-    } catch (err) {
-      const error = err as Error;
-      setError(error.message);
-      onPaymentError?.(error);
+        // Redirect to AamarPay payment page
+        if (onPaymentRedirect) {
+          onPaymentRedirect(paymentResponse.data.payment_url);
+        } else {
+          window.location.href = paymentResponse.data.payment_url;
+        }
+      } else {
+        throw new Error(paymentResponse.error || 'Failed to initiate payment');
+      }
+    } catch (err: any) {
+      const errorMessage = parsePaymentError(err);
+      setError(errorMessage);
+      onPaymentError?.(new Error(errorMessage));
     } finally {
       setIsProcessing(false);
-      setIsRedirecting(false);
     }
   };
-
-  const [isSuccess, setIsSuccess] = useState(false);
 
   if (isSuccess) {
     return (

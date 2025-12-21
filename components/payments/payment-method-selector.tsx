@@ -16,6 +16,7 @@ import {
 
 interface PaymentMethodSelectorProps {
   amount: number;
+  receiptId?: string;
   customerInfo?: {
     name: string;
     email?: string;
@@ -24,6 +25,7 @@ interface PaymentMethodSelectorProps {
   };
   onPaymentSuccess?: (transactionId: string) => void;
   onPaymentError?: (error: Error) => void;
+  onPaymentRedirect?: (paymentUrl: string) => void;
   className?: string;
 }
 
@@ -67,9 +69,11 @@ const paymentMethods = [
 
 export function PaymentMethodSelector({
   amount,
+  receiptId,
   customerInfo,
   onPaymentSuccess,
   onPaymentError,
+  onPaymentRedirect,
   className,
 }: PaymentMethodSelectorProps) {
   const { selectedPaymentMethod, setSelectedPaymentMethod } = useCheckoutStore();
@@ -86,25 +90,31 @@ export function PaymentMethodSelector({
         return (
           <BkashPayment
             amount={amount}
+            receiptId={receiptId || ''}
             onPaymentSuccess={onPaymentSuccess}
             onPaymentError={onPaymentError}
+            onPaymentRedirect={onPaymentRedirect}
           />
         );
       case "nagad":
         return (
           <NagadPayment
             amount={amount}
+            receiptId={receiptId || ''}
             onPaymentSuccess={onPaymentSuccess}
             onPaymentError={onPaymentError}
+            onPaymentRedirect={onPaymentRedirect}
           />
         );
       case "aamarpay":
         return (
           <AamarpayPayment
             amount={amount}
+            receiptId={receiptId || ''}
             customerInfo={customerInfo}
             onPaymentSuccess={onPaymentSuccess}
             onPaymentError={onPaymentError}
+            onPaymentRedirect={onPaymentRedirect}
           />
         );
       case "self_mfs":

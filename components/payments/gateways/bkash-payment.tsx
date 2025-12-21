@@ -2,69 +2,61 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Smartphone, CheckCircle, Loader2 } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Smartphone, CheckCircle, Loader2, ExternalLink } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { PaymentType } from "@/lib/payments/types";
+import { processPayment, formatPrice } from "@/lib/payments/api";
+import { parsePaymentError } from "@/lib/payments/utils";
 
 interface BkashPaymentProps {
   amount: number;
+  receiptId: string;
   onPaymentSuccess?: (transactionId: string) => void;
   onPaymentError?: (error: Error) => void;
+  onPaymentRedirect?: (paymentUrl: string) => void;
   className?: string;
 }
 
 export function BkashPayment({
   amount,
+  receiptId,
   onPaymentSuccess,
   onPaymentError,
+  onPaymentRedirect,
   className,
 }: BkashPaymentProps) {
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [pin, setPin] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState("");
 
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("en-BD", {
-      style: "currency",
-      currency: "BDT",
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(price);
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (phoneNumber.length < 11) {
-      setError("Please enter a valid bKash number");
-      return;
-    }
-
-    if (pin.length !== 4) {
-      setError("Please enter a 4-digit PIN");
-      return;
-    }
-
+  const handlePayment = async () => {
     setIsProcessing(true);
     setError("");
 
     try {
-      // Simulate bKash API call
-      await new Promise(resolve => setTimeout(resolve, 3000));
+      // Process payment through API
+      const paymentResponse = await processPayment({
+        receipt_id: receiptId,
+        pay_now_amount: amount,
+        redirect_root_url: window.location.origin + '/payment-confirm',
+      });
 
-      // Mock successful payment
-      const mockTransactionId = "BK" + Date.now();
-      setIsSuccess(true);
-      onPaymentSuccess?.(mockTransactionId);
-    } catch (err) {
-      const error = err as Error;
-      setError(error.message);
-      onPaymentError?.(error);
+      if (paymentResponse.success && paymentResponse.data?.payment_url) {
+        // Redirect to bKash payment page
+        if (onPaymentRedirect) {
+          onPaymentRedirect(paymentResponse.data.payment_url);
+        } else {
+          window.location.href = paymentResponse.data.payment_url;
+        }
+      } else {
+        throw new Error(paymentResponse.error || 'Failed to initiate payment');
+      }
+    } catch (err: any) {
+      const errorMessage = parsePaymentError(err);
+      setError(errorMessage);
+      onPaymentError?.(new Error(errorMessage));
     } finally {
       setIsProcessing(false);
     }
@@ -98,79 +90,53 @@ export function BkashPayment({
           Pay with bKash
         </CardTitle>
       </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
-            <h4 className="font-medium text-purple-900 mb-2">Payment Details</h4>
-            <div className="text-2xl font-bold text-purple-900">
-              {formatPrice(amount)}
-            </div>
-            <p className="text-sm text-purple-700 mt-1">
-              Merchant: Zatiq Store
-            </p>
+      <CardContent className="space-y-4">
+        <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
+          <h4 className="font-medium text-purple-900 mb-2">Payment Details</h4>
+          <div className="text-2xl font-bold text-purple-900">
+            {formatPrice(amount)}
           </div>
+          <p className="text-sm text-purple-700 mt-1">
+            Merchant: Zatiq Store
+          </p>
+        </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="bkash-number">bKash Account Number</Label>
-            <Input
-              id="bkash-number"
-              type="tel"
-              placeholder="01XXXXXXXXX"
-              value={phoneNumber}
-              onChange={(e) => {
-                const value = e.target.value.replace(/\D/g, "");
-                if (value.length <= 11) {
-                  setPhoneNumber(value);
-                }
-              }}
-              maxLength={11}
-            />
-            <p className="text-xs text-muted-foreground">
-              Enter your registered bKash mobile number
-            </p>
-          </div>
+        <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+          <h4 className="font-medium text-gray-900 mb-2">How to pay:</h4>
+          <ol className="text-sm text-gray-700 space-y-1">
+            <li>1. Click "Pay with bKash" button</li>
+            <li>2. You will be redirected to bKash payment page</li>
+            <li>3. Enter your bKash number and PIN</li>
+            <li>4. Complete payment</li>
+            <li>5. You will be returned to store after payment</li>
+          </ol>
+        </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="bkash-pin">bKash PIN</Label>
-            <Input
-              id="bkash-pin"
-              type="password"
-              placeholder="****"
-              value={pin}
-              onChange={(e) => {
-                const value = e.target.value.replace(/\D/g, "");
-                if (value.length <= 4) {
-                  setPin(value);
-                }
-              }}
-              maxLength={4}
-            />
-            <p className="text-xs text-muted-foreground">
-              Enter your 4-digit bKash security PIN
-            </p>
-          </div>
+        {error && (
+          <Alert variant="destructive">
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
 
-          {error && (
-            <Alert variant="destructive">
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
+        <Button
+          onClick={handlePayment}
+          className="w-full bg-purple-600 hover:bg-purple-700"
+          disabled={isProcessing}
+        >
+          {isProcessing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          {isProcessing ? "Processing..." : (
+            <>
+              <ExternalLink className="mr-2 h-4 w-4" />
+              Pay with bKash
+            </>
           )}
+        </Button>
 
-          <Button
-            type="submit"
-            className="w-full bg-purple-600 hover:bg-purple-700"
-            disabled={isProcessing}
-          >
-            {isProcessing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {isProcessing ? "Processing..." : `Pay ${formatPrice(amount)}`}
-          </Button>
-
-          <div className="text-xs text-muted-foreground space-y-1">
-            <p>• Your payment information is secure and encrypted</p>
-            <p>• You will receive a confirmation SMS from bKash</p>
-            <p>• For support, dial 16247 (bKash helpline)</p>
-          </div>
-        </form>
+        <div className="text-xs text-muted-foreground space-y-1">
+          <p>• Your payment information is secure and encrypted</p>
+          <p>• You will receive a confirmation SMS from bKash</p>
+          <p>• For support, dial 16247 (bKash helpline)</p>
+        </div>
       </CardContent>
     </Card>
   );

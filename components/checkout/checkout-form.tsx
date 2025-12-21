@@ -14,6 +14,9 @@ import { PaymentOptionsSection } from "./payment-options-section";
 import { OrderSummarySection } from "./order-summary-section";
 import { Loader2, ShoppingCart } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { createOrder } from "@/lib/payments/api";
+import { PaymentType } from "@/lib/payments/types";
+import { validatePhoneNumber } from "@/lib/payments/utils";
 
 interface CheckoutFormProps {
   className?: string;
@@ -52,33 +55,82 @@ export function CheckoutForm({ className, onSubmit }: CheckoutFormProps) {
     setIsSubmitting(true);
 
     try {
-      // Gather order data
-      const orderData = {
-        items: cartProducts,
-        subtotal,
-        deliveryCharge,
-        grandTotal,
+      // Get checkout data from store
+      const checkoutState = useCheckoutStore.getState();
+
+      // Validate required fields
+      if (!checkoutState.customerName || !checkoutState.fullPhoneNumber || !checkoutState.fullAddress) {
+        throw new Error('Please fill in all required fields');
+      }
+
+      if (!validatePhoneNumber(checkoutState.fullPhoneNumber)) {
+        throw new Error('Please enter a valid phone number');
+      }
+
+      if (cartProducts.length === 0) {
+        throw new Error('Your cart is empty');
+      }
+
+      // Prepare order items (matching old project structure)
+      const receiptItems = cartProducts.map(item => ({
+        product_id: item.id,
+        product_handle: item.handle || item.id,
+        product_name: item.name,
+        variant_id: item.variantId,
+        variant_name: item.variantName,
+        quantity: item.quantity,
+        unit_price: item.price,
+        total_price: item.price * item.quantity,
+        product_image: item.image,
+      }));
+
+      // Create order payload (exact match to old project)
+      const orderPayload = {
+        shop_id: 1, // This should come from shop context
+        customer_name: checkoutState.customerName,
+        customer_phone: checkoutState.fullPhoneNumber,
+        customer_address: checkoutState.fullAddress,
+        delivery_charge: deliveryCharge,
+        tax_amount: 0,
+        total_amount: grandTotal,
+        payment_type: checkoutState.selectedPaymentMethod || PaymentType.COD,
+        pay_now_amount: grandTotal,
+        receipt_items: receiptItems,
+        type: "Online",
+        status: "Order Placed",
         note: orderNote,
-        acceptedTerms,
-        // Add other checkout store data as needed
-        ...useCheckoutStore.getState(),
       };
 
-      if (onSubmit) {
-        await onSubmit(orderData);
+      // Create order (API call to match old project)
+      const response = await createOrder(orderPayload);
+
+      if (response.success && response.data) {
+        // Clear cart on successful order (matching old project)
+        useCartStore.getState().clearCart();
+
+        // Handle payment redirect (exact match to old project)
+        if (response.data.payment_url) {
+          // For gateway payments (bKash, Nagad, AamarPay)
+          // This matches: window.location.replace(deriptedData.payment_url)
+          console.log('Redirecting to payment:', response.data.payment_url);
+          window.location.replace(response.data.payment_url);
+        } else if (response.data.receipt_url) {
+          // For COD or successful orders
+          router.push(`/payment-confirm?status=success&receipt_url=${response.data.receipt_url}`);
+        } else {
+          // Fallback to receipt page
+          router.push(`/receipt/${response.data.receipt_id}`);
+        }
       } else {
-        // Default behavior: proceed to payment confirmation
-        // In a real app, you'd submit this to your API
-        console.log("Order data:", orderData);
-
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 2000));
-
-        // Navigate to payment confirmation
-        router.push("/payment-confirm");
+        throw new Error(response.error || 'Failed to create order');
       }
-    } catch (error) {
+
+      if (onSubmit) {
+        await onSubmit(orderPayload);
+      }
+    } catch (error: any) {
       console.error("Checkout error:", error);
+      alert(error.message || 'Failed to place order. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
