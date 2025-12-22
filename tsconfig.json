@@ -46,7 +46,7 @@
         "./providers/*"
       ],
       "@/themes/*": [
-        "./app/themes/*"
+        "app/_themes/*"
       ]
     }
   },

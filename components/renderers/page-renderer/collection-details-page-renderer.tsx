@@ -20,7 +20,7 @@ import {
   CollectionProducts2,
   CollectionSubcategories1,
   CollectionSubcategories2,
-} from "@/features/collection-details";
+} from "@/components/renderers/page-renderer/page-components/collection-details";
 import { convertSettingsKeys } from "@/lib/settings-utils";
 
 interface CollectionDetailsPageRendererProps {

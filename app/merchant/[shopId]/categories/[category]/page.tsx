@@ -3,12 +3,8 @@
 import { useEffect } from "react";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
 import { useProductsStore } from "@/stores";
-import { BasicCategoryPage } from "@/app/themes/basic/modules/home/basic-category-page";
-import {
-  useShopProfile,
-  useShopInventories,
-  useShopCategories,
-} from "@/hooks";
+import { BasicCategoryPage } from "@/app/_themes/basic/modules/home/basic-category-page";
+import { useShopProfile, useShopInventories, useShopCategories } from "@/hooks";
 
 // Loading component
 const LoadingFallback = () => (
@@ -61,18 +57,14 @@ function CategoryPageContent({ shopId, categoryId }: CategoryPageContentProps) {
   } = useShopProfile({ shopId });
 
   // Fetch inventories when shop profile is available
-  const {
-    isLoading: isInventoriesLoading,
-    isError: isInventoriesError,
-  } = useShopInventories(
-    { shopUuid: shopProfile?.shop_uuid ?? "" },
-    { enabled: !!shopProfile?.shop_uuid }
-  );
+  const { isLoading: isInventoriesLoading, isError: isInventoriesError } =
+    useShopInventories(
+      { shopUuid: shopProfile?.shop_uuid ?? "" },
+      { enabled: !!shopProfile?.shop_uuid }
+    );
 
   // Fetch categories when shop profile is available
-  const {
-    isLoading: isCategoriesLoading,
-  } = useShopCategories(
+  const { isLoading: isCategoriesLoading } = useShopCategories(
     { shopUuid: shopProfile?.shop_uuid ?? "" },
     { enabled: !!shopProfile?.shop_uuid }
   );
@@ -104,7 +96,8 @@ function CategoryPageContent({ shopId, categoryId }: CategoryPageContentProps) {
   }, [searchParams, setFilters, categoryId]);
 
   // Determine overall loading state
-  const isLoading = isProfileLoading ||
+  const isLoading =
+    isProfileLoading ||
     (shopProfile && (isInventoriesLoading || isCategoriesLoading));
 
   // Handle loading state
@@ -114,14 +107,12 @@ function CategoryPageContent({ shopId, categoryId }: CategoryPageContentProps) {
 
   // Handle error state
   if (isProfileError || isInventoriesError) {
-    const errorMessage = profileError instanceof Error
-      ? profileError.message
-      : "Failed to load shop";
+    const errorMessage =
+      profileError instanceof Error
+        ? profileError.message
+        : "Failed to load shop";
     return (
-      <ErrorComponent
-        error={errorMessage}
-        retry={() => refetchProfile()}
-      />
+      <ErrorComponent error={errorMessage} retry={() => refetchProfile()} />
     );
   }
 

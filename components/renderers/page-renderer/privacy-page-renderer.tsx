@@ -7,7 +7,7 @@ import {
   PrivacyHero2,
   PrivacyContent1,
   PrivacyContent2,
-} from "@/components/privacy";
+} from "@/components/renderers/block-renderer/block-components/privacy";
 
 interface PrivacyPageRendererProps {
   sections: Section[];

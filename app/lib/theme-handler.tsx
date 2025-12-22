@@ -1,15 +1,15 @@
 "use client";
 
-import React, { useEffect } from 'react';
-import { useShopStore } from '@/stores';
-import { BasicHeader } from '@/app/themes/basic/components/header';
-import { BasicFooter } from '@/app/themes/basic/components/footer';
-import { getThemeColors, getThemeColor } from '@/lib/utils';
+import React, { useEffect } from "react";
+import { useShopStore } from "@/stores";
+import { BasicHeader } from "@/app/_themes/basic/components/header";
+import { BasicFooter } from "@/app/_themes/basic/components/footer";
+import { getThemeColors, getThemeColor } from "@/lib/utils";
 
 // Theme handler similar to old project
 export function ThemeHandler({ children }: { children: React.ReactNode }) {
   const { shopDetails } = useShopStore();
-  const shopTheme = shopDetails?.shop_theme?.theme_name || 'Basic';
+  const shopTheme = shopDetails?.shop_theme?.theme_name || "Basic";
 
   // Apply theme colors to CSS variables (same approach as old project)
   useEffect(() => {
@@ -43,7 +43,7 @@ export function ThemeHandler({ children }: { children: React.ReactNode }) {
   }, [shopDetails]);
 
   switch (shopTheme) {
-    case 'Basic':
+    case "Basic":
       return (
         <>
           <BasicHeader />
@@ -53,19 +53,19 @@ export function ThemeHandler({ children }: { children: React.ReactNode }) {
       );
 
     // Add other themes here when migrated
-    case 'Premium':
+    case "Premium":
       // TODO: Implement PremiumHeader and PremiumFooter
       return <>{children}</>;
 
-    case 'Aurora':
+    case "Aurora":
       // TODO: Implement AuroraHeader and AuroraFooter
       return <>{children}</>;
 
-    case 'Luxura':
+    case "Luxura":
       // TODO: Implement LuxuraHeader and LuxuraFooter
       return <>{children}</>;
 
-    case 'Sellora':
+    case "Sellora":
       // TODO: Implement SelloraHeader and SelloraFooter
       return <>{children}</>;
 

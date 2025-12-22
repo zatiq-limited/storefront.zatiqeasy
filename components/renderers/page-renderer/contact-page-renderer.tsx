@@ -11,7 +11,7 @@ import {
   ContactMap2,
   ContactForm1,
   ContactForm2,
-} from "@/components/contact";
+} from "@/components/renderers/block-renderer/block-components/contact";
 
 interface ContactPageRendererProps {
   sections: Section[];

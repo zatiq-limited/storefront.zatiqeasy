@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import { useShopStore, useProductsStore } from "@/stores";
-import { BasicHomePage } from "@/app/themes/basic";
+import { BasicHomePage } from "@/app/_themes/basic";
 import { useShopProfile, useShopInventories, useShopCategories } from "@/hooks";
 
 // Loading component
