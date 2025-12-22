@@ -49,6 +49,14 @@ export function InventoryProducts() {
   const filters = useProductsStore((state) => state.filters);
   const isLoading = useProductsStore((state) => state.isLoading);
   const setFilters = useProductsStore((state) => state.setFilters);
+  const categories = useProductsStore((state) => state.categories);
+
+  // Get current category name from filters
+  const currentCategoryName = useMemo(() => {
+    if (!filters.category) return null;
+    const category = categories.find((cat) => String(cat.id) === String(filters.category));
+    return category?.name || null;
+  }, [filters.category, categories]);
 
   // Compute filtered products in the component
   const { filteredProducts, totalPages, currentPage, sortOption } =
@@ -129,7 +137,7 @@ export function InventoryProducts() {
             {/* Header with category name and sort */}
             <div className="px-4 h-13.75 bg-white dark:bg-gray-800 rounded-xl mb-3 border border-gray-200 dark:border-gray-600 flex items-center justify-between">
               <h2 className="font-medium text-gray-900 dark:text-gray-300 truncate w-[45%]">
-                All Products
+                {currentCategoryName || "All Products"}
               </h2>
               <div className="text-gray-700 dark:text-gray-300 text-sm flex items-center gap-2">
                 <span className="min-w-fit">Sort by:</span>

@@ -65,7 +65,9 @@ export default async function MerchantLayout({
 
   return (
     <ShopProvider initialShopData={shopProfile}>
-      <ThemeHandler>{children}</ThemeHandler>
+      <div className="min-h-screen bg-gray-50">
+        <ThemeHandler>{children}</ThemeHandler>
+      </div>
     </ShopProvider>
   );
 }

@@ -78,32 +78,23 @@ export function SidebarCategory({
   // Handle category click
   const handleCategoryClick = useCallback(
     (category: Category) => {
-      // Check if this category has subcategories
       const hasSubcategories = categories.some(
         (cat) => String(cat.parent_id) === String(category.id)
       );
 
       if (hasSubcategories) {
-        // Has subcategories - drill down
-        // ONLY set category_id for navigation, DON'T set selected_category (no product filtering yet)
         router.push(
-          buildUrl({
-            category_id: String(category.id),
-            selected_category: null, // Don't filter products when drilling down
-          })
+          `${baseUrl}/categories/${category.id}?selected_category=${category.id}&category_id=${category.id}`
         );
       } else {
-        // No subcategories (leaf) - filter products, keep current navigation
         router.push(
-          buildUrl({
-            category_id: categoryIdParam,
-            selected_category: String(category.id), // Filter products by this category
-          })
+          `${baseUrl}?category_id=${currentRootCategory?.id}&selected_category=${category.id}`
         );
-        setShowMobileNav?.(false);
       }
+
+      setShowMobileNav?.(false);
     },
-    [categories, categoryIdParam, router, buildUrl, setShowMobileNav]
+    [categories, currentRootCategory, baseUrl, router, setShowMobileNav]
   );
 
   // Handle back button

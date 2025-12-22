@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
-import { ShoppingCart, Mail, Phone, Globe, Search } from "lucide-react";
+import { ShoppingCart, Mail, Phone, Globe, Search, X } from "lucide-react";
 import {
   useCartStore,
   useShopStore,
@@ -20,6 +20,7 @@ import TopbarMessage from "../core/topbar-message";
  */
 export function BasicHeader() {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   // Get stores
   const { shopDetails } = useShopStore();
@@ -28,7 +29,14 @@ export function BasicHeader() {
 
   // State
   const [scrollY, setScrollY] = useState(0);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState(() => {
+    // Initialize search query from URL params
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get('search') || '';
+    }
+    return '';
+  });
   const [langValue, setLangValue] = useState(
     shopDetails?.default_language_code || "en"
   );
@@ -70,11 +78,33 @@ export function BasicHeader() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      const baseUrl = shopDetails?.baseUrl || "";
-      router.push(
-        `${baseUrl}?search=${encodeURIComponent(searchQuery.trim())}`
-      );
+      // Get current URL path (e.g., /merchant/47366/categories/139924)
+      const currentPath = window.location.pathname;
+      // Create new params preserving existing ones and adding search
+      const params = new URLSearchParams(searchParams);
+      params.set("search", searchQuery.trim());
+
+      // Build full URL with path and parameters
+      const newUrl = `${currentPath}?${params.toString()}`;
+      router.push(newUrl);
     }
+  };
+
+  // Handle clear search
+  const handleClearSearch = () => {
+    setSearchQuery("");
+
+    // Get current URL path (e.g., /merchant/47366/categories/139924)
+    const currentPath = window.location.pathname;
+    // Update URL to remove search parameter
+    const params = new URLSearchParams(searchParams);
+    params.delete("search");
+
+    // Build full URL with path and remaining parameters
+    const newUrl = params.toString()
+      ? `${currentPath}?${params.toString()}`
+      : currentPath;
+    router.push(newUrl);
   };
 
   return (
@@ -131,8 +161,21 @@ export function BasicHeader() {
                   placeholder="Search products..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-4 pr-10 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-zatiq focus:border-blue-zatiq dark:bg-gray-800 dark:border-gray-600 dark:text-white text-sm"
+                  className={cn(
+                    "w-full pl-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-zatiq focus:border-blue-zatiq dark:bg-gray-800 dark:border-gray-600 dark:text-white text-sm transition-all",
+                    searchQuery ? "pr-20" : "pr-10"
+                  )}
                 />
+                {searchQuery && (
+                  <button
+                    type="button"
+                    onClick={handleClearSearch}
+                    className="absolute right-10 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                    aria-label="Clear search"
+                  >
+                    <X size={16} />
+                  </button>
+                )}
                 <button
                   type="submit"
                   className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-gray-400 hover:text-blue-zatiq transition-colors"
@@ -209,8 +252,21 @@ export function BasicHeader() {
             placeholder="Search products..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-4 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:text-white"
+            className={cn(
+              "w-full pl-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:text-white transition-all",
+              searchQuery ? "pr-20" : "pr-10"
+            )}
           />
+          {searchQuery && (
+            <button
+              type="button"
+              onClick={handleClearSearch}
+              className="absolute right-10 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600 transition-colors"
+              aria-label="Clear search"
+            >
+              <X size={16} />
+            </button>
+          )}
           <button
             type="submit"
             className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-gray-400 hover:text-blue-600"
