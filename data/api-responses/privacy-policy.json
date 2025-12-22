@@ -1,0 +1,376 @@
+{
+  "success": true,
+  "data": {
+    "template": "privacy",
+    "sections": [
+      {
+        "id": "privacy_hero_1_0",
+        "type": "privacy-hero-1",
+        "enabled": true,
+        "settings": {
+          "enabled": true
+        },
+        "blocks": [
+          {
+            "wrapper": "section#privacy-hero-1-1765959527247",
+            "type": "privacy_hero_overlay",
+            "class": "relative w-full overflow-hidden",
+            "style": {
+              "background_color": "#FFFFFF"
+            },
+            "data": {
+              "headline": "Privacy Policy",
+              "subheadline": "Your Privacy Matters",
+              "description": "We are committed to protecting your personal information and your right to privacy.",
+              "image": "https://images.unsplash.com/photo-1633265486064-086b219458ec?w=1200&h=400&fit=crop",
+              "last_updated": "December 21, 2024",
+              "show_breadcrumb": true
+            },
+            "blocks": [
+              {
+                "wrapper": "div",
+                "class": "relative w-full h-[20vh] sm:h-[35vh]",
+                "blocks": [
+                  {
+                    "wrapper": "img",
+                    "class": "absolute inset-0 w-full h-full object-cover",
+                    "src": "https://images.unsplash.com/photo-1633265486064-086b219458ec?w=1200&h=400&fit=crop",
+                    "alt": "Privacy Policy"
+                  },
+                  {
+                    "wrapper": "div",
+                    "class": "absolute inset-0",
+                    "style": {
+                      "background": "linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.5) 100%)"
+                    }
+                  },
+                  {
+                    "wrapper": "div",
+                    "class": "relative z-10 h-full flex items-center justify-center",
+                    "blocks": [
+                      {
+                        "wrapper": "nav",
+                        "class": "absolute top-4 md:top-6 left-0 right-0 z-10 container mx-auto px-4 2xl:px-0",
+                        "blocks": [
+                          {
+                            "wrapper": "ol",
+                            "class": "flex items-center gap-1 text-sm text-white/80",
+                            "blocks": [
+                              {
+                                "wrapper": "li",
+                                "blocks": [
+                                  {
+                                    "wrapper": "a",
+                                    "href": "/",
+                                    "class": "uppercase tracking-wider text-xs font-medium hover:text-white transition-colors",
+                                    "content": "Home"
+                                  }
+                                ]
+                              },
+                              {
+                                "wrapper": "li",
+                                "class": "text-white/60",
+                                "blocks": [
+                                  {
+                                    "wrapper": "svg",
+                                    "class": "w-3 h-3",
+                                    "fill": "none",
+                                    "stroke": "currentColor",
+                                    "viewBox": "0 0 24 24",
+                                    "blocks": [
+                                      {
+                                        "wrapper": "path",
+                                        "stroke-linecap": "round",
+                                        "stroke-linejoin": "round",
+                                        "stroke-width": "2",
+                                        "d": "M9 5l7 7-7 7"
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "wrapper": "li",
+                                "blocks": [
+                                  {
+                                    "wrapper": "span",
+                                    "class": "uppercase tracking-wider text-xs font-medium text-white",
+                                    "content": "Privacy Policy"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "wrapper": "div",
+                        "class": "max-w-[1200px] mx-auto px-4 text-center",
+                        "blocks": [
+                          {
+                            "wrapper": "p",
+                            "class": "text-xs md:text-sm font-medium text-blue-300 tracking-wider uppercase mb-2",
+                            "content": "Your Privacy Matters"
+                          },
+                          {
+                            "wrapper": "h1",
+                            "class": "text-2xl sm:text-3xl md:text-4xl font-semibold text-white mb-4",
+                            "content": "Privacy Policy"
+                          },
+                          {
+                            "wrapper": "p",
+                            "class": "text-sm md:text-base max-w-2xl text-white/80 mb-4",
+                            "content": "We are committed to protecting your personal information and your right to privacy."
+                          },
+                          {
+                            "wrapper": "p",
+                            "class": "text-xs md:text-sm text-white/60",
+                            "content": "Last updated: December 21, 2024"
+                          }
+                        ]
+                      },
+                      {
+                        "wrapper": "div",
+                        "class": "absolute -bottom-px left-0 right-0",
+                        "blocks": [
+                          {
+                            "wrapper": "svg",
+                            "viewBox": "0 0 1440 60",
+                            "fill": "none",
+                            "xmlns": "http://www.w3.org/2000/svg",
+                            "class": "w-full block",
+                            "preserve-aspect-ratio": "none",
+                            "blocks": [
+                              {
+                                "wrapper": "path",
+                                "d": "M0 60 Q720 20 1440 60 V60 H0 Z",
+                                "fill": "white"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "privacy_content_1_1",
+        "type": "privacy-content-1",
+        "enabled": true,
+        "settings": {
+          "enabled": true,
+          "background_color": "#FFFFFF",
+          "text_color": "#111827",
+          "accent_color": "#2563EB"
+        },
+        "blocks": [
+          {
+            "wrapper": "section",
+            "class": "py-12 md:py-16 lg:py-20",
+            "style": {
+              "background-color": "#FFFFFF"
+            },
+            "data": {
+              "content_sections": [
+                {
+                  "title": "Information We Collect",
+                  "content": "<p>We collect information you provide directly to us, such as when you create an account, make a purchase, subscribe to our newsletter, or contact us for support.</p><ul><li><strong>Personal Information:</strong> Name, email address, phone number, shipping and billing addresses</li><li><strong>Payment Information:</strong> Credit card numbers, banking details (processed securely through our payment providers)</li><li><strong>Account Information:</strong> Username, password, purchase history, and preferences</li></ul>"
+                },
+                {
+                  "title": "How We Use Your Information",
+                  "content": "<p>We use the information we collect to:</p><ul><li><strong>Process Transactions:</strong> Complete purchases, process payments, and deliver products to you</li><li><strong>Communicate With You:</strong> Send order confirmations, shipping updates, and respond to inquiries</li><li><strong>Personalize Experience:</strong> Recommend products based on your preferences and shopping history</li></ul>"
+                },
+                {
+                  "title": "Information Sharing and Disclosure",
+                  "content": "<p>We do not sell, trade, or rent your personal information to third parties. We may share your information only with trusted service providers who assist in operating our website.</p>"
+                },
+                {
+                  "title": "Data Security",
+                  "content": "<p>We implement appropriate technical and organizational security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.</p><ul><li><strong>SSL Encryption:</strong> All data transmitted between your browser and our servers is encrypted</li><li><strong>Secure Payment Processing:</strong> We use PCI-compliant payment processors</li></ul>"
+                },
+                {
+                  "title": "Cookies and Tracking",
+                  "content": "<p>We use cookies and similar tracking technologies to enhance your browsing experience. You can control cookie preferences through your browser settings.</p>"
+                },
+                {
+                  "title": "Your Rights and Choices",
+                  "content": "<p>You have the following rights regarding your personal information:</p><ul><li><strong>Access:</strong> Request a copy of the personal data we hold about you</li><li><strong>Correction:</strong> Update or correct inaccurate information</li><li><strong>Deletion:</strong> Request deletion of your personal data</li><li><strong>Opt-Out:</strong> Unsubscribe from marketing communications at any time</li></ul>"
+                },
+                {
+                  "title": "Contact Us",
+                  "content": "<p>If you have any questions about this Privacy Policy, please contact us:</p><p><strong>Email:</strong> privacy@example.com<br/><strong>Phone:</strong> +1 (555) 123-4567</p>"
+                }
+              ]
+            },
+            "blocks": [
+              {
+                "wrapper": "div",
+                "class": "max-w-[1200px] mx-auto px-4 2xl:px-0",
+                "blocks": [
+                  {
+                    "wrapper": "div",
+                    "class": "space-y-12",
+                    "blocks": [
+                      {
+                        "wrapper": "div",
+                        "class": "prose prose-lg max-w-none",
+                        "style": {
+                          "color": "#111827"
+                        },
+                        "blocks": [
+                          {
+                            "wrapper": "h2",
+                            "class": "text-3xl font-bold mb-4 text-gray-900",
+                            "style": {
+                              "color": "#111827"
+                            },
+                            "content": "Information We Collect"
+                          },
+                          {
+                            "wrapper": "div",
+                            "dangerouslySetInnerHTML": "<p>We collect information you provide directly to us, such as when you create an account, make a purchase, subscribe to our newsletter, or contact us for support.</p><ul><li><strong>Personal Information:</strong> Name, email address, phone number, shipping and billing addresses</li><li><strong>Payment Information:</strong> Credit card numbers, banking details (processed securely through our payment providers)</li><li><strong>Account Information:</strong> Username, password, purchase history, and preferences</li></ul>"
+                          }
+                        ]
+                      },
+                      {
+                        "wrapper": "div",
+                        "class": "prose prose-lg max-w-none",
+                        "style": {
+                          "color": "#111827"
+                        },
+                        "blocks": [
+                          {
+                            "wrapper": "h2",
+                            "class": "text-3xl font-bold mb-4 text-gray-900",
+                            "style": {
+                              "color": "#111827"
+                            },
+                            "content": "How We Use Your Information"
+                          },
+                          {
+                            "wrapper": "div",
+                            "dangerouslySetInnerHTML": "<p>We use the information we collect to:</p><ul><li><strong>Process Transactions:</strong> Complete purchases, process payments, and deliver products to you</li><li><strong>Communicate With You:</strong> Send order confirmations, shipping updates, and respond to inquiries</li><li><strong>Personalize Experience:</strong> Recommend products based on your preferences and shopping history</li></ul>"
+                          }
+                        ]
+                      },
+                      {
+                        "wrapper": "div",
+                        "class": "prose prose-lg max-w-none",
+                        "style": {
+                          "color": "#111827"
+                        },
+                        "blocks": [
+                          {
+                            "wrapper": "h2",
+                            "class": "text-3xl font-bold mb-4 text-gray-900",
+                            "style": {
+                              "color": "#111827"
+                            },
+                            "content": "Information Sharing and Disclosure"
+                          },
+                          {
+                            "wrapper": "div",
+                            "dangerouslySetInnerHTML": "<p>We do not sell, trade, or rent your personal information to third parties. We may share your information only with trusted service providers who assist in operating our website.</p>"
+                          }
+                        ]
+                      },
+                      {
+                        "wrapper": "div",
+                        "class": "prose prose-lg max-w-none",
+                        "style": {
+                          "color": "#111827"
+                        },
+                        "blocks": [
+                          {
+                            "wrapper": "h2",
+                            "class": "text-3xl font-bold mb-4 text-gray-900",
+                            "style": {
+                              "color": "#111827"
+                            },
+                            "content": "Data Security"
+                          },
+                          {
+                            "wrapper": "div",
+                            "dangerouslySetInnerHTML": "<p>We implement appropriate technical and organizational security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.</p><ul><li><strong>SSL Encryption:</strong> All data transmitted between your browser and our servers is encrypted</li><li><strong>Secure Payment Processing:</strong> We use PCI-compliant payment processors</li></ul>"
+                          }
+                        ]
+                      },
+                      {
+                        "wrapper": "div",
+                        "class": "prose prose-lg max-w-none",
+                        "style": {
+                          "color": "#111827"
+                        },
+                        "blocks": [
+                          {
+                            "wrapper": "h2",
+                            "class": "text-3xl font-bold mb-4 text-gray-900",
+                            "style": {
+                              "color": "#111827"
+                            },
+                            "content": "Cookies and Tracking"
+                          },
+                          {
+                            "wrapper": "div",
+                            "dangerouslySetInnerHTML": "<p>We use cookies and similar tracking technologies to enhance your browsing experience. You can control cookie preferences through your browser settings.</p>"
+                          }
+                        ]
+                      },
+                      {
+                        "wrapper": "div",
+                        "class": "prose prose-lg max-w-none",
+                        "style": {
+                          "color": "#111827"
+                        },
+                        "blocks": [
+                          {
+                            "wrapper": "h2",
+                            "class": "text-3xl font-bold mb-4 text-gray-900",
+                            "style": {
+                              "color": "#111827"
+                            },
+                            "content": "Your Rights and Choices"
+                          },
+                          {
+                            "wrapper": "div",
+                            "dangerouslySetInnerHTML": "<p>You have the following rights regarding your personal information:</p><ul><li><strong>Access:</strong> Request a copy of the personal data we hold about you</li><li><strong>Correction:</strong> Update or correct inaccurate information</li><li><strong>Deletion:</strong> Request deletion of your personal data</li><li><strong>Opt-Out:</strong> Unsubscribe from marketing communications at any time</li></ul>"
+                          }
+                        ]
+                      },
+                      {
+                        "wrapper": "div",
+                        "class": "prose prose-lg max-w-none",
+                        "style": {
+                          "color": "#111827"
+                        },
+                        "blocks": [
+                          {
+                            "wrapper": "h2",
+                            "class": "text-3xl font-bold mb-4 text-gray-900",
+                            "style": {
+                              "color": "#111827"
+                            },
+                            "content": "Contact Us"
+                          },
+                          {
+                            "wrapper": "div",
+                            "dangerouslySetInnerHTML": "<p>If you have any questions about this Privacy Policy, please contact us:</p><p><strong>Email:</strong> privacy@example.com<br/><strong>Phone:</strong> +1 (555) 123-4567</p>"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

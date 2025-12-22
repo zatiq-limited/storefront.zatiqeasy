@@ -32,6 +32,7 @@ export const API_ROUTES = {
   PAGE_PRODUCTS: '/api/storefront/v1/page/products',
   PAGE_PRODUCT_DETAILS: '/api/storefront/v1/page/product-details',
   PAGE_ABOUT_US: '/api/storefront/v1/page/about-us',
+  PAGE_PRIVACY_POLICY: '/api/storefront/v1/page/privacy-policy',
   ORDER_CREATE: '/api/orders/create',
   ORDER_RECEIPT: (receiptId: string) => `/api/orders/${receiptId}`,
 } as const;

@@ -374,10 +374,18 @@ function BlockRendererInternal({
     };
   }
 
-  // Render children
-  let children: React.ReactNode = content;
+  // Handle dangerouslySetInnerHTML for HTML content
+  if (block.dangerouslySetInnerHTML) {
+    props.dangerouslySetInnerHTML = { __html: block.dangerouslySetInnerHTML };
+  }
 
-  if (block.blocks && block.blocks.length > 0) {
+  // Render children
+  let children: React.ReactNode;
+
+  // If dangerouslySetInnerHTML is used, don't render children or content
+  if (block.dangerouslySetInnerHTML) {
+    children = undefined;
+  } else if (block.blocks && block.blocks.length > 0) {
     children = block.blocks.map((childBlock, index) => (
       <BlockRendererInternal
         key={generateBlockKey(childBlock, index)}
@@ -387,6 +395,8 @@ function BlockRendererInternal({
         eventHandlers={extendedHandlers}
       />
     ));
+  } else {
+    children = content;
   }
 
   // Special handling for self-closing tags

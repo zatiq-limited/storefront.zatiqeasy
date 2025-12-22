@@ -1,105 +1,50 @@
-import React from "react";
-import type { Metadata } from "next";
-import PrivacyPageRenderer from "@/components/renderers/page-renderer/privacy-page-renderer";
-import type { Section } from "@/lib/types";
+"use client";
 
-export const metadata: Metadata = {
-  title: "Privacy Policy",
-  description: "Learn about our commitment to protecting your privacy and personal information.",
-};
-
-// Default privacy policy sections
-const sections: Section[] = [
-  {
-    id: "privacy-hero-1",
-    type: "privacy-hero-1",
-    enabled: true,
-    settings: {
-      headline: "Privacy Policy",
-      subheadline: "Your Privacy Matters",
-      description: "We are committed to protecting your personal information and your right to privacy.",
-      lastUpdated: "December 21, 2024",
-      showBreadcrumb: true,
-    },
-  },
-  {
-    id: "privacy-content-1",
-    type: "privacy-content-1",
-    enabled: true,
-    settings: {
-      contentSections: JSON.stringify([
-        {
-          title: "Information We Collect",
-          content: `
-            <p>We collect information you provide directly to us, such as when you create an account, make a purchase, subscribe to our newsletter, or contact us for support.</p>
-            <ul>
-              <li><strong>Personal Information:</strong> Name, email address, phone number, shipping and billing addresses</li>
-              <li><strong>Payment Information:</strong> Credit card numbers, banking details (processed securely through our payment providers)</li>
-              <li><strong>Account Information:</strong> Username, password, purchase history, and preferences</li>
-            </ul>
-          `,
-        },
-        {
-          title: "How We Use Your Information",
-          content: `
-            <p>We use the information we collect to:</p>
-            <ul>
-              <li><strong>Process Transactions:</strong> Complete purchases, process payments, and deliver products to you</li>
-              <li><strong>Communicate With You:</strong> Send order confirmations, shipping updates, and respond to inquiries</li>
-              <li><strong>Personalize Experience:</strong> Recommend products based on your preferences and shopping history</li>
-            </ul>
-          `,
-        },
-        {
-          title: "Information Sharing and Disclosure",
-          content: `
-            <p>We do not sell, trade, or rent your personal information to third parties. We may share your information only with trusted service providers who assist in operating our website.</p>
-          `,
-        },
-        {
-          title: "Data Security",
-          content: `
-            <p>We implement appropriate technical and organizational security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.</p>
-            <ul>
-              <li><strong>SSL Encryption:</strong> All data transmitted between your browser and our servers is encrypted</li>
-              <li><strong>Secure Payment Processing:</strong> We use PCI-compliant payment processors</li>
-            </ul>
-          `,
-        },
-        {
-          title: "Cookies and Tracking",
-          content: `
-            <p>We use cookies and similar tracking technologies to enhance your browsing experience. You can control cookie preferences through your browser settings.</p>
-          `,
-        },
-        {
-          title: "Your Rights and Choices",
-          content: `
-            <p>You have the following rights regarding your personal information:</p>
-            <ul>
-              <li><strong>Access:</strong> Request a copy of the personal data we hold about you</li>
-              <li><strong>Correction:</strong> Update or correct inaccurate information</li>
-              <li><strong>Deletion:</strong> Request deletion of your personal data</li>
-              <li><strong>Opt-Out:</strong> Unsubscribe from marketing communications at any time</li>
-            </ul>
-          `,
-        },
-        {
-          title: "Contact Us",
-          content: `
-            <p>If you have any questions about this Privacy Policy, please contact us:</p>
-            <p><strong>Email:</strong> privacy@example.com<br/><strong>Phone:</strong> +1 (555) 123-4567</p>
-          `,
-        },
-      ]),
-    },
-  },
-];
+import { usePrivacyPolicy } from "@/hooks";
+import { usePrivacyPolicyStore } from "@/stores/privacyPolicyStore";
+import BlockRenderer from "@/components/renderers/block-renderer";
 
 export default function PrivacyPolicyPage() {
+  const { privacyPolicy } = usePrivacyPolicyStore();
+  const { isLoading, error } = usePrivacyPolicy();
+
+  if (isLoading) {
+    return (
+      <main className="flex items-center justify-center min-h-[50vh]">
+        <p>Loading...</p>
+      </main>
+    );
+  }
+
+  if (error) {
+    return (
+      <main className="flex items-center justify-center min-h-[50vh]">
+        <p>Error loading privacy policy page</p>
+      </main>
+    );
+  }
+
+  // Extract sections from privacy policy data
+  const pageData = (privacyPolicy as Record<string, unknown>)?.data || privacyPolicy || {};
+  const sections = (pageData as Record<string, unknown>)?.sections || [];
+
   return (
     <main className="zatiq-privacy-policy-page">
-      <PrivacyPageRenderer sections={sections} />
+      {(sections as Array<Record<string, unknown>>).map((section, index) => {
+        // Get the first block from each section
+        const block = (section.blocks as Array<Record<string, unknown>>)?.[0];
+        if (!block || !section.enabled) return null;
+
+        return (
+          <BlockRenderer
+            key={(section.id as string) || `section-${index}`}
+            block={
+              block as import("@/components/renderers/block-renderer").Block
+            }
+            data={(block.data as Record<string, unknown>) || {}}
+          />
+        );
+      })}
     </main>
   );
 }
