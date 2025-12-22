@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { useCartStore, useCheckoutStore, selectSubtotal } from "@/stores";
+import { useCartStore, useCheckoutStore } from "@/stores";
+import { useCartTotals } from "@/hooks";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -28,7 +29,9 @@ export default function PaymentConfirmPage() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [transactionId, setTransactionId] = useState("");
 
-  const subtotal = useCartStore(selectSubtotal);
+  // Get cart totals using the custom hook (prevents infinite loop)
+  const { totalPrice: subtotal } = useCartTotals();
+
   const deliveryCharge = 50; // This should come from checkout state
   const total = subtotal + deliveryCharge;
 

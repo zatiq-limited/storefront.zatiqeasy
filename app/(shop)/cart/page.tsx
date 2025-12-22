@@ -1,15 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { useCartStore, selectCartProducts } from "@/stores";
+import { useCartStore } from "@/stores";
+import { useCartTotals } from "@/hooks";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ShoppingCart } from "lucide-react";
 import { CartItem, CartSummary } from "@/features/cart";
 
 export default function CartPage() {
-  const cartProducts = useCartStore(selectCartProducts);
+  // Get cart totals using the custom hook (prevents infinite loop)
+  const { products, hasItems } = useCartTotals();
 
-  if (cartProducts.length === 0) {
+  // Convert to array for rendering
+  const cartProducts = Object.values(products);
+
+  if (!hasItems) {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-2xl mx-auto text-center space-y-6">

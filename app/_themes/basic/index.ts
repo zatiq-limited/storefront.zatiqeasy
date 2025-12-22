@@ -3,17 +3,17 @@
  * A clean, minimalist theme optimized for e-commerce
  */
 
-import { StaticTheme } from '@/types/theme';
+import { StaticTheme } from "@/types/theme";
 
 // Theme configuration
 export const BasicTheme: StaticTheme = {
-  id: 'basic',
-  name: 'basic',
-  displayName: 'Basic Theme',
-  description: 'Clean and minimalist design perfect for any online store',
-  version: '1.0.0',
-  author: 'Zatiq Team',
-  category: 'basic',
+  id: "basic",
+  name: "basic",
+  displayName: "Basic Theme",
+  description: "Clean and minimalist design perfect for any online store",
+  version: "1.0.0",
+  author: "Zatiq Team",
+  category: "basic",
   isDefault: true,
   isPremium: false,
   supportsDarkMode: true,
@@ -22,85 +22,85 @@ export const BasicTheme: StaticTheme = {
   config: {
     colors: {
       // Primary brand colors
-      primary: '#3b82f6',         // blue-500
-      primaryHover: '#2563eb',    // blue-600
-      primaryLight: '#dbeafe',    // blue-100
-      primaryDark: '#1e40af',     // blue-800
+      primary: "#3b82f6", // blue-500
+      primaryHover: "#2563eb", // blue-600
+      primaryLight: "#dbeafe", // blue-100
+      primaryDark: "#1e40af", // blue-800
 
       // Secondary colors
-      secondary: '#6b7280',       // gray-500
-      secondaryHover: '#4b5563',  // gray-600
-      secondaryLight: '#f3f4f6',  // gray-100
-      secondaryDark: '#374151',   // gray-700
+      secondary: "#6b7280", // gray-500
+      secondaryHover: "#4b5563", // gray-600
+      secondaryLight: "#f3f4f6", // gray-100
+      secondaryDark: "#374151", // gray-700
 
       // Accent colors
-      accent: '#f59e0b',          // amber-500
-      accentHover: '#d97706',     // amber-600
+      accent: "#f59e0b", // amber-500
+      accentHover: "#d97706", // amber-600
 
       // Semantic colors
-      success: '#10b981',         // emerald-500
-      warning: '#f59e0b',         // amber-500
-      error: '#ef4444',           // red-500
-      info: '#3b82f6',            // blue-500
+      success: "#10b981", // emerald-500
+      warning: "#f59e0b", // amber-500
+      error: "#ef4444", // red-500
+      info: "#3b82f6", // blue-500
 
       // Neutral colors
-      background: '#ffffff',      // white
-      foreground: '#111827',      // gray-900
-      muted: '#f3f4f6',           // gray-100
-      mutedForeground: '#6b7280', // gray-500
-      border: '#e5e7eb',          // gray-200
-      input: '#ffffff',           // white
-      ring: '#3b82f6',            // blue-500
+      background: "#ffffff", // white
+      foreground: "#111827", // gray-900
+      muted: "#f3f4f6", // gray-100
+      mutedForeground: "#6b7280", // gray-500
+      border: "#e5e7eb", // gray-200
+      input: "#ffffff", // white
+      ring: "#3b82f6", // blue-500
 
       // Text colors
-      textPrimary: '#111827',     // gray-900
-      textSecondary: '#6b7280',   // gray-500
-      textMuted: '#9ca3af',       // gray-400
-      textInverse: '#ffffff',     // white
+      textPrimary: "#111827", // gray-900
+      textSecondary: "#6b7280", // gray-500
+      textMuted: "#9ca3af", // gray-400
+      textInverse: "#ffffff", // white
 
       // Surface colors
-      surface: '#ffffff',         // white
-      surfaceVariant: '#f8fafc',  // slate-50
-      surfaceHover: '#f9fafb',    // gray-50
+      surface: "#ffffff", // white
+      surfaceVariant: "#f8fafc", // slate-50
+      surfaceHover: "#f9fafb", // gray-50
     },
 
     // Spacing system
     spacing: {
-      xs: '0.25rem',    // 4px
-      sm: '0.5rem',     // 8px
-      md: '1rem',       // 16px
-      lg: '1.5rem',     // 24px
-      xl: '2rem',       // 32px
-      '2xl': '3rem',    // 48px
-      '3xl': '4rem',    // 64px
-      '4xl': '6rem',    // 96px
+      xs: "0.25rem", // 4px
+      sm: "0.5rem", // 8px
+      md: "1rem", // 16px
+      lg: "1.5rem", // 24px
+      xl: "2rem", // 32px
+      "2xl": "3rem", // 48px
+      "3xl": "4rem", // 64px
+      "4xl": "6rem", // 96px
     },
 
     // Typography
     fonts: {
-      primary: 'Inter, system-ui, -apple-system, sans-serif',
-      secondary: 'Inter, system-ui, -apple-system, sans-serif',
-      mono: 'JetBrains Mono, Consolas, monospace',
-      display: 'Inter, system-ui, -apple-system, sans-serif',
-      body: 'Inter, system-ui, -apple-system, sans-serif',
-      heading: 'Inter, system-ui, -apple-system, sans-serif',
+      primary: "Inter, system-ui, -apple-system, sans-serif",
+      secondary: "Inter, system-ui, -apple-system, sans-serif",
+      mono: "JetBrains Mono, Consolas, monospace",
+      display: "Inter, system-ui, -apple-system, sans-serif",
+      body: "Inter, system-ui, -apple-system, sans-serif",
+      heading: "Inter, system-ui, -apple-system, sans-serif",
     },
 
     // Border radius
     borderRadius: {
-      none: '0',
-      sm: '0.125rem',    // 2px
-      md: '0.375rem',    // 6px
-      lg: '0.5rem',      // 8px
-      xl: '0.75rem',     // 12px
-      full: '9999px',
-    }
+      none: "0",
+      sm: "0.125rem", // 2px
+      md: "0.375rem", // 6px
+      lg: "0.5rem", // 8px
+      xl: "0.75rem", // 12px
+      full: "9999px",
+    },
   },
 
   // Component mappings (dynamic imports)
   components: {
     // Header components
-    Header: () => import('./components/header/header'),
+    Header: () => import("./components/header/header"),
     // Navigation: () => import('./components/header/navigation'),
     // CartButton: () => import('./components/header/cart-button'),
 
@@ -109,8 +109,10 @@ export const BasicTheme: StaticTheme = {
     // FooterLinks: () => import('./components/footer/footer-links'),
 
     // Animation components
-    HeightAnimation: () => import('@/components/shared/animations/height-animation'),
-    LazyAnimation: () => import('@/components/shared/animations/lazy-animation'),
+    HeightAnimation: () =>
+      import("@/components/shared/animations/height-animation"),
+    LazyAnimation: () =>
+      import("@/components/shared/animations/lazy-animation"),
 
     // Modal components (not yet created)
     // Modal: () => import('@/components/modal/modal'),
@@ -130,7 +132,7 @@ export const BasicTheme: StaticTheme = {
   // Module mappings
   modules: {
     // Page modules
-    'basic-home-page': () => import('./modules/home/basic-home-page'),
+    "basic-home-page": () => import("./modules/home/basic-home-page"),
     // 'category-page': () => import('./modules/category/category-page'),
     // 'product-page': () => import('./modules/product/basic-product-page'),
     // 'checkout': () => import('./modules/checkout/basic-checkout'),
@@ -290,40 +292,39 @@ html {
 .space-x-theme > * + * {
   margin-left: var(--theme-spacing-md);
 }
-    `
+    `,
   },
 
   // Preview image
   preview: {
-    image: '/themes/basic/preview.png',
-    thumbnail: '/themes/basic/thumbnail.png',
-    demoUrl: 'https://demo.zatiq.com/themes/basic'
+    image: "/themes/basic/preview.png",
+    thumbnail: "/themes/basic/thumbnail.png",
+    demoUrl: "https://demo.zatiq.com/themes/basic",
   },
 
   // Dependencies
-  dependencies: [
-    'lucide-react',
-    'clsx',
-    'tailwind-merge'
-  ]
+  dependencies: ["lucide-react", "clsx", "tailwind-merge"],
 };
 
 // Export theme configuration
 export default BasicTheme;
 
 // Export components
-export { BasicHomePage } from './modules/home/basic-home-page';
-export { BasicCategoryPage } from './modules/home/basic-category-page';
+export { BasicHomePage } from "./modules/home/basic-home-page";
+export { BasicCategoryPage } from "./modules/home/basic-category-page";
 
 // Export theme utilities
 export const basicThemeUtils = {
   // Get theme color as RGB tuple for Tailwind
   getColor(colorName: string): [number, number, number] {
-    const color = BasicTheme.config.colors[colorName as keyof typeof BasicTheme.config.colors];
+    const color =
+      BasicTheme.config.colors[
+        colorName as keyof typeof BasicTheme.config.colors
+      ];
     if (!color) return [0, 0, 0];
 
     // Convert hex to RGB
-    const hex = color.replace('#', '');
+    const hex = color.replace("#", "");
     const r = parseInt(hex.substring(0, 2), 16);
     const g = parseInt(hex.substring(2, 4), 16);
     const b = parseInt(hex.substring(4, 6), 16);
@@ -333,8 +334,11 @@ export const basicThemeUtils = {
 
   // Get CSS custom property value
   getCSSVar(varName: string): string {
-    const themeVar = BasicTheme.config.colors[varName as keyof typeof BasicTheme.config.colors];
-    return themeVar || '';
+    const themeVar =
+      BasicTheme.config.colors[
+        varName as keyof typeof BasicTheme.config.colors
+      ];
+    return themeVar || "";
   },
 
   // Generate Tailwind color config
@@ -342,9 +346,9 @@ export const basicThemeUtils = {
     const colors: Record<string, string> = {};
 
     Object.entries(BasicTheme.config.colors).forEach(([key, value]) => {
-      colors[key] = value.replace('#', '');
+      colors[key] = value.replace("#", "");
     });
 
     return colors;
-  }
+  },
 };

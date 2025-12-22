@@ -1,6 +1,7 @@
 "use client";
 
-import { useCartStore, selectCartProducts } from "@/stores";
+import { useCartStore } from "@/stores";
+import { useCartTotals } from "@/hooks";
 import { Button } from "@/components/ui/button";
 import { X, ShoppingCart } from "lucide-react";
 import { CartItem, CartSummary } from "@/features/cart";
@@ -20,7 +21,11 @@ export function CartSidebar({
   onCheckout,
   position = "right",
 }: CartSidebarProps) {
-  const cartProducts = useCartStore(selectCartProducts);
+  // Get cart totals using the custom hook (prevents infinite loop)
+  const { products } = useCartTotals();
+
+  // Convert to array for rendering
+  const cartProducts = Object.values(products);
 
   return (
     <div

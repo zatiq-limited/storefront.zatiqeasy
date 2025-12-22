@@ -9,11 +9,16 @@ interface ShopProviderProps {
 }
 
 export function ShopProvider({ children, initialShopData }: ShopProviderProps) {
-  const { setShopDetails } = useShopStore();
+  const setShopDetails = useShopStore((state) => state.setShopDetails);
 
+  // Set shop details if we have them and they're different from current
   useEffect(() => {
     if (initialShopData) {
-      setShopDetails(initialShopData);
+      const currentShopDetails = useShopStore.getState().shopDetails;
+      // Only update if the data is different (avoid unnecessary updates)
+      if (!currentShopDetails || currentShopDetails.id !== initialShopData.id) {
+        setShopDetails(initialShopData);
+      }
     }
   }, [initialShopData, setShopDetails]);
 

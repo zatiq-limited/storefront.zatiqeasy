@@ -1,6 +1,7 @@
 "use client";
 
-import { useCartStore, selectSubtotal, selectTotalItems, selectCartIsEmpty } from "@/stores";
+import { useCartStore } from "@/stores";
+import { useCartTotals } from "@/hooks";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
@@ -22,11 +23,14 @@ export function CartSummary({
   showDeliveryCharge = false,
   deliveryCharge = 0,
 }: CartSummaryProps) {
-  const subtotal = useCartStore(selectSubtotal);
-  const totalItems = useCartStore(selectTotalItems);
-  const cartIsEmpty = useCartStore(selectCartIsEmpty);
+  // Get cart totals using the custom hook (prevents infinite loop)
+  const { totalPrice: subtotal, totalProducts, hasItems } = useCartTotals();
 
   const total = subtotal + deliveryCharge;
+
+  // For backward compatibility
+  const totalItems = totalProducts;
+  const cartIsEmpty = !hasItems;
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("en-BD", {

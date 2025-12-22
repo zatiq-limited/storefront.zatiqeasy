@@ -1,5 +1,6 @@
-import { create } from 'zustand';
-import type { ShopProfile } from '@/types';
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+import type { ShopProfile } from "@/types";
 
 interface ShopState {
   // Shop data
@@ -29,50 +30,60 @@ interface ShopActions {
   toggleMobileMenu: () => void;
 }
 
-export const useShopStore = create<ShopState & ShopActions>((set) => ({
-  // Initial state
-  shopDetails: null,
-  isSearchModalOpen: false,
-  isCartDrawerOpen: false,
-  isMobileMenuOpen: false,
-  shopLanguage: 'en',
-  visitorId: null,
+export const useShopStore = create<ShopState & ShopActions>()(
+  persist(
+    (set) => ({
+      // Initial state
+      shopDetails: null,
+      isSearchModalOpen: false,
+      isCartDrawerOpen: false,
+      isMobileMenuOpen: false,
+      shopLanguage: "en",
+      visitorId: null,
 
-  // Actions
-  setShopDetails: (details) => set({ shopDetails: details }),
+      // Actions
+      setShopDetails: (details) => set({ shopDetails: details }),
 
-  setSearchModalOpen: (open) => set({ isSearchModalOpen: open }),
+      setSearchModalOpen: (open) => set({ isSearchModalOpen: open }),
 
-  setCartDrawerOpen: (open) => set({ isCartDrawerOpen: open }),
+      setCartDrawerOpen: (open) => set({ isCartDrawerOpen: open }),
 
-  setMobileMenuOpen: (open) => set({ isMobileMenuOpen: open }),
+      setMobileMenuOpen: (open) => set({ isMobileMenuOpen: open }),
 
-  setShopLanguage: (lang) => set({ shopLanguage: lang }),
+      setShopLanguage: (lang) => set({ shopLanguage: lang }),
 
-  setVisitorId: (id) => set({ visitorId: id }),
+      setVisitorId: (id) => set({ visitorId: id }),
 
-  toggleSearchModal: () =>
-    set((state) => ({ isSearchModalOpen: !state.isSearchModalOpen })),
+      toggleSearchModal: () =>
+        set((state) => ({ isSearchModalOpen: !state.isSearchModalOpen })),
 
-  toggleCartDrawer: () =>
-    set((state) => ({ isCartDrawerOpen: !state.isCartDrawerOpen })),
+      toggleCartDrawer: () =>
+        set((state) => ({ isCartDrawerOpen: !state.isCartDrawerOpen })),
 
-  toggleMobileMenu: () =>
-    set((state) => ({ isMobileMenuOpen: !state.isMobileMenuOpen })),
-}));
+      toggleMobileMenu: () =>
+        set((state) => ({ isMobileMenuOpen: !state.isMobileMenuOpen })),
+    }),
+    {
+      name: "shop-storage",
+      storage: createJSONStorage(() => localStorage),
+      // Only persist shopDetails, ignore UI state
+      partialize: (state) => ({ shopDetails: state.shopDetails }),
+    }
+  )
+);
 
 // Selectors
 export const selectShopDetails = (state: ShopState & ShopActions) =>
   state.shopDetails;
 
 export const selectThemeType = (state: ShopState & ShopActions) =>
-  state.shopDetails?.shop_theme?.theme_type || 'builder';
+  state.shopDetails?.shop_theme?.theme_type || "builder";
 
 export const selectThemeName = (state: ShopState & ShopActions) =>
-  state.shopDetails?.shop_theme?.theme_name || 'Basic';
+  state.shopDetails?.shop_theme?.theme_name || "Basic";
 
 export const selectCurrency = (state: ShopState & ShopActions) =>
-  state.shopDetails?.country_currency || 'BDT';
+  state.shopDetails?.country_currency || "BDT";
 
 export const selectCountryCode = (state: ShopState & ShopActions) =>
-  state.shopDetails?.country_code || 'BD';
+  state.shopDetails?.country_code || "BD";

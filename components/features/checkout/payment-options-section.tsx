@@ -1,125 +1,70 @@
 "use client";
 
-import { useCheckoutStore } from "@/stores";
-import { CreditCard, Smartphone, Truck, DollarSign, Wallet } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils";
+import { useState } from "react";
 
-interface PaymentOptionsSectionProps {
-  className?: string;
-}
+export function PaymentOptionsSection() {
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<"cod" | "online">("cod");
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
 
-const paymentMethods = [
-  {
-    value: "cod" as const,
-    label: "Cash on Delivery (COD)",
-    description: "Pay when you receive your order",
-    icon: Truck,
-    fee: 0,
-  },
-  {
-    value: "bkash" as const,
-    label: "bKash",
-    description: "Pay with bKash mobile wallet",
-    icon: Wallet,
-    fee: 0,
-  },
-  {
-    value: "aamarpay" as const,
-    label: "AamarPay",
-    description: "Pay with credit/debit card or mobile banking",
-    icon: CreditCard,
-    fee: 0,
-  },
-  {
-    value: "partial_payment" as const,
-    label: "Partial Payment",
-    description: "Pay part now, rest on delivery",
-    icon: DollarSign,
-    fee: 0,
-  },
-  {
-    value: "self_mfs" as const,
-    label: "Self Mobile Banking",
-    description: "Pay with other mobile banking services",
-    icon: Smartphone,
-    fee: 0,
-  },
-];
-
-export function PaymentOptionsSection({ className }: PaymentOptionsSectionProps) {
-  const { selectedPaymentMethod, setSelectedPaymentMethod } = useCheckoutStore();
+  const paymentMethods = [
+    { id: "cod", name: "Cash on Delivery", description: "Pay when you receive your order" },
+    { id: "online", name: "Online Payment", description: "Pay with credit/debit card or mobile banking" },
+  ];
 
   return (
-    <Card className={className}>
-      <CardHeader>
-        <CardTitle>Payment Method</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <RadioGroup
-          value={selectedPaymentMethod}
-          onValueChange={(value: string) => setSelectedPaymentMethod(value as any)}
-          className="space-y-3"
-        >
-          {paymentMethods.map((method) => {
-            const Icon = method.icon;
-            return (
-              <div
-                key={method.value}
-                className={cn(
-                  "flex items-center space-x-3 rounded-lg border p-3 cursor-pointer transition-colors",
-                  selectedPaymentMethod === method.value
-                    ? "border-primary bg-primary/5"
-                    : "hover:bg-muted/50"
-                )}
-                onClick={() => setSelectedPaymentMethod(method.value)}
-              >
-                <RadioGroupItem value={method.value} id={method.value} />
-                <div className="flex items-center space-x-3 flex-1">
-                  <Icon className="h-5 w-5 text-muted-foreground" />
-                  <div className="flex-1">
-                    <Label
-                      htmlFor={method.value}
-                      className="font-medium cursor-pointer"
-                    >
-                      {method.label}
-                    </Label>
-                    <p className="text-sm text-muted-foreground">
-                      {method.description}
-                    </p>
-                  </div>
-                  {method.fee > 0 && (
-                    <span className="text-sm text-muted-foreground">
-                      +{method.fee} BDT fee
-                    </span>
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </RadioGroup>
+    <div className="bg-white dark:bg-gray-800 rounded-lg p-6 mb-6 shadow-sm">
+      <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">
+        Payment Method
+      </h2>
 
-        {selectedPaymentMethod === "partial_payment" && (
-          <div className="mt-4 p-4 bg-muted/50 rounded-lg">
-            <h4 className="font-medium mb-2">Partial Payment Details</h4>
-            <p className="text-sm text-muted-foreground mb-2">
-              You can pay a portion now and the rest when you receive your order.
-            </p>
-            <div className="space-y-2">
-              <div className="flex justify-between text-sm">
-                <span>Minimum advance:</span>
-                <span className="font-medium">৳100</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span>Maximum advance:</span>
-                <span className="font-medium">50% of order value</span>
-              </div>
+      <div className="space-y-3">
+        {paymentMethods.map((method) => (
+          <label
+            key={method.id}
+            className="flex items-center p-3 border border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700"
+          >
+            <input
+              type="radio"
+              name="paymentMethod"
+              value={method.id}
+              checked={selectedPaymentMethod === method.id}
+              onChange={(e) => setSelectedPaymentMethod(e.target.value as "cod" | "online")}
+              className="mr-3 text-blue-zatiq focus:ring-blue-zatiq"
+            />
+            <div>
+              <span className="font-medium text-gray-900 dark:text-gray-100">
+                {method.name}
+              </span>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                {method.description}
+              </p>
             </div>
-          </div>
-        )}
-      </CardContent>
-    </Card>
+          </label>
+        ))}
+      </div>
+
+      {selectedPaymentMethod !== "cod" && (
+        <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-600">
+          <label className="flex items-start">
+            <input
+              type="checkbox"
+              checked={acceptedTerms}
+              onChange={(e) => setAcceptedTerms(e.target.checked)}
+              className="mt-1 mr-3 text-blue-zatiq focus:ring-blue-zatiq rounded"
+            />
+            <span className="text-sm text-gray-600 dark:text-gray-400">
+              I agree to the{" "}
+              <a href="#" className="text-blue-zatiq hover:underline">
+                Terms and Conditions
+              </a>{" "}
+              and{" "}
+              <a href="#" className="text-blue-zatiq hover:underline">
+                Privacy Policy
+              </a>
+            </span>
+          </label>
+        </div>
+      )}
+    </div>
   );
 }

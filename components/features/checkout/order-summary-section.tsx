@@ -1,6 +1,7 @@
 "use client";
 
-import { useCartStore, useCheckoutStore, selectCartProducts, selectSubtotal } from "@/stores";
+import { useCartStore, useCheckoutStore } from "@/stores";
+import { useCartTotals } from "@/hooks";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
@@ -16,12 +17,18 @@ export function OrderSummarySection({
   deliveryCharge = 0,
   taxAmount = 0,
 }: OrderSummarySectionProps) {
-  const cartProducts = useCartStore(selectCartProducts);
-  const subtotal = useCartStore(selectSubtotal);
+  // Get cart totals using the custom hook (prevents infinite loop)
+  const { products, totalPrice: subtotal, totalProducts } = useCartTotals();
+
   const { discountAmount, selectedPaymentMethod } = useCheckoutStore();
 
-  const totalItems = cartProducts.reduce((sum, product) => sum + product.qty, 0);
+  // Convert products object to array for calculations
+  const cartProducts = Object.values(products);
+
   const grandTotal = subtotal + deliveryCharge + taxAmount - discountAmount;
+
+  // Alias for consistency with the variable name used in the component
+  const totalItems = totalProducts;
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("en-BD", {

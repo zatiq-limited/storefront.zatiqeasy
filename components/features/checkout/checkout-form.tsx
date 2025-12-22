@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useCartStore, useCheckoutStore, selectCartProducts, selectSubtotal } from "@/stores";
+import { useCartStore, useCheckoutStore } from "@/stores";
+import { useCartTotals } from "@/hooks";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -25,8 +26,13 @@ interface CheckoutFormProps {
 
 export function CheckoutForm({ className, onSubmit }: CheckoutFormProps) {
   const router = useRouter();
-  const cartProducts = useCartStore(selectCartProducts);
-  const subtotal = useCartStore(selectSubtotal);
+
+  // Get cart totals using the custom hook (prevents infinite loop)
+  const { products, totalPrice: subtotal } = useCartTotals();
+
+  // Convert products object to array for rendering
+  const cartProducts = Object.values(products);
+
   const { acceptedTerms, setAcceptedTerms } = useCheckoutStore();
 
   const [orderNote, setOrderNote] = useState("");

@@ -10,6 +10,7 @@ import {
   useShopStore,
   useProductsStore,
   selectTotalItems,
+  selectShopDetails,
 } from "@/stores";
 import { cn } from "@/lib/utils";
 import TopbarMessage from "../core/topbar-message";
@@ -23,7 +24,7 @@ export function BasicHeader() {
   const searchParams = useSearchParams();
 
   // Get stores
-  const { shopDetails } = useShopStore();
+  const shopDetails = useShopStore(selectShopDetails);
   const totalItems = useCartStore(selectTotalItems);
   const { setCurrentPage } = useProductsStore();
 
