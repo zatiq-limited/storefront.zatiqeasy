@@ -5,6 +5,7 @@ import { useParams, useSearchParams } from "next/navigation";
 import { useShopStore, useProductsStore } from "@/stores";
 import { BasicHomePage } from "@/app/_themes/basic";
 import { useShopProfile, useShopInventories, useShopCategories } from "@/hooks";
+import type { ShopTheme } from "@/types/shop.types";
 
 // Loading component
 const LoadingFallback = () => (
@@ -106,7 +107,10 @@ function ShopPageContent({ shopId }: ShopPageProps) {
   }
 
   // Check if single product theme is enabled
-  if ((shopDetails?.shop_theme as any)?.singleProductTheme) {
+  if (
+    (shopDetails?.shop_theme as ShopTheme & { singleProductTheme?: boolean })
+      ?.singleProductTheme
+  ) {
     return <SingleProductLandingPage shopId={shopId} />;
   }
 
@@ -123,6 +127,8 @@ function ShopPageContent({ shopId }: ShopPageProps) {
 
 // Single Product Landing Page Component
 function SingleProductLandingPage({ shopId: _shopId }: { shopId: string }) {
+  console.log("Rendering Single Product Landing Page for shop:", _shopId);
+
   return (
     <div className="min-h-screen">
       <div className="container mx-auto px-4 py-8">
