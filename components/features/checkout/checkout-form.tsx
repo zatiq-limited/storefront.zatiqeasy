@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
 import { useCartStore, useCheckoutStore } from "@/stores";
 import { useCartTotals } from "@/hooks";
 import { Button } from "@/components/ui/button";
@@ -19,6 +20,11 @@ import { createOrder } from "@/lib/payments/api";
 import { PaymentType, OrderStatus } from "@/lib/payments/types";
 import { validatePhoneNumber } from "@/lib/payments/utils";
 
+// Mock data for sections
+const mockDivisions = [{ id: 1, name: "Dhaka" }];
+const mockDistricts = [{ id: 1, name: "Dhaka" }];
+const mockUpazilas = [{ id: 1, name: "Dhanmondi" }];
+
 interface CheckoutFormProps {
   className?: string;
   onSubmit?: (orderData: any) => void;
@@ -26,6 +32,9 @@ interface CheckoutFormProps {
 
 export function CheckoutForm({ className, onSubmit }: CheckoutFormProps) {
   const router = useRouter();
+
+  // Form setup
+  const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
   // Get cart totals using the custom hook (prevents infinite loop)
   const { products, totalPrice: subtotal } = useCartTotals();
@@ -37,6 +46,14 @@ export function CheckoutForm({ className, onSubmit }: CheckoutFormProps) {
 
   const [orderNote, setOrderNote] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedCountryCode, setSelectedCountryCode] = useState("+880");
+  const [isPhoneVerified, setIsPhoneVerified] = useState(false);
+  const [selectedSpecificDeliveryZone, setSelectedSpecificDeliveryZone] = useState("Inside City");
+  const [promoCodeSearch, setPromoCodeSearch] = useState("");
+  const [isPromoLoading, setIsPromoLoading] = useState(false);
+  const [promoCodeMessage, setPromoCodeMessage] = useState("");
+  const [isFullOnlinePayment, setIsFullOnlinePayment] = useState(false);
+  const [deliveryOption, setDeliveryOption] = useState("districts"); // Can be "zones", "districts", or "upazilas"
 
   // Simple delivery charge calculation (this should be more sophisticated in production)
   const calculateDeliveryCharge = () => {
@@ -53,8 +70,7 @@ export function CheckoutForm({ className, onSubmit }: CheckoutFormProps) {
   const deliveryCharge = calculateDeliveryCharge();
   const grandTotal = subtotal + deliveryCharge;
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onFormSubmit = async (data: any) => {
 
     if (isSubmitting) return;
 
@@ -180,7 +196,8 @@ export function CheckoutForm({ className, onSubmit }: CheckoutFormProps) {
       selectedDistrict &&
       selectedUpazila &&
       selectedPaymentMethod &&
-      acceptedTerms
+      acceptedTerms &&
+      isPhoneVerified
     );
   };
 
@@ -200,14 +217,94 @@ export function CheckoutForm({ className, onSubmit }: CheckoutFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className={cn("space-y-6", className)}>
+    <form onSubmit={handleSubmit(onFormSubmit)} className={cn("space-y-6", className)}>
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Main Checkout Form */}
         <div className="lg:col-span-2 space-y-6">
-          <ContactSection />
-          <ShippingAddressSection />
-          <DeliveryZoneSection />
-          <PaymentOptionsSection />
+          <ContactSection
+            register={register}
+            errors={errors}
+            watch={watch}
+            validPhoneNumber={validatePhoneNumber}
+            selectedCountryCode={selectedCountryCode}
+            needPhoneVerification={true}
+            onCountryCodeChange={setSelectedCountryCode}
+            onPhoneVerificationChange={setIsPhoneVerified}
+            shopId={1} // This should come from shop context
+          />
+          <ShippingAddressSection
+            register={register}
+            errors={errors}
+            setValue={() => {}}
+            watch={watch}
+            country_code="BD"
+            delivery_option={deliveryOption}
+            divisions={mockDivisions}
+            districts={{
+              "Dhaka": mockDistricts,
+            }}
+            upazilas={{
+              "Dhaka": {
+                "Dhaka": mockUpazilas,
+              },
+            }}
+            selectedDivision="Dhaka"
+            selectedDistrict="Dhaka"
+            shopLanguage="en"
+          />
+          <DeliveryZoneSection
+            country_code="BD"
+            delivery_option={deliveryOption}
+            specificDeliveryCharges={{
+              "Inside City": 50,
+              "Suburb": 80,
+              "Outside City": 120,
+              "Others": 150,
+            }}
+            selectedSpecificDeliveryZone={selectedSpecificDeliveryZone}
+            setSelectedSpecificDeliveryZone={setSelectedSpecificDeliveryZone}
+          />
+
+          {/* Delivery Option Toggle for Testing */}
+          <div className="mb-6 md:mb-8">
+            <h3 className="text-lg font-medium mb-3">Delivery Option (Testing)</h3>
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={() => setDeliveryOption("zones")}
+                className={`px-4 py-2 rounded-lg ${
+                  deliveryOption === "zones"
+                    ? "bg-blue-zatiq text-white"
+                    : "bg-gray-200 text-gray-700"
+                }`}
+              >
+                Zones (Show Delivery Zone Buttons)
+              </button>
+              <button
+                type="button"
+                onClick={() => setDeliveryOption("districts")}
+                className={`px-4 py-2 rounded-lg ${
+                  deliveryOption === "districts"
+                    ? "bg-blue-zatiq text-white"
+                    : "bg-gray-200 text-gray-700"
+                }`}
+              >
+                Districts (Show Division/District/Upazila)
+              </button>
+            </div>
+          </div>
+
+          <PaymentOptionsSection
+            paymentMethods={["Cash on Delivery", "Online Payment"]}
+            selectedPaymentMethod="Cash on Delivery"
+            setSelectedPaymentMethod={() => {}}
+            register={register}
+            errors={errors}
+            profile={null}
+            isAceeptTermsAndCondition={acceptedTerms}
+            setIsAceeptTermsAndCondition={setAcceptedTerms}
+            selectedDeliveryZone="Inside City"
+          />
 
           {/* Order Notes */}
           <div className="space-y-2">
@@ -256,7 +353,30 @@ export function CheckoutForm({ className, onSubmit }: CheckoutFormProps) {
         {/* Order Summary */}
         <div className="lg:col-span-1">
           <div className="sticky top-4">
-            <OrderSummarySection deliveryCharge={deliveryCharge} />
+            <OrderSummarySection
+              totalPrice={subtotal}
+              discountAmount={0}
+              totaltax={0}
+              deliveryCharge={deliveryCharge}
+              grandTotal={subtotal + deliveryCharge}
+              country_currency="BDT"
+              profile={null}
+              promoCodeSearch={promoCodeSearch}
+              setPromoCodeSearch={setPromoCodeSearch}
+              promoCodeMessage={promoCodeMessage}
+              isPromoLoading={isPromoLoading}
+              isLoading={isSubmitting}
+              shopId="1"
+              promoCodeMutate={() => {}}
+              isFullOnlinePayment={isFullOnlinePayment}
+              handleChange={() => {}}
+              getPayNowAmount={() => subtotal + deliveryCharge}
+              selectedPaymentMethod="Cash on Delivery"
+              isAceeptTermsAndCondition={acceptedTerms}
+              setIsAceeptTermsAndCondition={setAcceptedTerms}
+              products={products}
+              register={register}
+            />
 
             <Separator className="my-6" />
 

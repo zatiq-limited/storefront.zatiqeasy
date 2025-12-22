@@ -305,7 +305,7 @@ export function CommonCheckoutForm({
           register={register}
           errors={errors}
           watch={watch}
-          validPhoneNumber={validatePhoneNumber(fullPhoneNumber)}
+          validPhoneNumber={validatePhoneNumber}
           selectedCountryCode={selectedCountryCode}
           needPhoneVerification={order_verification_enabled || false}
           onCountryCodeChange={setSelectedCountryCode}
@@ -315,9 +315,8 @@ export function CommonCheckoutForm({
               setShowPhoneVerificationError(false);
             }
           }}
-          shopId={shopDetails?.id?.toString() || "1"}
+          shopId={shopDetails?.id || 1}
           fullPhoneNumber={fullPhoneNumber}
-          onPhoneNumberChange={setFullPhoneNumber}
           profile={profile}
         />
 
@@ -325,6 +324,7 @@ export function CommonCheckoutForm({
           register={register}
           errors={errors}
           setValue={setValue}
+          watch={watch}
           country_code={country_code}
           delivery_option={delivery_option}
           divisions={divisions}
@@ -351,8 +351,10 @@ export function CommonCheckoutForm({
         <PaymentOptionsSection
           paymentMethods={profile?.payment_methods || []}
           selectedPaymentMethod={selectedPaymentMethod}
-          setSelectedPaymentMethod={(method) => {
-            useCheckoutStore.getState().setSelectedPaymentMethod(method);
+          setSelectedPaymentMethod={(method: string) => {
+            useCheckoutStore.setState({
+              selectedPaymentMethod: method as 'cod' | 'bkash' | 'nagad' | 'aamarpay' | 'partial_payment'
+            });
           }}
           register={register}
           errors={errors}

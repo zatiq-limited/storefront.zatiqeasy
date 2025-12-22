@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { ShoppingCart, Mail, Phone, Globe, Search, X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import {
   useCartStore,
   useShopStore,
@@ -22,6 +23,7 @@ import TopbarMessage from "../core/topbar-message";
 export function BasicHeader() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { i18n, t } = useTranslation();
 
   // Get stores
   const shopDetails = useShopStore(selectShopDetails);
@@ -66,7 +68,8 @@ export function BasicHeader() {
     const newLang = langValue === "en" ? "bn" : "en";
     localStorage.setItem("locale", newLang);
     setLangValue(newLang);
-    // TODO: Add i18n.changeLanguage(newLang) when i18n is set up
+    // Change language using i18n
+    i18n.changeLanguage(newLang);
   };
 
   // Handle logo click
@@ -159,7 +162,7 @@ export function BasicHeader() {
               <form onSubmit={handleSearch} className="relative w-full">
                 <input
                   type="text"
-                  placeholder="Search products..."
+                  placeholder={t("search_items")}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className={cn(

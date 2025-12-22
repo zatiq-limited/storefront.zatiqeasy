@@ -1,48 +1,88 @@
 "use client";
 
-import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { cn } from "@/lib/utils";
 
-export function DeliveryZoneSection() {
-  const [selectedDeliveryZone, setSelectedDeliveryZone] = useState("Inside City");
+type DeliveryZoneSectionProps = {
+  country_code: string;
+  delivery_option: string;
+  specificDeliveryCharges: Record<string, number> | null;
+  selectedSpecificDeliveryZone: string;
+  setSelectedSpecificDeliveryZone: (zone: string) => void;
+  isDisabled?: boolean;
+};
 
-  const deliveryZones = [
-    { name: "Inside City", charge: 50 },
-    { name: "Suburb", charge: 80 },
-    { name: "Outside City", charge: 120 },
-    { name: "Others", charge: 150 },
-  ];
+export const DeliveryZoneSection = ({
+  country_code,
+  delivery_option,
+  specificDeliveryCharges,
+  selectedSpecificDeliveryZone,
+  setSelectedSpecificDeliveryZone,
+  isDisabled = false,
+}: DeliveryZoneSectionProps) => {
+  const { t } = useTranslation();
+
+  if (
+    (country_code === "BD" && delivery_option !== "zones") ||
+    !specificDeliveryCharges
+  ) {
+    return null;
+  }
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg p-6 mb-6 shadow-sm">
-      <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">
-        Delivery Zone
-      </h2>
-
-      <div className="space-y-2">
-        {deliveryZones.map((zone) => (
-          <label
-            key={zone.name}
-            className="flex items-center p-3 border border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700"
-          >
-            <input
-              type="radio"
-              name="deliveryZone"
-              value={zone.name}
-              checked={selectedDeliveryZone === zone.name}
-              onChange={(e) => setSelectedDeliveryZone(e.target.value)}
-              className="mr-3 text-blue-zatiq focus:ring-blue-zatiq"
-            />
-            <div className="flex-1">
-              <span className="font-medium text-gray-900 dark:text-gray-100">
-                {zone.name}
-              </span>
-            </div>
-            <span className="text-gray-900 dark:text-gray-100 font-medium">
-              ৳{zone.charge}
-            </span>
-          </label>
+    <div
+      className={`space-y-3 mb-6 md:mb-8 ${
+        isDisabled ? "opacity-50 pointer-events-none" : ""
+      }`}
+    >
+      <h4 className="text-base font-medium text-gray-700 dark:text-gray-300">
+        {t("delivery_zone")}
+      </h4>
+      <div className="flex flex-wrap gap-3">
+        {Object.keys(specificDeliveryCharges).map((zone) => (
+          <DeliveryOption
+            key={zone}
+            label={zone}
+            isSelected={selectedSpecificDeliveryZone === zone}
+            isDisabled={isDisabled}
+            onClick={() => {
+              if (isDisabled) return;
+              selectedSpecificDeliveryZone === zone
+                ? setSelectedSpecificDeliveryZone("Others")
+                : setSelectedSpecificDeliveryZone(zone);
+            }}
+          />
         ))}
       </div>
     </div>
   );
-}
+};
+
+const DeliveryOption = ({
+  label,
+  onClick,
+  isSelected,
+  isDisabled,
+}: {
+  label: string;
+  onClick: () => void;
+  isSelected: boolean;
+  isDisabled?: boolean;
+}) => {
+  return (
+    <button
+      onClick={onClick}
+      type="button"
+      disabled={isDisabled}
+      className={cn(
+        "px-[16px] py-[8px] text-sm tracking-[-0.12px] flex items-center gap-4 ring-2  rounded-full ring-gray-200 dark:ring-gray-600 text-black-full dark:text-gray-300 cursor-pointer disabled:cursor-not-allowed",
+        {
+          "text-blue-zatiq ring-blue-zatiq dark:ring-blue-zatiq bg-blue-zatiq/10":
+            isSelected,
+        }
+      )}
+    >
+      {label}
+    </button>
+  );
+};

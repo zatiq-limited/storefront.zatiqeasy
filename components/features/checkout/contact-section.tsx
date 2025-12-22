@@ -1,17 +1,21 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { UseFormRegister, FieldErrors, UseFormWatch } from "react-hook-form";
 import { CountryCode } from "libphonenumber-js";
+import { useState, useEffect } from "react";
 import { CountryDropdown, Country } from "@/components/ui/country-dropdown";
 import {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import { validatePhoneNumber } from "@/lib/payments/utils";
-import { sendOTP, verifyOTP, resendOTP } from "@/lib/api/otp";
-import { saveVerifiedPhone, isPhoneVerified } from "@/lib/utils/storage.util";
+import { apiClient } from "@/lib/configs/api-client";
+import { encryptData, decryptData } from "@/lib/encrypt-decrypt";
+import {
+  saveVerifiedPhone,
+  isPhoneVerified as checkPhoneVerified,
+} from "@/lib/utils/storage.util";
 
 type ContactSectionProps = {
   register: UseFormRegister<any>;
@@ -25,13 +29,12 @@ type ContactSectionProps = {
   needPhoneVerification?: boolean;
   onCountryCodeChange?: (countryCode: string) => void;
   onPhoneVerificationChange?: (isVerified: boolean) => void;
-  shopId?: string;
+  shopId?: number;
   fullPhoneNumber?: string;
-  onPhoneNumberChange?: (phone: string) => void;
   profile?: any;
 };
 
-export function ContactSection({
+export const ContactSection = ({
   register,
   errors,
   watch,
@@ -41,10 +44,11 @@ export function ContactSection({
   onCountryCodeChange,
   onPhoneVerificationChange,
   shopId,
-  fullPhoneNumber = "",
-  onPhoneNumberChange,
+  fullPhoneNumber,
   profile,
-}: ContactSectionProps) {
+}: ContactSectionProps) => {
+  const { t } = useTranslation();
+
   // Check if email field should be shown
   const showEmailField =
     profile?.metadata?.settings?.shop_settings?.show_email_for_place_order !==
@@ -65,19 +69,7 @@ export function ContactSection({
   const [isPhoneVerified, setIsPhoneVerified] = useState(false);
 
   // Country selection state - default to Bangladesh
-  const [selectedCountry, setSelectedCountry] = useState<Country | null>(() => {
-    const defaultCountry: Country = {
-      alpha2: "BD",
-      alpha3: "BGD",
-      countryCallingCodes: ["+880"],
-      currencies: ["BDT"],
-      name: "Bangladesh",
-      status: "assigned",
-      ioc: "BAN",
-      languages: ["bn"],
-    };
-    return defaultCountry;
-  });
+  const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
 
   // Sync phoneNumber state with form value
   useEffect(() => {
@@ -88,8 +80,24 @@ export function ContactSection({
 
   // Initialize with Bangladesh as default country
   useEffect(() => {
-    if (selectedCountry && onCountryCodeChange) {
-      onCountryCodeChange(selectedCountry.countryCallingCodes?.[0] || "+880");
+    // Set Bangladesh as default if no country is selected
+    if (!selectedCountry) {
+      const defaultCountry: Country = {
+        alpha2: "BD",
+        alpha3: "BGD",
+        countryCallingCodes: ["+880"],
+        currencies: ["BDT"],
+        name: "Bangladesh",
+        status: "assigned",
+        ioc: "BAN",
+        languages: ["bn"],
+      };
+      setSelectedCountry(defaultCountry);
+
+      // Notify parent component about default country code
+      if (onCountryCodeChange) {
+        onCountryCodeChange("+880");
+      }
     }
   }, [selectedCountry, onCountryCodeChange]);
 
@@ -116,15 +124,11 @@ export function ContactSection({
             normalizedPhone = normalizedPhone.substring(1);
           }
 
-          // Check if phone is already verified
-          const verified = await isPhoneVerified(
-            parseInt(shopId),
-            normalizedPhone
-          );
-          setIsPhoneVerified(verified);
+          const isVerified = await checkPhoneVerified(shopId, normalizedPhone);
+          setIsPhoneVerified(isVerified);
 
           // Reset OTP fields if phone is not verified
-          if (!verified) {
+          if (!isVerified) {
             setShowOtpField(false);
             setIsOtpSent(false);
             setOtpCode("");
@@ -172,22 +176,6 @@ export function ContactSection({
     }
   }, [otpTimer, isOtpSent]);
 
-  // Update parent when phone changes
-  useEffect(() => {
-    if (onPhoneNumberChange) {
-      const countryCallingCode =
-        selectedCountry?.countryCallingCodes?.[0] || "+880";
-      let fullPhone = phoneNumber;
-
-      // Add country code if not present
-      if (phoneNumber && !phoneNumber.startsWith(countryCallingCode)) {
-        fullPhone = countryCallingCode + phoneNumber;
-      }
-
-      onPhoneNumberChange(fullPhone);
-    }
-  }, [phoneNumber, selectedCountry, onPhoneNumberChange]);
-
   // Validate phone number and show OTP field
   const handlePhoneValidation = () => {
     const phoneValidationResult = validPhoneNumber(
@@ -197,6 +185,7 @@ export function ContactSection({
 
     if (phoneValidationResult === true) {
       setIsPhoneValidated(true);
+
       sendOtp();
     } else {
       setOtpError(
@@ -214,7 +203,7 @@ export function ContactSection({
     try {
       // Extract phone number without country code
       const countryCallingCode =
-        selectedCountry?.countryCallingCodes?.[0] || "+880";
+        selectedCountry?.countryCallingCodes?.[0] || "";
       let phoneWithoutCountryCode = fullPhoneNumber || phoneNumber;
 
       if (
@@ -237,15 +226,22 @@ export function ContactSection({
         phone: phoneWithoutCountryCode,
       };
 
-      const response = await sendOTP(payload);
+      const response = await apiClient.post(
+        "/api/v1/live/order-verification/send",
+        {
+          payload: encryptData(payload),
+        }
+      );
 
-      if (response.status) {
+      const decryptedData = decryptData(response.data);
+
+      if (decryptedData.status) {
         setIsOtpSent(true);
         setOtpTimer(60); // 1 minute timer
         setCanResend(false);
         setShowOtpField(true);
       } else {
-        setOtpError(response.message || "Failed to send OTP");
+        setOtpError(decryptedData.message || "Failed to send OTP");
       }
     } catch (error: any) {
       // Handle validation errors
@@ -273,7 +269,7 @@ export function ContactSection({
     try {
       // Extract phone number without country code
       const countryCallingCode =
-        selectedCountry?.countryCallingCodes?.[0] || "+880";
+        selectedCountry?.countryCallingCodes?.[0] || "";
       let phoneWithoutCountryCode = fullPhoneNumber || phoneNumber;
 
       if (
@@ -297,17 +293,24 @@ export function ContactSection({
         otp: otpCode,
       };
 
-      const response = await verifyOTP(payload);
+      const response = await apiClient.post(
+        "/api/v1/live/order-verification/verify",
+        {
+          payload: encryptData(payload),
+        }
+      );
 
-      if (response.status) {
+      const decryptedData = decryptData(response.data);
+
+      if (decryptedData.status) {
         setIsPhoneVerified(true);
         setOtpError("");
 
-        // Save verified phone to storage
+        // Save verified phone to localForage
         if (shopId) {
           try {
             await saveVerifiedPhone(
-              parseInt(shopId),
+              shopId,
               phoneWithoutCountryCode,
               countryCallingCode,
               30 // Verification valid for 30 days
@@ -321,7 +324,7 @@ export function ContactSection({
           }
         }
       } else {
-        setOtpError(response.message || "Invalid OTP code");
+        setOtpError(decryptedData.message || "Invalid OTP code");
       }
     } catch (error: any) {
       // Handle validation errors
@@ -341,48 +344,10 @@ export function ContactSection({
   };
 
   // Resend OTP function
-  const resendOtp = async () => {
+  const resendOtp = () => {
     setOtpCode("");
     setCanResend(false);
-
-    try {
-      // Extract phone number without country code
-      const countryCallingCode =
-        selectedCountry?.countryCallingCodes?.[0] || "+880";
-      let phoneWithoutCountryCode = fullPhoneNumber || phoneNumber;
-
-      if (
-        countryCallingCode &&
-        phoneWithoutCountryCode.startsWith(countryCallingCode)
-      ) {
-        phoneWithoutCountryCode = phoneWithoutCountryCode.replace(
-          countryCallingCode,
-          ""
-        );
-      }
-
-      // Remove leading zero if present
-      if (phoneWithoutCountryCode.startsWith("0")) {
-        phoneWithoutCountryCode = phoneWithoutCountryCode.substring(1);
-      }
-
-      const payload = {
-        shop_id: shopId,
-        phone: phoneWithoutCountryCode,
-      };
-
-      const response = await resendOTP(payload);
-
-      if (response.status) {
-        setIsOtpSent(true);
-        setOtpTimer(60);
-        setCanResend(false);
-      } else {
-        setOtpError(response.message || "Failed to resend OTP");
-      }
-    } catch (error) {
-      setOtpError("Failed to resend OTP. Please try again.");
-    }
+    sendOtp();
   };
 
   // Handle phone number input change
@@ -419,24 +384,6 @@ export function ContactSection({
       setOtpError("");
       setOtpCode("");
     }
-  };
-
-  // Translation function (simplified)
-  const t = (key: string) => {
-    const translations: Record<string, string> = {
-      phone_number: "Phone Number",
-      verify: "Verify",
-      verified: "Verified",
-      otp_sent_message: "OTP has been sent to your phone number",
-      submit: "Submit",
-      didnt_receive_code: "Didn't receive the code?",
-      resend_in: "Resend in",
-      resend: "Resend",
-      sending: "Sending",
-      email_addressoptional: "Email Address (Optional)",
-      invalid_email_address: "Invalid email address",
-    };
-    return translations[key] || key;
   };
 
   return (
@@ -494,7 +441,7 @@ export function ContactSection({
                         type="button"
                         onClick={handlePhoneValidation}
                         disabled={!phoneNumber || isSendingOtp}
-                        className="px-4 py-3 bg-blue-zatiq dark:bg-white text-white dark:text-black rounded-lg text-sm font-medium disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors duration-200 min-w-[80px] cursor-pointer"
+                        className="px-4 py-3 bg-blue-zatiq dark:bg-white text-white dark:text-black rounded-lg text-sm font-medium disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors duration-200 min-w-20 cursor-pointer"
                       >
                         {isSendingOtp ? "..." : t("verify")}
                       </button>
@@ -549,19 +496,12 @@ export function ContactSection({
                     value={otpCode}
                     onChange={(value) => setOtpCode(value)}
                     className="flex-1 grow text-black dark:text-white"
-                  >
-                    <InputOTPGroup>
-                      <InputOTPSlot index={0} />
-                      <InputOTPSlot index={1} />
-                      <InputOTPSlot index={2} />
-                      <InputOTPSlot index={3} />
-                    </InputOTPGroup>
-                  </InputOTP>
+                  />
                   <button
                     type="button"
                     onClick={verifyOtp}
                     disabled={otpCode.length !== 4 || isVerifyingOtp}
-                    className="w-full sm:w-auto px-6 py-3 rounded-lg text-sm font-medium bg-green-600 text-white disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors duration-200 min-w-[100px] cursor-pointer"
+                    className="w-full sm:w-auto px-6 py-3 rounded-lg text-sm font-medium bg-green-600 text-white disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors duration-200 min-w-25 cursor-pointer"
                   >
                     {isVerifyingOtp ? "..." : t("submit")}
                   </button>
@@ -603,7 +543,7 @@ export function ContactSection({
                 htmlFor="email"
                 className="block text-base font-medium text-gray-700 dark:text-gray-300"
               >
-                {t("email_addressoptional")}
+                {t("email_address(optional)")}
               </label>
               <input
                 id="email"
@@ -626,4 +566,4 @@ export function ContactSection({
       </div>
     </div>
   );
-}
+};
