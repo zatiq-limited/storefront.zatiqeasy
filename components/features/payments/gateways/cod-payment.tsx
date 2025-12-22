@@ -7,28 +7,38 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Truck, CheckCircle, MapPin, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { PaymentType } from "@/lib/payments/types";
+import { createOrder } from "@/lib/payments/api";
+import { parsePaymentError } from "@/lib/payments/utils";
 
 interface CodPaymentProps {
-  amount: number;
-  customerInfo?: {
-    name: string;
-    phone: string;
-    address?: string;
-  };
-  onConfirmOrder?: () => void;
+  orderPayload: any; // Full order payload matching old project structure
+  onOrderSuccess?: (receiptUrl: string) => void;
+  onPaymentError?: (error: Error) => void;
+  onPaymentRedirect?: (paymentUrl: string) => void;
   className?: string;
 }
 
 export function CodPayment({
-  amount,
-  customerInfo,
-  onConfirmOrder,
+  orderPayload,
+  onOrderSuccess,
+  onPaymentError,
+  onPaymentRedirect,
   className,
 }: CodPaymentProps) {
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [isConfirming, setIsConfirming] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState("");
+
+  const amount = orderPayload?.pay_now_amount || 0;
+  const customerInfo = orderPayload
+    ? {
+        name: orderPayload.customer_name,
+        phone: orderPayload.customer_phone,
+        address: orderPayload.customer_address,
+      }
+    : undefined;
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("en-BD", {
@@ -49,14 +59,28 @@ export function CodPayment({
     setError("");
 
     try {
-      // Simulate order confirmation
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Create order with COD payment (matching old project pattern)
+      const orderResponse = await createOrder({
+        ...orderPayload,
+        payment_type: PaymentType.COD,
+      });
 
-      setIsSuccess(true);
-      onConfirmOrder?.();
-    } catch (err) {
-      const error = err as Error;
-      setError(error.message);
+      if (orderResponse.success && orderResponse.data?.receipt_url) {
+        setIsSuccess(true);
+        const redirectUrl = `${window.location.origin}/payment-confirm?status=success&receipt_url=${orderResponse.data.receipt_url}`;
+
+        if (onPaymentRedirect) {
+          onPaymentRedirect(redirectUrl);
+        } else if (onOrderSuccess) {
+          onOrderSuccess(orderResponse.data.receipt_url);
+        }
+      } else {
+        throw new Error(orderResponse.error || "Failed to create order");
+      }
+    } catch (err: any) {
+      const errorMessage = parsePaymentError(err);
+      setError(errorMessage);
+      onPaymentError?.(new Error(errorMessage));
     } finally {
       setIsConfirming(false);
     }
@@ -73,7 +97,8 @@ export function CodPayment({
                 Order Confirmed!
               </h3>
               <p className="text-muted-foreground">
-                Your order has been placed successfully. You will pay {formatPrice(amount)} when you receive your order.
+                Your order has been placed successfully. You will pay{" "}
+                {formatPrice(amount)} when you receive your order.
               </p>
             </div>
           </div>
@@ -110,15 +135,20 @@ export function CodPayment({
                 <MapPin className="h-4 w-4 text-muted-foreground mt-0.5" />
                 <div className="text-sm">
                   <div className="font-medium">{customerInfo.name}</div>
-                  <div className="text-muted-foreground">{customerInfo.phone}</div>
-                  <div className="text-muted-foreground">{customerInfo.address}</div>
+                  <div className="text-muted-foreground">
+                    {customerInfo.phone}
+                  </div>
+                  <div className="text-muted-foreground">
+                    {customerInfo.address}
+                  </div>
                 </div>
               </div>
             </div>
           ) : (
             <Alert>
               <AlertDescription>
-                Please ensure your delivery information is correct before confirming the order.
+                Please ensure your delivery information is correct before
+                confirming the order.
               </AlertDescription>
             </Alert>
           )}
@@ -138,7 +168,9 @@ export function CodPayment({
               <Truck className="h-4 w-4 text-muted-foreground" />
               <div className="text-sm">
                 <div className="font-medium">Delivery Charge</div>
-                <div className="text-muted-foreground">Calculated at checkout</div>
+                <div className="text-muted-foreground">
+                  Calculated at checkout
+                </div>
               </div>
             </div>
           </div>
@@ -150,7 +182,9 @@ export function CodPayment({
             <li>• Pay the full amount when you receive your order</li>
             <li>• Please keep the exact amount ready for smooth delivery</li>
             <li>• Check your order items before making payment</li>
-            <li>• Our delivery partner will provide you with an official receipt</li>
+            <li>
+              • Our delivery partner will provide you with an official receipt
+            </li>
             <li>• No advance payment required</li>
           </ul>
         </div>
@@ -169,7 +203,8 @@ export function CodPayment({
               I agree to the Cash on Delivery terms
             </label>
             <p className="text-xs text-muted-foreground">
-              I confirm that I will pay the full order amount upon delivery and have read the terms and conditions.
+              I confirm that I will pay the full order amount upon delivery and
+              have read the terms and conditions.
             </p>
           </div>
         </div>

@@ -27,15 +27,16 @@ export enum OrderStatus {
 
 // Order/Receipt Types
 export interface OrderItem {
-  product_id: string;
-  product_handle: string;
-  product_name: string;
-  variant_id?: string;
-  variant_name?: string;
-  quantity: number;
-  unit_price: number;
-  total_price: number;
-  product_image?: string;
+  name: string;
+  price: number;
+  image_url?: string;
+  inventory_id: string | number;
+  qty: number;
+  warranty?: string;
+  variants?: {
+    variant_type_id?: string | number;
+    variant_id?: string | number;
+  }[];
 }
 
 export interface DeliveryAddress {
@@ -52,16 +53,25 @@ export interface CreateOrderPayload {
   customer_name: string;
   customer_phone: string;
   customer_address: string;
+  email?: string;
   delivery_charge: number;
+  delivery_zone?: string;
   tax_amount: number;
+  tax_percentage?: number;
   total_amount: number;
-  payment_type: PaymentType;
+  discount_amount?: number;
   pay_now_amount: number;
   advance_payment_amount?: number;
+  payment_type: PaymentType | string;
+  redirect_root_url?: string;
   receipt_items: OrderItem[];
-  type: "Online" | "Offline";
-  status: OrderStatus;
+  type?: "Online" | "Offline";
+  status?: OrderStatus | string;
   note?: string;
+  // For Self MFS
+  mfs_payment_phone?: string;
+  mfs_transaction_id?: string;
+  mfs_provider?: string;
 }
 
 export interface OrderResponse {

@@ -7,18 +7,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CreditCard, CheckCircle, Loader2, ExternalLink } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { PaymentType } from "@/lib/payments/types";
-import { processPayment } from "@/lib/payments/api";
+import { createOrder } from "@/lib/payments/api";
 import { formatPrice, parsePaymentError } from "@/lib/payments/utils";
 
 interface AamarpayPaymentProps {
-  amount: number;
-  receiptId: string;
-  customerInfo?: {
-    name: string;
-    email?: string;
-    phone: string;
-    address?: string;
-  };
+  orderPayload: any; // Full order payload matching old project structure
   onPaymentSuccess?: (transactionId: string) => void;
   onPaymentError?: (error: Error) => void;
   onPaymentRedirect?: (paymentUrl: string) => void;
@@ -26,9 +19,7 @@ interface AamarpayPaymentProps {
 }
 
 export function AamarpayPayment({
-  amount,
-  receiptId,
-  customerInfo,
+  orderPayload,
   onPaymentSuccess,
   onPaymentError,
   onPaymentRedirect,
@@ -39,33 +30,42 @@ export function AamarpayPayment({
   const [error, setError] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
 
+  const amount = orderPayload?.pay_now_amount || 0;
+
   const handlePayment = async () => {
     setIsProcessing(true);
     setError("");
 
     try {
-      // Process payment through API
-      const paymentResponse = await processPayment({
-        receipt_id: receiptId,
-        pay_now_amount: amount,
-        redirect_root_url: window.location.origin + '/payment-confirm',
+      // Create order with AamarPay payment (matching old project pattern)
+      const orderResponse = await createOrder({
+        ...orderPayload,
+        payment_type: PaymentType.AAMARPAY,
       });
 
-      if (paymentResponse.success && paymentResponse.data?.payment_url) {
+      if (orderResponse.success && orderResponse.data?.payment_url) {
         // Show redirecting state
         setIsRedirecting(true);
 
         // Delay for UX to show redirecting animation
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        await new Promise((resolve) => setTimeout(resolve, 2000));
 
         // Redirect to AamarPay payment page
         if (onPaymentRedirect) {
-          onPaymentRedirect(paymentResponse.data.payment_url);
+          onPaymentRedirect(orderResponse.data.payment_url);
         } else {
-          window.location.href = paymentResponse.data.payment_url;
+          window.location.replace(orderResponse.data.payment_url);
+        }
+      } else if (orderResponse.success && orderResponse.data?.receipt_url) {
+        // For non-gateway payments or successful orders without payment URL
+        const redirectUrl = `${window.location.origin}/payment-confirm?status=success&receipt_url=${orderResponse.data.receipt_url}`;
+        if (onPaymentRedirect) {
+          onPaymentRedirect(redirectUrl);
+        } else {
+          window.location.replace(redirectUrl);
         }
       } else {
-        throw new Error(paymentResponse.error || 'Failed to initiate payment');
+        throw new Error(orderResponse.error || "Failed to create order");
       }
     } catch (err: any) {
       const errorMessage = parsePaymentError(err);
@@ -87,7 +87,8 @@ export function AamarpayPayment({
                 Payment Successful!
               </h3>
               <p className="text-muted-foreground">
-                Your payment of {formatPrice(amount)} has been processed successfully.
+                Your payment of {formatPrice(amount)} has been processed
+                successfully.
               </p>
             </div>
           </div>
@@ -133,42 +134,8 @@ export function AamarpayPayment({
           <div className="text-2xl font-bold text-blue-900">
             {formatPrice(amount)}
           </div>
-          <p className="text-sm text-blue-700 mt-1">
-            Merchant: Zatiq Store
-          </p>
+          <p className="text-sm text-blue-700 mt-1">Merchant: Zatiq Store</p>
         </div>
-
-        {customerInfo && (
-          <div className="space-y-3 p-4 bg-muted/50 rounded-lg">
-            <h5 className="font-medium text-sm">Billing Information</h5>
-            <div className="grid gap-2 text-sm">
-              {customerInfo.name && (
-                <div>
-                  <span className="text-muted-foreground">Name: </span>
-                  <span>{customerInfo.name}</span>
-                </div>
-              )}
-              {customerInfo.phone && (
-                <div>
-                  <span className="text-muted-foreground">Phone: </span>
-                  <span>{customerInfo.phone}</span>
-                </div>
-              )}
-              {customerInfo.email && (
-                <div>
-                  <span className="text-muted-foreground">Email: </span>
-                  <span>{customerInfo.email}</span>
-                </div>
-              )}
-              {customerInfo.address && (
-                <div>
-                  <span className="text-muted-foreground">Address: </span>
-                  <span>{customerInfo.address}</span>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
 
         <div className="space-y-3">
           <h5 className="font-medium text-sm">Accepted Payment Methods</h5>

@@ -6,18 +6,36 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Smartphone, CheckCircle, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { PaymentType } from "@/lib/payments/types";
+import { createOrder } from "@/lib/payments/api";
+import { parsePaymentError, formatPrice } from "@/lib/payments/utils";
 
 interface SelfMfsPaymentProps {
-  amount: number;
+  orderPayload: any; // Full order payload matching old project structure
+  shopMfsDetails?: {
+    bkash_number?: string;
+    bkash_qr?: string;
+    nagad_number?: string;
+    nagad_qr?: string;
+  };
   onPaymentSuccess?: (transactionId: string) => void;
   onPaymentError?: (error: Error) => void;
+  onPaymentRedirect?: (paymentUrl: string) => void;
   className?: string;
 }
 
 const mfsProviders = [
+  { value: "bkash", label: "bKash", color: "purple" },
+  { value: "nagad", label: "Nagad", color: "orange" },
   { value: "rocket", label: "Rocket (Dutch-Bangla)", color: "red" },
   { value: "upay", label: "UPay", color: "blue" },
   { value: "tap", label: "TAP", color: "green" },
@@ -26,27 +44,21 @@ const mfsProviders = [
 ];
 
 export function SelfMfsPayment({
-  amount,
+  orderPayload,
+  shopMfsDetails,
   onPaymentSuccess,
   onPaymentError,
+  onPaymentRedirect,
   className,
 }: SelfMfsPaymentProps) {
   const [selectedProvider, setSelectedProvider] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [transactionId, setTransactionId] = useState("");
-  const [isManualVerification, setIsManualVerification] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState("");
 
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("en-BD", {
-      style: "currency",
-      currency: "BDT",
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(price);
-  };
+  const amount = orderPayload?.pay_now_amount || 0;
 
   const handlePayment = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,7 +73,7 @@ export function SelfMfsPayment({
       return;
     }
 
-    if (isManualVerification && !transactionId) {
+    if (!transactionId) {
       setError("Please enter the transaction ID");
       return;
     }
@@ -70,23 +82,39 @@ export function SelfMfsPayment({
     setError("");
 
     try {
-      // Simulate payment processing
-      await new Promise(resolve => setTimeout(resolve, 3000));
+      // Create order with Self MFS payment (matching old project pattern)
+      const orderResponse = await createOrder({
+        ...orderPayload,
+        payment_type: PaymentType.SELF_MFS,
+        mfs_payment_phone: phoneNumber,
+        mfs_transaction_id: transactionId,
+        mfs_provider: selectedProvider,
+      });
 
-      // Mock successful payment
-      const mockTransactionId = transactionId || "MFS" + Date.now();
-      setIsSuccess(true);
-      onPaymentSuccess?.(mockTransactionId);
-    } catch (err) {
-      const error = err as Error;
-      setError(error.message);
-      onPaymentError?.(error);
+      if (orderResponse.success && orderResponse.data?.receipt_url) {
+        setIsSuccess(true);
+        const redirectUrl = `${window.location.origin}/payment-confirm?status=success&receipt_url=${orderResponse.data.receipt_url}`;
+
+        if (onPaymentRedirect) {
+          onPaymentRedirect(redirectUrl);
+        } else if (onPaymentSuccess) {
+          onPaymentSuccess(transactionId);
+        }
+      } else {
+        throw new Error(orderResponse.error || "Failed to create order");
+      }
+    } catch (err: any) {
+      const errorMessage = parsePaymentError(err);
+      setError(errorMessage);
+      onPaymentError?.(new Error(errorMessage));
     } finally {
       setIsProcessing(false);
     }
   };
 
-  const selectedProviderInfo = mfsProviders.find(p => p.value === selectedProvider);
+  const selectedProviderInfo = mfsProviders.find(
+    (p) => p.value === selectedProvider
+  );
 
   if (isSuccess) {
     return (
@@ -99,7 +127,8 @@ export function SelfMfsPayment({
                 Payment Successful!
               </h3>
               <p className="text-muted-foreground">
-                Your payment of {formatPrice(amount)} has been processed successfully.
+                Your payment of {formatPrice(amount)} has been processed
+                successfully.
               </p>
             </div>
           </div>
@@ -119,7 +148,9 @@ export function SelfMfsPayment({
       <CardContent>
         <form onSubmit={handlePayment} className="space-y-4">
           <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-4">
-            <h4 className="font-medium text-indigo-900 mb-2">Payment Details</h4>
+            <h4 className="font-medium text-indigo-900 mb-2">
+              Payment Details
+            </h4>
             <div className="text-2xl font-bold text-indigo-900">
               {formatPrice(amount)}
             </div>
@@ -130,7 +161,12 @@ export function SelfMfsPayment({
 
           <div className="space-y-2">
             <Label htmlFor="mfs-provider">Select Provider</Label>
-            <Select value={selectedProvider} onValueChange={(value: string | null) => value && setSelectedProvider(value)}>
+            <Select
+              value={selectedProvider}
+              onValueChange={(value: string | null) =>
+                value && setSelectedProvider(value)
+              }
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Choose your mobile banking service" />
               </SelectTrigger>
@@ -146,7 +182,7 @@ export function SelfMfsPayment({
 
           {selectedProviderInfo && (
             <div className="space-y-2">
-              <Label htmlFor="mfs-number">Account Number</Label>
+              <Label htmlFor="mfs-number">Your Account Number</Label>
               <Input
                 id="mfs-number"
                 type="tel"
@@ -163,6 +199,45 @@ export function SelfMfsPayment({
               <p className="text-xs text-muted-foreground">
                 Enter your {selectedProviderInfo.label} mobile number
               </p>
+
+              {/* Show shop's MFS details if available */}
+              {shopMfsDetails && (
+                <div className="mt-3 p-3 bg-muted/50 rounded-lg">
+                  <p className="text-sm font-medium mb-1">Send payment to:</p>
+                  {selectedProvider === "bkash" &&
+                    shopMfsDetails.bkash_number && (
+                      <div className="text-sm">
+                        <span className="font-medium">bKash Number:</span>{" "}
+                        {shopMfsDetails.bkash_number}
+                      </div>
+                    )}
+                  {selectedProvider === "nagad" &&
+                    shopMfsDetails.nagad_number && (
+                      <div className="text-sm">
+                        <span className="font-medium">Nagad Number:</span>{" "}
+                        {shopMfsDetails.nagad_number}
+                      </div>
+                    )}
+                  {shopMfsDetails.bkash_qr && selectedProvider === "bkash" && (
+                    <div className="mt-2">
+                      <img
+                        src={shopMfsDetails.bkash_qr}
+                        alt="bKash QR"
+                        className="w-32 h-32"
+                      />
+                    </div>
+                  )}
+                  {shopMfsDetails.nagad_qr && selectedProvider === "nagad" && (
+                    <div className="mt-2">
+                      <img
+                        src={shopMfsDetails.nagad_qr}
+                        alt="Nagad QR"
+                        className="w-32 h-32"
+                      />
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           )}
 
@@ -172,41 +247,26 @@ export function SelfMfsPayment({
               <ol className="text-xs space-y-1 list-decimal list-inside">
                 <li>Go to your {selectedProviderInfo?.label} mobile menu</li>
                 <li>Select "Send Money" or "Payment" option</li>
-                <li>Enter merchant number: 01XXXXXXXXX</li>
+                <li>Enter the merchant number shown above</li>
                 <li>Enter amount: {formatPrice(amount)}</li>
                 <li>Enter your PIN to confirm</li>
                 <li>Save the transaction ID for verification</li>
               </ol>
             </div>
-
-            <div className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                id="manual-verify"
-                checked={isManualVerification}
-                onChange={(e) => setIsManualVerification(e.target.checked)}
-                className="rounded"
-              />
-              <Label htmlFor="manual-verify" className="text-sm">
-                I have already sent the money
-              </Label>
-            </div>
           </div>
 
-          {isManualVerification && (
-            <div className="space-y-2">
-              <Label htmlFor="transaction-id">Transaction ID</Label>
-              <Input
-                id="transaction-id"
-                placeholder="Enter transaction ID"
-                value={transactionId}
-                onChange={(e) => setTransactionId(e.target.value)}
-              />
-              <p className="text-xs text-muted-foreground">
-                Enter the transaction ID from your mobile banking app
-              </p>
-            </div>
-          )}
+          <div className="space-y-2">
+            <Label htmlFor="transaction-id">Transaction ID *</Label>
+            <Input
+              id="transaction-id"
+              placeholder="Enter transaction ID"
+              value={transactionId}
+              onChange={(e) => setTransactionId(e.target.value)}
+            />
+            <p className="text-xs text-muted-foreground">
+              Enter the transaction ID from your mobile banking app
+            </p>
+          </div>
 
           {error && (
             <Alert variant="destructive">
@@ -227,7 +287,9 @@ export function SelfMfsPayment({
             <p>• Make sure to send the exact amount</p>
             <p>• Double-check the merchant number before sending</p>
             <p>• Keep your transaction receipt for verification</p>
-            <p>• For support, contact your respective mobile banking provider</p>
+            <p>
+              • For support, contact your respective mobile banking provider
+            </p>
           </div>
         </form>
       </CardContent>

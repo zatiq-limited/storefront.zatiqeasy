@@ -7,12 +7,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Smartphone, CheckCircle, Loader2, ExternalLink } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { PaymentType } from "@/lib/payments/types";
-import { processPayment } from "@/lib/payments/api";
+import { createOrder } from "@/lib/payments/api";
 import { formatPrice, parsePaymentError } from "@/lib/payments/utils";
 
 interface NagadPaymentProps {
-  amount: number;
-  receiptId: string;
+  orderPayload: any; // Full order payload matching old project structure
   onPaymentSuccess?: (transactionId: string) => void;
   onPaymentError?: (error: Error) => void;
   onPaymentRedirect?: (paymentUrl: string) => void;
@@ -20,8 +19,7 @@ interface NagadPaymentProps {
 }
 
 export function NagadPayment({
-  amount,
-  receiptId,
+  orderPayload,
   onPaymentSuccess,
   onPaymentError,
   onPaymentRedirect,
@@ -31,27 +29,36 @@ export function NagadPayment({
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState("");
 
+  const amount = orderPayload?.pay_now_amount || 0;
+
   const handlePayment = async () => {
     setIsProcessing(true);
     setError("");
 
     try {
-      // Process payment through API
-      const paymentResponse = await processPayment({
-        receipt_id: receiptId,
-        pay_now_amount: amount,
-        redirect_root_url: window.location.origin + '/payment-confirm',
+      // Create order with Nagad payment (matching old project pattern)
+      const orderResponse = await createOrder({
+        ...orderPayload,
+        payment_type: PaymentType.NAGAD,
       });
 
-      if (paymentResponse.success && paymentResponse.data?.payment_url) {
+      if (orderResponse.success && orderResponse.data?.payment_url) {
         // Redirect to Nagad payment page
         if (onPaymentRedirect) {
-          onPaymentRedirect(paymentResponse.data.payment_url);
+          onPaymentRedirect(orderResponse.data.payment_url);
         } else {
-          window.location.href = paymentResponse.data.payment_url;
+          window.location.replace(orderResponse.data.payment_url);
+        }
+      } else if (orderResponse.success && orderResponse.data?.receipt_url) {
+        // For non-gateway payments or successful orders without payment URL
+        const redirectUrl = `${window.location.origin}/payment-confirm?status=success&receipt_url=${orderResponse.data.receipt_url}`;
+        if (onPaymentRedirect) {
+          onPaymentRedirect(redirectUrl);
+        } else {
+          window.location.replace(redirectUrl);
         }
       } else {
-        throw new Error(paymentResponse.error || 'Failed to initiate payment');
+        throw new Error(orderResponse.error || "Failed to create order");
       }
     } catch (err: any) {
       const errorMessage = parsePaymentError(err);
@@ -73,7 +80,8 @@ export function NagadPayment({
                 Payment Successful!
               </h3>
               <p className="text-muted-foreground">
-                Your payment of {formatPrice(amount)} has been processed successfully.
+                Your payment of {formatPrice(amount)} has been processed
+                successfully.
               </p>
             </div>
           </div>
@@ -96,9 +104,7 @@ export function NagadPayment({
           <div className="text-2xl font-bold text-orange-900">
             {formatPrice(amount)}
           </div>
-          <p className="text-sm text-orange-700 mt-1">
-            Merchant: Zatiq Store
-          </p>
+          <p className="text-sm text-orange-700 mt-1">Merchant: Zatiq Store</p>
         </div>
 
         <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
@@ -124,7 +130,9 @@ export function NagadPayment({
           disabled={isProcessing}
         >
           {isProcessing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          {isProcessing ? "Processing..." : (
+          {isProcessing ? (
+            "Processing..."
+          ) : (
             <>
               <ExternalLink className="mr-2 h-4 w-4" />
               Pay with Nagad
