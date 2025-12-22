@@ -1,7 +1,7 @@
 {
   "success": true,
   "data": {
-    "template": "privacy",
+    "template": "privacy-policy",
     "sections": [
       {
         "id": "privacy_hero_1_0",
@@ -12,139 +12,182 @@
         },
         "blocks": [
           {
-            "wrapper": "section#privacy-hero-1-1765959527247",
-            "type": "privacy_hero_overlay",
+            "wrapper": "section",
             "class": "relative w-full overflow-hidden",
-            "style": {
-              "background_color": "#FFFFFF"
-            },
-            "data": {
-              "headline": "Privacy Policy",
-              "subheadline": "Your Privacy Matters",
-              "description": "We are committed to protecting your personal information and your right to privacy.",
-              "image": "https://images.unsplash.com/photo-1633265486064-086b219458ec?w=1200&h=400&fit=crop",
-              "last_updated": "December 21, 2024",
-              "show_breadcrumb": true
-            },
+            "bind_style": { "backgroundColor": "#F9FAFB" },
             "blocks": [
               {
                 "wrapper": "div",
-                "class": "relative w-full h-[20vh] sm:h-[35vh]",
+                "class": "relative w-full h-[280px] md:h-80 lg:h-[360px]",
                 "blocks": [
                   {
                     "wrapper": "img",
-                    "class": "absolute inset-0 w-full h-full object-cover",
                     "src": "https://images.unsplash.com/photo-1633265486064-086b219458ec?w=1200&h=400&fit=crop",
-                    "alt": "Privacy Policy"
+                    "alt": "Privacy Policy",
+                    "class": "absolute inset-0 w-full h-full object-cover"
                   },
                   {
                     "wrapper": "div",
-                    "class": "absolute inset-0",
-                    "style": {
-                      "background": "linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.5) 100%)"
-                    }
+                    "class": "absolute inset-0 bg-linear-to-r from-black/70 to-black/50"
                   },
                   {
                     "wrapper": "div",
-                    "class": "relative z-10 h-full flex items-center justify-center",
+                    "class": "relative z-10 h-full flex items-center",
                     "blocks": [
                       {
-                        "wrapper": "nav",
-                        "class": "absolute top-4 md:top-6 left-0 right-0 z-10 container mx-auto px-4 2xl:px-0",
+                        "wrapper": "div",
+                        "class": "max-w-[1440px] w-full mx-auto px-4 2xl:px-0",
                         "blocks": [
                           {
-                            "wrapper": "ol",
-                            "class": "flex items-center gap-1 text-sm text-white/80",
+                            "wrapper": "p",
+                            "class": "text-sm md:text-base font-medium text-blue-300 mb-2",
+                            "content": "Your Privacy Matters"
+                          },
+                          {
+                            "wrapper": "h1",
+                            "class": "text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4",
+                            "content": "Privacy Policy"
+                          },
+                          {
+                            "wrapper": "p",
+                            "class": "text-base md:text-lg max-w-2xl text-white/80 mb-4",
+                            "content": "We are committed to protecting your personal information and your right to privacy."
+                          },
+                          {
+                            "wrapper": "p",
+                            "class": "text-sm text-white/60",
+                            "content": "Last updated: December 1, 2025"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "privacy_hero_2_1",
+        "type": "privacy-hero-2",
+        "enabled": true,
+        "settings": {
+          "enabled": true
+        },
+        "blocks": [
+          {
+            "wrapper": "section",
+            "bind_style": { "backgroundColor": "#FFFFFF" },
+            "blocks": [
+              {
+                "wrapper": "div",
+                "class": "max-w-[1440px] mx-auto px-4 2xl:px-0",
+                "blocks": [
+                  {
+                    "wrapper": "div",
+                    "class": "py-6 md:py-8 lg:py-12",
+                    "blocks": [
+                      {
+                        "wrapper": "div",
+                        "class": "max-w-3xl",
+                        "blocks": [
+                          {
+                            "wrapper": "div",
+                            "class": "inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium mb-6",
+                            "bind_style": {
+                              "backgroundColor": "#2563EB10",
+                              "color": "#2563EB"
+                            },
                             "blocks": [
                               {
-                                "wrapper": "li",
+                                "wrapper": "svg",
+                                "class": "w-4 h-4",
+                                "fill": "none",
+                                "stroke": "currentColor",
+                                "viewBox": "0 0 24 24",
                                 "blocks": [
                                   {
-                                    "wrapper": "a",
-                                    "href": "/",
-                                    "class": "uppercase tracking-wider text-xs font-medium hover:text-white transition-colors",
-                                    "content": "Home"
+                                    "wrapper": "path",
+                                    "strokeLinecap": "round",
+                                    "strokeLinejoin": "round",
+                                    "strokeWidth": "2",
+                                    "d": "M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
                                   }
                                 ]
                               },
                               {
-                                "wrapper": "li",
-                                "class": "text-white/60",
+                                "wrapper": "span",
+                                "content": "Your Privacy Matters"
+                              }
+                            ]
+                          },
+                          {
+                            "wrapper": "h1",
+                            "class": "text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6",
+                            "bind_style": { "color": "#111827" },
+                            "content": "Privacy Policy"
+                          },
+                          {
+                            "wrapper": "p",
+                            "class": "text-lg md:text-xl text-gray-600 mb-8 leading-relaxed",
+                            "content": "We are committed to protecting your personal information and your right to privacy."
+                          },
+                          {
+                            "wrapper": "div",
+                            "class": "flex flex-wrap items-center gap-6 text-sm text-gray-500",
+                            "blocks": [
+                              {
+                                "wrapper": "div",
+                                "class": "flex items-center gap-2",
                                 "blocks": [
                                   {
                                     "wrapper": "svg",
-                                    "class": "w-3 h-3",
+                                    "class": "w-4 h-4",
                                     "fill": "none",
                                     "stroke": "currentColor",
                                     "viewBox": "0 0 24 24",
                                     "blocks": [
                                       {
                                         "wrapper": "path",
-                                        "stroke-linecap": "round",
-                                        "stroke-linejoin": "round",
-                                        "stroke-width": "2",
-                                        "d": "M9 5l7 7-7 7"
+                                        "strokeLinecap": "round",
+                                        "strokeLinejoin": "round",
+                                        "strokeWidth": "2",
+                                        "d": "M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                                       }
                                     ]
+                                  },
+                                  {
+                                    "wrapper": "span",
+                                    "content": "Last updated: December 1, 2025"
                                   }
                                 ]
                               },
                               {
-                                "wrapper": "li",
+                                "wrapper": "div",
+                                "class": "flex items-center gap-2",
                                 "blocks": [
                                   {
+                                    "wrapper": "svg",
+                                    "class": "w-4 h-4",
+                                    "fill": "none",
+                                    "stroke": "currentColor",
+                                    "viewBox": "0 0 24 24",
+                                    "blocks": [
+                                      {
+                                        "wrapper": "path",
+                                        "strokeLinecap": "round",
+                                        "strokeLinejoin": "round",
+                                        "strokeWidth": "2",
+                                        "d": "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                                      }
+                                    ]
+                                  },
+                                  {
                                     "wrapper": "span",
-                                    "class": "uppercase tracking-wider text-xs font-medium text-white",
-                                    "content": "Privacy Policy"
+                                    "content": "10 min read"
                                   }
                                 ]
-                              }
-                            ]
-                          }
-                        ]
-                      },
-                      {
-                        "wrapper": "div",
-                        "class": "max-w-[1200px] mx-auto px-4 text-center",
-                        "blocks": [
-                          {
-                            "wrapper": "p",
-                            "class": "text-xs md:text-sm font-medium text-blue-300 tracking-wider uppercase mb-2",
-                            "content": "Your Privacy Matters"
-                          },
-                          {
-                            "wrapper": "h1",
-                            "class": "text-2xl sm:text-3xl md:text-4xl font-semibold text-white mb-4",
-                            "content": "Privacy Policy"
-                          },
-                          {
-                            "wrapper": "p",
-                            "class": "text-sm md:text-base max-w-2xl text-white/80 mb-4",
-                            "content": "We are committed to protecting your personal information and your right to privacy."
-                          },
-                          {
-                            "wrapper": "p",
-                            "class": "text-xs md:text-sm text-white/60",
-                            "content": "Last updated: December 21, 2024"
-                          }
-                        ]
-                      },
-                      {
-                        "wrapper": "div",
-                        "class": "absolute -bottom-px left-0 right-0",
-                        "blocks": [
-                          {
-                            "wrapper": "svg",
-                            "viewBox": "0 0 1440 60",
-                            "fill": "none",
-                            "xmlns": "http://www.w3.org/2000/svg",
-                            "class": "w-full block",
-                            "preserve-aspect-ratio": "none",
-                            "blocks": [
-                              {
-                                "wrapper": "path",
-                                "d": "M0 60 Q720 20 1440 60 V60 H0 Z",
-                                "fill": "white"
                               }
                             ]
                           }
@@ -159,207 +202,1083 @@
         ]
       },
       {
-        "id": "privacy_content_1_1",
+        "id": "privacy_content_1_2",
         "type": "privacy-content-1",
         "enabled": true,
         "settings": {
-          "enabled": true,
-          "background_color": "#FFFFFF",
-          "text_color": "#111827",
-          "accent_color": "#2563EB"
+          "enabled": true
         },
         "blocks": [
           {
             "wrapper": "section",
             "class": "py-12 md:py-16 lg:py-20",
-            "style": {
-              "background-color": "#FFFFFF"
-            },
-            "data": {
-              "content_sections": [
-                {
-                  "title": "Information We Collect",
-                  "content": "<p>We collect information you provide directly to us, such as when you create an account, make a purchase, subscribe to our newsletter, or contact us for support.</p><ul><li><strong>Personal Information:</strong> Name, email address, phone number, shipping and billing addresses</li><li><strong>Payment Information:</strong> Credit card numbers, banking details (processed securely through our payment providers)</li><li><strong>Account Information:</strong> Username, password, purchase history, and preferences</li></ul>"
-                },
-                {
-                  "title": "How We Use Your Information",
-                  "content": "<p>We use the information we collect to:</p><ul><li><strong>Process Transactions:</strong> Complete purchases, process payments, and deliver products to you</li><li><strong>Communicate With You:</strong> Send order confirmations, shipping updates, and respond to inquiries</li><li><strong>Personalize Experience:</strong> Recommend products based on your preferences and shopping history</li></ul>"
-                },
-                {
-                  "title": "Information Sharing and Disclosure",
-                  "content": "<p>We do not sell, trade, or rent your personal information to third parties. We may share your information only with trusted service providers who assist in operating our website.</p>"
-                },
-                {
-                  "title": "Data Security",
-                  "content": "<p>We implement appropriate technical and organizational security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.</p><ul><li><strong>SSL Encryption:</strong> All data transmitted between your browser and our servers is encrypted</li><li><strong>Secure Payment Processing:</strong> We use PCI-compliant payment processors</li></ul>"
-                },
-                {
-                  "title": "Cookies and Tracking",
-                  "content": "<p>We use cookies and similar tracking technologies to enhance your browsing experience. You can control cookie preferences through your browser settings.</p>"
-                },
-                {
-                  "title": "Your Rights and Choices",
-                  "content": "<p>You have the following rights regarding your personal information:</p><ul><li><strong>Access:</strong> Request a copy of the personal data we hold about you</li><li><strong>Correction:</strong> Update or correct inaccurate information</li><li><strong>Deletion:</strong> Request deletion of your personal data</li><li><strong>Opt-Out:</strong> Unsubscribe from marketing communications at any time</li></ul>"
-                },
-                {
-                  "title": "Contact Us",
-                  "content": "<p>If you have any questions about this Privacy Policy, please contact us:</p><p><strong>Email:</strong> privacy@example.com<br/><strong>Phone:</strong> +1 (555) 123-4567</p>"
-                }
-              ]
-            },
+            "bind_style": { "backgroundColor": "#FFFFFF" },
             "blocks": [
               {
                 "wrapper": "div",
-                "class": "max-w-[1200px] mx-auto px-4 2xl:px-0",
+                "class": "max-w-[1440px] mx-auto px-4 2xl:px-0",
                 "blocks": [
                   {
                     "wrapper": "div",
-                    "class": "space-y-12",
+                    "class": "grid lg:grid-cols-[280px_1fr] gap-8 lg:gap-12",
+                    "blocks": [
+                      {
+                        "wrapper": "aside",
+                        "class": "hidden lg:block",
+                        "blocks": [
+                          {
+                            "wrapper": "div",
+                            "class": "sticky top-24",
+                            "blocks": [
+                              {
+                                "wrapper": "h3",
+                                "class": "text-sm font-semibold uppercase tracking-wider mb-4",
+                                "bind_style": { "color": "#2563EB" },
+                                "content": "Table of Contents"
+                              },
+                              {
+                                "wrapper": "nav",
+                                "class": "space-y-2",
+                                "blocks": [
+                                  {
+                                    "wrapper": "a",
+                                    "href": "#section-0",
+                                    "class": "block text-sm text-gray-600 hover:text-gray-900 transition-colors py-1 border-l-2 border-transparent hover:border-blue-500 pl-3 -ml-px",
+                                    "content": "Information We Collect"
+                                  },
+                                  {
+                                    "wrapper": "a",
+                                    "href": "#section-1",
+                                    "class": "block text-sm text-gray-600 hover:text-gray-900 transition-colors py-1 border-l-2 border-transparent hover:border-blue-500 pl-3 -ml-px",
+                                    "content": "How We Use Your Information"
+                                  },
+                                  {
+                                    "wrapper": "a",
+                                    "href": "#section-2",
+                                    "class": "block text-sm text-gray-600 hover:text-gray-900 transition-colors py-1 border-l-2 border-transparent hover:border-blue-500 pl-3 -ml-px",
+                                    "content": "Information Sharing and Disclosure"
+                                  },
+                                  {
+                                    "wrapper": "a",
+                                    "href": "#section-3",
+                                    "class": "block text-sm text-gray-600 hover:text-gray-900 transition-colors py-1 border-l-2 border-transparent hover:border-blue-500 pl-3 -ml-px",
+                                    "content": "Data Security"
+                                  },
+                                  {
+                                    "wrapper": "a",
+                                    "href": "#section-4",
+                                    "class": "block text-sm text-gray-600 hover:text-gray-900 transition-colors py-1 border-l-2 border-transparent hover:border-blue-500 pl-3 -ml-px",
+                                    "content": "Cookies and Tracking"
+                                  },
+                                  {
+                                    "wrapper": "a",
+                                    "href": "#section-5",
+                                    "class": "block text-sm text-gray-600 hover:text-gray-900 transition-colors py-1 border-l-2 border-transparent hover:border-blue-500 pl-3 -ml-px",
+                                    "content": "Your Rights and Choices"
+                                  },
+                                  {
+                                    "wrapper": "a",
+                                    "href": "#section-6",
+                                    "class": "block text-sm text-gray-600 hover:text-gray-900 transition-colors py-1 border-l-2 border-transparent hover:border-blue-500 pl-3 -ml-px",
+                                    "content": "Contact Us"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "wrapper": "div",
+                        "class": "min-w-0",
+                        "blocks": [
+                          {
+                            "wrapper": "div",
+                            "class": "lg:hidden sticky top-0 z-30 -mx-4 px-4 py-3 bg-white/95 backdrop-blur-sm border-b border-gray-100",
+                            "blocks": [
+                              {
+                                "wrapper": "details",
+                                "class": "group",
+                                "blocks": [
+                                  {
+                                    "wrapper": "summary",
+                                    "class": "flex items-center justify-between w-full p-3 bg-white border border-gray-200 rounded-xl shadow-sm cursor-pointer hover:border-gray-300 transition-all",
+                                    "blocks": [
+                                      {
+                                        "wrapper": "div",
+                                        "class": "flex items-center gap-3",
+                                        "blocks": [
+                                          {
+                                            "wrapper": "span",
+                                            "class": "flex items-center justify-center w-10 h-10 rounded-lg",
+                                            "bind_style": {
+                                              "backgroundColor": "#2563EB15"
+                                            },
+                                            "blocks": [
+                                              {
+                                                "wrapper": "svg",
+                                                "class": "w-5 h-5",
+                                                "bind_style": {
+                                                  "color": "#2563EB"
+                                                },
+                                                "fill": "none",
+                                                "stroke": "currentColor",
+                                                "viewBox": "0 0 24 24",
+                                                "blocks": [
+                                                  {
+                                                    "wrapper": "path",
+                                                    "strokeLinecap": "round",
+                                                    "strokeLinejoin": "round",
+                                                    "strokeWidth": "2",
+                                                    "d": "M4 6h16M4 12h16M4 18h7"
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "wrapper": "div",
+                                            "blocks": [
+                                              {
+                                                "wrapper": "p",
+                                                "class": "text-sm font-semibold text-gray-900",
+                                                "content": "Table of Contents"
+                                              },
+                                              {
+                                                "wrapper": "p",
+                                                "class": "text-xs text-gray-500",
+                                                "content": "7 sections"
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "wrapper": "svg",
+                                        "class": "w-5 h-5 text-gray-400 transition-transform group-open:rotate-180",
+                                        "fill": "none",
+                                        "stroke": "currentColor",
+                                        "viewBox": "0 0 24 24",
+                                        "blocks": [
+                                          {
+                                            "wrapper": "path",
+                                            "strokeLinecap": "round",
+                                            "strokeLinejoin": "round",
+                                            "strokeWidth": "2",
+                                            "d": "M19 9l-7 7-7-7"
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "wrapper": "nav",
+                                    "class": "mt-2 bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden",
+                                    "blocks": [
+                                      {
+                                        "wrapper": "a",
+                                        "href": "#section-0",
+                                        "class": "flex items-center gap-3 px-4 py-3 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors border-b border-gray-100 last:border-b-0",
+                                        "blocks": [
+                                          {
+                                            "wrapper": "span",
+                                            "class": "flex items-center justify-center w-6 h-6 rounded-full text-xs font-medium text-white shrink-0",
+                                            "bind_style": {
+                                              "backgroundColor": "#2563EB"
+                                            },
+                                            "content": "1"
+                                          },
+                                          {
+                                            "wrapper": "span",
+                                            "class": "line-clamp-1",
+                                            "content": "Information We Collect"
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "wrapper": "a",
+                                        "href": "#section-1",
+                                        "class": "flex items-center gap-3 px-4 py-3 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors border-b border-gray-100 last:border-b-0",
+                                        "blocks": [
+                                          {
+                                            "wrapper": "span",
+                                            "class": "flex items-center justify-center w-6 h-6 rounded-full text-xs font-medium text-white shrink-0",
+                                            "bind_style": {
+                                              "backgroundColor": "#2563EB"
+                                            },
+                                            "content": "2"
+                                          },
+                                          {
+                                            "wrapper": "span",
+                                            "class": "line-clamp-1",
+                                            "content": "How We Use Your Information"
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "wrapper": "a",
+                                        "href": "#section-2",
+                                        "class": "flex items-center gap-3 px-4 py-3 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors border-b border-gray-100 last:border-b-0",
+                                        "blocks": [
+                                          {
+                                            "wrapper": "span",
+                                            "class": "flex items-center justify-center w-6 h-6 rounded-full text-xs font-medium text-white shrink-0",
+                                            "bind_style": {
+                                              "backgroundColor": "#2563EB"
+                                            },
+                                            "content": "3"
+                                          },
+                                          {
+                                            "wrapper": "span",
+                                            "class": "line-clamp-1",
+                                            "content": "Information Sharing and Disclosure"
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "wrapper": "a",
+                                        "href": "#section-3",
+                                        "class": "flex items-center gap-3 px-4 py-3 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors border-b border-gray-100 last:border-b-0",
+                                        "blocks": [
+                                          {
+                                            "wrapper": "span",
+                                            "class": "flex items-center justify-center w-6 h-6 rounded-full text-xs font-medium text-white shrink-0",
+                                            "bind_style": {
+                                              "backgroundColor": "#2563EB"
+                                            },
+                                            "content": "4"
+                                          },
+                                          {
+                                            "wrapper": "span",
+                                            "class": "line-clamp-1",
+                                            "content": "Data Security"
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "wrapper": "a",
+                                        "href": "#section-4",
+                                        "class": "flex items-center gap-3 px-4 py-3 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors border-b border-gray-100 last:border-b-0",
+                                        "blocks": [
+                                          {
+                                            "wrapper": "span",
+                                            "class": "flex items-center justify-center w-6 h-6 rounded-full text-xs font-medium text-white shrink-0",
+                                            "bind_style": {
+                                              "backgroundColor": "#2563EB"
+                                            },
+                                            "content": "5"
+                                          },
+                                          {
+                                            "wrapper": "span",
+                                            "class": "line-clamp-1",
+                                            "content": "Cookies and Tracking"
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "wrapper": "a",
+                                        "href": "#section-5",
+                                        "class": "flex items-center gap-3 px-4 py-3 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors border-b border-gray-100 last:border-b-0",
+                                        "blocks": [
+                                          {
+                                            "wrapper": "span",
+                                            "class": "flex items-center justify-center w-6 h-6 rounded-full text-xs font-medium text-white shrink-0",
+                                            "bind_style": {
+                                              "backgroundColor": "#2563EB"
+                                            },
+                                            "content": "6"
+                                          },
+                                          {
+                                            "wrapper": "span",
+                                            "class": "line-clamp-1",
+                                            "content": "Your Rights and Choices"
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "wrapper": "a",
+                                        "href": "#section-6",
+                                        "class": "flex items-center gap-3 px-4 py-3 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors border-b border-gray-100 last:border-b-0",
+                                        "blocks": [
+                                          {
+                                            "wrapper": "span",
+                                            "class": "flex items-center justify-center w-6 h-6 rounded-full text-xs font-medium text-white shrink-0",
+                                            "bind_style": {
+                                              "backgroundColor": "#2563EB"
+                                            },
+                                            "content": "7"
+                                          },
+                                          {
+                                            "wrapper": "span",
+                                            "class": "line-clamp-1",
+                                            "content": "Contact Us"
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "wrapper": "div",
+                            "class": "space-y-10 md:space-y-12",
+                            "blocks": [
+                              {
+                                "wrapper": "article",
+                                "id": "section-0",
+                                "class": "scroll-mt-24",
+                                "blocks": [
+                                  {
+                                    "wrapper": "h2",
+                                    "class": "text-xl md:text-2xl font-bold mb-4 flex items-center gap-3",
+                                    "bind_style": { "color": "#111827" },
+                                    "blocks": [
+                                      {
+                                        "wrapper": "span",
+                                        "class": "flex items-center justify-center w-8 h-8 rounded-full text-sm font-semibold text-white",
+                                        "bind_style": {
+                                          "backgroundColor": "#2563EB"
+                                        },
+                                        "content": "1"
+                                      },
+                                      {
+                                        "wrapper": "span",
+                                        "content": "Information We Collect"
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "wrapper": "div",
+                                    "class": "prose prose-gray max-w-none pl-11 [&_p]:text-gray-600 [&_p]:mb-4 [&_p]:leading-relaxed [&_strong]:font-semibold [&_strong]:text-gray-900 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-4 [&_ul]:space-y-2 [&_ul]:text-gray-600 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-4 [&_ol]:space-y-2 [&_ol]:text-gray-600 [&_li]:text-gray-600",
+                                    "dangerouslySetInnerHTML": "<p>We collect information you provide directly to us, such as when you create an account, make a purchase, subscribe to our newsletter, or contact us for support.</p><ul><li><strong>Personal Information:</strong> Name, email address, phone number, shipping and billing addresses</li><li><strong>Payment Information:</strong> Credit card numbers, banking details (processed securely through our payment providers)</li><li><strong>Account Information:</strong> Username, password, purchase history, and preferences</li></ul>"
+                                  }
+                                ]
+                              },
+                              {
+                                "wrapper": "article",
+                                "id": "section-1",
+                                "class": "scroll-mt-24",
+                                "blocks": [
+                                  {
+                                    "wrapper": "h2",
+                                    "class": "text-xl md:text-2xl font-bold mb-4 flex items-center gap-3",
+                                    "bind_style": { "color": "#111827" },
+                                    "blocks": [
+                                      {
+                                        "wrapper": "span",
+                                        "class": "flex items-center justify-center w-8 h-8 rounded-full text-sm font-semibold text-white",
+                                        "bind_style": {
+                                          "backgroundColor": "#2563EB"
+                                        },
+                                        "content": "2"
+                                      },
+                                      {
+                                        "wrapper": "span",
+                                        "content": "How We Use Your Information"
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "wrapper": "div",
+                                    "class": "prose prose-gray max-w-none pl-11 [&_p]:text-gray-600 [&_p]:mb-4 [&_p]:leading-relaxed [&_strong]:font-semibold [&_strong]:text-gray-900 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-4 [&_ul]:space-y-2 [&_ul]:text-gray-600 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-4 [&_ol]:space-y-2 [&_ol]:text-gray-600 [&_li]:text-gray-600",
+                                    "dangerouslySetInnerHTML": "<p>We use the information we collect to:</p><ul><li><strong>Process Transactions:</strong> Complete purchases, process payments, and deliver products to you</li><li><strong>Communicate With You:</strong> Send order confirmations, shipping updates, and respond to inquiries</li><li><strong>Personalize Experience:</strong> Recommend products based on your preferences and shopping history</li></ul>"
+                                  }
+                                ]
+                              },
+                              {
+                                "wrapper": "article",
+                                "id": "section-2",
+                                "class": "scroll-mt-24",
+                                "blocks": [
+                                  {
+                                    "wrapper": "h2",
+                                    "class": "text-xl md:text-2xl font-bold mb-4 flex items-center gap-3",
+                                    "bind_style": { "color": "#111827" },
+                                    "blocks": [
+                                      {
+                                        "wrapper": "span",
+                                        "class": "flex items-center justify-center w-8 h-8 rounded-full text-sm font-semibold text-white",
+                                        "bind_style": {
+                                          "backgroundColor": "#2563EB"
+                                        },
+                                        "content": "3"
+                                      },
+                                      {
+                                        "wrapper": "span",
+                                        "content": "Information Sharing and Disclosure"
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "wrapper": "div",
+                                    "class": "prose prose-gray max-w-none pl-11 [&_p]:text-gray-600 [&_p]:mb-4 [&_p]:leading-relaxed [&_strong]:font-semibold [&_strong]:text-gray-900 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-4 [&_ul]:space-y-2 [&_ul]:text-gray-600 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-4 [&_ol]:space-y-2 [&_ol]:text-gray-600 [&_li]:text-gray-600",
+                                    "dangerouslySetInnerHTML": "<p>We do not sell, trade, or rent your personal information to third parties. We may share your information only with trusted service providers who assist in operating our website.</p>"
+                                  }
+                                ]
+                              },
+                              {
+                                "wrapper": "article",
+                                "id": "section-3",
+                                "class": "scroll-mt-24",
+                                "blocks": [
+                                  {
+                                    "wrapper": "h2",
+                                    "class": "text-xl md:text-2xl font-bold mb-4 flex items-center gap-3",
+                                    "bind_style": { "color": "#111827" },
+                                    "blocks": [
+                                      {
+                                        "wrapper": "span",
+                                        "class": "flex items-center justify-center w-8 h-8 rounded-full text-sm font-semibold text-white",
+                                        "bind_style": {
+                                          "backgroundColor": "#2563EB"
+                                        },
+                                        "content": "4"
+                                      },
+                                      {
+                                        "wrapper": "span",
+                                        "content": "Data Security"
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "wrapper": "div",
+                                    "class": "prose prose-gray max-w-none pl-11 [&_p]:text-gray-600 [&_p]:mb-4 [&_p]:leading-relaxed [&_strong]:font-semibold [&_strong]:text-gray-900 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-4 [&_ul]:space-y-2 [&_ul]:text-gray-600 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-4 [&_ol]:space-y-2 [&_ol]:text-gray-600 [&_li]:text-gray-600",
+                                    "dangerouslySetInnerHTML": "<p>We implement appropriate technical and organizational security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.</p><ul><li><strong>SSL Encryption:</strong> All data transmitted between your browser and our servers is encrypted</li><li><strong>Secure Payment Processing:</strong> We use PCI-compliant payment processors</li></ul>"
+                                  }
+                                ]
+                              },
+                              {
+                                "wrapper": "article",
+                                "id": "section-4",
+                                "class": "scroll-mt-24",
+                                "blocks": [
+                                  {
+                                    "wrapper": "h2",
+                                    "class": "text-xl md:text-2xl font-bold mb-4 flex items-center gap-3",
+                                    "bind_style": { "color": "#111827" },
+                                    "blocks": [
+                                      {
+                                        "wrapper": "span",
+                                        "class": "flex items-center justify-center w-8 h-8 rounded-full text-sm font-semibold text-white",
+                                        "bind_style": {
+                                          "backgroundColor": "#2563EB"
+                                        },
+                                        "content": "5"
+                                      },
+                                      {
+                                        "wrapper": "span",
+                                        "content": "Cookies and Tracking"
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "wrapper": "div",
+                                    "class": "prose prose-gray max-w-none pl-11 [&_p]:text-gray-600 [&_p]:mb-4 [&_p]:leading-relaxed [&_strong]:font-semibold [&_strong]:text-gray-900 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-4 [&_ul]:space-y-2 [&_ul]:text-gray-600 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-4 [&_ol]:space-y-2 [&_ol]:text-gray-600 [&_li]:text-gray-600",
+                                    "dangerouslySetInnerHTML": "<p>We use cookies and similar tracking technologies to enhance your browsing experience. You can control cookie preferences through your browser settings.</p>"
+                                  }
+                                ]
+                              },
+                              {
+                                "wrapper": "article",
+                                "id": "section-5",
+                                "class": "scroll-mt-24",
+                                "blocks": [
+                                  {
+                                    "wrapper": "h2",
+                                    "class": "text-xl md:text-2xl font-bold mb-4 flex items-center gap-3",
+                                    "bind_style": { "color": "#111827" },
+                                    "blocks": [
+                                      {
+                                        "wrapper": "span",
+                                        "class": "flex items-center justify-center w-8 h-8 rounded-full text-sm font-semibold text-white",
+                                        "bind_style": {
+                                          "backgroundColor": "#2563EB"
+                                        },
+                                        "content": "6"
+                                      },
+                                      {
+                                        "wrapper": "span",
+                                        "content": "Your Rights and Choices"
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "wrapper": "div",
+                                    "class": "prose prose-gray max-w-none pl-11 [&_p]:text-gray-600 [&_p]:mb-4 [&_p]:leading-relaxed [&_strong]:font-semibold [&_strong]:text-gray-900 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-4 [&_ul]:space-y-2 [&_ul]:text-gray-600 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-4 [&_ol]:space-y-2 [&_ol]:text-gray-600 [&_li]:text-gray-600",
+                                    "dangerouslySetInnerHTML": "<p>You have the following rights regarding your personal information:</p><ul><li><strong>Access:</strong> Request a copy of the personal data we hold about you</li><li><strong>Correction:</strong> Update or correct inaccurate information</li><li><strong>Deletion:</strong> Request deletion of your personal data</li><li><strong>Opt-Out:</strong> Unsubscribe from marketing communications at any time</li></ul>"
+                                  }
+                                ]
+                              },
+                              {
+                                "wrapper": "article",
+                                "id": "section-6",
+                                "class": "scroll-mt-24",
+                                "blocks": [
+                                  {
+                                    "wrapper": "h2",
+                                    "class": "text-xl md:text-2xl font-bold mb-4 flex items-center gap-3",
+                                    "bind_style": { "color": "#111827" },
+                                    "blocks": [
+                                      {
+                                        "wrapper": "span",
+                                        "class": "flex items-center justify-center w-8 h-8 rounded-full text-sm font-semibold text-white",
+                                        "bind_style": {
+                                          "backgroundColor": "#2563EB"
+                                        },
+                                        "content": "7"
+                                      },
+                                      {
+                                        "wrapper": "span",
+                                        "content": "Contact Us"
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "wrapper": "div",
+                                    "class": "prose prose-gray max-w-none pl-11 [&_p]:text-gray-600 [&_p]:mb-4 [&_p]:leading-relaxed [&_strong]:font-semibold [&_strong]:text-gray-900 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-4 [&_ul]:space-y-2 [&_ul]:text-gray-600 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-4 [&_ol]:space-y-2 [&_ol]:text-gray-600 [&_li]:text-gray-600",
+                                    "dangerouslySetInnerHTML": "<p>If you have any questions about this Privacy Policy, please contact us:</p><p><strong>Email:</strong> privacy@example.com<br/><strong>Phone:</strong> +1 (555) 123-4567</p>"
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "wrapper": "div",
+                            "class": "mt-12 pt-8 border-t border-gray-200",
+                            "blocks": [
+                              {
+                                "wrapper": "button",
+                                "onClick": "window.scrollTo({ top: 0, behavior: \"smooth\" })",
+                                "class": "inline-flex items-center gap-2 text-sm font-medium transition-colors",
+                                "bind_style": {
+                                  "color": "#2563EB"
+                                },
+                                "blocks": [
+                                  {
+                                    "wrapper": "svg",
+                                    "class": "w-4 h-4",
+                                    "fill": "none",
+                                    "stroke": "currentColor",
+                                    "viewBox": "0 0 24 24",
+                                    "blocks": [
+                                      {
+                                        "wrapper": "path",
+                                        "strokeLinecap": "round",
+                                        "strokeLinejoin": "round",
+                                        "strokeWidth": "2",
+                                        "d": "M5 10l7-7m0 0l7 7m-7-7v18"
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "wrapper": "span",
+                                    "content": "Back to top"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "privacy_content_2_3",
+        "type": "privacy-content-2",
+        "enabled": true,
+        "settings": {
+          "enabled": true
+        },
+        "blocks": [
+          {
+            "wrapper": "section",
+            "class": "py-6 md:py-8 lg:py-12",
+            "bind_style": { "backgroundColor": "#F9FAFB" },
+            "blocks": [
+              {
+                "wrapper": "div",
+                "class": "max-w-[1440px] mx-auto px-4 2xl:px-0",
+                "blocks": [
+                  {
+                    "wrapper": "div",
+                    "class": "flex items-center justify-between mb-8",
+                    "blocks": [
+                      {
+                        "wrapper": "p",
+                        "class": "text-sm text-gray-500",
+                        "content": "4 sections"
+                      },
+                      {
+                        "wrapper": "div",
+                        "class": "flex items-center gap-3",
+                        "blocks": [
+                          {
+                            "wrapper": "button",
+                            "class": "text-sm font-medium transition-colors hover:opacity-80",
+                            "bind_style": {
+                              "color": "#2563EB"
+                            },
+                            "content": "Expand all"
+                          },
+                          {
+                            "wrapper": "span",
+                            "class": "text-gray-300",
+                            "content": "|"
+                          },
+                          {
+                            "wrapper": "button",
+                            "class": "text-sm font-medium transition-colors hover:opacity-80",
+                            "bind_style": {
+                              "color": "#2563EB"
+                            },
+                            "content": "Collapse all"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "wrapper": "div",
+                    "class": "space-y-3",
                     "blocks": [
                       {
                         "wrapper": "div",
-                        "class": "prose prose-lg max-w-none",
-                        "style": {
-                          "color": "#111827"
+                        "class": "bg-white rounded-xl border transition-all duration-200 hover:border-gray-200 hover:shadow-sm",
+                        "bind_style": {
+                          "borderColor": "#F3F4F6"
                         },
                         "blocks": [
                           {
-                            "wrapper": "h2",
-                            "class": "text-3xl font-bold mb-4 text-gray-900",
-                            "style": {
-                              "color": "#111827"
-                            },
-                            "content": "Information We Collect"
+                            "wrapper": "button",
+                            "class": "w-full flex items-center gap-4 p-5 md:p-6 text-left",
+                            "blocks": [
+                              {
+                                "wrapper": "div",
+                                "class": "flex items-center justify-center w-10 h-10 rounded-lg shrink-0",
+                                "bind_style": {
+                                  "backgroundColor": "#2563EB10",
+                                  "color": "#2563EB"
+                                },
+                                "blocks": [
+                                  {
+                                    "wrapper": "svg",
+                                    "fill": "none",
+                                    "stroke": "currentColor",
+                                    "viewBox": "0 0 24 24",
+                                    "blocks": [
+                                      {
+                                        "wrapper": "path",
+                                        "strokeLinecap": "round",
+                                        "strokeLinejoin": "round",
+                                        "strokeWidth": "2",
+                                        "d": "M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "wrapper": "div",
+                                "class": "flex-1 min-w-0",
+                                "blocks": [
+                                  {
+                                    "wrapper": "h3",
+                                    "class": "text-base md:text-lg font-semibold",
+                                    "bind_style": {
+                                      "color": "#111827"
+                                    },
+                                    "content": "Information We Collect"
+                                  }
+                                ]
+                              },
+                              {
+                                "wrapper": "div",
+                                "class": "shrink-0 transition-transform duration-200",
+                                "blocks": [
+                                  {
+                                    "wrapper": "svg",
+                                    "class": "w-5 h-5 text-gray-400",
+                                    "fill": "none",
+                                    "stroke": "currentColor",
+                                    "viewBox": "0 0 24 24",
+                                    "blocks": [
+                                      {
+                                        "wrapper": "path",
+                                        "strokeLinecap": "round",
+                                        "strokeLinejoin": "round",
+                                        "strokeWidth": "2",
+                                        "d": "M19 9l-7 7-7-7"
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
                           },
                           {
                             "wrapper": "div",
-                            "dangerouslySetInnerHTML": "<p>We collect information you provide directly to us, such as when you create an account, make a purchase, subscribe to our newsletter, or contact us for support.</p><ul><li><strong>Personal Information:</strong> Name, email address, phone number, shipping and billing addresses</li><li><strong>Payment Information:</strong> Credit card numbers, banking details (processed securely through our payment providers)</li><li><strong>Account Information:</strong> Username, password, purchase history, and preferences</li></ul>"
+                            "class": "overflow-hidden transition-all duration-300 max-h-0 opacity-0",
+                            "blocks": [
+                              {
+                                "wrapper": "div",
+                                "class": "px-5 md:px-6 pb-6 pl-[76px] md:pl-[88px]",
+                                "blocks": [
+                                  {
+                                    "wrapper": "div",
+                                    "class": "prose prose-gray max-w-none [&_p]:text-gray-600 [&_p]:mb-4 [&_p]:leading-relaxed [&_strong]:font-semibold [&_strong]:text-gray-900 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-4 [&_ul]:space-y-2 [&_ul]:text-gray-600 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:mb-4 [&_ol]:space-y-2 [&_ol]:text-gray-600 [&_li]:text-gray-600 [&_a]:text-blue-600 [&_a]:underline",
+                                    "dangerouslySetInnerHTML": "<p>We collect information you provide directly to us, such as when you create an account, make a purchase, subscribe to our newsletter, or contact us for support.</p><ul><li><strong>Personal Information:</strong> Name, email address, phone number</li><li><strong>Payment Information:</strong> Credit card numbers, banking details</li></ul>"
+                                  }
+                                ]
+                              }
+                            ]
                           }
                         ]
                       },
                       {
                         "wrapper": "div",
-                        "class": "prose prose-lg max-w-none",
-                        "style": {
-                          "color": "#111827"
+                        "class": "bg-white rounded-xl border transition-all duration-200 hover:border-gray-200 hover:shadow-sm",
+                        "bind_style": {
+                          "borderColor": "#F3F4F6"
                         },
                         "blocks": [
                           {
-                            "wrapper": "h2",
-                            "class": "text-3xl font-bold mb-4 text-gray-900",
-                            "style": {
-                              "color": "#111827"
-                            },
-                            "content": "How We Use Your Information"
+                            "wrapper": "button",
+                            "class": "w-full flex items-center gap-4 p-5 md:p-6 text-left",
+                            "blocks": [
+                              {
+                                "wrapper": "div",
+                                "class": "flex items-center justify-center w-10 h-10 rounded-lg shrink-0",
+                                "bind_style": {
+                                  "backgroundColor": "#2563EB10",
+                                  "color": "#2563EB"
+                                },
+                                "blocks": [
+                                  {
+                                    "wrapper": "svg",
+                                    "fill": "none",
+                                    "stroke": "currentColor",
+                                    "viewBox": "0 0 24 24",
+                                    "blocks": [
+                                      {
+                                        "wrapper": "path",
+                                        "strokeLinecap": "round",
+                                        "strokeLinejoin": "round",
+                                        "strokeWidth": "2",
+                                        "d": "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "wrapper": "div",
+                                "class": "flex-1 min-w-0",
+                                "blocks": [
+                                  {
+                                    "wrapper": "h3",
+                                    "class": "text-base md:text-lg font-semibold",
+                                    "bind_style": {
+                                      "color": "#111827"
+                                    },
+                                    "content": "How We Use Your Information"
+                                  }
+                                ]
+                              },
+                              {
+                                "wrapper": "div",
+                                "class": "shrink-0 transition-transform duration-200",
+                                "blocks": [
+                                  {
+                                    "wrapper": "svg",
+                                    "class": "w-5 h-5 text-gray-400",
+                                    "fill": "none",
+                                    "stroke": "currentColor",
+                                    "viewBox": "0 0 24 24",
+                                    "blocks": [
+                                      {
+                                        "wrapper": "path",
+                                        "strokeLinecap": "round",
+                                        "strokeLinejoin": "round",
+                                        "strokeWidth": "2",
+                                        "d": "M19 9l-7 7-7-7"
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
                           },
                           {
                             "wrapper": "div",
-                            "dangerouslySetInnerHTML": "<p>We use the information we collect to:</p><ul><li><strong>Process Transactions:</strong> Complete purchases, process payments, and deliver products to you</li><li><strong>Communicate With You:</strong> Send order confirmations, shipping updates, and respond to inquiries</li><li><strong>Personalize Experience:</strong> Recommend products based on your preferences and shopping history</li></ul>"
+                            "class": "overflow-hidden transition-all duration-300 max-h-0 opacity-0",
+                            "blocks": [
+                              {
+                                "wrapper": "div",
+                                "class": "px-5 md:px-6 pb-6 pl-[76px] md:pl-[88px]",
+                                "blocks": [
+                                  {
+                                    "wrapper": "div",
+                                    "class": "prose prose-gray max-w-none [&_p]:text-gray-600 [&_p]:mb-4 [&_p]:leading-relaxed [&_strong]:font-semibold [&_strong]:text-gray-900 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-4 [&_ul]:space-y-2 [&_ul]:text-gray-600 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:mb-4 [&_ol]:space-y-2 [&_ol]:text-gray-600 [&_li]:text-gray-600 [&_a]:text-blue-600 [&_a]:underline",
+                                    "dangerouslySetInnerHTML": "<p>We use the information we collect to:</p><ul><li><strong>Process Transactions:</strong> Complete purchases and process payments</li><li><strong>Communicate With You:</strong> Send order confirmations and updates</li></ul>"
+                                  }
+                                ]
+                              }
+                            ]
                           }
                         ]
                       },
                       {
                         "wrapper": "div",
-                        "class": "prose prose-lg max-w-none",
-                        "style": {
-                          "color": "#111827"
+                        "class": "bg-white rounded-xl border transition-all duration-200 hover:border-gray-200 hover:shadow-sm",
+                        "bind_style": {
+                          "borderColor": "#F3F4F6"
                         },
                         "blocks": [
                           {
-                            "wrapper": "h2",
-                            "class": "text-3xl font-bold mb-4 text-gray-900",
-                            "style": {
-                              "color": "#111827"
-                            },
-                            "content": "Information Sharing and Disclosure"
+                            "wrapper": "button",
+                            "class": "w-full flex items-center gap-4 p-5 md:p-6 text-left",
+                            "blocks": [
+                              {
+                                "wrapper": "div",
+                                "class": "flex items-center justify-center w-10 h-10 rounded-lg shrink-0",
+                                "bind_style": {
+                                  "backgroundColor": "#2563EB10",
+                                  "color": "#2563EB"
+                                },
+                                "blocks": [
+                                  {
+                                    "wrapper": "svg",
+                                    "fill": "none",
+                                    "stroke": "currentColor",
+                                    "viewBox": "0 0 24 24",
+                                    "blocks": [
+                                      {
+                                        "wrapper": "path",
+                                        "strokeLinecap": "round",
+                                        "strokeLinejoin": "round",
+                                        "strokeWidth": "2",
+                                        "d": "M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "wrapper": "div",
+                                "class": "flex-1 min-w-0",
+                                "blocks": [
+                                  {
+                                    "wrapper": "h3",
+                                    "class": "text-base md:text-lg font-semibold",
+                                    "bind_style": {
+                                      "color": "#111827"
+                                    },
+                                    "content": "Data Security"
+                                  }
+                                ]
+                              },
+                              {
+                                "wrapper": "div",
+                                "class": "shrink-0 transition-transform duration-200",
+                                "blocks": [
+                                  {
+                                    "wrapper": "svg",
+                                    "class": "w-5 h-5 text-gray-400",
+                                    "fill": "none",
+                                    "stroke": "currentColor",
+                                    "viewBox": "0 0 24 24",
+                                    "blocks": [
+                                      {
+                                        "wrapper": "path",
+                                        "strokeLinecap": "round",
+                                        "strokeLinejoin": "round",
+                                        "strokeWidth": "2",
+                                        "d": "M19 9l-7 7-7-7"
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
                           },
                           {
                             "wrapper": "div",
-                            "dangerouslySetInnerHTML": "<p>We do not sell, trade, or rent your personal information to third parties. We may share your information only with trusted service providers who assist in operating our website.</p>"
+                            "class": "overflow-hidden transition-all duration-300 max-h-0 opacity-0",
+                            "blocks": [
+                              {
+                                "wrapper": "div",
+                                "class": "px-5 md:px-6 pb-6 pl-[76px] md:pl-[88px]",
+                                "blocks": [
+                                  {
+                                    "wrapper": "div",
+                                    "class": "prose prose-gray max-w-none [&_p]:text-gray-600 [&_p]:mb-4 [&_p]:leading-relaxed [&_strong]:font-semibold [&_strong]:text-gray-900 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-4 [&_ul]:space-y-2 [&_ul]:text-gray-600 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:mb-4 [&_ol]:space-y-2 [&_ol]:text-gray-600 [&_li]:text-gray-600 [&_a]:text-blue-600 [&_a]:underline",
+                                    "dangerouslySetInnerHTML": "<p>We implement appropriate technical and organizational security measures to protect your personal information.</p><ul><li><strong>SSL Encryption:</strong> All data is encrypted</li><li><strong>Access Controls:</strong> Limited access on a need-to-know basis</li></ul>"
+                                  }
+                                ]
+                              }
+                            ]
                           }
                         ]
                       },
                       {
                         "wrapper": "div",
-                        "class": "prose prose-lg max-w-none",
-                        "style": {
-                          "color": "#111827"
+                        "class": "bg-white rounded-xl border transition-all duration-200 hover:border-gray-200 hover:shadow-sm",
+                        "bind_style": {
+                          "borderColor": "#F3F4F6"
                         },
                         "blocks": [
                           {
-                            "wrapper": "h2",
-                            "class": "text-3xl font-bold mb-4 text-gray-900",
-                            "style": {
-                              "color": "#111827"
-                            },
-                            "content": "Data Security"
+                            "wrapper": "button",
+                            "class": "w-full flex items-center gap-4 p-5 md:p-6 text-left",
+                            "blocks": [
+                              {
+                                "wrapper": "div",
+                                "class": "flex items-center justify-center w-10 h-10 rounded-lg shrink-0",
+                                "bind_style": {
+                                  "backgroundColor": "#2563EB10",
+                                  "color": "#2563EB"
+                                },
+                                "blocks": [
+                                  {
+                                    "wrapper": "svg",
+                                    "fill": "none",
+                                    "stroke": "currentColor",
+                                    "viewBox": "0 0 24 24",
+                                    "blocks": [
+                                      {
+                                        "wrapper": "path",
+                                        "strokeLinecap": "round",
+                                        "strokeLinejoin": "round",
+                                        "strokeWidth": "2",
+                                        "d": "M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "wrapper": "div",
+                                "class": "flex-1 min-w-0",
+                                "blocks": [
+                                  {
+                                    "wrapper": "h3",
+                                    "class": "text-base md:text-lg font-semibold",
+                                    "bind_style": {
+                                      "color": "#111827"
+                                    },
+                                    "content": "Contact Us"
+                                  }
+                                ]
+                              },
+                              {
+                                "wrapper": "div",
+                                "class": "shrink-0 transition-transform duration-200",
+                                "blocks": [
+                                  {
+                                    "wrapper": "svg",
+                                    "class": "w-5 h-5 text-gray-400",
+                                    "fill": "none",
+                                    "stroke": "currentColor",
+                                    "viewBox": "0 0 24 24",
+                                    "blocks": [
+                                      {
+                                        "wrapper": "path",
+                                        "strokeLinecap": "round",
+                                        "strokeLinejoin": "round",
+                                        "strokeWidth": "2",
+                                        "d": "M19 9l-7 7-7-7"
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
                           },
                           {
                             "wrapper": "div",
-                            "dangerouslySetInnerHTML": "<p>We implement appropriate technical and organizational security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.</p><ul><li><strong>SSL Encryption:</strong> All data transmitted between your browser and our servers is encrypted</li><li><strong>Secure Payment Processing:</strong> We use PCI-compliant payment processors</li></ul>"
+                            "class": "overflow-hidden transition-all duration-300 max-h-0 opacity-0",
+                            "blocks": [
+                              {
+                                "wrapper": "div",
+                                "class": "px-5 md:px-6 pb-6 pl-[76px] md:pl-[88px]",
+                                "blocks": [
+                                  {
+                                    "wrapper": "div",
+                                    "class": "prose prose-gray max-w-none [&_p]:text-gray-600 [&_p]:mb-4 [&_p]:leading-relaxed [&_strong]:font-semibold [&_strong]:text-gray-900 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-4 [&_ul]:space-y-2 [&_ul]:text-gray-600 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:mb-4 [&_ol]:space-y-2 [&_ol]:text-gray-600 [&_li]:text-gray-600 [&_a]:text-blue-600 [&_a]:underline",
+                                    "dangerouslySetInnerHTML": "<p>If you have any questions, please contact us:</p><p><strong>Email:</strong> privacy@example.com</p>"
+                                  }
+                                ]
+                              }
+                            ]
                           }
                         ]
-                      },
+                      }
+                    ]
+                  },
+                  {
+                    "wrapper": "div",
+                    "class": "mt-12 pt-8 border-t border-gray-200",
+                    "blocks": [
                       {
                         "wrapper": "div",
-                        "class": "prose prose-lg max-w-none",
-                        "style": {
-                          "color": "#111827"
-                        },
+                        "class": "flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4",
                         "blocks": [
                           {
-                            "wrapper": "h2",
-                            "class": "text-3xl font-bold mb-4 text-gray-900",
-                            "style": {
-                              "color": "#111827"
-                            },
-                            "content": "Cookies and Tracking"
+                            "wrapper": "p",
+                            "class": "text-sm text-gray-500",
+                            "blocks": [
+                              {
+                                "wrapper": "span",
+                                "content": "Questions about our privacy practices? "
+                              },
+                              {
+                                "wrapper": "a",
+                                "href": "/contact",
+                                "class": "font-medium underline transition-colors",
+                                "bind_style": {
+                                  "color": "#2563EB"
+                                },
+                                "content": "Contact us"
+                              }
+                            ]
                           },
                           {
-                            "wrapper": "div",
-                            "dangerouslySetInnerHTML": "<p>We use cookies and similar tracking technologies to enhance your browsing experience. You can control cookie preferences through your browser settings.</p>"
-                          }
-                        ]
-                      },
-                      {
-                        "wrapper": "div",
-                        "class": "prose prose-lg max-w-none",
-                        "style": {
-                          "color": "#111827"
-                        },
-                        "blocks": [
-                          {
-                            "wrapper": "h2",
-                            "class": "text-3xl font-bold mb-4 text-gray-900",
-                            "style": {
-                              "color": "#111827"
+                            "wrapper": "button",
+                            "onClick": "window.scrollTo({ top: 0, behavior: \"smooth\" })",
+                            "class": "inline-flex items-center gap-2 text-sm font-medium transition-colors",
+                            "bind_style": {
+                              "color": "#2563EB"
                             },
-                            "content": "Your Rights and Choices"
-                          },
-                          {
-                            "wrapper": "div",
-                            "dangerouslySetInnerHTML": "<p>You have the following rights regarding your personal information:</p><ul><li><strong>Access:</strong> Request a copy of the personal data we hold about you</li><li><strong>Correction:</strong> Update or correct inaccurate information</li><li><strong>Deletion:</strong> Request deletion of your personal data</li><li><strong>Opt-Out:</strong> Unsubscribe from marketing communications at any time</li></ul>"
-                          }
-                        ]
-                      },
-                      {
-                        "wrapper": "div",
-                        "class": "prose prose-lg max-w-none",
-                        "style": {
-                          "color": "#111827"
-                        },
-                        "blocks": [
-                          {
-                            "wrapper": "h2",
-                            "class": "text-3xl font-bold mb-4 text-gray-900",
-                            "style": {
-                              "color": "#111827"
-                            },
-                            "content": "Contact Us"
-                          },
-                          {
-                            "wrapper": "div",
-                            "dangerouslySetInnerHTML": "<p>If you have any questions about this Privacy Policy, please contact us:</p><p><strong>Email:</strong> privacy@example.com<br/><strong>Phone:</strong> +1 (555) 123-4567</p>"
+                            "blocks": [
+                              {
+                                "wrapper": "svg",
+                                "class": "w-4 h-4",
+                                "fill": "none",
+                                "stroke": "currentColor",
+                                "viewBox": "0 0 24 24",
+                                "blocks": [
+                                  {
+                                    "wrapper": "path",
+                                    "strokeLinecap": "round",
+                                    "strokeLinejoin": "round",
+                                    "strokeWidth": "2",
+                                    "d": "M5 10l7-7m0 0l7 7m-7-7v18"
+                                  }
+                                ]
+                              },
+                              {
+                                "wrapper": "span",
+                                "content": "Back to top"
+                              }
+                            ]
                           }
                         ]
                       }
@@ -371,6 +1290,23 @@
           }
         ]
       }
-    ]
+    ],
+    "seo": {
+      "title": "Privacy Policy - Custom Theme Store",
+      "description": "Learn how we protect your personal information and privacy.",
+      "canonical": "https://your-store.com/privacy-policy",
+      "og": {
+        "title": "Privacy Policy - Custom Theme Store",
+        "description": "Learn how we protect your privacy",
+        "image": "https://your-store.com/privacy-og.jpg",
+        "type": "website"
+      },
+      "twitter": {
+        "card": "summary",
+        "title": "Privacy Policy - Custom Theme Store",
+        "description": "Learn how we protect your privacy",
+        "image": "https://your-store.com/privacy-twitter.jpg"
+      }
+    }
   }
 }
