@@ -36,35 +36,25 @@ export const createOrder = async (
           "Content-Type": "application/json",
           "Device-Type": "Web",
           "Application-Type": "Online_Shop",
-          // Note: Referer and User-Agent are forbidden headers in browsers
-          // They are automatically set by the browser
         },
       }
     );
 
-    // Decrypt response if needed
+    // Decrypt response - response.data contains the encrypted string
     const decryptedData = decryptApiResponse(response.data);
 
-    // Handle response structure matching old project
-    // The old project expects payment_url directly in the response
-    if (decryptedData.payment_url || decryptedData.data?.payment_url) {
-      return {
-        success: true,
-        data: {
-          ...decryptedData.data,
-          payment_url:
-            decryptedData.payment_url || decryptedData.data?.payment_url,
-          receipt_id:
-            decryptedData.receipt_id || decryptedData.data?.receipt_id,
-          receipt_url:
-            decryptedData.receipt_url || decryptedData.data?.receipt_url,
-        },
-      };
-    }
+    console.log("Decrypted API Response:", decryptedData);
 
+    // Old project structure: payment_url at root OR data.receipt_url
     return {
       success: true,
-      data: decryptedData,
+      data: {
+        payment_url: decryptedData.payment_url,
+        receipt_id: decryptedData.data?.receipt_id || decryptedData.receipt_id,
+        receipt_url:
+          decryptedData.data?.receipt_url || decryptedData.receipt_url,
+        ...decryptedData.data,
+      },
     };
   } catch (error: unknown) {
     if (process.env.NODE_ENV === "development") {
@@ -134,12 +124,15 @@ export const getReceiptDetails = async (
       }
     );
 
-    // Decrypt response if needed
+    // Decrypt response - response.data contains the encrypted string
     const decryptedData = decryptApiResponse(response.data);
+
+    // Old project structure: decryptedData has {success: true, data: {...actual receipt data}}
+    const receiptData = decryptedData.data || decryptedData;
 
     return {
       success: true,
-      data: decryptedData,
+      data: receiptData,
     };
   } catch (error: unknown) {
     if (process.env.NODE_ENV === "development") {

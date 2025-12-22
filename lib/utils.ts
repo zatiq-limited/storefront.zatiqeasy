@@ -83,3 +83,27 @@ export const getThemeColor = (color?: string): string => {
 
   return changedColor;
 };
+
+/**
+ * Placeholder image data URL
+ */
+const placeholderImgaeDataUrl =
+  "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iI2UwZTBlMCIvPgogIDx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LXNpemU9IjE4IiBmaWxsPSIjOTk5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+Tm8gSW1hZ2U8L3RleHQ+Cjwvc3ZnPg==";
+
+/**
+ * Validates whether a given URL is a valid image URL (HTTP/HTTPS) or starts with a slash ("/").
+ * Applies image optimization transformations for inventory images.
+ *
+ * @param {string} input - The URL string to validate.
+ * @returns {string} The validated URL if it's valid; otherwise, placeholder image.
+ */
+export const getInventoryThumbImageUrl = (input?: string): string => {
+  return input &&
+    (input.startsWith("http:") ||
+      input.startsWith("https:") ||
+      input.startsWith("/"))
+    ? input
+        .replace("/inventories/", "/inventories/fit-in/400x400/")
+        .replace("d10rvdv6rxomuk.cloudfront.net", "www.easykoro.com")
+    : placeholderImgaeDataUrl;
+};

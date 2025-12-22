@@ -1,11 +1,12 @@
-import CryptoJS from 'crypto-js';
+import CryptoJS from "crypto-js";
 
 // Encryption key from environment
-const ENCRYPTION_KEY = process.env.NEXT_PUBLIC_ENCRYPTION_KEY || 'b3817f6f8bb8e5ed1c16c4c578f9ed8e';
+const ENCRYPTION_KEY =
+  process.env.NEXT_PUBLIC_ENCRYPTION_KEY || "b3817f6f8bb8e5ed1c16c4c578f9ed8e";
 
 // Generate IV from SHA256 hash of empty string (matching old project)
 const getEncryptionIV = (): string => {
-  const hash = CryptoJS.SHA256('');
+  const hash = CryptoJS.SHA256("");
   const hashedIv = hash.toString(CryptoJS.enc.Hex);
   return hashedIv.slice(0, 16);
 };
@@ -33,8 +34,8 @@ export const encryptData = (plainData: any): string => {
 
     return encrypted.toString();
   } catch (error) {
-    console.error('Encryption error:', error);
-    throw new Error('Failed to encrypt data');
+    console.error("Encryption error:", error);
+    throw new Error("Failed to encrypt data");
   }
 };
 
@@ -58,32 +59,34 @@ export const decryptData = (encryptedData: string): any => {
     const decryptedString = decrypted.toString(CryptoJS.enc.Utf8);
 
     if (!decryptedString) {
-      throw new Error('Invalid encrypted data or key');
+      throw new Error("Invalid encrypted data or key");
     }
 
     return JSON.parse(decryptedString);
   } catch (error) {
-    console.error('Decryption error:', error);
-    throw new Error('Failed to decrypt data');
+    console.error("Decryption error:", error);
+    throw new Error("Failed to decrypt data");
   }
 };
 
 /**
- * Create encrypted payload for API requests
+ * Create encrypted payload for API requests (matching old project structure)
  */
 export const createEncryptedPayload = (data: any) => {
   return {
-    encrypted: true,
-    data: encryptData(data)
+    payload: encryptData(data),
   };
 };
 
 /**
- * Decrypt API response
+ * Decrypt API response (matching old project structure)
+ * Old project receives encrypted string directly in response.data
  */
 export const decryptApiResponse = (response: any) => {
-  if (response?.encrypted && response?.data) {
-    return decryptData(response.data);
+  // Response.data is the encrypted string from the server
+  if (typeof response === "string") {
+    return decryptData(response);
   }
+  // If already decrypted or not encrypted
   return response;
 };

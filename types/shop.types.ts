@@ -1,4 +1,4 @@
-import type { InventoryProduct, InventoryCategory } from './inventory.types';
+import type { InventoryProduct, InventoryCategory } from "./inventory.types";
 
 // Shop Profile
 export interface ShopProfile {
@@ -39,9 +39,38 @@ export interface ShopProfile {
   delivery_option?: string;
   message_on_top?: string;
   order_verification_enabled?: boolean;
-  advance_payment_type?: 'fixed' | 'percentage';
+  advance_payment_type?: "fixed" | "percentage";
   advanced_payment_fixed_amount?: number;
   advanced_payment_percentage?: number;
+  is_delivery_charge_not_refundable?: boolean;
+
+  // Self MFS
+  self_mfs?: {
+    mfs_provider?: string;
+    mfs_number?: string;
+    qr_code?: string;
+  };
+
+  // Metadata
+  metadata?: {
+    settings?: {
+      shop_settings?: {
+        show_email_for_place_order?: boolean;
+        enable_promo_code_for_place_order?: boolean;
+      };
+      delivery_support?: {
+        zone_cod_enabled?: Record<string, boolean>;
+        default_cod_enabled?: boolean;
+        weight_based_charges?: Array<{
+          weight: number;
+          extra_charge: number;
+        }>;
+      };
+    };
+  };
+
+  // Payment custom message
+  payment_custom_message?: string;
 
   // Social
   social_links?: SocialLinks;
@@ -75,11 +104,11 @@ export interface ThemeColor {
 // Shop Theme
 export interface ShopTheme {
   id: number;
-  theme_type: 'builder' | 'static';
+  theme_type: "builder" | "static";
 
   // For static themes
-  theme_name?: 'Basic' | 'Premium' | 'Aurora' | 'Luxura' | 'Sellora';
-  theme_mode?: 'light' | 'dark';
+  theme_name?: "Basic" | "Premium" | "Aurora" | "Luxura" | "Sellora";
+  theme_mode?: "light" | "dark";
 
   // For builder themes
   theme_json?: ZatiqTheme;
@@ -134,15 +163,21 @@ export interface BlockSchema {
 }
 
 export interface ConditionSchema {
-  type: 'show' | 'hide';
+  type: "show" | "hide";
   field: string;
-  operator: '==' | '!=' | '>' | '<' | '>=' | '<=' | 'includes' | 'exists';
+  operator: "==" | "!=" | ">" | "<" | ">=" | "<=" | "includes" | "exists";
   value?: unknown;
 }
 
 export interface EventSchema {
-  type: 'click' | 'hover' | 'focus' | 'blur';
-  action: 'navigate' | 'toggle_drawer' | 'toggle_theme' | 'search' | 'slider_prev' | 'slider_next';
+  type: "click" | "hover" | "focus" | "blur";
+  action:
+    | "navigate"
+    | "toggle_drawer"
+    | "toggle_theme"
+    | "search"
+    | "slider_prev"
+    | "slider_next";
   payload?: Record<string, unknown>;
 }
 
@@ -153,18 +188,21 @@ export interface RepeaterSchema {
 }
 
 export interface SwiperSchema {
-  slidesPerView?: number | 'auto';
+  slidesPerView?: number | "auto";
   spaceBetween?: number;
   loop?: boolean;
   autoplay?: boolean | { delay: number };
   pagination?: boolean;
   navigation?: boolean;
-  breakpoints?: Record<number, { slidesPerView: number; spaceBetween?: number }>;
+  breakpoints?: Record<
+    number,
+    { slidesPerView: number; spaceBetween?: number }
+  >;
 }
 
 export interface MarqueeSchema {
   speed?: number;
-  direction?: 'left' | 'right';
+  direction?: "left" | "right";
   pauseOnHover?: boolean;
 }
 

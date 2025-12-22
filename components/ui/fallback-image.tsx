@@ -7,24 +7,33 @@ interface FallbackImageProps extends Omit<ImageProps, "onError"> {
   fallbackSrc?: string;
 }
 
-/**
- * FallbackImage Component
- * Matches old project's implementation from FallbackImage.js
- * Displays a fallback image if the main image fails to load
- */
 export const FallbackImage = ({
   src,
   fallbackSrc = "/placeholder.jpg",
+  alt = "",
   ...rest
 }: FallbackImageProps) => {
-  const [imgSrc, setImgSrc] = useState<string>(src as string);
+  const [state, setState] = useState({ src, hasError: false });
+
+  // Reset error state when src prop changes (derived state pattern)
+  if (state.src !== src) {
+    setState({ src, hasError: false });
+  }
+
+  // Determine the actual source to use
+  // If src is empty/null/undefined, use fallback immediately
+  const actualSrc = src && src.trim() !== "" ? src : fallbackSrc;
+  const displaySrc = state.hasError ? fallbackSrc : actualSrc;
 
   return (
     <Image
       {...rest}
-      src={imgSrc || fallbackSrc}
+      alt={alt}
+      src={displaySrc}
       onError={() => {
-        setImgSrc(fallbackSrc);
+        if (!state.hasError) {
+          setState({ src, hasError: true });
+        }
       }}
       onContextMenu={(e) => e.preventDefault()}
       style={{ userSelect: "none", ...rest.style }}

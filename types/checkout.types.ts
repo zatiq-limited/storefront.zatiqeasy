@@ -1,5 +1,5 @@
-import type { CartProduct } from './cart.types';
-import type { Division, District, Upazila } from './shop.types';
+import type { CartProduct } from "./cart.types";
+import type { Division, District, Upazila } from "./shop.types";
 
 // Checkout state for Zustand store
 export interface CheckoutState {
@@ -55,19 +55,19 @@ export interface CheckoutActions {
 
 // Payment methods
 export type PaymentMethod =
-  | 'cod'
-  | 'bkash'
-  | 'nagad'
-  | 'aamarpay'
-  | 'partial_payment'
-  | 'zatiq_seller_pay'
-  | 'self_mfs';
+  | "cod"
+  | "bkash"
+  | "nagad"
+  | "aamarpay"
+  | "partial_payment"
+  | "zatiq_seller_pay"
+  | "self_mfs";
 
 // Promo code
 export interface PromoCode {
   id: number;
   code: string;
-  discount_type: 'percentage' | 'fixed';
+  discount_type: "percentage" | "fixed";
   discount_value: number;
   minimum_order_amount?: number;
   maximum_discount?: number;
@@ -86,6 +86,7 @@ export interface CheckoutFormData {
   upazila?: string;
   delivery_zone?: string;
   note?: string;
+  mfs_provider?: string;
 }
 
 // Checkout calculations

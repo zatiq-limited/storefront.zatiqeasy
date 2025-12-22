@@ -1,77 +1,24 @@
 "use client";
 
 import * as React from "react";
+import { OTPInput, OTPInputContext } from "input-otp";
+
 import { cn } from "@/lib/utils";
 
 const InputOTP = React.forwardRef<
-  React.ElementRef<"div">,
-  Omit<React.ComponentPropsWithoutRef<"div">, 'onChange'> & {
-    maxLength?: number;
-    value?: string;
-    onChange?: (value: string) => void;
-    className?: string;
-  }
->(({ className, maxLength = 6, value = "", onChange, ...props }, ref) => {
-  const [otpValues, setOtpValues] = React.useState<string[]>(
-    Array(maxLength).fill("")
-  );
-
-  React.useEffect(() => {
-    const values = value.split("").slice(0, maxLength);
-    const newValues = Array(maxLength)
-      .fill("")
-      .map((_, i) => values[i] || "");
-    setOtpValues(newValues);
-  }, [value, maxLength]);
-
-  const handleChange = (index: number, val: string) => {
-    const newOtpValues = [...otpValues];
-    newOtpValues[index] = val.slice(-1); // Take only last character
-    setOtpValues(newOtpValues);
-
-    const newValue = newOtpValues.join("");
-    onChange?.(newValue);
-
-    // Focus next input
-    if (val && index < maxLength - 1) {
-      const nextInput = document.getElementById(`otp-${index + 1}`);
-      if (nextInput) {
-        nextInput.focus();
-      }
-    }
-  };
-
-  const handleKeyDown = (
-    index: number,
-    e: React.KeyboardEvent<HTMLInputElement>
-  ) => {
-    if (e.key === "Backspace" && !otpValues[index] && index > 0) {
-      const prevInput = document.getElementById(`otp-${index - 1}`);
-      if (prevInput) {
-        prevInput.focus();
-      }
-    }
-  };
-
-  return (
-    <div
-      ref={ref}
-      className={cn("flex items-center gap-2", className)}
-      {...props}
-    >
-      {Array.from({ length: maxLength }, (_, index) => (
-        <InputOTPSlot
-          key={index}
-          index={index}
-          id={`otp-${index}`}
-          value={otpValues[index]}
-          onChange={(val) => handleChange(index, val)}
-          onKeyDown={(e) => handleKeyDown(index, e)}
-        />
-      ))}
-    </div>
-  );
-});
+  React.ElementRef<typeof OTPInput>,
+  React.ComponentPropsWithoutRef<typeof OTPInput>
+>(({ className, containerClassName, ...props }, ref) => (
+  <OTPInput
+    ref={ref}
+    containerClassName={cn(
+      "flex items-center gap-2 has-[:disabled]:opacity-50",
+      containerClassName
+    )}
+    className={cn("disabled:cursor-not-allowed", className)}
+    {...props}
+  />
+));
 InputOTP.displayName = "InputOTP";
 
 const InputOTPGroup = React.forwardRef<
@@ -83,32 +30,49 @@ const InputOTPGroup = React.forwardRef<
 InputOTPGroup.displayName = "InputOTPGroup";
 
 const InputOTPSlot = React.forwardRef<
-  React.ElementRef<"input">,
-  Omit<React.InputHTMLAttributes<HTMLInputElement>, 'id' | 'value' | 'onChange'> & {
-    index: number;
-    id: string;
-    value: string;
-    onChange: (value: string) => void;
-  }
->(({ index, id, value, onChange, className, ...props }, ref) => {
+  React.ElementRef<"div">,
+  React.ComponentPropsWithoutRef<"div"> & { index: number }
+>(({ index, className, ...props }, ref) => {
+  const inputOTPContext = React.useContext(OTPInputContext);
+  const { char, hasFakeCaret, isActive } = inputOTPContext.slots[index];
+
   return (
-    <input
+    <div
       ref={ref}
-      id={id}
-      type="text"
-      inputMode="numeric"
-      pattern="[0-9]*"
-      maxLength={1}
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
       className={cn(
-        "w-12 h-12 text-center text-lg font-semibold border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white",
+        "relative flex h-9 w-9 items-center justify-center border-y border-r border-input text-sm shadow-sm transition-all first:rounded-l-md first:border-l last:rounded-r-md",
+        isActive && "z-10 ring-1 ring-ring",
         className
       )}
       {...props}
-    />
+    >
+      {char}
+      {hasFakeCaret && (
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+          <div className="h-4 w-px animate-caret-blink bg-foreground duration-1000" />
+        </div>
+      )}
+    </div>
   );
 });
 InputOTPSlot.displayName = "InputOTPSlot";
 
-export { InputOTP, InputOTPGroup, InputOTPSlot };
+const InputOTPSeparator = React.forwardRef<
+  React.ElementRef<"div">,
+  React.ComponentPropsWithoutRef<"div">
+>(({ ...props }, ref) => (
+  <div ref={ref} role="separator" {...props}>
+    <svg
+      width="8"
+      height="16"
+      viewBox="0 0 8 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M0 8H8" stroke="currentColor" />
+    </svg>
+  </div>
+));
+InputOTPSeparator.displayName = "InputOTPSeparator";
+
+export { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator };

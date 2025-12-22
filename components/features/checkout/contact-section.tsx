@@ -1,37 +1,46 @@
 "use client";
 
-import { useTranslation } from "react-i18next";
 import { UseFormRegister, FieldErrors, UseFormWatch } from "react-hook-form";
 import { CountryCode } from "libphonenumber-js";
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { CountryDropdown, Country } from "@/components/ui/country-dropdown";
 import {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import { apiClient } from "@/lib/configs/api-client";
-import { encryptData, decryptData } from "@/lib/encrypt-decrypt";
+import { encryptData, decryptData } from "@/lib/utils/encrypt-decrypt";
 import {
   saveVerifiedPhone,
   isPhoneVerified as checkPhoneVerified,
-} from "@/lib/utils/storage.util";
+} from "@/lib/utils/storage";
+import type { CheckoutFormData } from "@/types/checkout.types";
+import type { ShopProfile } from "@/types/shop.types";
 
 type ContactSectionProps = {
-  register: UseFormRegister<any>;
+  register: UseFormRegister<CheckoutFormData>;
   errors: FieldErrors;
-  watch: UseFormWatch<any>;
+  watch: UseFormWatch<CheckoutFormData>;
   validPhoneNumber: (
     value: string,
     countryCode: CountryCode
   ) => boolean | string;
-  selectedCountryCode: string;
+  selectedCountryCode?: string;
   needPhoneVerification?: boolean;
   onCountryCodeChange?: (countryCode: string) => void;
   onPhoneVerificationChange?: (isVerified: boolean) => void;
   shopId?: number;
   fullPhoneNumber?: string;
-  profile?: any;
+  profile?: ShopProfile & {
+    metadata?: {
+      settings?: {
+        shop_settings?: {
+          show_email_for_place_order?: boolean;
+        };
+      };
+    };
+  };
 };
 
 export const ContactSection = ({
@@ -39,7 +48,6 @@ export const ContactSection = ({
   errors,
   watch,
   validPhoneNumber,
-  selectedCountryCode,
   needPhoneVerification = false,
   onCountryCodeChange,
   onPhoneVerificationChange,
@@ -57,7 +65,6 @@ export const ContactSection = ({
   // OTP verification states
   const formPhoneNumber = watch("customer_phone") || "";
   const [phoneNumber, setPhoneNumber] = useState(formPhoneNumber);
-  const [isPhoneValidated, setIsPhoneValidated] = useState(false);
   const [showOtpField, setShowOtpField] = useState(false);
   const [otpCode, setOtpCode] = useState("");
   const [isOtpSent, setIsOtpSent] = useState(false);
@@ -184,8 +191,6 @@ export const ContactSection = ({
     );
 
     if (phoneValidationResult === true) {
-      setIsPhoneValidated(true);
-
       sendOtp();
     } else {
       setOtpError(
@@ -226,14 +231,14 @@ export const ContactSection = ({
         phone: phoneWithoutCountryCode,
       };
 
-      const response = await apiClient.post(
-        "/api/v1/live/order-verification/send",
-        {
-          payload: encryptData(payload),
-        }
-      );
+      const response = await fetch("/api/orders/verify-phone", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ payload: encryptData(payload) }),
+      });
 
-      const decryptedData = decryptData(response.data);
+      const data = await response.json();
+      const decryptedData = decryptData(data);
 
       if (decryptedData.status) {
         setIsOtpSent(true);
@@ -243,12 +248,17 @@ export const ContactSection = ({
       } else {
         setOtpError(decryptedData.message || "Failed to send OTP");
       }
-    } catch (error: any) {
+    } catch (error) {
       // Handle validation errors
-      if (error.response?.data?.errors?.phone) {
-        setOtpError(error.response.data.errors.phone[0]);
-      } else if (error.response?.data?.message) {
-        setOtpError(error.response.data.message);
+      const err = error as {
+        response?: {
+          data?: { errors?: { phone?: string[] }; message?: string };
+        };
+      };
+      if (err.response?.data?.errors?.phone) {
+        setOtpError(err.response.data.errors.phone[0]);
+      } else if (err.response?.data?.message) {
+        setOtpError(err.response.data.message);
       } else {
         setOtpError("Failed to send OTP. Please try again.");
       }
@@ -293,14 +303,14 @@ export const ContactSection = ({
         otp: otpCode,
       };
 
-      const response = await apiClient.post(
-        "/api/v1/live/order-verification/verify",
-        {
-          payload: encryptData(payload),
-        }
-      );
+      const response = await fetch("/api/orders/verify-phone", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ payload: encryptData(payload) }),
+      });
 
-      const decryptedData = decryptData(response.data);
+      const data = await response.json();
+      const decryptedData = decryptData(data);
 
       if (decryptedData.status) {
         setIsPhoneVerified(true);
@@ -326,15 +336,20 @@ export const ContactSection = ({
       } else {
         setOtpError(decryptedData.message || "Invalid OTP code");
       }
-    } catch (error: any) {
+    } catch (error) {
       // Handle validation errors
-      if (error.response?.data?.errors) {
-        const firstError = Object.values(error.response.data.errors)[0];
+      const err = error as {
+        response?: {
+          data?: { errors?: Record<string, string[]>; message?: string };
+        };
+      };
+      if (err.response?.data?.errors) {
+        const firstError = Object.values(err.response.data.errors)[0];
         setOtpError(
           Array.isArray(firstError) ? firstError[0] : "Invalid OTP code"
         );
-      } else if (error.response?.data?.message) {
-        setOtpError(error.response.data.message);
+      } else if (err.response?.data?.message) {
+        setOtpError(err.response.data.message);
       } else {
         setOtpError("Failed to verify OTP. Please try again.");
       }
@@ -357,7 +372,6 @@ export const ContactSection = ({
 
     // Only reset verification states if phone verification is needed
     if (needPhoneVerification) {
-      setIsPhoneValidated(false);
       setShowOtpField(false);
       setIsOtpSent(false);
       setIsPhoneVerified(false);
@@ -377,7 +391,6 @@ export const ContactSection = ({
 
     // Reset verification states when country changes if phone verification is needed
     if (needPhoneVerification && phoneNumber) {
-      setIsPhoneValidated(false);
       setShowOtpField(false);
       setIsOtpSent(false);
       setIsPhoneVerified(false);
@@ -496,7 +509,14 @@ export const ContactSection = ({
                     value={otpCode}
                     onChange={(value) => setOtpCode(value)}
                     className="flex-1 grow text-black dark:text-white"
-                  />
+                  >
+                    <InputOTPGroup>
+                      <InputOTPSlot index={0} />
+                      <InputOTPSlot index={1} />
+                      <InputOTPSlot index={2} />
+                      <InputOTPSlot index={3} />
+                    </InputOTPGroup>
+                  </InputOTP>
                   <button
                     type="button"
                     onClick={verifyOtp}
@@ -543,14 +563,14 @@ export const ContactSection = ({
                 htmlFor="email"
                 className="block text-base font-medium text-gray-700 dark:text-gray-300"
               >
-                {t("email_address(optional)")}
+                {t("email_addressoptional")}
               </label>
               <input
                 id="email"
                 type="email"
-                placeholder={t("email_address(optional)")}
-                className="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-gray-200"
-                {...register("email", {
+                placeholder={t("email_addressoptional")}
+                className="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-transparent dark:text-gray-200"
+                {...register("customer_email", {
                   pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                   required: false,
                 })}

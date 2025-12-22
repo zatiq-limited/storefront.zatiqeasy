@@ -1,16 +1,45 @@
 "use client";
 
 import { UseFormRegister, FieldErrors } from "react-hook-form";
-import { Checkbox } from "@/components/ui/checkbox";
+import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
+import { CodIcon } from "@/components/ui/icons/cod-icon";
+import { BkashPaymentIcon } from "@/components/ui/icons/bkash-payment-icon";
+import { NagadIcon } from "@/components/ui/icons/nagad-icon";
+import { SelfMFSIcon } from "@/components/ui/icons/self-mfs-icon";
+import { SellerPayIcon } from "@/components/ui/icons/seller-pay-icon";
+import SelfMfsPaymentSection from "./self-mfs-payment-section";
+import { DELIVERY_OPTION } from "@/lib/constants/delivery";
+
+// Helper to get payment method i18n key
+const getPaymentMethodName = (method: string): string => {
+  switch (method) {
+    case "bkash":
+      return "bkash";
+    case "nagad":
+      return "nagad";
+    case "zatiq_seller_pay":
+      return "Zatiq Secure Purchase";
+    case "aamarpay":
+      return "AamarPay(Cards/MFS)";
+    case "self_mfs":
+      return "self_mfs";
+    case "cod":
+    default:
+      return "cash_on_delivery";
+  }
+};
+
+import type { CheckoutFormData } from "@/types/checkout.types";
+import type { ShopProfile } from "@/types/shop.types";
 
 type PaymentOptionsSectionProps = {
   paymentMethods: string[];
   selectedPaymentMethod: string;
   setSelectedPaymentMethod: (method: string) => void;
-  register: UseFormRegister<any>;
+  register: UseFormRegister<CheckoutFormData>;
   errors: FieldErrors;
-  profile: any;
+  profile: ShopProfile;
   isAceeptTermsAndCondition: boolean;
   setIsAceeptTermsAndCondition: (value: boolean) => void;
   showTermsError?: boolean;
@@ -37,6 +66,8 @@ export function PaymentOptionsSection({
   selectedDistrict = null,
   deliveryOption,
 }: PaymentOptionsSectionProps) {
+  const { t } = useTranslation();
+
   // Check if COD is enabled based on delivery zone or district
   const isCodEnabled = () => {
     const deliverySupport = profile?.metadata?.settings?.delivery_support;
@@ -45,17 +76,35 @@ export function PaymentOptionsSection({
     if (!deliverySupport) return true;
 
     // Check zone-specific COD if delivery_option is "zones" and a zone is selected
-    if (deliveryOption === "zones" && selectedDeliveryZone) {
-      const zoneCodEnabled = deliverySupport?.zone_cod_enabled?.[selectedDeliveryZone];
+    if (deliveryOption === DELIVERY_OPTION.ZONES && selectedDeliveryZone) {
+      const zoneCodEnabled =
+        deliverySupport?.zone_cod_enabled?.[selectedDeliveryZone];
+      // Use explicit check - if zone setting exists, use it; otherwise default to true
       return zoneCodEnabled !== undefined ? zoneCodEnabled : true;
     }
 
     // For district-wise delivery, check if the selected district has a zone COD setting
-    if (deliveryOption === "districts" && selectedDistrict) {
-      const zoneCodEnabled = deliverySupport?.zone_cod_enabled?.[selectedDistrict];
+    if (deliveryOption === DELIVERY_OPTION.DISTRICTS && selectedDistrict) {
+      const zoneCodEnabled =
+        deliverySupport?.zone_cod_enabled?.[selectedDistrict];
+      // If district has a specific zone COD setting, use it
       if (zoneCodEnabled !== undefined) {
         return zoneCodEnabled;
       }
+      // Otherwise, fall back to default COD setting
+      const defaultCodEnabled = deliverySupport?.default_cod_enabled;
+      return defaultCodEnabled !== undefined ? defaultCodEnabled : true;
+    }
+
+    // For upazila-wise delivery, check if the selected district has a zone COD setting
+    if (deliveryOption === DELIVERY_OPTION.UPAZILAS && selectedDistrict) {
+      const zoneCodEnabled =
+        deliverySupport?.zone_cod_enabled?.[selectedDistrict];
+      // If district has a specific zone COD setting, use it
+      if (zoneCodEnabled !== undefined) {
+        return zoneCodEnabled;
+      }
+      // Otherwise, fall back to default COD setting
       const defaultCodEnabled = deliverySupport?.default_cod_enabled;
       return defaultCodEnabled !== undefined ? defaultCodEnabled : true;
     }
@@ -67,159 +116,111 @@ export function PaymentOptionsSection({
 
   // Filter payment methods to exclude COD if disabled
   const filteredPaymentMethods = paymentMethods.filter((method) => {
-    if (method === 'cod') {
+    if (method === "cod") {
       return isCodEnabled();
     }
     return true;
   });
 
-  const getPaymentMethodInfo = (method: string) => {
-    switch (method) {
-      case 'cod':
-        return {
-          name: 'Cash on Delivery',
-          description: 'Pay when you receive your order',
-          icon: '💵'
-        };
-      case 'bkash':
-        return {
-          name: 'bKash',
-          description: 'Pay with bKash mobile banking',
-          icon: '📱'
-        };
-      case 'nagad':
-        return {
-          name: 'Nagad',
-          description: 'Pay with Nagad mobile banking',
-          icon: '📱'
-        };
-      case 'aamarpay':
-        return {
-          name: 'AamarPay',
-          description: 'Pay with credit/debit card or mobile banking',
-          icon: '💳'
-        };
-      case 'self_mfs':
-        return {
-          name: 'Mobile Banking',
-          description: 'Pay with selected mobile banking service',
-          icon: '📱'
-        };
-      default:
-        return {
-          name: method,
-          description: 'Pay with this method',
-          icon: '💳'
-        };
-    }
-  };
-
   const handlePaymentMethodChange = (method: string) => {
     setSelectedPaymentMethod(method);
     // Clear terms error when switching to COD
-    if (method === 'cod' && setShowTermsError) {
+    if (method === "cod" && setShowTermsError) {
       setShowTermsError(false);
     }
   };
-
-  const handleTermsChange = (checked: boolean) => {
-    setIsAceeptTermsAndCondition(checked);
-    // Clear terms error when accepting
-    if (checked && setShowTermsError) {
-      setShowTermsError(false);
-    }
-  };
-
-  const isOnlinePayment = selectedPaymentMethod !== 'cod';
 
   return (
-    <div className={`mb-6 md:mb-8 ${isDisabled ? "opacity-50 pointer-events-none" : ""}`}>
-      <h2 className="text-2xl font-semibold mb-3 md:mb-4 dark:text-gray-200">
-        Payment Method
-      </h2>
-
-      <div className="space-y-3">
-        {filteredPaymentMethods.map((method) => {
-          const info = getPaymentMethodInfo(method);
-          return (
-            <label
-              key={method}
-              className={cn(
-                "flex items-center p-4 border rounded-lg cursor-pointer transition-all duration-200",
-                selectedPaymentMethod === method
-                  ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-400"
-                  : "border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500"
-              )}
+    <>
+      {/* Payment Options Section */}
+      <div
+        className={`mb-6 md:mb-8 space-y-3 ${
+          isDisabled ? "opacity-50 pointer-events-none" : ""
+        }`}
+      >
+        <h4 className="text-base font-medium text-gray-700 dark:text-gray-300">
+          {t("payment_options")}
+        </h4>
+        <div className="flex flex-wrap gap-3 w-full">
+          {!paymentMethods?.length && isCodEnabled() && (
+            <button
+              onClick={() => !isDisabled && setSelectedPaymentMethod("cod")}
+              type="button"
+              disabled={isDisabled}
+              className={`px-4 sm:px-6 py-2 sm:py-3 text-blue-zatiq text-sm font-medium flex items-center gap-2 md:gap-3 ring-2 ${
+                selectedPaymentMethod === "cod"
+                  ? "ring-blue-zatiq bg-blue-50 dark:bg-blue-900/20"
+                  : "ring-gray-300 dark:ring-gray-600"
+              } rounded-full transition-all disabled:cursor-not-allowed`}
             >
-              <input
-                type="radio"
-                name="payment_method"
-                value={method}
-                checked={selectedPaymentMethod === method}
-                onChange={() => handlePaymentMethodChange(method)}
-                disabled={isDisabled}
-                className="mr-3 text-blue-500 focus:ring-blue-500"
-              />
-              <div className="flex items-center flex-1">
-                <span className="text-2xl mr-3">{info.icon}</span>
-                <div>
-                  <div className="font-medium text-gray-900 dark:text-gray-100">
-                    {info.name}
-                  </div>
-                  <div className="text-sm text-gray-500 dark:text-gray-400">
-                    {info.description}
-                  </div>
-                </div>
-              </div>
-            </label>
-          );
-        })}
-      </div>
+              <CodIcon />
+              {t("cash_on_delivery")}
+            </button>
+          )}
 
-      {/* Terms and Conditions for non-COD payments */}
-      {isOnlinePayment && (
-        <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-600">
-          <div className="space-y-3">
-            <div className="flex items-start space-x-3">
-              <Checkbox
-                id="terms"
-                checked={isAceeptTermsAndCondition}
-                onCheckedChange={handleTermsChange}
+          <div className="grid grid-cols-2 gap-4 w-full">
+            {filteredPaymentMethods?.map((paymentMethod: string) => (
+              <button
+                key={paymentMethod}
+                onClick={() => {
+                  if (!isDisabled) handlePaymentMethodChange(paymentMethod);
+                }}
+                type="button"
                 disabled={isDisabled}
-              />
-              <div className="space-y-1">
-                <label
-                  htmlFor="terms"
-                  className="text-sm font-medium cursor-pointer text-gray-700 dark:text-gray-300"
-                >
-                  I agree to the Terms and Conditions
-                </label>
-                <p className="text-xs text-muted-foreground">
-                  By placing this order, you agree to our{" "}
-                  <a href="/terms" className="underline hover:text-foreground">
-                    Terms of Service
-                  </a>{" "}
-                  and{" "}
-                  <a href="/privacy" className="underline hover:text-foreground">
-                    Privacy Policy
-                  </a>
-                </p>
-              </div>
-            </div>
-            {showTermsError && (
-              <p className="text-sm text-red-500 dark:text-red-400">
-                You must accept the terms and conditions to proceed with online payment
-              </p>
-            )}
+                className={cn(
+                  "px-4 sm:px-6 py-3 sm:py-4 text-sm capitalize gap-2 md:gap-3 border-2 rounded-lg transition-colors w-full flex flex-col items-start cursor-pointer disabled:cursor-not-allowed",
+                  selectedPaymentMethod === paymentMethod
+                    ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400"
+                    : "border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500"
+                )}
+              >
+                <div className="flex justify-between w-full items-center text-black dark:text-white">
+                  <p>{t(getPaymentMethodName(paymentMethod))}</p>
+                  {paymentMethod === selectedPaymentMethod ? (
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M8 0C3.58897 0 0 3.58897 0 8C0 12.411 3.58897 16 8 16C12.411 16 16 12.411 16 8C16 3.58897 12.411 0 8 0ZM12.4712 5.89474L7.3584 10.9674C7.05764 11.2682 6.57644 11.2882 6.25564 10.9875L3.54887 8.5213C3.22807 8.22055 3.20802 7.7193 3.48872 7.3985C3.78947 7.07769 4.29073 7.05764 4.61153 7.3584L6.75689 9.32331L11.3283 4.75188C11.6491 4.43108 12.1504 4.43108 12.4712 4.75188C12.792 5.07268 12.792 5.57393 12.4712 5.89474Z"
+                        fill="#3465F0"
+                      />
+                    </svg>
+                  ) : null}
+                </div>
+                {paymentMethod === "zatiq_seller_pay" && <SellerPayIcon />}
+                {paymentMethod === "cod" && <CodIcon />}
+                {paymentMethod === "bkash" && <BkashPaymentIcon />}
+                {paymentMethod === "nagad" && <NagadIcon />}
+                {paymentMethod === "self_mfs" && <SelfMFSIcon />}
+              </button>
+            ))}
           </div>
         </div>
-      )}
+      </div>
 
-      {filteredPaymentMethods.length === 0 && (
-        <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-          No payment methods available for your selected location
-        </div>
+      {/* Self MFS Payment Section */}
+      {selectedPaymentMethod === "self_mfs" && (
+        <input type="hidden" {...register("mfs_provider")} value="self_mfs" />
       )}
-    </div>
+      <SelfMfsPaymentSection
+        selectedPaymentMethod={selectedPaymentMethod}
+        profile={profile}
+        register={register}
+        errors={errors}
+        isAceeptTermsAndCondition={isAceeptTermsAndCondition}
+        setIsAceeptTermsAndCondition={setIsAceeptTermsAndCondition}
+        paymentCustomMessage={
+          profile.payment_custom_message ??
+          `Note: ${`We'll `} contact you once the order is confirmed`
+        }
+        messageClassName="block text-red-500 tracking-[-.56px] whitespace-pre-line"
+        showTermsError={showTermsError}
+        setShowTermsError={setShowTermsError}
+      />
+    </>
   );
 }

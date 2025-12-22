@@ -99,6 +99,7 @@ export const CartQtyControl = ({
         onClick={(e) => e.stopPropagation()}
         className="font-medium text-sm md:text-base text-center w-12 md:w-16 border border-gray-200 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-zatiq focus:border-transparent [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none dark:bg-gray-700 dark:border-gray-600 dark:text-white"
         min="0"
+        max={maxStock}
       />
       <button
         type="button"

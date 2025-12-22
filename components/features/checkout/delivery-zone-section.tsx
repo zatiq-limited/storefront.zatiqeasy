@@ -1,5 +1,3 @@
-"use client";
-
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 
@@ -47,9 +45,11 @@ export const DeliveryZoneSection = ({
             isDisabled={isDisabled}
             onClick={() => {
               if (isDisabled) return;
-              selectedSpecificDeliveryZone === zone
-                ? setSelectedSpecificDeliveryZone("Others")
-                : setSelectedSpecificDeliveryZone(zone);
+              if (selectedSpecificDeliveryZone === zone) {
+                setSelectedSpecificDeliveryZone("Others");
+              } else {
+                setSelectedSpecificDeliveryZone(zone);
+              }
             }}
           />
         ))}
@@ -75,7 +75,7 @@ const DeliveryOption = ({
       type="button"
       disabled={isDisabled}
       className={cn(
-        "px-[16px] py-[8px] text-sm tracking-[-0.12px] flex items-center gap-4 ring-2  rounded-full ring-gray-200 dark:ring-gray-600 text-black-full dark:text-gray-300 cursor-pointer disabled:cursor-not-allowed",
+        "px-4 py-2 text-sm tracking-[-0.12px] flex items-center gap-4 ring-2 rounded-full ring-gray-200 dark:ring-gray-600 text-black-full dark:text-gray-300 cursor-pointer disabled:cursor-not-allowed",
         {
           "text-blue-zatiq ring-blue-zatiq dark:ring-blue-zatiq bg-blue-zatiq/10":
             isSelected,

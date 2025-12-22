@@ -1,8 +1,14 @@
 "use client";
 
 import { useTranslation } from "react-i18next";
-import { UseFormRegister, FieldErrors, UseFormSetValue, UseFormWatch } from "react-hook-form";
+import {
+  UseFormRegister,
+  FieldErrors,
+  UseFormSetValue,
+  UseFormWatch,
+} from "react-hook-form";
 import { ChevronDown } from "lucide-react";
+import type { CheckoutFormData } from "@/types/checkout.types";
 
 type Division = {
   id: number;
@@ -11,10 +17,10 @@ type Division = {
 };
 
 type ShippingAddressSectionProps = {
-  register: UseFormRegister<any>;
+  register: UseFormRegister<CheckoutFormData>;
   errors: FieldErrors;
-  setValue: UseFormSetValue<any>;
-  watch: UseFormWatch<any>;
+  setValue: UseFormSetValue<CheckoutFormData>;
+  watch: UseFormWatch<CheckoutFormData>;
   country_code: string;
   delivery_option: string;
   divisions: Division[];

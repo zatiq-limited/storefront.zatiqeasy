@@ -4,34 +4,61 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useCartStore, useCheckoutStore, useShopStore } from "@/stores";
 import { useCartTotals } from "@/hooks";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { Checkbox } from "@/components/ui/checkbox";
 import { ContactSection } from "./contact-section";
 import { ShippingAddressSection } from "./shipping-address-section";
 import { DeliveryZoneSection } from "./delivery-zone-section";
 import { PaymentOptionsSection } from "./payment-options-section";
 import { OrderSummarySection } from "./order-summary-section";
 import { createOrder } from "@/lib/payments/api";
+import type { CheckoutFormData } from "@/types/checkout.types";
+import type { ShopProfile } from "@/types/shop.types";
+import type { Division, District, Upazila } from "@/types/shop.types";
 import { PaymentType, OrderStatus } from "@/lib/payments/types";
-import { validatePhoneNumber } from "@/lib/payments/utils";
+import { validatePhoneNumberWithCountry } from "@/lib/utils/validation";
+import { parsePhoneNumber, CountryCode } from "libphonenumber-js";
+import { convertBanglaToLatin } from "@/lib/utils/bangla-to-latin";
+import { toast } from "react-hot-toast";
 
-interface CommonCheckoutFormProps {
-  className?: string;
-  onSubmit?: (orderData: any) => void;
+interface ReceiptItem {
+  name: string;
+  price: number;
+  image_url?: string;
+  inventory_id: number;
+  qty: number;
+  variants: Array<{
+    variant_type_id: number;
+    variant_id: number;
+  }>;
 }
 
-export function CommonCheckoutForm({
-  className,
-  onSubmit,
-}: CommonCheckoutFormProps) {
+interface OrderData {
+  shop_id: number;
+  customer_name: string;
+  customer_phone: string;
+  customer_address: string;
+  delivery_charge: number;
+  tax_amount: number;
+  total_amount: number;
+  payment_type: PaymentType;
+  pay_now_amount: number;
+  receipt_items: ReceiptItem[];
+  type: "Online";
+  status: OrderStatus;
+  note: string;
+}
+
+interface CommonCheckoutFormProps {
+  onSubmit?: (orderData: OrderData) => void;
+}
+
+export function CommonCheckoutForm({ onSubmit }: CommonCheckoutFormProps) {
   const {
     register,
     handleSubmit,
     watch,
     setValue,
     formState: { errors },
-  } = useForm();
+  } = useForm<CheckoutFormData>();
 
   // Get shop details
   const shopDetails = useShopStore((state) => state.shopDetails);
@@ -40,16 +67,8 @@ export function CommonCheckoutForm({
   const { products, totalPrice } = useCartTotals();
   const cartProducts = Object.values(products);
 
-  // Checkout state
-  const {
-    selectedDivision,
-    selectedDistrict,
-    selectedUpazila,
-    selectedDeliveryZone,
-    selectedPaymentMethod,
-    acceptedTerms,
-    discountAmount,
-  } = useCheckoutStore();
+  // Checkout state from store (only used for selectedDivision/selectedDistrict)
+  const { selectedDivision, selectedDistrict } = useCheckoutStore();
 
   // Local state
   const [isLoading, setIsLoading] = useState(false);
@@ -64,9 +83,21 @@ export function CommonCheckoutForm({
   const [isPromoLoading, setIsPromoLoading] = useState(false);
   const [fullPhoneNumber, setFullPhoneNumber] = useState("");
   const [selectedCountryCode, setSelectedCountryCode] = useState("+880");
+  const [selectedSpecificDeliveryZone, setSelectedSpecificDeliveryZone] =
+    useState<string>("");
+  const [selectedPaymentMethod, setSelectedPaymentMethod] =
+    useState<string>("cod");
+  const [discountAmount] = useState(0);
 
-  // Form values
-  const formValues = watch();
+  // Location data state
+  type LocationData = { id: number; name: string; bn_name: string };
+  const [divisions, setDivisions] = useState<LocationData[]>([]);
+  const [districts, setDistricts] = useState<Record<string, LocationData[]>>(
+    {}
+  );
+  const [upazilas, setUpazilas] = useState<
+    Record<string, Record<string, LocationData[]>>
+  >({});
 
   // Constants
   const order_verification_enabled =
@@ -88,6 +119,7 @@ export function CommonCheckoutForm({
 
   const deliveryCharge = calculateDeliveryCharge();
   const taxAmount = 0; // Can be implemented later
+  const totaltax = taxAmount; // Alias to match old project
   const grandTotal = totalPrice + deliveryCharge + taxAmount - discountAmount;
 
   // Check if full online payment is required
@@ -99,25 +131,112 @@ export function CommonCheckoutForm({
     return grandTotal;
   };
 
-  // Handle form changes
-  const handleChange = (field: string, value: any) => {
-    setValue(field, value);
+  // Handle full online payment toggle (used by OrderSummarySection)
+  const handleChange = (value: boolean) => {
+    // This handles the full online payment checkbox toggle
+    // The value represents whether full payment is selected
+    console.log("Full online payment:", value);
   };
 
   // Handle promo code apply
-  const handlePromoCodeApply = async () => {
-    if (!promoCodeSearch) return;
+  const handlePromoCodeApply = async (data: {
+    shop_id: string;
+    shop_promo_code: string;
+  }) => {
+    if (!data.shop_promo_code) return;
 
     setIsPromoLoading(true);
     try {
       // API call for promo code validation can be added here
       setPromoCodeMessage("Promo code applied successfully!");
-    } catch (error) {
+    } catch (err) {
+      console.error("Promo code error:", err);
       setPromoCodeMessage("Invalid promo code");
     } finally {
       setIsPromoLoading(false);
     }
   };
+
+  // Fetch divisions/districts/upazilas data
+  useEffect(() => {
+    const fetchLocationData = async () => {
+      try {
+        const response = await fetch("/api/storefront/divisions");
+        const data = await response.json();
+
+        if (data.status && data.data) {
+          // Process divisions
+          const divisionsData = data.data.map((div: Division) => ({
+            id: div.id,
+            name: div.name,
+            bn_name: div.bn_name,
+          }));
+          setDivisions(divisionsData);
+
+          // Process districts grouped by division
+          const districtsData: Record<string, LocationData[]> = {};
+          data.data.forEach((div: Division) => {
+            if (div.districts && Array.isArray(div.districts)) {
+              districtsData[div.name] = div.districts.map((dist: District) => ({
+                id: dist.id,
+                name: dist.name,
+                bn_name: dist.bn_name,
+              }));
+            }
+          });
+          setDistricts(districtsData);
+
+          // Process upazilas grouped by division and district
+          const upazilasData: Record<
+            string,
+            Record<string, LocationData[]>
+          > = {};
+          data.data.forEach((div: Division) => {
+            upazilasData[div.name] = {};
+            if (div.districts && Array.isArray(div.districts)) {
+              div.districts.forEach((dist: District) => {
+                if (dist.upazilas && Array.isArray(dist.upazilas)) {
+                  upazilasData[div.name][dist.name] = dist.upazilas.map(
+                    (upz: Upazila) => ({
+                      id: upz.id,
+                      name: upz.name,
+                      bn_name: upz.bn_name,
+                    })
+                  );
+                }
+              });
+            }
+          });
+          setUpazilas(upazilasData);
+        }
+      } catch (err) {
+        console.error("Failed to fetch location data:", err);
+      }
+    };
+
+    fetchLocationData();
+  }, []);
+
+  // Ensure mfs_provider is set in form data when self managed MFS is chosen
+  useEffect(() => {
+    const selfMfsData = shopDetails?.self_mfs;
+
+    if (
+      selectedPaymentMethod === "self_mfs" &&
+      selfMfsData &&
+      selfMfsData.mfs_provider
+    ) {
+      setValue("mfs_provider", selfMfsData.mfs_provider, {
+        shouldDirty: true,
+        shouldValidate: false,
+      });
+    } else {
+      setValue("mfs_provider", "", {
+        shouldDirty: false,
+        shouldValidate: false,
+      });
+    }
+  }, [selectedPaymentMethod, setValue, shopDetails]);
 
   // Clear terms error when payment method changes to COD or terms are accepted
   useEffect(() => {
@@ -126,8 +245,55 @@ export function CommonCheckoutForm({
     }
   }, [selectedPaymentMethod, isAceeptTermsAndCondition]);
 
+  // Watch customer_phone and auto-validate to set fullPhoneNumber
+  const customerPhone = watch("customer_phone");
+  useEffect(() => {
+    if (customerPhone && customerPhone.length >= 10) {
+      try {
+        const countryCode = selectedCountryCode.replace("+", "");
+        const normalizedPhone = convertBanglaToLatin(customerPhone);
+        const parsedNumber = parsePhoneNumber(
+          normalizedPhone,
+          (countryCode.length === 2 ? countryCode : "BD") as CountryCode
+        );
+        if (parsedNumber && parsedNumber.isValid()) {
+          setFullPhoneNumber(parsedNumber.number);
+        }
+      } catch (error) {
+        console.log("Phone parsing error:", error);
+      }
+    }
+  }, [customerPhone, selectedCountryCode]);
+
+  // Create a wrapper for phone validation that also sets fullPhoneNumber
+  const validPhoneNumberWrapper = (
+    phone: string,
+    country: CountryCode
+  ): boolean | string => {
+    const result = validatePhoneNumberWithCountry(phone, country);
+
+    // If validation passes, also update fullPhoneNumber
+    if (result === true) {
+      try {
+        const countryCode = country.length > 2 ? country.slice(1, 3) : country;
+        const normalizedPhoneNumber = convertBanglaToLatin(phone);
+        const parsedNumber = parsePhoneNumber(
+          normalizedPhoneNumber,
+          countryCode as CountryCode
+        );
+        if (parsedNumber) {
+          setFullPhoneNumber(parsedNumber.number);
+        }
+      } catch (error) {
+        console.error("Error parsing phone number:", error);
+      }
+    }
+
+    return result;
+  };
+
   // Handle form submission with phone verification check
-  const handleFormSubmit = async (data: any) => {
+  const handleFormSubmit = async (data: CheckoutFormData) => {
     // Check if phone verification is required and not verified
     if (order_verification_enabled && !isPhoneVerified) {
       setShowPhoneVerificationError(true);
@@ -148,12 +314,22 @@ export function CommonCheckoutForm({
 
     try {
       // Validate required fields
-      if (!fullPhoneNumber || !data.customer_name || !data.customer_address) {
-        throw new Error("Please fill in all required fields");
-      }
+      console.log("Validation check:", {
+        fullPhoneNumber,
+        customer_name: data.customer_name,
+        customer_address: data.customer_address,
+        customer_phone: data.customer_phone,
+      });
 
-      if (!validatePhoneNumber(fullPhoneNumber)) {
-        throw new Error("Please enter a valid phone number");
+      // Use customer_phone from form data if fullPhoneNumber is not set
+      const phoneToValidate = fullPhoneNumber || data.customer_phone;
+
+      if (!phoneToValidate || !data.customer_name || !data.customer_address) {
+        const missingFields = [];
+        if (!phoneToValidate) missingFields.push("phone number");
+        if (!data.customer_name) missingFields.push("name");
+        if (!data.customer_address) missingFields.push("address");
+        throw new Error(`Please fill in: ${missingFields.join(", ")}`);
       }
 
       if (cartProducts.length === 0) {
@@ -193,7 +369,7 @@ export function CommonCheckoutForm({
       const orderPayload = {
         shop_id: shopDetails?.id || 1,
         customer_name: data.customer_name,
-        customer_phone: fullPhoneNumber,
+        customer_phone: fullPhoneNumber || data.customer_phone,
         customer_address: data.customer_address,
         delivery_charge: deliveryCharge,
         tax_amount: taxAmount,
@@ -203,22 +379,27 @@ export function CommonCheckoutForm({
         receipt_items: receiptItems,
         type: "Online" as const,
         status: OrderStatus.ORDER_PLACED,
-        note: data.order_note || "",
+        note: data.note || "",
       };
 
       // Create order
       const response = await createOrder(orderPayload);
 
+      console.log("Order response:", response);
+
       if (response.success && response.data) {
         // Clear cart
         useCartStore.getState().clearCart();
 
-        // Handle payment redirect
+        // Handle payment redirect (matching old project)
         if (response.data.payment_url) {
+          // For online payment gateways
           window.location.replace(response.data.payment_url);
         } else if (response.data.receipt_url) {
-          window.location.href = `/receipt/${response.data.receipt_id}`;
+          // For COD or completed payments - use receipt_url as the path
+          window.location.href = `/receipt/${response.data.receipt_url}`;
         } else {
+          // Fallback to receipt_id if receipt_url not available
           window.location.href = `/receipt/${response.data.receipt_id}`;
         }
       } else {
@@ -228,54 +409,34 @@ export function CommonCheckoutForm({
       if (onSubmit) {
         await onSubmit(orderPayload);
       }
-    } catch (error: any) {
-      console.error("Checkout error:", error);
-      alert(error.message || "Failed to place order. Please try again.");
+    } catch (err) {
+      console.error("Checkout error:", err);
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : "Failed to place order. Please try again.";
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Mock data for locations (should be fetched from API)
-  const divisions = [
-    { id: 1, name: "Dhaka" },
-    { id: 2, name: "Chattogram" },
-    { id: 3, name: "Khulna" },
-    { id: 4, name: "Rajshahi" },
-    { id: 5, name: "Sylhet" },
-    { id: 6, name: "Barishal" },
-    { id: 7, name: "Rangpur" },
-    { id: 8, name: "Mymensingh" },
-  ];
+  // Location data is now fetched from API via useEffect above
 
-  const districts = [
-    { id: 1, division_id: 1, name: "Dhaka" },
-    { id: 2, division_id: 1, name: "Gazipur" },
-    { id: 3, division_id: 1, name: "Narayanganj" },
-  ];
-
-  const upazilas = [
-    { id: 1, district_id: 1, name: "Dhanmondi" },
-    { id: 2, district_id: 1, name: "Mirpur" },
-    { id: 3, district_id: 1, name: "Uttara" },
-  ];
-
-  // Mock profile data
-  const profile = {
-    payment_methods: shopDetails?.payment_methods || [
-      "cod",
-      "bkash",
-      "nagad",
-      "aamarpay",
-    ],
-    specific_delivery_charges: [],
+  // Use shop details as profile
+  const profile = (shopDetails || {
+    payment_methods: ["cod", "bkash", "nagad", "aamarpay"],
+    specific_delivery_charges: {},
     self_mfs: null,
-  };
+  }) as ShopProfile;
+
+  // Shop ID
+  const shopId = shopDetails?.id || 1;
 
   return (
     <form
       onSubmit={handleSubmit(handleFormSubmit)}
-      className="container flex flex-col lg:flex-row justify-center gap-6 lg:gap-8"
+      className="container flex flex-col lg:flex-row justify-center gap-6 lg:gap-8 pt-6"
     >
       {/* Left section - Contact and Shipping Form */}
       <div className="flex-1 basis-full lg:basis-1/2 lg:pr-8 xl:pr-16">
@@ -305,17 +466,24 @@ export function CommonCheckoutForm({
           register={register}
           errors={errors}
           watch={watch}
-          validPhoneNumber={validatePhoneNumber}
+          validPhoneNumber={validPhoneNumberWrapper}
           selectedCountryCode={selectedCountryCode}
           needPhoneVerification={order_verification_enabled || false}
-          onCountryCodeChange={setSelectedCountryCode}
+          onCountryCodeChange={(code) => {
+            setSelectedCountryCode(code);
+            // Update full phone number when country code changes
+            const phoneNumber = watch("customer_phone") || "";
+            if (phoneNumber) {
+              setFullPhoneNumber(code + phoneNumber);
+            }
+          }}
           onPhoneVerificationChange={(verified) => {
             setIsPhoneVerified(verified);
             if (verified) {
               setShowPhoneVerificationError(false);
             }
           }}
-          shopId={shopDetails?.id || 1}
+          shopId={shopId}
           fullPhoneNumber={fullPhoneNumber}
           profile={profile}
         />
@@ -332,7 +500,6 @@ export function CommonCheckoutForm({
           upazilas={upazilas}
           selectedDivision={selectedDivision}
           selectedDistrict={selectedDistrict}
-          selectedUpazila={selectedUpazila}
           shopLanguage={shopLanguage}
           isDisabled={order_verification_enabled && !isPhoneVerified}
         />
@@ -341,21 +508,15 @@ export function CommonCheckoutForm({
           country_code={country_code}
           delivery_option={delivery_option}
           specificDeliveryCharges={profile.specific_delivery_charges}
-          selectedSpecificDeliveryZone={selectedDeliveryZone}
-          setSelectedSpecificDeliveryZone={(zone) => {
-            useCheckoutStore.getState().setSelectedDeliveryZone(zone);
-          }}
+          selectedSpecificDeliveryZone={selectedSpecificDeliveryZone}
+          setSelectedSpecificDeliveryZone={setSelectedSpecificDeliveryZone}
           isDisabled={order_verification_enabled && !isPhoneVerified}
         />
 
         <PaymentOptionsSection
           paymentMethods={profile?.payment_methods || []}
           selectedPaymentMethod={selectedPaymentMethod}
-          setSelectedPaymentMethod={(method: string) => {
-            useCheckoutStore.setState({
-              selectedPaymentMethod: method as 'cod' | 'bkash' | 'nagad' | 'aamarpay' | 'partial_payment'
-            });
-          }}
+          setSelectedPaymentMethod={setSelectedPaymentMethod}
           register={register}
           errors={errors}
           profile={profile}
@@ -364,7 +525,7 @@ export function CommonCheckoutForm({
           showTermsError={showTermsError}
           setShowTermsError={setShowTermsError}
           isDisabled={order_verification_enabled && !isPhoneVerified}
-          selectedDeliveryZone={selectedDeliveryZone}
+          selectedDeliveryZone={selectedSpecificDeliveryZone}
           selectedDistrict={selectedDistrict}
           deliveryOption={delivery_option}
         />
@@ -375,7 +536,7 @@ export function CommonCheckoutForm({
         <OrderSummarySection
           totalPrice={totalPrice}
           discountAmount={discountAmount}
-          totaltax={taxAmount}
+          totaltax={totaltax}
           deliveryCharge={deliveryCharge}
           grandTotal={grandTotal}
           country_currency={country_currency}
@@ -385,7 +546,7 @@ export function CommonCheckoutForm({
           promoCodeMessage={promoCodeMessage}
           isPromoLoading={isPromoLoading}
           isLoading={isLoading}
-          shopId={shopDetails?.id?.toString() || "1"}
+          shopId={shopId}
           promoCodeMutate={handlePromoCodeApply}
           isFullOnlinePayment={isFullOnlinePayment}
           handleChange={handleChange}
@@ -393,7 +554,7 @@ export function CommonCheckoutForm({
           selectedPaymentMethod={selectedPaymentMethod}
           isAceeptTermsAndCondition={isAceeptTermsAndCondition}
           setIsAceeptTermsAndCondition={setIsAceeptTermsAndCondition}
-          products={products}
+          products={cartProducts}
           register={register}
           showTermsError={showTermsError}
           setShowTermsError={setShowTermsError}
