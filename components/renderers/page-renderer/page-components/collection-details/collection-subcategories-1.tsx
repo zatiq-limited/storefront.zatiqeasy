@@ -9,7 +9,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { convertSettingsKeys } from "@/lib/settings-utils";
-import type { Collection } from "@/hooks/useCollectionDetails";
+import type { CollectionDetails as Collection } from "@/hooks/useCollectionDetails";
 
 interface CollectionSubcategories1Props {
   settings?: Record<string, unknown>;

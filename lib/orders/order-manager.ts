@@ -90,15 +90,17 @@ export class OrderManager {
           variantEntries.length > 0 ? variantEntries[0].variant_id : undefined;
 
         return {
-          product_id: String(item.id),
-          product_handle: (item as any).handle || String(item.id),
-          product_name: item.name,
-          variant_id: variantId ? String(variantId) : undefined,
-          variant_name: variantName,
-          quantity: item.qty,
-          unit_price: item.price,
-          total_price: item.price * item.qty,
-          product_image: item.image_url,
+          name: item.name,
+          price: item.price * item.qty,
+          image_url: item.image_url,
+          inventory_id: item.id,
+          qty: item.qty,
+          variants: item.selectedVariants ? Object.values(item.selectedVariants)
+            .filter(v => v?.variant_type_id && v?.variant_id)
+            .map(v => ({
+              variant_type_id: v!.variant_type_id,
+              variant_id: v!.variant_id,
+            })) : [],
         };
       });
 
@@ -192,7 +194,7 @@ export class OrderManager {
       status: receipt.status,
       paymentStatus: receipt.payment_status,
       subtotal: receipt.receipt_items.reduce(
-        (sum, item) => sum + item.total_price,
+        (sum, item) => sum + item.price,
         0
       ),
       deliveryCharge: receipt.delivery_charge,

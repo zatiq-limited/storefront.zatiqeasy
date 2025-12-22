@@ -6,6 +6,7 @@
 "use client";
 
 import { useProductDetails } from "@/hooks";
+import { useEffect } from "react";
 import ProductDetailsPageRenderer from "@/components/renderers/page-renderer/product-details-page-renderer";
 import type { Section } from "@/lib/types";
 import Link from "next/link";
@@ -32,6 +33,15 @@ export default function ProductDetailsClient({
     incrementQuantity,
     decrementQuantity,
   } = useProductDetails(handle);
+
+  // Scroll to top when component mounts or handle changes
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
+  }, [handle]);
 
   // Show loading state
   if (isLoading || isPageConfigLoading) {

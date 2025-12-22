@@ -10,7 +10,7 @@
 "use client";
 
 import type { Section } from "@/lib/types";
-import type { Collection } from "@/hooks/useCollectionDetails";
+import type { CollectionDetails } from "@/hooks/useCollectionDetails";
 import {
   CollectionBreadcrumb1,
   CollectionBreadcrumb2,
@@ -25,7 +25,7 @@ import { convertSettingsKeys } from "@/lib/settings-utils";
 
 interface CollectionDetailsPageRendererProps {
   sections: Section[];
-  collection: Collection;
+  collection: CollectionDetails;
   isLoading?: boolean;
   className?: string;
 }

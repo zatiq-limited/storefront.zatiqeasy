@@ -3,6 +3,8 @@
  * Common hook for all themes (Basic, Aurora, Sellora, etc.)
  */
 
+"use client";
+
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { fetchShopProfile, type ShopProfile } from "@/lib/api/shop";

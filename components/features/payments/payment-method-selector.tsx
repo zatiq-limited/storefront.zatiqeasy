@@ -15,13 +15,12 @@ import {
 } from "./gateways";
 
 interface PaymentMethodSelectorProps {
-  amount: number;
-  receiptId?: string;
-  customerInfo?: {
-    name: string;
-    email?: string;
-    phone: string;
-    address?: string;
+  orderPayload: any; // Full order payload matching old project structure
+  shopMfsDetails?: {
+    bkash_number?: string;
+    bkash_qr?: string;
+    nagad_number?: string;
+    nagad_qr?: string;
   };
   onPaymentSuccess?: (transactionId: string) => void;
   onPaymentError?: (error: Error) => void;
@@ -68,9 +67,8 @@ const paymentMethods = [
 ];
 
 export function PaymentMethodSelector({
-  amount,
-  receiptId,
-  customerInfo,
+  orderPayload,
+  shopMfsDetails,
   onPaymentSuccess,
   onPaymentError,
   onPaymentRedirect,
@@ -89,8 +87,7 @@ export function PaymentMethodSelector({
       case "bkash":
         return (
           <BkashPayment
-            amount={amount}
-            receiptId={receiptId || ''}
+            orderPayload={{...orderPayload, payment_type: "bkash"}}
             onPaymentSuccess={onPaymentSuccess}
             onPaymentError={onPaymentError}
             onPaymentRedirect={onPaymentRedirect}
@@ -99,8 +96,7 @@ export function PaymentMethodSelector({
       case "nagad":
         return (
           <NagadPayment
-            amount={amount}
-            receiptId={receiptId || ''}
+            orderPayload={{...orderPayload, payment_type: "nagad"}}
             onPaymentSuccess={onPaymentSuccess}
             onPaymentError={onPaymentError}
             onPaymentRedirect={onPaymentRedirect}
@@ -109,9 +105,7 @@ export function PaymentMethodSelector({
       case "aamarpay":
         return (
           <AamarpayPayment
-            amount={amount}
-            receiptId={receiptId || ''}
-            customerInfo={customerInfo}
+            orderPayload={{...orderPayload, payment_type: "aamarpay"}}
             onPaymentSuccess={onPaymentSuccess}
             onPaymentError={onPaymentError}
             onPaymentRedirect={onPaymentRedirect}
@@ -120,17 +114,20 @@ export function PaymentMethodSelector({
       case "self_mfs":
         return (
           <SelfMfsPayment
-            amount={amount}
+            orderPayload={orderPayload}
+            shopMfsDetails={shopMfsDetails}
             onPaymentSuccess={onPaymentSuccess}
             onPaymentError={onPaymentError}
+            onPaymentRedirect={onPaymentRedirect}
           />
         );
       case "cod":
         return (
           <CodPayment
-            amount={amount}
-            customerInfo={customerInfo}
-            onConfirmOrder={() => onPaymentSuccess?.("COD-" + Date.now())}
+            orderPayload={{...orderPayload, payment_type: "cod"}}
+            onOrderSuccess={(receiptUrl) => onPaymentRedirect?.(`/payment-confirm?status=success&receipt_url=${receiptUrl}`)}
+            onPaymentError={onPaymentError}
+            onPaymentRedirect={onPaymentRedirect}
           />
         );
       default:

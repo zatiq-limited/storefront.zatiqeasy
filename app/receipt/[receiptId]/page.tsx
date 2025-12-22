@@ -131,7 +131,7 @@ export default function ReceiptPage() {
   }
 
   const subtotal = orderDetails.receipt_items.reduce(
-    (sum: number, item: OrderItem) => sum + item.total_price,
+    (sum: number, item: OrderItem) => sum + item.price,
     0
   );
 
@@ -250,29 +250,23 @@ export default function ReceiptPage() {
                   {orderDetails.receipt_items.map(
                     (item: OrderItem, index: number) => (
                       <div key={index} className="flex items-center gap-3">
-                        {item.product_image && (
+                        {item.image_url && (
                           <Image
-                            src={item.product_image}
-                            alt={item.product_name}
+                            src={item.image_url}
+                            alt={item.name}
                             width={64}
                             height={64}
                             className="w-16 h-16 object-cover rounded"
                           />
                         )}
                         <div className="flex-1">
-                          <h4 className="font-medium">{item.product_name}</h4>
-                          {item.variant_name && (
-                            <p className="text-sm text-gray-600">
-                              {item.variant_name}
-                            </p>
-                          )}
+                          <h4 className="font-medium">{item.name}</h4>
                           <p className="text-sm text-gray-600">
-                            Qty: {item.quantity} ×{" "}
-                            {formatPrice(item.unit_price)}
+                            Qty: {item.qty}
                           </p>
                         </div>
                         <p className="font-medium">
-                          {formatPrice(item.total_price)}
+                          {formatPrice(item.price)}
                         </p>
                       </div>
                     )

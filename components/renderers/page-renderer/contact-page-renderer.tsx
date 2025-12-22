@@ -31,7 +31,7 @@ export default function ContactPageRenderer({ sections }: ContactPageRendererPro
         return <ContactHero2 key={section.id} settings={settings} />;
 
       case "contact-info-1":
-        return <ContactInfo1 key={section.id} settings={settings as Record<string, unknown>} />;
+        return <ContactInfo1 key={section.id} settings={settings as any} />;
 
       case "contact-info-2":
         return <ContactInfo2 key={section.id} settings={settings} />;

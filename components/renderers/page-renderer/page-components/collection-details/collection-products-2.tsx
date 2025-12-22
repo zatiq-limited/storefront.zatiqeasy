@@ -8,7 +8,7 @@
 
 import { useState, useEffect } from "react";
 import { convertSettingsKeys } from "@/lib/settings-utils";
-import type { Collection } from "@/hooks/useCollectionDetails";
+import type { CollectionDetails as Collection } from "@/hooks/useCollectionDetails";
 
 interface CollectionProducts2Props {
   settings?: Record<string, unknown>;
@@ -260,10 +260,10 @@ export default function CollectionProducts2({
                       className="appearance-none pl-4 pr-10 py-2 rounded-xl border-2 font-medium cursor-pointer transition-all focus:outline-none focus:ring-2"
                       style={{
                         borderColor: `${s.accentColor || "#7c3aed"}30`,
-                        focusRingColor: s.accentColor || "#7c3aed",
+                        "--tw-ring-color": s.accentColor || "#7c3aed",
                         color: s.textColor || "#374151",
                         backgroundColor: "#ffffff",
-                      }}
+                      } as React.CSSProperties}
                     >
                       <option value="featured">Featured</option>
                       <option value="price-low">Price: Low to High</option>

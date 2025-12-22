@@ -8,7 +8,7 @@
 
 import { useState } from "react";
 import { convertSettingsKeys } from "@/lib/settings-utils";
-import type { Collection } from "@/hooks/useCollectionDetails";
+import type { CollectionDetails as Collection } from "@/hooks/useCollectionDetails";
 
 interface CollectionProducts1Props {
   settings?: Record<string, unknown>;
@@ -96,8 +96,8 @@ export default function CollectionProducts1({
                   className="pl-10 pr-4 py-2 rounded-xl border transition-all focus:outline-none focus:ring-2"
                   style={{
                     borderColor: `${s.accentColor || "#7c3aed"}30`,
-                    focusRingColor: s.accentColor || "#7c3aed",
-                  }}
+                    "--tw-ring-color": s.accentColor || "#7c3aed",
+                  } as React.CSSProperties}
                 />
                 <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4" style={{ color: s.textColor || "#9ca3af" }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
@@ -147,9 +147,9 @@ export default function CollectionProducts1({
               <select className="px-4 py-2 rounded-xl border transition-all appearance-none cursor-pointer focus:outline-none focus:ring-2"
                 style={{
                   borderColor: `${s.accentColor || "#7c3aed"}30`,
-                  focusRingColor: s.accentColor || "#7c3aed",
+                  "--tw-ring-color": s.accentColor || "#7c3aed",
                   color: s.textColor || "#374151",
-                }}
+                } as React.CSSProperties}
               >
                 <option>Featured</option>
                 <option>Price: Low to High</option>

@@ -7,7 +7,7 @@
 "use client";
 
 import { convertSettingsKeys } from "@/lib/settings-utils";
-import type { Collection } from "@/hooks/useCollectionDetails";
+import type { CollectionDetails as Collection } from "@/hooks/useCollectionDetails";
 import Image from "next/image";
 
 interface CollectionBanner2Props {

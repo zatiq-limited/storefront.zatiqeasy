@@ -1,9 +1,11 @@
+"use client";
+
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import type { Section } from "@/lib/types";
 
 // Collection type from collections.json
-export interface Collection {
+export interface CollectionDetails {
   id: number;
   name: string;
   slug: string;
@@ -11,13 +13,13 @@ export interface Collection {
   image_url: string;
   banner_url?: string;
   product_count: number;
-  children?: Collection[];
+  children?: CollectionDetails[];
 }
 
 interface CollectionResponse {
   success: boolean;
   data: {
-    collection: Collection;
+    collection: CollectionDetails;
   };
 }
 

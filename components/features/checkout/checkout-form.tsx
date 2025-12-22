@@ -79,15 +79,17 @@ export function CheckoutForm({ className, onSubmit }: CheckoutFormProps) {
         const variantNames = variantValues.map(v => v.variant_name).join(', ');
 
         return {
-          product_id: String(item.id),
-          product_handle: item.handle || String(item.id),
-          product_name: item.name,
-          variant_id: firstVariant?.variant_id ? String(firstVariant.variant_id) : undefined,
-          variant_name: variantNames || undefined,
-          quantity: item.qty,
-          unit_price: item.price,
-          total_price: item.price * item.qty,
-          product_image: item.image_url,
+          name: item.name,
+          price: item.price * item.qty,
+          image_url: item.image_url,
+          inventory_id: item.id,
+          qty: item.qty,
+          variants: item.selectedVariants ? Object.values(item.selectedVariants)
+            .filter(v => v?.variant_type_id && v?.variant_id)
+            .map(v => ({
+              variant_type_id: v!.variant_type_id,
+              variant_id: v!.variant_id,
+            })) : [],
         };
       });
 

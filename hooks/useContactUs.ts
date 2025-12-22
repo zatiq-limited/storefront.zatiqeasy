@@ -1,3 +1,5 @@
+"use client";
+
 import { useQuery } from "@tanstack/react-query";
 import { useContactUsStore } from "@/stores/contactUsStore";
 import { useEffect } from "react";

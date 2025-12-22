@@ -1,3 +1,5 @@
+"use client";
+
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useCallback } from "react";
 import { useProductDetailsStore } from "@/stores/productDetailsStore";
