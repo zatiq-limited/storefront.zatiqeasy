@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import productData from "@/data/api-responses/product.json";
-import productsData from "@/data/api-responses/products.json";
+import { apiClient } from "@/lib/api/client";
 
 // Revalidate every 60 seconds
 export const revalidate = 60;
@@ -12,84 +11,53 @@ interface RouteParams {
 export async function GET(request: NextRequest, { params }: RouteParams) {
   const { handle } = await params;
 
-  console.log("[Product API] Searching for product with handle:", handle);
+  try {
+    // Call external API using apiClient
+    // Note: This endpoint does NOT require encryption (GET request)
+    const { data } = await apiClient.get(`/api/v1/live/inventory/${handle}`);
 
-  // In production, this would fetch from a database
-  // For now, we check if handle matches product id, slug, or product_code
-  const productFromList = productsData.data?.products?.find((p) => {
-    const matches =
-      p.id.toString() === handle ||
-      p.name.toLowerCase().replace(/\s+/g, "-") === handle.toLowerCase() ||
-      p.product_code?.toLowerCase() === handle.toLowerCase();
-
-    if (matches) {
-      console.log("[Product API] Found matching product:", p.id, p.name);
-    }
-    return matches;
-  });
-
-  // Use detailed product data if handle matches, otherwise use from list
-  let product = null;
-
-  if (productFromList) {
-    console.log(
-      "[Product API] Building product response for:",
-      productFromList.id
-    );
-    // Create a detailed product from list data
-    product = {
-      ...productFromList,
-      slug: productFromList.name.toLowerCase().replace(/\s+/g, "-"),
-      reviews: [],
-      related_products: productsData.data?.products
-        ?.filter((p) => p.id !== productFromList.id)
-        .slice(0, 8),
-      theme: {
-        id: productFromList.id,
-        slug: productFromList.name.toLowerCase().replace(/\s+/g, "-"),
-        page_title: `${productFromList.name} | ZatiqEasy`,
-        page_description:
-          productFromList.description || productFromList.short_description,
-        theme_name: "Modern Product",
-        theme_data: {
-          gallery_layout: "thumbnails_left",
-          show_zoom: true,
-          show_size_guide: true,
-          show_share_buttons: true,
+    // Check if product data exists
+    if (!data?.data) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Product not found",
         },
-        preview: productFromList.image_url,
-      },
-    };
-  }
+        {
+          status: 404,
+          headers: {
+            "Cache-Control": "public, s-maxage=10, stale-while-revalidate=59",
+          },
+        }
+      );
+    }
 
-  if (!product) {
-    console.log("[Product API] Product not found for handle:", handle);
+    return NextResponse.json(
+      {
+        success: true,
+        data: {
+          product: data.data,
+        },
+      },
+      {
+        headers: {
+          "Cache-Control": "public, s-maxage=120, stale-while-revalidate=600",
+        },
+      }
+    );
+  } catch (error) {
+    console.error("[Product API] Error fetching product:", error);
     return NextResponse.json(
       {
         success: false,
-        error: "Product not found",
+        error: "Failed to fetch product",
       },
       {
-        status: 404,
+        status: 500,
         headers: {
-          "Cache-Control": "public, s-maxage=10, stale-while-revalidate=59",
+          "Cache-Control": "no-store",
         },
       }
     );
   }
-
-  return NextResponse.json(
-    {
-      success: true,
-      data: {
-        product,
-      },
-    },
-    {
-      headers: {
-        // Longer cache for individual products
-        "Cache-Control": "public, s-maxage=120, stale-while-revalidate=600",
-      },
-    }
-  );
 }
