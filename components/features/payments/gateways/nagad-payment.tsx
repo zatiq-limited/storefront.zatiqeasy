@@ -5,13 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Smartphone, CheckCircle, Loader2, ExternalLink } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { PaymentType } from "@/lib/payments/types";
-import { createOrder } from "@/lib/payments/api";
+import { paymentService } from "@/lib/api";
+import type { CreateOrderPayload } from "@/lib/api/types";
 import { formatPrice, parsePaymentError } from "@/lib/payments/utils";
 
 interface NagadPaymentProps {
-  orderPayload: any; // Full order payload matching old project structure
+  orderPayload: CreateOrderPayload;
   onPaymentSuccess?: (transactionId: string) => void;
   onPaymentError?: (error: Error) => void;
   onPaymentRedirect?: (paymentUrl: string) => void;
@@ -20,13 +20,12 @@ interface NagadPaymentProps {
 
 export function NagadPayment({
   orderPayload,
-  onPaymentSuccess,
   onPaymentError,
   onPaymentRedirect,
   className,
 }: NagadPaymentProps) {
   const [isProcessing, setIsProcessing] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
+  const [isSuccess] = useState(false);
   const [error, setError] = useState("");
 
   const amount = orderPayload?.pay_now_amount || 0;
@@ -37,7 +36,7 @@ export function NagadPayment({
 
     try {
       // Create order with Nagad payment (matching old project pattern)
-      const orderResponse = await createOrder({
+      const orderResponse = await paymentService.createOrder({
         ...orderPayload,
         payment_type: PaymentType.NAGAD,
       });
@@ -60,7 +59,7 @@ export function NagadPayment({
       } else {
         throw new Error(orderResponse.error || "Failed to create order");
       }
-    } catch (err: any) {
+    } catch (err) {
       const errorMessage = parsePaymentError(err);
       setError(errorMessage);
       onPaymentError?.(new Error(errorMessage));
@@ -110,7 +109,7 @@ export function NagadPayment({
         <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
           <h4 className="font-medium text-gray-900 mb-2">How to pay:</h4>
           <ol className="text-sm text-gray-700 space-y-1">
-            <li>1. Click "Pay with Nagad" button</li>
+            <li>1. Click &quot;Pay with Nagad&quot; button</li>
             <li>2. You will be redirected to Nagad payment page</li>
             <li>3. Enter your Nagad number and PIN</li>
             <li>4. Complete payment</li>

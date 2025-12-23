@@ -4,10 +4,10 @@ import { useEffect, useState, useCallback } from "react";
 import { useParams } from "next/navigation";
 import { FallbackImage } from "@/components/ui/fallback-image";
 import { Loader2 } from "lucide-react";
-import { getReceiptDetails } from "@/lib/payments/api";
+import { paymentService } from "@/lib/api";
 import type { OrderItem } from "@/lib/payments/types";
-import { getInventoryThumbImageUrl } from "@/lib/utils";
 import getSymbolFromCurrency from "currency-symbol-map";
+import { getInventoryThumbImageUrl } from "@/lib/utils/formatting";
 
 // Receipt data structure from API (matching old project)
 // Extended from ReceiptDetails with additional API response fields
@@ -54,8 +54,7 @@ export default function ReceiptPage() {
 
   const fetchReceiptDetails = useCallback(async () => {
     try {
-      const response = await getReceiptDetails(receiptId);
-      console.log("Receipt response:", response);
+      const response = await paymentService.getReceiptDetails(receiptId);
       if (response.success && response.data) {
         setOrderDetails(response.data as unknown as ReceiptData);
       } else {

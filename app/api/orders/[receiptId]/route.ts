@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { getReceiptDetails } from '@/lib/payments/api';
+import { NextRequest, NextResponse } from "next/server";
+import { paymentService } from "@/lib/api";
 
 export async function GET(
   request: NextRequest,
@@ -11,13 +11,13 @@ export async function GET(
     // Validate receipt ID
     if (!receiptId || receiptId.length < 5) {
       return NextResponse.json(
-        { success: false, error: 'Invalid receipt ID' },
+        { success: false, error: "Invalid receipt ID" },
         { status: 400 }
       );
     }
 
     // Get receipt details
-    const response = await getReceiptDetails(receiptId);
+    const response = await paymentService.getReceiptDetails(receiptId);
 
     if (response.success) {
       return NextResponse.json({
@@ -31,11 +31,11 @@ export async function GET(
       );
     }
   } catch (error: any) {
-    console.error('Get receipt API error:', error);
+    console.error("Get receipt API error:", error);
     return NextResponse.json(
       {
         success: false,
-        error: error.message || 'Failed to get receipt details'
+        error: error.message || "Failed to get receipt details",
       },
       { status: 500 }
     );

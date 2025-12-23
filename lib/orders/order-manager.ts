@@ -1,13 +1,15 @@
 import {
-  CreateOrderPayload,
-  OrderResponse,
-  ReceiptDetails,
   PaymentType,
   OrderStatus,
   PaymentStatus,
   ApiResponse,
 } from "@/lib/payments/types";
-import { createOrder, getReceiptDetails } from "@/lib/payments/api";
+import { paymentService } from "@/lib/api";
+import type {
+  CreateOrderPayload,
+  OrderResponse,
+  ReceiptDetails,
+} from "@/lib/api/types";
 import { formatPrice } from "@/lib/payments/utils";
 import { validatePhoneNumber, calculateDeliveryCharge } from "@/lib/utils";
 import type { CartProduct } from "@/types";
@@ -82,25 +84,21 @@ export class OrderManager {
 
       // Prepare order items
       const receiptItems = cart.items.map((item) => {
-        // Get variant info from selectedVariants if exists
-        const variantEntries = Object.values(item.selectedVariants || {});
-        const variantName =
-          variantEntries.map((v) => v.variant_name).join(", ") || "";
-        const variantId =
-          variantEntries.length > 0 ? variantEntries[0].variant_id : undefined;
-
         return {
           name: item.name,
-          price: item.price * item.qty,
-          image_url: item.image_url,
           inventory_id: item.id,
-          qty: item.qty,
-          variants: item.selectedVariants ? Object.values(item.selectedVariants)
-            .filter(v => v?.variant_type_id && v?.variant_id)
-            .map(v => ({
-              variant_type_id: v!.variant_type_id,
-              variant_id: v!.variant_id,
-            })) : [],
+          quantity: item.qty,
+          price: item.price,
+          total_price: item.price * item.qty,
+          image_url: item.image_url,
+          variants: item.selectedVariants
+            ? Object.values(item.selectedVariants)
+                .filter((v) => v?.variant_type_id && v?.variant_id)
+                .map((v) => ({
+                  variant_type_id: v!.variant_type_id,
+                  variant_id: v!.variant_id,
+                }))
+            : [],
         };
       });
 
@@ -118,7 +116,7 @@ export class OrderManager {
         receipt_items: receiptItems,
         type: "Online",
         status: OrderStatus.ORDER_PLACED,
-        note: checkoutData.note,
+        notes: checkoutData.note,
       };
 
       // Create order with retry mechanism
@@ -142,7 +140,7 @@ export class OrderManager {
     payload: CreateOrderPayload
   ): Promise<OrderResponse> {
     try {
-      const response = await createOrder(payload);
+      const response = await paymentService.createOrder(payload);
       this.retryCount = 0; // Reset retry count on success
       return response;
     } catch (error) {
@@ -168,7 +166,7 @@ export class OrderManager {
    */
   async getOrderDetails(receiptId: string): Promise<ReceiptDetails | null> {
     try {
-      const response = await getReceiptDetails(receiptId);
+      const response = await paymentService.getReceiptDetails(receiptId);
       if (response.success && response.data) {
         return response.data;
       }
@@ -194,7 +192,7 @@ export class OrderManager {
       status: receipt.status,
       paymentStatus: receipt.payment_status,
       subtotal: receipt.receipt_items.reduce(
-        (sum, item) => sum + item.price,
+        (sum: number, item: { price: number }) => sum + item.price,
         0
       ),
       deliveryCharge: receipt.delivery_charge,
@@ -274,7 +272,7 @@ Total Amount: ${formatPrice(orderSummary.totalAmount)}
 Payment Method: ${orderSummary.paymentType}
 Status: ${this.formatOrderStatus(orderSummary.status)}
 
-Track your order: ${this.generateReceiptUrl(orderSummary.receiptId)}
+Track your order: ${this.generateReceiptUrl(String(orderSummary.receiptId))}
     `.trim();
 
     return `https://wa.me/?text=${encodeURIComponent(message)}`;
@@ -289,7 +287,7 @@ Track your order: ${this.generateReceiptUrl(orderSummary.receiptId)}
     transactionId: string;
     status: PaymentStatus;
     amount: number;
-    gatewayResponse: any;
+    gatewayResponse: Record<string, unknown>;
   }): Promise<ApiResponse> {
     try {
       // Get current order details

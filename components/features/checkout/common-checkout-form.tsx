@@ -9,7 +9,7 @@ import { ShippingAddressSection } from "./shipping-address-section";
 import { DeliveryZoneSection } from "./delivery-zone-section";
 import { PaymentOptionsSection } from "./payment-options-section";
 import { OrderSummarySection } from "./order-summary-section";
-import { createOrder } from "@/lib/payments/api";
+import { paymentService } from "@/lib/api";
 import type { CheckoutFormData } from "@/types/checkout.types";
 import type { ShopProfile } from "@/types/shop.types";
 import type { Division, District, Upazila } from "@/types/shop.types";
@@ -21,10 +21,11 @@ import { toast } from "react-hot-toast";
 
 interface ReceiptItem {
   name: string;
-  price: number;
-  image_url?: string;
   inventory_id: number;
-  qty: number;
+  quantity: number;
+  price: number;
+  total_price: number;
+  image_url?: string;
   variants: Array<{
     variant_type_id: number;
     variant_id: number;
@@ -314,13 +315,6 @@ export function CommonCheckoutForm({ onSubmit }: CommonCheckoutFormProps) {
 
     try {
       // Validate required fields
-      console.log("Validation check:", {
-        fullPhoneNumber,
-        customer_name: data.customer_name,
-        customer_address: data.customer_address,
-        customer_phone: data.customer_phone,
-      });
-
       // Use customer_phone from form data if fullPhoneNumber is not set
       const phoneToValidate = fullPhoneNumber || data.customer_phone;
 
@@ -339,10 +333,11 @@ export function CommonCheckoutForm({ onSubmit }: CommonCheckoutFormProps) {
       // Prepare order items
       const receiptItems = cartProducts.map((item) => ({
         name: item.name,
-        price: item.price * item.qty,
-        image_url: item.image_url,
         inventory_id: item.id,
-        qty: item.qty,
+        quantity: item.qty,
+        price: item.price,
+        total_price: item.price * item.qty,
+        image_url: item.image_url,
         variants: item.selectedVariants
           ? Object.values(item.selectedVariants)
               .filter((v) => v?.variant_type_id && v?.variant_id)
@@ -383,9 +378,7 @@ export function CommonCheckoutForm({ onSubmit }: CommonCheckoutFormProps) {
       };
 
       // Create order
-      const response = await createOrder(orderPayload);
-
-      console.log("Order response:", response);
+      const response = await paymentService.createOrder(orderPayload);
 
       if (response.success && response.data) {
         // Clear cart

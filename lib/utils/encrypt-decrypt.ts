@@ -16,11 +16,7 @@ export function decryptData(encryptedData: string): any {
   const key = CryptoJS.enc.Utf8.parse(ENCRYPTION_KEY);
   const iv = CryptoJS.enc.Utf8.parse(ENCRYPTION_IV);
 
-  const decrypted = CryptoJS.AES.decrypt(
-    { ciphertext: CryptoJS.enc.Base64.parse(encryptedData) },
-    key,
-    { iv: iv }
-  );
+  const decrypted = CryptoJS.AES.decrypt(encryptedData, key, { iv: iv });
 
   return JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
 }

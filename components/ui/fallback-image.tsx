@@ -22,7 +22,8 @@ export const FallbackImage = ({
 
   // Determine the actual source to use
   // If src is empty/null/undefined, use fallback immediately
-  const actualSrc = src && src.trim() !== "" ? src : fallbackSrc;
+  const actualSrc = 
+    src && typeof src === "string" && src.trim() !== "" ? src : fallbackSrc;
   const displaySrc = state.hasError ? fallbackSrc : actualSrc;
 
   return (

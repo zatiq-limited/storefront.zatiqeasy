@@ -6,13 +6,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Truck, CheckCircle, MapPin, Clock } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { PaymentType } from "@/lib/payments/types";
-import { createOrder } from "@/lib/payments/api";
+import { paymentService } from "@/lib/api";
+import type { CreateOrderPayload } from "@/lib/api/types";
 import { parsePaymentError } from "@/lib/payments/utils";
 
 interface CodPaymentProps {
-  orderPayload: any; // Full order payload matching old project structure
+  orderPayload: CreateOrderPayload;
   onOrderSuccess?: (receiptUrl: string) => void;
   onPaymentError?: (error: Error) => void;
   onPaymentRedirect?: (paymentUrl: string) => void;
@@ -60,7 +60,7 @@ export function CodPayment({
 
     try {
       // Create order with COD payment (matching old project pattern)
-      const orderResponse = await createOrder({
+      const orderResponse = await paymentService.createOrder({
         ...orderPayload,
         payment_type: PaymentType.COD,
       });
@@ -77,7 +77,7 @@ export function CodPayment({
       } else {
         throw new Error(orderResponse.error || "Failed to create order");
       }
-    } catch (err: any) {
+    } catch (err) {
       const errorMessage = parsePaymentError(err);
       setError(errorMessage);
       onPaymentError?.(new Error(errorMessage));

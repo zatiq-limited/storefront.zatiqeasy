@@ -5,13 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CreditCard, CheckCircle, Loader2, ExternalLink } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { PaymentType } from "@/lib/payments/types";
-import { createOrder } from "@/lib/payments/api";
+import { paymentService } from "@/lib/api";
+import type { CreateOrderPayload } from "@/lib/api/types";
 import { formatPrice, parsePaymentError } from "@/lib/payments/utils";
 
 interface AamarpayPaymentProps {
-  orderPayload: any; // Full order payload matching old project structure
+  orderPayload: CreateOrderPayload;
   onPaymentSuccess?: (transactionId: string) => void;
   onPaymentError?: (error: Error) => void;
   onPaymentRedirect?: (paymentUrl: string) => void;
@@ -20,7 +20,6 @@ interface AamarpayPaymentProps {
 
 export function AamarpayPayment({
   orderPayload,
-  onPaymentSuccess,
   onPaymentError,
   onPaymentRedirect,
   className,
@@ -28,7 +27,7 @@ export function AamarpayPayment({
   const [isProcessing, setIsProcessing] = useState(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
   const [error, setError] = useState("");
-  const [isSuccess, setIsSuccess] = useState(false);
+  const [isSuccess] = useState(false);
 
   const amount = orderPayload?.pay_now_amount || 0;
 
@@ -38,7 +37,7 @@ export function AamarpayPayment({
 
     try {
       // Create order with AamarPay payment (matching old project pattern)
-      const orderResponse = await createOrder({
+      const orderResponse = await paymentService.createOrder({
         ...orderPayload,
         payment_type: PaymentType.AAMARPAY,
       });
@@ -67,7 +66,7 @@ export function AamarpayPayment({
       } else {
         throw new Error(orderResponse.error || "Failed to create order");
       }
-    } catch (err: any) {
+    } catch (err) {
       const errorMessage = parsePaymentError(err);
       setError(errorMessage);
       onPaymentError?.(new Error(errorMessage));
@@ -108,7 +107,7 @@ export function AamarpayPayment({
                 Redirecting to Payment Gateway...
               </h3>
               <p className="text-muted-foreground">
-                You will be redirected to AamarPay's secure payment page.
+                You will be redirected to AamarPay&apos;s secure payment page.
               </p>
               <p className="text-sm text-muted-foreground">
                 Please do not close this window.
@@ -200,7 +199,9 @@ export function AamarpayPayment({
         </Button>
 
         <div className="text-xs text-muted-foreground space-y-1">
-          <p>• You will be redirected to AamarPay's secure payment gateway</p>
+          <p>
+            • You will be redirected to AamarPay&apos;s secure payment gateway
+          </p>
           <p>• All major debit/credit cards and mobile banking are accepted</p>
           <p>• Your payment information is processed securely</p>
           <p>• Transaction is completed in real-time</p>

@@ -1,12 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import {
-  CreateOrderPayload,
-  OrderResponse,
-  PaymentType,
-  OrderStatus,
-} from "@/lib/payments/types";
-import { createOrder } from "@/lib/payments/api";
-import { validatePhoneNumber } from "@/lib/utils";
+import { PaymentType, OrderStatus } from "@/lib/payments/types";
+import { validatePhoneNumber } from "@/lib/payments/utils";
 import { encryptData, decryptData } from "@/lib/utils/encrypt-decrypt";
 
 const API_BASE_URL =
@@ -126,12 +120,14 @@ export async function POST(request: NextRequest) {
 
     // This should never be reached due to throw in loop
     throw new Error("Failed to place order after maximum retries");
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Create order API error:", error);
+    const errorMessage =
+      error instanceof Error ? error.message : "Failed to create order";
     return NextResponse.json(
       {
         success: false,
-        error: error.message || "Failed to create order",
+        error: errorMessage,
       },
       { status: 500 }
     );

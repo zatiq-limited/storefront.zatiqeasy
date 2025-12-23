@@ -14,9 +14,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Smartphone, CheckCircle, Loader2 } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { PaymentType } from "@/lib/payments/types";
-import { createOrder } from "@/lib/payments/api";
+import { paymentService } from "@/lib/api";
 import { parsePaymentError, formatPrice } from "@/lib/payments/utils";
 
 interface SelfMfsPaymentProps {
@@ -83,7 +82,7 @@ export function SelfMfsPayment({
 
     try {
       // Create order with Self MFS payment (matching old project pattern)
-      const orderResponse = await createOrder({
+      const orderResponse = await paymentService.createOrder({
         ...orderPayload,
         payment_type: PaymentType.SELF_MFS,
         mfs_payment_phone: phoneNumber,

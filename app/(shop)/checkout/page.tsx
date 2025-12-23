@@ -1,6 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowLeft, Shield, Truck, RefreshCw } from "lucide-react";
-import { CheckoutForm } from "@/features/checkout";
+import { CommonCheckoutForm } from "@/components/features/checkout";
 
 export default function CheckoutPage() {
   return (
@@ -8,7 +10,10 @@ export default function CheckoutPage() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <Link href="/cart" className="inline-flex items-center text-muted-foreground hover:text-foreground mb-4">
+          <Link
+            href="/cart"
+            className="inline-flex items-center text-muted-foreground hover:text-foreground mb-4"
+          >
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Cart
           </Link>
@@ -50,13 +55,16 @@ export default function CheckoutPage() {
         </div>
 
         {/* Checkout Form */}
-        <CheckoutForm />
+        <CommonCheckoutForm />
 
         {/* Footer Info */}
         <div className="mt-12 pt-8 border-t text-center text-sm text-muted-foreground">
           <p className="mb-2">
             Need help? Contact our support team at{" "}
-            <a href="tel:+8801234567890" className="text-primary hover:underline">
+            <a
+              href="tel:+8801234567890"
+              className="text-primary hover:underline"
+            >
               +880 1234 567 890
             </a>
           </p>
