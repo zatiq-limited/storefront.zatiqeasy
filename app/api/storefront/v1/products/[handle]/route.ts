@@ -12,26 +12,30 @@ interface RouteParams {
 export async function GET(request: NextRequest, { params }: RouteParams) {
   const { handle } = await params;
 
+  console.log("[Product API] Searching for product with handle:", handle);
+
   // In production, this would fetch from a database
   // For now, we check if handle matches product id, slug, or product_code
-  const productFromList = productsData.data?.products?.find(
-    (p) =>
+  const productFromList = productsData.data?.products?.find((p) => {
+    const matches =
       p.id.toString() === handle ||
       p.name.toLowerCase().replace(/\s+/g, "-") === handle.toLowerCase() ||
-      p.product_code?.toLowerCase() === handle.toLowerCase()
-  );
+      p.product_code?.toLowerCase() === handle.toLowerCase();
+
+    if (matches) {
+      console.log("[Product API] Found matching product:", p.id, p.name);
+    }
+    return matches;
+  });
 
   // Use detailed product data if handle matches, otherwise use from list
   let product = null;
 
-  if (
-    handle === "1" ||
-    handle === "classic-white-shirt" ||
-    handle === productData.data?.product?.id?.toString() ||
-    handle === productData.data?.product?.product_code?.toLowerCase()
-  ) {
-    product = productData.data?.product;
-  } else if (productFromList) {
+  if (productFromList) {
+    console.log(
+      "[Product API] Building product response for:",
+      productFromList.id
+    );
     // Create a detailed product from list data
     product = {
       ...productFromList,
@@ -59,6 +63,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
   }
 
   if (!product) {
+    console.log("[Product API] Product not found for handle:", handle);
     return NextResponse.json(
       {
         success: false,

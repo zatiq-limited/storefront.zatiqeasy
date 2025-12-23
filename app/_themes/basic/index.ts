@@ -133,8 +133,9 @@ export const BasicTheme: StaticTheme = {
   modules: {
     // Page modules
     "basic-home-page": () => import("./modules/home/basic-home-page"),
-    // 'category-page': () => import('./modules/category/category-page'),
-    // 'product-page': () => import('./modules/product/basic-product-page'),
+    "basic-category-page": () => import("./modules/home/basic-category-page"),
+    "basic-product-detail-page": () =>
+      import("./modules/product-detail/basic-product-detail-page"),
     // 'checkout': () => import('./modules/checkout/basic-checkout'),
     // 'payment-confirm': () => import('./modules/payment/payment-confirm'),
   },

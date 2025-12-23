@@ -339,9 +339,13 @@ const SingleCartItem: React.FC<SingleCartItemProps> = ({
                           </span>
                           <div className="flex gap-2 flex-wrap">
                             {variantType.variants.map((variant) => {
+                              const selectedVariant =
+                                cartProduct.selectedVariants?.[variantType.id];
                               const isSelected =
-                                cartProduct.selectedVariants?.[variantType.id]
-                                  ?.variant_id === variant.id;
+                                selectedVariant?.variant_id === variant.id ||
+                                (selectedVariant &&
+                                  "id" in selectedVariant &&
+                                  selectedVariant.id === variant.id);
 
                               // Check stock availability for this variant
                               const stockCheck = checkVariantStock(
@@ -392,17 +396,31 @@ const SingleCartItem: React.FC<SingleCartItemProps> = ({
                       <ul className="flex gap-1 md:gap-3 flex-wrap items-center justify-start md:justify-center">
                         {Object.values(cartProduct?.selectedVariants || {})
                           .filter((variant) => variant)
-                          .map((variant) => (
-                            <li
-                              role="button"
-                              key={variant.variant_id}
-                              className={cn(
-                                "flex items-center justify-center text-gray-700 dark:text-gray-200 text-[12px] font-medium px-3 py-0.75 pt-1 capitalize bg-blue-zatiq/10 rounded-full"
-                              )}
-                            >
-                              <span className="">{variant.variant_name}</span>
-                            </li>
-                          ))}
+                          .map((variant) => {
+                            const variantKey =
+                              variant.variant_id ||
+                              ("id" in variant && typeof variant.id === "number"
+                                ? variant.id
+                                : 0);
+                            const variantName =
+                              variant.variant_name ||
+                              ("name" in variant &&
+                              typeof variant.name === "string"
+                                ? variant.name
+                                : "");
+
+                            return (
+                              <li
+                                role="button"
+                                key={variantKey}
+                                className={cn(
+                                  "flex items-center justify-center text-gray-700 dark:text-gray-200 text-[12px] font-medium px-3 py-0.75 pt-1 capitalize bg-blue-zatiq/10 rounded-full"
+                                )}
+                              >
+                                <span className="">{variantName}</span>
+                              </li>
+                            );
+                          })}
                       </ul>
                     </div>
                   )}
