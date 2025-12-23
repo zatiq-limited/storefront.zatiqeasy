@@ -10,7 +10,7 @@ import { validatePhoneNumber } from "@/lib/utils";
 import { encryptData, decryptData } from "@/lib/utils/encrypt-decrypt";
 
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.zatiqeasy.com";
+  process.env.NEXT_PUBLIC_API_URL || "https://api.zatiqeasy.com";
 const MAX_RETRIES = 3;
 const RETRY_DELAY = 1000; // 1 second
 

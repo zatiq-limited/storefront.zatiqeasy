@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { encryptData, decryptData } from "@/lib/utils/encrypt-decrypt";
 
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.zatiqeasy.com";
+  process.env.NEXT_PUBLIC_API_URL || "https://api.zatiqeasy.com";
 
 /**
  * Send OTP for phone verification

@@ -10,20 +10,21 @@ This document outlines the strategy to integrate the **static theme system** fro
 
 ### New Project: `storefront.zatiqeasy` (Target)
 
-| Aspect | Current State |
-|--------|---------------|
-| **Framework** | **Next.js 16.0.10** with App Router |
-| **React** | **React 19.2.1** |
-| **State Management** | **Zustand 5.0.9** |
-| **Data Fetching** | **TanStack Query v5.90.12** |
-| **Styling** | **Tailwind CSS v4** |
-| **Theme System** | JSON Schema-driven BlockRenderer (V3.0 Schema) |
-| **TypeScript** | Yes (TypeScript 5) |
-| **Carousel** | Swiper 12.0.3, Embla Carousel 8.6.0 |
-| **Icons** | Lucide React 0.561.0 |
-| **UI Primitives** | Radix UI (Select, Slot) |
+| Aspect               | Current State                                  |
+| -------------------- | ---------------------------------------------- |
+| **Framework**        | **Next.js 16.0.10** with App Router            |
+| **React**            | **React 19.2.1**                               |
+| **State Management** | **Zustand 5.0.9**                              |
+| **Data Fetching**    | **TanStack Query v5.90.12**                    |
+| **Styling**          | **Tailwind CSS v4**                            |
+| **Theme System**     | JSON Schema-driven BlockRenderer (V3.0 Schema) |
+| **TypeScript**       | Yes (TypeScript 5)                             |
+| **Carousel**         | Swiper 12.0.3, Embla Carousel 8.6.0            |
+| **Icons**            | Lucide React 0.561.0                           |
+| **UI Primitives**    | Radix UI (Select, Slot)                        |
 
 **Key Features:**
+
 - Dynamic UI rendering from JSON API responses via BlockRenderer
 - V3.0 Schema rendering with data binding (bind_content, bind_src, bind_href, etc.)
 - BlockRenderer supports: repeaters, swipers, marquees, icons, conditions, events
@@ -35,6 +36,7 @@ This document outlines the strategy to integrate the **static theme system** fro
 - Event system: navigate, toggle_drawer, toggle_theme, search, slider controls
 
 **Existing Stores (5 total):**
+
 - `themeStore.ts` - Theme JSON data (globalSections, templates)
 - `homepageStore.ts` - Homepage JSON data (sections)
 - `productsStore.ts` - Products list, filters (page, limit, category, search, sort), pagination
@@ -42,6 +44,7 @@ This document outlines the strategy to integrate the **static theme system** fro
 - `aboutUsStore.ts` - About Us page data
 
 **Existing Hooks (5 total):**
+
 - `useTheme()` - Fetch theme config (staleTime: Infinity)
 - `useHomepage()` - Fetch homepage config
 - `useProducts()` - Products with filtering, pagination, sorting
@@ -49,12 +52,14 @@ This document outlines the strategy to integrate the **static theme system** fro
 - `useAboutUs()` - About Us page
 
 **Pages (App Router):**
+
 - `/` - Homepage
 - `/products` - Products listing
 - `/products/[handle]` - Product details
 - `/about-us` - About Us
 
 **API Routes:**
+
 - `GET /api/storefront/v1/theme` - Theme configuration
 - `GET /api/storefront/v1/products` - Products with filters
 - `GET /api/storefront/v1/products/[handle]` - Single product
@@ -69,21 +74,22 @@ This document outlines the strategy to integrate the **static theme system** fro
 
 ### Old Project: `storefront.zatiqeasy.com` (Source)
 
-| Aspect | Current State |
-|--------|---------------|
-| **Framework** | **Next.js 14.2.33** with Pages Router |
-| **React** | **React 18.3.1** |
-| **State Management** | **React Context API** (6 contexts) |
-| **Data Fetching** | **TanStack Query v4.42.0** |
-| **Styling** | **Tailwind CSS v4.1.17** |
-| **Theme System** | 5 Static Themes (Basic, Premium, Aurora, Luxura, Sellora) |
-| **TypeScript** | Yes (TypeScript 5.9.3) |
-| **Forms** | React Hook Form 7.68.0 |
-| **i18n** | ni18n + react-i18next |
-| **Phone Validation** | libphonenumber-js |
-| **Encryption** | crypto-js |
+| Aspect               | Current State                                             |
+| -------------------- | --------------------------------------------------------- |
+| **Framework**        | **Next.js 14.2.33** with Pages Router                     |
+| **React**            | **React 18.3.1**                                          |
+| **State Management** | **React Context API** (6 contexts)                        |
+| **Data Fetching**    | **TanStack Query v4.42.0**                                |
+| **Styling**          | **Tailwind CSS v4.1.17**                                  |
+| **Theme System**     | 5 Static Themes (Basic, Premium, Aurora, Luxura, Sellora) |
+| **TypeScript**       | Yes (TypeScript 5.9.3)                                    |
+| **Forms**            | React Hook Form 7.68.0                                    |
+| **i18n**             | ni18n + react-i18next                                     |
+| **Phone Validation** | libphonenumber-js                                         |
+| **Encryption**       | crypto-js                                                 |
 
 **Key Features:**
+
 - Pre-built theme components per theme (5 complete themes)
 - Multi-tenant support (SHOPLINK/STANDALONE modes)
 - Complete e-commerce flow (Cart, Checkout, Payment, Receipt)
@@ -99,6 +105,7 @@ This document outlines the strategy to integrate the **static theme system** fro
 - Phone verification with OTP
 
 **Existing Contexts (6 total):**
+
 - `ShopContext` - Shop profile, visitor tracking, language settings
 - `CartContext` - Cart state with localStorage persistence, order placement with retry
 - `CheckoutContext` - Form state (react-hook-form), delivery zones, promo codes, tax calculation
@@ -109,6 +116,7 @@ This document outlines the strategy to integrate the **static theme system** fro
 **Total Source Files:** **445 TypeScript/JavaScript files**
 
 **Pages (37 page files):**
+
 - `/` - Home (with single product landing page support)
 - `/products` - All products
 - `/products/[productId]` - Product detail
@@ -167,15 +175,15 @@ The integrated system will support **two theme modes**:
 
 ```typescript
 // The theme_type determines which rendering system to use
-type ThemeType = 'builder' | 'static';
+type ThemeType = "builder" | "static";
 
 interface ShopTheme {
   theme_type: ThemeType;
   // For builder themes
   theme_json?: ZatiqTheme;
   // For static themes
-  theme_name?: 'Basic' | 'Premium' | 'Aurora' | 'Luxura' | 'Sellora';
-  theme_mode?: 'light' | 'dark';
+  theme_name?: "Basic" | "Premium" | "Aurora" | "Luxura" | "Sellora";
+  theme_mode?: "light" | "dark";
 }
 ```
 
@@ -367,10 +375,10 @@ export interface ShopProfile {
 
 export interface ShopTheme {
   id: number;
-  theme_type: 'builder' | 'static';
+  theme_type: "builder" | "static";
   // For static themes
-  theme_name?: 'Basic' | 'Premium' | 'Aurora' | 'Luxura' | 'Sellora';
-  theme_mode?: 'light' | 'dark';
+  theme_name?: "Basic" | "Premium" | "Aurora" | "Luxura" | "Sellora";
+  theme_mode?: "light" | "dark";
   // For builder themes
   theme_json?: ZatiqTheme;
   // Common
@@ -385,14 +393,14 @@ export interface ShopTheme {
 
 ```typescript
 // src/lib/api/axios.config.ts
-import axios from 'axios';
+import axios from "axios";
 
 export const apiClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: {
-    'Content-Type': 'application/json',
-    'Device-Type': 'Web',
-    'Application-Type': 'Online_Shop',
+    "Content-Type": "application/json",
+    "Device-Type": "Web",
+    "Application-Type": "Online_Shop",
   },
 });
 
@@ -412,9 +420,9 @@ apiClient.interceptors.response.use((response) => {
 
 ```typescript
 // src/stores/shopStore.ts
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import type { ShopProfile } from '@/types/shop.types';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import type { ShopProfile } from "@/types/shop.types";
 
 interface ShopState {
   shopDetails: ShopProfile | null;
@@ -429,7 +437,7 @@ interface ShopState {
 export const useShopStore = create<ShopState>((set) => ({
   shopDetails: null,
   isSearchModalOpen: false,
-  shopLanguage: 'en',
+  shopLanguage: "en",
 
   setShopDetails: (details) => set({ shopDetails: details }),
   setSearchModalOpen: (open) => set({ isSearchModalOpen: open }),
@@ -439,15 +447,15 @@ export const useShopStore = create<ShopState>((set) => ({
 
 ```typescript
 // src/stores/cartStore.ts
-import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
-import type { CartProduct } from '@/types/cart.types';
-import { nanoid } from 'nanoid';
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+import type { CartProduct } from "@/types/cart.types";
+import { nanoid } from "nanoid";
 
 interface CartState {
   products: Record<string, CartProduct>;
   cartExpiry: string | null;
-  orderStatus: 'success' | 'error' | undefined;
+  orderStatus: "success" | "error" | undefined;
   isLoading: boolean;
   trackLink: string | null;
 
@@ -458,7 +466,7 @@ interface CartState {
   incrementQty: (cartId: string) => void;
   decrementQty: (cartId: string) => void;
   resetCart: () => void;
-  setOrderStatus: (status: 'success' | 'error' | undefined) => void;
+  setOrderStatus: (status: "success" | "error" | undefined) => void;
   setIsLoading: (loading: boolean) => void;
   setTrackLink: (link: string | null) => void;
 }
@@ -477,11 +485,12 @@ export const useCartStore = create<CartState>()(
         set((state) => ({
           products: {
             ...state.products,
-            [cartId]: { ...product, cartId }
+            [cartId]: { ...product, cartId },
           },
-          cartExpiry: Object.keys(state.products).length === 0
-            ? new Date().toISOString()
-            : state.cartExpiry,
+          cartExpiry:
+            Object.keys(state.products).length === 0
+              ? new Date().toISOString()
+              : state.cartExpiry,
         }));
       },
 
@@ -491,7 +500,8 @@ export const useCartStore = create<CartState>()(
           delete newProducts[cartId];
           return {
             products: newProducts,
-            cartExpiry: Object.keys(newProducts).length === 0 ? null : state.cartExpiry
+            cartExpiry:
+              Object.keys(newProducts).length === 0 ? null : state.cartExpiry,
           };
         });
       },
@@ -504,8 +514,8 @@ export const useCartStore = create<CartState>()(
         set((state) => ({
           products: {
             ...state.products,
-            [cartId]: { ...state.products[cartId], qty }
-          }
+            [cartId]: { ...state.products[cartId], qty },
+          },
         }));
       },
 
@@ -523,22 +533,23 @@ export const useCartStore = create<CartState>()(
         }
       },
 
-      resetCart: () => set({
-        products: {},
-        orderStatus: undefined,
-        trackLink: null
-      }),
+      resetCart: () =>
+        set({
+          products: {},
+          orderStatus: undefined,
+          trackLink: null,
+        }),
 
       setOrderStatus: (status) => set({ orderStatus: status }),
       setIsLoading: (loading) => set({ isLoading: loading }),
       setTrackLink: (link) => set({ trackLink: link }),
     }),
     {
-      name: 'cart-storage',
+      name: "cart-storage",
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         products: state.products,
-        cartExpiry: state.cartExpiry
+        cartExpiry: state.cartExpiry,
       }),
     }
   )
@@ -549,7 +560,7 @@ export const selectTotalItems = (state: CartState) =>
   Object.values(state.products).reduce((sum, p) => sum + p.qty, 0);
 
 export const selectTotalPrice = (state: CartState) =>
-  Object.values(state.products).reduce((sum, p) => sum + (p.price * p.qty), 0);
+  Object.values(state.products).reduce((sum, p) => sum + p.price * p.qty, 0);
 
 export const selectProductsArray = (state: CartState) =>
   Object.values(state.products);
@@ -565,17 +576,17 @@ export const selectProductsArray = (state: CartState) =>
 
 ```typescript
 // src/components/ThemeSelector.tsx
-'use client';
+"use client";
 
-import { useShopStore } from '@/stores/shopStore';
-import ThemeLayout from '@/app/_layouts/theme/layout';
+import { useShopStore } from "@/stores/shopStore";
+import ThemeLayout from "@/app/_layouts/theme/layout";
 
 // Static theme imports
-import BasicLayout from '@/components/themes/basic/Layout';
-import PremiumLayout from '@/components/themes/premium/Layout';
-import AuroraLayout from '@/components/themes/aurora/Layout';
-import LuxuraLayout from '@/components/themes/luxura/Layout';
-import SelloraLayout from '@/components/themes/sellora/Layout';
+import BasicLayout from "@/components/themes/basic/Layout";
+import PremiumLayout from "@/components/themes/premium/Layout";
+import AuroraLayout from "@/components/themes/aurora/Layout";
+import LuxuraLayout from "@/components/themes/luxura/Layout";
+import SelloraLayout from "@/components/themes/sellora/Layout";
 
 interface ThemeSelectorProps {
   children: React.ReactNode;
@@ -592,11 +603,11 @@ const staticThemeLayouts = {
 export default function ThemeSelector({ children }: ThemeSelectorProps) {
   const shopDetails = useShopStore((state) => state.shopDetails);
 
-  const themeType = shopDetails?.shop_theme?.theme_type || 'builder';
-  const themeName = shopDetails?.shop_theme?.theme_name || 'Basic';
+  const themeType = shopDetails?.shop_theme?.theme_type || "builder";
+  const themeName = shopDetails?.shop_theme?.theme_name || "Basic";
 
   // Use Theme Builder (JSON-driven)
-  if (themeType === 'builder') {
+  if (themeType === "builder") {
     return <ThemeLayout>{children}</ThemeLayout>;
   }
 
@@ -610,21 +621,21 @@ export default function ThemeSelector({ children }: ThemeSelectorProps) {
 
 ```typescript
 // src/components/PageContentSelector.tsx
-'use client';
+"use client";
 
-import { useShopStore } from '@/stores/shopStore';
+import { useShopStore } from "@/stores/shopStore";
 
 // Builder page renderers
-import HomepageRenderer from '@/components/HomepageRenderer';
-import ProductsPageRenderer from '@/components/ProductsPageRenderer';
-import ProductDetailsPageRenderer from '@/components/ProductDetailsPageRenderer';
+import HomepageRenderer from "@/components/HomepageRenderer";
+import ProductsPageRenderer from "@/components/ProductsPageRenderer";
+import ProductDetailsPageRenderer from "@/components/ProductDetailsPageRenderer";
 
 // Static theme page components
-import * as BasicPages from '@/components/themes/basic/pages';
-import * as PremiumPages from '@/components/themes/premium/pages';
-import * as AuroraPages from '@/components/themes/aurora/pages';
-import * as LuxuraPages from '@/components/themes/luxura/pages';
-import * as SelloraPages from '@/components/themes/sellora/pages';
+import * as BasicPages from "@/components/themes/basic/pages";
+import * as PremiumPages from "@/components/themes/premium/pages";
+import * as AuroraPages from "@/components/themes/aurora/pages";
+import * as LuxuraPages from "@/components/themes/luxura/pages";
+import * as SelloraPages from "@/components/themes/sellora/pages";
 
 const staticThemePages = {
   Basic: BasicPages,
@@ -635,7 +646,7 @@ const staticThemePages = {
 };
 
 interface PageContentSelectorProps {
-  pageType: 'home' | 'products' | 'product-detail' | 'categories' | 'checkout';
+  pageType: "home" | "products" | "product-detail" | "categories" | "checkout";
   // Props passed from the page
   [key: string]: unknown;
 }
@@ -646,17 +657,17 @@ export default function PageContentSelector({
 }: PageContentSelectorProps) {
   const shopDetails = useShopStore((state) => state.shopDetails);
 
-  const themeType = shopDetails?.shop_theme?.theme_type || 'builder';
-  const themeName = shopDetails?.shop_theme?.theme_name || 'Basic';
+  const themeType = shopDetails?.shop_theme?.theme_type || "builder";
+  const themeName = shopDetails?.shop_theme?.theme_name || "Basic";
 
-  if (themeType === 'builder') {
+  if (themeType === "builder") {
     // Use JSON-driven renderers
     switch (pageType) {
-      case 'home':
+      case "home":
         return <HomepageRenderer {...props} />;
-      case 'products':
+      case "products":
         return <ProductsPageRenderer {...props} />;
-      case 'product-detail':
+      case "product-detail":
         return <ProductDetailsPageRenderer {...props} />;
       default:
         return null;
@@ -667,15 +678,15 @@ export default function PageContentSelector({
   const ThemePages = staticThemePages[themeName] || staticThemePages.Basic;
 
   switch (pageType) {
-    case 'home':
+    case "home":
       return <ThemePages.HomePage {...props} />;
-    case 'products':
+    case "products":
       return <ThemePages.ProductsPage {...props} />;
-    case 'product-detail':
+    case "product-detail":
       return <ThemePages.ProductDetailPage {...props} />;
-    case 'categories':
+    case "categories":
       return <ThemePages.CategoriesPage {...props} />;
-    case 'checkout':
+    case "checkout":
       return <ThemePages.CheckoutPage {...props} />;
     default:
       return null;
@@ -720,21 +731,24 @@ src/components/themes/basic/
 
 ```typescript
 // src/components/themes/basic/Layout.tsx
-'use client';
+"use client";
 
-import { ReactNode } from 'react';
-import type { ShopProfile } from '@/types/shop.types';
-import Header from './Header';
-import Footer from './Footer';
-import CartDrawer from '@/components/cart/CartDrawer';
-import SearchModal from './components/SearchModal';
+import { ReactNode } from "react";
+import type { ShopProfile } from "@/types/shop.types";
+import Header from "./Header";
+import Footer from "./Footer";
+import CartDrawer from "@/components/cart/CartDrawer";
+import SearchModal from "./components/SearchModal";
 
 interface BasicLayoutProps {
   children: ReactNode;
   shopDetails: ShopProfile | null;
 }
 
-export default function BasicLayout({ children, shopDetails }: BasicLayoutProps) {
+export default function BasicLayout({
+  children,
+  shopDetails,
+}: BasicLayoutProps) {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Topbar Message */}
@@ -748,9 +762,7 @@ export default function BasicLayout({ children, shopDetails }: BasicLayoutProps)
       <Header shopDetails={shopDetails} />
 
       {/* Main Content */}
-      <main className="flex-1">
-        {children}
-      </main>
+      <main className="flex-1">{children}</main>
 
       {/* Footer */}
       <Footer shopDetails={shopDetails} />
@@ -767,13 +779,13 @@ export default function BasicLayout({ children, shopDetails }: BasicLayoutProps)
 
 ```typescript
 // src/components/themes/basic/pages/HomePage.tsx
-'use client';
+"use client";
 
-import { useShopStore } from '@/stores/shopStore';
-import { useInventoryStore } from '@/stores/inventoryStore';
-import ProductCard from '../components/ProductCard';
-import CategorySection from '../components/CategorySection';
-import Carousel from '../components/Carousel';
+import { useShopStore } from "@/stores/shopStore";
+import { useInventoryStore } from "@/stores/inventoryStore";
+import ProductCard from "../components/ProductCard";
+import CategorySection from "../components/CategorySection";
+import Carousel from "../components/Carousel";
 
 export default function HomePage() {
   const shopDetails = useShopStore((state) => state.shopDetails);
@@ -841,8 +853,13 @@ export default function HomePage() {
 
 ```typescript
 // src/stores/checkoutStore.ts
-import { create } from 'zustand';
-import type { Division, District, Upazila, PromoCode } from '@/types/checkout.types';
+import { create } from "zustand";
+import type {
+  Division,
+  District,
+  Upazila,
+  PromoCode,
+} from "@/types/checkout.types";
 
 interface CheckoutState {
   // Location
@@ -889,32 +906,34 @@ interface CheckoutState {
 }
 
 export const useCheckoutStore = create<CheckoutState>((set) => ({
-  selectedDivision: '',
-  selectedDistrict: '',
-  selectedUpazila: '',
-  selectedDeliveryZone: 'Others',
+  selectedDivision: "",
+  selectedDistrict: "",
+  selectedUpazila: "",
+  selectedDeliveryZone: "Others",
   divisions: [],
   districts: {},
   upazilas: {},
-  selectedPaymentMethod: 'cod',
+  selectedPaymentMethod: "cod",
   isFullOnlinePayment: true,
   promoCode: null,
-  promoCodeSearch: '',
-  promoCodeMessage: '',
+  promoCodeSearch: "",
+  promoCodeMessage: "",
   discountAmount: 0,
-  fullPhoneNumber: '',
-  countryCallingCode: '+880',
+  fullPhoneNumber: "",
+  countryCallingCode: "+880",
   acceptedTerms: false,
 
-  setSelectedDivision: (division) => set({
-    selectedDivision: division,
-    selectedDistrict: '',
-    selectedUpazila: '',
-  }),
-  setSelectedDistrict: (district) => set({
-    selectedDistrict: district,
-    selectedUpazila: '',
-  }),
+  setSelectedDivision: (division) =>
+    set({
+      selectedDivision: division,
+      selectedDistrict: "",
+      selectedUpazila: "",
+    }),
+  setSelectedDistrict: (district) =>
+    set({
+      selectedDistrict: district,
+      selectedUpazila: "",
+    }),
   setSelectedUpazila: (upazila) => set({ selectedUpazila: upazila }),
   setSelectedDeliveryZone: (zone) => set({ selectedDeliveryZone: zone }),
   setDivisions: (divisions) => {
@@ -937,19 +956,20 @@ export const useCheckoutStore = create<CheckoutState>((set) => ({
   setPromoCodeMessage: (message) => set({ promoCodeMessage: message }),
   setFullPhoneNumber: (phone) => set({ fullPhoneNumber: phone }),
   setAcceptedTerms: (accepted) => set({ acceptedTerms: accepted }),
-  resetCheckout: () => set({
-    selectedDivision: '',
-    selectedDistrict: '',
-    selectedUpazila: '',
-    selectedDeliveryZone: 'Others',
-    selectedPaymentMethod: 'cod',
-    promoCode: null,
-    promoCodeSearch: '',
-    promoCodeMessage: '',
-    discountAmount: 0,
-    fullPhoneNumber: '',
-    acceptedTerms: false,
-  }),
+  resetCheckout: () =>
+    set({
+      selectedDivision: "",
+      selectedDistrict: "",
+      selectedUpazila: "",
+      selectedDeliveryZone: "Others",
+      selectedPaymentMethod: "cod",
+      promoCode: null,
+      promoCodeSearch: "",
+      promoCodeMessage: "",
+      discountAmount: 0,
+      fullPhoneNumber: "",
+      acceptedTerms: false,
+    }),
 }));
 ```
 
@@ -957,11 +977,15 @@ export const useCheckoutStore = create<CheckoutState>((set) => ({
 
 ```typescript
 // src/hooks/useCheckout.ts
-import { useMemo } from 'react';
-import { useShopStore } from '@/stores/shopStore';
-import { useCartStore, selectProductsArray, selectTotalPrice } from '@/stores/cartStore';
-import { useCheckoutStore } from '@/stores/checkoutStore';
-import { calculateDeliveryCharge } from '@/lib/utils/delivery-charge';
+import { useMemo } from "react";
+import { useShopStore } from "@/stores/shopStore";
+import {
+  useCartStore,
+  selectProductsArray,
+  selectTotalPrice,
+} from "@/stores/cartStore";
+import { useCheckoutStore } from "@/stores/checkoutStore";
+import { calculateDeliveryCharge } from "@/lib/utils/delivery-charge";
 
 export function useCheckout() {
   const shopDetails = useShopStore((state) => state.shopDetails);
@@ -996,7 +1020,7 @@ export function useCheckout() {
     selectedDivision,
     selectedDistrict,
     selectedUpazila,
-    selectedDeliveryZone
+    selectedDeliveryZone,
   ]);
 
   // Calculate tax
@@ -1012,7 +1036,7 @@ export function useCheckout() {
 
   // Calculate advance payment (if applicable)
   const advancePayment = useMemo(() => {
-    if (!shopDetails || selectedPaymentMethod !== 'partial_payment') {
+    if (!shopDetails || selectedPaymentMethod !== "partial_payment") {
       return grandTotal;
     }
 
@@ -1020,9 +1044,9 @@ export function useCheckout() {
     const fixedAmount = shopDetails.advanced_payment_fixed_amount || 0;
     const percentage = shopDetails.advanced_payment_percentage || 0;
 
-    if (advanceType === 'fixed') {
+    if (advanceType === "fixed") {
       return Math.min(fixedAmount, grandTotal);
-    } else if (advanceType === 'percentage') {
+    } else if (advanceType === "percentage") {
       return (grandTotal * percentage) / 100;
     }
 
@@ -1059,13 +1083,13 @@ export function useCheckout() {
 
 ```typescript
 // src/hooks/usePlaceOrder.ts
-import { useMutation } from '@tanstack/react-query';
-import { useCartStore } from '@/stores/cartStore';
-import { useCheckoutStore } from '@/stores/checkoutStore';
-import { useShopStore } from '@/stores/shopStore';
-import { apiClient } from '@/lib/api/axios.config';
-import { encryptData } from '@/lib/encrypt-decrypt';
-import { trackPurchase } from '@/lib/analytics/fpixel';
+import { useMutation } from "@tanstack/react-query";
+import { useCartStore } from "@/stores/cartStore";
+import { useCheckoutStore } from "@/stores/checkoutStore";
+import { useShopStore } from "@/stores/shopStore";
+import { apiClient } from "@/lib/api/axios.config";
+import { encryptData } from "@/lib/encrypt-decrypt";
+import { trackPurchase } from "@/lib/analytics/fpixel";
 
 interface OrderPayload {
   customer_name: string;
@@ -1095,7 +1119,7 @@ export function usePlaceOrder() {
 
   return useMutation({
     mutationFn: async (payload: OrderPayload) => {
-      const response = await apiClient.post('/api/v1/live/receipts', {
+      const response = await apiClient.post("/api/v1/live/receipts", {
         payload: encryptData({
           ...payload,
           shop_id: shopDetails?.id,
@@ -1107,18 +1131,18 @@ export function usePlaceOrder() {
       // Track purchase event
       trackPurchase({
         value: data.total_amount,
-        currency: shopDetails?.country_currency || 'BDT',
+        currency: shopDetails?.country_currency || "BDT",
         content_ids: variables.products.map((p) => p.inventory_id.toString()),
       });
 
       // Update state
-      setOrderStatus('success');
+      setOrderStatus("success");
       setTrackLink(data.track_link);
       resetCart();
       resetCheckout();
     },
     onError: () => {
-      setOrderStatus('error');
+      setOrderStatus("error");
     },
   });
 }
@@ -1134,7 +1158,7 @@ export function usePlaceOrder() {
 
 ```typescript
 // src/stores/analyticsStore.ts
-import { create } from 'zustand';
+import { create } from "zustand";
 
 interface AnalyticsState {
   pixelId: string | null;
@@ -1163,19 +1187,22 @@ export const useAnalyticsStore = create<AnalyticsState>((set) => ({
   hasGTMAccess: false,
   hasTikTokAccess: false,
 
-  setPixelConfig: (config) => set({
-    pixelId: config.pixelId,
-    pixelAccessToken: config.accessToken,
-    hasPixelAccess: config.hasAccess ?? false,
-  }),
-  setGTMConfig: (config) => set({
-    gtmId: config.gtmId,
-    hasGTMAccess: config.hasAccess ?? false,
-  }),
-  setTikTokConfig: (config) => set({
-    tiktokPixelId: config.pixelId,
-    hasTikTokAccess: config.hasAccess ?? false,
-  }),
+  setPixelConfig: (config) =>
+    set({
+      pixelId: config.pixelId,
+      pixelAccessToken: config.accessToken,
+      hasPixelAccess: config.hasAccess ?? false,
+    }),
+  setGTMConfig: (config) =>
+    set({
+      gtmId: config.gtmId,
+      hasGTMAccess: config.hasAccess ?? false,
+    }),
+  setTikTokConfig: (config) =>
+    set({
+      tiktokPixelId: config.pixelId,
+      hasTikTokAccess: config.hasAccess ?? false,
+    }),
 }));
 ```
 
@@ -1183,7 +1210,7 @@ export const useAnalyticsStore = create<AnalyticsState>((set) => ({
 
 ```typescript
 // src/lib/analytics/fpixel.ts
-import { useAnalyticsStore } from '@/stores/analyticsStore';
+import { useAnalyticsStore } from "@/stores/analyticsStore";
 
 declare global {
   interface Window {
@@ -1197,14 +1224,17 @@ export const pageview = () => {
   const { hasPixelAccess, pixelId } = useAnalyticsStore.getState();
   if (!hasPixelAccess || !pixelId) return;
 
-  window.fbq('track', 'PageView');
+  window.fbq("track", "PageView");
 };
 
-export const trackEvent = (name: string, options: Record<string, unknown> = {}) => {
+export const trackEvent = (
+  name: string,
+  options: Record<string, unknown> = {}
+) => {
   const { hasPixelAccess, pixelId } = useAnalyticsStore.getState();
   if (!hasPixelAccess || !pixelId) return;
 
-  window.fbq('track', name, options);
+  window.fbq("track", name, options);
 };
 
 export const trackViewContent = (product: {
@@ -1213,10 +1243,10 @@ export const trackViewContent = (product: {
   price: number;
   currency: string;
 }) => {
-  trackEvent('ViewContent', {
+  trackEvent("ViewContent", {
     content_name: product.name,
     content_ids: [product.id],
-    content_type: 'product',
+    content_type: "product",
     value: product.price,
     currency: product.currency,
   });
@@ -1229,10 +1259,10 @@ export const trackAddToCart = (product: {
   quantity: number;
   currency: string;
 }) => {
-  trackEvent('AddToCart', {
+  trackEvent("AddToCart", {
     content_name: product.name,
     content_ids: [product.id],
-    content_type: 'product',
+    content_type: "product",
     value: product.price * product.quantity,
     currency: product.currency,
   });
@@ -1243,7 +1273,7 @@ export const trackInitiateCheckout = (options: {
   currency: string;
   content_ids: string[];
 }) => {
-  trackEvent('InitiateCheckout', options);
+  trackEvent("InitiateCheckout", options);
 };
 
 export const trackPurchase = (options: {
@@ -1251,7 +1281,7 @@ export const trackPurchase = (options: {
   currency: string;
   content_ids: string[];
 }) => {
-  trackEvent('Purchase', options);
+  trackEvent("Purchase", options);
 };
 ```
 
@@ -1259,14 +1289,14 @@ export const trackPurchase = (options: {
 
 ```typescript
 // src/providers/AnalyticsProvider.tsx
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import Script from 'next/script';
-import { usePathname, useSearchParams } from 'next/navigation';
-import { useShopStore } from '@/stores/shopStore';
-import { useAnalyticsStore } from '@/stores/analyticsStore';
-import { pageview } from '@/lib/analytics/fpixel';
+import { useEffect } from "react";
+import Script from "next/script";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useShopStore } from "@/stores/shopStore";
+import { useAnalyticsStore } from "@/stores/analyticsStore";
+import { pageview } from "@/lib/analytics/fpixel";
 
 export default function AnalyticsProvider({
   children,
@@ -1276,7 +1306,13 @@ export default function AnalyticsProvider({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const shopDetails = useShopStore((state) => state.shopDetails);
-  const { setPixelConfig, setGTMConfig, setTikTokConfig, hasPixelAccess, pixelId } = useAnalyticsStore();
+  const {
+    setPixelConfig,
+    setGTMConfig,
+    setTikTokConfig,
+    hasPixelAccess,
+    pixelId,
+  } = useAnalyticsStore();
 
   // Initialize analytics config from shop details
   useEffect(() => {
@@ -1340,7 +1376,7 @@ export default function AnalyticsProvider({
 
 ```typescript
 // src/lib/utils/delivery-charge.ts
-import type { ShopProfile, CartProduct } from '@/types';
+import type { ShopProfile, CartProduct } from "@/types";
 
 interface DeliveryChargeParams {
   shopDetails: ShopProfile;
@@ -1361,9 +1397,10 @@ export function calculateDeliveryCharge({
 }: DeliveryChargeParams): number {
   // Check if all products have free delivery
   const allFreeDelivery = products.every(
-    (p) => p.isApplyDefaultDeliveryCharge === false &&
-           !p.specific_delivery_charges &&
-           !p.others_delivery_charge
+    (p) =>
+      p.isApplyDefaultDeliveryCharge === false &&
+      !p.specific_delivery_charges &&
+      !p.others_delivery_charge
   );
 
   if (allFreeDelivery) return 0;
@@ -1394,7 +1431,8 @@ export function calculateDeliveryCharge({
     }
 
     if (product.specific_delivery_charges?.[deliveryZone]) {
-      productCharge += product.specific_delivery_charges[deliveryZone] * product.qty;
+      productCharge +=
+        product.specific_delivery_charges[deliveryZone] * product.qty;
     } else if (product.others_delivery_charge) {
       productCharge += product.others_delivery_charge * product.qty;
     }
@@ -1436,7 +1474,7 @@ function getDeliveryZone({
     }
   }
 
-  return 'Others';
+  return "Others";
 }
 ```
 
@@ -1445,11 +1483,11 @@ function getDeliveryZone({
 ```typescript
 // src/lib/utils/currency.ts
 const currencySymbols: Record<string, string> = {
-  BDT: '৳',
-  USD: '$',
-  EUR: '€',
-  GBP: '£',
-  INR: '₹',
+  BDT: "৳",
+  USD: "$",
+  EUR: "€",
+  GBP: "£",
+  INR: "₹",
 };
 
 export function getCurrencySymbol(currency: string): string {
@@ -1458,13 +1496,13 @@ export function getCurrencySymbol(currency: string): string {
 
 export function formatPrice(
   price: number,
-  currency: string = 'BDT',
+  currency: string = "BDT",
   options: { showSymbol?: boolean; decimals?: number } = {}
 ): string {
   const { showSymbol = true, decimals = 0 } = options;
-  const symbol = showSymbol ? getCurrencySymbol(currency) : '';
+  const symbol = showSymbol ? getCurrencySymbol(currency) : "";
 
-  const formatted = price.toLocaleString('en-BD', {
+  const formatted = price.toLocaleString("en-BD", {
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,
   });
@@ -1479,95 +1517,95 @@ export function formatPrice(
 
 ### Priority 1: Core Infrastructure
 
-| File (Old) | File (New) | Status |
-|------------|------------|--------|
-| `types/shop-profile.type.ts` | `types/shop.types.ts` | |
-| `types/inventory.type.ts` | `types/inventory.types.ts` | |
-| `types/cart.type.ts` | `types/cart.types.ts` | |
-| `types/order.type.ts` | `types/order.types.ts` | |
-| `types/misc.type.ts` | `types/common.types.ts` | |
-| `lib/configs/axios.config.ts` | `lib/api/axios.config.ts` | |
-| `lib/encrypt-decrypt.js` | `lib/encrypt-decrypt.ts` | |
+| File (Old)                    | File (New)                 | Status |
+| ----------------------------- | -------------------------- | ------ |
+| `types/shop-profile.type.ts`  | `types/shop.types.ts`      |        |
+| `types/inventory.type.ts`     | `types/inventory.types.ts` |        |
+| `types/cart.type.ts`          | `types/cart.types.ts`      |        |
+| `types/order.type.ts`         | `types/order.types.ts`     |        |
+| `types/misc.type.ts`          | `types/common.types.ts`    |        |
+| `lib/configs/axios.config.ts` | `lib/api/axios.config.ts`  |        |
+| `lib/encrypt-decrypt.js`      | `lib/encrypt-decrypt.ts`   |        |
 
 ### Priority 2: Stores (Context → Zustand)
 
-| Context (Old) | Store (New) | Status |
-|---------------|-------------|--------|
-| `shop.context.tsx` | `stores/shopStore.ts` | |
-| `cart-context.tsx` | `stores/cartStore.ts` | |
-| `checkout-context.tsx` | `stores/checkoutStore.ts` | |
-| `inventory-context.tsx` | `stores/inventoryStore.ts` | |
-| `product-context.tsx` | (Keep as hook/component state) | |
-| `pixel.context.tsx` | `stores/analyticsStore.ts` | |
+| Context (Old)           | Store (New)                    | Status |
+| ----------------------- | ------------------------------ | ------ |
+| `shop.context.tsx`      | `stores/shopStore.ts`          |        |
+| `cart-context.tsx`      | `stores/cartStore.ts`          |        |
+| `checkout-context.tsx`  | `stores/checkoutStore.ts`      |        |
+| `inventory-context.tsx` | `stores/inventoryStore.ts`     |        |
+| `product-context.tsx`   | (Keep as hook/component state) |        |
+| `pixel.context.tsx`     | `stores/analyticsStore.ts`     |        |
 
 ### Priority 3: Utilities
 
-| File (Old) | File (New) | Status |
-|------------|------------|--------|
-| `lib/utils/helpers.util.ts` | `lib/utils/helpers.ts` | |
-| `lib/utils/helpers.ts` | `lib/utils/delivery-charge.ts` | |
-| `lib/utils/fpixel.util.ts` | `lib/analytics/fpixel.ts` | |
-| `lib/utils/tpixel.util.ts` | `lib/analytics/tpixel.ts` | |
-| `lib/utils/gtm.util.ts` | `lib/analytics/gtm.ts` | |
+| File (Old)                  | File (New)                     | Status |
+| --------------------------- | ------------------------------ | ------ |
+| `lib/utils/helpers.util.ts` | `lib/utils/helpers.ts`         |        |
+| `lib/utils/helpers.ts`      | `lib/utils/delivery-charge.ts` |        |
+| `lib/utils/fpixel.util.ts`  | `lib/analytics/fpixel.ts`      |        |
+| `lib/utils/tpixel.util.ts`  | `lib/analytics/tpixel.ts`      |        |
+| `lib/utils/gtm.util.ts`     | `lib/analytics/gtm.ts`         |        |
 
 ### Priority 4: Static Theme Components
 
 For each theme (Basic, Premium, Aurora, Luxura, Sellora):
 
-| Component Type | Files to Create |
-|----------------|-----------------|
-| Layout | `components/themes/{theme}/Layout.tsx` |
-| Header | `components/themes/{theme}/Header.tsx` |
-| Footer | `components/themes/{theme}/Footer.tsx` |
-| HomePage | `components/themes/{theme}/pages/HomePage.tsx` |
-| ProductsPage | `components/themes/{theme}/pages/ProductsPage.tsx` |
+| Component Type    | Files to Create                                         |
+| ----------------- | ------------------------------------------------------- |
+| Layout            | `components/themes/{theme}/Layout.tsx`                  |
+| Header            | `components/themes/{theme}/Header.tsx`                  |
+| Footer            | `components/themes/{theme}/Footer.tsx`                  |
+| HomePage          | `components/themes/{theme}/pages/HomePage.tsx`          |
+| ProductsPage      | `components/themes/{theme}/pages/ProductsPage.tsx`      |
 | ProductDetailPage | `components/themes/{theme}/pages/ProductDetailPage.tsx` |
-| CheckoutPage | `components/themes/{theme}/pages/CheckoutPage.tsx` |
-| ProductCard | `components/themes/{theme}/components/ProductCard.tsx` |
-| CategoryCard | `components/themes/{theme}/components/CategoryCard.tsx` |
-| Carousel | `components/themes/{theme}/components/Carousel.tsx` |
-| SearchModal | `components/themes/{theme}/components/SearchModal.tsx` |
+| CheckoutPage      | `components/themes/{theme}/pages/CheckoutPage.tsx`      |
+| ProductCard       | `components/themes/{theme}/components/ProductCard.tsx`  |
+| CategoryCard      | `components/themes/{theme}/components/CategoryCard.tsx` |
+| Carousel          | `components/themes/{theme}/components/Carousel.tsx`     |
+| SearchModal       | `components/themes/{theme}/components/SearchModal.tsx`  |
 
 ### Priority 5: Shared Components
 
-| Component | Location | Status |
-|-----------|----------|--------|
-| CartDrawer | `components/cart/CartDrawer.tsx` | |
-| CartItem | `components/cart/CartItem.tsx` | |
-| CartFloatingButton | `components/cart/CartFloatingButton.tsx` | |
-| CheckoutForm | `components/checkout/CheckoutForm.tsx` | |
-| DeliverySection | `components/checkout/DeliverySection.tsx` | |
-| PaymentSection | `components/checkout/PaymentSection.tsx` | |
-| PromoCodeSection | `components/checkout/PromoCodeSection.tsx` | |
-| ImageLightbox | `components/shared/ImageLightbox.tsx` | |
-| CustomerReviews | `components/shared/CustomerReviews.tsx` | |
+| Component          | Location                                   | Status |
+| ------------------ | ------------------------------------------ | ------ |
+| CartDrawer         | `components/cart/CartDrawer.tsx`           |        |
+| CartItem           | `components/cart/CartItem.tsx`             |        |
+| CartFloatingButton | `components/cart/CartFloatingButton.tsx`   |        |
+| CheckoutForm       | `components/checkout/CheckoutForm.tsx`     |        |
+| DeliverySection    | `components/checkout/DeliverySection.tsx`  |        |
+| PaymentSection     | `components/checkout/PaymentSection.tsx`   |        |
+| PromoCodeSection   | `components/checkout/PromoCodeSection.tsx` |        |
+| ImageLightbox      | `components/shared/ImageLightbox.tsx`      |        |
+| CustomerReviews    | `components/shared/CustomerReviews.tsx`    |        |
 
 ### Priority 6: Hooks
 
-| Hook | Purpose | Status |
-|------|---------|--------|
-| `useShop` | Fetch shop profile | |
-| `useCart` | Cart operations | |
-| `useCheckout` | Checkout calculations | |
-| `usePlaceOrder` | Order placement mutation | |
-| `usePromoCode` | Promo validation | |
-| `useAnalytics` | Analytics event tracking | |
+| Hook            | Purpose                  | Status |
+| --------------- | ------------------------ | ------ |
+| `useShop`       | Fetch shop profile       |        |
+| `useCart`       | Cart operations          |        |
+| `useCheckout`   | Checkout calculations    |        |
+| `usePlaceOrder` | Order placement mutation |        |
+| `usePromoCode`  | Promo validation         |        |
+| `useAnalytics`  | Analytics event tracking |        |
 
 ### Priority 7: Pages
 
-| Route | Page File | Status |
-|-------|-----------|--------|
-| `/` | `app/(shop)/page.tsx` | |
-| `/products` | `app/(shop)/products/page.tsx` | |
-| `/products/[handle]` | `app/(shop)/products/[handle]/page.tsx` | |
-| `/categories` | `app/(shop)/categories/page.tsx` | |
-| `/categories/[category]` | `app/(shop)/categories/[category]/page.tsx` | |
-| `/checkout` | `app/(shop)/checkout/page.tsx` | |
-| `/payment-confirm` | `app/(shop)/payment-confirm/page.tsx` | |
-| `/receipt/[id]` | `app/(shop)/receipt/[id]/page.tsx` | |
-| `/about-us` | `app/(shop)/about-us/page.tsx` | |
-| `/privacy-policy` | `app/(shop)/privacy-policy/page.tsx` | |
-| `/terms-and-conditions` | `app/(shop)/terms-and-conditions/page.tsx` | |
+| Route                    | Page File                                   | Status |
+| ------------------------ | ------------------------------------------- | ------ |
+| `/`                      | `app/(shop)/page.tsx`                       |        |
+| `/products`              | `app/(shop)/products/page.tsx`              |        |
+| `/products/[handle]`     | `app/(shop)/products/[handle]/page.tsx`     |        |
+| `/categories`            | `app/(shop)/categories/page.tsx`            |        |
+| `/categories/[category]` | `app/(shop)/categories/[category]/page.tsx` |        |
+| `/checkout`              | `app/(shop)/checkout/page.tsx`              |        |
+| `/payment-confirm`       | `app/(shop)/payment-confirm/page.tsx`       |        |
+| `/receipt/[id]`          | `app/(shop)/receipt/[id]/page.tsx`          |        |
+| `/about-us`              | `app/(shop)/about-us/page.tsx`              |        |
+| `/privacy-policy`        | `app/(shop)/privacy-policy/page.tsx`        |        |
+| `/terms-and-conditions`  | `app/(shop)/terms-and-conditions/page.tsx`  |        |
 
 ---
 
@@ -1704,19 +1742,19 @@ src/
 ```typescript
 // src/types/landing-page.types.ts
 export enum ContentType {
-  TOP = 'TOP',
-  FEATURED = 'FEATURED',
-  SHOWCASE = 'SHOWCASE',
-  STANDALONE = 'STANDALONE',
-  TEXT = 'TEXT',
-  TEXTONLY = 'TEXTONLY',
-  IMAGE_BANNER = 'IMAGE_BANNER',
+  TOP = "TOP",
+  FEATURED = "FEATURED",
+  SHOWCASE = "SHOWCASE",
+  STANDALONE = "STANDALONE",
+  TEXT = "TEXT",
+  TEXTONLY = "TEXTONLY",
+  IMAGE_BANNER = "IMAGE_BANNER",
 }
 
 export enum SingleProductTheme {
-  Arcadia = 'Arcadia',
-  Nirvana = 'Nirvana',
-  Grip = 'Grip',
+  Arcadia = "Arcadia",
+  Nirvana = "Nirvana",
+  Grip = "Grip",
 }
 
 export interface ContentInterface {
@@ -1732,7 +1770,7 @@ export interface ContentInterface {
 
 export interface ProductVideoInterface {
   video_url: string;
-  type: 'TOP' | 'FEATURED';
+  type: "TOP" | "FEATURED";
   title: string | null;
   description: string | null;
   button_text: string | null;
@@ -1742,7 +1780,7 @@ export interface ProductVideoInterface {
 export interface FeatureInterface {
   title: string | null;
   subtitle: string | null;
-  type: 'SIMPLE';
+  type: "SIMPLE";
   content: ContentInterface[];
 }
 
@@ -1758,7 +1796,7 @@ export interface SingleProductThemeData {
   product_videos: ProductVideoInterface[] | null;
   product_image: {
     title: string | null;
-    type: 'SIMPLE';
+    type: "SIMPLE";
     content: string[];
   } | null;
   message_on_top?: string;
@@ -1780,8 +1818,8 @@ export interface SingleProductPage {
 
 ```typescript
 // src/stores/landingPageStore.ts
-import { create } from 'zustand';
-import type { SingleProductPage } from '@/types/landing-page.types';
+import { create } from "zustand";
+import type { SingleProductPage } from "@/types/landing-page.types";
 
 interface LandingPageState {
   pageData: SingleProductPage | null;
@@ -1795,15 +1833,15 @@ interface LandingPageState {
 
 export const useLandingPageStore = create<LandingPageState>((set) => ({
   pageData: null,
-  primaryColor: '#541DFF',
-  secondaryColor: '#FFFF00',
+  primaryColor: "#541DFF",
+  secondaryColor: "#FFFF00",
 
   setPageData: (data) => {
     const themeData = data.theme_data?.[0];
     set({
       pageData: data,
-      primaryColor: themeData?.color?.primary_color || '#541DFF',
-      secondaryColor: themeData?.color?.secondary_color || '#FFFF00',
+      primaryColor: themeData?.color?.primary_color || "#541DFF",
+      secondaryColor: themeData?.color?.secondary_color || "#FFFF00",
     });
   },
   setPrimaryColor: (color) => set({ primaryColor: color }),
@@ -1815,24 +1853,26 @@ export const useLandingPageStore = create<LandingPageState>((set) => ({
 
 ```typescript
 // src/components/landing-page/LandingPageRenderer.tsx
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import { useLandingPageStore } from '@/stores/landingPageStore';
-import { ProductContextProvider } from '@/contexts/ProductContext';
-import { getThemeColors, getThemeColor } from '@/lib/utils/theme-colors';
-import TopbarMessage from '@/components/shared/TopbarMessage';
+import { useEffect } from "react";
+import { useLandingPageStore } from "@/stores/landingPageStore";
+import { ProductContextProvider } from "@/contexts/ProductContext";
+import { getThemeColors, getThemeColor } from "@/lib/utils/theme-colors";
+import TopbarMessage from "@/components/shared/TopbarMessage";
 
 // Theme components
-import Arcadia from './themes/arcadia';
-import Nirvana from './themes/nirvana';
-import Grip from './themes/grip';
+import Arcadia from "./themes/arcadia";
+import Nirvana from "./themes/nirvana";
+import Grip from "./themes/grip";
 
 interface LandingPageRendererProps {
   pageData: SingleProductPage;
 }
 
-export default function LandingPageRenderer({ pageData }: LandingPageRendererProps) {
+export default function LandingPageRenderer({
+  pageData,
+}: LandingPageRendererProps) {
   const setPageData = useLandingPageStore((state) => state.setPageData);
   const themeName = pageData?.theme_name;
   const themeData = pageData?.theme_data?.[0];
@@ -1847,12 +1887,12 @@ export default function LandingPageRenderer({ pageData }: LandingPageRendererPro
     const secondaryColor = themeData?.color?.secondary_color;
 
     const primaryColors = getThemeColors(
-      getThemeColor(primaryColor ?? '#541DFF'),
-      'landing-primary'
+      getThemeColor(primaryColor ?? "#541DFF"),
+      "landing-primary"
     );
     const secondaryColors = getThemeColors(
-      getThemeColor(secondaryColor ?? '#FFFF00'),
-      'landing-secondary'
+      getThemeColor(secondaryColor ?? "#FFFF00"),
+      "landing-secondary"
     );
 
     Object.entries(primaryColors).forEach(([key, value]) => {
@@ -1874,9 +1914,9 @@ export default function LandingPageRenderer({ pageData }: LandingPageRendererPro
         )}
 
         {/* Theme-specific content */}
-        {themeName === 'Arcadia' && <Arcadia pageData={pageData} />}
-        {themeName === 'Nirvana' && <Nirvana pageData={pageData} />}
-        {themeName === 'Grip' && <Grip pageData={pageData} />}
+        {themeName === "Arcadia" && <Arcadia pageData={pageData} />}
+        {themeName === "Nirvana" && <Nirvana pageData={pageData} />}
+        {themeName === "Grip" && <Grip pageData={pageData} />}
       </ProductContextProvider>
     </div>
   );
@@ -1887,23 +1927,23 @@ export default function LandingPageRenderer({ pageData }: LandingPageRendererPro
 
 ```typescript
 // src/components/landing-page/themes/grip/index.tsx
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import { useCartStore } from '@/stores/cartStore';
-import type { SingleProductPage } from '@/types/landing-page.types';
+import { useEffect } from "react";
+import { useCartStore } from "@/stores/cartStore";
+import type { SingleProductPage } from "@/types/landing-page.types";
 
 // Grip-specific components
-import GripNavbar from './GripNavbar';
-import GripTopCarousel from './GripTopCarousel';
-import GripFeatured from './GripFeatured';
-import GripFeaturedImageBanner from './GripFeaturedImageBanner';
-import GripProductVideo from './GripProductVideo';
-import GripProductBuyNow from './GripProductBuyNow';
-import GripStandalone from './GripStandalone';
-import GripProductImages from './GripProductImages';
-import GripFooter from './GripFooter';
-import EmbeddedCheckout from './EmbeddedCheckout';
+import GripNavbar from "./GripNavbar";
+import GripTopCarousel from "./GripTopCarousel";
+import GripFeatured from "./GripFeatured";
+import GripFeaturedImageBanner from "./GripFeaturedImageBanner";
+import GripProductVideo from "./GripProductVideo";
+import GripProductBuyNow from "./GripProductBuyNow";
+import GripStandalone from "./GripStandalone";
+import GripProductImages from "./GripProductImages";
+import GripFooter from "./GripFooter";
+import EmbeddedCheckout from "./EmbeddedCheckout";
 
 interface GripProps {
   pageData: SingleProductPage;
@@ -1915,11 +1955,19 @@ export default function Grip({ pageData }: GripProps) {
   const themeData = pageData?.theme_data?.[0];
 
   // Extract banner types from theme data
-  const topContent = themeData?.banners?.filter((b) => b.type === 'TOP');
-  const featuredContent = themeData?.banners?.filter((b) => b.type === 'FEATURED');
-  const imageBanners = themeData?.banners?.filter((b) => b.type === 'IMAGE_BANNER');
-  const showcaseContent = themeData?.banners?.filter((b) => b.type === 'SHOWCASE');
-  const standaloneContent = themeData?.banners?.find((b) => b.type === 'STANDALONE');
+  const topContent = themeData?.banners?.filter((b) => b.type === "TOP");
+  const featuredContent = themeData?.banners?.filter(
+    (b) => b.type === "FEATURED"
+  );
+  const imageBanners = themeData?.banners?.filter(
+    (b) => b.type === "IMAGE_BANNER"
+  );
+  const showcaseContent = themeData?.banners?.filter(
+    (b) => b.type === "SHOWCASE"
+  );
+  const standaloneContent = themeData?.banners?.find(
+    (b) => b.type === "STANDALONE"
+  );
   const productVideoContent = themeData?.product_videos;
 
   // Check if product is already in cart
@@ -2025,11 +2073,11 @@ export default function Grip({ pageData }: GripProps) {
 
 ```typescript
 // src/components/landing-page/themes/grip/EmbeddedCheckout.tsx
-'use client';
+"use client";
 
-import { CheckoutProvider } from '@/contexts/CheckoutContext';
-import CommonCheckoutForm from '@/components/landing-page/checkout/CommonCheckoutForm';
-import OrderStatus from '@/components/landing-page/checkout/OrderStatus';
+import { CheckoutProvider } from "@/contexts/CheckoutContext";
+import CommonCheckoutForm from "@/components/landing-page/checkout/CommonCheckoutForm";
+import OrderStatus from "@/components/landing-page/checkout/OrderStatus";
 
 export default function EmbeddedCheckout() {
   return (
@@ -2058,20 +2106,22 @@ export default function EmbeddedCheckout() {
 
 ```typescript
 // src/app/(shop)/single-product/[slug]/page.tsx
-import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
-import LandingPageRenderer from '@/components/landing-page/LandingPageRenderer';
-import { getSingleProductPage, getDivisions } from '@/lib/api/landing-page';
+import { Metadata } from "next";
+import { notFound } from "next/navigation";
+import LandingPageRenderer from "@/components/landing-page/LandingPageRenderer";
+import { getSingleProductPage, getDivisions } from "@/lib/api/landing-page";
 
 interface PageProps {
   params: { slug: string };
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
   const pageData = await getSingleProductPage(params.slug);
 
   if (!pageData) {
-    return { title: 'Not Found' };
+    return { title: "Not Found" };
   }
 
   return {
@@ -2106,19 +2156,19 @@ export default async function SingleProductPage({ params }: PageProps) {
 
 ### 7.8 Landing Page Migration Checklist
 
-| Component (Old) | Component (New) | Priority |
-|-----------------|-----------------|----------|
-| `single-page-scema.ts` | `types/landing-page.types.ts` | High |
-| `single-product.module.tsx` | Server component + LandingPageRenderer | High |
-| `themes/arcadia/index.tsx` | `landing-page/themes/arcadia/index.tsx` | High |
-| `themes/nirvana/index.tsx` | `landing-page/themes/nirvana/index.tsx` | High |
-| `themes/grip/index.tsx` | `landing-page/themes/grip/index.tsx` | High |
-| All Arcadia components | `landing-page/themes/arcadia/` | Medium |
-| All Nirvana components | `landing-page/themes/nirvana/` | Medium |
-| All Grip components | `landing-page/themes/grip/` | Medium |
-| `common-checkout-form.tsx` | `landing-page/checkout/CommonCheckoutForm.tsx` | High |
-| Checkout section components | `landing-page/checkout/` | Medium |
-| Shared product images | `landing-page/shared/ProductImages.tsx` | Medium |
+| Component (Old)             | Component (New)                                | Priority |
+| --------------------------- | ---------------------------------------------- | -------- |
+| `single-page-scema.ts`      | `types/landing-page.types.ts`                  | High     |
+| `single-product.module.tsx` | Server component + LandingPageRenderer         | High     |
+| `themes/arcadia/index.tsx`  | `landing-page/themes/arcadia/index.tsx`        | High     |
+| `themes/nirvana/index.tsx`  | `landing-page/themes/nirvana/index.tsx`        | High     |
+| `themes/grip/index.tsx`     | `landing-page/themes/grip/index.tsx`           | High     |
+| All Arcadia components      | `landing-page/themes/arcadia/`                 | Medium   |
+| All Nirvana components      | `landing-page/themes/nirvana/`                 | Medium   |
+| All Grip components         | `landing-page/themes/grip/`                    | Medium   |
+| `common-checkout-form.tsx`  | `landing-page/checkout/CommonCheckoutForm.tsx` | High     |
+| Checkout section components | `landing-page/checkout/`                       | Medium   |
+| Shared product images       | `landing-page/shared/ProductImages.tsx`        | Medium   |
 
 ---
 
@@ -2154,6 +2204,7 @@ This integration plan provides a clear path to:
 5. **Support** multi-tenant architecture
 
 The hybrid architecture allows shops to choose between:
+
 - **Theme Builder:** Full customization via JSON configuration
 - **Static Themes:** Pre-built, optimized themes with consistent UX
 
@@ -2166,6 +2217,7 @@ Both options share the same underlying infrastructure (stores, hooks, utilities)
 ### Current Migration Status
 
 **✅ COMPLETED (100%):**
+
 - Theme Builder system with BlockRenderer V3.0
 - 16 product card variants with proper naming conventions
 - Core Zustand stores (cart, checkout, analytics, shop, theme, homepage, products, productDetails, aboutUs)
@@ -2180,11 +2232,13 @@ Both options share the same underlying infrastructure (stores, hooks, utilities)
 - **Proper Component Organization** - Hooks in /hooks, components properly structured
 
 **⚠️ PARTIALLY COMPLETE (Frontend Only):**
+
 - **Payment Gateway Backend Integration** - UI components exist but all are MOCK implementations
 - **Analytics Integration** - Analytics store and types complete, but no actual tracking implementations
 - **Order Management** - No real order creation or management APIs
 
 **❌ MISSING - TO BE MIGRATED:**
+
 - **Real Payment Gateway APIs** - bKash, Nagad, AamarPay actual SDK integrations
 - **Order Management System** - Order creation, tracking, and receipt generation
 - **Static Themes** (Basic, Premium, Aurora, Luxura, Sellora)
@@ -2194,7 +2248,9 @@ Both options share the same underlying infrastructure (stores, hooks, utilities)
 - **User Authentication System**
 
 ### Current Component Structure
+
 The project follows kebab-case naming conventions:
+
 ```
 components/
 ├── cart/                    # ✅ COMPLETE - All cart UI components implemented
@@ -2229,6 +2285,7 @@ components/
 ```
 
 ### Hook Structure
+
 ```
 hooks/
 ├── useTheme.ts              # ✅ Existing
@@ -2243,6 +2300,7 @@ hooks/
 ```
 
 ### User Preferences
+
 - **Payment Gateways**: All 5 gateways (bKash, Nagad, AamarPay, COD, Self MFS) - ✅ FRONTEND COMPLETE
 - **Theme System**: Hybrid approach (Builder + Static) - READY FOR STATIC THEMES
 - **Component Naming**: ✅ kebab-case (e.g., `cart-floating-btn`) - PROPERLY IMPLEMENTED
@@ -2251,30 +2309,37 @@ hooks/
 ## Updated Phase Status
 
 ### ✅ PHASE 1: Core Infrastructure - COMPLETED
+
 - Dependencies, types, stores, query provider - 100% DONE
 
 ### ✅ PHASE 2: Cart System - COMPLETED
+
 - Cart UI components (floating buttons, modals, sidebar) - 100% DONE
 - Cart hooks (useCartFloat, useAddToCart) - 100% DONE
 - Cart pages (/cart) - 100% DONE
 
 ### ✅ PHASE 3: Checkout Flow - COMPLETED
+
 - All checkout form components - 100% DONE
 - Checkout page (/checkout) - 100% DONE
 - Payment confirmation page (/payment-confirm) - 100% DONE
 - Bangladesh location integration - 100% DONE
 
 ### ⚠️ PHASE 4: Payment Gateway Integration - FRONTEND ONLY
+
 - ✅ All 5 payment UI components created - 100% DONE
 - ❌ **ALL PAYMENTS ARE MOCK IMPLEMENTATIONS** - NEEDS REAL API INTEGRATION
 
 ### ❌ PHASE 5: Static Themes - NOT STARTED
+
 - Basic, Premium, Aurora, Luxura, Sellora themes - 0% DONE
 
 ### ❌ PHASE 6: Landing Page Themes - NOT STARTED
+
 - Arcadia, Nirvana, Grip landing pages - 0% DONE
 
 ### ⚠️ PHASE 7: Analytics Integration - FOUNDATION ONLY
+
 - ✅ Analytics store and types - 100% DONE
 - ❌ No actual tracking implementations (Facebook Pixel, GTM, TikTok) - 0% DONE
 
@@ -2283,8 +2348,10 @@ hooks/
 ## Migration Implementation Plan
 
 ### ✅ Phase 1: Core Cart System - COMPLETED
+
 **Status**: 100% DONE
 **What Was Implemented**:
+
 ```
 components/cart/
 ├── cart-floating-btn/
@@ -2301,6 +2368,7 @@ components/cart/
 ```
 
 **Hooks Created**:
+
 ```
 hooks/
 ├── useCartFloat.ts               # ✅ Cart modal/sidebar state management
@@ -2309,8 +2377,10 @@ hooks/
 ```
 
 ### ✅ Phase 2: Complete Checkout Flow - COMPLETED
+
 **Status**: 100% DONE
 **What Was Implemented**:
+
 ```
 components/checkout/
 ├── checkout-form.tsx              # ✅ Main checkout form container
@@ -2323,6 +2393,7 @@ components/checkout/
 ```
 
 **Pages Created**:
+
 ```
 app/(shop)/
 ├── cart/page.tsx                    # ✅ Dedicated shopping cart page
@@ -2331,8 +2402,10 @@ app/(shop)/
 ```
 
 ### ⚠️ Phase 3: Payment Gateway Frontend - COMPLETED (MOCK ONLY)
+
 **Status**: UI 100% DONE, Backend 0% DONE
 **What Was Implemented**:
+
 ```
 components/payments/
 ├── payment-method-selector.tsx      # ✅ Choose payment method
@@ -2348,8 +2421,10 @@ components/payments/
 **⚠️ CRITICAL ISSUE**: All payment components are MOCK implementations only - NO REAL API INTEGRATION
 
 ### Phase 4: Real Payment Gateway Backend Integration - PENDING
+
 **Priority**: IMMEDIATE (Business Critical)
 **What Needs to Be Done**:
+
 - Real bKash SDK integration
 - Real Nagad SDK integration
 - Real AamarPay SDK integration
@@ -2358,30 +2433,38 @@ components/payments/
 - Secure server-side payment processing
 
 ### Phase 5: Static Themes Migration - PENDING
+
 **Priority**: MEDIUM
 **What Needs to Be Done**:
+
 - Migrate 5 static themes (Basic, Premium, Aurora, Luxura, Sellora)
 - Theme selector component
 - Integration with existing BlockRenderer system
 
 ### Phase 6: Landing Page Themes - PENDING
+
 **Priority**: MEDIUM
 **What Needs to Be Done**:
+
 - Migrate 3 landing themes (Arcadia, Nirvana, Grip)
 - Single-product landing page functionality
 - Embedded checkout for landing pages
 
 ### Phase 7: Analytics Implementation - PENDING
+
 **Priority**: LOW
 **What Needs to Be Done**:
+
 - Facebook Pixel actual tracking implementation
 - Google Tag Manager integration
 - TikTok Pixel tracking
 - Analytics provider component
 
 ### Phase 4: Static Themes Migration (Priority: MEDIUM)
+
 **Duration**: 5-7 days
 **Theme Structure**:
+
 ```
 components/themes/
 ├── basic/
@@ -2398,6 +2481,7 @@ components/themes/
 ```
 
 **Implementation Notes**:
+
 - Each theme as complete, self-contained component set
 - Compatible with existing BlockRenderer system
 - Theme selector component to switch between themes
@@ -2405,8 +2489,10 @@ components/themes/
 - Follow existing kebab-case naming
 
 ### Phase 5: Landing Page Themes (Priority: MEDIUM)
+
 **Duration**: 3-4 days
 **Landing Pages to Migrate**:
+
 ```
 components/landing-pages/
 ├── arcadia/
@@ -2424,14 +2510,17 @@ components/landing-pages/
 ```
 
 **Special Features**:
+
 - Grip theme includes auto-add to cart functionality
 - Embedded checkout forms in landing pages
 - Product-specific, single-product focus
 - Integration with existing cart and checkout systems
 
 ### Phase 6: Analytics Integration (Priority: LOW)
+
 **Duration**: 2-3 days
 **Components to Create**:
+
 ```
 components/analytics/
 ├── facebook-pixel.tsx              # Facebook Pixel events
@@ -2444,14 +2533,17 @@ hooks/
 ```
 
 **Integration Points**:
+
 - ✅ `stores/analyticsStore.ts` - Framework exists
 - Track: PageView, AddToCart, InitiateCheckout, Purchase
 - Bangladesh market specific events
 - E-commerce conversion tracking
 
 ### Phase 7: Internationalization (Priority: LOW)
+
 **Duration**: 2-3 days
 **Files to Create**:
+
 ```
 messages/
 ├── en.json                         # English translations
@@ -2465,6 +2557,7 @@ lib/
 ```
 
 **Implementation Notes**:
+
 - Leverage existing `next-intl` dependency
 - Bangladesh primary language support (Bengali)
 - Language switcher component
@@ -2473,19 +2566,23 @@ lib/
 ## Technical Implementation Details
 
 ### Naming Convention Compliance
+
 All new components MUST follow kebab-case:
+
 - ✅ `cart-floating-btn` (not `CartFloatingButton`)
 - ✅ `checkout-form` (not `CheckoutForm`)
 - ✅ `bkash-payment` (not `BkashPayment`)
 - ✅ `basic-header` (not `BasicHeader`)
 
 ### Store Integration Strategy
+
 1. **Cart Store**: ✅ Complete - only needs UI components
 2. **Checkout Store**: ✅ Basic exists - needs full checkout flow
 3. **Analytics Store**: ✅ Framework exists - needs integration
 4. **Theme Store**: ✅ Integrated with builder - extend for static themes
 
 ### Hybrid Theme System Architecture
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                    ZATIQ STOREFRONT                      │
@@ -2511,22 +2608,24 @@ All new components MUST follow kebab-case:
 ```
 
 ### File Migration Path Matrix
-| Source (storefront.zatiqeasy.com) | Target (storefront.zatiqeasy.dev) | Priority |
-|-----------------------------------|---------------------------------------|----------|
-| `/src/www/e-commerce/components/cart/` | `/components/cart/` | HIGH |
-| `/src/www/e-commerce/modules/order/` | `/components/checkout/` | HIGH |
-| `/src/www/e-commerce/themes/basic/` | `/components/themes/basic/` | MEDIUM |
-| `/src/www/e-commerce/themes/premium/` | `/components/themes/premium/` | MEDIUM |
-| `/src/www/e-commerce/themes/aurora/` | `/components/themes/aurora/ | MEDIUM |
-| `/src/www/e-commerce/themes/luxura/` | `/components/themes/luxura/ | MEDIUM |
-| `/src/www/e-commerce/themes/sellora/` | `/components/themes/sellora/ | MEDIUM |
-| `/src/www/e-commerce/modules/single-page/` | `/components/landing-pages/` | MEDIUM |
-| `/src/lib/utils/fpixel.util.ts` | `/components/analytics/facebook-pixel.tsx` | LOW |
-| `/src/www/context/` | Convert to Zustand stores | LOW |
+
+| Source (storefront.zatiqeasy.com)          | Target (storefront.zatiqeasy.dev)          | Priority |
+| ------------------------------------------ | ------------------------------------------ | -------- |
+| `/src/www/e-commerce/components/cart/`     | `/components/cart/`                        | HIGH     |
+| `/src/www/e-commerce/modules/order/`       | `/components/checkout/`                    | HIGH     |
+| `/src/www/e-commerce/themes/basic/`        | `/components/themes/basic/`                | MEDIUM   |
+| `/src/www/e-commerce/themes/premium/`      | `/components/themes/premium/`              | MEDIUM   |
+| `/src/www/e-commerce/themes/aurora/`       | `/components/themes/aurora/                | MEDIUM   |
+| `/src/www/e-commerce/themes/luxura/`       | `/components/themes/luxura/                | MEDIUM   |
+| `/src/www/e-commerce/themes/sellora/`      | `/components/themes/sellora/               | MEDIUM   |
+| `/src/www/e-commerce/modules/single-page/` | `/components/landing-pages/`               | MEDIUM   |
+| `/src/lib/utils/fpixel.util.ts`            | `/components/analytics/facebook-pixel.tsx` | LOW      |
+| `/src/www/context/`                        | Convert to Zustand stores                  | LOW      |
 
 ## Success Metrics
 
 ### Functional Requirements
+
 - ✅ Complete e-commerce workflow (Add to Cart → Checkout → Payment → Order Confirmation)
 - ✅ All 5 payment gateways functional (bKash, Nagad, AamarPay, COD, Self MFS)
 - ✅ Theme selector allowing choice between builder and static themes
@@ -2534,12 +2633,14 @@ All new components MUST follow kebab-case:
 - ✅ Landing page themes (Arcadia, Nirdvana, Grip) with embedded checkout
 
 ### Technical Requirements
+
 - ✅ Zero breaking changes to existing theme builder functionality
 - ✅ All components follow kebab-case naming convention
 - ✅ TypeScript type safety maintained throughout
 - ✅ Performance optimized (bundle size analysis)
 
 ### User Experience
+
 - ✅ Seamless cart management with responsive design
 - ✅ Intuitive checkout flow with multiple payment options
 - ✅ Professional theme selection and switching
