@@ -147,7 +147,7 @@ export const clearVerifiedPhonesForShop = async (
 export const clearExpiredVerifications = async (): Promise<void> => {
   try {
     // Iterate through all cached stores and clear expired entries
-    for (const [shopId, store] of storeCache.entries()) {
+    for (const [, store] of storeCache.entries()) {
       const keys = await store.keys();
       for (const key of keys) {
         const data = await store.getItem<VerifiedPhoneData>(key);

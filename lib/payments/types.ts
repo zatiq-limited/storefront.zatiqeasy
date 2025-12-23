@@ -126,7 +126,7 @@ export interface ReceiptDetails {
   transaction_id?: string;
   payment_details?: {
     gateway_transaction_id?: string;
-    gateway_response?: any;
+    gateway_response?: Record<string, unknown>;
     paid_at?: string;
   };
 }
@@ -182,12 +182,12 @@ export interface PaymentWebhook {
     status: PaymentStatus;
     signature?: string;
     timestamp: string;
-    raw_response: any;
+    raw_response: Record<string, unknown>;
   };
 }
 
 // API Response Wrapper
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   success: boolean;
   data?: T;
   error?: string;

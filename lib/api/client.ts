@@ -6,9 +6,9 @@
 import axios from "axios";
 import { encryptData, decryptData } from "@/lib/utils/encrypt-decrypt";
 
-// API base URL from environment
+// API base URL from environment (matching old project)
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "https://api.zatiqeasy.com";
+  process.env.NEXT_PUBLIC_API_URL || "https://easybill.zatiq.tech";
 
 // Create axios instance with default config
 export const apiClient = axios.create({
@@ -18,6 +18,11 @@ export const apiClient = axios.create({
     "Content-Type": "application/json",
     "Device-Type": "Web",
     "Application-Type": "Online_Shop",
+    Referer: "https://shop.zatiqeasy.com",
+    "User-Agent":
+      typeof window !== "undefined"
+        ? window.navigator.userAgent
+        : "NextJS Server",
   },
 });
 
@@ -32,6 +37,7 @@ function shouldEncrypt(url?: string): boolean {
     "/api/v1/live/receipts",
     "/api/v1/live/pendingPayment",
     "/api/v1/live/inventories",
+    "/api/v1/receipts/view/",
   ];
 
   return encryptedEndpoints.some((endpoint) => url.includes(endpoint));
@@ -54,8 +60,11 @@ apiClient.interceptors.request.use(
   (config) => {
     // Encrypt request payload if needed
     if (config.data && shouldEncrypt(config.url)) {
+      console.log("🔐 Encrypting request for:", config.url);
+      console.log("📦 Original payload:", config.data);
       const encryptedPayload = encryptData(config.data);
       config.data = { payload: encryptedPayload };
+      console.log("🔒 Encrypted payload:", config.data);
     }
 
     // Add auth token if available (for future use)
@@ -66,6 +75,13 @@ apiClient.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+
+    console.log("📡 Final request config:", {
+      url: config.url,
+      method: config.method,
+      headers: config.headers,
+      baseURL: config.baseURL,
+    });
 
     return config;
   },
@@ -84,14 +100,17 @@ apiClient.interceptors.request.use(
  */
 apiClient.interceptors.response.use(
   (response) => {
+    console.log("📨 Response received from:", response.config.url);
+    console.log("📄 Raw response data:", response.data);
+
     // Decrypt response if needed
     if (shouldDecrypt(response.config.url)) {
       try {
+        console.log("🔓 Decrypting response...");
         response.data = decryptData(response.data);
+        console.log("✅ Decrypted data:", response.data);
       } catch (error) {
-        if (process.env.NODE_ENV === "development") {
-          console.error("Failed to decrypt response:", error);
-        }
+        console.error("❌ Failed to decrypt response:", error);
         // Return original data if decryption fails
       }
     }
@@ -99,6 +118,13 @@ apiClient.interceptors.response.use(
     return response;
   },
   (error) => {
+    console.error("❌ Response error:", {
+      url: error.config?.url,
+      status: error.response?.status,
+      statusText: error.response?.statusText,
+      data: error.response?.data,
+    });
+
     // Handle common error cases
     if (error.response?.status === 401) {
       // Unauthorized - clear token and redirect

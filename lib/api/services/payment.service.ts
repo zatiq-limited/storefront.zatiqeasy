@@ -4,7 +4,6 @@
  */
 
 import { apiClient } from "../client";
-import { encryptData, decryptData } from "@/lib/utils/encrypt-decrypt";
 import type {
   CreateOrderPayload,
   OrderResponse,
@@ -32,36 +31,21 @@ export const paymentService = {
   /**
    * Create a new order/receipt
    * Returns payment_url directly for gateway payments
+   * Encryption/decryption handled automatically by interceptors
    */
   async createOrder(payload: CreateOrderPayload): Promise<OrderResponse> {
     try {
-      // Encrypt payload
-      const encryptedPayload = encryptData(payload);
+      // Interceptor will handle encryption automatically
+      const { data } = await apiClient.post("/api/v1/live/receipts", payload);
 
-      const { data } = await apiClient.post(
-        `${PAYMENT_API_BASE}/live/receipts`,
-        { payload: encryptedPayload },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Device-Type": "Web",
-            "Application-Type": "Online_Shop",
-          },
-        }
-      );
-
-      // Decrypt response
-      const decryptedData = decryptData(data);
-
+      // Interceptor will handle decryption automatically
       return {
         success: true,
         data: {
-          payment_url: decryptedData.payment_url,
-          receipt_id:
-            decryptedData.data?.receipt_id || decryptedData.receipt_id,
-          receipt_url:
-            decryptedData.data?.receipt_url || decryptedData.receipt_url,
-          ...decryptedData.data,
+          payment_url: data.payment_url,
+          receipt_id: data.data?.receipt_id || data.receipt_id,
+          receipt_url: data.data?.receipt_url || data.receipt_url,
+          ...data.data,
         },
       };
     } catch (error: unknown) {
@@ -77,30 +61,22 @@ export const paymentService = {
 
   /**
    * Process payment for an existing order
+   * Encryption/decryption handled automatically by interceptors
    */
   async processPayment(
     payload: PaymentProcessPayload
   ): Promise<PaymentProcessResponse> {
     try {
-      const encryptedPayload = encryptData(payload);
-
-      const { data } = await apiClient.post<any>(
-        `${PAYMENT_API_BASE}/live/pendingPayment`,
-        { payload: encryptedPayload },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Device-Type": "Web",
-            "Application-Type": "Online_Shop",
-          },
-        }
+      // Interceptor will handle encryption automatically
+      const { data } = await apiClient.post(
+        "/api/v1/live/pendingPayment",
+        payload
       );
 
-      const decryptedData = decryptData(data);
-
+      // Interceptor will handle decryption automatically
       return {
         success: true,
-        data: decryptedData,
+        data: data,
       };
     } catch (error: unknown) {
       if (process.env.NODE_ENV === "development") {
@@ -130,8 +106,8 @@ export const paymentService = {
         }
       );
 
-      const decryptedData = decryptData(data);
-      const receiptData = decryptedData.data || decryptedData;
+      // Interceptor handles decryption if needed
+      const receiptData = data.data || data;
 
       return {
         success: true,
@@ -194,11 +170,10 @@ export const paymentService = {
         }
       );
 
-      const decryptedData = decryptData(data);
-
+      // Interceptor handles decryption if needed
       return {
         success: true,
-        data: decryptedData,
+        data: data,
       };
     } catch (error: unknown) {
       if (process.env.NODE_ENV === "development") {

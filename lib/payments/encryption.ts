@@ -16,7 +16,7 @@ const getEncryptionIV = (): string => {
  * @param plainData - The data to encrypt (can be object or primitive)
  * @returns Encrypted string
  */
-export const encryptData = (plainData: any): string => {
+export const encryptData = (plainData: unknown): string => {
   try {
     const iv = getEncryptionIV();
     const key = CryptoJS.enc.Utf8.parse(ENCRYPTION_KEY);
@@ -44,14 +44,16 @@ export const encryptData = (plainData: any): string => {
  * @param encryptedData - The encrypted string to decrypt
  * @returns Decrypted data (parsed JSON)
  */
-export const decryptData = (encryptedData: string): any => {
+export const decryptData = (encryptedData: string): unknown => {
   try {
     const iv = getEncryptionIV();
     const key = CryptoJS.enc.Utf8.parse(ENCRYPTION_KEY);
     const ivParsed = CryptoJS.enc.Utf8.parse(iv);
 
     const decrypted = CryptoJS.AES.decrypt(
-      { ciphertext: CryptoJS.enc.Base64.parse(encryptedData) } as any,
+      {
+        ciphertext: CryptoJS.enc.Base64.parse(encryptedData),
+      } as CryptoJS.lib.CipherParams,
       key,
       { iv: ivParsed }
     );
@@ -72,7 +74,7 @@ export const decryptData = (encryptedData: string): any => {
 /**
  * Create encrypted payload for API requests (matching old project structure)
  */
-export const createEncryptedPayload = (data: any) => {
+export const createEncryptedPayload = (data: unknown) => {
   return {
     payload: encryptData(data),
   };
@@ -82,7 +84,7 @@ export const createEncryptedPayload = (data: any) => {
  * Decrypt API response (matching old project structure)
  * Old project receives encrypted string directly in response.data
  */
-export const decryptApiResponse = (response: any) => {
+export const decryptApiResponse = (response: unknown) => {
   // Response.data is the encrypted string from the server
   if (typeof response === "string") {
     return decryptData(response);
