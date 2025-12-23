@@ -16,8 +16,6 @@ export async function POST(request: Request) {
 
     // TODO: Add actual email sending logic here
     // For now, we'll just log the data
-    console.log("Contact form submission:", body);
-
     // Simulate email sending delay
     await new Promise(resolve => setTimeout(resolve, 1000));
 

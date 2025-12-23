@@ -60,11 +60,8 @@ apiClient.interceptors.request.use(
   (config) => {
     // Encrypt request payload if needed
     if (config.data && shouldEncrypt(config.url)) {
-      console.log("🔐 Encrypting request for:", config.url);
-      console.log("📦 Original payload:", config.data);
       const encryptedPayload = encryptData(config.data);
       config.data = { payload: encryptedPayload };
-      console.log("🔒 Encrypted payload:", config.data);
     }
 
     // Add auth token if available (for future use)
@@ -75,13 +72,6 @@ apiClient.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-
-    console.log("📡 Final request config:", {
-      url: config.url,
-      method: config.method,
-      headers: config.headers,
-      baseURL: config.baseURL,
-    });
 
     return config;
   },
@@ -100,15 +90,10 @@ apiClient.interceptors.request.use(
  */
 apiClient.interceptors.response.use(
   (response) => {
-    console.log("📨 Response received from:", response.config.url);
-    console.log("📄 Raw response data:", response.data);
-
     // Decrypt response if needed
     if (shouldDecrypt(response.config.url)) {
       try {
-        console.log("🔓 Decrypting response...");
         response.data = decryptData(response.data);
-        console.log("✅ Decrypted data:", response.data);
       } catch (error) {
         console.error("❌ Failed to decrypt response:", error);
         // Return original data if decryption fails
