@@ -7,9 +7,9 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
-import { fetchShopProfile, type ShopProfile } from "@/lib/api/shop";
 import { useShopStore } from "@/stores";
 import { CACHE_TIMES, DEFAULT_QUERY_OPTIONS } from "@/lib/constants";
+import type { ShopProfile } from "@/types/shop.types";
 
 interface UseShopProfileParams {
   shopId?: string | number;
@@ -40,17 +40,30 @@ export function useShopProfile(
   const query = useQuery({
     queryKey,
     queryFn: async () => {
-      const profile = await fetchShopProfile({
-        shop_id: params.shopId,
-        domain: params.domain,
-        subdomain: params.subdomain,
+      // Call local API route instead of external API
+      const response = await fetch("/api/storefront/v1/profile", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          shop_id: params.shopId,
+          domain: params.domain,
+          subdomain: params.subdomain,
+        }),
       });
 
-      if (!profile) {
+      if (!response.ok) {
         throw new Error("Shop not found");
       }
 
-      return profile;
+      const result = await response.json();
+
+      if (!result.success || !result.data) {
+        throw new Error("Shop not found");
+      }
+
+      return result.data;
     },
     enabled: enabled && !!(params.shopId || params.domain || params.subdomain),
     ...CACHE_TIMES.SHOP_PROFILE,
@@ -74,7 +87,7 @@ export function useShopProfile(
         hasTikTokPixelAccess: query.data.hasTikTokPixelAccess ?? false,
         baseUrl: `/merchant/${params.shopId}`,
         shopCurrencySymbol: query.data.currency_code === "BDT" ? "৳" : "$",
-      } as any);
+      } as ShopProfile);
     }
   }, [query.data, syncToStore, setShopDetails, params.shopId]);
 
