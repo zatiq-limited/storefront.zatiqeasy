@@ -5,6 +5,29 @@ import { twMerge } from "tailwind-merge";
 export * from "./utils/validation";
 export * from "./utils/delivery";
 
+// Placeholder image data URL
+const placeholderImageDataUrl =
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect width='400' height='400' fill='%23f0f0f0'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='24' fill='%23999'%3ENo Image%3C/text%3E%3C/svg%3E";
+
+/**
+ * Transform inventory image URL to use CDN thumbnail optimization
+ * Matches old project implementation
+ */
+export const getInventoryThumbImageUrl = (input?: string): string => {
+  if (!input) return placeholderImageDataUrl;
+
+  const startsWithProtocol =
+    input.startsWith("http:") ||
+    input.startsWith("https:") ||
+    input.startsWith("/");
+
+  if (!startsWithProtocol) return placeholderImageDataUrl;
+
+  return input
+    .replace("/inventories/", "/inventories/fit-in/400x400/")
+    .replace("d10rvdv6rxomuk.cloudfront.net", "www.easykoro.com");
+};
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -82,28 +105,4 @@ export const getThemeColor = (color?: string): string => {
   }
 
   return changedColor;
-};
-
-/**
- * Placeholder image data URL
- */
-const placeholderImgaeDataUrl =
-  "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iI2UwZTBlMCIvPgogIDx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LXNpemU9IjE4IiBmaWxsPSIjOTk5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+Tm8gSW1hZ2U8L3RleHQ+Cjwvc3ZnPg==";
-
-/**
- * Validates whether a given URL is a valid image URL (HTTP/HTTPS) or starts with a slash ("/").
- * Applies image optimization transformations for inventory images.
- *
- * @param {string} input - The URL string to validate.
- * @returns {string} The validated URL if it's valid; otherwise, placeholder image.
- */
-export const getInventoryThumbImageUrl = (input?: string): string => {
-  return input &&
-    (input.startsWith("http:") ||
-      input.startsWith("https:") ||
-      input.startsWith("/"))
-    ? input
-        .replace("/inventories/", "/inventories/fit-in/400x400/")
-        .replace("d10rvdv6rxomuk.cloudfront.net", "www.easykoro.com")
-    : placeholderImgaeDataUrl;
 };

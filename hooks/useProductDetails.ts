@@ -28,14 +28,37 @@ interface ProductDetailsPageConfigResponse {
 
 // Fetch single product by handle
 async function fetchProduct(handle: string): Promise<ProductResponse> {
-  const res = await fetch(`/api/storefront/v1/products/${handle}`);
+  // Use the live API endpoint like the old project
+  const API_BASE_URL =
+    process.env.NEXT_PUBLIC_PAYMENT_API_URL ||
+    "https://easybill.zatiq.tech/api/v1";
+  const res = await fetch(`${API_BASE_URL}/live/inventory/${handle}`, {
+    headers: {
+      "Content-Type": "application/json",
+      "Device-Type": "Web",
+      "Application-Type": "Online_Shop",
+      Referer: "https://shop.zatiqeasy.com",
+      "User-Agent":
+        typeof window !== "undefined"
+          ? window.navigator.userAgent
+          : "NextJS Server",
+    },
+  });
   if (!res.ok) {
     if (res.status === 404) {
       throw new Error("Product not found");
     }
     throw new Error("Failed to fetch product");
   }
-  return res.json();
+  const data = await res.json();
+
+  // Transform the response to match expected structure
+  return {
+    success: true,
+    data: {
+      product: data.data,
+    },
+  };
 }
 
 // Fetch product details page configuration
