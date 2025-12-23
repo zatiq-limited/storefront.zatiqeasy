@@ -238,7 +238,10 @@ export const ContactSection = ({
       });
 
       const data = await response.json();
-      const decryptedData = decryptData(data);
+      const decryptedData = decryptData(data) as {
+        status?: boolean;
+        message?: string;
+      };
 
       if (decryptedData.status) {
         setIsOtpSent(true);
@@ -310,7 +313,10 @@ export const ContactSection = ({
       });
 
       const data = await response.json();
-      const decryptedData = decryptData(data);
+      const decryptedData = decryptData(data) as {
+        status?: boolean;
+        message?: string;
+      };
 
       if (decryptedData.status) {
         setIsPhoneVerified(true);

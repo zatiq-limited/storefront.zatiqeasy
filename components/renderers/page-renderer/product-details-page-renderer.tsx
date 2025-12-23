@@ -158,7 +158,9 @@ function ProductDetail({
   const whatsappTextColor =
     (settings.whatsapp_text_color as string) || "#FFFFFF";
 
-  const images = product.images?.length ? product.images : [product.image_url];
+  const images = (
+    product.images?.length ? product.images : [product.image_url]
+  ).filter((img): img is string => !!img);
   const discount =
     product.old_price && product.old_price > product.price
       ? Math.round(
@@ -167,14 +169,14 @@ function ProductDetail({
       : null;
 
   // Get variant image if available
-  const getDisplayImage = () => {
+  const getDisplayImage = (): string => {
     if (
       product.image_variant_type_id &&
       selectedVariants[product.image_variant_type_id]?.image_url
     ) {
       return selectedVariants[product.image_variant_type_id].image_url!;
     }
-    return images[selectedImageIndex];
+    return images[selectedImageIndex] || "";
   };
 
   return (
@@ -752,7 +754,7 @@ function RelatedProducts({
               >
                 <div className="aspect-square overflow-hidden bg-gray-100 relative">
                   <Image
-                    src={product.image_url}
+                    src={product.image_url || ""}
                     alt={product.name}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-300"

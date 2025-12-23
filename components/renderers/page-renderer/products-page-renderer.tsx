@@ -179,7 +179,7 @@ function ProductsLayout({
       vendor: product.brand,
       price: product.price,
       comparePrice: product.old_price,
-      image: product.image_url,
+      image: product.image_url || "",
       buttonBgColor: cardButtonBgColor,
       buttonTextColor: cardButtonTextColor,
     };
@@ -610,7 +610,7 @@ function ProductsLayout({
                         <div className="flex flex-col sm:flex-row gap-4 p-4">
                           <div className="w-full sm:w-48 h-48 shrink-0 overflow-hidden bg-gray-100 rounded-lg relative">
                             <Image
-                              src={product.image_url}
+                              src={product.image_url || ""}
                               alt={product.name}
                               fill
                               className="object-cover group-hover:scale-105 transition-transform"

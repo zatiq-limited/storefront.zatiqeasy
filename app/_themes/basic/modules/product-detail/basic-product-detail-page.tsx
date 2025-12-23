@@ -84,7 +84,7 @@ export const BasicProductDetailPage = ({
   // Selected image URL
   const selectedImageUrl = useMemo(() => {
     if (product?.images && product.images.length !== 0) {
-      return product.images[selectedImageIdx] || product.image_url;
+      return product.images[selectedImageIdx] || product.image_url || "";
     }
     return product?.image_url || "";
   }, [product, selectedImageIdx]);
