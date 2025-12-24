@@ -22,9 +22,11 @@ export function AuroraFeaturedProductsSection({
   const { shopDetails } = useShopStore();
 
   const baseUrl = shopDetails?.baseUrl || "";
-  // Use new_arrival_inventories for featured products section (or on_sale_inventories as fallback)
-  const featuredProducts: Product[] =
-    ((shopDetails?.shop_theme?.new_arrival_inventories as unknown as Product[]) || []).slice(0, 8);
+  // Use selected_inventories for featured products section (matches old Aurora theme)
+  const featuredProducts: Product[] = (
+    (shopDetails?.shop_theme?.selected_inventories as unknown as Product[]) ||
+    []
+  ).slice(0, 8);
 
   if (featuredProducts.length === 0) {
     return null;

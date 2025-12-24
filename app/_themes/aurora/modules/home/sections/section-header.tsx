@@ -12,8 +12,9 @@ export function SectionHeader({ text, className }: SectionHeaderProps) {
   return (
     <h2
       className={cn(
-        "text-xl md:text-4xl xl:text-5xl leading-snug lg:leading-[57.50px]",
-        "text-black dark:text-blue-zatiq font-bold mb-6 md:mb-9",
+        "text-center text-[38px] md:text-[64px] leading-snug",
+        "text-[#4B5563] dark:text-blue-zatiq font-normal",
+        "mb-12 md:mb-16 xl:mb-[84px]",
         className
       )}
     >

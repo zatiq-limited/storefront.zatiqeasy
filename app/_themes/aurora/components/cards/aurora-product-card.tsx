@@ -54,7 +54,9 @@ export function AuroraProductCard({
   const countryCurrency = shopDetails?.country_currency || "BDT";
   const baseUrl = shopDetails?.baseUrl || "";
   const buyNowEnabled =
-    showBuyNow ?? shopDetails?.shop_theme?.enable_buy_now_on_product_card ?? false;
+    showBuyNow ??
+    shopDetails?.shop_theme?.enable_buy_now_on_product_card ??
+    false;
 
   // Get cart products for this item
   const cartProducts = useMemo(
@@ -62,8 +64,9 @@ export function AuroraProductCard({
     [getProductsByInventoryId, id]
   );
   const totalInCart = cartProducts.reduce((sum, p) => sum + p.qty, 0);
-  // Check if stock is out (quantity is 0)
-  const isStockOut = quantity === 0;
+
+  // Check if stock is out (quantity is 0 or less)
+  const isStockOut = (quantity ?? 0) <= 0;
 
   // Calculate discount
   const hasDiscount = (old_price ?? 0) > (price ?? 0);
@@ -121,7 +124,8 @@ export function AuroraProductCard({
         image_url: images?.[0] || image_url,
         qty: 1,
         selectedVariants: {},
-        total_inventory_sold: (productRecord.total_inventory_sold as number) ?? 0,
+        total_inventory_sold:
+          (productRecord.total_inventory_sold as number) ?? 0,
         categories: product.categories ?? [],
         variant_types: product.variant_types ?? [],
         stocks: product.stocks ?? [],
@@ -197,7 +201,9 @@ export function AuroraProductCard({
 
         {/* Product Info */}
         <div className="text-gray-700 dark:text-gray-200 text-base font-normal leading-4.5 max-w-[95%] h-12 mb-3 mt-6">
-          <p className="line-clamp-2 text-base font-medium capitalize">{name}</p>
+          <p className="line-clamp-2 text-base font-medium capitalize">
+            {name}
+          </p>
         </div>
 
         {/* Price */}

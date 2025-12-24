@@ -93,7 +93,12 @@ export interface SocialLinks {
   twitter?: string;
   youtube?: string;
   tiktok?: string;
-  linkedin?: string;
+  linkedIn?: string; // Capital I to match API
+  telegram?: string;
+  discord?: string;
+  amazon?: string;
+  walmart?: string;
+  daraz?: string;
   whatsapp?: string;
 }
 
