@@ -7,6 +7,7 @@ import { BasicHomePage } from "@/app/_themes/basic";
 import { AuroraHomePage } from "@/app/_themes/aurora";
 import { LuxuraHomePage } from "@/app/_themes/luxura";
 import { PremiumHomePage } from "@/app/_themes/premium";
+import { SelloraHomePage } from "@/app/_themes/sellora";
 import { useShopProfile, useShopInventories, useShopCategories } from "@/hooks";
 import type { ShopTheme } from "@/types/shop.types";
 
@@ -129,6 +130,8 @@ function ShopPageContent({ shopId }: ShopPageProps) {
         return <LuxuraHomePage />;
       case "Premium":
         return <PremiumHomePage />;
+      case "Sellora":
+        return <SelloraHomePage />;
       case "Basic":
       default:
         return <BasicHomePage />;

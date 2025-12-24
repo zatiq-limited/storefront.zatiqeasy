@@ -7,6 +7,7 @@ import { BasicCategoryPage } from "@/app/_themes/basic/modules/home/basic-catego
 import { AuroraCategoryPage } from "@/app/_themes/aurora/modules/category/aurora-category-page";
 import { LuxuraCategoryPage } from "@/app/_themes/luxura/modules/category/luxura-category-page";
 import { PremiumCategoryPage } from "@/app/_themes/premium/modules/category/premium-category-page";
+import { SelloraCategoryPage } from "@/app/_themes/sellora/modules/category/sellora-category-page";
 import { useShopProfile, useShopInventories, useShopCategories } from "@/hooks";
 
 // Loading component
@@ -132,6 +133,8 @@ function CategoryPageContent({ shopId, categoryId }: CategoryPageContentProps) {
         return <LuxuraCategoryPage />;
       case "Premium":
         return <PremiumCategoryPage />;
+      case "Sellora":
+        return <SelloraCategoryPage />;
       case "Basic":
       default:
         return <BasicCategoryPage />;

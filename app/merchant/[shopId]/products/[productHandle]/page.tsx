@@ -9,6 +9,7 @@ import { BasicProductDetailPage } from "@/app/_themes/basic/modules/product-deta
 import { AuroraProductDetailPage } from "@/app/_themes/aurora/modules/product-detail/aurora-product-detail-page";
 import { LuxuraProductDetailPage } from "@/app/_themes/luxura/modules/product-detail/luxura-product-detail-page";
 import { PremiumProductDetailPage } from "@/app/_themes/premium/modules/product-detail/premium-product-detail-page";
+import { SelloraProductDetailPage } from "@/app/_themes/sellora/modules/product-detail/sellora-product-detail-page";
 import { useProductsStore, type Product } from "@/stores/productsStore";
 
 // Loading component
@@ -153,6 +154,12 @@ export default function MerchantProductDetailPage() {
     case "Premium":
       return product ? (
         <PremiumProductDetailPage product={product} />
+      ) : (
+        <LoadingFallback />
+      );
+    case "Sellora":
+      return product ? (
+        <SelloraProductDetailPage product={product} />
       ) : (
         <LoadingFallback />
       );

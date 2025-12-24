@@ -10,6 +10,8 @@ import { LuxuraHeader } from "@/app/_themes/luxura/components/header";
 import { LuxuraFooter } from "@/app/_themes/luxura/components/footer";
 import { PremiumHeader } from "@/app/_themes/premium/components/header";
 import { PremiumFooter } from "@/app/_themes/premium/components/footer";
+import { SelloraHeader } from "@/app/_themes/sellora/components/header";
+import { SelloraFooter } from "@/app/_themes/sellora/components/footer";
 import { getThemeColors, getThemeColor } from "@/lib/utils";
 
 // Theme handler similar to old project
@@ -86,8 +88,13 @@ export function ThemeHandler({ children }: { children: React.ReactNode }) {
       );
 
     case "Sellora":
-      // TODO: Implement SelloraHeader and SelloraFooter
-      return <>{children}</>;
+      return (
+        <>
+          <SelloraHeader />
+          {children}
+          <SelloraFooter />
+        </>
+      );
 
     default:
       return <>{children}</>;

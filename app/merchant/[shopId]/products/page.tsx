@@ -7,6 +7,7 @@ import { BasicHomePage } from "@/app/_themes/basic";
 import { AuroraAllProducts } from "@/app/_themes/aurora/modules/products/aurora-all-products";
 import { LuxuraAllProducts } from "@/app/_themes/luxura/modules/products/luxura-all-products";
 import { PremiumAllProducts } from "@/app/_themes/premium/modules/products/premium-all-products";
+import { SelloraAllProducts } from "@/app/_themes/sellora/modules/products/sellora-all-products";
 import { useShopProfile, useShopInventories, useShopCategories } from "@/hooks";
 
 // Loading component
@@ -123,6 +124,8 @@ export default function MerchantProductsPage() {
         return <LuxuraAllProducts />;
       case "Premium":
         return <PremiumAllProducts />;
+      case "Sellora":
+        return <SelloraAllProducts />;
       case "Basic":
       default:
         return <BasicHomePage />;
