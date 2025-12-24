@@ -8,6 +8,8 @@ import type { ShopProfile } from "@/types";
 import { BasicProductDetailPage } from "@/app/_themes/basic/modules/product-detail/basic-product-detail-page";
 import { AuroraProductDetailPage } from "@/app/_themes/aurora/modules/product-detail/aurora-product-detail-page";
 import { LuxuraProductDetailPage } from "@/app/_themes/luxura/modules/product-detail/luxura-product-detail-page";
+import { PremiumProductDetailPage } from "@/app/_themes/premium/modules/product-detail/premium-product-detail-page";
+import { useProductsStore, type Product } from "@/stores/productsStore";
 
 // Loading component
 const LoadingFallback = () => (
@@ -136,12 +138,24 @@ export default function MerchantProductDetailPage() {
   // Get the theme name from shop details
   const themeName = activeShopData?.shop_theme?.theme_name || "Basic";
 
+  // Get products from store for Premium theme
+  const products = useProductsStore((state) => state.products);
+  const product = products.find(
+    (p: Product) => String(p.id) === productHandle
+  );
+
   // Render the appropriate theme product detail page
   switch (themeName) {
     case "Aurora":
       return <AuroraProductDetailPage />;
     case "Luxura":
       return <LuxuraProductDetailPage />;
+    case "Premium":
+      return product ? (
+        <PremiumProductDetailPage product={product} />
+      ) : (
+        <LoadingFallback />
+      );
     case "Basic":
     default:
       return <BasicProductDetailPage handle={productHandle} />;

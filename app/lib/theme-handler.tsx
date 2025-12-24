@@ -8,6 +8,8 @@ import { AuroraHeader } from "@/app/_themes/aurora/components/header";
 import { AuroraFooter } from "@/app/_themes/aurora/components/footer";
 import { LuxuraHeader } from "@/app/_themes/luxura/components/header";
 import { LuxuraFooter } from "@/app/_themes/luxura/components/footer";
+import { PremiumHeader } from "@/app/_themes/premium/components/header";
+import { PremiumFooter } from "@/app/_themes/premium/components/footer";
 import { getThemeColors, getThemeColor } from "@/lib/utils";
 
 // Theme handler similar to old project
@@ -65,10 +67,14 @@ export function ThemeHandler({ children }: { children: React.ReactNode }) {
         </>
       );
 
-    // Add other themes here when migrated
     case "Premium":
-      // TODO: Implement PremiumHeader and PremiumFooter
-      return <>{children}</>;
+      return (
+        <>
+          <PremiumHeader />
+          {children}
+          <PremiumFooter />
+        </>
+      );
 
     case "Luxura":
       return (

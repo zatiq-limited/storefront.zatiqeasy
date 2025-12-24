@@ -6,6 +6,7 @@ import { useShopStore, useProductsStore } from "@/stores";
 import { BasicCategoryPage } from "@/app/_themes/basic/modules/home/basic-category-page";
 import { AuroraCategoryPage } from "@/app/_themes/aurora/modules/category/aurora-category-page";
 import { LuxuraCategoryPage } from "@/app/_themes/luxura/modules/category/luxura-category-page";
+import { PremiumCategoryPage } from "@/app/_themes/premium/modules/category/premium-category-page";
 import { useShopProfile, useShopInventories, useShopCategories } from "@/hooks";
 
 // Loading component
@@ -129,6 +130,8 @@ function CategoryPageContent({ shopId, categoryId }: CategoryPageContentProps) {
         return <AuroraCategoryPage />;
       case "Luxura":
         return <LuxuraCategoryPage />;
+      case "Premium":
+        return <PremiumCategoryPage />;
       case "Basic":
       default:
         return <BasicCategoryPage />;
