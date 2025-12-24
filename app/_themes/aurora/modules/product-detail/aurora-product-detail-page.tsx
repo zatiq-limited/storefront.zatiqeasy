@@ -68,7 +68,7 @@ export function AuroraProductDetailPage({
 
   return (
     <>
-      <div className="xl:grid xl:grid-cols-5 gap-5 px-4 md:px-0">
+      <div className="container xl:grid xl:grid-cols-5 gap-5">
         <div className="xl:col-span-5">
           <ProductDetails product={product} />
         </div>
