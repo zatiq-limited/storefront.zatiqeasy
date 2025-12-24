@@ -64,7 +64,9 @@ export function useProductDetails(handle: string) {
   // Product query
   const productQuery = useQuery({
     queryKey: ["product", handle],
-    queryFn: () => fetchProduct(handle),
+    queryFn: () => {
+      return fetchProduct(handle);
+    },
     enabled: !!handle,
     staleTime: 1000 * 60 * 2, // 2 minutes - product data changes less frequently
     gcTime: 1000 * 60 * 10, // 10 minutes

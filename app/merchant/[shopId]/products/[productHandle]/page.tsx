@@ -138,7 +138,7 @@ export default function MerchantProductDetailPage() {
   // Render the appropriate theme product detail page
   switch (themeName) {
     case "Aurora":
-      return <AuroraProductDetailPage />;
+      return <AuroraProductDetailPage handle={productHandle} />;
     case "Basic":
     default:
       return <BasicProductDetailPage handle={productHandle} />;
