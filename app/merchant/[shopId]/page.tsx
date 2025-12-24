@@ -5,6 +5,7 @@ import { useParams, useSearchParams } from "next/navigation";
 import { useShopStore, useProductsStore } from "@/stores";
 import { BasicHomePage } from "@/app/_themes/basic";
 import { AuroraHomePage } from "@/app/_themes/aurora";
+import { LuxuraHomePage } from "@/app/_themes/luxura";
 import { useShopProfile, useShopInventories, useShopCategories } from "@/hooks";
 import type { ShopTheme } from "@/types/shop.types";
 
@@ -123,6 +124,8 @@ function ShopPageContent({ shopId }: ShopPageProps) {
     switch (themeName) {
       case "Aurora":
         return <AuroraHomePage />;
+      case "Luxura":
+        return <LuxuraHomePage />;
       case "Basic":
       default:
         return <BasicHomePage />;

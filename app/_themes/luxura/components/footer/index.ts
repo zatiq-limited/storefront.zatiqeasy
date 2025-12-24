@@ -1,0 +1,1 @@
+export { LuxuraFooter } from "./footer";

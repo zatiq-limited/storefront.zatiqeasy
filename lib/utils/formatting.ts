@@ -1,4 +1,19 @@
 /**
+ * Format price with currency
+ * @param price - The price to format
+ * @param currency - The currency code (default: "BDT")
+ * @returns Formatted price string
+ */
+export function formatPrice(price: number, currency: string = "BDT"): string {
+  return new Intl.NumberFormat("en-BD", {
+    style: "currency",
+    currency: currency,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(price);
+}
+
+/**
  * Convert string to title case
  * @param str - String to convert
  * @returns Title cased string

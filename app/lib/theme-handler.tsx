@@ -6,6 +6,8 @@ import { BasicHeader } from "@/app/_themes/basic/components/header";
 import { BasicFooter } from "@/app/_themes/basic/components/footer";
 import { AuroraHeader } from "@/app/_themes/aurora/components/header";
 import { AuroraFooter } from "@/app/_themes/aurora/components/footer";
+import { LuxuraHeader } from "@/app/_themes/luxura/components/header";
+import { LuxuraFooter } from "@/app/_themes/luxura/components/footer";
 import { getThemeColors, getThemeColor } from "@/lib/utils";
 
 // Theme handler similar to old project
@@ -69,8 +71,13 @@ export function ThemeHandler({ children }: { children: React.ReactNode }) {
       return <>{children}</>;
 
     case "Luxura":
-      // TODO: Implement LuxuraHeader and LuxuraFooter
-      return <>{children}</>;
+      return (
+        <>
+          <LuxuraHeader />
+          {children}
+          <LuxuraFooter />
+        </>
+      );
 
     case "Sellora":
       // TODO: Implement SelloraHeader and SelloraFooter

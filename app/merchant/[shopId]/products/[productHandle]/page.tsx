@@ -7,6 +7,7 @@ import { useShopStore } from "@/stores/shopStore";
 import type { ShopProfile } from "@/types";
 import { BasicProductDetailPage } from "@/app/_themes/basic/modules/product-detail/basic-product-detail-page";
 import { AuroraProductDetailPage } from "@/app/_themes/aurora/modules/product-detail/aurora-product-detail-page";
+import { LuxuraProductDetailPage } from "@/app/_themes/luxura/modules/product-detail/luxura-product-detail-page";
 
 // Loading component
 const LoadingFallback = () => (
@@ -139,6 +140,8 @@ export default function MerchantProductDetailPage() {
   switch (themeName) {
     case "Aurora":
       return <AuroraProductDetailPage />;
+    case "Luxura":
+      return <LuxuraProductDetailPage />;
     case "Basic":
     default:
       return <BasicProductDetailPage handle={productHandle} />;
