@@ -100,3 +100,76 @@ export const getInventoryThumbImageUrl = (input?: string): string => {
     .replace("/inventories/", "/inventories/fit-in/400x400/")
     .replace("d10rvdv6rxomuk.cloudfront.net", "www.easykoro.com");
 };
+
+/**
+ * Transform slider image URL to use CDN optimization for carousel banners
+ * Optimizes for 1720x1080 resolution
+ */
+export const getSliderImage = (input?: string): string => {
+  if (!input) return placeholderImageDataUrl;
+
+  const startsWithProtocol =
+    input.startsWith("http:") ||
+    input.startsWith("https:") ||
+    input.startsWith("/");
+
+  if (!startsWithProtocol) return placeholderImageDataUrl;
+
+  return input
+    .replace("/shops/", "/shops/fit-in/1720x1080/")
+    .replace("d10rvdv6rxomuk.cloudfront.net", "www.easykoro.com");
+};
+
+/**
+ * Transform shop image URL to use CDN thumbnail optimization
+ * Optimizes for 400x400 resolution
+ */
+export const getShopImageUrl = (input?: string): string => {
+  if (!input) return placeholderImageDataUrl;
+
+  const startsWithProtocol =
+    input.startsWith("http:") ||
+    input.startsWith("https:") ||
+    input.startsWith("/");
+
+  if (!startsWithProtocol) return placeholderImageDataUrl;
+
+  return input
+    .replace("/shops/", "/shops/fit-in/400x400/")
+    .replace("d10rvdv6rxomuk.cloudfront.net", "www.easykoro.com");
+};
+
+/**
+ * Transform detail page image URL to use CDN optimization
+ * Optimizes for 600x800 resolution
+ */
+export const getDetailPageImageUrl = (input?: string): string => {
+  if (!input) return placeholderImageDataUrl;
+
+  const startsWithProtocol =
+    input.startsWith("http:") ||
+    input.startsWith("https:") ||
+    input.startsWith("/");
+
+  if (!startsWithProtocol) return placeholderImageDataUrl;
+
+  return input
+    .replace("/inventories/", "/inventories/fit-in/600x800/")
+    .replace("d10rvdv6rxomuk.cloudfront.net", "www.easykoro.com");
+};
+
+/**
+ * Get validated image URL or placeholder
+ */
+export const getImageUrl = (input?: string): string => {
+  if (!input) return placeholderImageDataUrl;
+
+  const startsWithProtocol =
+    input.startsWith("http:") ||
+    input.startsWith("https:") ||
+    input.startsWith("/");
+
+  if (!startsWithProtocol) return placeholderImageDataUrl;
+
+  return input.replace("d10rvdv6rxomuk.cloudfront.net", "www.easykoro.com");
+};

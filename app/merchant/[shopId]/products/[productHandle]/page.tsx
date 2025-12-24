@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { useShopStore } from "@/stores/shopStore";
 import type { ShopProfile } from "@/types";
 import { BasicProductDetailPage } from "@/app/_themes/basic/modules/product-detail/basic-product-detail-page";
+import { AuroraProductDetailPage } from "@/app/_themes/aurora/modules/product-detail/aurora-product-detail-page";
 
 // Loading component
 const LoadingFallback = () => (
@@ -131,6 +132,15 @@ export default function MerchantProductDetailPage() {
     );
   }
 
-  // Render Basic theme product detail page
-  return <BasicProductDetailPage handle={productHandle} />;
+  // Get the theme name from shop details
+  const themeName = activeShopData?.shop_theme?.theme_name || "Basic";
+
+  // Render the appropriate theme product detail page
+  switch (themeName) {
+    case "Aurora":
+      return <AuroraProductDetailPage />;
+    case "Basic":
+    default:
+      return <BasicProductDetailPage handle={productHandle} />;
+  }
 }

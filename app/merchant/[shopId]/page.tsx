@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import { useShopStore, useProductsStore } from "@/stores";
 import { BasicHomePage } from "@/app/_themes/basic";
+import { AuroraHomePage } from "@/app/_themes/aurora";
 import { useShopProfile, useShopInventories, useShopCategories } from "@/hooks";
 import type { ShopTheme } from "@/types/shop.types";
 
@@ -114,13 +115,26 @@ function ShopPageContent({ shopId }: ShopPageProps) {
     return <SingleProductLandingPage shopId={shopId} />;
   }
 
-  // Return regular shop home page with Basic theme
+  // Get the theme name from shop details
+  const themeName = shopDetails?.shop_theme?.theme_name || "Basic";
+
+  // Render the appropriate theme page
+  const renderThemePage = () => {
+    switch (themeName) {
+      case "Aurora":
+        return <AuroraHomePage />;
+      case "Basic":
+      default:
+        return <BasicHomePage />;
+    }
+  };
+
   return (
     <div
-      data-theme="basic"
+      data-theme={themeName.toLowerCase()}
       className="min-h-screen bg-gray-50 dark:bg-gray-900"
     >
-      <BasicHomePage />
+      {renderThemePage()}
     </div>
   );
 }
