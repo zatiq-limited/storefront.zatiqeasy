@@ -3,7 +3,7 @@
 import React, { useState, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
-import { Minus, Plus, Play, ZoomIn, Download, ChevronLeft } from "lucide-react";
+import { Minus, Plus, Play, Download, ChevronLeft } from "lucide-react";
 import { useShopStore } from "@/stores/shopStore";
 import { useCartStore, selectTotalItems, selectSubtotal } from "@/stores/cartStore";
 import { useProductsStore } from "@/stores/productsStore";
@@ -42,7 +42,6 @@ export function PremiumProductDetailPage({ product }: PremiumProductDetailPagePr
   const [isShowVideo, setIsShowVideo] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [selectedVariants, setSelectedVariants] = useState<VariantsState>({});
-  const [lightboxOpen, setLightboxOpen] = useState(false);
 
   const {
     id,
@@ -60,7 +59,6 @@ export function PremiumProductDetailPage({ product }: PremiumProductDetailPagePr
     image_variant_type_id,
   } = product;
 
-  const countryCurrency = shopDetails?.country_currency || "BDT";
   const baseUrl = shopDetails?.baseUrl || "";
   const hasItems = totalCartItems > 0;
 
@@ -314,26 +312,16 @@ export function PremiumProductDetailPage({ product }: PremiumProductDetailPagePr
                   )}
 
                   {/* Image Action Buttons */}
-                  {allImages.length > 0 && !isShowVideo && (
+                  {allImages.length > 0 && !isShowVideo && allowDownload && selectedImageUrl && (
                     <div className="absolute top-2 right-2 z-10 flex gap-2">
                       <button
-                        onClick={() => setLightboxOpen(true)}
+                        onClick={handleDownloadImage}
                         className="bg-blue-zatiq/15 backdrop-blur-sm p-3 rounded-full cursor-pointer hover:bg-blue-zatiq/25 transition-all duration-200 shadow-lg"
-                        aria-label="Zoom image"
+                        aria-label="Download image"
                         type="button"
                       >
-                        <ZoomIn className="text-white dark:text-gray-700 w-5 h-5 md:w-7 md:h-7" />
+                        <Download className="text-white dark:text-gray-700 w-5 h-5 md:w-7 md:h-7" />
                       </button>
-                      {allowDownload && selectedImageUrl && (
-                        <button
-                          onClick={handleDownloadImage}
-                          className="bg-blue-zatiq/15 backdrop-blur-sm p-3 rounded-full cursor-pointer hover:bg-blue-zatiq/25 transition-all duration-200 shadow-lg"
-                          aria-label="Download image"
-                          type="button"
-                        >
-                          <Download className="text-white dark:text-gray-700 w-5 h-5 md:w-7 md:h-7" />
-                        </button>
-                      )}
                     </div>
                   )}
 

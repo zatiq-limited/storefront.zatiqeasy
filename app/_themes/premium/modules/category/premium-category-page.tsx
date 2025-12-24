@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useCallback, useMemo } from "react";
-import { useRouter, useParams, useSearchParams } from "next/navigation";
+import React, { useState, useCallback } from "react";
+import { useRouter, useParams } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { ChevronLeft } from "lucide-react";
 import { useShopStore } from "@/stores/shopStore";
@@ -19,7 +19,6 @@ const PRODUCTS_PER_PAGE = 20;
 export function PremiumCategoryPage() {
   const router = useRouter();
   const params = useParams();
-  const searchParams = useSearchParams();
   const { t } = useTranslation();
 
   const { shopDetails } = useShopStore();

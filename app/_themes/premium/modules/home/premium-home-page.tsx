@@ -4,7 +4,7 @@ import React, { useState, useCallback } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useShopStore } from "@/stores/shopStore";
-import { useProductsStore, type Product } from "@/stores/productsStore";
+import type { Product } from "@/stores/productsStore";
 import { useCartStore, selectTotalItems, selectSubtotal } from "@/stores/cartStore";
 import { CartFloatingBtn } from "@/components/features/cart/cart-floating-btn";
 import { VariantSelectorModal } from "@/components/products/variant-selector-modal";
@@ -28,7 +28,6 @@ const PremiumCategoryProductsSection = dynamic(
 export function PremiumHomePage() {
   const router = useRouter();
   const { shopDetails } = useShopStore();
-  const products = useProductsStore((state) => state.products);
   const totalProducts = useCartStore(selectTotalItems);
   const totalPrice = useCartStore(selectSubtotal);
 

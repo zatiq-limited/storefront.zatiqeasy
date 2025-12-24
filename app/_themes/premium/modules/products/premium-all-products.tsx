@@ -31,7 +31,6 @@ export function PremiumAllProducts() {
   const [priceRange, setPriceRange] = useState<{ min: number; max: number }>({ min: 0, max: 100000 });
 
   const baseUrl = shopDetails?.baseUrl || "";
-  const currency = shopDetails?.country_currency || "BDT";
   const hasItems = totalCartItems > 0;
 
   // Filter products
