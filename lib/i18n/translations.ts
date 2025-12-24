@@ -89,6 +89,7 @@ export const translations = {
       description: "Description",
       share: "Share",
       wishlist: "Wishlist",
+      no_categories_found: "No categories found",
     },
   },
   bn: {
@@ -181,6 +182,7 @@ export const translations = {
       description: "বর্ণনা",
       share: "শেয়ার করুন",
       wishlist: "উইশলিস্ট",
+      no_categories_found: "কোন বিভাগ পাওয়া যায়নি",
     },
   },
 };

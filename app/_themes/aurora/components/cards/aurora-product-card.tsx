@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { AnimatePresence, motion } from "framer-motion";
@@ -8,7 +8,9 @@ import { useShopStore } from "@/stores/shopStore";
 import { useCartStore } from "@/stores/cartStore";
 import { FallbackImage } from "@/components/ui/fallback-image";
 import { getInventoryThumbImageUrl, cn } from "@/lib/utils";
+import { ROUTES } from "@/lib/constants";
 import type { Product } from "@/stores/productsStore";
+import type { VariantState } from "@/types/cart.types";
 
 interface AuroraProductCardProps {
   product: Product;
@@ -48,8 +50,12 @@ export function AuroraProductCard({
 
   // Zustand stores
   const { shopDetails } = useShopStore();
-  const { addProduct, getProductsByInventoryId, incrementQty, decrementQty } =
-    useCartStore();
+  const {
+    addProduct,
+    updateQuantity,
+    removeProduct,
+    getProductsByInventoryId,
+  } = useCartStore();
 
   const countryCurrency = shopDetails?.country_currency || "BDT";
   const baseUrl = shopDetails?.baseUrl || "";
@@ -58,11 +64,8 @@ export function AuroraProductCard({
     shopDetails?.shop_theme?.enable_buy_now_on_product_card ??
     false;
 
-  // Get cart products for this item
-  const cartProducts = useMemo(
-    () => getProductsByInventoryId(Number(id)),
-    [getProductsByInventoryId, id]
-  );
+  // Get cart products for this item (no useMemo - needs to recompute when cart updates)
+  const cartProducts = getProductsByInventoryId(Number(id));
   const totalInCart = cartProducts.reduce((sum, p) => sum + p.qty, 0);
 
   // Check if stock is out (quantity is 0 or less)
@@ -71,6 +74,37 @@ export function AuroraProductCard({
   // Calculate discount
   const hasDiscount = (old_price ?? 0) > (price ?? 0);
   const discountAmount = hasDiscount ? (old_price ?? 0) - (price ?? 0) : 0;
+
+  // Calculate max stock for cart item
+  const getMaxStock = () => {
+    const currentCartItem = cartProducts[0];
+    if (!currentCartItem) return quantity;
+
+    if (
+      currentCartItem.is_stock_manage_by_variant &&
+      currentCartItem.stocks?.length > 0
+    ) {
+      const selectedVariantIds = Object.values(
+        currentCartItem.selectedVariants || {}
+      )
+        .filter((v): v is VariantState => Boolean(v))
+        .map((v) => v.variant_id);
+
+      if (selectedVariantIds.length > 0) {
+        const matchingStock = currentCartItem.stocks.find((stock) =>
+          selectedVariantIds.every((variantId: number) =>
+            stock.combination.includes(`${variantId}`)
+          )
+        );
+        return matchingStock?.quantity ?? currentCartItem.quantity;
+      }
+    }
+    return currentCartItem.quantity ?? quantity;
+  };
+
+  const maxStock = getMaxStock();
+  const isCartIncrementDisabled =
+    isStockOut || (typeof maxStock === "number" && totalInCart >= maxStock);
 
   // Navigate to product detail
   const handleNavigate = () => {
@@ -84,24 +118,33 @@ export function AuroraProductCard({
   // Add to cart
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (variant_types?.length) {
+
+    if (has_variant || variant_types?.length) {
       onSelectProduct?.();
       return;
     }
 
-    // Cast product to any to allow flexible property override
+    // Type assertion needed due to type differences
     const productRecord = product as unknown as Record<string, unknown>;
     addProduct({
-      ...product,
       id: Number(id),
-      image_url: images?.[0] || image_url,
+      shop_id: 0,
+      name,
+      price: price ?? 0,
+      old_price: old_price || price,
+      quantity: quantity || 0,
+      is_active: true,
+      has_variant: has_variant || false,
+      images: images || (image_url ? [image_url] : []),
+      image_url: images?.[0] || image_url || "",
+      categories: [],
+      variant_types: variant_types || [],
+      stocks: [],
+      is_stock_manage_by_variant: false,
+      reviews: [],
+      total_inventory_sold: (productRecord.total_inventory_sold as number) ?? 0,
       qty: 1,
       selectedVariants: {},
-      total_inventory_sold: (productRecord.total_inventory_sold as number) ?? 0,
-      categories: product.categories ?? [],
-      variant_types: product.variant_types ?? [],
-      stocks: product.stocks ?? [],
-      reviews: (productRecord.reviews as Array<unknown>) ?? [],
     } as Parameters<typeof addProduct>[0]);
   };
 
@@ -110,30 +153,35 @@ export function AuroraProductCard({
     e.preventDefault();
     e.stopPropagation();
 
-    if (has_variant) {
+    if (has_variant || variant_types?.length) {
       onSelectProduct?.();
       return;
     }
 
-    if (totalInCart < 1) {
-      // Cast product to any to allow flexible property override
-      const productRecord = product as unknown as Record<string, unknown>;
-      addProduct({
-        ...product,
-        id: Number(id),
-        image_url: images?.[0] || image_url,
-        qty: 1,
-        selectedVariants: {},
-        total_inventory_sold:
-          (productRecord.total_inventory_sold as number) ?? 0,
-        categories: product.categories ?? [],
-        variant_types: product.variant_types ?? [],
-        stocks: product.stocks ?? [],
-        reviews: (productRecord.reviews as Array<unknown>) ?? [],
-      } as Parameters<typeof addProduct>[0]);
-    }
+    // Type assertion needed due to type differences
+    const productRecord = product as unknown as Record<string, unknown>;
+    addProduct({
+      id: Number(id),
+      shop_id: 0,
+      name,
+      price: price ?? 0,
+      old_price: old_price || price,
+      quantity: quantity || 0,
+      is_active: true,
+      has_variant: has_variant || false,
+      images: images || (image_url ? [image_url] : []),
+      image_url: images?.[0] || image_url || "",
+      categories: [],
+      variant_types: variant_types || [],
+      stocks: [],
+      is_stock_manage_by_variant: false,
+      reviews: [],
+      total_inventory_sold: (productRecord.total_inventory_sold as number) ?? 0,
+      qty: 1,
+      selectedVariants: {},
+    } as Parameters<typeof addProduct>[0]);
 
-    router.push(`${baseUrl}/checkout`);
+    router.push(ROUTES.CHECKOUT);
   };
 
   // Increment quantity
@@ -143,8 +191,9 @@ export function AuroraProductCard({
       onSelectProduct?.();
       return;
     }
-    if (cartProducts[0]) {
-      incrementQty(cartProducts[0].cartId);
+    const cartProduct = cartProducts[0];
+    if (cartProduct?.cartId) {
+      updateQuantity(cartProduct.cartId, totalInCart + 1);
     }
   };
 
@@ -155,8 +204,13 @@ export function AuroraProductCard({
       onSelectProduct?.();
       return;
     }
-    if (cartProducts[0]) {
-      decrementQty(cartProducts[0].cartId);
+    const cartProduct = cartProducts[0];
+    if (cartProduct?.cartId) {
+      if (totalInCart <= 1) {
+        removeProduct(cartProduct.cartId);
+      } else {
+        updateQuantity(cartProduct.cartId, totalInCart - 1);
+      }
     }
   };
 
@@ -239,12 +293,12 @@ export function AuroraProductCard({
                   >
                     -
                   </button>
-                  <span className="text-base font-medium min-w-[24px] text-center">
+                  <span className="text-base font-medium min-w-6 text-center">
                     {totalInCart}
                   </span>
                   <button
                     onClick={handleIncrement}
-                    disabled={isStockOut}
+                    disabled={isCartIncrementDisabled}
                     className="w-8 h-8 flex items-center justify-center text-lg font-bold hover:bg-blue-zatiq/10 rounded disabled:opacity-50"
                   >
                     +

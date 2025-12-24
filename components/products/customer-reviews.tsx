@@ -9,9 +9,10 @@ import "swiper/css";
 
 interface CustomerReviewsProps {
   reviews: Review[];
+  showGradientOverlays?: boolean;
 }
 
-export function CustomerReviews({ reviews }: CustomerReviewsProps) {
+export function CustomerReviews({ reviews, showGradientOverlays = true }: CustomerReviewsProps) {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalImage, setModalImage] = useState("");
 
@@ -42,7 +43,7 @@ export function CustomerReviews({ reviews }: CustomerReviewsProps) {
       {/* Image Modal */}
       {modalOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80"
+          className="fixed inset-0 z-50 flex items-center justify-center"
           onClick={() => setModalOpen(false)}
         >
           <div className="relative max-w-4xl max-h-[90vh]">
@@ -118,8 +119,12 @@ export function CustomerReviews({ reviews }: CustomerReviewsProps) {
       </div>
 
       {/* Gradient overlays */}
-      <div className="h-full w-[10%] bg-linear-to-r from-transparent to-white dark:to-gray-900 right-0 bottom-0 absolute z-10 pointer-events-none"></div>
-      <div className="h-full w-[10%] bg-linear-to-r to-transparent from-white dark:from-gray-900 left-0 bottom-0 absolute z-10 pointer-events-none"></div>
+      {showGradientOverlays && (
+        <>
+          <div className="h-full w-[10%] bg-linear-to-r from-transparent to-white dark:to-gray-900 right-0 bottom-0 absolute z-10 pointer-events-none"></div>
+          <div className="h-full w-[10%] bg-linear-to-r to-transparent from-white dark:from-gray-900 left-0 bottom-0 absolute z-10 pointer-events-none"></div>
+        </>
+      )}
     </div>
   );
 }

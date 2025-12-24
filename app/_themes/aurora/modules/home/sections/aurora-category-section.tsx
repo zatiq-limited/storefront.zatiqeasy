@@ -21,7 +21,7 @@ export function AuroraCategorySection() {
   }
 
   return (
-    <div className="px-4 md:px-0">
+    <>
       <SectionHeader text={t("category")} />
 
       <GridContainer>
@@ -36,7 +36,7 @@ export function AuroraCategorySection() {
       </GridContainer>
 
       <ViewAllButton link={`${baseUrl}/categories`} text={t("view_more")} />
-    </div>
+    </>
   );
 }
 

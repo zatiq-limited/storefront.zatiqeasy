@@ -39,6 +39,7 @@ export interface ShopProfile {
   delivery_option?: string;
   message_on_top?: string;
   order_verification_enabled?: boolean;
+  show_product_sold_count?: boolean;
   advance_payment_type?: "fixed" | "percentage";
   advanced_payment_fixed_amount?: number;
   advanced_payment_percentage?: number;
@@ -57,6 +58,7 @@ export interface ShopProfile {
       shop_settings?: {
         show_email_for_place_order?: boolean;
         enable_promo_code_for_place_order?: boolean;
+        enable_product_image_download?: boolean;
       };
       delivery_support?: {
         zone_cod_enabled?: Record<string, boolean>;
@@ -122,6 +124,7 @@ export interface ShopTheme {
   enable_buy_now_on_product_card: boolean;
   on_sale_inventories: InventoryProduct[];
   new_arrival_inventories?: InventoryProduct[];
+  selected_inventories?: InventoryProduct[];
   selected_categories: SelectedCategory[];
   carousels: Carousel[];
   primary_color?: string;

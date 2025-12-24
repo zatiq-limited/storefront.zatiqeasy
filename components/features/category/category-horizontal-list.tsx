@@ -78,6 +78,35 @@ export function CategoryHorizontalList({
   // Handle category selection - matching old project's handleSelectCategory
   const handleSelectCategory = useCallback(
     (categoryId: string | number | null) => {
+      // Special case: fromCategory mode uses route-based navigation
+      if (fromCategory) {
+        const categoriesPath = `${baseUrl}/categories`;
+
+        // Go back to parent (id === -1)
+        if (categoryId === -1) {
+          if (currentRootCategory?.parent_id) {
+            // Go to parent's parent
+            router.push(`${categoriesPath}/${currentRootCategory.parent_id}`);
+          } else {
+            // Go back to all categories
+            router.push(categoriesPath);
+          }
+          return;
+        }
+
+        // Show all categories (id === null)
+        if (categoryId === null) {
+          router.push(categoriesPath);
+          return;
+        }
+
+        // Navigate to specific category route
+        const categoryIdStr = String(categoryId);
+        router.push(`${categoriesPath}/${categoryIdStr}`);
+        return;
+      }
+
+      // Regular mode (products page): use URL params
       // Go back to parent (id === -1)
       if (categoryId === -1) {
         if (currentRootCategory?.parent_id) {
@@ -143,6 +172,7 @@ export function CategoryHorizontalList({
       }
     },
     [
+      fromCategory,
       baseUrl,
       categories,
       currentRootCategory,

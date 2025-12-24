@@ -14,7 +14,7 @@ import {
 } from "@/lib/utils";
 import type { Product, VariantType, Variant } from "@/stores/productsStore";
 import type { VariantsState, VariantState } from "@/types/cart.types";
-import CustomerReviews from "@/app/_themes/aurora/components/product-details/customer-reviews";
+import { CustomerReviews } from "@/components/products/customer-reviews";
 import AuroraRelatedProducts from "@/app/_themes/aurora/components/product-details/aurora-related-products";
 import { ProductVariants } from "@/components/products/product-variants";
 
@@ -229,19 +229,23 @@ export function ProductDetails({ product }: ProductDetailsProps) {
   };
 
   // Handle quantity change
+  const handleQuantityChange = (newQuantity: number) => {
+    if (newQuantity < 1) return;
+    if (product.quantity && newQuantity > product.quantity) return;
+    setQuantity(newQuantity);
+  };
+
   const sumQty = () => {
-    if (quantity < (product.quantity || 999)) {
-      setQuantity(quantity + 1);
-    }
+    handleQuantityChange(quantity + 1);
   };
 
   const subQty = () => {
-    if (quantity > 1) {
-      setQuantity(quantity - 1);
-    }
+    handleQuantityChange(quantity - 1);
   };
 
   const disableSub = quantity <= 1;
+  const disableSum =
+    product.quantity !== undefined && quantity >= product.quantity;
 
   // Handle download
   const handleDownload = async (imageUrl: string, index: number) => {
@@ -315,7 +319,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
 
   return (
     <>
-      <div className="flex items-start xl:flex-row flex-col gap-[26px] pt-6 pb-12 md:pb-[84px]">
+      <div className="flex items-start xl:flex-row flex-col gap-6.5 pt-6 pb-12 md:pb-21">
         {/* Vertical Thumbnail Sidebar (Desktop only) */}
         <div className="overflow-auto xl:w-[10%] xl:h-[calc(100vh-120px)] xl:flex hidden xl:pl-1">
           {allImages && allImages.length > 0 && (
@@ -323,7 +327,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
               {video_link && (
                 <div
                   className={cn(
-                    "relative w-[90px] h-[116px] p-1 ring-[1px] ring-transparent bg-[#E4E4E7] dark:bg-transparent cursor-pointer",
+                    "relative w-22.5 h-29 p-1 ring-[1px] ring-transparent bg-[#E4E4E7] dark:bg-transparent cursor-pointer",
                     {
                       "ring-blue-zatiq": isShowVideo,
                     }
@@ -354,7 +358,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                   }}
                   key={key}
                   className={cn(
-                    "w-[90px] h-[116px] p-1 ring-[1px] ring-transparent bg-[#E4E4E7] dark:bg-transparent cursor-pointer",
+                    "w-22.5 h-29 p-1 ring-[1px] ring-transparent bg-[#E4E4E7] dark:bg-transparent cursor-pointer",
                     {
                       "ring-blue-zatiq":
                         key === selectedImageIdx && !isShowVideo,
@@ -376,9 +380,9 @@ export function ProductDetails({ product }: ProductDetailsProps) {
 
         {/* Main Content Area */}
         <div className="xl:w-[90%] w-full pt-1">
-          <div className="w-full flex xl:flex-row flex-col items-start gap-5 xl:gap-[30px] h-full rounded-xl">
+          <div className="w-full flex xl:flex-row flex-col items-start gap-5 xl:gap-7.5 h-full rounded-xl">
             {/* Left Side: Image Gallery (639px on desktop) */}
-            <div className="w-full xl:w-[639px]">
+            <div className="w-full xl:w-160">
               <div className="relative">
                 {/* Main Image or Video */}
                 {isShowVideo && video_link ? (
@@ -393,7 +397,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                       referrerPolicy="strict-origin-when-cross-origin"
                       allowFullScreen
-                      className="w-full max-h-[300px] md:max-h-[500px] object-contain transition ease-in duration-500"
+                      className="w-full max-h-75 md:max-h-125 object-contain transition ease-in duration-500"
                     />
                   </div>
                 ) : (
@@ -402,7 +406,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                       src={getDetailPageImageUrl(selectedImageUrl)}
                       width={512}
                       height={512}
-                      className="w-full max-h-[900px] object-contain transition ease-in duration-500"
+                      className="w-full max-h-225 object-contain transition ease-in duration-500"
                       alt={name}
                     />
                   )
@@ -446,7 +450,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                       {video_link && (
                         <div
                           className={cn(
-                            "w-[50px] min-w-[50px] h-[50px] sm:min-w-[75px] sm:h-[75px] sm:w-[75px] relative overflow-hidden ring ring-transparent p-1 cursor-pointer",
+                            "w-12.5 min-w-12.5 h-12.5 sm:min-w-18.75 sm:h-18.75 sm:w-18.75 relative overflow-hidden ring ring-transparent p-1 cursor-pointer",
                             {
                               "ring-blue-zatiq": isShowVideo,
                             }
@@ -477,7 +481,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                           }}
                           key={key}
                           className={cn(
-                            "w-[50px] min-w-[50px] h-[50px] sm:min-w-[75px] sm:h-[75px] sm:w-[75px] relative overflow-hidden ring-3 ring-transparent p-1 cursor-pointer",
+                            "w-12.5 min-w-12.5 h-12.5 sm:min-w-18.75 sm:h-18.75 sm:w-18.75 relative overflow-hidden ring-3 ring-transparent p-1 cursor-pointer",
                             {
                               "ring-blue-zatiq":
                                 key === selectedImageIdx && !isShowVideo,
@@ -498,7 +502,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                 </div>
 
                 {/* Custom Fields and Description (Desktop) */}
-                <div className="text-sm mt-[40px] hidden xl:block">
+                <div className="text-sm mt-10 hidden xl:block">
                   {(custom_fields || warranty) && (
                     <div className="bg-blue-zatiq/10 dark:bg-black-18 border border-blue-zatiq/50 dark:border-gray-700 px-5 py-5 text-black-1.2 dark:text-white mb-4">
                       <h4 className="font-medium text-sm text-[#4B5563] dark:text-gray-300">
@@ -544,7 +548,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
 
             {/* Right Side: Product Info */}
             <div className="flex flex-col flex-1 w-full">
-              <div className="grid gap-[18px]">
+              <div className="grid gap-4.5">
                 {/* Product Title */}
                 <h1 className="text-[20px] md:text-4xl text-blue-zatiq">
                   {name}
@@ -557,7 +561,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                   </span>
                 )}
 
-                <div className="flex flex-col gap-[30px]">
+                <div className="flex flex-col gap-7.5">
                   {/* Product Pricing */}
                   <div className="flex items-end gap-2">
                     <div className="flex items-start flex-col">
@@ -574,7 +578,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                             <span className="text-sm text-[#8E8E8E] dark:text-gray-300 min-w-fit line-through">
                               {regularPrice.toLocaleString()} {countryCurrency}
                             </span>
-                            <span className="px-[10px] pb-[8px] pt-[9px] bg-blue-zatiq rounded-full text-white dark:text-black-18 text-center text-xs md:text-[16px]">
+                            <span className="px-2.5 pb-2 pt-2.25 bg-blue-zatiq rounded-full text-white dark:text-black-18 text-center text-xs md:text-[16px]">
                               Save {savePrice.toLocaleString()}{" "}
                               {countryCurrency}
                             </span>
@@ -588,7 +592,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                   {showProductSoldCount &&
                     initialProductSold + totalInventorySold > 0 && (
                       <div>
-                        <span className="px-4 py-[8px] pt-[9px] bg-blue-zatiq opacity-80 rounded-full text-white dark:text-black-18 text-center text-[12px] md:text-[16px]">
+                        <span className="px-4 py-2 pt-2.25 bg-blue-zatiq opacity-80 rounded-full text-white dark:text-black-18 text-center text-[12px] md:text-[16px]">
                           {t("sold_units")}{" "}
                           {initialProductSold + totalInventorySold}
                         </span>
@@ -596,7 +600,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                     )}
 
                   {/* Already in Cart Message */}
-                  <div className="flex flex-col gap-[18px]">
+                  <div className="flex flex-col gap-4.5">
                     {isInCart && (
                       <div>
                         <p className="text-sm text-blue-zatiq font-medium">
@@ -622,22 +626,22 @@ export function ProductDetails({ product }: ProductDetailsProps) {
 
                 {/* Trust Card */}
                 <div>
-                  <div className="w-full mt-[30px] border-y border-gray-300 dark:border-gray-500 py-2 md:py-3 flex flex-wrap justify-center xl:justify-start gap-4 sm:gap-6 md:gap-9">
-                    <div className="flex items-center gap-2 sm:gap-3 md:gap-[18px]">
+                  <div className="w-full mt-7.5 border-y border-gray-300 dark:border-gray-500 py-2 md:py-3 flex flex-wrap justify-center xl:justify-start gap-4 sm:gap-6 md:gap-9">
+                    <div className="flex items-center gap-2 sm:gap-3 md:gap-4.5">
                       <SecureIcon className="w-6 h-6 sm:w-8 sm:h-8 lg:w-10 lg:h-10" />
                       <p className="text-[12px] sm:text-sm text-gray-600 dark:text-gray-300">
                         Secure <br />{" "}
                         <span className="font-medium">Checkout</span>
                       </p>
                     </div>
-                    <div className="flex items-center gap-2 sm:gap-3 md:gap-[18px]">
+                    <div className="flex items-center gap-2 sm:gap-3 md:gap-4.5">
                       <Satisfaction className="w-6 h-6 sm:w-8 sm:h-8 lg:w-10 lg:h-10" />
                       <p className="text-[12px] sm:text-sm text-gray-600 dark:text-gray-300">
                         Satisfaction <br />{" "}
                         <span className="font-medium">Guaranteed</span>
                       </p>
                     </div>
-                    <div className="flex items-center gap-2 sm:gap-3 md:gap-[18px]">
+                    <div className="flex items-center gap-2 sm:gap-3 md:gap-4.5">
                       <PrivacyIcon className="w-6 h-6 sm:w-8 sm:h-8 lg:w-10 lg:h-10" />
                       <p className="text-[12px] sm:text-sm text-gray-600 dark:text-gray-300">
                         Privacy <br />{" "}
@@ -652,7 +656,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
               <div className="w-full my-6 mt-12">
                 <div className="flex flex-col md:flex-row md:items-center items-start gap-4 w-full pb-2">
                   {/* Cart Quantity Control */}
-                  <div className="flex items-center justify-between gap-4 text-blue-zatiq dark:text-white px-3 py-1.5 md:w-1/2 w-full bg-transparent border-[1.2px] border-blue-zatiq">
+                  <div className="flex items-center justify-between gap-4 text-blue-zatiq dark:text-white px-3 py-3 md:w-1/2 w-full bg-transparent border-[1.2px] border-blue-zatiq">
                     <button
                       type="button"
                       className="cursor-pointer disabled:opacity-50"
@@ -666,18 +670,17 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                       value={quantity}
                       onChange={(e) => {
                         const value = parseInt(e.target.value) || 1;
-                        if (value >= 1 && value <= (product.quantity || 999)) {
-                          setQuantity(value);
-                        }
+                        handleQuantityChange(value);
                       }}
                       className="font-medium text-sm md:text-base text-center w-12 md:w-16 border-0 focus:outline-none focus:ring-0 bg-transparent [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                       min="1"
+                      max={product.quantity}
                     />
                     <button
                       type="button"
                       className="cursor-pointer disabled:opacity-50"
                       onClick={sumQty}
-                      disabled={isStockNotAvailable}
+                      disabled={disableSum || isStockNotAvailable}
                     >
                       <Plus className="h-5 w-5 md:h-6 md:w-6" />
                     </button>
