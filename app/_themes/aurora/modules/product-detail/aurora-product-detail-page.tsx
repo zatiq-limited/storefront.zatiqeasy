@@ -4,20 +4,36 @@ import React from "react";
 import { useRouter, useParams } from "next/navigation";
 import dynamic from "next/dynamic";
 import { useShopStore } from "@/stores/shopStore";
-import { useCartStore, selectTotalItems, selectSubtotal } from "@/stores/cartStore";
+import {
+  useCartStore,
+  selectTotalItems,
+  selectSubtotal,
+} from "@/stores/cartStore";
 import { useProductDetails } from "@/hooks/useProductDetails";
 import { CartFloatingBtn } from "@/components/features/cart/cart-floating-btn";
 
 // Dynamic imports
-const ProductDetails = dynamic(() => import("./product-details"), { ssr: true });
+const ProductDetails = dynamic(() => import("./product-details"), {
+  ssr: true,
+});
 
-export function AuroraProductDetailPage() {
+export function AuroraProductDetailPage({
+  handle: propHandle,
+}: {
+  handle?: string;
+}) {
   const router = useRouter();
   const params = useParams();
   const { shopDetails } = useShopStore();
 
-  // Get product handle from params (can be product_id or handle)
-  const handle = (params?.handle || params?.product_id || "") as string;
+  // Get product handle from props first, then params (can be productHandle, handle, or product_id)
+  const handle =
+    propHandle ||
+    ((params?.productHandle ||
+      params?.handle ||
+      params?.product_id ||
+      "") as string);
+
   const { product, isLoading, error } = useProductDetails(handle);
   const totalProducts = useCartStore(selectTotalItems);
   const totalPrice = useCartStore(selectSubtotal);
@@ -52,7 +68,7 @@ export function AuroraProductDetailPage() {
 
   return (
     <>
-      <div className="xl:grid xl:grid-cols-5 gap-5 px-4 md:px-0">
+      <div className="container xl:grid xl:grid-cols-5 gap-5">
         <div className="xl:col-span-5">
           <ProductDetails product={product} />
         </div>

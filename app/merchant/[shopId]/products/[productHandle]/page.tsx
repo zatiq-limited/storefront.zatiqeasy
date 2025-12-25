@@ -50,6 +50,7 @@ const ErrorComponent = ({
 export default function MerchantProductDetailPage() {
   const params = useParams();
   const { shopDetails, setShopDetails } = useShopStore();
+  const products = useProductsStore((state) => state.products);
 
   const shopId = params?.shopId as string;
   const productHandle = params?.productHandle as string;
@@ -139,8 +140,7 @@ export default function MerchantProductDetailPage() {
   // Get the theme name from shop details
   const themeName = activeShopData?.shop_theme?.theme_name || "Basic";
 
-  // Get products from store for Premium theme
-  const products = useProductsStore((state) => state.products);
+  // Find product from store for Premium/Sellora themes
   const product = products.find(
     (p: Product) => String(p.id) === productHandle
   );
@@ -148,7 +148,7 @@ export default function MerchantProductDetailPage() {
   // Render the appropriate theme product detail page
   switch (themeName) {
     case "Aurora":
-      return <AuroraProductDetailPage />;
+      return <AuroraProductDetailPage handle={productHandle} />;
     case "Luxura":
       return <LuxuraProductDetailPage />;
     case "Premium":

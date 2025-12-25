@@ -36,16 +36,19 @@ function AuroraPageHeader({
   className?: string;
 }) {
   return (
-    <div className={cn("flex items-center gap-2", className)}>
-      <h1 className="text-xl md:text-4xl xl:text-5xl leading-snug lg:leading-[57.50px] text-black dark:text-blue-zatiq font-bold">
-        {titleElement}
-      </h1>
+    <h1
+      className={cn(
+        "text-[38px] md:text-[64px] font-normal text-blue-zatiq",
+        className
+      )}
+    >
+      {titleElement}
       {number !== undefined && number > 0 && (
-        <span className="text-gray-500 dark:text-gray-400 text-lg md:text-2xl">
+        <span className="text-[18px] md:text-[30px] text-[#9CA3AF] ml-2">
           ({number})
         </span>
       )}
-    </div>
+    </h1>
   );
 }
 
@@ -101,7 +104,8 @@ export function AuroraAllProducts() {
     if (selectedRange) {
       filtered = filtered.filter(
         (product) =>
-          product.price >= selectedRange.min && product.price <= selectedRange.max
+          product.price >= selectedRange.min &&
+          product.price <= selectedRange.max
       );
     }
 
@@ -234,7 +238,7 @@ export function AuroraAllProducts() {
         {/* Header Row */}
         <div className="flex justify-between items-center">
           <div className="w-full flex items-center justify-between mb-6 xl:mb-9">
-            <AuroraPageHeader titleElement={t("All")} number={totalProducts} />
+            <AuroraPageHeader titleElement={t("all")} number={totalProducts} />
             <button
               onClick={() => setShowMobileFilter(true)}
               className="lg:hidden"

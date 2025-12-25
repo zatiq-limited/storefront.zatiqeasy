@@ -13,6 +13,7 @@ import { AuroraShoppingCart } from "./aurora-shopping-cart";
 import LanguageToggler from "./language-toggler";
 import MobileNav from "./mobile-nav";
 import SearchModal from "../search/search-modal";
+import { TopbarMessage } from "@/app/_themes/basic/components/core";
 
 // Custom hook for window scroll position
 function useWindowScroll() {
@@ -72,6 +73,19 @@ export function AuroraHeader() {
         <SearchModal isOpen={isSearchModalOpen} onClose={handleSearchClose} />
       )}
 
+      {/* Top marquee section */}
+      {shopDetails?.message_on_top && (
+        <div className="bg-blue-zatiq">
+          <div className="container">
+            <TopbarMessage
+              message={shopDetails.message_on_top}
+              marqueeStyle="py-2 md:py-[11px] md:pt-[13px] text-white"
+              textStyle="font-inter text-sm md:text-base font-semibold"
+            />
+          </div>
+        </div>
+      )}
+
       {/* Mobile Navigation */}
       <MobileNav
         isOpen={showMobileNav}
@@ -88,8 +102,8 @@ export function AuroraHeader() {
           { "shadow-md": scrollY > 20 }
         )}
       >
-        <div className="relative w-full top-0 left-0 bg-white dark:bg-black-18 lg:text-black-1.2 text-white z-100 flex items-center justify-center shadow-none transition-shadow duration-150">
-          <nav className="w-full items-center flex px-4 relative">
+        <div className="container relative w-full top-0 left-0 bg-white dark:bg-black-18 lg:text-black-1.2 text-white z-100 flex items-center justify-center shadow-none transition-shadow duration-150">
+          <nav className="w-full items-center flex relative">
             <div className="flex items-center justify-between w-full relative">
               {/* Mobile Menu Button */}
               <div

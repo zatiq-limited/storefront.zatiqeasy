@@ -3,7 +3,11 @@
 import React, { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useShopStore } from "@/stores/shopStore";
-import { useCartStore, selectTotalItems, selectSubtotal } from "@/stores/cartStore";
+import {
+  useCartStore,
+  selectTotalItems,
+  selectSubtotal,
+} from "@/stores/cartStore";
 import { useCategoryProducts } from "@/hooks/useCategoryProducts";
 import { GridContainer } from "../../components/core";
 import { AuroraProductCard } from "../../components/cards";
@@ -45,7 +49,7 @@ export function AuroraCategoryPage() {
 
   return (
     <>
-      <div className="pb-20 px-4 md:px-0">
+      <div className="container pb-20">
         {/* Variant Selector Modal */}
         <VariantSelectorModal
           product={selectedProduct}
@@ -54,12 +58,7 @@ export function AuroraCategoryPage() {
         />
 
         {/* Category Title */}
-        <div>
-          <SectionHeader
-            text={category?.name || "Category"}
-            className="py-5"
-          />
-        </div>
+        <SectionHeader text={category?.name || "Category"} className="py-5" />
 
         {/* Category Horizontal List */}
         <CategoryHorizontalList fromCategory />
