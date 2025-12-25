@@ -2,7 +2,7 @@
 
 import { useMemo, useCallback } from "react";
 import Image from "next/image";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { useProductsStore } from "@/stores/productsStore";
 import { useShopStore } from "@/stores";
 import { ArrowLeftCircle } from "lucide-react";
@@ -27,6 +27,7 @@ export function CategoryHorizontalList({
 }: CategoryHorizontalListProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const pathname = usePathname();
   const { categories } = useProductsStore();
   const { shopDetails } = useShopStore();
 
@@ -55,13 +56,20 @@ export function CategoryHorizontalList({
     return categories.filter((cat) => !cat.parent_id);
   }, [currentRootCategory, categories]);
 
-  // Build URL with params
+  // Build URL with params - preserve current pathname (e.g., /products, /categories)
   const buildUrl = useCallback(
     (params: {
       category_id?: string | null;
       selected_category?: string | null;
     }) => {
-      const url = new URL(baseUrl || "/", window.location.origin);
+      // Use current pathname instead of baseUrl to preserve route
+      // e.g., /merchant/5286/products stays as /merchant/5286/products
+      const basePath = pathname || baseUrl || "/";
+      const url = new URL(basePath, window.location.origin);
+
+      // Clear existing search params first
+      url.searchParams.delete("category_id");
+      url.searchParams.delete("selected_category");
 
       if (params.category_id) {
         url.searchParams.set("category_id", params.category_id);
@@ -72,7 +80,7 @@ export function CategoryHorizontalList({
 
       return url.pathname + url.search;
     },
-    [baseUrl]
+    [pathname, baseUrl]
   );
 
   // Handle category selection - matching old project's handleSelectCategory

@@ -182,6 +182,36 @@ export function ProductDetails({ product }: ProductDetailsProps) {
   const cartProducts = getProductsByInventoryId(Number(id));
   const isInCart = cartProducts.length > 0;
 
+  // For non-variant products, find the cart item directly
+  // For variant products, find the matching variant combination
+  const matchingCartItem = useMemo(() => {
+    if (cartProducts.length === 0) return null;
+    // For non-variant products, return first cart item
+    if (!variant_types || variant_types.length === 0) {
+      return cartProducts[0];
+    }
+    // For variant products, find matching selected variants
+    return cartProducts.find((item) => {
+      const itemVariants = item.selectedVariants || {};
+      const selectedKeys = Object.keys(selectedVariants);
+      const itemKeys = Object.keys(itemVariants);
+      if (selectedKeys.length !== itemKeys.length) return false;
+      return selectedKeys.every((key) => {
+        const numKey = Number(key);
+        return selectedVariants[numKey]?.id === itemVariants[numKey]?.variant_id;
+      });
+    }) || null;
+  }, [cartProducts, selectedVariants, variant_types]);
+
+  // Sync quantity with matching cart item
+  // Use matchingCartItem?.qty in dependency to detect actual value changes
+  const matchingCartQty = matchingCartItem?.qty ?? 0;
+  useEffect(() => {
+    if (matchingCartQty > 0) {
+      setQuantity(matchingCartQty);
+    }
+  }, [matchingCartQty]);
+
   // Check stock status
   const isStockOut = (product.quantity ?? 0) <= 0;
   const isStockNotAvailable = isStockOut;

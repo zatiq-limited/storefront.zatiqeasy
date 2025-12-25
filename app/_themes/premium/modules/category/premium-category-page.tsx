@@ -112,12 +112,13 @@ export function PremiumCategoryPage() {
             />
           ))
         ) : paginatedProducts.length > 0 ? (
-          paginatedProducts.map((product) => (
+          paginatedProducts.map((product, index) => (
             <PremiumProductCard
               key={product.id}
               product={product}
               onSelectProduct={() => setSelectedProduct(product)}
               onNavigate={() => navigateProductDetails(product.id)}
+              imagePriority={index < 8}
             />
           ))
         ) : (

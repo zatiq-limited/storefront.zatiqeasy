@@ -26,7 +26,7 @@ export function LuxuraProductCard({
   const router = useRouter();
   const { t } = useTranslation();
   const { shopDetails } = useShopStore();
-  const { addProduct, removeProduct, getProductsByInventoryId } = useCartStore();
+  const { addProduct, removeProduct, getProductsByInventoryId, updateQuantity } = useCartStore();
 
   const [isHovered, setIsHovered] = useState(false);
 
@@ -37,7 +37,7 @@ export function LuxuraProductCard({
   // Check if product is in cart
   const cartProducts = getProductsByInventoryId(Number(product.id));
   const isInCart = cartProducts.length > 0;
-  const cartQuantity = cartProducts.reduce((acc, p) => acc + (p.quantity || 0), 0);
+  const cartQuantity = cartProducts.reduce((acc, p) => acc + (p.qty || 0), 0);
 
   // Check stock status
   const isOutOfStock = product.quantity === 0;
@@ -83,24 +83,22 @@ export function LuxuraProductCard({
   // Handle quantity change
   const handleIncrement = (e: React.MouseEvent) => {
     e.stopPropagation();
-    addProduct({
-      ...product,
-      id: Number(product.id),
-      image_url: imageUrl,
-      qty: 1,
-      selectedVariants: {},
-      total_inventory_sold: 0,
-      categories: product.categories ?? [],
-      variant_types: product.variant_types ?? [],
-      stocks: product.stocks ?? [],
-      reviews: [],
-    } as unknown as Parameters<typeof addProduct>[0]);
+    // For non-variant products, increment existing cart item's quantity
+    if (cartProducts.length > 0) {
+      const cartItem = cartProducts[0];
+      updateQuantity(cartItem.cartId, cartItem.qty + 1);
+    }
   };
 
   const handleDecrement = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (cartProducts.length > 0) {
-      removeProduct(cartProducts[0].cartId);
+      const cartItem = cartProducts[0];
+      if (cartItem.qty > 1) {
+        updateQuantity(cartItem.cartId, cartItem.qty - 1);
+      } else {
+        removeProduct(cartItem.cartId);
+      }
     }
   };
 

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
@@ -74,6 +74,35 @@ export function LuxuraProductDetailPage() {
   // Check cart status
   const cartProducts = product ? getProductsByInventoryId(Number(product.id)) : [];
   const cartQuantity = cartProducts.reduce((acc, p) => acc + (p.qty || 0), 0);
+
+  // For non-variant products, find the cart item directly
+  // For variant products, find the matching variant combination
+  const matchingCartItem = useMemo(() => {
+    if (cartProducts.length === 0) return null;
+    // For non-variant products, return first cart item
+    if (!product?.variant_types || product.variant_types.length === 0) {
+      return cartProducts[0];
+    }
+    // For variant products with selectedVariant, find matching
+    if (selectedVariant) {
+      return cartProducts.find((item) => {
+        const itemVariants = item.selectedVariants || {};
+        return Object.values(itemVariants).some(
+          (v) => v.variant_id === selectedVariant.id
+        );
+      }) || null;
+    }
+    return cartProducts[0];
+  }, [cartProducts, selectedVariant, product?.variant_types]);
+
+  // Sync quantity with matching cart item
+  // Use matchingCartItem?.qty in dependency to detect actual value changes
+  const matchingCartQty = matchingCartItem?.qty ?? 0;
+  useEffect(() => {
+    if (matchingCartQty > 0) {
+      setQuantity(matchingCartQty);
+    }
+  }, [matchingCartQty]);
 
   // Check stock
   const isOutOfStock = product?.quantity === 0;

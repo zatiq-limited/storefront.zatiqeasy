@@ -22,12 +22,14 @@ interface PremiumProductCardProps {
   product: Product;
   onSelectProduct?: () => void;
   onNavigate?: () => void;
+  imagePriority?: boolean; // For above-the-fold images
 }
 
 export function PremiumProductCard({
   product,
   onSelectProduct,
   onNavigate,
+  imagePriority = false,
 }: PremiumProductCardProps) {
   const router = useRouter();
   const { t } = useTranslation();
@@ -104,19 +106,11 @@ export function PremiumProductCard({
       return;
     }
 
-    // For non-variant products, add one more
-    addProduct({
-      ...product,
-      id: Number(product.id),
-      image_url: imageUrl,
-      qty: 1,
-      selectedVariants: {},
-      total_inventory_sold: 0,
-      categories: product.categories ?? [],
-      variant_types: product.variant_types ?? [],
-      stocks: product.stocks ?? [],
-      reviews: [],
-    } as unknown as Parameters<typeof addProduct>[0]);
+    // For non-variant products, increment existing cart item's quantity
+    if (cartProducts.length > 0) {
+      const cartItem = cartProducts[0];
+      updateQuantity(cartItem.cartId, cartItem.qty + 1);
+    }
   };
 
   // Handle decrement
@@ -171,6 +165,8 @@ export function PremiumProductCard({
             src={imageUrl}
             alt={product.name}
             fill
+            priority={imagePriority}
+            sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
             className="w-full aspect-244/304 object-cover rounded-lg md:rounded-none"
           />
 

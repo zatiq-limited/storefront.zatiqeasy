@@ -282,12 +282,14 @@ export function PremiumAllProducts() {
           {/* Products Grid */}
           <div className="w-full lg:w-4/5 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
             {paginatedProducts.length > 0 ? (
-              paginatedProducts.map((product) => (
+              paginatedProducts.map((product, index) => (
                 <PremiumProductCard
                   key={product.id}
                   product={product}
                   onSelectProduct={() => setSelectedProduct(product)}
                   onNavigate={() => navigateProductDetails(product.id)}
+                  // Priority loading for first 8 images (above the fold)
+                  imagePriority={index < 8}
                 />
               ))
             ) : (

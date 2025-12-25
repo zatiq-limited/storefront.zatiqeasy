@@ -186,13 +186,15 @@ export function PremiumProductDetailPage({
   ]);
 
   // Sync quantity with matching cart item - matches old project logic
+  // Use matchingCartItem?.qty in dependency to detect actual value changes
+  const matchingCartQty = matchingCartItem?.qty ?? 0;
   useEffect(() => {
-    if (matchingCartItem?.qty && matchingCartItem.qty > 0) {
-      setQuantity(matchingCartItem.qty);
+    if (matchingCartQty > 0) {
+      setQuantity(matchingCartQty);
     } else {
       setQuantity(1);
     }
-  }, [matchingCartItem]);
+  }, [matchingCartQty]);
 
   // Check stock status
   const isStockOut = product.quantity === 0;
@@ -356,6 +358,7 @@ export function PremiumProductDetailPage({
                       alt="Video thumbnail"
                       width={200}
                       height={200}
+                      sizes="90px"
                       className="w-full h-full object-cover"
                     />
                     <Play
@@ -386,6 +389,7 @@ export function PremiumProductDetailPage({
                       src={getInventoryThumbImageUrl(img)}
                       width={200}
                       height={200}
+                      sizes="90px"
                       className="w-full h-full object-cover"
                     />
                   </li>
@@ -421,6 +425,8 @@ export function PremiumProductDetailPage({
                         src={getDetailPageImageUrl(selectedImageUrl)}
                         width={512}
                         height={512}
+                        priority={true}
+                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 70vw, 50vw"
                         className="w-full max-h-225 object-contain transition ease-in duration-500"
                         alt={name || "Product"}
                       />
@@ -461,6 +467,7 @@ export function PremiumProductDetailPage({
                               alt="Video thumbnail"
                               width={200}
                               height={200}
+                              sizes="75px"
                               className="w-full h-full object-cover"
                             />
                             <Play
@@ -489,6 +496,7 @@ export function PremiumProductDetailPage({
                               src={getInventoryThumbImageUrl(img)}
                               width={200}
                               height={200}
+                              sizes="75px"
                               className="w-full h-full object-cover"
                             />
                           </li>
