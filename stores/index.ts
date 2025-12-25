@@ -47,3 +47,21 @@ export { useProductsStore } from "./productsStore";
 export { useProductDetailsStore } from "./productDetailsStore";
 
 export { useAboutUsStore } from "./aboutUsStore";
+
+// Landing page store
+export {
+  useLandingStore,
+  selectPageData,
+  selectPrimaryColor,
+  selectSecondaryColor,
+  selectCheckoutFormData,
+  selectOrderPlaced,
+  selectOrderId,
+  selectTrackLink,
+  selectInventory,
+  selectThemeData,
+  selectBanners,
+  selectProductVideos,
+  selectProductImages,
+  selectMessageOnTop,
+} from "./landingStore";

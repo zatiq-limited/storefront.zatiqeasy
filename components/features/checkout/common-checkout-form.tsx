@@ -50,9 +50,11 @@ interface OrderData {
 
 interface CommonCheckoutFormProps {
   onSubmit?: (orderData: OrderData) => void;
+  onOrderComplete?: (result: { orderId: string; trackLink?: string; receiptUrl?: string }) => void;
+  preventRedirect?: boolean;
 }
 
-export function CommonCheckoutForm({ onSubmit }: CommonCheckoutFormProps) {
+export function CommonCheckoutForm({ onSubmit, onOrderComplete, preventRedirect }: CommonCheckoutFormProps) {
   const {
     register,
     handleSubmit,
@@ -384,10 +386,24 @@ export function CommonCheckoutForm({ onSubmit }: CommonCheckoutFormProps) {
         // Clear cart
         useCartStore.getState().clearCart();
 
+        // Call onSubmit callback if provided
+        if (onSubmit) {
+          await onSubmit(orderPayload);
+        }
+
         // Handle payment redirect (matching old project)
         if (response.data.payment_url) {
-          // For online payment gateways
+          // For online payment gateways - must redirect
           window.location.replace(response.data.payment_url);
+        } else if (preventRedirect && onOrderComplete) {
+          // For landing pages - stay on page and show order status
+          const orderId = String(response.data.receipt_id || response.data.receipt_url || "");
+          const receiptUrl = String(response.data.receipt_url || response.data.receipt_id || "");
+          onOrderComplete({
+            orderId,
+            trackLink: response.data.track_link,
+            receiptUrl,
+          });
         } else if (response.data.receipt_url) {
           // For COD or completed payments - use receipt_url as the path
           window.location.href = `/receipt/${response.data.receipt_url}`;
@@ -397,10 +413,6 @@ export function CommonCheckoutForm({ onSubmit }: CommonCheckoutFormProps) {
         }
       } else {
         throw new Error(response.error || "Failed to create order");
-      }
-
-      if (onSubmit) {
-        await onSubmit(orderPayload);
       }
     } catch (err) {
       console.error("Checkout error:", err);

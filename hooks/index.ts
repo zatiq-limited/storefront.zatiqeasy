@@ -17,3 +17,7 @@ export * from "./useShopCategories";
 // Cart and pricing hooks (common for all themes)
 export * from "./useCartTotals";
 export * from "./usePriceFormatting";
+
+// Landing page hooks
+export * from "./useLandingPage";
+export * from "./useCategoryProducts";

@@ -121,6 +121,8 @@ function ShopPageContent({ shopId }: ShopPageProps) {
   // Get the theme name from shop details
   const themeName = shopDetails?.shop_theme?.theme_name || "Basic";
 
+  console.log(themeName, "theme selected for shop:", shopId);
+
   // Render the appropriate theme page
   const renderThemePage = () => {
     switch (themeName) {
