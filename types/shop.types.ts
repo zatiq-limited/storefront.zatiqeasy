@@ -40,7 +40,7 @@ export interface ShopProfile {
   message_on_top?: string;
   order_verification_enabled?: boolean;
   show_product_sold_count?: boolean;
-  advance_payment_type?: "fixed" | "percentage";
+  advance_payment_type?: "Full Payment" | "Delivery Charge Only" | "Percentage" | "Fixed Amount" | "fixed" | "percentage";
   advanced_payment_fixed_amount?: number;
   advanced_payment_percentage?: number;
   is_delivery_charge_not_refundable?: boolean;

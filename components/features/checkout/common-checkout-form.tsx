@@ -22,9 +22,8 @@ import { toast } from "react-hot-toast";
 interface ReceiptItem {
   name: string;
   inventory_id: number;
-  quantity: number;
+  qty: number;
   price: number;
-  total_price: number;
   image_url?: string;
   variants: Array<{
     variant_type_id: number;
@@ -136,20 +135,38 @@ export function CommonCheckoutForm({ onSubmit, onOrderComplete, preventRedirect 
   const totaltax = taxAmount; // Alias to match old project
   const grandTotal = totalPrice + deliveryCharge + taxAmount - discountAmount;
 
-  // Check if full online payment is required
-  const isFullOnlinePayment = selectedPaymentMethod !== "cod";
+  // State for full online payment toggle (used by Advanced Payment Options)
+  const [isFullOnlinePayment, setIsFullOnlinePayment] = useState(true);
 
-  // Get pay now amount
-  const getPayNowAmount = () => {
-    if (selectedPaymentMethod === "cod") return 0;
-    return grandTotal;
+  // Get pay now amount - calculates based on shop settings
+  const getPayNowAmount = (formatted: boolean = false): string | number => {
+    if (selectedPaymentMethod === "cod") return formatted ? "0" : 0;
+
+    // If full payment is selected, return grand total
+    if (isFullOnlinePayment) {
+      return formatted ? grandTotal.toLocaleString() : grandTotal;
+    }
+
+    // Calculate advance payment based on shop settings
+    const advancePaymentType = shopDetails?.advance_payment_type ?? "Full Payment";
+    let advanceAmount = grandTotal;
+
+    if (advancePaymentType === "Delivery Charge Only") {
+      advanceAmount = deliveryCharge < 5 ? 5 : deliveryCharge;
+    } else if (advancePaymentType === "Percentage" && shopDetails?.advanced_payment_percentage) {
+      advanceAmount = Math.ceil(grandTotal * (shopDetails.advanced_payment_percentage / 100));
+    } else if (advancePaymentType === "Fixed Amount" && shopDetails?.advanced_payment_fixed_amount) {
+      advanceAmount = grandTotal < shopDetails.advanced_payment_fixed_amount
+        ? grandTotal
+        : shopDetails.advanced_payment_fixed_amount;
+    }
+
+    return formatted ? advanceAmount.toLocaleString() : advanceAmount;
   };
 
   // Handle full online payment toggle (used by OrderSummarySection)
-  const handleChange = (value: boolean) => {
-    // This handles the full online payment checkbox toggle
-    // The value represents whether full payment is selected
-    console.log("Full online payment:", value);
+  const handleChange = (isFullOnline: boolean) => {
+    setIsFullOnlinePayment(isFullOnline);
   };
 
   // Handle promo code apply
@@ -343,13 +360,12 @@ export function CommonCheckoutForm({ onSubmit, onOrderComplete, preventRedirect 
         throw new Error("Your cart is empty");
       }
 
-      // Prepare order items
+      // Prepare order items - using 'qty' and 'price' as total price (matching old project)
       const receiptItems = cartProducts.map((item) => ({
         name: item.name,
         inventory_id: item.id,
-        quantity: item.qty,
-        price: item.price,
-        total_price: item.price * item.qty,
+        qty: item.qty,
+        price: item.price * item.qty,
         image_url: item.image_url,
         variants: item.selectedVariants
           ? Object.values(item.selectedVariants)
@@ -390,8 +406,8 @@ export function CommonCheckoutForm({ onSubmit, onOrderComplete, preventRedirect 
         tax_percentage: shopDetails?.vat_tax || 0,
         total_amount: grandTotal,
         payment_type: paymentMethodToType(selectedPaymentMethod || "cod"),
-        pay_now_amount: getPayNowAmount(),
-        advance_payment_amount: getPayNowAmount(),
+        pay_now_amount: getPayNowAmount(false) as number,
+        advance_payment_amount: isFullOnlinePayment ? grandTotal : (getPayNowAmount(false) as number),
         discount_amount: discountAmount,
         discount_percentage: 0,
         receipt_items: receiptItems,
@@ -400,7 +416,7 @@ export function CommonCheckoutForm({ onSubmit, onOrderComplete, preventRedirect 
         notes: data.note || "",
         redirect_root_url: redirectRootUrl,
         district: selectedDistrict || "",
-        email: data.email || "",
+        email: data.customer_email || "",
         // Self MFS fields
         mfs_provider: data.mfs_provider || "",
         mfs_payment_phone: data.mfs_payment_phone || "",
