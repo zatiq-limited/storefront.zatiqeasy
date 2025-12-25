@@ -138,30 +138,38 @@ export function CommonCheckoutForm({ onSubmit, onOrderComplete, preventRedirect 
   // State for full online payment toggle (used by Advanced Payment Options)
   const [isFullOnlinePayment, setIsFullOnlinePayment] = useState(true);
 
-  // Get pay now amount - calculates based on shop settings
-  const getPayNowAmount = (formatted: boolean = false): string | number => {
-    if (selectedPaymentMethod === "cod") return formatted ? "0" : 0;
-
-    // If full payment is selected, return grand total
-    if (isFullOnlinePayment) {
-      return formatted ? grandTotal.toLocaleString() : grandTotal;
-    }
-
-    // Calculate advance payment based on shop settings
+  // Calculate the advance amount based on shop settings (always calculates advance, not full)
+  const calculateAdvanceAmount = (): number => {
     const advancePaymentType = shopDetails?.advance_payment_type ?? "Full Payment";
-    let advanceAmount = grandTotal;
 
     if (advancePaymentType === "Delivery Charge Only") {
-      advanceAmount = deliveryCharge < 5 ? 5 : deliveryCharge;
+      return deliveryCharge < 5 ? 5 : deliveryCharge;
     } else if (advancePaymentType === "Percentage" && shopDetails?.advanced_payment_percentage) {
-      advanceAmount = Math.ceil(grandTotal * (shopDetails.advanced_payment_percentage / 100));
+      return Math.ceil(grandTotal * (shopDetails.advanced_payment_percentage / 100));
     } else if (advancePaymentType === "Fixed Amount" && shopDetails?.advanced_payment_fixed_amount) {
-      advanceAmount = grandTotal < shopDetails.advanced_payment_fixed_amount
+      return grandTotal < shopDetails.advanced_payment_fixed_amount
         ? grandTotal
         : shopDetails.advanced_payment_fixed_amount;
     }
 
-    return formatted ? advanceAmount.toLocaleString() : advanceAmount;
+    return grandTotal;
+  };
+
+  // Get pay now amount - when forceAdvance is true, always return advance amount (for display)
+  const getPayNowAmount = (forceAdvance: boolean = false): string | number => {
+    if (selectedPaymentMethod === "cod") return forceAdvance ? calculateAdvanceAmount().toLocaleString() : 0;
+
+    // If forceAdvance is true (used for display), always show advance amount
+    if (forceAdvance) {
+      return calculateAdvanceAmount().toLocaleString();
+    }
+
+    // Otherwise return based on isFullOnlinePayment selection
+    if (isFullOnlinePayment) {
+      return grandTotal;
+    }
+
+    return calculateAdvanceAmount();
   };
 
   // Handle full online payment toggle (used by OrderSummarySection)
@@ -406,8 +414,8 @@ export function CommonCheckoutForm({ onSubmit, onOrderComplete, preventRedirect 
         tax_percentage: shopDetails?.vat_tax || 0,
         total_amount: grandTotal,
         payment_type: paymentMethodToType(selectedPaymentMethod || "cod"),
-        pay_now_amount: getPayNowAmount(false) as number,
-        advance_payment_amount: isFullOnlinePayment ? grandTotal : (getPayNowAmount(false) as number),
+        pay_now_amount: getPayNowAmount() as number,
+        advance_payment_amount: isFullOnlinePayment ? grandTotal : calculateAdvanceAmount(),
         discount_amount: discountAmount,
         discount_percentage: 0,
         receipt_items: receiptItems,
