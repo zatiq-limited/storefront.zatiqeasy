@@ -116,7 +116,7 @@ export const PremiumTheme: StaticTheme = {
   // Dynamic component imports
   components: {
     Header: () => import("./components/header/header"),
-    Footer: () => import("./components/footer/footer"),
+    Footer: () => import("@/app/_themes/aurora/components/footer/footer"),
     ProductCard: () => import("./components/cards/premium-product-card"),
     CategoryCard: () => import("./components/cards/premium-category-card"),
     SearchModal: () => import("./components/search/premium-search-modal"),

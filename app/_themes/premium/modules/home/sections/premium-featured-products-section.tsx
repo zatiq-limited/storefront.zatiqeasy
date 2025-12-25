@@ -3,9 +3,9 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useShopStore } from "@/stores/shopStore";
-import { GridContainer } from "../../../components/core";
 import { PremiumProductCard } from "../../../components/cards";
 import { SectionHeader } from "./section-header";
+import { ViewAllButton } from "./view-all-button";
 import type { Product } from "@/stores/productsStore";
 
 interface PremiumFeaturedProductsSectionProps {
@@ -36,14 +36,13 @@ export function PremiumFeaturedProductsSection({
   }
 
   return (
-    <div>
+    <div className="flex flex-col gap-[24px] lg:gap-[44px]">
       <SectionHeader
-        text={t(title)}
-        viewAllLink={`${baseUrl}/products`}
-        showViewAll={true}
+        title={t(title)}
+        buttonLink={`${baseUrl}/products`}
       />
 
-      <GridContainer columns={{ mobile: 2, tablet: 3, desktop: 5 }}>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-5">
         {featuredProducts.map((product) => (
           <PremiumProductCard
             key={product.id}
@@ -52,7 +51,12 @@ export function PremiumFeaturedProductsSection({
             onNavigate={() => navigateProductDetails(product.id)}
           />
         ))}
-      </GridContainer>
+      </div>
+
+      <ViewAllButton
+        button_text={t("view_all_products")}
+        button_link={`${baseUrl}/products`}
+      />
     </div>
   );
 }

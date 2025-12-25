@@ -72,8 +72,8 @@ export function LuxuraHeader() {
           { "shadow-md": scrollY > 20 }
         )}
       >
-        <div className="relative w-[97%] lg:w-[78%] top-0 left-0 bg-white dark:bg-black-18 lg:text-black-1.2 text-white z-100 flex items-center justify-center shadow-none transition-shadow duration-150">
-          <nav className="premium-layout-width items-center flex justify-center w-full">
+        <div className="relative w-full top-0 left-0 bg-white dark:bg-black-18 lg:text-black-1.2 text-white z-100 flex items-center justify-center shadow-none transition-shadow duration-150">
+          <nav className="container items-center flex justify-center w-full">
             <div className="w-full flex items-center justify-between">
               {/* Left: Mobile Menu + Logo */}
               <div className="flex items-center gap-2">

@@ -2,6 +2,7 @@
 
 import { useShopStore } from "@/stores/shopStore";
 import { AuroraAllCategoriesPage } from "@/app/_themes/aurora/modules/category";
+import { PremiumAllCategoriesPage } from "@/app/_themes/premium/modules/category";
 import { BasicHomePage } from "@/app/_themes/basic";
 
 /**
@@ -22,17 +23,7 @@ export function AllCategoriesRenderer() {
       return <AuroraAllCategoriesPage />;
 
     case "Premium":
-      // TODO: Create PremiumAllCategoriesPage when Premium theme is migrated
-      return (
-        <div className="min-h-[50vh] flex items-center justify-center">
-          <div className="text-center">
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">
-              Premium Theme Categories
-            </h2>
-            <p className="text-gray-600">Coming soon...</p>
-          </div>
-        </div>
-      );
+      return <PremiumAllCategoriesPage />;
 
     case "Luxura":
       // TODO: Create LuxuraAllCategoriesPage when Luxura theme is migrated

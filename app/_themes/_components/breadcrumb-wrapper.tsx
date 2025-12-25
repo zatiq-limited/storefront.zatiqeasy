@@ -35,7 +35,7 @@ export function BreadcrumbWrapper() {
   }
 
   return (
-    <div className="container breadcrumb-layout-width w-full">
+    <div className="container w-full">
       <Breadcrumb
         homeElement="Home"
         separator={<span className="text-gray-400">›</span>}

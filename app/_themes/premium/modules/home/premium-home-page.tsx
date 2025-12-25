@@ -5,23 +5,37 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useShopStore } from "@/stores/shopStore";
 import type { Product } from "@/stores/productsStore";
-import { useCartStore, selectTotalItems, selectSubtotal } from "@/stores/cartStore";
+import {
+  useCartStore,
+  selectTotalItems,
+  selectSubtotal,
+} from "@/stores/cartStore";
 import { CartFloatingBtn } from "@/components/features/cart/cart-floating-btn";
 import { VariantSelectorModal } from "@/components/products/variant-selector-modal";
+import { PremiumCarouselSlider } from "../../components/carousel";
 
 // Dynamic imports for sections
 const PremiumCategorySection = dynamic(
-  () => import("./sections/premium-category-section").then((mod) => mod.PremiumCategorySection),
+  () =>
+    import("./sections/premium-category-section").then(
+      (mod) => mod.PremiumCategorySection
+    ),
   { ssr: false }
 );
 
 const PremiumFeaturedProductsSection = dynamic(
-  () => import("./sections/premium-featured-products-section").then((mod) => mod.PremiumFeaturedProductsSection),
+  () =>
+    import("./sections/premium-featured-products-section").then(
+      (mod) => mod.PremiumFeaturedProductsSection
+    ),
   { ssr: false }
 );
 
 const PremiumCategoryProductsSection = dynamic(
-  () => import("./sections/premium-category-products-section").then((mod) => mod.PremiumCategoryProductsSection),
+  () =>
+    import("./sections/premium-category-products-section").then(
+      (mod) => mod.PremiumCategoryProductsSection
+    ),
   { ssr: false }
 );
 
@@ -34,7 +48,9 @@ export function PremiumHomePage() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   const baseUrl = shopDetails?.baseUrl || "";
-  const selectedInventories = (shopDetails?.shop_theme as unknown as { selected_inventories?: Product[] })?.selected_inventories || [];
+  const selectedInventories =
+    (shopDetails?.shop_theme as unknown as { selected_inventories?: Product[] })
+      ?.selected_inventories || [];
   const hasItems = totalProducts > 0;
 
   // Navigate to product detail
@@ -51,10 +67,15 @@ export function PremiumHomePage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-white dark:bg-gray-900">
+      {/* Hero Carousel Slider */}
+      <div className="w-[96vw] md:w-full mx-auto relative">
+        <PremiumCarouselSlider />
+      </div>
+
       {/* Main Content */}
-      <div className="w-[95%] md:w-[90%] lg:w-[85%] max-w-[1400px] mx-auto py-6 md:py-10 lg:py-14">
-        <div className="space-y-10 md:space-y-14 lg:space-y-16">
+      <div className="container">
+        <div className="flex flex-col pt-[48px] md:pt-[60px] xl:pt-[84px] gap-[48px] md:gap-[60px] xl:gap-[84px]">
           {/* Categories Section */}
           <PremiumCategorySection showHeader={true} />
 

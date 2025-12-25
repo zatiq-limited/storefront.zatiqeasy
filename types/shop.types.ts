@@ -226,6 +226,8 @@ export interface Carousel {
   image_url: string;
   link?: string;
   mobile_image_url?: string;
+  button_text?: string;
+  button_link?: string;
 }
 
 // Division/District/Upazila for Bangladesh
