@@ -7,7 +7,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
-import { fetchShopCategories, type Category } from "@/lib/api/shop";
+import { type Category } from "@/lib/api/types";
 import { useProductsStore } from "@/stores";
 import { CACHE_TIMES, DEFAULT_QUERY_OPTIONS } from "@/lib/constants";
 
@@ -34,10 +34,24 @@ export function useShopCategories(
   const query = useQuery({
     queryKey,
     queryFn: async () => {
-      const categories = await fetchShopCategories({
-        shop_uuid: params.shopUuid,
-        ids: params.ids,
+      // Fetch categories from local API route
+      const response = await fetch("/api/storefront/v1/categories", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          shop_uuid: params.shopUuid,
+          ids: params.ids,
+        }),
       });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch categories");
+      }
+
+      const result = await response.json();
+      const categories = result.data || [];
 
       if (!categories) {
         return [];

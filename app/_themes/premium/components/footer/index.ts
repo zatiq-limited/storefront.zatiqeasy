@@ -1,0 +1,1 @@
+export { PremiumFooter } from "./footer";

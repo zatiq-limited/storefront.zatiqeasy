@@ -10,7 +10,7 @@ export interface Product {
   price: number;
   old_price?: number | null;
   buying_price?: number;
-  image_url: string;
+  image_url?: string;
   images?: string[];
   quantity: number;
   initial_product_sold?: number;
@@ -190,31 +190,35 @@ export const useProductsStore = create<ProductsState>()(
 
         // Apply search filter
         if (searchQuery) {
-          filtered = filtered.filter(product =>
+          filtered = filtered.filter((product) =>
             product.name.toLowerCase().includes(searchQuery.toLowerCase())
           );
         }
 
         // Apply category filter
         if (filters.category) {
-          filtered = filtered.filter(product =>
-            product.category_id === filters.category?.toString()
+          filtered = filtered.filter(
+            (product) => product.category_id === filters.category?.toString()
           );
         }
 
         // Apply sorting
         switch (sortOption) {
-          case 'price-asc':
+          case "price-asc":
             filtered = [...filtered].sort((a, b) => a.price - b.price);
             break;
-          case 'price-desc':
+          case "price-desc":
             filtered = [...filtered].sort((a, b) => b.price - a.price);
             break;
-          case 'name-asc':
-            filtered = [...filtered].sort((a, b) => a.name.localeCompare(b.name));
+          case "name-asc":
+            filtered = [...filtered].sort((a, b) =>
+              a.name.localeCompare(b.name)
+            );
             break;
-          case 'name-desc':
-            filtered = [...filtered].sort((a, b) => b.name.localeCompare(a.name));
+          case "name-desc":
+            filtered = [...filtered].sort((a, b) =>
+              b.name.localeCompare(a.name)
+            );
             break;
           default:
             // Keep original order for 'newest'
@@ -234,7 +238,7 @@ export const useProductsStore = create<ProductsState>()(
       },
 
       get searchQuery() {
-        return get().filters.search || '';
+        return get().filters.search || "";
       },
 
       get sortOption() {
@@ -254,23 +258,23 @@ export const useProductsStore = create<ProductsState>()(
       setError: (error) => set({ error }),
       setSearchQuery: (query) =>
         set((state) => ({
-          filters: { ...state.filters, search: query, page: 1 }
+          filters: { ...state.filters, search: query, page: 1 },
         })),
       setSortOption: (option) =>
         set((state) => ({
-          filters: { ...state.filters, sort: option, page: 1 }
+          filters: { ...state.filters, sort: option, page: 1 },
         })),
       setCurrentPage: (page) =>
         set((state) => ({
-          filters: { ...state.filters, page }
+          filters: { ...state.filters, page },
         })),
       getProductById: (id) => {
         const { products } = get();
-        return products.find(p => String(p.id) === id);
+        return products.find((p) => String(p.id) === id);
       },
       getProductsByCategory: (categoryId) => {
         const { products } = get();
-        return products.filter(p => p.category_id === categoryId);
+        return products.filter((p) => p.category_id === categoryId);
       },
       reset: () =>
         set({

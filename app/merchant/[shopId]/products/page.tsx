@@ -2,8 +2,12 @@
 
 import { useEffect } from "react";
 import { useParams, useSearchParams } from "next/navigation";
-import { useProductsStore } from "@/stores";
+import { useShopStore, useProductsStore } from "@/stores";
 import { BasicHomePage } from "@/app/_themes/basic";
+import { AuroraAllProducts } from "@/app/_themes/aurora/modules/products/aurora-all-products";
+import { LuxuraAllProducts } from "@/app/_themes/luxura/modules/products/luxura-all-products";
+import { PremiumAllProducts } from "@/app/_themes/premium/modules/products/premium-all-products";
+import { SelloraAllProducts } from "@/app/_themes/sellora/modules/products/sellora-all-products";
 import { useShopProfile, useShopInventories, useShopCategories } from "@/hooks";
 
 // Loading component
@@ -39,12 +43,12 @@ const ErrorComponent = ({
 
 /**
  * Merchant Products Page
- * For basic theme, this shows the same content as the home page
- * (products list with categories, same design as home)
+ * Renders theme-specific products page based on shop_theme.theme_name
  */
 export default function MerchantProductsPage() {
   const params = useParams();
   const searchParams = useSearchParams();
+  const { shopDetails } = useShopStore();
   const { setFilters } = useProductsStore();
 
   const shopId = params?.shopId as string;
@@ -108,13 +112,32 @@ export default function MerchantProductsPage() {
     );
   }
 
-  // For basic theme, the products page is the same as home page
+  // Get the theme name from shop details
+  const themeName = shopDetails?.shop_theme?.theme_name || "Basic";
+
+  // Render the appropriate theme products page
+  const renderThemePage = () => {
+    switch (themeName) {
+      case "Aurora":
+        return <AuroraAllProducts />;
+      case "Luxura":
+        return <LuxuraAllProducts />;
+      case "Premium":
+        return <PremiumAllProducts />;
+      case "Sellora":
+        return <SelloraAllProducts />;
+      case "Basic":
+      default:
+        return <BasicHomePage />;
+    }
+  };
+
   return (
     <div
-      data-theme="basic"
+      data-theme={themeName.toLowerCase()}
       className="min-h-screen bg-gray-50 dark:bg-gray-900"
     >
-      <BasicHomePage />
+      {renderThemePage()}
     </div>
   );
 }

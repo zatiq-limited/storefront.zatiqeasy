@@ -60,7 +60,28 @@ export const useProductDetailsStore = create<ProductDetailsState>()(
 
       setProduct: (product) => {
         const basePrice = product?.price || 0;
-        set({ product, computedPrice: basePrice, selectedVariants: {} });
+
+        // Auto-select first variant of mandatory variant types
+        const autoSelectedVariants: SelectedVariants = {};
+        if (product?.variant_types && product.variant_types.length > 0) {
+          product.variant_types.forEach((variantType) => {
+            if (variantType.is_mandatory && variantType.variants?.length > 0) {
+              autoSelectedVariants[variantType.id] = variantType.variants[0];
+            }
+          });
+        }
+
+        // Calculate price with auto-selected variants
+        const variantPrice = Object.values(autoSelectedVariants).reduce(
+          (sum, v) => sum + (v.price || 0),
+          0
+        );
+
+        set({
+          product,
+          computedPrice: basePrice + variantPrice,
+          selectedVariants: autoSelectedVariants,
+        });
       },
 
       setProductDetailsPageConfig: (config) =>

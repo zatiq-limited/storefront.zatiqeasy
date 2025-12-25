@@ -7,7 +7,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
-import { fetchShopInventories, type Product } from "@/lib/api/shop";
+import { type Product } from "@/lib/api/types";
 import { useProductsStore } from "@/stores";
 import { CACHE_TIMES, DEFAULT_QUERY_OPTIONS } from "@/lib/constants";
 
@@ -35,10 +35,24 @@ export function useShopInventories(
   const query = useQuery({
     queryKey,
     queryFn: async () => {
-      const products = await fetchShopInventories({
-        shop_uuid: params.shopUuid,
-        ids: params.ids,
+      // Fetch inventories from local API route
+      const response = await fetch("/api/storefront/v1/inventories", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          shop_uuid: params.shopUuid,
+          ids: params.ids,
+        }),
       });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch inventories");
+      }
+
+      const result = await response.json();
+      const products = result.data || [];
 
       if (!products) {
         return [];
@@ -46,7 +60,7 @@ export function useShopInventories(
 
       // Sort products: in-stock items first, out-of-stock items at the end
       if (sortByStock) {
-        return [...products].sort((a, b) => {
+        return [...products].sort((a: Product, b: Product) => {
           const aInStock = (a.quantity ?? 0) > 0;
           const bInStock = (b.quantity ?? 0) > 0;
           if (aInStock === bInStock) return 0;
@@ -64,7 +78,7 @@ export function useShopInventories(
   // Sync to Zustand store when data changes
   useEffect(() => {
     if (syncToStore && query.data && query.data.length > 0) {
-      setProducts(query.data as any);
+      setProducts(query.data as Product[]);
     }
   }, [query.data, syncToStore, setProducts]);
 

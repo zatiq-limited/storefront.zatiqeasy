@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import { fetchShopProfile } from "@/lib/api/shop";
+import { shopService } from "@/lib/api/services/shop.service";
 import { ThemeHandler } from "@/app/lib/theme-handler";
 import { ShopProvider } from "@/app/providers/shop-provider";
+import { BreadcrumbWrapper } from "@/app/_themes/_components/breadcrumb-wrapper";
 
 interface MerchantLayoutProps {
   children: React.ReactNode;
@@ -15,8 +16,8 @@ export async function generateMetadata({
 }: MerchantLayoutProps): Promise<Metadata> {
   const { shopId } = await params;
 
-  // Fetch real shop data
-  const shopProfile = await fetchShopProfile({
+  // Fetch real shop data using service directly (server-side)
+  const shopProfile = await shopService.getProfile({
     shop_id: shopId,
   });
 
@@ -58,15 +59,20 @@ export default async function MerchantLayout({
 }: MerchantLayoutProps) {
   const { shopId } = await params;
 
-  // Fetch shop profile for the shop provider
-  const shopProfile = await fetchShopProfile({
+  // Fetch shop profile for the shop provider (server-side)
+  const shopProfile = await shopService.getProfile({
     shop_id: shopId,
   });
 
   return (
     <ShopProvider initialShopData={shopProfile}>
       <div className="min-h-screen bg-gray-50">
-        <ThemeHandler>{children}</ThemeHandler>
+        <ThemeHandler>
+          {/* Breadcrumb wrapper - conditionally rendered based on theme and route */}
+          <BreadcrumbWrapper />
+
+          {children}
+        </ThemeHandler>
       </div>
     </ShopProvider>
   );

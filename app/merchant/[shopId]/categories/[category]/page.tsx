@@ -2,8 +2,12 @@
 
 import { useEffect } from "react";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
-import { useProductsStore } from "@/stores";
+import { useShopStore, useProductsStore } from "@/stores";
 import { BasicCategoryPage } from "@/app/_themes/basic/modules/home/basic-category-page";
+import { AuroraCategoryPage } from "@/app/_themes/aurora/modules/category/aurora-category-page";
+import { LuxuraCategoryPage } from "@/app/_themes/luxura/modules/category/luxura-category-page";
+import { PremiumCategoryPage } from "@/app/_themes/premium/modules/category/premium-category-page";
+import { SelloraCategoryPage } from "@/app/_themes/sellora/modules/category/sellora-category-page";
 import { useShopProfile, useShopInventories, useShopCategories } from "@/hooks";
 
 // Loading component
@@ -45,6 +49,7 @@ interface CategoryPageContentProps {
 function CategoryPageContent({ shopId, categoryId }: CategoryPageContentProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const { shopDetails } = useShopStore();
   const { setFilters } = useProductsStore();
 
   // Fetch shop profile using React Query hook (auto-syncs to store)
@@ -116,13 +121,32 @@ function CategoryPageContent({ shopId, categoryId }: CategoryPageContentProps) {
     );
   }
 
-  // Return category page with Basic theme
+  // Get the theme name from shop details
+  const themeName = shopDetails?.shop_theme?.theme_name || "Basic";
+
+  // Render the appropriate theme category page
+  const renderThemePage = () => {
+    switch (themeName) {
+      case "Aurora":
+        return <AuroraCategoryPage />;
+      case "Luxura":
+        return <LuxuraCategoryPage />;
+      case "Premium":
+        return <PremiumCategoryPage />;
+      case "Sellora":
+        return <SelloraCategoryPage />;
+      case "Basic":
+      default:
+        return <BasicCategoryPage />;
+    }
+  };
+
   return (
     <div
-      data-theme="basic"
+      data-theme={themeName.toLowerCase()}
       className="min-h-screen bg-gray-50 dark:bg-gray-900"
     >
-      <BasicCategoryPage />
+      {renderThemePage()}
     </div>
   );
 }

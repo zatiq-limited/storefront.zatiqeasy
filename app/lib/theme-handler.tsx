@@ -4,6 +4,14 @@ import React, { useEffect } from "react";
 import { useShopStore } from "@/stores";
 import { BasicHeader } from "@/app/_themes/basic/components/header";
 import { BasicFooter } from "@/app/_themes/basic/components/footer";
+import { AuroraHeader } from "@/app/_themes/aurora/components/header";
+import { AuroraFooter } from "@/app/_themes/aurora/components/footer";
+import { LuxuraHeader } from "@/app/_themes/luxura/components/header";
+import { LuxuraFooter } from "@/app/_themes/luxura/components/footer";
+import { PremiumHeader } from "@/app/_themes/premium/components/header";
+import { PremiumFooter } from "@/app/_themes/premium/components/footer";
+import { SelloraHeader } from "@/app/_themes/sellora/components/header";
+import { SelloraFooter } from "@/app/_themes/sellora/components/footer";
 import { getThemeColors, getThemeColor } from "@/lib/utils";
 
 // Theme handler similar to old project
@@ -52,22 +60,41 @@ export function ThemeHandler({ children }: { children: React.ReactNode }) {
         </>
       );
 
-    // Add other themes here when migrated
-    case "Premium":
-      // TODO: Implement PremiumHeader and PremiumFooter
-      return <>{children}</>;
-
     case "Aurora":
-      // TODO: Implement AuroraHeader and AuroraFooter
-      return <>{children}</>;
+      return (
+        <>
+          <AuroraHeader />
+          {children}
+          <AuroraFooter />
+        </>
+      );
+
+    case "Premium":
+      return (
+        <>
+          <PremiumHeader />
+          {children}
+          <PremiumFooter />
+        </>
+      );
 
     case "Luxura":
-      // TODO: Implement LuxuraHeader and LuxuraFooter
-      return <>{children}</>;
+      return (
+        <>
+          <LuxuraHeader />
+          {children}
+          <LuxuraFooter />
+        </>
+      );
 
     case "Sellora":
-      // TODO: Implement SelloraHeader and SelloraFooter
-      return <>{children}</>;
+      return (
+        <>
+          <SelloraHeader />
+          {children}
+          <SelloraFooter />
+        </>
+      );
 
     default:
       return <>{children}</>;
