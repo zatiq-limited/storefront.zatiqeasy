@@ -38,14 +38,25 @@ interface OrderData {
   customer_phone: string;
   customer_address: string;
   delivery_charge: number;
+  delivery_zone?: string;
   tax_amount: number;
+  tax_percentage?: number;
   total_amount: number;
   payment_type: PaymentType;
   pay_now_amount: number;
+  advance_payment_amount?: number;
+  discount_amount?: number;
+  discount_percentage?: number;
   receipt_items: ReceiptItem[];
   type: "Online";
   status: OrderStatus;
-  note: string;
+  notes?: string;
+  redirect_root_url?: string;
+  district?: string;
+  email?: string;
+  mfs_provider?: string;
+  mfs_payment_phone?: string;
+  mfs_transaction_id?: string;
 }
 
 interface CommonCheckoutFormProps {
@@ -362,21 +373,38 @@ export function CommonCheckoutForm({ onSubmit, onOrderComplete, preventRedirect 
         return mapping[method] || PaymentType.COD;
       };
 
-      // Create order payload
+      // Build redirect URL matching old project pattern
+      const baseUrl = typeof window !== "undefined" ? window.location.origin : "";
+      const shopBaseUrl = shopDetails?.baseUrl || "";
+      const redirectRootUrl = `${baseUrl}${shopBaseUrl}/payment-confirm`;
+
+      // Create order payload - matching old project structure exactly
       const orderPayload = {
         shop_id: shopDetails?.id || 1,
         customer_name: data.customer_name,
         customer_phone: fullPhoneNumber || data.customer_phone,
         customer_address: data.customer_address,
         delivery_charge: deliveryCharge,
+        delivery_zone: selectedSpecificDeliveryZone || "Others",
         tax_amount: taxAmount,
+        tax_percentage: shopDetails?.vat_tax || 0,
         total_amount: grandTotal,
         payment_type: paymentMethodToType(selectedPaymentMethod || "cod"),
         pay_now_amount: getPayNowAmount(),
+        advance_payment_amount: getPayNowAmount(),
+        discount_amount: discountAmount,
+        discount_percentage: 0,
         receipt_items: receiptItems,
         type: "Online" as const,
         status: OrderStatus.ORDER_PLACED,
-        note: data.note || "",
+        notes: data.note || "",
+        redirect_root_url: redirectRootUrl,
+        district: selectedDistrict || "",
+        email: data.email || "",
+        // Self MFS fields
+        mfs_provider: data.mfs_provider || "",
+        mfs_payment_phone: data.mfs_payment_phone || "",
+        mfs_transaction_id: data.mfs_transaction_id || "",
       };
 
       // Create order

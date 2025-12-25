@@ -80,6 +80,7 @@ export interface CheckoutFormData {
   customer_name: string;
   customer_phone: string;
   customer_email?: string;
+  email?: string;
   customer_address: string;
   division?: string;
   district?: string;
@@ -87,6 +88,8 @@ export interface CheckoutFormData {
   delivery_zone?: string;
   note?: string;
   mfs_provider?: string;
+  mfs_payment_phone?: string;
+  mfs_transaction_id?: string;
 }
 
 // Checkout calculations
