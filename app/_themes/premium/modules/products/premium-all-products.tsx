@@ -195,10 +195,10 @@ export function PremiumAllProducts() {
         </div>
       )}
 
-      <div className="md:pt-[24px] pb-[84px]">
+      <div className="md:pt-6 pb-21">
         {/* Header */}
         <div className="flex justify-between items-center">
-          <h1 className="text-gray-700 dark:text-gray-200 text-xl lg:text-3xl font-normal leading-[38px]">
+          <h1 className="text-gray-700 dark:text-gray-200 text-xl lg:text-3xl font-normal leading-9.5">
             {t("all_products")} ({totalProducts})
           </h1>
           <button
@@ -211,7 +211,7 @@ export function PremiumAllProducts() {
             />
           </button>
           {totalProducts > 0 && (
-            <div className="hidden lg:flex pl-2 h-[55px] rounded-xl items-center justify-between">
+            <div className="hidden lg:flex pl-2 h-13.75 rounded-xl items-center justify-between">
               <div className="text-black-1.2 text-sm flex items-center gap-2">
                 <span className="text-gray-700 dark:text-gray-200 text-base whitespace-nowrap">
                   {t("sort_by")}
@@ -219,7 +219,7 @@ export function PremiumAllProducts() {
                 <select
                   onChange={handleInventorySort}
                   value={sortOrder}
-                  className="w-[182px] text-sm rounded-none text-black-2 dark:text-gray-200 bg-white dark:bg-black-2 border border-gray-300 dark:border-gray-600"
+                  className="w-45 text-sm rounded-none text-black-2 dark:text-gray-200 bg-white dark:bg-black-2 border border-gray-300 dark:border-gray-600"
                   style={{ borderRadius: "0", padding: "8px 14px" }}
                 >
                   <option value="">{t("default")}</option>
@@ -235,7 +235,7 @@ export function PremiumAllProducts() {
         <CategoryHorizontalList className="my-3 md:my-4 xl:my-5" />
 
         {/* Main Content */}
-        <div className="pt-[24px] flex gap-10">
+        <div className="pt-6 flex gap-10">
           {/* Left Sidebar - Price Filter */}
           <div className="hidden lg:block lg:w-1/5">
             <div className="pb-4 border-b border-b-gray-300 dark:border-b-gray-600 flex items-center justify-between">
@@ -291,7 +291,7 @@ export function PremiumAllProducts() {
                 />
               ))
             ) : (
-              <div className="text-gray-700 dark:text-gray-200 w-full col-span-2 md:col-span-3 lg:col-span-4 text-xl text-center flex items-center h-full justify-center min-h-[200px]">
+              <div className="text-gray-700 dark:text-gray-200 w-full col-span-2 md:col-span-3 lg:col-span-4 text-xl text-center flex items-center h-full justify-center min-h-50">
                 {t("no_products_found")}
               </div>
             )}
