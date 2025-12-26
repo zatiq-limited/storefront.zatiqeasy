@@ -134,7 +134,7 @@ export function RelatedProducts({
               768: { slidesPerView: 3, spaceBetween: 20 },
               1024: { slidesPerView: 4, spaceBetween: 20 },
             }}
-            className="!pb-12"
+            className="pb-12!"
             pagination={{
               clickable: true,
               dynamicBullets: true,

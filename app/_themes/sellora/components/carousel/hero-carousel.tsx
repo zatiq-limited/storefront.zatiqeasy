@@ -52,13 +52,13 @@ export function HeroCarousel({ tag = "primary" }: HeroCarouselProps) {
     (currentCarousel.button_link.startsWith("http") || currentCarousel.button_link.startsWith("/"));
 
   return (
-    <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] overflow-hidden">
+    <div className="max-w-screen relative overflow-hidden">
       <div
         className={cn(
           "relative w-full select-none",
           tag === "secondary"
-            ? "h-[210px] sm:h-[500px] md:h-[600px] lg:h-[700px] xl:h-[580px]"
-            : "h-[210px] sm:h-[500px] md:h-[600px] lg:h-[700px] xl:h-[800px]",
+            ? "h-52.5 sm:h-125 md:h-150 lg:h-175 xl:h-145"
+            : "h-52.5 sm:h-125 md:h-150 lg:h-175 xl:h-200",
           isValidLink && "cursor-pointer"
         )}
         onClick={() => {

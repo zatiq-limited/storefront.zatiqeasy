@@ -20,7 +20,10 @@ export function OurCollectionSection() {
   const baseUrl = shopDetails?.baseUrl || "";
 
   // Get selected categories from theme
-  const categories = (shopDetails?.shop_theme as unknown as { selected_categories?: Category[] })?.selected_categories?.slice(0, 6) || [];
+  const categories =
+    (
+      shopDetails?.shop_theme as unknown as { selected_categories?: Category[] }
+    )?.selected_categories?.slice(0, 6) || [];
 
   if (categories.length === 0) return null;
 

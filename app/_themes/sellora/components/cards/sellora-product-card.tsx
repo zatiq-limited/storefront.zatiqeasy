@@ -47,10 +47,10 @@ export function SelloraProductCard({
     image_url,
     images = [],
     variant_types = [],
-    quantity = 0,
   } = product;
 
-  const isStockOut = quantity === 0;
+  // Check if out of stock - matches Basic theme: product.quantity <= 0
+  const isStockOut = (product.quantity ?? 0) <= 0;
   const hasVariants = variant_types && variant_types.length > 0;
   const discountPercent = old_price && old_price > price
     ? Math.round(((old_price - price) / old_price) * 100)
@@ -117,17 +117,17 @@ export function SelloraProductCard({
     <div className="group">
       <div role="button" onClick={handleNavigate} className="cursor-pointer">
         {/* Image Container */}
-        <div className="relative w-full aspect-[10/16] overflow-hidden">
+        <div className="relative w-full aspect-10/16 overflow-hidden">
           <FallbackImage
             src={getInventoryThumbImageUrl(displayImage || "")}
             fill
             alt={name}
-            className="w-full aspect-[10/16] object-cover object-top rounded-none transition-transform duration-300 group-hover:scale-105"
+            className="w-full aspect-10/16 object-cover object-top rounded-none transition-transform duration-300 group-hover:scale-105"
           />
 
           {/* Out of Stock Overlay */}
           {isStockOut && (
-            <div className="absolute w-full py-2 top-1/2 -translate-y-1/2 text-sm text-center bg-black/60 text-white backdrop-blur-sm">
+            <div className="absolute w-full py-2 top-1/2 -translate-y-1/2 text-sm text-center bg-black/60 text-white backdrop-blur-sm z-20">
               {t("out_of_stock")}
             </div>
           )}
