@@ -38,11 +38,24 @@ export function CategoryHorizontalList({
   const selectedCategory =
     searchParams.get("selected_category") || searchParams.get("category"); // For filtering
 
-  // Get current root category from URL (derived from category_id param)
+  // For fromCategory mode, extract category ID from pathname (e.g., /merchant/123/categories/456 -> 456)
+  const categoryIdFromPath = useMemo(() => {
+    if (!fromCategory) return null;
+    const pathParts = pathname.split("/");
+    const categoriesIndex = pathParts.indexOf("categories");
+    if (categoriesIndex !== -1 && pathParts[categoriesIndex + 1]) {
+      return pathParts[categoriesIndex + 1];
+    }
+    return null;
+  }, [fromCategory, pathname]);
+
+  // Get current root category from URL (derived from category_id param or path)
   const currentRootCategory = useMemo(() => {
-    if (!categoryIdParam) return null;
-    return categories.find((cat) => String(cat.id) === categoryIdParam) || null;
-  }, [categoryIdParam, categories]);
+    // For fromCategory mode, use path-based category ID
+    const categoryId = fromCategory ? categoryIdFromPath : categoryIdParam;
+    if (!categoryId) return null;
+    return categories.find((cat) => String(cat.id) === categoryId) || null;
+  }, [fromCategory, categoryIdFromPath, categoryIdParam, categories]);
 
   // Get the visible category list based on current root
   const categoryList = useMemo(() => {
@@ -198,56 +211,54 @@ export function CategoryHorizontalList({
     <div className={cn("w-full", className)}>
       <div className="flex overflow-y-hidden overflow-x-auto pb-2 gap-1.5 md:pb-0 scroll-mb-1 category-x-scrollbar">
         {/* Show "All [Parent Category]" card with back button when viewing subcategories */}
-        {currentRootCategory?.id ? (
-          !fromCategory && (
+        {currentRootCategory?.id && !fromCategory ? (
+          <div
+            key={currentRootCategory.id}
+            className={cn(
+              "w-25 min-w-25! md:w-37.5 md:min-w-37.5! aspect-square relative cursor-pointer rounded-lg outline-solid outline-4 m-1 md:m-2",
+              {
+                "outline-blue-zatiq":
+                  selectedCategory === String(currentRootCategory.id),
+                "outline-white":
+                  selectedCategory !== String(currentRootCategory.id),
+              }
+            )}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              // Click on "All [Category]" filters by this category
+              router.push(
+                buildUrl({
+                  category_id: String(currentRootCategory.id),
+                  selected_category: String(currentRootCategory.id),
+                })
+              );
+            }}
+          >
+            <FallbackImage
+              src={currentRootCategory.image_url ?? ""}
+              alt="image"
+              height={310}
+              width={310}
+              className="h-full w-full rounded-lg object-cover"
+            />
+            <div className="absolute bottom-0 w-full bg-linear-to-t from-black/80 to-transparent pt-5 pl-2 lg:pl-3 pb-1 lg:pb-2 rounded-lg">
+              <h3 className="bottom-2 lg:bottom-3 text-white text-sm md:text-base font-medium line-clamp-2 leading-none">
+                All {currentRootCategory.name}
+              </h3>
+            </div>
+            {/* Back button */}
             <div
-              key={currentRootCategory.id}
-              className={cn(
-                "w-25 min-w-25! md:w-37.5 md:min-w-37.5! aspect-square relative cursor-pointer rounded-lg outline-solid outline-4 m-1 md:m-2",
-                {
-                  "outline-blue-zatiq":
-                    selectedCategory === String(currentRootCategory.id),
-                  "outline-white":
-                    selectedCategory !== String(currentRootCategory.id),
-                }
-              )}
+              className="absolute top-1 left-1 md:top-2 md:left-3 text-red-500"
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                // Click on "All [Category]" filters by this category
-                router.push(
-                  buildUrl({
-                    category_id: String(currentRootCategory.id),
-                    selected_category: String(currentRootCategory.id),
-                  })
-                );
+                handleSelectCategory(-1);
               }}
             >
-              <FallbackImage
-                src={currentRootCategory.image_url ?? ""}
-                alt="image"
-                height={310}
-                width={310}
-                className="h-full w-full rounded-lg object-cover"
-              />
-              <div className="absolute bottom-0 w-full bg-linear-to-t from-black/80 to-transparent pt-5 pl-2 lg:pl-3 pb-1 lg:pb-2 rounded-lg">
-                <h3 className="bottom-2 lg:bottom-3 text-white text-sm md:text-base font-medium line-clamp-2 leading-none">
-                  All {currentRootCategory.name}
-                </h3>
-              </div>
-              {/* Back button */}
-              <div
-                className="absolute top-1 left-1 md:top-2 md:left-3 text-red-500"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  handleSelectCategory(-1);
-                }}
-              >
-                <ArrowLeftCircle className="w-5 md:w-6" />
-              </div>
+              <ArrowLeftCircle className="w-5 md:w-6" />
             </div>
-          )
+          </div>
         ) : (
           /* "All products/categories" card - shown when viewing root categories */
           <div
