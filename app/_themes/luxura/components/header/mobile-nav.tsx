@@ -1,12 +1,11 @@
 "use client";
 
-import React from "react";
-import Link from "next/link";
+import { useState } from "react";
 import { X } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useShopStore } from "@/stores/shopStore";
-import { useProductsStore } from "@/stores/productsStore";
+import { SidebarCategory } from "./sidebar-category";
+import LanguageToggler from "./language-toggler";
 
 interface MobileNavProps {
   isOpen: boolean;
@@ -14,113 +13,58 @@ interface MobileNavProps {
 }
 
 export function MobileNav({ isOpen, onClose }: MobileNavProps) {
-  const { t } = useTranslation();
+  const { i18n } = useTranslation();
   const { shopDetails } = useShopStore();
-  const categories = useProductsStore((state) => state.categories);
 
-  const baseUrl = shopDetails?.baseUrl || "";
+  const [langValue, setLangValue] = useState<string>(
+    shopDetails?.default_language_code ?? "en"
+  );
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <>
-          {/* Backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+    <>
+      {/* Backdrop */}
+      <div
+        className={`lg:hidden w-full bg-black/20 bg-opacity-50 fixed top-0 right-0 h-full z-[1000] ${
+          isOpen ? "flex" : "hidden"
+        }`}
+        onClick={onClose}
+      />
+
+      {/* Sidebar */}
+      <div
+        className={`fixed overflow-y-scroll top-0 left-0 z-[1001] w-[266px] sm:w-[300px] bg-white dark:bg-black-27 h-full py-4 transition-transform duration-300 ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        {/* Close Button */}
+        <div className="flex justify-end mb-4 pr-4">
+          <button
+            className="h-9 w-9 bg-blue-zatiq/15 flex justify-center items-center rounded-full cursor-pointer"
             onClick={onClose}
-            className="fixed inset-0 bg-black/50 z-[150]"
-          />
-
-          {/* Sidebar */}
-          <motion.div
-            initial={{ x: "-100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "-100%" }}
-            transition={{ type: "tween", duration: 0.3 }}
-            className="fixed left-0 top-0 h-full w-[280px] max-w-[80vw] bg-white dark:bg-black-27 z-[200] shadow-xl overflow-y-auto"
           >
-            {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b dark:border-gray-700">
-              <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">
-                {t("menu")}
-              </h2>
-              <button
-                onClick={onClose}
-                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
-                aria-label="Close menu"
-              >
-                <X size={20} className="text-gray-600 dark:text-gray-400" />
-              </button>
-            </div>
+            <X size={20} className="text-red-500 text-xl" />
+          </button>
+        </div>
 
-            {/* Navigation Links */}
-            <div className="p-4">
-              <nav className="space-y-2">
-                <Link
-                  href={baseUrl || "/"}
-                  onClick={onClose}
-                  className="block px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors font-medium"
-                >
-                  {t("home")}
-                </Link>
-                <Link
-                  href={`${baseUrl}/products`}
-                  onClick={onClose}
-                  className="block px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors font-medium"
-                >
-                  {t("products")}
-                </Link>
-                <Link
-                  href={`${baseUrl}/categories`}
-                  onClick={onClose}
-                  className="block px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors font-medium"
-                >
-                  {t("categories")}
-                </Link>
-              </nav>
-            </div>
+        {/* Category Sidebar */}
+        <SidebarCategory setShowMobileNav={(value) => !value && onClose()} />
 
-            {/* Categories Section */}
-            {categories && categories.length > 0 && (
-              <div className="p-4 border-t dark:border-gray-700">
-                <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
-                  {t("categories")}
-                </h3>
-                <div className="space-y-1 max-h-[300px] overflow-y-auto">
-                  {categories.slice(0, 10).map((category) => (
-                    <Link
-                      key={category.id}
-                      href={`${baseUrl}/categories/${category.id}?selected_category=${category.id}`}
-                      onClick={onClose}
-                      className="block px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
-                    >
-                      {category.name}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Shop Info */}
-            <div className="p-4 border-t dark:border-gray-700 mt-auto">
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                {shopDetails?.shop_name}
-              </p>
-              {shopDetails?.shop_phone && (
-                <a
-                  href={`tel:${shopDetails.shop_phone}`}
-                  className="text-sm text-blue-500 hover:underline mt-1 block"
-                >
-                  {shopDetails.shop_phone}
-                </a>
-              )}
-            </div>
-          </motion.div>
-        </>
-      )}
-    </AnimatePresence>
+        {/* Language Toggler */}
+        <div
+          className="flex mt-5 flex-col gap-5 items-start pl-7 pr-5"
+          onClick={onClose}
+        >
+          <div>
+            <LanguageToggler
+              className="flex items-center gap-2"
+              langValue={langValue}
+              setLangValue={setLangValue}
+              i18n={i18n}
+            />
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
 

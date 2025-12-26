@@ -4,7 +4,11 @@ import React, { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { useShopStore } from "@/stores/shopStore";
-import { useCartStore, selectTotalItems, selectSubtotal } from "@/stores/cartStore";
+import {
+  useCartStore,
+  selectTotalItems,
+  selectSubtotal,
+} from "@/stores/cartStore";
 import { CartFloatingBtn } from "@/components/features/cart/cart-floating-btn";
 import type { Product } from "@/stores/productsStore";
 
@@ -34,8 +38,16 @@ const LuxuraSelectedProductsByCategorySection = dynamic(
   { ssr: false }
 );
 
+const LuxuraHomeSelectedCategorySection = dynamic(
+  () => import("./sections/luxura-home-selected-category-section"),
+  { ssr: false }
+);
+
 const VariantSelectorModal = dynamic(
-  () => import("@/components/products/variant-selector-modal").then(mod => ({ default: mod.VariantSelectorModal })),
+  () =>
+    import("@/components/products/variant-selector-modal").then((mod) => ({
+      default: mod.VariantSelectorModal,
+    })),
   { ssr: false }
 );
 
@@ -48,8 +60,12 @@ export function LuxuraHomePage() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   const baseUrl = shopDetails?.baseUrl || "";
-  const selectedInventories = (shopDetails?.shop_theme as unknown as { selected_inventories?: Product[] })?.selected_inventories || [];
-  const onSaleInventories = (shopDetails?.shop_theme as unknown as { on_sale_inventories?: Product[] })?.on_sale_inventories || [];
+  const selectedInventories =
+    (shopDetails?.shop_theme as unknown as { selected_inventories?: Product[] })
+      ?.selected_inventories || [];
+  const onSaleInventories =
+    (shopDetails?.shop_theme as unknown as { on_sale_inventories?: Product[] })
+      ?.on_sale_inventories || [];
   const hasItems = totalProducts > 0;
 
   // Navigate to product detail
@@ -75,9 +91,9 @@ export function LuxuraHomePage() {
       />
 
       {/* Main Content - Luxura uses larger spacing (84px on desktop) */}
-      <div className="flex flex-col py-[24px] md:py-[60px] xl:py-[84px] gap-[36px] md:gap-[60px] xl:gap-[84px]">
+      <div className="flex flex-col py-6 md:py-15 xl:py-21 gap-9 md:gap-15 xl:gap-21">
         {/* Hero Section with Sidebar Categories - Premium width 78% */}
-        <div className="w-[95%] md:w-[95%] lg:w-[78%] mx-auto flex flex-col gap-8 lg:gap-20">
+        <div className="container flex flex-col gap-8 lg:gap-20">
           <LuxuraHeroSection />
           <LuxuraCategorySection />
         </div>
@@ -88,8 +104,8 @@ export function LuxuraHomePage() {
           navigateProductDetails={navigateProductDetails}
         />
 
-        {/* Featured Products & Flash Sale */}
-        <div className="w-[95%] md:w-[90%] lg:w-[78%] mx-auto flex flex-col gap-[48px] md:gap-[60px] xl:gap-[84px]">
+        {/* Featured Products, Category Carousel & Flash Sale */}
+        <div className="container flex flex-col gap-12 md:gap-15 xl:gap-21">
           {/* Featured Products */}
           {(selectedInventories as Product[]).length > 0 && (
             <LuxuraFeaturedProductsSection
@@ -99,6 +115,9 @@ export function LuxuraHomePage() {
               title="featured_products"
             />
           )}
+
+          {/* Category Carousel */}
+          <LuxuraHomeSelectedCategorySection />
 
           {/* Flash Sale / On Sale Products */}
           {(onSaleInventories as Product[]).length > 0 && (

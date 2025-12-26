@@ -1,51 +1,48 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { MoveRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { cn } from "@/lib/utils";
+import { useShopStore } from "@/stores/shopStore";
 
-interface SectionHeaderProps {
+type Props = {
   text: string;
-  viewAllLink?: string;
-  showViewAll?: boolean;
-  className?: string;
-  centered?: boolean;
-}
+  link?: string;
+  viewMoreTextKey?: string;
+};
 
-export function SectionHeader({
+const SectionHeader = ({
   text,
-  viewAllLink,
-  showViewAll = true,
-  className,
-  centered = false,
-}: SectionHeaderProps) {
+  viewMoreTextKey = "view_more",
+  link,
+}: Props) => {
+  const { shopDetails } = useShopStore();
   const { t } = useTranslation();
 
   return (
-    <div
-      className={cn(
-        "flex items-center mb-6 md:mb-8",
-        centered ? "justify-center" : "justify-between",
-        className
-      )}
-    >
-      <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white">
-        {text}
-      </h2>
-
-      {showViewAll && viewAllLink && !centered && (
-        <Link
-          href={viewAllLink}
-          className="flex items-center gap-1 text-blue-zatiq hover:text-blue-600 transition-colors text-sm md:text-base font-medium"
-        >
-          {t("view_more")}
-          <ArrowRight size={18} />
-        </Link>
-      )}
-    </div>
+    <>
+      <div className="grid grid-cols-2 lg:grid-cols-6 mb-4 md:mb-8 xl:mb-11">
+        <div className="hidden lg:block"></div>
+        <div className="lg:col-span-4">
+          <h2 className="lg:text-center text-[28px] md:text-[32px] lg:text-[48px] leading-snug text-[#4B5563] dark:text-blue-zatiq line-clamp-1">
+            {text}
+          </h2>
+        </div>
+        <div className="flex items-center justify-end">
+          <Link
+            href={link ? `${shopDetails?.baseUrl}${link}` : "/"}
+            className="flex items-center justify-center gap-4 text-4 md:text-5 text-[#4B5563]/50 dark:text-blue-zatiq font-bold hover:text-blue-zatiq transition"
+          >
+            <span>{t(viewMoreTextKey)}</span>
+            <span>
+              <MoveRight className="text-2xl" />
+            </span>
+          </Link>
+        </div>
+      </div>
+    </>
   );
-}
+};
 
+export { SectionHeader };
 export default SectionHeader;

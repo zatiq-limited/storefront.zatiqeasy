@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import { useShopStore } from "@/stores/shopStore";
 import { FallbackImage } from "@/components/ui/fallback-image";
 import { cn } from "@/lib/utils";
@@ -18,46 +18,40 @@ export function LuxuraCategoryCard({
   id,
   name,
   image_url,
-  isOnSale,
+  isOnSale = true,
   className,
 }: LuxuraCategoryCardProps) {
+  const { t } = useTranslation();
   const { shopDetails } = useShopStore();
   const baseUrl = shopDetails?.baseUrl || "";
 
   return (
     <Link
-      href={`${baseUrl}/categories/${id}?selected_category=${id}`}
+      href={`${baseUrl}/categories/${id}?selected_category=${id}&category_id=${id}`}
       className={cn(
-        "group relative block rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 aspect-[420/360]",
+        "flex flex-col items-center justify-center aspect-square shadow-lg relative",
         className
       )}
     >
       {/* Image */}
-      {image_url ? (
-        <FallbackImage
-          src={image_url}
-          alt={name}
-          fill
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
-        />
-      ) : (
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900 dark:to-blue-800" />
-      )}
-
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-
-      {/* On Sale Badge */}
-      {isOnSale && (
-        <div className="absolute top-3 right-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
-          On Sale
-        </div>
-      )}
-
-      {/* Category Name */}
-      <div className="absolute bottom-0 left-0 right-0 p-4">
-        <h3 className="text-white text-lg md:text-xl font-bold line-clamp-2">
-          {name}
+      <FallbackImage
+        src={image_url ?? ""}
+        alt={name}
+        height={100}
+        width={140}
+        className="w-full rounded-lg object-cover aspect-square"
+      />
+      {/* Bottom Overlay with Category Name */}
+      <div className="absolute bottom-0 w-full bg-blue-zatiq/75 px-3 py-2 md:px-5 md:py-3 lg:py-4 lg:px-6 rounded-lg">
+        <h3 className="text-white text-sm sm:text-base lg:text-lg font-medium">
+          {isOnSale ? (
+            <>
+              {t("on_sale")} <br />
+              <span className="line-clamp-1">{name}</span>
+            </>
+          ) : (
+            <span className="line-clamp-1 text-center">{name}</span>
+          )}
         </h3>
       </div>
     </Link>

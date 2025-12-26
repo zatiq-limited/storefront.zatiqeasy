@@ -45,7 +45,7 @@ export function LuxuraCategoryPage() {
 
   return (
     <>
-      <div className="pb-20 w-[95%] md:w-[90%] lg:w-[78%] mx-auto">
+      <div className="container pb-20">
         {/* Variant Selector Modal */}
         <VariantSelectorModal
           product={selectedProduct}
@@ -57,7 +57,6 @@ export function LuxuraCategoryPage() {
         <div className="pt-6 md:pt-9">
           <SectionHeader
             text={category?.name || "Category"}
-            showViewAll={false}
           />
         </div>
 

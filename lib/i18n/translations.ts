@@ -107,6 +107,11 @@ export const translations = {
       already_in_cart: "Already in cart",
       no_more_items_remaining: "No more items remaining",
       no_products_in_category: "No products in this category",
+      search_for_products: "Search for products",
+      type_to_search: "Type to search for products",
+      home: "Home",
+      menu: "Menu",
+      more_categories: "More categories",
     },
   },
   bn: {
@@ -217,6 +222,11 @@ export const translations = {
       already_in_cart: "কার্টে আছে",
       no_more_items_remaining: "আর কোন আইটেম বাকি নেই",
       no_products_in_category: "এই বিভাগে কোন পণ্য নেই",
+      search_for_products: "পণ্য খুঁজুন",
+      type_to_search: "পণ্য খুঁজতে টাইপ করুন",
+      home: "হোম",
+      menu: "মেনু",
+      more_categories: "আরও ক্যাটাগরি",
     },
   },
 };
