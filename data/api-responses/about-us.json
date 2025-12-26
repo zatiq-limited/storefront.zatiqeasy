@@ -49,7 +49,7 @@
                     "blocks": [
                       {
                         "wrapper": "div",
-                        "class": "max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 text-center",
+                        "class": "container px-4 sm:px-6 lg:px-8 text-center",
                         "blocks": [
                           {
                             "wrapper": "p",
@@ -112,7 +112,7 @@
             "blocks": [
               {
                 "wrapper": "div",
-                "class": "max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8",
+                "class": "container px-4 sm:px-6 lg:px-8",
                 "blocks": [
                   {
                     "wrapper": "div",
@@ -217,7 +217,7 @@
             "blocks": [
               {
                 "wrapper": "div",
-                "class": "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8",
+                "class": "container px-4 sm:px-6 lg:px-8",
                 "blocks": [
                   {
                     "wrapper": "div",
@@ -674,7 +674,7 @@
             "blocks": [
               {
                 "wrapper": "div",
-                "class": "max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8",
+                "class": "container px-4 sm:px-6 lg:px-8",
                 "blocks": [
                   {
                     "wrapper": "div",
@@ -857,7 +857,7 @@
             "blocks": [
               {
                 "wrapper": "div",
-                "class": "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8",
+                "class": "container px-4 sm:px-6 lg:px-8",
                 "blocks": [
                   {
                     "wrapper": "div",
@@ -886,7 +886,7 @@
               },
               {
                 "wrapper": "div",
-                "class": "relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8",
+                "class": "relative container px-4 sm:px-6 lg:px-8",
                 "blocks": [
                   {
                     "wrapper": "div",
@@ -946,22 +946,66 @@
                                       {
                                         "wrapper": "p",
                                         "class": "text-xs sm:text-sm font-medium mb-2 sm:mb-3 truncate",
-                                        "style": { "color": "#111827", "opacity": 0.6 },
+                                        "style": {
+                                          "color": "#111827",
+                                          "opacity": 0.6
+                                        },
                                         "content": "CEO & Founder"
                                       },
                                       {
                                         "wrapper": "p",
                                         "class": "text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2",
-                                        "style": { "color": "#111827", "opacity": 0.7 },
+                                        "style": {
+                                          "color": "#111827",
+                                          "opacity": 0.7
+                                        },
                                         "content": "Visionary leader with 15+ years in e-commerce"
                                       },
                                       {
                                         "wrapper": "div",
                                         "class": "flex gap-2 sm:gap-3",
                                         "blocks": [
-                                          { "wrapper": "a", "class": "text-gray-500 hover:text-blue-600 transition-colors", "href": "https://linkedin.com", "target": "_blank", "blocks": [{ "wrapper": "svg", "type": "icon", "icon": "linkedin", "class": "w-5 h-5" }] },
-                                          { "wrapper": "a", "class": "text-gray-500 hover:text-gray-900 transition-colors", "href": "https://twitter.com", "target": "_blank", "blocks": [{ "wrapper": "svg", "type": "icon", "icon": "twitter", "class": "w-5 h-5" }] },
-                                          { "wrapper": "a", "class": "text-gray-500 hover:text-red-600 transition-colors", "href": "mailto:sarah@example.com", "blocks": [{ "wrapper": "svg", "type": "icon", "icon": "mail", "class": "w-5 h-5" }] }
+                                          {
+                                            "wrapper": "a",
+                                            "class": "text-gray-500 hover:text-blue-600 transition-colors",
+                                            "href": "https://linkedin.com",
+                                            "target": "_blank",
+                                            "blocks": [
+                                              {
+                                                "wrapper": "svg",
+                                                "type": "icon",
+                                                "icon": "linkedin",
+                                                "class": "w-5 h-5"
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "wrapper": "a",
+                                            "class": "text-gray-500 hover:text-gray-900 transition-colors",
+                                            "href": "https://twitter.com",
+                                            "target": "_blank",
+                                            "blocks": [
+                                              {
+                                                "wrapper": "svg",
+                                                "type": "icon",
+                                                "icon": "twitter",
+                                                "class": "w-5 h-5"
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "wrapper": "a",
+                                            "class": "text-gray-500 hover:text-red-600 transition-colors",
+                                            "href": "mailto:sarah@example.com",
+                                            "blocks": [
+                                              {
+                                                "wrapper": "svg",
+                                                "type": "icon",
+                                                "icon": "mail",
+                                                "class": "w-5 h-5"
+                                              }
+                                            ]
+                                          }
                                         ]
                                       }
                                     ]
@@ -983,22 +1027,74 @@
                                     "wrapper": "div",
                                     "class": "relative w-full aspect-square overflow-hidden",
                                     "blocks": [
-                                      { "wrapper": "img", "class": "w-full h-full object-cover group-hover:scale-105 transition-transform duration-500", "src": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=faces", "alt": "Michael Chen" }
+                                      {
+                                        "wrapper": "img",
+                                        "class": "w-full h-full object-cover group-hover:scale-105 transition-transform duration-500",
+                                        "src": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=faces",
+                                        "alt": "Michael Chen"
+                                      }
                                     ]
                                   },
                                   {
                                     "wrapper": "div",
                                     "class": "p-3 sm:p-4 lg:p-5",
                                     "blocks": [
-                                      { "wrapper": "h3", "class": "text-base sm:text-lg lg:text-xl font-bold mb-0.5 sm:mb-1 truncate", "style": { "color": "#111827" }, "content": "Michael Chen" },
-                                      { "wrapper": "p", "class": "text-xs sm:text-sm font-medium mb-2 sm:mb-3 truncate", "style": { "color": "#111827", "opacity": 0.6 }, "content": "CTO" },
-                                      { "wrapper": "p", "class": "text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2", "style": { "color": "#111827", "opacity": 0.7 }, "content": "Tech innovator driving our digital transformation" },
+                                      {
+                                        "wrapper": "h3",
+                                        "class": "text-base sm:text-lg lg:text-xl font-bold mb-0.5 sm:mb-1 truncate",
+                                        "style": { "color": "#111827" },
+                                        "content": "Michael Chen"
+                                      },
+                                      {
+                                        "wrapper": "p",
+                                        "class": "text-xs sm:text-sm font-medium mb-2 sm:mb-3 truncate",
+                                        "style": {
+                                          "color": "#111827",
+                                          "opacity": 0.6
+                                        },
+                                        "content": "CTO"
+                                      },
+                                      {
+                                        "wrapper": "p",
+                                        "class": "text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2",
+                                        "style": {
+                                          "color": "#111827",
+                                          "opacity": 0.7
+                                        },
+                                        "content": "Tech innovator driving our digital transformation"
+                                      },
                                       {
                                         "wrapper": "div",
                                         "class": "flex gap-2 sm:gap-3",
                                         "blocks": [
-                                          { "wrapper": "a", "class": "text-gray-500 hover:text-blue-600 transition-colors", "href": "https://linkedin.com", "target": "_blank", "blocks": [{ "wrapper": "svg", "type": "icon", "icon": "linkedin", "class": "w-5 h-5" }] },
-                                          { "wrapper": "a", "class": "text-gray-500 hover:text-gray-900 transition-colors", "href": "https://twitter.com", "target": "_blank", "blocks": [{ "wrapper": "svg", "type": "icon", "icon": "twitter", "class": "w-5 h-5" }] }
+                                          {
+                                            "wrapper": "a",
+                                            "class": "text-gray-500 hover:text-blue-600 transition-colors",
+                                            "href": "https://linkedin.com",
+                                            "target": "_blank",
+                                            "blocks": [
+                                              {
+                                                "wrapper": "svg",
+                                                "type": "icon",
+                                                "icon": "linkedin",
+                                                "class": "w-5 h-5"
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "wrapper": "a",
+                                            "class": "text-gray-500 hover:text-gray-900 transition-colors",
+                                            "href": "https://twitter.com",
+                                            "target": "_blank",
+                                            "blocks": [
+                                              {
+                                                "wrapper": "svg",
+                                                "type": "icon",
+                                                "icon": "twitter",
+                                                "class": "w-5 h-5"
+                                              }
+                                            ]
+                                          }
                                         ]
                                       }
                                     ]
@@ -1020,22 +1116,73 @@
                                     "wrapper": "div",
                                     "class": "relative w-full aspect-square overflow-hidden",
                                     "blocks": [
-                                      { "wrapper": "img", "class": "w-full h-full object-cover group-hover:scale-105 transition-transform duration-500", "src": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop&crop=faces", "alt": "Emily Rodriguez" }
+                                      {
+                                        "wrapper": "img",
+                                        "class": "w-full h-full object-cover group-hover:scale-105 transition-transform duration-500",
+                                        "src": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop&crop=faces",
+                                        "alt": "Emily Rodriguez"
+                                      }
                                     ]
                                   },
                                   {
                                     "wrapper": "div",
                                     "class": "p-3 sm:p-4 lg:p-5",
                                     "blocks": [
-                                      { "wrapper": "h3", "class": "text-base sm:text-lg lg:text-xl font-bold mb-0.5 sm:mb-1 truncate", "style": { "color": "#111827" }, "content": "Emily Rodriguez" },
-                                      { "wrapper": "p", "class": "text-xs sm:text-sm font-medium mb-2 sm:mb-3 truncate", "style": { "color": "#111827", "opacity": 0.6 }, "content": "Head of Design" },
-                                      { "wrapper": "p", "class": "text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2", "style": { "color": "#111827", "opacity": 0.7 }, "content": "Creative designer crafting exceptional experiences" },
+                                      {
+                                        "wrapper": "h3",
+                                        "class": "text-base sm:text-lg lg:text-xl font-bold mb-0.5 sm:mb-1 truncate",
+                                        "style": { "color": "#111827" },
+                                        "content": "Emily Rodriguez"
+                                      },
+                                      {
+                                        "wrapper": "p",
+                                        "class": "text-xs sm:text-sm font-medium mb-2 sm:mb-3 truncate",
+                                        "style": {
+                                          "color": "#111827",
+                                          "opacity": 0.6
+                                        },
+                                        "content": "Head of Design"
+                                      },
+                                      {
+                                        "wrapper": "p",
+                                        "class": "text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2",
+                                        "style": {
+                                          "color": "#111827",
+                                          "opacity": 0.7
+                                        },
+                                        "content": "Creative designer crafting exceptional experiences"
+                                      },
                                       {
                                         "wrapper": "div",
                                         "class": "flex gap-2 sm:gap-3",
                                         "blocks": [
-                                          { "wrapper": "a", "class": "text-gray-500 hover:text-blue-600 transition-colors", "href": "https://linkedin.com", "target": "_blank", "blocks": [{ "wrapper": "svg", "type": "icon", "icon": "linkedin", "class": "w-5 h-5" }] },
-                                          { "wrapper": "a", "class": "text-gray-500 hover:text-red-600 transition-colors", "href": "mailto:emily@example.com", "blocks": [{ "wrapper": "svg", "type": "icon", "icon": "mail", "class": "w-5 h-5" }] }
+                                          {
+                                            "wrapper": "a",
+                                            "class": "text-gray-500 hover:text-blue-600 transition-colors",
+                                            "href": "https://linkedin.com",
+                                            "target": "_blank",
+                                            "blocks": [
+                                              {
+                                                "wrapper": "svg",
+                                                "type": "icon",
+                                                "icon": "linkedin",
+                                                "class": "w-5 h-5"
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "wrapper": "a",
+                                            "class": "text-gray-500 hover:text-red-600 transition-colors",
+                                            "href": "mailto:emily@example.com",
+                                            "blocks": [
+                                              {
+                                                "wrapper": "svg",
+                                                "type": "icon",
+                                                "icon": "mail",
+                                                "class": "w-5 h-5"
+                                              }
+                                            ]
+                                          }
                                         ]
                                       }
                                     ]
@@ -1057,22 +1204,73 @@
                                     "wrapper": "div",
                                     "class": "relative w-full aspect-square overflow-hidden",
                                     "blocks": [
-                                      { "wrapper": "img", "class": "w-full h-full object-cover group-hover:scale-105 transition-transform duration-500", "src": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=faces", "alt": "David Kim" }
+                                      {
+                                        "wrapper": "img",
+                                        "class": "w-full h-full object-cover group-hover:scale-105 transition-transform duration-500",
+                                        "src": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=faces",
+                                        "alt": "David Kim"
+                                      }
                                     ]
                                   },
                                   {
                                     "wrapper": "div",
                                     "class": "p-3 sm:p-4 lg:p-5",
                                     "blocks": [
-                                      { "wrapper": "h3", "class": "text-base sm:text-lg lg:text-xl font-bold mb-0.5 sm:mb-1 truncate", "style": { "color": "#111827" }, "content": "David Kim" },
-                                      { "wrapper": "p", "class": "text-xs sm:text-sm font-medium mb-2 sm:mb-3 truncate", "style": { "color": "#111827", "opacity": 0.6 }, "content": "Head of Marketing" },
-                                      { "wrapper": "p", "class": "text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2", "style": { "color": "#111827", "opacity": 0.7 }, "content": "Marketing strategist connecting brands with customers" },
+                                      {
+                                        "wrapper": "h3",
+                                        "class": "text-base sm:text-lg lg:text-xl font-bold mb-0.5 sm:mb-1 truncate",
+                                        "style": { "color": "#111827" },
+                                        "content": "David Kim"
+                                      },
+                                      {
+                                        "wrapper": "p",
+                                        "class": "text-xs sm:text-sm font-medium mb-2 sm:mb-3 truncate",
+                                        "style": {
+                                          "color": "#111827",
+                                          "opacity": 0.6
+                                        },
+                                        "content": "Head of Marketing"
+                                      },
+                                      {
+                                        "wrapper": "p",
+                                        "class": "text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2",
+                                        "style": {
+                                          "color": "#111827",
+                                          "opacity": 0.7
+                                        },
+                                        "content": "Marketing strategist connecting brands with customers"
+                                      },
                                       {
                                         "wrapper": "div",
                                         "class": "flex gap-2 sm:gap-3",
                                         "blocks": [
-                                          { "wrapper": "a", "class": "text-gray-500 hover:text-gray-900 transition-colors", "href": "https://twitter.com", "target": "_blank", "blocks": [{ "wrapper": "svg", "type": "icon", "icon": "twitter", "class": "w-5 h-5" }] },
-                                          { "wrapper": "a", "class": "text-gray-500 hover:text-red-600 transition-colors", "href": "mailto:david@example.com", "blocks": [{ "wrapper": "svg", "type": "icon", "icon": "mail", "class": "w-5 h-5" }] }
+                                          {
+                                            "wrapper": "a",
+                                            "class": "text-gray-500 hover:text-gray-900 transition-colors",
+                                            "href": "https://twitter.com",
+                                            "target": "_blank",
+                                            "blocks": [
+                                              {
+                                                "wrapper": "svg",
+                                                "type": "icon",
+                                                "icon": "twitter",
+                                                "class": "w-5 h-5"
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "wrapper": "a",
+                                            "class": "text-gray-500 hover:text-red-600 transition-colors",
+                                            "href": "mailto:david@example.com",
+                                            "blocks": [
+                                              {
+                                                "wrapper": "svg",
+                                                "type": "icon",
+                                                "icon": "mail",
+                                                "class": "w-5 h-5"
+                                              }
+                                            ]
+                                          }
                                         ]
                                       }
                                     ]
@@ -1094,23 +1292,87 @@
                                     "wrapper": "div",
                                     "class": "relative w-full aspect-square overflow-hidden",
                                     "blocks": [
-                                      { "wrapper": "img", "class": "w-full h-full object-cover group-hover:scale-105 transition-transform duration-500", "src": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop&crop=faces", "alt": "Sarah Johnson" }
+                                      {
+                                        "wrapper": "img",
+                                        "class": "w-full h-full object-cover group-hover:scale-105 transition-transform duration-500",
+                                        "src": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop&crop=faces",
+                                        "alt": "Sarah Johnson"
+                                      }
                                     ]
                                   },
                                   {
                                     "wrapper": "div",
                                     "class": "p-3 sm:p-4 lg:p-5",
                                     "blocks": [
-                                      { "wrapper": "h3", "class": "text-base sm:text-lg lg:text-xl font-bold mb-0.5 sm:mb-1 truncate", "style": { "color": "#111827" }, "content": "Sarah Johnson" },
-                                      { "wrapper": "p", "class": "text-xs sm:text-sm font-medium mb-2 sm:mb-3 truncate", "style": { "color": "#111827", "opacity": 0.6 }, "content": "CEO & Founder" },
-                                      { "wrapper": "p", "class": "text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2", "style": { "color": "#111827", "opacity": 0.7 }, "content": "Visionary leader with 15+ years in e-commerce" },
+                                      {
+                                        "wrapper": "h3",
+                                        "class": "text-base sm:text-lg lg:text-xl font-bold mb-0.5 sm:mb-1 truncate",
+                                        "style": { "color": "#111827" },
+                                        "content": "Sarah Johnson"
+                                      },
+                                      {
+                                        "wrapper": "p",
+                                        "class": "text-xs sm:text-sm font-medium mb-2 sm:mb-3 truncate",
+                                        "style": {
+                                          "color": "#111827",
+                                          "opacity": 0.6
+                                        },
+                                        "content": "CEO & Founder"
+                                      },
+                                      {
+                                        "wrapper": "p",
+                                        "class": "text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2",
+                                        "style": {
+                                          "color": "#111827",
+                                          "opacity": 0.7
+                                        },
+                                        "content": "Visionary leader with 15+ years in e-commerce"
+                                      },
                                       {
                                         "wrapper": "div",
                                         "class": "flex gap-2 sm:gap-3",
                                         "blocks": [
-                                          { "wrapper": "a", "class": "text-gray-500 hover:text-blue-600 transition-colors", "href": "https://linkedin.com", "target": "_blank", "blocks": [{ "wrapper": "svg", "type": "icon", "icon": "linkedin", "class": "w-5 h-5" }] },
-                                          { "wrapper": "a", "class": "text-gray-500 hover:text-gray-900 transition-colors", "href": "https://twitter.com", "target": "_blank", "blocks": [{ "wrapper": "svg", "type": "icon", "icon": "twitter", "class": "w-5 h-5" }] },
-                                          { "wrapper": "a", "class": "text-gray-500 hover:text-red-600 transition-colors", "href": "mailto:sarah@example.com", "blocks": [{ "wrapper": "svg", "type": "icon", "icon": "mail", "class": "w-5 h-5" }] }
+                                          {
+                                            "wrapper": "a",
+                                            "class": "text-gray-500 hover:text-blue-600 transition-colors",
+                                            "href": "https://linkedin.com",
+                                            "target": "_blank",
+                                            "blocks": [
+                                              {
+                                                "wrapper": "svg",
+                                                "type": "icon",
+                                                "icon": "linkedin",
+                                                "class": "w-5 h-5"
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "wrapper": "a",
+                                            "class": "text-gray-500 hover:text-gray-900 transition-colors",
+                                            "href": "https://twitter.com",
+                                            "target": "_blank",
+                                            "blocks": [
+                                              {
+                                                "wrapper": "svg",
+                                                "type": "icon",
+                                                "icon": "twitter",
+                                                "class": "w-5 h-5"
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "wrapper": "a",
+                                            "class": "text-gray-500 hover:text-red-600 transition-colors",
+                                            "href": "mailto:sarah@example.com",
+                                            "blocks": [
+                                              {
+                                                "wrapper": "svg",
+                                                "type": "icon",
+                                                "icon": "mail",
+                                                "class": "w-5 h-5"
+                                              }
+                                            ]
+                                          }
                                         ]
                                       }
                                     ]
@@ -1132,22 +1394,74 @@
                                     "wrapper": "div",
                                     "class": "relative w-full aspect-square overflow-hidden",
                                     "blocks": [
-                                      { "wrapper": "img", "class": "w-full h-full object-cover group-hover:scale-105 transition-transform duration-500", "src": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=faces", "alt": "Michael Chen" }
+                                      {
+                                        "wrapper": "img",
+                                        "class": "w-full h-full object-cover group-hover:scale-105 transition-transform duration-500",
+                                        "src": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=faces",
+                                        "alt": "Michael Chen"
+                                      }
                                     ]
                                   },
                                   {
                                     "wrapper": "div",
                                     "class": "p-3 sm:p-4 lg:p-5",
                                     "blocks": [
-                                      { "wrapper": "h3", "class": "text-base sm:text-lg lg:text-xl font-bold mb-0.5 sm:mb-1 truncate", "style": { "color": "#111827" }, "content": "Michael Chen" },
-                                      { "wrapper": "p", "class": "text-xs sm:text-sm font-medium mb-2 sm:mb-3 truncate", "style": { "color": "#111827", "opacity": 0.6 }, "content": "CTO" },
-                                      { "wrapper": "p", "class": "text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2", "style": { "color": "#111827", "opacity": 0.7 }, "content": "Tech innovator driving our digital transformation" },
+                                      {
+                                        "wrapper": "h3",
+                                        "class": "text-base sm:text-lg lg:text-xl font-bold mb-0.5 sm:mb-1 truncate",
+                                        "style": { "color": "#111827" },
+                                        "content": "Michael Chen"
+                                      },
+                                      {
+                                        "wrapper": "p",
+                                        "class": "text-xs sm:text-sm font-medium mb-2 sm:mb-3 truncate",
+                                        "style": {
+                                          "color": "#111827",
+                                          "opacity": 0.6
+                                        },
+                                        "content": "CTO"
+                                      },
+                                      {
+                                        "wrapper": "p",
+                                        "class": "text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2",
+                                        "style": {
+                                          "color": "#111827",
+                                          "opacity": 0.7
+                                        },
+                                        "content": "Tech innovator driving our digital transformation"
+                                      },
                                       {
                                         "wrapper": "div",
                                         "class": "flex gap-2 sm:gap-3",
                                         "blocks": [
-                                          { "wrapper": "a", "class": "text-gray-500 hover:text-blue-600 transition-colors", "href": "https://linkedin.com", "target": "_blank", "blocks": [{ "wrapper": "svg", "type": "icon", "icon": "linkedin", "class": "w-5 h-5" }] },
-                                          { "wrapper": "a", "class": "text-gray-500 hover:text-gray-900 transition-colors", "href": "https://twitter.com", "target": "_blank", "blocks": [{ "wrapper": "svg", "type": "icon", "icon": "twitter", "class": "w-5 h-5" }] }
+                                          {
+                                            "wrapper": "a",
+                                            "class": "text-gray-500 hover:text-blue-600 transition-colors",
+                                            "href": "https://linkedin.com",
+                                            "target": "_blank",
+                                            "blocks": [
+                                              {
+                                                "wrapper": "svg",
+                                                "type": "icon",
+                                                "icon": "linkedin",
+                                                "class": "w-5 h-5"
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "wrapper": "a",
+                                            "class": "text-gray-500 hover:text-gray-900 transition-colors",
+                                            "href": "https://twitter.com",
+                                            "target": "_blank",
+                                            "blocks": [
+                                              {
+                                                "wrapper": "svg",
+                                                "type": "icon",
+                                                "icon": "twitter",
+                                                "class": "w-5 h-5"
+                                              }
+                                            ]
+                                          }
                                         ]
                                       }
                                     ]
@@ -1169,22 +1483,73 @@
                                     "wrapper": "div",
                                     "class": "relative w-full aspect-square overflow-hidden",
                                     "blocks": [
-                                      { "wrapper": "img", "class": "w-full h-full object-cover group-hover:scale-105 transition-transform duration-500", "src": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop&crop=faces", "alt": "Emily Rodriguez" }
+                                      {
+                                        "wrapper": "img",
+                                        "class": "w-full h-full object-cover group-hover:scale-105 transition-transform duration-500",
+                                        "src": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop&crop=faces",
+                                        "alt": "Emily Rodriguez"
+                                      }
                                     ]
                                   },
                                   {
                                     "wrapper": "div",
                                     "class": "p-3 sm:p-4 lg:p-5",
                                     "blocks": [
-                                      { "wrapper": "h3", "class": "text-base sm:text-lg lg:text-xl font-bold mb-0.5 sm:mb-1 truncate", "style": { "color": "#111827" }, "content": "Emily Rodriguez" },
-                                      { "wrapper": "p", "class": "text-xs sm:text-sm font-medium mb-2 sm:mb-3 truncate", "style": { "color": "#111827", "opacity": 0.6 }, "content": "Head of Design" },
-                                      { "wrapper": "p", "class": "text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2", "style": { "color": "#111827", "opacity": 0.7 }, "content": "Creative designer crafting exceptional experiences" },
+                                      {
+                                        "wrapper": "h3",
+                                        "class": "text-base sm:text-lg lg:text-xl font-bold mb-0.5 sm:mb-1 truncate",
+                                        "style": { "color": "#111827" },
+                                        "content": "Emily Rodriguez"
+                                      },
+                                      {
+                                        "wrapper": "p",
+                                        "class": "text-xs sm:text-sm font-medium mb-2 sm:mb-3 truncate",
+                                        "style": {
+                                          "color": "#111827",
+                                          "opacity": 0.6
+                                        },
+                                        "content": "Head of Design"
+                                      },
+                                      {
+                                        "wrapper": "p",
+                                        "class": "text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2",
+                                        "style": {
+                                          "color": "#111827",
+                                          "opacity": 0.7
+                                        },
+                                        "content": "Creative designer crafting exceptional experiences"
+                                      },
                                       {
                                         "wrapper": "div",
                                         "class": "flex gap-2 sm:gap-3",
                                         "blocks": [
-                                          { "wrapper": "a", "class": "text-gray-500 hover:text-blue-600 transition-colors", "href": "https://linkedin.com", "target": "_blank", "blocks": [{ "wrapper": "svg", "type": "icon", "icon": "linkedin", "class": "w-5 h-5" }] },
-                                          { "wrapper": "a", "class": "text-gray-500 hover:text-red-600 transition-colors", "href": "mailto:emily@example.com", "blocks": [{ "wrapper": "svg", "type": "icon", "icon": "mail", "class": "w-5 h-5" }] }
+                                          {
+                                            "wrapper": "a",
+                                            "class": "text-gray-500 hover:text-blue-600 transition-colors",
+                                            "href": "https://linkedin.com",
+                                            "target": "_blank",
+                                            "blocks": [
+                                              {
+                                                "wrapper": "svg",
+                                                "type": "icon",
+                                                "icon": "linkedin",
+                                                "class": "w-5 h-5"
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "wrapper": "a",
+                                            "class": "text-gray-500 hover:text-red-600 transition-colors",
+                                            "href": "mailto:emily@example.com",
+                                            "blocks": [
+                                              {
+                                                "wrapper": "svg",
+                                                "type": "icon",
+                                                "icon": "mail",
+                                                "class": "w-5 h-5"
+                                              }
+                                            ]
+                                          }
                                         ]
                                       }
                                     ]
@@ -1206,22 +1571,73 @@
                                     "wrapper": "div",
                                     "class": "relative w-full aspect-square overflow-hidden",
                                     "blocks": [
-                                      { "wrapper": "img", "class": "w-full h-full object-cover group-hover:scale-105 transition-transform duration-500", "src": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=faces", "alt": "David Kim" }
+                                      {
+                                        "wrapper": "img",
+                                        "class": "w-full h-full object-cover group-hover:scale-105 transition-transform duration-500",
+                                        "src": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=faces",
+                                        "alt": "David Kim"
+                                      }
                                     ]
                                   },
                                   {
                                     "wrapper": "div",
                                     "class": "p-3 sm:p-4 lg:p-5",
                                     "blocks": [
-                                      { "wrapper": "h3", "class": "text-base sm:text-lg lg:text-xl font-bold mb-0.5 sm:mb-1 truncate", "style": { "color": "#111827" }, "content": "David Kim" },
-                                      { "wrapper": "p", "class": "text-xs sm:text-sm font-medium mb-2 sm:mb-3 truncate", "style": { "color": "#111827", "opacity": 0.6 }, "content": "Head of Marketing" },
-                                      { "wrapper": "p", "class": "text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2", "style": { "color": "#111827", "opacity": 0.7 }, "content": "Marketing strategist connecting brands with customers" },
+                                      {
+                                        "wrapper": "h3",
+                                        "class": "text-base sm:text-lg lg:text-xl font-bold mb-0.5 sm:mb-1 truncate",
+                                        "style": { "color": "#111827" },
+                                        "content": "David Kim"
+                                      },
+                                      {
+                                        "wrapper": "p",
+                                        "class": "text-xs sm:text-sm font-medium mb-2 sm:mb-3 truncate",
+                                        "style": {
+                                          "color": "#111827",
+                                          "opacity": 0.6
+                                        },
+                                        "content": "Head of Marketing"
+                                      },
+                                      {
+                                        "wrapper": "p",
+                                        "class": "text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2",
+                                        "style": {
+                                          "color": "#111827",
+                                          "opacity": 0.7
+                                        },
+                                        "content": "Marketing strategist connecting brands with customers"
+                                      },
                                       {
                                         "wrapper": "div",
                                         "class": "flex gap-2 sm:gap-3",
                                         "blocks": [
-                                          { "wrapper": "a", "class": "text-gray-500 hover:text-gray-900 transition-colors", "href": "https://twitter.com", "target": "_blank", "blocks": [{ "wrapper": "svg", "type": "icon", "icon": "twitter", "class": "w-5 h-5" }] },
-                                          { "wrapper": "a", "class": "text-gray-500 hover:text-red-600 transition-colors", "href": "mailto:david@example.com", "blocks": [{ "wrapper": "svg", "type": "icon", "icon": "mail", "class": "w-5 h-5" }] }
+                                          {
+                                            "wrapper": "a",
+                                            "class": "text-gray-500 hover:text-gray-900 transition-colors",
+                                            "href": "https://twitter.com",
+                                            "target": "_blank",
+                                            "blocks": [
+                                              {
+                                                "wrapper": "svg",
+                                                "type": "icon",
+                                                "icon": "twitter",
+                                                "class": "w-5 h-5"
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "wrapper": "a",
+                                            "class": "text-gray-500 hover:text-red-600 transition-colors",
+                                            "href": "mailto:david@example.com",
+                                            "blocks": [
+                                              {
+                                                "wrapper": "svg",
+                                                "type": "icon",
+                                                "icon": "mail",
+                                                "class": "w-5 h-5"
+                                              }
+                                            ]
+                                          }
                                         ]
                                       }
                                     ]
@@ -1306,7 +1722,7 @@
             "blocks": [
               {
                 "wrapper": "div",
-                "class": "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8",
+                "class": "container px-4 sm:px-6 lg:px-8",
                 "blocks": [
                   {
                     "wrapper": "div",
@@ -1365,7 +1781,7 @@
                                   },
                                   {
                                     "wrapper": "div",
-                                    "class": "absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/80 via-black/50 to-transparent pointer-events-none"
+                                    "class": "absolute inset-x-0 bottom-0 h-2/3 bg-linear-to-t from-black/80 via-black/50 to-transparent pointer-events-none"
                                   },
                                   {
                                     "wrapper": "div",
@@ -1452,7 +1868,7 @@
                                   },
                                   {
                                     "wrapper": "div",
-                                    "class": "absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/80 via-black/50 to-transparent pointer-events-none"
+                                    "class": "absolute inset-x-0 bottom-0 h-2/3 bg-linear-to-t from-black/80 via-black/50 to-transparent pointer-events-none"
                                   },
                                   {
                                     "wrapper": "div",
@@ -1526,7 +1942,7 @@
                                   },
                                   {
                                     "wrapper": "div",
-                                    "class": "absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/80 via-black/50 to-transparent pointer-events-none"
+                                    "class": "absolute inset-x-0 bottom-0 h-2/3 bg-linear-to-t from-black/80 via-black/50 to-transparent pointer-events-none"
                                   },
                                   {
                                     "wrapper": "div",
@@ -1599,7 +2015,7 @@
                                   },
                                   {
                                     "wrapper": "div",
-                                    "class": "absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/80 via-black/50 to-transparent pointer-events-none"
+                                    "class": "absolute inset-x-0 bottom-0 h-2/3 bg-linear-to-t from-black/80 via-black/50 to-transparent pointer-events-none"
                                   },
                                   {
                                     "wrapper": "div",

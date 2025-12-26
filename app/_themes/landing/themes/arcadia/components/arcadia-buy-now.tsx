@@ -36,7 +36,7 @@ export function ArcadiaBuyNow({ content, onBuyNow }: ArcadiaBuyNowProps) {
             {/* Product Showcase */}
             <section
               id="products"
-              className="py-10 md:py-20 bg-gradient-to-b from-white to-violet-50 min-h-[700px] sm:min-h-[920px] md:min-h-[650px] lg:min-h-[600px]"
+              className="py-10 md:py-20 bg-linear-to-b from-white to-violet-50 min-h-[700px] sm:min-h-[920px] md:min-h-[650px] lg:min-h-[600px]"
             >
               <div className="container mx-auto px-4">
                 <div className="lg:flex flex-col lg:flex-row gap-12 items-center">
@@ -52,7 +52,7 @@ export function ArcadiaBuyNow({ content, onBuyNow }: ArcadiaBuyNowProps) {
                           className="w-full h-full rounded-2xl shadow-xl transition-all duration-500 group-hover:scale-110 cursor-pointer object-cover aspect-square"
                         />
                       )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer" />
+                      <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer" />
                     </div>
                   </div>
 
@@ -65,7 +65,9 @@ export function ArcadiaBuyNow({ content, onBuyNow }: ArcadiaBuyNowProps) {
 
                     {/* Tag */}
                     {item.tag && (
-                      <h3 className="font-semibold text-gray-700">{item.tag}</h3>
+                      <h3 className="font-semibold text-gray-700">
+                        {item.tag}
+                      </h3>
                     )}
 
                     {/* Title */}
@@ -83,7 +85,7 @@ export function ArcadiaBuyNow({ content, onBuyNow }: ArcadiaBuyNowProps) {
                     )}
 
                     {/* Divider */}
-                    <hr className="my-12 h-px border-0 bg-gradient-to-r from-transparent via-landing-primary to-transparent opacity-50" />
+                    <hr className="my-12 h-px border-0 bg-linear-to-r from-transparent via-landing-primary to-transparent opacity-50" />
 
                     {/* Description */}
                     {item.description && (
@@ -97,7 +99,7 @@ export function ArcadiaBuyNow({ content, onBuyNow }: ArcadiaBuyNowProps) {
                       <div className="flex items-center justify-center md:justify-start gap-6 pt-5 md:pt-12 lg:pt-16 xl:pt-20">
                         <button
                           onClick={() => onBuyNow?.(item.link)}
-                          className="bg-gradient-to-r from-landing-primary to-landing-primary text-white px-8 py-4 rounded-full hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer"
+                          className="bg-linear-to-r from-landing-primary to-landing-primary text-white px-8 py-4 rounded-full hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer"
                         >
                           {item.button_text || "Buy Now"}
                         </button>

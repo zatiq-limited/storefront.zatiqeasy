@@ -8,7 +8,7 @@ interface ContactInfo1Settings {
   textColor?: string;
   accentColor?: string;
   title?: string;
-  titleStyle?: 'script' | 'normal';
+  titleStyle?: "script" | "normal";
   iconBackgroundColor?: string;
   info1Icon?: string;
   info1Title?: string;
@@ -32,7 +32,8 @@ interface ContactInfo1Props {
 
 // Icon mapping helper - converts kebab-case to PascalCase and returns the icon component
 const getIcon = (iconName?: string, size = 28, color?: string) => {
-  if (!iconName) return <LucideIcons.MapPin size={size} strokeWidth={1.5} color={color} />;
+  if (!iconName)
+    return <LucideIcons.MapPin size={size} strokeWidth={1.5} color={color} />;
 
   // Handle legacy icon names for backwards compatibility
   const iconNameMap: Record<string, string> = {
@@ -65,7 +66,16 @@ const getIcon = (iconName?: string, size = 28, color?: string) => {
     .join("");
 
   // Get the icon component from lucide-react
-  const IconComponent = (LucideIcons as unknown as Record<string, React.ComponentType<{ size?: number; strokeWidth?: number; color?: string }>>)[pascalCase];
+  const IconComponent = (
+    LucideIcons as unknown as Record<
+      string,
+      React.ComponentType<{
+        size?: number;
+        strokeWidth?: number;
+        color?: string;
+      }>
+    >
+  )[pascalCase];
 
   if (IconComponent) {
     return <IconComponent size={size} strokeWidth={1.5} color={color} />;
@@ -77,34 +87,36 @@ const getIcon = (iconName?: string, size = 28, color?: string) => {
 
 const ContactInfoItems = [
   {
-    icon: 'info1Icon',
-    title: 'info1Title',
-    content: 'info1Content',
-    link: 'info1Link'
+    icon: "info1Icon",
+    title: "info1Title",
+    content: "info1Content",
+    link: "info1Link",
   },
   {
-    icon: 'info2Icon',
-    title: 'info2Title',
-    content: 'info2Content',
-    link: 'info2Link'
+    icon: "info2Icon",
+    title: "info2Title",
+    content: "info2Content",
+    link: "info2Link",
   },
   {
-    icon: 'info3Icon',
-    title: 'info3Title',
-    content: 'info3Content',
-    link: 'info3Link'
-  }
+    icon: "info3Icon",
+    title: "info3Title",
+    content: "info3Content",
+    link: "info3Link",
+  },
 ];
 
 export default function ContactInfo1({ settings = {} }: ContactInfo1Props) {
-  const s = convertSettingsKeys(settings as Record<string, unknown>) as ContactInfo1Settings;
+  const s = convertSettingsKeys(
+    settings as Record<string, unknown>
+  ) as ContactInfo1Settings;
 
   return (
     <section
       className="py-12 md:py-16 lg:py-20"
       style={{ backgroundColor: s.backgroundColor || "#FFFFFF" }}
     >
-      <div className="max-w-[1440px] mx-auto px-4 2xl:px-0">
+      <div className="container px-4 2xl:px-0">
         {/* Title */}
         {s.title && (
           <h2
@@ -130,7 +142,10 @@ export default function ContactInfo1({ settings = {} }: ContactInfo1Props) {
             if (!title && !content) return null;
 
             return (
-              <div key={index} className="flex flex-col items-center text-center">
+              <div
+                key={index}
+                className="flex flex-col items-center text-center"
+              >
                 {/* Icon Circle */}
                 <div
                   className="flex items-center justify-center w-20 h-20 md:w-24 md:h-24 rounded-full mb-5"

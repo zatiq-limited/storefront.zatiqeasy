@@ -18,7 +18,7 @@ export function NirvanaProductImages({ content }: NirvanaProductImagesProps) {
       <div className="w-[90%] max-w-[1840px] mx-auto">
         {/* Title */}
         {content.title && (
-          <h2 className="pt-10 md:pt-20 pb-5 md:pb-10 text-4xl md:text-6xl font-extrabold text-center bg-gradient-to-r from-landing-primary to-landing-secondary bg-clip-text text-transparent leading-tight">
+          <h2 className="pt-10 md:pt-20 pb-5 md:pb-10 text-4xl md:text-6xl font-extrabold text-center bg-linear-to-r from-landing-primary to-landing-secondary bg-clip-text text-transparent leading-tight">
             {content.title}
           </h2>
         )}

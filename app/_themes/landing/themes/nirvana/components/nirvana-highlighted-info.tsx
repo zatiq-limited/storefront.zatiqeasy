@@ -9,7 +9,10 @@ interface NirvanaHighlightedInfoProps {
   onBuyNow?: (link: string | null) => void;
 }
 
-export function NirvanaHighlightedInfo({ content, onBuyNow }: NirvanaHighlightedInfoProps) {
+export function NirvanaHighlightedInfo({
+  content,
+  onBuyNow,
+}: NirvanaHighlightedInfoProps) {
   if (!content) {
     return null;
   }
@@ -21,7 +24,7 @@ export function NirvanaHighlightedInfo({ content, onBuyNow }: NirvanaHighlighted
       <div className="w-[90%] mx-auto max-w-7xl">
         {/* Title */}
         {content.title && (
-          <h2 className="text-4xl md:text-6xl font-extrabold text-center md:pb-5 bg-gradient-to-r from-landing-primary to-landing-secondary bg-clip-text text-transparent leading-tight">
+          <h2 className="text-4xl md:text-6xl font-extrabold text-center md:pb-5 bg-linear-to-r from-landing-primary to-landing-secondary bg-clip-text text-transparent leading-tight">
             {content.title}
           </h2>
         )}

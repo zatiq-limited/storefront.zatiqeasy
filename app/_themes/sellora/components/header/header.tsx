@@ -12,17 +12,25 @@ import { cn } from "@/lib/utils";
 import { SelloraMobileNav } from "./mobile-nav";
 import { SelloraSearchModal } from "../sections/search-modal";
 import TopbarMessage from "@/components/ui/topbar-message";
+import LanguageToggler from "./language-toggler";
 
 export function SelloraHeader() {
   const router = useRouter();
   const pathname = usePathname();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { shopDetails } = useShopStore();
   const totalItems = useCartStore(selectTotalItems);
 
   const [scrollY, setScrollY] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [langValue, setLangValue] = useState(() => {
+    if (typeof window !== "undefined") {
+      const storedLocale = localStorage.getItem("locale");
+      if (storedLocale) return storedLocale;
+    }
+    return shopDetails?.default_language_code ?? "en";
+  });
 
   const baseUrl = shopDetails?.baseUrl || "";
   const shopName = shopDetails?.shop_name || "Shop";
@@ -82,7 +90,7 @@ export function SelloraHeader() {
         )}
       >
         <div className="relative w-full top-0 left-0 z-50 flex items-center justify-center transition-all duration-300">
-          <nav className="max-w-7xl mx-auto w-full items-center flex px-3 sm:px-4 xl:px-0 relative">
+          <nav className="container w-full items-center flex relative">
             <div className="flex items-center justify-between w-full relative">
               {/* Mobile Menu Button */}
               <button
@@ -207,6 +215,14 @@ export function SelloraHeader() {
                     )}
                   />
                 </button>
+
+                {/* Language Toggle */}
+                <LanguageToggler
+                  langValue={langValue}
+                  setLangValue={setLangValue}
+                  i18n={i18n}
+                  className="hidden lg:flex"
+                />
               </div>
             </div>
           </nav>

@@ -149,7 +149,7 @@ export default function CollectionsHero1({
       )}
 
       {/* Content */}
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-14 lg:py-16">
+      <div className="relative container px-4 sm:px-6 lg:px-8 py-12 sm:py-14 lg:py-16">
         {/* Breadcrumb */}
         {showBreadcrumb && (
           <nav

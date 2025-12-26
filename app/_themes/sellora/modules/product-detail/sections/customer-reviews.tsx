@@ -83,7 +83,7 @@ export function CustomerReviews({ reviews }: CustomerReviewsProps) {
   const hasMore = reviews.length > visibleReviews;
 
   return (
-    <section className="w-full max-w-7xl mx-auto px-4 xl:px-0 py-6 sm:py-8 lg:py-10 border border-gray-200 dark:border-gray-700 rounded-lg">
+    <section className="w-full container px-4 xl:px-0 py-6 sm:py-8 lg:py-10 border border-gray-200 dark:border-gray-700 rounded-lg">
       {/* Image Modal */}
       <ImageModal
         isOpen={modalOpen}

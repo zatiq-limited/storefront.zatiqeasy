@@ -37,34 +37,51 @@ interface PrivacyContent2Props {
 // Get icon based on section title
 const getIconForSection = (title: string) => {
   const lowerTitle = title.toLowerCase();
-  const iconClass = 'w-5 h-5';
+  const iconClass = "w-5 h-5";
 
-  if (lowerTitle.includes('collect')) return <Archive className={iconClass} />;
-  if (lowerTitle.includes('use') || lowerTitle.includes('how')) return <ClipboardCheck className={iconClass} />;
-  if (lowerTitle.includes('shar') || lowerTitle.includes('disclos')) return <Share2 className={iconClass} />;
-  if (lowerTitle.includes('secur')) return <Lock className={iconClass} />;
-  if (lowerTitle.includes('cookie') || lowerTitle.includes('track')) return <Globe className={iconClass} />;
-  if (lowerTitle.includes('right') || lowerTitle.includes('choice')) return <ShieldCheck className={iconClass} />;
-  if (lowerTitle.includes('child')) return <Users className={iconClass} />;
-  if (lowerTitle.includes('change') || lowerTitle.includes('update')) return <RefreshCw className={iconClass} />;
-  if (lowerTitle.includes('contact')) return <Mail className={iconClass} />;
+  if (lowerTitle.includes("collect")) return <Archive className={iconClass} />;
+  if (lowerTitle.includes("use") || lowerTitle.includes("how"))
+    return <ClipboardCheck className={iconClass} />;
+  if (lowerTitle.includes("shar") || lowerTitle.includes("disclos"))
+    return <Share2 className={iconClass} />;
+  if (lowerTitle.includes("secur")) return <Lock className={iconClass} />;
+  if (lowerTitle.includes("cookie") || lowerTitle.includes("track"))
+    return <Globe className={iconClass} />;
+  if (lowerTitle.includes("right") || lowerTitle.includes("choice"))
+    return <ShieldCheck className={iconClass} />;
+  if (lowerTitle.includes("child")) return <Users className={iconClass} />;
+  if (lowerTitle.includes("change") || lowerTitle.includes("update"))
+    return <RefreshCw className={iconClass} />;
+  if (lowerTitle.includes("contact")) return <Mail className={iconClass} />;
   return <FileText className={iconClass} />;
 };
 
-export default function PrivacyContent2({ settings = {} }: PrivacyContent2Props) {
-  const s = convertSettingsKeys(settings as Record<string, unknown>) as PrivacyContent2Settings;
-  const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set());
+export default function PrivacyContent2({
+  settings = {},
+}: PrivacyContent2Props) {
+  const s = convertSettingsKeys(
+    settings as Record<string, unknown>
+  ) as PrivacyContent2Settings;
+  const [expandedSections, setExpandedSections] = useState<Set<string>>(
+    new Set()
+  );
   const [contentSections, setContentSections] = useState<ContentSection[]>([]);
 
   useEffect(() => {
     try {
       const sections = s.contentSections ? JSON.parse(s.contentSections) : [];
-      const filteredSections = sections.filter((section: ContentSection) => section.title && section.title.trim());
+      const filteredSections = sections.filter(
+        (section: ContentSection) => section.title && section.title.trim()
+      );
       setContentSections(filteredSections);
 
       // Expand sections based on default setting
       if (s.expandAllByDefault) {
-        setExpandedSections(new Set(filteredSections.map((section: ContentSection) => section.title)));
+        setExpandedSections(
+          new Set(
+            filteredSections.map((section: ContentSection) => section.title)
+          )
+        );
       } else {
         // Expand first section by default
         if (filteredSections.length > 0 && filteredSections[0].title) {
@@ -91,7 +108,9 @@ export default function PrivacyContent2({ settings = {} }: PrivacyContent2Props)
     if (expandedSections.size === contentSections.length) {
       setExpandedSections(new Set());
     } else {
-      setExpandedSections(new Set(contentSections.map(section => section.title)));
+      setExpandedSections(
+        new Set(contentSections.map((section) => section.title))
+      );
     }
   };
 
@@ -104,7 +123,7 @@ export default function PrivacyContent2({ settings = {} }: PrivacyContent2Props)
       className="py-12 md:py-16 lg:py-20"
       style={{ backgroundColor: s.backgroundColor || "#F9FAFB" }}
     >
-      <div className="max-w-[1440px] mx-auto px-4 2xl:px-0">
+      <div className="container px-4 2xl:px-0">
         {/* Header with Toggle All Button */}
         <div className="flex justify-between items-center mb-8">
           <h2
@@ -122,10 +141,12 @@ export default function PrivacyContent2({ settings = {} }: PrivacyContent2Props)
               backgroundColor: (s.accentColor || "#2563EB") + "10",
             }}
             onMouseOver={(e) => {
-              e.currentTarget.style.backgroundColor = (s.accentColor || "#2563EB") + "20";
+              e.currentTarget.style.backgroundColor =
+                (s.accentColor || "#2563EB") + "20";
             }}
             onMouseOut={(e) => {
-              e.currentTarget.style.backgroundColor = (s.accentColor || "#2563EB") + "10";
+              e.currentTarget.style.backgroundColor =
+                (s.accentColor || "#2563EB") + "10";
             }}
           >
             {expandedSections.size === contentSections.length ? (
@@ -183,7 +204,9 @@ export default function PrivacyContent2({ settings = {} }: PrivacyContent2Props)
 
                   {/* Chevron Icon */}
                   <div
-                    className={`transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}
+                    className={`transition-transform duration-200 ${
+                      isExpanded ? "rotate-180" : ""
+                    }`}
                     style={{ color: (s.textColor || "#111827") + "60" }}
                   >
                     <ChevronDown className="w-5 h-5" />

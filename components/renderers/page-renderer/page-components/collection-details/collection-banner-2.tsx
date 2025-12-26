@@ -51,26 +51,33 @@ export default function CollectionBanner2({
         style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239CA3AF' opacity='.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
           backgroundRepeat: "repeat",
-          backgroundSize: "60px 60px"
+          backgroundSize: "60px 60px",
         }}
       />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className={`grid lg:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center ${s.imagePosition === "left" ? "lg:grid-flow-col-dense" : ""}`}>
+        <div
+          className={`grid lg:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center ${
+            s.imagePosition === "left" ? "lg:grid-flow-col-dense" : ""
+          }`}
+        >
           {/* Content Card */}
-          <div className={`${s.imagePosition === "left" ? "lg:col-start-2" : ""}`}>
+          <div
+            className={`${s.imagePosition === "left" ? "lg:col-start-2" : ""}`}
+          >
             <div
               className="relative p-6 sm:p-8 md:p-10 lg:p-12 rounded-2xl shadow-xl backdrop-blur-sm border border-white/50"
               style={{
                 backgroundColor: s.cardBackgroundColor || "#ffffff",
-                animation: "fadeInUp 0.8s ease-out"
+                animation: "fadeInUp 0.8s ease-out",
               }}
             >
               {/* Glow Effect */}
               <div
                 className="absolute inset-0 rounded-2xl opacity-0 blur-xl transition-opacity duration-500"
                 style={{
-                  background: "linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%)"
+                  background:
+                    "linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%)",
                 }}
               />
 
@@ -81,7 +88,7 @@ export default function CollectionBanner2({
                   style={{
                     backgroundColor: s.badgeBackgroundColor || "#ecfdf5",
                     color: s.badgeTextColor || "#059669",
-                    animation: "fadeInUp 0.8s ease-out 0.2s both"
+                    animation: "fadeInUp 0.8s ease-out 0.2s both",
                   }}
                 >
                   <svg
@@ -106,7 +113,7 @@ export default function CollectionBanner2({
                 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight"
                 style={{
                   animation: "fadeInUp 0.8s ease-out 0.3s both",
-                  color: s.titleColor || "#111827"
+                  color: s.titleColor || "#111827",
                 }}
               >
                 {collection.name}
@@ -118,7 +125,7 @@ export default function CollectionBanner2({
                   className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 leading-relaxed"
                   style={{
                     animation: "fadeInUp 0.8s ease-out 0.4s both",
-                    color: s.descriptionColor || "#6b7280"
+                    color: s.descriptionColor || "#6b7280",
                   }}
                 >
                   {collection.description}
@@ -133,10 +140,10 @@ export default function CollectionBanner2({
                   style={{
                     animation: "fadeInUp 0.8s ease-out 0.5s both",
                     backgroundColor: s.buttonBackgroundColor || "#111827",
-                    color: s.buttonTextColor || "#ffffff"
+                    color: s.buttonTextColor || "#ffffff",
                   }}
                 >
-                  <span className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <span className="absolute inset-0 bg-linear-to-r from-indigo-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   <span className="relative z-10 flex items-center justify-center">
                     {s.bannerButtonText}
                     <svg
@@ -158,11 +165,11 @@ export default function CollectionBanner2({
 
               {/* Decorative Elements */}
               <div
-                className="absolute -top-2 -right-2 w-24 h-24 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full opacity-10 blur-2xl"
+                className="absolute -top-2 -right-2 w-24 h-24 bg-linear-to-br from-purple-400 to-pink-400 rounded-full opacity-10 blur-2xl"
                 style={{ animation: "float 6s ease-in-out infinite" }}
               />
               <div
-                className="absolute -bottom-2 -left-2 w-32 h-32 bg-gradient-to-tr from-blue-400 to-green-400 rounded-full opacity-10 blur-2xl"
+                className="absolute -bottom-2 -left-2 w-32 h-32 bg-linear-to-tr from-blue-400 to-green-400 rounded-full opacity-10 blur-2xl"
                 style={{ animation: "float 8s ease-in-out infinite reverse" }}
               />
             </div>
@@ -170,7 +177,11 @@ export default function CollectionBanner2({
 
           {/* Image */}
           {s.showBanner && bannerImage && (
-            <div className={`${s.imagePosition === "right" ? "" : "lg:col-start-1"}`}>
+            <div
+              className={`${
+                s.imagePosition === "right" ? "" : "lg:col-start-1"
+              }`}
+            >
               <div className="relative h-64 sm:h-80 md:h-96 lg:h-full min-h-[400px] rounded-2xl overflow-hidden group">
                 {/* Main Image */}
                 <Image
@@ -182,14 +193,16 @@ export default function CollectionBanner2({
                 />
 
                 {/* Overlay Gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-linear-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
                 {/* Floating Badge */}
                 <div
                   className="absolute top-4 right-4 sm:top-6 sm:right-6 md:top-8 md:right-8 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-white/90 backdrop-blur-sm shadow-lg transform transition-all duration-300 group-hover:scale-110"
                   style={{ animation: "fadeInUp 0.8s ease-out 0.6s both" }}
                 >
-                  <span className="text-xs sm:text-sm font-medium text-gray-800">Featured</span>
+                  <span className="text-xs sm:text-sm font-medium text-gray-800">
+                    Featured
+                  </span>
                 </div>
 
                 {/* Decorative Corner */}

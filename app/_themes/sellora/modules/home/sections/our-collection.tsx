@@ -25,7 +25,7 @@ export function OurCollectionSection() {
   if (categories.length === 0) return null;
 
   return (
-    <div className="py-10 sm:py-14 px-3 sm:px-4 xl:px-0 max-w-7xl mx-auto">
+    <div className="container py-10 sm:py-14">
       {/* Header with View All */}
       <div className="flex items-center justify-between mb-4 md:mb-8">
         <h2

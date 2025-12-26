@@ -85,7 +85,7 @@ export default function CollectionsGrid2({
   if (isLoading) {
     return (
       <section className="py-16 md:py-24" style={{ backgroundColor }}>
-        <div className="max-w-[1440px] mx-auto px-4 2xl:px-6">
+        <div className="container px-4 2xl:px-6">
           <div className={`grid grid-cols-1 ${gridClasses} gap-6 lg:gap-8`}>
             {[...Array(6)].map((_, i) => (
               <div
@@ -102,7 +102,7 @@ export default function CollectionsGrid2({
   if (!collections || collections.length === 0) {
     return (
       <section className="py-16 md:py-24" style={{ backgroundColor }}>
-        <div className="max-w-[1440px] mx-auto px-4 2xl:px-6">
+        <div className="container px-4 2xl:px-6">
           <div className="text-center py-12">
             <svg
               className="w-16 h-16 mx-auto text-gray-300 mb-4"
@@ -131,7 +131,7 @@ export default function CollectionsGrid2({
 
   return (
     <section className="py-16 md:py-24" style={{ backgroundColor }}>
-      <div className="max-w-[1440px] mx-auto px-4 2xl:px-6">
+      <div className="container px-4 2xl:px-6">
         <div className={`grid grid-cols-1 ${gridClasses} gap-6 lg:gap-8`}>
           {collections.map((collection, index) => (
             <div
@@ -158,7 +158,7 @@ export default function CollectionsGrid2({
 
                   {/* Gradient Overlay */}
                   <div
-                    className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"
+                    className="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent"
                     style={{ opacity: (cardOverlayOpacity / 100) * 2.5 }}
                   />
 

@@ -5,7 +5,11 @@ import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { Minus, Plus, ZoomIn, Download, Play } from "lucide-react";
 import { useShopStore } from "@/stores/shopStore";
-import { useCartStore, selectTotalItems, selectSubtotal } from "@/stores/cartStore";
+import {
+  useCartStore,
+  selectTotalItems,
+  selectSubtotal,
+} from "@/stores/cartStore";
 import { FallbackImage } from "@/components/ui/fallback-image";
 import { CartFloatingBtn } from "@/components/features/cart/cart-floating-btn";
 import { ImageLightbox } from "@/components/products/image-lightbox";
@@ -33,7 +37,9 @@ function extractVideoId(url: string): string | null {
   return match ? match[1] : null;
 }
 
-export function SelloraProductDetailPage({ product }: SelloraProductDetailPageProps) {
+export function SelloraProductDetailPage({
+  product,
+}: SelloraProductDetailPageProps) {
   const router = useRouter();
   const { t } = useTranslation();
   const { shopDetails } = useShopStore();
@@ -68,7 +74,11 @@ export function SelloraProductDetailPage({ product }: SelloraProductDetailPagePr
 
   // Check if download is allowed
   const allowDownload = Boolean(
-    (shopDetails?.metadata?.settings?.shop_settings as { enable_product_image_download?: boolean } | undefined)?.enable_product_image_download
+    (
+      shopDetails?.metadata?.settings?.shop_settings as
+        | { enable_product_image_download?: boolean }
+        | undefined
+    )?.enable_product_image_download
   );
 
   // All product images
@@ -102,16 +112,21 @@ export function SelloraProductDetailPage({ product }: SelloraProductDetailPagePr
       return cartProducts[0];
     }
     // For variant products, find matching selected variants
-    return cartProducts.find((item) => {
-      const itemVariants = item.selectedVariants || {};
-      const selectedKeys = Object.keys(selectedVariants);
-      const itemKeys = Object.keys(itemVariants);
-      if (selectedKeys.length !== itemKeys.length) return false;
-      return selectedKeys.every((key) => {
-        const numKey = Number(key);
-        return selectedVariants[numKey]?.variant_id === itemVariants[numKey]?.variant_id;
-      });
-    }) || null;
+    return (
+      cartProducts.find((item) => {
+        const itemVariants = item.selectedVariants || {};
+        const selectedKeys = Object.keys(selectedVariants);
+        const itemKeys = Object.keys(itemVariants);
+        if (selectedKeys.length !== itemKeys.length) return false;
+        return selectedKeys.every((key) => {
+          const numKey = Number(key);
+          return (
+            selectedVariants[numKey]?.variant_id ===
+            itemVariants[numKey]?.variant_id
+          );
+        });
+      }) || null
+    );
   }, [cartProducts, selectedVariants, variant_types]);
 
   // Sync quantity with matching cart item
@@ -131,7 +146,7 @@ export function SelloraProductDetailPage({ product }: SelloraProductDetailPagePr
   const currentPrice = price || 0;
   const regularPrice = old_price || price || 0;
   const hasSavePrice = (old_price ?? 0) > (price ?? 0);
-  const savePrice = hasSavePrice ? (old_price! - price!) : 0;
+  const savePrice = hasSavePrice ? old_price! - price! : 0;
 
   // Category IDs for related products
   const categoryIds = useMemo(() => categories.map((c) => c.id), [categories]);
@@ -198,28 +213,33 @@ export function SelloraProductDetailPage({ product }: SelloraProductDetailPagePr
   }, [isStockOut, isInCart, handleAddToCart, router, baseUrl]);
 
   // Handle download image
-  const handleDownloadImage = useCallback(async (imageUrl: string, index: number) => {
-    if (!allowDownload || !imageUrl) return;
+  const handleDownloadImage = useCallback(
+    async (imageUrl: string, index: number) => {
+      if (!allowDownload || !imageUrl) return;
 
-    try {
-      const proxyUrl = `/api/download-image?url=${encodeURIComponent(imageUrl)}`;
-      const response = await fetch(proxyUrl);
+      try {
+        const proxyUrl = `/api/download-image?url=${encodeURIComponent(
+          imageUrl
+        )}`;
+        const response = await fetch(proxyUrl);
 
-      if (!response.ok) throw new Error("Download failed");
+        if (!response.ok) throw new Error("Download failed");
 
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `${name}-image-${index + 1}.jpg`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error("Download failed:", error);
-    }
-  }, [allowDownload, name]);
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `${name}-image-${index + 1}.jpg`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      } catch (error) {
+        console.error("Download failed:", error);
+      }
+    },
+    [allowDownload, name]
+  );
 
   // Action button label
   const actionButtonLabel = isInCart ? t("update_cart") : t("add_to_cart");
@@ -228,14 +248,17 @@ export function SelloraProductDetailPage({ product }: SelloraProductDetailPagePr
     <>
       {/* Image Lightbox */}
       <ImageLightbox
-        product={{ images: allImages.map((img) => getDetailPageImageUrl(img)), name: name || "" }}
+        product={{
+          images: allImages.map((img) => getDetailPageImageUrl(img)),
+          name: name || "",
+        }}
         open={lightboxOpen}
         setOpen={setLightboxOpen}
         selectedImageIdx={selectedImageIndex}
       />
 
       {/* Main Product Section */}
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-8 px-3 sm:px-4 xl:px-0 pt-10 sm:pt-20 lg:items-start">
+      <div className="container grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-8 px-3 sm:px-4 xl:px-0 pt-10 sm:pt-20 lg:items-start">
         {/* Left Side - Images Grid */}
         <div className="lg:col-span-3 py-6 sm:py-8 lg:py-10">
           {allImages.length > 0 && (
@@ -439,7 +462,7 @@ export function SelloraProductDetailPage({ product }: SelloraProductDetailPagePr
 
       {/* Product Video Section */}
       {video_link && videoId && (
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 xl:px-0 py-8 sm:py-12">
+        <div className="container px-3 sm:px-4 xl:px-0 py-8 sm:py-12">
           <h2 className="text-xl sm:text-2xl font-semibold text-foreground mb-4 sm:mb-6">
             {t("product_video") || "Product Video"}
           </h2>
@@ -461,15 +484,22 @@ export function SelloraProductDetailPage({ product }: SelloraProductDetailPagePr
       {/* Customer Reviews */}
       {reviews && reviews.length > 0 && (
         <div className="py-6 sm:py-8 lg:py-10 px-3 sm:px-4 xl:px-0">
-          <CustomerReviews reviews={reviews as { name?: string; description?: string; images?: string[]; rating?: number; created_at?: string }[]} />
+          <CustomerReviews
+            reviews={
+              reviews as {
+                name?: string;
+                description?: string;
+                images?: string[];
+                rating?: number;
+                created_at?: string;
+              }[]
+            }
+          />
         </div>
       )}
 
       {/* Related Products */}
-      <RelatedProducts
-        currentProductId={id}
-        categoryIds={categoryIds}
-      />
+      <RelatedProducts currentProductId={id} categoryIds={categoryIds} />
 
       {/* Floating Cart Button */}
       <CartFloatingBtn

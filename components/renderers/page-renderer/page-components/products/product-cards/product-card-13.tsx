@@ -51,7 +51,7 @@ export default function ProductCard13({
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           />
           {/* Gradient Overlay with Content */}
-          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2 sm:p-4">
+          <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/70 to-transparent p-2 sm:p-4">
             {/* Title */}
             <h3 className="text-white font-semibold line-clamp-1 text-sm sm:text-base mb-1 sm:mb-2">
               {title}
@@ -70,7 +70,10 @@ export default function ProductCard13({
               {quickAddEnabled && (
                 <button
                   className="flex-1 h-7 sm:h-8 lg:h-9 text-[10px] sm:text-xs lg:text-sm rounded font-medium transition-opacity hover:opacity-90"
-                  style={{ backgroundColor: buttonBgColor, color: buttonTextColor }}
+                  style={{
+                    backgroundColor: buttonBgColor,
+                    color: buttonTextColor,
+                  }}
                   onClick={(e) => {
                     e.preventDefault();
                     onAddToCart?.();

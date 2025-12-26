@@ -6,7 +6,11 @@ import { SlidersHorizontal } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useShopStore } from "@/stores/shopStore";
 import { useProductsStore, type Product } from "@/stores/productsStore";
-import { useCartStore, selectTotalItems, selectSubtotal } from "@/stores/cartStore";
+import {
+  useCartStore,
+  selectTotalItems,
+  selectSubtotal,
+} from "@/stores/cartStore";
 import { CartFloatingBtn } from "@/components/features/cart/cart-floating-btn";
 import { VariantSelectorModal } from "@/components/products/variant-selector-modal";
 import { FallbackImage } from "@/components/ui/fallback-image";
@@ -41,7 +45,9 @@ export function SelloraAllProducts() {
   const hasItems = totalCartItems > 0;
 
   // Get first carousel for hero
-  const carousels = (shopDetails?.shop_theme as unknown as { carousels?: Carousel[] })?.carousels || [];
+  const carousels =
+    (shopDetails?.shop_theme as unknown as { carousels?: Carousel[] })
+      ?.carousels || [];
   const heroCarousel = carousels[0];
 
   // Filter and sort products
@@ -109,16 +115,16 @@ export function SelloraAllProducts() {
               priority
             />
           ) : (
-            <div className="w-full h-full bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 dark:from-gray-800 dark:to-gray-900" />
+            <div className="w-full h-full bg-linear-to-r from-gray-200 via-gray-300 to-gray-200 dark:from-gray-800 dark:to-gray-900" />
           )}
         </div>
 
         {/* Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent dark:from-black/80 dark:via-black/50" />
+        <div className="absolute inset-0 bg-linear-to-r from-black/70 via-black/40 to-transparent dark:from-black/80 dark:via-black/50" />
 
         {/* Content */}
         <div className="relative h-full flex items-end pb-10 sm:pb-20">
-          <div className="max-w-7xl mx-auto w-full px-3 sm:px-4 xl:px-0">
+          <div className="container w-full px-3 sm:px-4 xl:px-0">
             <div className="max-w-full sm:max-w-xl md:max-w-2xl">
               <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl text-white mb-2 sm:mb-3 md:mb-4 lg:mb-6">
                 {heroCarousel?.title || t("all_products")}
@@ -134,7 +140,7 @@ export function SelloraAllProducts() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto mt-4 sm:mt-6 md:mt-8 lg:mt-10 px-3 sm:px-4 xl:px-0">
+      <div className="container mt-4 sm:mt-6 md:mt-8 lg:mt-10 px-3 sm:px-4 xl:px-0">
         {/* Header with Filter Button */}
         <div className="pb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
           <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -157,9 +163,15 @@ export function SelloraAllProducts() {
               className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-800"
             >
               <option value="">{t("sort_by") || "Sort by"}</option>
-              <option value="price_asc">{t("price_low_high") || "Price: Low to High"}</option>
-              <option value="price_desc">{t("price_high_low") || "Price: High to Low"}</option>
-              <option value="name_asc">{t("name_a_z") || "Name: A to Z"}</option>
+              <option value="price_asc">
+                {t("price_low_high") || "Price: Low to High"}
+              </option>
+              <option value="price_desc">
+                {t("price_high_low") || "Price: High to Low"}
+              </option>
+              <option value="name_asc">
+                {t("name_a_z") || "Name: A to Z"}
+              </option>
             </select>
           </div>
         </div>
@@ -167,11 +179,17 @@ export function SelloraAllProducts() {
         {/* Main Content with Sidebar */}
         <div className="flex flex-col lg:flex-row gap-4 md:gap-6 lg:gap-8">
           {/* Sidebar Filters */}
-          <aside className={`${showMobileFilter ? "block" : "hidden"} lg:block w-full lg:w-56 xl:w-64 flex-shrink-0`}>
+          <aside
+            className={`${
+              showMobileFilter ? "block" : "hidden"
+            } lg:block w-full lg:w-56 xl:w-64 flex-shrink-0`}
+          >
             <div className="lg:sticky lg:top-24 space-y-4 lg:space-y-5 p-4 lg:p-0 bg-gray-50 dark:bg-gray-800 lg:bg-transparent rounded-lg lg:rounded-none">
               {/* Categories Filter */}
               <div>
-                <h3 className="font-semibold text-base mb-3">{t("categories")}</h3>
+                <h3 className="font-semibold text-base mb-3">
+                  {t("categories")}
+                </h3>
                 <div className="space-y-2">
                   <button
                     onClick={() => {

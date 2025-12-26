@@ -18,7 +18,10 @@ function extractVideoId(url: string): string | null {
   return match ? match[1] : null;
 }
 
-export function NirvanaProductVideo({ content, onBuyNow }: NirvanaProductVideoProps) {
+export function NirvanaProductVideo({
+  content,
+  onBuyNow,
+}: NirvanaProductVideoProps) {
   // Support both single video and array of videos
   const productVideo = Array.isArray(content) ? content[0] : content;
 
@@ -27,7 +30,8 @@ export function NirvanaProductVideo({ content, onBuyNow }: NirvanaProductVideoPr
   const [error, setError] = useState<string | null>(null);
 
   const videoId = useMemo(
-    () => (productVideo?.video_url ? extractVideoId(productVideo.video_url) : null),
+    () =>
+      productVideo?.video_url ? extractVideoId(productVideo.video_url) : null,
     [productVideo?.video_url]
   );
 
@@ -53,11 +57,11 @@ export function NirvanaProductVideo({ content, onBuyNow }: NirvanaProductVideoPr
   return (
     <div className="bg-white/95 border-b-2">
       <div className="container mx-auto w-full py-10 md:py-20 xl:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="container px-4 sm:px-6 lg:px-8">
           {/* Title with animated underline */}
           {productVideo?.title && (
             <div className="text-center mb-8 md:mb-16 cursor-pointer">
-              <h2 className="text-4xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-landing-primary to-landing-secondary leading-tight tracking-tight relative inline-block after:content-[''] after:absolute after:-bottom-1 md:after:-bottom-6 pb-2 after:left-0 after:w-full after:h-1 after:bg-landing-primary after:transform after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100">
+              <h2 className="text-4xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-linear-to-r from-landing-primary to-landing-secondary leading-tight tracking-tight relative inline-block after:content-[''] after:absolute after:-bottom-1 md:after:-bottom-6 pb-2 after:left-0 after:w-full after:h-1 after:bg-landing-primary after:transform after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100">
                 {productVideo.title}
               </h2>
             </div>

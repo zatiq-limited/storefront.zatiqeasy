@@ -43,9 +43,9 @@ export const arcadiaThemeConfig = {
 
   // Gradient styles
   gradients: {
-    section: "bg-gradient-to-br from-violet-50 via-indigo-50 to-white",
-    footer: "bg-gradient-to-r from-blue-600 to-landing-primary",
-    text: "bg-gradient-to-r from-landing-primary to-gray-700",
+    section: "bg-linear-to-br from-violet-50 via-indigo-50 to-white",
+    footer: "bg-linear-to-r from-blue-600 to-landing-primary",
+    text: "bg-linear-to-r from-landing-primary to-gray-700",
   },
 } as const;
 

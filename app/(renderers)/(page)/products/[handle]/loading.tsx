@@ -7,7 +7,7 @@ export default function ProductDetailsLoading() {
   return (
     <main className="min-h-screen bg-white">
       {/* Breadcrumb Skeleton */}
-      <div className="max-w-7xl mx-auto px-4 py-4">
+      <div className="container px-4 py-4">
         <div className="flex items-center gap-2">
           <div className="h-4 w-12 bg-gray-200 rounded animate-pulse" />
           <span className="text-gray-300">/</span>
@@ -18,7 +18,7 @@ export default function ProductDetailsLoading() {
       </div>
 
       {/* Product Details Skeleton */}
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="container px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Image Gallery Skeleton */}
           <div className="space-y-4">

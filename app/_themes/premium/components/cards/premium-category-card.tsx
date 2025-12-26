@@ -42,7 +42,7 @@ export function PremiumCategoryCard({
         width={140}
         className="w-full rounded-lg lg:rounded-none object-cover aspect-square"
       />
-      <div className="absolute bottom-0 w-full bg-gradient-to-t from-black/50 to-transparent pt-5 pl-3 lg:pl-6 pb-2 lg:pb-3 rounded-lg lg:rounded-none">
+      <div className="absolute bottom-0 w-full bg-linear-to-t from-black/50 to-transparent pt-5 pl-3 lg:pl-6 pb-2 lg:pb-3 rounded-lg lg:rounded-none">
         <h3 className="bottom-2 lg:bottom-3 text-white text-sm sm:text-xl md:text-2xl lg:text-3xl font-bold">
           {category.name}
         </h3>

@@ -7,8 +7,8 @@ export default function CollectionsLoading() {
   return (
     <main className="min-h-screen bg-gray-50">
       {/* Hero Skeleton */}
-      <div className="bg-gradient-to-r from-blue-50 to-purple-50 py-12 px-4">
-        <div className="max-w-7xl mx-auto text-center">
+      <div className="bg-linear-to-r from-blue-50 to-purple-50 py-12 px-4">
+        <div className="container text-center">
           <div className="h-4 w-32 bg-gray-200 rounded animate-pulse mx-auto mb-4" />
           <div className="h-10 w-64 bg-gray-200 rounded animate-pulse mx-auto mb-2" />
           <div className="h-5 w-96 bg-gray-200 rounded animate-pulse mx-auto" />
@@ -16,7 +16,7 @@ export default function CollectionsLoading() {
       </div>
 
       {/* Collections Grid Skeleton */}
-      <div className="max-w-7xl mx-auto px-4 py-12">
+      <div className="container px-4 py-12">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {Array.from({ length: 6 }).map((_, i) => (
             <div

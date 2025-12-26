@@ -58,7 +58,7 @@ export function GripTopCarousel({ content, onBuyNow }: GripTopCarouselProps) {
               )}
 
               {/* Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent" />
+              <div className="absolute inset-0 bg-linear-to-r from-black/60 via-black/30 to-transparent" />
 
               {/* Content */}
               <div className="absolute inset-0 flex items-center">

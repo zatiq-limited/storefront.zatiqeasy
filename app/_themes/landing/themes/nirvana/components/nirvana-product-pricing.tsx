@@ -13,7 +13,11 @@ interface NirvanaProductPricingProps {
   onBuyNow?: (link: string | null) => void;
 }
 
-export function NirvanaProductPricing({ product, content, onBuyNow }: NirvanaProductPricingProps) {
+export function NirvanaProductPricing({
+  product,
+  content,
+  onBuyNow,
+}: NirvanaProductPricingProps) {
   const { shopDetails } = useShopStore();
 
   const currency = shopDetails?.country_currency || "BDT";
@@ -29,7 +33,9 @@ export function NirvanaProductPricing({ product, content, onBuyNow }: NirvanaPro
   }
 
   const discountPercentage = product.old_price
-    ? Math.round(((product.old_price - (product.price || 0)) / product.old_price) * 100)
+    ? Math.round(
+        ((product.old_price - (product.price || 0)) / product.old_price) * 100
+      )
     : 0;
 
   return (
@@ -52,8 +58,8 @@ export function NirvanaProductPricing({ product, content, onBuyNow }: NirvanaPro
 
             {product.price && (
               <div className="relative group pt-3 md:pt-5">
-                <div className="absolute -inset-4 bg-gradient-to-r from-green-400 to-green-500 opacity-0 group-hover:opacity-5 rounded-xl blur transition-opacity duration-300" />
-                <h2 className="leading-tight text-3xl sm:text-5xl md:text-6xl font-extrabold bg-gradient-to-r from-green-500 to-green-600 bg-clip-text text-transparent tracking-tight group-hover:tracking-normal transition-all duration-300">
+                <div className="absolute -inset-4 bg-linear-to-r from-green-400 to-green-500 opacity-0 group-hover:opacity-5 rounded-xl blur transition-opacity duration-300" />
+                <h2 className="leading-tight text-3xl sm:text-5xl md:text-6xl font-extrabold bg-linear-to-r from-green-500 to-green-600 bg-clip-text text-transparent tracking-tight group-hover:tracking-normal transition-all duration-300">
                   {product.old_price ? "Discount Price" : "Price"}
                   <span className="inline-flex items-center gap-3 ml-3">
                     {product.price} {currency}
@@ -73,7 +79,7 @@ export function NirvanaProductPricing({ product, content, onBuyNow }: NirvanaPro
         {/* Product Image */}
         {content?.image_url && (
           <div className="relative mt-10 group">
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="absolute inset-0 bg-linear-to-r from-blue-500/10 to-purple-500/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             <FallbackImage
               src={content.image_url}
               alt={product.name || "Product"}
@@ -88,9 +94,9 @@ export function NirvanaProductPricing({ product, content, onBuyNow }: NirvanaPro
         <div className="mt-10 flex justify-center">
           <button
             onClick={handleBuyNow}
-            className="group relative overflow-hidden inline-flex items-center gap-4 px-10 py-5 bg-gradient-to-r from-landing-primary to-landing-secondary hover:from-landing-primary hover:to-landing-secondary rounded-full transform hover:scale-[1.02] transition-all duration-300 ease-out shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:shadow-[0_8px_30px_rgb(59,130,246,0.5)] cursor-pointer"
+            className="group relative overflow-hidden inline-flex items-center gap-4 px-10 py-5 bg-linear-to-r from-landing-primary to-landing-secondary hover:from-landing-primary hover:to-landing-secondary rounded-full transform hover:scale-[1.02] transition-all duration-300 ease-out shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:shadow-[0_8px_30px_rgb(59,130,246,0.5)] cursor-pointer"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+            <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
             <ShoppingCart className="w-7 h-7 text-white transform group-hover:rotate-12 transition-transform duration-300 ease-out" />
             <span className="text-2xl font-bold text-white tracking-wide group-hover:tracking-wider transition-all duration-300">
               {content?.button_text ?? "Buy Now"}

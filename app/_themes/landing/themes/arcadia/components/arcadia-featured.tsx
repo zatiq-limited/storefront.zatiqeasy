@@ -21,7 +21,7 @@ export function ArcadiaFeatured({ content, onBuyNow }: ArcadiaFeaturedProps) {
       {content.map((banner, index) => (
         <section
           key={index}
-          className="pt-12 pb-10 md:pt-24 md:pb-20 bg-gradient-to-br from-violet-50 via-indigo-50 to-white"
+          className="pt-12 pb-10 md:pt-24 md:pb-20 bg-linear-to-br from-violet-50 via-indigo-50 to-white"
         >
           <div className="container mx-auto px-4">
             <div className="flex flex-col lg:flex-row md:items-center gap-12">
@@ -41,12 +41,13 @@ export function ArcadiaFeatured({ content, onBuyNow }: ArcadiaFeaturedProps) {
 
                 {/* Title & Subtitle */}
                 {banner.title && (
-                  <h1 className="pt-2 text-3xl md:text-4xl font-bold bg-gradient-to-r from-landing-primary to-gray-700 bg-clip-text text-transparent">
+                  <h1 className="pt-2 text-3xl md:text-4xl font-bold bg-linear-to-r from-landing-primary to-gray-700 bg-clip-text text-transparent">
                     {banner.title}
                     {banner.subtitle && (
                       <>
-                        <br /><br />
-                        <span className="pt-1 text-[22px] bg-gradient-to-r from-gray-700 to-gray-700 bg-clip-text text-transparent font-semibold mt-3 text-2xl">
+                        <br />
+                        <br />
+                        <span className="pt-1 text-[22px] bg-linear-to-r from-gray-700 to-gray-700 bg-clip-text text-transparent font-semibold mt-3 text-2xl">
                           {banner.subtitle}
                         </span>
                       </>
@@ -67,7 +68,7 @@ export function ArcadiaFeatured({ content, onBuyNow }: ArcadiaFeaturedProps) {
                     {banner.link === "buy-now" ? (
                       <button
                         onClick={() => onBuyNow?.(banner.link)}
-                        className="bg-gradient-to-r from-landing-primary to-landing-primary text-white px-5 py-2 md:px-8 md:py-4 rounded-full hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
+                        className="bg-linear-to-r from-landing-primary to-landing-primary text-white px-5 py-2 md:px-8 md:py-4 rounded-full hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
                       >
                         {banner.button_text || "SHOP NOW"}
                         <ArrowRight className="w-5 h-5" />
@@ -75,7 +76,7 @@ export function ArcadiaFeatured({ content, onBuyNow }: ArcadiaFeaturedProps) {
                     ) : (
                       <Link
                         href={banner.link}
-                        className="bg-gradient-to-r from-landing-primary to-landing-primary text-white px-5 py-2 md:px-8 md:py-4 rounded-full hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2"
+                        className="bg-linear-to-r from-landing-primary to-landing-primary text-white px-5 py-2 md:px-8 md:py-4 rounded-full hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2"
                       >
                         {banner.button_text || "SHOP NOW"}
                         <ArrowRight className="w-5 h-5" />
@@ -101,7 +102,7 @@ export function ArcadiaFeatured({ content, onBuyNow }: ArcadiaFeaturedProps) {
                       className="w-full h-full object-cover rounded-2xl transition-all duration-500 group-hover:scale-105"
                     />
                   )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
               </div>
             </div>

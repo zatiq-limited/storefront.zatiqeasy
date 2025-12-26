@@ -1,11 +1,13 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Mail, MapPin, Phone, ExternalLink, ChevronRight } from "lucide-react";
 import { useShopStore } from "@/stores/shopStore";
-import { socialIcons, type Sociallinks } from "@/components/shared/icons/social-links-svg-icon";
+import {
+  socialIcons,
+  type Sociallinks,
+} from "@/components/shared/icons/social-links-svg-icon";
 
 export function ArcadiaFooter() {
   const { shopDetails } = useShopStore();
@@ -30,21 +32,18 @@ export function ArcadiaFooter() {
   return (
     <footer className="relative overflow-hidden">
       {/* Main footer content */}
-      <div className="relative w-full bg-gradient-to-b from-white to-blue-50 dark:from-gray-900 dark:to-gray-800 pt-10 md:pt-20 pb-10 px-4 sm:px-6 lg:px-8 rounded-t-3xl shadow-[0_-10px_30px_-15px_rgba(0,0,0,0.1)]">
+      <div className="relative w-full bg-linear-to-b from-white to-blue-50 dark:from-gray-900 dark:to-gray-800 pt-10 md:pt-20 pb-10 px-4 sm:px-6 lg:px-8 rounded-t-3xl shadow-[0_-10px_30px_-15px_rgba(0,0,0,0.1)]">
         <div className="container mx-auto">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
             {/* Company info */}
-            <Link
-              href={baseUrl || "/"}
-              className="space-y-4"
-            >
+            <Link href={baseUrl || "/"} className="space-y-4">
               {shopDetails?.image_url ? (
                 <Image
                   height={60}
                   width={200}
                   alt={shopDetails.shop_name || "Shop"}
                   src={shopDetails.image_url}
-                  className="h-[40px] md:h-[50px] w-auto max-w-[200px] object-contain cursor-pointer transition-all duration-300 hover:scale-110 rounded-xs shadow-lg"
+                  className="h-10 md:h-12.5 w-auto max-w-50 object-contain cursor-pointer transition-all duration-300 hover:scale-110 rounded-xs shadow-lg"
                 />
               ) : (
                 <div className="flex flex-col">
@@ -62,7 +61,7 @@ export function ArcadiaFooter() {
             <div className="space-y-4">
               <h4 className="font-bold text-lg relative inline-block text-gray-900 dark:text-white">
                 QUICK LINKS
-                <span className="absolute -bottom-1 left-0 w-12 h-1 bg-gradient-to-r from-blue-400 to-landing-primary rounded-full" />
+                <span className="absolute -bottom-1 left-0 w-12 h-1 bg-linear-to-r from-blue-400 to-landing-primary rounded-full" />
               </h4>
               <div className="flex flex-col gap-3 text-sm">
                 {policyLinks.map((slug) => (
@@ -72,7 +71,9 @@ export function ArcadiaFooter() {
                     className="flex items-center text-gray-600 dark:text-gray-300 hover:text-landing-primary dark:hover:text-landing-primary transition-colors duration-200 group"
                   >
                     <ChevronRight className="w-4 h-4 mr-2 opacity-0 -ml-6 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" />
-                    <span className="capitalize">{slug.replace(/-/g, " ")}</span>
+                    <span className="capitalize">
+                      {slug.replace(/-/g, " ")}
+                    </span>
                   </Link>
                 ))}
               </div>
@@ -82,7 +83,7 @@ export function ArcadiaFooter() {
             <div className="space-y-4">
               <h4 className="font-bold text-lg relative inline-block text-gray-900 dark:text-white">
                 CONTACT US
-                <span className="absolute -bottom-1 left-0 w-12 h-1 bg-gradient-to-r from-blue-400 to-landing-primary rounded-full" />
+                <span className="absolute -bottom-1 left-0 w-12 h-1 bg-linear-to-r from-blue-400 to-landing-primary rounded-full" />
               </h4>
               <div className="flex flex-col gap-2 md:gap-4 text-sm text-gray-600 dark:text-gray-300">
                 {shopDetails?.address && (
@@ -132,7 +133,7 @@ export function ArcadiaFooter() {
               <div className="space-y-4">
                 <h4 className="font-bold text-lg relative inline-block text-gray-900 dark:text-white">
                   FOLLOW US
-                  <span className="absolute -bottom-1 left-0 w-12 h-1 bg-gradient-to-r from-blue-400 to-landing-primary rounded-full" />
+                  <span className="absolute -bottom-1 left-0 w-12 h-1 bg-linear-to-r from-blue-400 to-landing-primary rounded-full" />
                 </h4>
                 <div className="flex flex-wrap items-center gap-4">
                   {activeSocialLinks.map(([key, value]) => {
@@ -149,7 +150,7 @@ export function ArcadiaFooter() {
                         rel="noopener noreferrer"
                         className="group"
                       >
-                        <div className="w-12 h-12 flex items-center justify-center bg-gradient-to-br from-blue-500 to-landing-primary rounded-xl shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-blue-400/30 hover:rotate-3">
+                        <div className="w-12 h-12 flex items-center justify-center bg-linear-to-br from-blue-500 to-landing-primary rounded-xl shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-blue-400/30 hover:rotate-3">
                           <IconComponent className="w-5 h-5" />
                         </div>
                       </Link>
@@ -163,8 +164,8 @@ export function ArcadiaFooter() {
       </div>
 
       {/* Copyright section */}
-      <div className="relative bg-gradient-to-r from-blue-600 to-landing-primary text-white py-8 px-4">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+      <div className="relative bg-linear-to-r from-blue-600 to-landing-primary text-white py-8 px-4">
+        <div className="container flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-center md:text-left text-sm md:text-base">
             © {shopDetails?.shop_name || "Shop"} {new Date().getFullYear()}. All
             rights reserved

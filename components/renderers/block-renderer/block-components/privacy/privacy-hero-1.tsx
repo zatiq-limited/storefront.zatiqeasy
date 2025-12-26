@@ -21,7 +21,9 @@ interface PrivacyHero1Props {
 }
 
 export default function PrivacyHero1({ settings = {} }: PrivacyHero1Props) {
-  const s = convertSettingsKeys(settings as Record<string, unknown>) as PrivacyHero1Settings;
+  const s = convertSettingsKeys(
+    settings as Record<string, unknown>
+  ) as PrivacyHero1Settings;
 
   // If no headline provided, don't render
   if (!s.headline) return null;
@@ -44,14 +46,15 @@ export default function PrivacyHero1({ settings = {} }: PrivacyHero1Props) {
         <div
           className="absolute inset-0"
           style={{
-            background: "linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.5) 100%)",
+            background:
+              "linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.5) 100%)",
           }}
         />
 
         {/* Breadcrumb - Upper Left */}
         {s.showBreadcrumb && (
           <div className="absolute top-4 md:top-6 left-0 right-0 z-10">
-            <nav className="max-w-[1440px] mx-auto px-4 2xl:px-0">
+            <nav className="container px-4 2xl:px-0">
               <ol className="flex items-center gap-1 text-sm text-white/80">
                 <li>
                   <Link
@@ -116,10 +119,7 @@ export default function PrivacyHero1({ settings = {} }: PrivacyHero1Props) {
             className="w-full block"
             preserveAspectRatio="none"
           >
-            <path
-              d="M0 60 Q720 20 1440 60 V60 H0 Z"
-              fill="white"
-            />
+            <path d="M0 60 Q720 20 1440 60 V60 H0 Z" fill="white" />
           </svg>
         </div>
       </div>

@@ -27,13 +27,15 @@ export function OnSaleSection({
   const swiperRef = useRef<SwiperType | null>(null);
 
   // Get on-sale products from theme
-  const onSaleProducts = (shopDetails?.shop_theme as unknown as { on_sale_inventories?: Product[] })?.on_sale_inventories || [];
+  const onSaleProducts =
+    (shopDetails?.shop_theme as unknown as { on_sale_inventories?: Product[] })
+      ?.on_sale_inventories || [];
 
   if (onSaleProducts.length === 0) return null;
 
   return (
     <div className="w-full px-3 sm:px-4 xl:px-0 py-10 sm:py-14">
-      <div className="max-w-7xl mx-auto">
+      <div className="container">
         {/* Header */}
         <div className="text-center mb-4 sm:mb-6 md:mb-8">
           <h2

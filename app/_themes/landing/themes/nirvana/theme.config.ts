@@ -43,9 +43,10 @@ export const nirvanaThemeConfig = {
 
   // Gradient styles
   gradients: {
-    text: "bg-gradient-to-r from-landing-primary to-landing-secondary",
-    background: "bg-gradient-to-br from-landing-primary/5 via-landing-primary/10 to-landing-secondary/5",
-    button: "bg-gradient-to-r from-landing-primary to-landing-secondary",
+    text: "bg-linear-to-r from-landing-primary to-landing-secondary",
+    background:
+      "bg-linear-to-br from-landing-primary/5 via-landing-primary/10 to-landing-secondary/5",
+    button: "bg-linear-to-r from-landing-primary to-landing-secondary",
   },
 } as const;
 

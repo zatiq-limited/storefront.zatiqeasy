@@ -62,7 +62,10 @@ export default function CollectionProducts2({
   };
 
   // Masonry classes for different heights
-  const masonryClasses = viewMode === "masonry" ? "columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-6" : "";
+  const masonryClasses =
+    viewMode === "masonry"
+      ? "columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-6"
+      : "";
 
   useEffect(() => {
     // Scroll animations
@@ -114,26 +117,39 @@ export default function CollectionProducts2({
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Enhanced Header */}
         <div className="text-center mb-10">
-          <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4" style={{ color: s.textColor || "#111827" }}>
+          <h2
+            className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4"
+            style={{ color: s.textColor || "#111827" }}
+          >
             Shop Our Collection
           </h2>
-          <p className="text-lg opacity-70 max-w-2xl mx-auto" style={{ color: s.textColor || "#6b7280" }}>
-            Discover {collection.product_count} carefully curated products in {collection.name}
+          <p
+            className="text-lg opacity-70 max-w-2xl mx-auto"
+            style={{ color: s.textColor || "#6b7280" }}
+          >
+            Discover {collection.product_count} carefully curated products in{" "}
+            {collection.name}
           </p>
         </div>
 
         {/* Floating Filter Bar */}
         {(s.showFilters || s.showSorting) && (
           <div
-            className={`${s.filterStyle === "floating" ? "sticky top-20 z-30 backdrop-blur-lg border-b" : "mb-8"} rounded-2xl p-6 transition-all duration-300`}
+            className={`${
+              s.filterStyle === "floating"
+                ? "sticky top-20 z-30 backdrop-blur-lg border-b"
+                : "mb-8"
+            } rounded-2xl p-6 transition-all duration-300`}
             style={{
-              backgroundColor: s.filterStyle === "floating"
-                ? `${s.backgroundColor || "#ffffff"}F0`
-                : "#ffffff",
+              backgroundColor:
+                s.filterStyle === "floating"
+                  ? `${s.backgroundColor || "#ffffff"}F0`
+                  : "#ffffff",
               borderColor: `${s.textColor || "#e5e7eb"}20`,
-              boxShadow: s.filterStyle === "floating"
-                ? "0 8px 32px rgba(0,0,0,0.1)"
-                : "0 4px 20px rgba(0,0,0,0.05)",
+              boxShadow:
+                s.filterStyle === "floating"
+                  ? "0 8px 32px rgba(0,0,0,0.1)"
+                  : "0 4px 20px rgba(0,0,0,0.05)",
             }}
           >
             <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
@@ -148,7 +164,12 @@ export default function CollectionProducts2({
                       color: s.accentColor || "#7c3aed",
                     }}
                   >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -171,24 +192,28 @@ export default function CollectionProducts2({
                   </button>
 
                   {/* Quick Filter Tags */}
-                  {["New Arrivals", "Best Sellers", "Sale", "Eco-Friendly"].map((tag) => (
-                    <button
-                      key={tag}
-                      className="px-4 py-2 rounded-xl border-2 font-medium transition-all hover:scale-105"
-                      style={{
-                        borderColor: `${s.accentColor || "#7c3aed"}30`,
-                        color: s.textColor || "#374151",
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = `${s.accentColor || "#7c3aed"}10`;
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = "transparent";
-                      }}
-                    >
-                      {tag}
-                    </button>
-                  ))}
+                  {["New Arrivals", "Best Sellers", "Sale", "Eco-Friendly"].map(
+                    (tag) => (
+                      <button
+                        key={tag}
+                        className="px-4 py-2 rounded-xl border-2 font-medium transition-all hover:scale-105"
+                        style={{
+                          borderColor: `${s.accentColor || "#7c3aed"}30`,
+                          color: s.textColor || "#374151",
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = `${
+                            s.accentColor || "#7c3aed"
+                          }10`;
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = "transparent";
+                        }}
+                      >
+                        {tag}
+                      </button>
+                    )
+                  )}
 
                   {activeFilters.length > 0 && (
                     <button
@@ -205,19 +230,38 @@ export default function CollectionProducts2({
               <div className="flex items-center gap-3">
                 {/* View Toggle */}
                 {s.showViewToggle && (
-                  <div className="flex items-center gap-1 p-1 rounded-xl bg-white shadow-sm border" style={{ borderColor: `${s.textColor || "#e5e7eb"}30` }}>
+                  <div
+                    className="flex items-center gap-1 p-1 rounded-xl bg-white shadow-sm border"
+                    style={{ borderColor: `${s.textColor || "#e5e7eb"}30` }}
+                  >
                     <button
                       onClick={() => setViewMode("grid")}
                       className={`p-2 rounded-lg transition-all ${
                         viewMode === "grid" ? "shadow-sm" : ""
                       }`}
                       style={{
-                        backgroundColor: viewMode === "grid" ? s.accentColor || "#7c3aed" : "transparent",
-                        color: viewMode === "grid" ? "#ffffff" : s.textColor || "#6b7280",
+                        backgroundColor:
+                          viewMode === "grid"
+                            ? s.accentColor || "#7c3aed"
+                            : "transparent",
+                        color:
+                          viewMode === "grid"
+                            ? "#ffffff"
+                            : s.textColor || "#6b7280",
                       }}
                     >
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+                      <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+                          strokeWidth={2}
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
                       </svg>
                     </button>
                     <button
@@ -226,12 +270,28 @@ export default function CollectionProducts2({
                         viewMode === "list" ? "shadow-sm" : ""
                       }`}
                       style={{
-                        backgroundColor: viewMode === "list" ? s.accentColor || "#7c3aed" : "transparent",
-                        color: viewMode === "list" ? "#ffffff" : s.textColor || "#6b7280",
+                        backgroundColor:
+                          viewMode === "list"
+                            ? s.accentColor || "#7c3aed"
+                            : "transparent",
+                        color:
+                          viewMode === "list"
+                            ? "#ffffff"
+                            : s.textColor || "#6b7280",
                       }}
                     >
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path d="M4 6h16M4 10h16M4 14h16M4 18h16" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+                      <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="M4 6h16M4 10h16M4 14h16M4 18h16"
+                          strokeWidth={2}
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
                       </svg>
                     </button>
                     <button
@@ -240,12 +300,28 @@ export default function CollectionProducts2({
                         viewMode === "masonry" ? "shadow-sm" : ""
                       }`}
                       style={{
-                        backgroundColor: viewMode === "masonry" ? s.accentColor || "#7c3aed" : "transparent",
-                        color: viewMode === "masonry" ? "#ffffff" : s.textColor || "#6b7280",
+                        backgroundColor:
+                          viewMode === "masonry"
+                            ? s.accentColor || "#7c3aed"
+                            : "transparent",
+                        color:
+                          viewMode === "masonry"
+                            ? "#ffffff"
+                            : s.textColor || "#6b7280",
                       }}
                     >
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path d="M4 6h8v8H4zM14 6h6v4h-6zM14 14h6v6h-6zM4 16h6v4H4z" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+                      <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="M4 6h8v8H4zM14 6h6v4h-6zM14 14h6v6h-6zM4 16h6v4H4z"
+                          strokeWidth={2}
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
                       </svg>
                     </button>
                   </div>
@@ -258,12 +334,14 @@ export default function CollectionProducts2({
                       value={selectedSort}
                       onChange={(e) => setSelectedSort(e.target.value)}
                       className="appearance-none pl-4 pr-10 py-2 rounded-xl border-2 font-medium cursor-pointer transition-all focus:outline-none focus:ring-2"
-                      style={{
-                        borderColor: `${s.accentColor || "#7c3aed"}30`,
-                        "--tw-ring-color": s.accentColor || "#7c3aed",
-                        color: s.textColor || "#374151",
-                        backgroundColor: "#ffffff",
-                      } as React.CSSProperties}
+                      style={
+                        {
+                          borderColor: `${s.accentColor || "#7c3aed"}30`,
+                          "--tw-ring-color": s.accentColor || "#7c3aed",
+                          color: s.textColor || "#374151",
+                          backgroundColor: "#ffffff",
+                        } as React.CSSProperties
+                      }
                     >
                       <option value="featured">Featured</option>
                       <option value="price-low">Price: Low to High</option>
@@ -273,8 +351,19 @@ export default function CollectionProducts2({
                       <option value="rated">Top Rated</option>
                       <option value="name-az">A to Z</option>
                     </select>
-                    <svg className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 pointer-events-none" style={{ color: s.textColor || "#6b7280" }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    <svg
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 pointer-events-none"
+                      style={{ color: s.textColor || "#6b7280" }}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
                     </svg>
                   </div>
                 )}
@@ -283,40 +372,75 @@ export default function CollectionProducts2({
 
             {/* Expandable Filter Panel */}
             {isFilterOpen && (
-              <div className="mt-6 pt-6 border-t" style={{ borderColor: `${s.textColor || "#e5e7eb"}20` }}>
+              <div
+                className="mt-6 pt-6 border-t"
+                style={{ borderColor: `${s.textColor || "#e5e7eb"}20` }}
+              >
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   <div>
-                    <label className="block text-sm font-semibold mb-2" style={{ color: s.textColor || "#374151" }}>
+                    <label
+                      className="block text-sm font-semibold mb-2"
+                      style={{ color: s.textColor || "#374151" }}
+                    >
                       Category
                     </label>
-                    <select className="w-full px-3 py-2 rounded-lg border" style={{ borderColor: `${s.accentColor || "#7c3aed"}30` }}>
+                    <select
+                      className="w-full px-3 py-2 rounded-lg border"
+                      style={{ borderColor: `${s.accentColor || "#7c3aed"}30` }}
+                    >
                       <option>All Categories</option>
                       <option>Electronics</option>
                       <option>Clothing</option>
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold mb-2" style={{ color: s.textColor || "#374151" }}>
+                    <label
+                      className="block text-sm font-semibold mb-2"
+                      style={{ color: s.textColor || "#374151" }}
+                    >
                       Price Range
                     </label>
                     <div className="flex items-center space-x-2">
-                      <input type="number" placeholder="Min" className="w-full px-3 py-2 rounded-lg border" style={{ borderColor: `${s.accentColor || "#7c3aed"}30` }} />
+                      <input
+                        type="number"
+                        placeholder="Min"
+                        className="w-full px-3 py-2 rounded-lg border"
+                        style={{
+                          borderColor: `${s.accentColor || "#7c3aed"}30`,
+                        }}
+                      />
                       <span style={{ color: s.textColor || "#6b7280" }}>-</span>
-                      <input type="number" placeholder="Max" className="w-full px-3 py-2 rounded-lg border" style={{ borderColor: `${s.accentColor || "#7c3aed"}30` }} />
+                      <input
+                        type="number"
+                        placeholder="Max"
+                        className="w-full px-3 py-2 rounded-lg border"
+                        style={{
+                          borderColor: `${s.accentColor || "#7c3aed"}30`,
+                        }}
+                      />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold mb-2" style={{ color: s.textColor || "#374151" }}>
+                    <label
+                      className="block text-sm font-semibold mb-2"
+                      style={{ color: s.textColor || "#374151" }}
+                    >
                       Brand
                     </label>
-                    <select className="w-full px-3 py-2 rounded-lg border" style={{ borderColor: `${s.accentColor || "#7c3aed"}30` }}>
+                    <select
+                      className="w-full px-3 py-2 rounded-lg border"
+                      style={{ borderColor: `${s.accentColor || "#7c3aed"}30` }}
+                    >
                       <option>All Brands</option>
                       <option>Brand A</option>
                       <option>Brand B</option>
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold mb-2" style={{ color: s.textColor || "#374151" }}>
+                    <label
+                      className="block text-sm font-semibold mb-2"
+                      style={{ color: s.textColor || "#374151" }}
+                    >
                       Rating
                     </label>
                     <div className="flex space-x-1">
@@ -327,7 +451,11 @@ export default function CollectionProducts2({
                           className="p-1 transition-colors"
                           style={{ color: "#fbbf24" }}
                         >
-                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                          <svg
+                            className="w-5 h-5"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
                             <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                           </svg>
                         </button>
@@ -341,10 +469,23 @@ export default function CollectionProducts2({
         )}
 
         {/* Products Grid/List/Masonry */}
-        <div className={viewMode === "masonry" ? masonryClasses : `grid ${columnClasses[Number(s.columns) as keyof typeof columnClasses] || columnClasses[4]} gap-6`}>
+        <div
+          className={
+            viewMode === "masonry"
+              ? masonryClasses
+              : `grid ${
+                  columnClasses[
+                    Number(s.columns) as keyof typeof columnClasses
+                  ] || columnClasses[4]
+                } gap-6`
+          }
+        >
           {isLoading ? (
             Array.from({ length: 8 }, (_, i) => (
-              <div key={i} className="product-card bg-white rounded-2xl shadow-lg overflow-hidden animate-pulse">
+              <div
+                key={i}
+                className="product-card bg-white rounded-2xl shadow-lg overflow-hidden animate-pulse"
+              >
                 <div className="aspect-square bg-gray-200"></div>
                 <div className="p-6 space-y-3">
                   <div className="h-4 bg-gray-200 rounded w-3/4"></div>
@@ -353,8 +494,18 @@ export default function CollectionProducts2({
               </div>
             ))
           ) : (
-            <div className={`${viewMode === "grid" ? "col-span-full" : ""} flex flex-col items-center justify-center py-20 text-center`}>
-              <svg className="w-32 h-32 mx-auto mb-6 opacity-20" style={{ color: s.accentColor || "#7c3aed" }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div
+              className={`${
+                viewMode === "grid" ? "col-span-full" : ""
+              } flex flex-col items-center justify-center py-20 text-center`}
+            >
+              <svg
+                className="w-32 h-32 mx-auto mb-6 opacity-20"
+                style={{ color: s.accentColor || "#7c3aed" }}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -362,11 +513,18 @@ export default function CollectionProducts2({
                   d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
                 />
               </svg>
-              <h3 className="text-2xl font-bold mb-3" style={{ color: s.textColor || "#374151" }}>
+              <h3
+                className="text-2xl font-bold mb-3"
+                style={{ color: s.textColor || "#374151" }}
+              >
                 Your cart is waiting
               </h3>
-              <p className="text-lg opacity-70 max-w-md" style={{ color: s.textColor || "#6b7280" }}>
-                Looks like you haven't added any products yet. Start shopping to fill it up!
+              <p
+                className="text-lg opacity-70 max-w-md"
+                style={{ color: s.textColor || "#6b7280" }}
+              >
+                Looks like you haven't added any products yet. Start shopping to
+                fill it up!
               </p>
               <button
                 className="mt-6 px-8 py-3 rounded-xl font-semibold transition-all hover:scale-105"
@@ -395,7 +553,12 @@ export default function CollectionProducts2({
             >
               <span className="relative z-10 flex items-center">
                 {s.loadMoreButtonText || "Explore More Products"}
-                <svg className="w-6 h-6 ml-3 transform group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg
+                  className="w-6 h-6 ml-3 transform group-hover:translate-x-2 transition-transform"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -404,9 +567,12 @@ export default function CollectionProducts2({
                   />
                 </svg>
               </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+              <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/20 to-white/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
             </button>
-            <p className="mt-3 text-sm opacity-70" style={{ color: s.textColor || "#6b7280" }}>
+            <p
+              className="mt-3 text-sm opacity-70"
+              style={{ color: s.textColor || "#6b7280" }}
+            >
               Showing 12 of {collection.product_count} products
             </p>
           </div>

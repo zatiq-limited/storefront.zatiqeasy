@@ -5,7 +5,11 @@ import { useRouter, useParams } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { useShopStore } from "@/stores/shopStore";
 import { useProductsStore, type Product } from "@/stores/productsStore";
-import { useCartStore, selectTotalItems, selectSubtotal } from "@/stores/cartStore";
+import {
+  useCartStore,
+  selectTotalItems,
+  selectSubtotal,
+} from "@/stores/cartStore";
 import { useCategoryProducts } from "@/hooks/useCategoryProducts";
 import { CartFloatingBtn } from "@/components/features/cart/cart-floating-btn";
 import { VariantSelectorModal } from "@/components/products/variant-selector-modal";
@@ -37,7 +41,7 @@ export function SelloraCategoryPage() {
     pagination,
     currentPage,
     setCurrentPage,
-    isLoading
+    isLoading,
   } = useCategoryProducts(PRODUCTS_PER_PAGE);
 
   // Pagination values from hook
@@ -60,10 +64,13 @@ export function SelloraCategoryPage() {
   );
 
   // Handle page change
-  const handlePageChange = useCallback((page: number) => {
-    setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [setCurrentPage]);
+  const handlePageChange = useCallback(
+    (page: number) => {
+      setCurrentPage(page);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    },
+    [setCurrentPage]
+  );
 
   return (
     <div className="px-3 md:px-0 pb-10">
@@ -74,7 +81,7 @@ export function SelloraCategoryPage() {
         onClose={() => setSelectedProduct(null)}
       />
 
-      <div className="max-w-7xl mx-auto">
+      <div className="container">
         {/* Category Title */}
         <div>
           <h2 className="text-[20px] md:text-[36px] xl:text-[46px] leading-snug lg:leading-[57.50px] text-black-full dark:text-blue-zatiq font-bold py-5">

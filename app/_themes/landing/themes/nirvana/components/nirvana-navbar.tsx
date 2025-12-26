@@ -29,7 +29,7 @@ export function NirvanaNavbar() {
                 className="h-8 md:h-10 w-auto max-w-[180px] object-contain transition-transform duration-300 group-hover:scale-105"
               />
             ) : (
-              <span className="font-bold text-xl md:text-2xl bg-gradient-to-r from-landing-primary to-landing-secondary bg-clip-text text-transparent">
+              <span className="font-bold text-xl md:text-2xl bg-linear-to-r from-landing-primary to-landing-secondary bg-clip-text text-transparent">
                 {shopDetails?.shop_name || "Shop"}
               </span>
             )}
@@ -38,7 +38,7 @@ export function NirvanaNavbar() {
           {/* Cart Button */}
           <Link
             href={`${baseUrl}/cart`}
-            className="relative p-2 md:p-3 rounded-full bg-gradient-to-r from-landing-primary to-landing-secondary text-white hover:shadow-lg hover:scale-110 transition-all duration-300"
+            className="relative p-2 md:p-3 rounded-full bg-linear-to-r from-landing-primary to-landing-secondary text-white hover:shadow-lg hover:scale-110 transition-all duration-300"
           >
             <ShoppingCart className="w-5 h-5 md:w-6 md:h-6" />
             {cartCount > 0 && (

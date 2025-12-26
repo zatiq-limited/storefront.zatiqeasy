@@ -26,7 +26,7 @@ export function ArcadiaNavbar() {
                 alt={shopDetails.shop_name || "Shop"}
                 width={200}
                 height={50}
-                className="h-10 md:h-12 w-auto max-w-[180px] object-contain transition-transform duration-300 group-hover:scale-105"
+                className="h-10 md:h-12 w-auto max-w-45 object-contain transition-transform duration-300 group-hover:scale-105"
               />
             ) : (
               <span className="font-bold text-xl md:text-2xl text-landing-primary group-hover:text-landing-primary/80 transition-colors">
@@ -38,7 +38,7 @@ export function ArcadiaNavbar() {
           {/* Cart Button */}
           <Link
             href={`${baseUrl}/cart`}
-            className="relative p-2 md:p-3 rounded-full bg-gradient-to-br from-blue-500 to-landing-primary text-white hover:shadow-lg hover:scale-110 transition-all duration-300"
+            className="relative p-2 md:p-3 rounded-full bg-linear-to-br from-blue-500 to-landing-primary text-white hover:shadow-lg hover:scale-110 transition-all duration-300"
           >
             <ShoppingCart className="w-5 h-5 md:w-6 md:h-6" />
             {cartCount > 0 && (

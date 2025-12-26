@@ -11,7 +11,8 @@ export function TrustFeaturesBar() {
     {
       icon: ShieldCheck,
       title: t("shop_with_confidence") || "Shop with Confidence",
-      description: t("trusted_by_happy_customers") || "Trusted by happy customers",
+      description:
+        t("trusted_by_happy_customers") || "Trusted by happy customers",
     },
     {
       icon: MessagesSquare,
@@ -21,18 +22,21 @@ export function TrustFeaturesBar() {
     {
       icon: Tags,
       title: t("trusted_online_store") || "Trusted Online Store",
-      description: t("quality_products_expert_support") || "Quality products & expert support",
+      description:
+        t("quality_products_expert_support") ||
+        "Quality products & expert support",
     },
     {
       icon: Truck,
       title: t("shop_smart_save_more") || "Shop Smart, Save More",
-      description: t("exclusive_deals_top_quality") || "Exclusive deals & top quality",
+      description:
+        t("exclusive_deals_top_quality") || "Exclusive deals & top quality",
     },
   ];
 
   return (
     <div className="px-4 sm:px-6 lg:px-8 bg-black text-white">
-      <div className="max-w-7xl mx-auto py-10">
+      <div className="container py-10">
         <div className="flex flex-col w-auto sm:flex-row sm:flex-wrap lg:flex-nowrap items-center justify-center sm:justify-between gap-6 sm:gap-8 lg:gap-10">
           {trustFeatures.map((feature, index) => {
             const Icon = feature.icon;

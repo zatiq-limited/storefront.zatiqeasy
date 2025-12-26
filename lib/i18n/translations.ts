@@ -112,6 +112,7 @@ export const translations = {
       home: "Home",
       menu: "Menu",
       more_categories: "More categories",
+      about_us: "About Us",
     },
   },
   bn: {
@@ -227,6 +228,7 @@ export const translations = {
       home: "হোম",
       menu: "মেনু",
       more_categories: "আরও ক্যাটাগরি",
+      about_us: "আমাদের সম্পর্কে",
     },
   },
 };
