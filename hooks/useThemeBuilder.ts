@@ -16,9 +16,9 @@ const DEFAULT_SHOP_ID = process.env.NEXT_PUBLIC_SHOP_ID || "85290";
  * 
  * @example
  * ```tsx
- * const { isLoading, error, data } = useThemeBuilder();
+ * const { isLoading, error, theme, homePage } = useThemeBuilder();
  * // or with specific shop ID
- * const { isLoading, error, data } = useThemeBuilder("12345");
+ * const { isLoading, error, theme, homePage } = useThemeBuilder("12345");
  * ```
  */
 export function useThemeBuilder(shopId?: string | number) {
@@ -36,7 +36,8 @@ export function useThemeBuilder(shopId?: string | number) {
           shopId: data.shopId,
           name: data.name,
           lastPublished: data.last_published,
-          hasEditorState: !!data.editorState,
+          hasTheme: !!data.theme,
+          hasHomePage: !!data.pages?.home,
         });
       } else {
         console.log("[useThemeBuilder] ℹ️ No theme found for shop:", resolvedShopId);
@@ -46,7 +47,7 @@ export function useThemeBuilder(shopId?: string | number) {
     },
     // Don't cache too aggressively - theme may change
     staleTime: 1000 * 60, // 1 minute
-    gcTime: 1000 * 60 * 5, // 5 minutes (previously cacheTime)
+    gcTime: 1000 * 60 * 5, // 5 minutes
     refetchOnWindowFocus: false,
     retry: 1,
   });
@@ -72,7 +73,9 @@ export function useThemeBuilder(shopId?: string | number) {
     ...query,
     // Convenience getters
     themeData: query.data,
-    editorState: query.data?.editorState,
+    theme: query.data?.theme,
+    homePage: query.data?.pages?.home,
+    pages: query.data?.pages,
   };
 }
 

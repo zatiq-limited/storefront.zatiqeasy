@@ -1,10 +1,15 @@
 import { create } from "zustand";
-import type { ThemeBuilderData, ThemeBuilderEditorState } from "@/lib/api/services/theme-builder.service";
+import type { 
+  ThemeBuilderData, 
+  TransformedTheme, 
+  TransformedPage 
+} from "@/lib/api/services/theme-builder.service";
 
 interface ThemeBuilderState {
   // Data
   themeBuilderData: ThemeBuilderData | null;
-  editorState: ThemeBuilderEditorState | null;
+  theme: TransformedTheme | null;
+  homePage: TransformedPage | null;
   
   // Loading states
   isLoading: boolean;
@@ -20,14 +25,16 @@ interface ThemeBuilderState {
 export const useThemeBuilderStore = create<ThemeBuilderState>((set) => ({
   // Initial state
   themeBuilderData: null,
-  editorState: null,
+  theme: null,
+  homePage: null,
   isLoading: false,
   error: null,
 
   // Actions
   setThemeBuilderData: (data) => set({ 
     themeBuilderData: data,
-    editorState: data?.editorState || null,
+    theme: data?.theme || null,
+    homePage: data?.pages?.home || null,
     error: null,
   }),
   
@@ -37,7 +44,8 @@ export const useThemeBuilderStore = create<ThemeBuilderState>((set) => ({
   
   reset: () => set({
     themeBuilderData: null,
-    editorState: null,
+    theme: null,
+    homePage: null,
     isLoading: false,
     error: null,
   }),
