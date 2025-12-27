@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { shopService } from "@/lib/api/services/shop.service";
-import { ThemeHandler } from "@/app/lib/theme-handler";
+import { ConditionalThemeHandler } from "@/app/lib/conditional-theme-handler";
 import { ShopProvider } from "@/app/providers/shop-provider";
 import { BreadcrumbWrapper } from "@/app/_themes/_components/breadcrumb-wrapper";
 
@@ -67,12 +67,12 @@ export default async function MerchantLayout({
   return (
     <ShopProvider initialShopData={shopProfile}>
       <div className="min-h-screen bg-gray-50">
-        <ThemeHandler>
+        <ConditionalThemeHandler>
           {/* Breadcrumb wrapper - conditionally rendered based on theme and route */}
           <BreadcrumbWrapper />
 
           {children}
-        </ThemeHandler>
+        </ConditionalThemeHandler>
       </div>
     </ShopProvider>
   );

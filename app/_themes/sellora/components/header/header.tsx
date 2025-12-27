@@ -82,7 +82,9 @@ export function SelloraHeader() {
 
       <header
         className={cn(
-          "h-12 md:h-20 w-full fixed top-8.5 sm:top-12 left-0 z-50 flex items-center justify-center transition-all duration-300",
+          `h-12 md:h-20 w-full ${
+            pathname.includes("/single-product") ? "sticky" : "fixed"
+          }  top-8.5 sm:top-12 left-0 z-50 flex items-center justify-center transition-all duration-300`,
           {
             "bg-white top-0! shadow-sm": scrollY > 20,
             "bg-white/5 dark:bg-black-18/40 backdrop-blur-sm": scrollY <= 20,

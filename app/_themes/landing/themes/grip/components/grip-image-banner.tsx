@@ -1,30 +1,43 @@
 "use client";
 
-import React from "react";
-import { FallbackImage } from "@/components/ui/fallback-image";
+import { useMemo } from "react";
+import Image from "next/image";
 import type { ContentInterface } from "@/types/landing-page.types";
 
 interface GripImageBannerProps {
-  content: ContentInterface | null | undefined;
+  content?: ContentInterface[] | ContentInterface | null;
 }
 
 export function GripImageBanner({ content }: GripImageBannerProps) {
-  if (!content?.image_url) {
+  // Accept either an array of banners or a single banner object
+  const banner = useMemo(() => {
+    if (!content) return null;
+    if (Array.isArray(content)) return content.length > 0 ? content[0] : null;
+    return content;
+  }, [content]);
+
+  const title = banner?.title;
+  const imageSrc = banner?.image_url;
+
+  if (!imageSrc) {
     return null;
   }
 
   return (
-    <div className="py-10 md:py-16">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="relative w-full aspect-[21/9] md:aspect-[3/1] overflow-hidden rounded-2xl">
-          <FallbackImage
-            src={content.image_url}
-            alt={content.title || "Banner"}
-            fill
-            className="object-cover"
-          />
-        </div>
-      </div>
+    <div className="pb-10 md:pb-16 lg:pb-24 xl:pb-28 space-y-10">
+      {title && (
+        <h2 className="text-grip-black dark:text-white text-3xl sm:text-4xl md:text-5xl lg:text-[56px] font-semibold text-center">
+          {title}
+        </h2>
+      )}
+
+      <Image
+        src={imageSrc}
+        alt={title || "Banner image"}
+        width={1920}
+        height={1080}
+        className="w-full h-auto rounded-md"
+      />
     </div>
   );
 }

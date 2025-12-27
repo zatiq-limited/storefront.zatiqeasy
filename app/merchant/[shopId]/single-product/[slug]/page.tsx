@@ -5,24 +5,47 @@ import { useParams, useSearchParams } from "next/navigation";
 import { useLandingPage } from "@/hooks/useLandingPage";
 import { useLandingStore } from "@/stores/landingStore";
 import { useShopStore } from "@/stores/shopStore";
+import { useShopProfile } from "@/hooks";
 import { GripLandingPage } from "@/app/_themes/landing/themes/grip";
 import { ArcadiaLandingPage } from "@/app/_themes/landing/themes/arcadia";
 import { NirvanaLandingPage } from "@/app/_themes/landing/themes/nirvana";
 import type { SingleProductTheme } from "@/types/landing-page.types";
+import type { ShopProfile } from "@/types";
 
-export default function LandingPage() {
+/**
+ * Merchant Single Product / Landing Page
+ * Matches old project: pages/merchant/[shopId]/single-product/[slug].tsx
+ */
+export default function MerchantLandingPage() {
   const params = useParams();
   const searchParams = useSearchParams();
+  const shopId = params.shopId as string;
   const slug = params.slug as string;
   const isPreview = searchParams.get("preview") === "true";
 
-  // Get shop details for the query
-  const { shopDetails } = useShopStore();
+  const { shopDetails, setShopDetails } = useShopStore();
+
+  // Fetch shop profile if not in store
+  const hasShopData = shopDetails && shopDetails.id === Number(shopId);
+  const { data: shopProfile, isLoading: isProfileLoading } = useShopProfile(
+    { shopId },
+    { enabled: !hasShopData }
+  );
+
+  // Set shop details in store
+  useEffect(() => {
+    if (shopProfile && !hasShopData) {
+      setShopDetails(shopProfile as unknown as ShopProfile);
+    }
+  }, [shopProfile, hasShopData, setShopDetails]);
+
+  // Use store data if available, otherwise use fetched data
+  const activeShopData = hasShopData ? shopDetails : shopProfile;
 
   // Get shop_uuid for API call (backend expects UUID, not numeric ID)
-  const shopUuid = shopDetails?.shop_uuid;
+  const shopUuid = activeShopData?.shop_uuid;
 
-  // Fetch landing page data using shop_uuid
+  // Fetch landing page data using shop_uuid (not shopId)
   const { data, isLoading, error } = useLandingPage(
     {
       slug,
@@ -45,7 +68,7 @@ export default function LandingPage() {
   }, [slug, clearOrderState]);
 
   // Loading state
-  if (isLoading || !shopDetails || !shopUuid) {
+  if (isLoading || isProfileLoading || !activeShopData) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
