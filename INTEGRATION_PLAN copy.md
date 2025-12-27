@@ -13,33 +13,33 @@ This document outlines the strategy to combine two existing projects into this n
 
 ### New Project: `storefront.zatiqeasy.dev` (This Project)
 
-| Aspect | Version/Details |
-|--------|-----------------|
-| **Framework** | Next.js 16.0.10 with App Router |
-| **React** | React 19.2.1 |
-| **Styling** | Tailwind CSS v4 with OKLch color variables |
+| Aspect            | Version/Details                            |
+| ----------------- | ------------------------------------------ |
+| **Framework**     | Next.js 16.0.10 with App Router            |
+| **React**         | React 19.2.1                               |
+| **Styling**       | Tailwind CSS v4 with OKLch color variables |
 | **UI Primitives** | @base-ui/react 1.0.0 (headless components) |
-| **Icons** | Lucide React 0.561.0 |
-| **CLI** | shadcn 3.6.2 |
-| **TypeScript** | TypeScript 5 |
+| **Icons**         | Lucide React 0.561.0                       |
+| **CLI**           | shadcn 3.6.2                               |
+| **TypeScript**    | TypeScript 5                               |
 
 ### Pre-built UI Components (13 total)
 
-| Component | Description |
-|-----------|-------------|
-| `alert-dialog` | Modal dialogs with actions |
-| `badge` | Label badges with variants |
-| `button` | Buttons with extensive variants (xs, sm, default, lg, icon) |
-| `card` | Card layout with header, content, footer, action |
-| `combobox` | Searchable select dropdown |
-| `dropdown-menu` | Context menus with submenus, checkboxes, radios |
-| `field` | Complete form field system with validation |
-| `input` | Text input with accessibility |
-| `input-group` | Input grouping component |
-| `label` | Form labels |
-| `select` | Dropdown select |
-| `separator` | Horizontal/vertical dividers |
-| `textarea` | Multi-line text input |
+| Component       | Description                                                 |
+| --------------- | ----------------------------------------------------------- |
+| `alert-dialog`  | Modal dialogs with actions                                  |
+| `badge`         | Label badges with variants                                  |
+| `button`        | Buttons with extensive variants (xs, sm, default, lg, icon) |
+| `card`          | Card layout with header, content, footer, action            |
+| `combobox`      | Searchable select dropdown                                  |
+| `dropdown-menu` | Context menus with submenus, checkboxes, radios             |
+| `field`         | Complete form field system with validation                  |
+| `input`         | Text input with accessibility                               |
+| `input-group`   | Input grouping component                                    |
+| `label`         | Form labels                                                 |
+| `select`        | Dropdown select                                             |
+| `separator`     | Horizontal/vertical dividers                                |
+| `textarea`      | Multi-line text input                                       |
 
 ### Path Aliases Configured
 
@@ -59,17 +59,18 @@ This document outlines the strategy to combine two existing projects into this n
 
 ### Source 1: `storefront.zatiqeasy` (Theme Builder)
 
-| Feature | Details |
-|---------|---------|
-| **BlockRenderer** | Dynamic UI from JSON API responses |
-| **V3.0 Schema** | Data binding (bind_content, bind_src, bind_href) |
-| **Components** | Repeaters, Swipers --> Embla, Marquees, Icons, Conditions, Events |
-| **Product Cards** | 16 variants (ProductCard1-16) |
-| **Pagination** | 2 styles |
-| **Hero Sections** | 2 styles |
-| **Sidebar** | 2 styles |
+| Feature           | Details                                                           |
+| ----------------- | ----------------------------------------------------------------- |
+| **BlockRenderer** | Dynamic UI from JSON API responses                                |
+| **V3.0 Schema**   | Data binding (bind_content, bind_src, bind_href)                  |
+| **Components**    | Repeaters, Swipers --> Embla, Marquees, Icons, Conditions, Events |
+| **Product Cards** | 16 variants (ProductCard1-16)                                     |
+| **Pagination**    | 2 styles                                                          |
+| **Hero Sections** | 2 styles                                                          |
+| **Sidebar**       | 2 styles                                                          |
 
 **Existing Stores (Zustand):**
+
 - `themeStore.ts` - Theme JSON data
 - `homepageStore.ts` - Homepage sections
 - `productsStore.ts` - Products with filters
@@ -77,6 +78,7 @@ This document outlines the strategy to combine two existing projects into this n
 - `aboutUsStore.ts` - About Us page
 
 **Existing Hooks:**
+
 - `useTheme()` - Theme config
 - `useHomepage()` - Homepage config
 - `useProducts()` - Products with filters
@@ -85,17 +87,18 @@ This document outlines the strategy to combine two existing projects into this n
 
 ### Source 2: `storefront.zatiqeasy.com` (Static Themes)
 
-| Feature | Details |
-|---------|---------|
-| **Static Themes** | 5 themes: Basic, Premium, Aurora, Luxura, Sellora |
-| **Landing Pages** | 3 themes: Arcadia, Nirvana, Grip |
-| **E-commerce** | Full cart, checkout, payment flow |
-| **Payment Gateways** | bKash, AamarPay, COD, self_mfs, zatiq_seller_pay |
-| **Analytics** | Facebook Pixel, GTM, TikTok Pixel, Firebase |
-| **i18n** | English (en), Bengali (bn) |
-| **Multi-tenant** | SHOPLINK/STANDALONE modes |
+| Feature              | Details                                           |
+| -------------------- | ------------------------------------------------- |
+| **Static Themes**    | 5 themes: Basic, Premium, Aurora, Luxura, Sellora |
+| **Landing Pages**    | 3 themes: Arcadia, Nirvana, Grip                  |
+| **E-commerce**       | Full cart, checkout, payment flow                 |
+| **Payment Gateways** | bKash, AamarPay, COD, self_mfs, zatiq_seller_pay  |
+| **Analytics**        | Facebook Pixel, GTM, TikTok Pixel, Firebase       |
+| **i18n**             | English (en), Bengali (bn)                        |
+| **Multi-tenant**     | SHOPLINK/STANDALONE modes                         |
 
 **Existing Contexts (6 total):**
+
 - `ShopContext` - Shop profile, visitor tracking
 - `CartContext` - Cart with localStorage persistence
 - `CheckoutContext` - Form state, delivery, promo codes
@@ -137,7 +140,7 @@ storefront.zatiqeasy.dev/
 │   │   │   └── page.tsx
 │   │   ├── terms-and-conditions/
 │   │   │   └── page.tsx
-│   │   └── return-and-cancellation-policy/
+│   │   └── return-policy/
 │   │       └── page.tsx
 │   │
 │   ├── merchant/                        # Multi-tenant routes
@@ -349,10 +352,10 @@ export interface ShopProfile {
 
 export interface ShopTheme {
   id: number;
-  theme_type: 'builder' | 'static';
+  theme_type: "builder" | "static";
   // For static themes
-  theme_name?: 'Basic' | 'Premium' | 'Aurora' | 'Luxura' | 'Sellora';
-  theme_mode?: 'light' | 'dark';
+  theme_name?: "Basic" | "Premium" | "Aurora" | "Luxura" | "Sellora";
+  theme_mode?: "light" | "dark";
   // For builder themes
   theme_json?: ZatiqTheme;
   // Common
@@ -431,8 +434,8 @@ export type VariantsState = Record<number | string, VariantState>;
 
 ```typescript
 // stores/shopStore.ts
-import { create } from 'zustand';
-import type { ShopProfile } from '@/types/shop.types';
+import { create } from "zustand";
+import type { ShopProfile } from "@/types/shop.types";
 
 interface ShopState {
   shopDetails: ShopProfile | null;
@@ -447,7 +450,7 @@ interface ShopState {
 export const useShopStore = create<ShopState>((set) => ({
   shopDetails: null,
   isSearchModalOpen: false,
-  shopLanguage: 'en',
+  shopLanguage: "en",
 
   setShopDetails: (details) => set({ shopDetails: details }),
   setSearchModalOpen: (open) => set({ isSearchModalOpen: open }),
@@ -457,15 +460,15 @@ export const useShopStore = create<ShopState>((set) => ({
 
 ```typescript
 // stores/cartStore.ts
-import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
-import type { CartProduct } from '@/types/cart.types';
-import { nanoid } from 'nanoid';
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+import type { CartProduct } from "@/types/cart.types";
+import { nanoid } from "nanoid";
 
 interface CartState {
   products: Record<string, CartProduct>;
   cartExpiry: string | null;
-  orderStatus: 'success' | 'error' | undefined;
+  orderStatus: "success" | "error" | undefined;
   isLoading: boolean;
   trackLink: string | null;
 
@@ -475,7 +478,7 @@ interface CartState {
   incrementQty: (cartId: string) => void;
   decrementQty: (cartId: string) => void;
   resetCart: () => void;
-  setOrderStatus: (status: 'success' | 'error' | undefined) => void;
+  setOrderStatus: (status: "success" | "error" | undefined) => void;
   setIsLoading: (loading: boolean) => void;
   setTrackLink: (link: string | null) => void;
 }
@@ -494,11 +497,12 @@ export const useCartStore = create<CartState>()(
         set((state) => ({
           products: {
             ...state.products,
-            [cartId]: { ...product, cartId }
+            [cartId]: { ...product, cartId },
           },
-          cartExpiry: Object.keys(state.products).length === 0
-            ? new Date().toISOString()
-            : state.cartExpiry,
+          cartExpiry:
+            Object.keys(state.products).length === 0
+              ? new Date().toISOString()
+              : state.cartExpiry,
         }));
       },
 
@@ -508,7 +512,8 @@ export const useCartStore = create<CartState>()(
           delete newProducts[cartId];
           return {
             products: newProducts,
-            cartExpiry: Object.keys(newProducts).length === 0 ? null : state.cartExpiry
+            cartExpiry:
+              Object.keys(newProducts).length === 0 ? null : state.cartExpiry,
           };
         });
       },
@@ -521,8 +526,8 @@ export const useCartStore = create<CartState>()(
         set((state) => ({
           products: {
             ...state.products,
-            [cartId]: { ...state.products[cartId], qty }
-          }
+            [cartId]: { ...state.products[cartId], qty },
+          },
         }));
       },
 
@@ -540,22 +545,23 @@ export const useCartStore = create<CartState>()(
         }
       },
 
-      resetCart: () => set({
-        products: {},
-        orderStatus: undefined,
-        trackLink: null
-      }),
+      resetCart: () =>
+        set({
+          products: {},
+          orderStatus: undefined,
+          trackLink: null,
+        }),
 
       setOrderStatus: (status) => set({ orderStatus: status }),
       setIsLoading: (loading) => set({ isLoading: loading }),
       setTrackLink: (link) => set({ trackLink: link }),
     }),
     {
-      name: 'zatiq-cart',
+      name: "zatiq-cart",
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         products: state.products,
-        cartExpiry: state.cartExpiry
+        cartExpiry: state.cartExpiry,
       }),
     }
   )
@@ -566,7 +572,7 @@ export const selectTotalItems = (state: CartState) =>
   Object.values(state.products).reduce((sum, p) => sum + p.qty, 0);
 
 export const selectTotalPrice = (state: CartState) =>
-  Object.values(state.products).reduce((sum, p) => sum + (p.price * p.qty), 0);
+  Object.values(state.products).reduce((sum, p) => sum + p.price * p.qty, 0);
 
 export const selectProductsArray = (state: CartState) =>
   Object.values(state.products);
@@ -576,10 +582,10 @@ export const selectProductsArray = (state: CartState) =>
 
 ```typescript
 // providers/QueryProvider.tsx
-'use client';
+"use client";
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useState } from 'react';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useState } from "react";
 
 export function QueryProvider({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(
@@ -595,9 +601,7 @@ export function QueryProvider({ children }: { children: React.ReactNode }) {
   );
 
   return (
-    <QueryClientProvider client={queryClient}>
-      {children}
-    </QueryClientProvider>
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
   );
 }
 ```
@@ -611,6 +615,7 @@ export function QueryProvider({ children }: { children: React.ReactNode }) {
 #### 2.1 Files to Copy from `storefront.zatiqeasy`
 
 **Stores:**
+
 ```
 src/stores/themeStore.ts      → stores/themeStore.ts
 src/stores/homepageStore.ts   → stores/homepageStore.ts
@@ -620,6 +625,7 @@ src/stores/aboutUsStore.ts    → stores/aboutUsStore.ts
 ```
 
 **Components:**
+
 ```
 src/components/BlockRenderer.tsx     → components/builder/BlockRenderer.tsx
 src/components/IconRenderer.tsx      → components/builder/IconRenderer.tsx
@@ -629,6 +635,7 @@ src/components/MarqueeRenderer.tsx   → components/builder/MarqueeRenderer.tsx
 ```
 
 **Product Cards:**
+
 ```
 src/components/products/ProductCard1.tsx  → components/products/ProductCard1.tsx
 src/components/products/ProductCard2.tsx  → components/products/ProductCard2.tsx
@@ -636,6 +643,7 @@ src/components/products/ProductCard2.tsx  → components/products/ProductCard2.t
 ```
 
 **Hooks:**
+
 ```
 src/hooks/useTheme.ts          → hooks/useTheme.ts
 src/hooks/useHomepage.ts       → hooks/useHomepage.ts
@@ -645,6 +653,7 @@ src/hooks/useAboutUs.ts        → hooks/useAboutUs.ts
 ```
 
 **Utilities:**
+
 ```
 src/lib/block-utils.ts → lib/block-utils.ts
 src/lib/types.ts       → types/theme.types.ts
@@ -694,15 +703,15 @@ src/www/e-commerce/themes/sellora/   → components/themes/sellora/
 
 ```typescript
 // components/ThemeSelector.tsx
-'use client';
+"use client";
 
-import { useShopStore } from '@/stores/shopStore';
-import BuilderLayout from '@/components/builder/BuilderLayout';
-import BasicLayout from '@/components/themes/basic/Layout';
-import PremiumLayout from '@/components/themes/premium/Layout';
-import AuroraLayout from '@/components/themes/aurora/Layout';
-import LuxuraLayout from '@/components/themes/luxura/Layout';
-import SelloraLayout from '@/components/themes/sellora/Layout';
+import { useShopStore } from "@/stores/shopStore";
+import BuilderLayout from "@/components/builder/BuilderLayout";
+import BasicLayout from "@/components/themes/basic/Layout";
+import PremiumLayout from "@/components/themes/premium/Layout";
+import AuroraLayout from "@/components/themes/aurora/Layout";
+import LuxuraLayout from "@/components/themes/luxura/Layout";
+import SelloraLayout from "@/components/themes/sellora/Layout";
 
 const staticThemeLayouts = {
   Basic: BasicLayout,
@@ -712,12 +721,16 @@ const staticThemeLayouts = {
   Sellora: SelloraLayout,
 };
 
-export default function ThemeSelector({ children }: { children: React.ReactNode }) {
+export default function ThemeSelector({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const shopDetails = useShopStore((state) => state.shopDetails);
-  const themeType = shopDetails?.shop_theme?.theme_type || 'builder';
-  const themeName = shopDetails?.shop_theme?.theme_name || 'Basic';
+  const themeType = shopDetails?.shop_theme?.theme_type || "builder";
+  const themeName = shopDetails?.shop_theme?.theme_name || "Basic";
 
-  if (themeType === 'builder') {
+  if (themeType === "builder") {
     return <BuilderLayout>{children}</BuilderLayout>;
   }
 
@@ -735,6 +748,7 @@ export default function ThemeSelector({ children }: { children: React.ReactNode 
 #### 4.1 Files to Copy
 
 **Checkout Components:**
+
 ```
 src/www/e-commerce/modules/order/common-checkout-form.tsx
   → components/checkout/CommonCheckoutForm.tsx
@@ -744,12 +758,14 @@ src/www/e-commerce/modules/order/components/
 ```
 
 **Cart Components:**
+
 ```
 src/www/e-commerce/components/cart/
   → components/cart/
 ```
 
 **Utilities:**
+
 ```
 src/lib/utils/helpers.ts          → lib/utils/delivery-charge.ts
 src/lib/encrypt-decrypt.js        → lib/encrypt-decrypt.ts
@@ -792,6 +808,7 @@ src/lib/utils/                   → lib/utils/
 ## Migration Checklist
 
 ### Phase 1: Core Infrastructure
+
 - [ ] Install dependencies (zustand, tanstack-query, axios, etc.)
 - [ ] Create `types/` directory with all type definitions
 - [ ] Create `stores/shopStore.ts`
@@ -801,6 +818,7 @@ src/lib/utils/                   → lib/utils/
 - [ ] Setup API client with encryption
 
 ### Phase 2: Theme Builder
+
 - [ ] Copy `stores/themeStore.ts`
 - [ ] Copy `stores/homepageStore.ts`
 - [ ] Copy `stores/productsStore.ts`
@@ -811,6 +829,7 @@ src/lib/utils/                   → lib/utils/
 - [ ] Copy block-utils.ts
 
 ### Phase 3: Static Themes
+
 - [ ] Create Basic theme structure
 - [ ] Create Premium theme structure
 - [ ] Create Aurora theme structure
@@ -820,6 +839,7 @@ src/lib/utils/                   → lib/utils/
 - [ ] Create PageContentSelector component
 
 ### Phase 4: E-Commerce Features
+
 - [ ] Create checkout components
 - [ ] Migrate payment gateway integrations
 - [ ] Migrate delivery charge calculator
@@ -827,6 +847,7 @@ src/lib/utils/                   → lib/utils/
 - [ ] Create receipt page
 
 ### Phase 5: Landing Pages
+
 - [ ] Create landing page types
 - [ ] Create landingPageStore
 - [ ] Migrate Arcadia theme
@@ -835,6 +856,7 @@ src/lib/utils/                   → lib/utils/
 - [ ] Create LandingPageRenderer
 
 ### Phase 6: Analytics & Utilities
+
 - [ ] Create analyticsStore
 - [ ] Migrate Facebook Pixel utilities
 - [ ] Migrate TikTok Pixel utilities
@@ -843,6 +865,7 @@ src/lib/utils/                   → lib/utils/
 - [ ] Migrate encryption utilities
 
 ### Phase 7: Pages & Routes
+
 - [ ] Create (shop) layout with providers
 - [ ] Create home page
 - [ ] Create products listing page
@@ -855,6 +878,7 @@ src/lib/utils/                   → lib/utils/
 - [ ] Create static pages (about, privacy, terms)
 
 ### Phase 8: Multi-tenant Support
+
 - [ ] Create merchant/[shopId] routes
 - [ ] Setup shop identification middleware
 - [ ] Test SHOPLINK mode
@@ -875,6 +899,7 @@ The new project uses `@base-ui/react` instead of Radix UI. When migrating:
 ### Tailwind CSS v4 Differences
 
 The new project uses Tailwind CSS v4 with:
+
 - **OKLch color space** for better color manipulation
 - **CSS custom properties** for theming (in globals.css)
 - **No separate tailwind.config.js** - configuration is inline

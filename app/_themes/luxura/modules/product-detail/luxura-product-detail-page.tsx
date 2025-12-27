@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import { Minus, Plus, ShoppingCart, ChevronLeft, ChevronRight } from "lucide-react";
 import { useShopStore } from "@/stores/shopStore";
-import { useProductsStore, type Product } from "@/stores/productsStore";
+import { useProductsStore } from "@/stores/productsStore";
 import { useCartStore, selectTotalItems, selectSubtotal } from "@/stores/cartStore";
 import { CartFloatingBtn } from "@/components/features/cart/cart-floating-btn";
 import { GridContainer } from "../../components/core";
@@ -26,7 +26,7 @@ export function LuxuraProductDetailPage() {
   const products = useProductsStore((state) => state.products);
   const totalCartProducts = useCartStore(selectTotalItems);
   const totalPrice = useCartStore(selectSubtotal);
-  const { addProduct, removeProduct, getProductsByInventoryId } = useCartStore();
+  const { addProduct, getProductsByInventoryId } = useCartStore();
 
   const [quantity, setQuantity] = useState(1);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
@@ -217,7 +217,7 @@ export function LuxuraProductDetailPage() {
                     key={index}
                     onClick={() => setSelectedImageIndex(index)}
                     className={cn(
-                      "w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 border-2 transition-colors",
+                      "w-20 h-20 rounded-lg overflow-hidden shrink-0 border-2 transition-colors",
                       selectedImageIndex === index
                         ? "border-blue-zatiq"
                         : "border-transparent"
@@ -365,7 +365,7 @@ export function LuxuraProductDetailPage() {
           <div className="mt-16">
             <SectionHeader
               text={t("related_products")}
-              viewAllLink={`${baseUrl}/products`}
+              link="/products"
             />
             <GridContainer>
               {relatedProducts.map((p) => (

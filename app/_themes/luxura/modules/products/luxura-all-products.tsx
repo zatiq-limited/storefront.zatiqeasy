@@ -56,7 +56,7 @@ export function LuxuraAllProducts() {
   ], []);
 
   // Compute filtered products
-  const { filteredProducts, totalPages, totalProducts } = useMemo(() => {
+  const { filteredProducts, totalPages, } = useMemo(() => {
     let filtered = [...products];
 
     // Apply search filter
@@ -202,8 +202,6 @@ export function LuxuraAllProducts() {
         <div className="flex justify-between items-center mb-6">
           <SectionHeader
             text={t("all_products")}
-            showViewAll={false}
-            className="mb-0"
           />
           <div className="flex items-center gap-4">
             <button

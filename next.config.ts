@@ -15,6 +15,9 @@ const nextConfig: NextConfig = {
     // Image sizes for srcset (thumbnails, cards, etc.)
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384, 512],
 
+    // Allowed quality values for image optimization
+    qualities: [75, 80],
+
     // Cache optimized images on server
     minimumCacheTTL: 604800, // Cache images for one week (in seconds)
 

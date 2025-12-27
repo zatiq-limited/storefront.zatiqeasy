@@ -158,11 +158,7 @@ export default function MerchantProductDetailPage() {
         <LoadingFallback />
       );
     case "Sellora":
-      return product ? (
-        <SelloraProductDetailPage product={product} />
-      ) : (
-        <LoadingFallback />
-      );
+      return <SelloraProductDetailPage handle={productHandle} />;
     case "Basic":
     default:
       return <BasicProductDetailPage handle={productHandle} />;

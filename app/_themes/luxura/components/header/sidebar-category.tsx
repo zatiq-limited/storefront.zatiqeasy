@@ -4,8 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useShopStore } from "@/stores/shopStore";
-import { useProductsStore } from "@/stores/productsStore";
-import type { Category } from "@/types";
+import { useProductsStore, type Category } from "@/stores/productsStore";
 
 type Props = {
   setShowMobileNav?: (value: boolean) => void;
@@ -51,11 +50,11 @@ const SidebarCategory = ({ setShowMobileNav, isBasic }: Props) => {
         if (item) nestedCategoryLocal.push(parseInt(item));
       });
       const item = flattenList.find(
-        (cat) => cat.id === nestedCategoryLocal[nestedCategoryLocal.length - 1]
+        (cat) => Number(cat.id) === nestedCategoryLocal[nestedCategoryLocal.length - 1]
       );
       if (item?.parent_id) {
         setCurrentRootCategory(
-          flattenList.find((i) => i.id === item.parent_id) || null
+          flattenList.find((i) => Number(i.id) === item.parent_id) || null
         );
       } else {
         setCurrentRootCategory(null);
@@ -88,7 +87,7 @@ const SidebarCategory = ({ setShowMobileNav, isBasic }: Props) => {
   const handleBackBtn = () => {
     if (currentRootCategory) {
       const parentItem = flattenList.find(
-        (item: Category) => item.id === currentRootCategory.parent_id
+        (item: Category) => Number(item.id) === currentRootCategory.parent_id
       );
       if (parentItem) {
         setCategoryList(parentItem.sub_categories || []);
@@ -168,7 +167,7 @@ const SidebarCategory = ({ setShowMobileNav, isBasic }: Props) => {
           <div
             key={index}
             className={`pl-7 py-4 pr-5 border-t dark:border-gray-700 last:border-b flex justify-between items-center cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 ${
-              selectedCategory === item.id ? "bg-gray-200 dark:bg-gray-700" : ""
+              selectedCategory === Number(item.id) ? "bg-gray-200 dark:bg-gray-700" : ""
             }`}
             onClick={() => handleCategoryClick(item)}
           >

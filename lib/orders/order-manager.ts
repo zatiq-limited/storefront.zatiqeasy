@@ -87,9 +87,8 @@ export class OrderManager {
         return {
           name: item.name,
           inventory_id: item.id,
-          quantity: item.qty,
+          qty: item.qty,
           price: item.price,
-          total_price: item.price * item.qty,
           image_url: item.image_url,
           variants: item.selectedVariants
             ? Object.values(item.selectedVariants)

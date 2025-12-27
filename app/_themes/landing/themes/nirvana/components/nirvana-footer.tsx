@@ -5,7 +5,10 @@ import Link from "next/link";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { FallbackImage } from "@/components/ui/fallback-image";
 import { useShopStore } from "@/stores/shopStore";
-import { socialIcons, type Sociallinks } from "@/components/shared/icons/social-links-svg-icon";
+import {
+  socialIcons,
+  type Sociallinks,
+} from "@/components/shared/icons/social-links-svg-icon";
 
 export function NirvanaFooter() {
   const { shopDetails } = useShopStore();
@@ -21,27 +24,29 @@ export function NirvanaFooter() {
     "about-us",
     "privacy-policy",
     "terms-and-conditions",
-    "return-and-cancellation-policy",
+    "return-policy",
   ];
 
-  const socialLinkElements = Object.entries(socialLinks).map(([key, value]) => {
-    const IconComponent = socialIcons[key as keyof Sociallinks];
-    if (!value || !IconComponent || typeof value !== "string") return null;
+  const socialLinkElements = Object.entries(socialLinks)
+    .map(([key, value]) => {
+      const IconComponent = socialIcons[key as keyof Sociallinks];
+      if (!value || !IconComponent || typeof value !== "string") return null;
 
-    const href = value.startsWith("http") ? value : `https://${value}`;
-    return (
-      <Link
-        key={key}
-        href={href}
-        target="_blank"
-        className="flex items-center gap-1 text-sm hover:decoration-0"
-      >
-        <div className="w-10 h-10 flex items-center justify-center bg-landing-primary rounded-full transition-all duration-100 hover:scale-105">
-          <IconComponent className="w-4 h-4 text-white" />
-        </div>
-      </Link>
-    );
-  }).filter(Boolean);
+      const href = value.startsWith("http") ? value : `https://${value}`;
+      return (
+        <Link
+          key={key}
+          href={href}
+          target="_blank"
+          className="flex items-center gap-1 text-sm hover:decoration-0"
+        >
+          <div className="w-10 h-10 flex items-center justify-center bg-landing-primary rounded-full transition-all duration-100 hover:scale-105">
+            <IconComponent className="w-4 h-4 text-white" />
+          </div>
+        </Link>
+      );
+    })
+    .filter(Boolean);
 
   return (
     <footer>
@@ -56,7 +61,7 @@ export function NirvanaFooter() {
                   width={200}
                   alt={shopName}
                   src={logoUrl}
-                  className="h-[34px] md:h-[40px] w-auto max-w-[200px] object-contain"
+                  className="h-8.5 md:h-10 w-auto max-w-50 object-contain"
                 />
               )}
             </div>
@@ -64,7 +69,7 @@ export function NirvanaFooter() {
             {/* Quick Links */}
             <div className="py-4 space-y-3">
               <h4 className="font-bold">QUICK LINKS</h4>
-              <div className="w-10 h-[2px] bg-gray-300" />
+              <div className="w-10 h-0.5 bg-gray-300" />
               <div className="flex flex-col gap-2 text-sm text-gray-600">
                 {policyLinks.map((slug) => (
                   <Link
@@ -85,7 +90,10 @@ export function NirvanaFooter() {
                 <div className="flex flex-col gap-2 text-sm text-gray-600">
                   {address && (
                     <div className="flex items-start gap-2">
-                      <MapPin strokeWidth={2.25} className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                      <MapPin
+                        strokeWidth={2.25}
+                        className="w-4 h-4 mt-0.5 shrink-0"
+                      />
                       <span className="whitespace-pre-line hover:text-black">
                         {address}
                       </span>
@@ -93,7 +101,7 @@ export function NirvanaFooter() {
                   )}
                   {phone && (
                     <div className="flex items-center gap-2">
-                      <Phone className="w-4 h-4 flex-shrink-0" />
+                      <Phone className="w-4 h-4 shrink-0" />
                       <Link href={`tel:${phone}`} className="hover:text-black">
                         {phone}
                       </Link>
@@ -101,8 +109,11 @@ export function NirvanaFooter() {
                   )}
                   {email && (
                     <div className="flex items-center gap-2">
-                      <Mail className="w-4 h-4 flex-shrink-0" />
-                      <Link href={`mailto:${email}`} className="hover:text-black">
+                      <Mail className="w-4 h-4 shrink-0" />
+                      <Link
+                        href={`mailto:${email}`}
+                        className="hover:text-black"
+                      >
                         {email}
                       </Link>
                     </div>

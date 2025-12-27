@@ -323,7 +323,7 @@ export function OrderSummarySection({
                 </a>{" "}
                 {t("and")}{" "}
                 <a
-                  href={`${profile.baseUrl}/return-and-cancellation-policy`}
+                  href={`${profile.baseUrl}/return-policy`}
                   target="_blank"
                   rel="noreferrer"
                   className="text-blue-zatiq hover:underline font-medium"

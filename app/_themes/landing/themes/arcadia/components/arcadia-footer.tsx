@@ -19,7 +19,7 @@ export function ArcadiaFooter() {
     "about-us",
     "privacy-policy",
     "terms-and-conditions",
-    "return-and-cancellation-policy",
+    "return-policy",
   ];
 
   // Get active social links

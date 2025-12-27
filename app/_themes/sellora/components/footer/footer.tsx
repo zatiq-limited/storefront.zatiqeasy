@@ -23,7 +23,7 @@ export function SelloraFooter() {
     "about-us",
     "privacy-policy",
     "terms-and-conditions",
-    "return-and-cancellation-policy",
+    "return-policy",
   ];
 
   // Social links like Basic theme
@@ -104,9 +104,7 @@ export function SelloraFooter() {
 
             {/* Quick Links */}
             <div className="space-y-3 sm:space-y-5">
-              <h4 className="font-bold text-base text-black">
-                {t("shop")}
-              </h4>
+              <h4 className="font-bold text-base text-black">{t("shop")}</h4>
               <div className="flex flex-col gap-1 text-base font-normal text-black">
                 <Link
                   href={`${baseUrl}/products`}
@@ -125,9 +123,7 @@ export function SelloraFooter() {
 
             {/* Help Links */}
             <div className="space-y-3 sm:space-y-5">
-              <h4 className="font-bold text-base text-black">
-                {t("help")}
-              </h4>
+              <h4 className="font-bold text-base text-black">{t("help")}</h4>
               <div className="flex flex-col gap-1 text-base font-normal text-black">
                 {policyLinks.map((slug) => (
                   <Link

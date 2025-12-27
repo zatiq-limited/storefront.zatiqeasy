@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
-import { useRouter, useParams } from "next/navigation";
+import { useState, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { useShopStore } from "@/stores/shopStore";
-import { useProductsStore, type Product } from "@/stores/productsStore";
+import { type Product } from "@/stores/productsStore";
 import {
   useCartStore,
   selectTotalItems,
@@ -13,6 +13,7 @@ import {
 import { useCategoryProducts } from "@/hooks/useCategoryProducts";
 import { CartFloatingBtn } from "@/components/features/cart/cart-floating-btn";
 import { VariantSelectorModal } from "@/components/products/variant-selector-modal";
+import { CategoryHorizontalList } from "@/components/features/category/category-horizontal-list";
 import { SelloraProductCard } from "../../components/cards";
 import { GridContainer, Pagination } from "../../components/core";
 
@@ -20,23 +21,19 @@ const PRODUCTS_PER_PAGE = 12;
 
 export function SelloraCategoryPage() {
   const router = useRouter();
-  const params = useParams();
   const { t } = useTranslation();
   const { shopDetails } = useShopStore();
-  const categories = useProductsStore((state) => state.categories);
   const totalCartItems = useCartStore(selectTotalItems);
   const totalPrice = useCartStore(selectSubtotal);
 
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
-  const categoryId = params?.category as string;
   const baseUrl = shopDetails?.baseUrl || "";
   const hasItems = totalCartItems > 0;
 
   // Get products for this category (hook gets category from URL params and handles pagination)
   const {
     products: paginatedProducts,
-    allProducts: categoryProducts,
     category: currentCategory,
     pagination,
     currentPage,
@@ -55,14 +52,6 @@ export function SelloraCategoryPage() {
     [router, baseUrl]
   );
 
-  // Handle category change
-  const handleCategoryChange = useCallback(
-    (catId: string) => {
-      router.push(`${baseUrl}/categories/${catId}?selected_category=${catId}`);
-    },
-    [router, baseUrl]
-  );
-
   // Handle page change
   const handlePageChange = useCallback(
     (page: number) => {
@@ -73,15 +62,15 @@ export function SelloraCategoryPage() {
   );
 
   return (
-    <div className="px-3 md:px-0 pb-10">
-      {/* Variant Selector Modal */}
-      <VariantSelectorModal
-        product={selectedProduct}
-        isOpen={!!selectedProduct}
-        onClose={() => setSelectedProduct(null)}
-      />
+    <>
+      <div className="container pt-16 pb-10">
+        {/* Variant Selector Modal */}
+        <VariantSelectorModal
+          product={selectedProduct}
+          isOpen={!!selectedProduct}
+          onClose={() => setSelectedProduct(null)}
+        />
 
-      <div className="container">
         {/* Category Title */}
         <div>
           <h2 className="text-[20px] md:text-[36px] xl:text-[46px] leading-snug lg:leading-[57.50px] text-black-full dark:text-blue-zatiq font-bold py-5">
@@ -90,53 +79,48 @@ export function SelloraCategoryPage() {
         </div>
 
         {/* Horizontal Category List */}
-        <div className="mb-6 overflow-x-auto pb-2">
-          <div className="flex gap-2 min-w-max">
-            {categories.map((category) => (
-              <button
-                key={category.id}
-                onClick={() => handleCategoryChange(String(category.id))}
-                className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
-                  String(category.id) === categoryId
-                    ? "bg-blue-zatiq text-white"
-                    : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
-                }`}
-              >
-                {category.name}
-              </button>
-            ))}
-          </div>
-        </div>
+        <CategoryHorizontalList fromCategory />
 
         {/* Products Grid */}
-        {isLoading ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-5">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="animate-pulse">
-                <div className="aspect-[10/16] bg-gray-200 dark:bg-gray-700 rounded-lg" />
-                <div className="mt-3 h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4" />
-                <div className="mt-2 h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2" />
+        <GridContainer columns={{ mobile: 2, tablet: 2, desktop: 4 }}>
+          {isLoading ? (
+            [...Array(9)].map((_, index) => (
+              <div
+                key={index}
+                className="border shadow-sm rounded-md p-4 max-w-sm w-full mx-auto"
+              >
+                <div className="animate-pulse flex flex-col">
+                  <div className="rounded-lg bg-slate-300 dark:bg-slate-600 h-37.5 sm:h-42 w-full" />
+                  <div className="flex flex-col space-y-6 pt-5">
+                    <div className="h-5 bg-slate-300 dark:bg-slate-600 rounded-sm" />
+                    <div className="space-y-3">
+                      <div className="grid grid-cols-3 gap-4">
+                        <div className="h-2 bg-slate-300 dark:bg-slate-600 rounded-sm col-span-2" />
+                        <div className="h-2 bg-slate-300 dark:bg-slate-600 rounded-sm col-span-1" />
+                      </div>
+                      <div className="h-2 bg-slate-300 dark:bg-slate-600 rounded-sm" />
+                    </div>
+                  </div>
+                </div>
               </div>
-            ))}
-          </div>
-        ) : paginatedProducts.length > 0 ? (
-          <GridContainer columns={{ mobile: 2, tablet: 3, desktop: 3 }}>
-            {paginatedProducts.map((product) => (
+            ))
+          ) : paginatedProducts.length > 0 ? (
+            paginatedProducts.map((product) => (
               <SelloraProductCard
                 key={product.id}
                 product={product}
                 onNavigate={() => navigateProductDetails(product.id)}
                 onSelectProduct={() => setSelectedProduct(product)}
               />
-            ))}
-          </GridContainer>
-        ) : (
-          <div className="col-span-full flex flex-col items-center justify-center py-12">
-            <h3 className="text-center text-lg mt-5">
-              {t("no_products_found") || "No products found"}
-            </h3>
-          </div>
-        )}
+            ))
+          ) : (
+            <div className="col-span-full flex flex-col items-center justify-center">
+              <h3 className="text-center text-lg mt-5">
+                {t("no_products_found") || "No products found"}
+              </h3>
+            </div>
+          )}
+        </GridContainer>
 
         {/* Pagination */}
         <Pagination
@@ -144,17 +128,17 @@ export function SelloraCategoryPage() {
           totalPages={totalPages}
           onPageChange={handlePageChange}
         />
-      </div>
 
-      {/* Floating Cart Button */}
-      <CartFloatingBtn
-        showCartFloatingBtn={hasItems}
-        totalProducts={totalCartItems}
-        totalPrice={totalPrice}
-        onClick={() => router.push(`${baseUrl}/checkout`)}
-        theme="Sellora"
-      />
-    </div>
+        {/* Floating Cart Button */}
+        <CartFloatingBtn
+          showCartFloatingBtn={hasItems}
+          totalProducts={totalCartItems}
+          totalPrice={totalPrice}
+          onClick={() => router.push(`${baseUrl}/checkout`)}
+          theme="Sellora"
+        />
+      </div>
+    </>
   );
 }
 

@@ -34,7 +34,7 @@ export function AuroraFooter({ bgStyle }: AuroraFooterProps) {
     "about-us",
     "privacy-policy",
     "terms-and-conditions",
-    "return-and-cancellation-policy",
+    "return-policy",
   ];
 
   // Build social links
