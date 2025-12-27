@@ -110,11 +110,18 @@ export interface ThemeBuilderAPIResponse {
   editor_state?: string; // Compressed - only needed for theme builder editing
   theme?: TransformedTheme;
   pages?: {
+    // Standard pages (matching PageType in merchant panel)
     home?: TransformedPage;
     products?: TransformedPage;
+    productDetails?: TransformedPage;
     collections?: TransformedPage;
+    collectionDetails?: TransformedPage;
     about?: TransformedPage;
     contact?: TransformedPage;
+    privacyPolicy?: TransformedPage;
+    cart?: TransformedPage;
+    checkout?: TransformedPage;
+    // Allow for additional page types (landing pages, etc.)
     [key: string]: TransformedPage | undefined;
   };
   createdAt?: string;

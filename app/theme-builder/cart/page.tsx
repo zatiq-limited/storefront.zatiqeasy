@@ -1,0 +1,138 @@
+/**
+ * ========================================
+ * THEME BUILDER - CART PAGE
+ * ========================================
+ *
+ * Renders the cart page using theme builder's published sections.
+ * Currently uses the default cart implementation with optional style overrides.
+ * 
+ * TODO: Create CartPageRenderer for full customization
+ */
+
+"use client";
+
+import Link from "next/link";
+import { useThemeBuilder } from "@/hooks/useThemeBuilder";
+import { useCartTotals } from "@/hooks";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft, ShoppingCart } from "lucide-react";
+import { CartItem, CartSummary } from "@/features/cart";
+
+export default function ThemeBuilderCartPage() {
+  const { cartPage, isLoading: isThemeLoading } = useThemeBuilder();
+  const { products, hasItems } = useCartTotals();
+
+  // Loading state
+  if (isThemeLoading) {
+    return (
+      <main className="flex items-center justify-center min-h-[50vh]">
+        <div className="flex flex-col items-center gap-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <p className="text-gray-600">Loading cart...</p>
+        </div>
+      </main>
+    );
+  }
+
+  // Convert to array for rendering
+  const cartProducts = Object.values(products);
+
+  // Get custom settings from theme builder if available
+  const sections = cartPage?.data?.sections || [];
+  const cartSettings = sections.find(s => s.type?.includes('cart'))?.settings || {};
+
+  if (!hasItems) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="max-w-2xl mx-auto text-center space-y-6">
+          <div className="flex justify-center">
+            <div className="w-24 h-24 bg-muted rounded-full flex items-center justify-center">
+              <ShoppingCart className="h-12 w-12 text-muted-foreground" />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <h1 className="text-2xl font-semibold">
+              {(cartSettings.empty_title as string) || "Your cart is empty"}
+            </h1>
+            <p className="text-muted-foreground">
+              {(cartSettings.empty_message as string) || "Looks like you haven't added anything to your cart yet."}
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            <Link href="/theme-builder/products">
+              <Button size="lg" className="w-full max-w-xs">
+                Continue Shopping
+              </Button>
+            </Link>
+            <Link href="/theme-builder" className="block">
+              <Button variant="ghost">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Back to Home
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <div className="max-w-6xl mx-auto">
+        <div className="mb-8">
+          <Link
+            href="/theme-builder"
+            className="inline-flex items-center text-muted-foreground hover:text-foreground mb-4"
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Home
+          </Link>
+          <h1 className="text-3xl font-bold">
+            {(cartSettings.page_title as string) || "Shopping Cart"}
+          </h1>
+        </div>
+
+        <div className="grid lg:grid-cols-3 gap-8">
+          {/* Cart Items */}
+          <div className="lg:col-span-2 space-y-0">
+            {cartProducts.map((product) => (
+              <CartItem
+                key={product.cartId}
+                product={product}
+                showImage={true}
+                showVariants={true}
+                compact={false}
+              />
+            ))}
+          </div>
+
+          {/* Order Summary */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-4 space-y-6">
+              <div className="bg-card border rounded-lg p-6">
+                <CartSummary
+                  showCheckoutButton={true}
+                  checkoutButtonLabel="Proceed to Checkout"
+                  onCheckout={() => {
+                    window.location.href = "/theme-builder/checkout";
+                  }}
+                  showDeliveryCharge={false}
+                />
+              </div>
+
+              <div className="space-y-4">
+                <Link href="/theme-builder/products">
+                  <Button variant="outline" className="w-full">
+                    Continue Shopping
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

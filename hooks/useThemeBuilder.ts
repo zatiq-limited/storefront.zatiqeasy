@@ -74,8 +74,19 @@ export function useThemeBuilder(shopId?: string | number) {
     // Convenience getters
     themeData: query.data,
     theme: query.data?.theme,
-    homePage: query.data?.pages?.home,
     pages: query.data?.pages,
+    
+    // Individual page getters (matching PageType in merchant panel)
+    homePage: query.data?.pages?.home,
+    productsPage: query.data?.pages?.products,
+    productDetailsPage: query.data?.pages?.productDetails,
+    collectionsPage: query.data?.pages?.collections,
+    collectionDetailsPage: query.data?.pages?.collectionDetails,
+    aboutPage: query.data?.pages?.about,
+    contactPage: query.data?.pages?.contact,
+    privacyPolicyPage: query.data?.pages?.privacyPolicy,
+    cartPage: query.data?.pages?.cart,
+    checkoutPage: query.data?.pages?.checkout,
   };
 }
 
