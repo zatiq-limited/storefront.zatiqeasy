@@ -4,9 +4,28 @@ import { useQuery } from "@tanstack/react-query";
 import { useThemeBuilderStore } from "@/stores/themeBuilderStore";
 import { themeBuilderService } from "@/lib/api/services/theme-builder.service";
 import { useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 
-// Default shop ID for development - will be replaced with dynamic value
-const DEFAULT_SHOP_ID = process.env.NEXT_PUBLIC_SHOP_ID || "85290";
+/**
+ * Get shopId dynamically from multiple sources (priority order):
+ * 1. URL parameter: ?shopId=xxx
+ * 2. Environment variable: NEXT_PUBLIC_SHOP_ID
+ * 3. Development fallback
+ */
+function getShopIdFromContext(
+  searchParams: ReturnType<typeof useSearchParams>
+): string {
+  // 1. Try URL parameter first
+  const urlShopId = searchParams?.get("shopId");
+  if (urlShopId) return urlShopId;
+
+  // 2. Try environment variable
+  const envShopId = process.env.NEXT_PUBLIC_SHOP_ID;
+  if (envShopId) return envShopId;
+
+  // 3. Development fallback
+  return "47366";
+}
 
 /**
  * Hook to fetch and manage theme builder data
@@ -22,27 +41,18 @@ const DEFAULT_SHOP_ID = process.env.NEXT_PUBLIC_SHOP_ID || "85290";
  * ```
  */
 export function useThemeBuilder(shopId?: string | number) {
-  const resolvedShopId = String(shopId || DEFAULT_SHOP_ID);
+  const searchParams = useSearchParams();
   const { setThemeBuilderData, setLoading, setError } = useThemeBuilderStore();
+
+  // Resolve shopId from prop → URL param → env var → fallback
+  const resolvedShopId = shopId
+    ? String(shopId)
+    : getShopIdFromContext(searchParams);
 
   const query = useQuery({
     queryKey: ["theme-builder", resolvedShopId],
     queryFn: async () => {
-      console.log("[useThemeBuilder] Fetching theme for shop:", resolvedShopId);
       const data = await themeBuilderService.getTheme(resolvedShopId);
-      
-      if (data) {
-        console.log("[useThemeBuilder] ✅ Theme data received:", {
-          shopId: data.shopId,
-          name: data.name,
-          lastPublished: data.last_published,
-          hasTheme: !!data.theme,
-          hasHomePage: !!data.pages?.home,
-        });
-      } else {
-        console.log("[useThemeBuilder] ℹ️ No theme found for shop:", resolvedShopId);
-      }
-      
       return data;
     },
     // Don't cache too aggressively - theme may change

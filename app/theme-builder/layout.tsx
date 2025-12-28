@@ -15,6 +15,7 @@ import { useThemeBuilderStore } from "@/stores/themeBuilderStore";
 import BlockRenderer from "@/components/renderers/block-renderer";
 import type { Block } from "@/components/renderers/block-renderer";
 import { useMemo } from "react";
+import { RoutePrefixProvider } from "@/providers/RoutePrefixProvider";
 
 interface ThemeBuilderLayoutProps {
   children: React.ReactNode;
@@ -135,35 +136,37 @@ export default function ThemeBuilderLayout({ children }: ThemeBuilderLayoutProps
   }
 
   return (
-    <div className="theme-builder-preview" style={cssVariables}>
-      {/* Announcement Bar */}
-      {announcementBlock && (
-        <BlockRenderer
-          block={announcementBlock}
-          data={(announcementBlock.data as Record<string, unknown>) || {}}
-        />
-      )}
+    <RoutePrefixProvider prefix="/theme-builder">
+      <div className="theme-builder-preview" style={cssVariables}>
+        {/* Announcement Bar */}
+        {announcementBlock && (
+          <BlockRenderer
+            block={announcementBlock}
+            data={(announcementBlock.data as Record<string, unknown>) || {}}
+          />
+        )}
 
-      {/* Header/Navbar */}
-      {headerBlock && (
-        <BlockRenderer
-          block={headerBlock}
-          data={(headerBlock.data as Record<string, unknown>) || {}}
-        />
-      )}
+        {/* Header/Navbar */}
+        {headerBlock && (
+          <BlockRenderer
+            block={headerBlock}
+            data={(headerBlock.data as Record<string, unknown>) || {}}
+          />
+        )}
 
-      {/* Main Content */}
-      <main className="theme-builder-content">
-        {children}
-      </main>
+        {/* Main Content */}
+        <main className="theme-builder-content">
+          {children}
+        </main>
 
-      {/* Footer */}
-      {footerBlock && (
-        <BlockRenderer
-          block={footerBlock}
-          data={(footerBlock.data as Record<string, unknown>) || {}}
-        />
-      )}
-    </div>
+        {/* Footer */}
+        {footerBlock && (
+          <BlockRenderer
+            block={footerBlock}
+            data={(footerBlock.data as Record<string, unknown>) || {}}
+          />
+        )}
+      </div>
+    </RoutePrefixProvider>
   );
 }

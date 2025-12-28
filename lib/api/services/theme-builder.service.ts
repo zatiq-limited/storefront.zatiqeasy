@@ -1,25 +1,42 @@
 /**
  * Theme Builder API Service
  * Fetches theme builder data from JSON Server (dev) or real API (prod)
- * 
+ *
  * Data Structure from API:
  * {
  *   shopId: string,
  *   name: string,
  *   is_active: boolean,
  *   last_published: string,
- *   editor_state: string,          // Compressed raw state (for theme builder editing)
+ *   data: string,                  // Compressed LZ-string containing { editorState, theme, pages }
+ * }
+ *
+ * After decompression:
+ * {
+ *   editorState: { ... },          // Raw theme builder state
  *   theme: { ... },                // Transformed theme.json format (header, footer, settings)
- *   pages: {                       // Transformed page JSONs (same format as homepage.json)
- *     home: { success: true, data: { template, sections, seo } },
- *     products: { ... },
- *     ...
- *   }
+ *   pages: { ... }                 // Transformed page JSONs (same format as homepage.json)
  * }
  */
 
+import LZString from 'lz-string';
+
 // Theme API URL - JSON Server in dev, real API in prod
 const THEME_API_URL = process.env.NEXT_PUBLIC_THEME_API_URL || 'http://localhost:4321/api';
+
+// ============================================
+// Compression Utilities
+// ============================================
+
+function decompressData<T = unknown>(compressed: string): T | null {
+  try {
+    const jsonString = LZString.decompressFromUTF16(compressed);
+    if (!jsonString) return null;
+    return JSON.parse(jsonString) as T;
+  } catch {
+    return null;
+  }
+}
 
 // ============================================
 // Types - Matches storefront data structures
@@ -107,7 +124,16 @@ export interface ThemeBuilderAPIResponse {
   name: string;
   is_active: boolean;
   last_published: string;
-  editor_state?: string; // Compressed - only needed for theme builder editing
+  data: string; // Compressed LZ-string containing { editorState, theme, pages }
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+/**
+ * Decompressed data structure
+ */
+interface DecompressedThemeData {
+  editorState: unknown;
   theme?: TransformedTheme;
   pages?: {
     // Standard pages (matching PageType in merchant panel)
@@ -124,8 +150,6 @@ export interface ThemeBuilderAPIResponse {
     // Allow for additional page types (landing pages, etc.)
     [key: string]: TransformedPage | undefined;
   };
-  createdAt?: string;
-  updatedAt?: string;
 }
 
 /**
@@ -151,9 +175,7 @@ export const themeBuilderService = {
    */
   async getTheme(shopId: string | number): Promise<ThemeBuilderData | null> {
     const url = `${THEME_API_URL}/themes/${shopId}`;
-    
-    console.log('[ThemeBuilder] Fetching from:', url);
-    
+
     try {
       const response = await fetch(url, {
         method: 'GET',
@@ -164,7 +186,6 @@ export const themeBuilderService = {
       });
 
       if (response.status === 404) {
-        console.log('[ThemeBuilder] No theme found for shop:', shopId);
         return null;
       }
 
@@ -173,24 +194,23 @@ export const themeBuilderService = {
       }
 
       const apiData: ThemeBuilderAPIResponse = await response.json();
-      
-      console.log('[ThemeBuilder] Data received:', {
-        shopId: apiData.shopId,
-        name: apiData.name,
-        hasTheme: !!apiData.theme,
-        pages: apiData.pages ? Object.keys(apiData.pages) : [],
-      });
+
+      // Decompress the data field to get { editorState, theme, pages }
+      const decompressed = decompressData<DecompressedThemeData>(apiData.data);
+
+      if (!decompressed) {
+        return null;
+      }
 
       return {
         shopId: apiData.shopId,
         name: apiData.name,
         is_active: apiData.is_active,
         last_published: apiData.last_published,
-        theme: apiData.theme || null,
-        pages: apiData.pages || null,
+        theme: decompressed.theme || null,
+        pages: decompressed.pages || null,
       };
-    } catch (error) {
-      console.error('[ThemeBuilder] Fetch error:', error);
+    } catch {
       return null;
     }
   },

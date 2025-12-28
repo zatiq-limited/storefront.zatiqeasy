@@ -1,115 +1,76 @@
 /**
- * ========================================
- * THEME BUILDER - PRODUCTS PAGE
- * ========================================
+ * Theme Builder Preview - Products Page
  *
- * Renders the products page using theme builder's published sections
- * combined with real products data from the store API.
+ * Route: /theme-builder/products
+ *
+ * Renders the products page using sections from Theme Builder API.
+ * Design logic: ProductsPageRenderer
+ * Which sections to show: Theme Builder API (with settings)
+ * Real product data: Shop API
  */
 
 "use client";
 
-import { useThemeBuilder } from "@/hooks/useThemeBuilder";
+import { useThemeBuilderStore } from "@/stores/themeBuilderStore";
 import { useProducts } from "@/hooks";
 import ProductsPageRenderer from "@/components/renderers/page-renderer/products-page-renderer";
+import { useRoutePrefix } from "@/providers/RoutePrefixProvider";
 import type { Section } from "@/lib/types";
 
 export default function ThemeBuilderProductsPage() {
-  const { productsPage, isLoading: isThemeLoading } = useThemeBuilder();
+  const { routePrefix } = useRoutePrefix();
+  const { productsPage, themeBuilderData } = useThemeBuilderStore();
   const {
     products,
     pagination,
     filters,
-    isLoading: isProductsLoading,
-    error,
+    isLoading,
     updateFilters,
   } = useProducts();
 
-  // Loading state
-  if (isThemeLoading) {
+  // No products page data from Theme Builder
+  if (!productsPage) {
     return (
-      <main className="flex items-center justify-center min-h-[50vh]">
-        <div className="flex flex-col items-center gap-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-          <p className="text-gray-600">Loading theme...</p>
-        </div>
-      </main>
-    );
-  }
-
-  // Error state
-  if (error) {
-    return (
-      <main className="flex items-center justify-center min-h-[50vh]">
+      <div className="min-h-[50vh] flex items-center justify-center">
         <div className="text-center">
-          <svg
-            className="w-16 h-16 text-red-400 mx-auto mb-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-            />
-          </svg>
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">
-            Error loading products
-          </h2>
-          <p className="text-gray-600">Please try again later</p>
+          <p className="text-gray-500 mb-2">No products page data found</p>
+          <p className="text-gray-400 text-sm">
+            Add sections to the products page in the theme builder and publish
+          </p>
         </div>
-      </main>
+      </div>
     );
   }
 
-  // Default sections if no theme builder data
-  const defaultSections: Section[] = [
-    {
-      id: "products_hero",
-      type: "products-hero-1",
-      enabled: true,
-      settings: {
-        title: "All Products",
-        description: "Discover our curated collection of premium products",
-        show_breadcrumb: true,
-        show_product_count: true,
-        gradient_start: "#EBF4FF",
-        gradient_end: "#F3E8FF",
-      },
-    },
-    {
-      id: "products_layout",
-      type: "products-layout",
-      enabled: true,
-      settings: {
-        show_sidebar: false,
-        show_search: true,
-        show_sort: true,
-        show_view_toggle: true,
-        columns: 4,
-        gap: 6,
-        sticky: true,
-      },
-    },
-  ];
+  // Extract sections from products page data and cast to Section type
+  // ProductsPageRenderer only uses type, enabled, and settings - which are compatible
+  const sections = (productsPage.data?.sections || []) as Section[];
 
-  // Get sections from theme builder or use defaults
-  const themeBuilderSections = productsPage?.data?.sections || [];
-  const pageSections = themeBuilderSections.length > 0
-    ? (themeBuilderSections as Section[])
-    : defaultSections;
+  // No sections - show message (NOT default sections)
+  if (sections.length === 0) {
+    return (
+      <div className="min-h-[50vh] flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-gray-500 mb-2">No sections configured</p>
+          <p className="text-gray-400 text-sm">
+            Add sections to the products page in the theme builder
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <main className="zatiq-theme-builder-products-page min-h-screen bg-gray-50">
+    <main className="theme-builder-products-page">
+      {/* ProductsPageRenderer handles which sections to show based on Theme Builder API */}
       <ProductsPageRenderer
-        sections={pageSections}
+        sections={sections}
         products={products}
         pagination={pagination}
         filters={filters}
         onFiltersChange={updateFilters}
-        isLoading={isProductsLoading}
+        isLoading={isLoading}
+        routePrefix={routePrefix}
       />
     </main>
   );

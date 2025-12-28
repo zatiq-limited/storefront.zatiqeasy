@@ -45,6 +45,7 @@ interface ProductsPageRendererProps {
   onFiltersChange: (filters: Partial<ProductFilters>) => void;
   isLoading?: boolean;
   className?: string;
+  routePrefix?: string;
 }
 
 // Products Layout Component
@@ -55,6 +56,7 @@ function ProductsLayout({
   pagination,
   onFiltersChange,
   isLoading,
+  routePrefix = "",
 }: {
   settings?: Record<string, unknown>;
   products: Product[];
@@ -62,6 +64,7 @@ function ProductsLayout({
   pagination: PaginationType | null;
   onFiltersChange: (filters: Partial<ProductFilters>) => void;
   isLoading?: boolean;
+  routePrefix?: string;
 }) {
   const [currentView, setCurrentView] = useState<"grid" | "list">(
     (settings.default_view as "grid" | "list") || "grid"
@@ -182,6 +185,7 @@ function ProductsLayout({
       image: product.image_url || "",
       buttonBgColor: cardButtonBgColor,
       buttonTextColor: cardButtonTextColor,
+      routePrefix,
     };
 
     switch (cardType) {
@@ -663,6 +667,7 @@ export default function ProductsPageRenderer({
   onFiltersChange,
   isLoading = false,
   className = "",
+  routePrefix = "",
 }: ProductsPageRendererProps) {
   const renderSection = (section: Section) => {
     if (section.enabled === false) return null;
@@ -716,6 +721,7 @@ export default function ProductsPageRenderer({
               pagination={pagination}
               onFiltersChange={onFiltersChange}
               isLoading={isLoading}
+              routePrefix={routePrefix}
             />
           </div>
         );

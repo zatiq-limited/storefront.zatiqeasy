@@ -28,6 +28,7 @@ interface ProductCard1Props {
   priceColor?: string;
   oldPriceColor?: string;
   onAddToCart?: () => void;
+  routePrefix?: string;
 }
 
 export default function ProductCard1({
@@ -48,13 +49,14 @@ export default function ProductCard1({
   priceColor = "#F55157",
   oldPriceColor = "#9CA3AF",
   onAddToCart,
+  routePrefix = "",
 }: ProductCard1Props) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
     <div className="w-full h-full">
       <Link
-        href={`/products/${handle}`}
+        href={`${routePrefix}/products/${handle}`}
         className="w-full h-full rounded overflow-hidden relative cursor-pointer transition-all duration-300 border hover:shadow-xl flex flex-col block"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}

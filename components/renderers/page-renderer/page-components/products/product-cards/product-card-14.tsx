@@ -23,6 +23,7 @@ interface ProductCard14Props {
   priceColor?: string;
   onAddToCart?: () => void;
   onBuyNow?: () => void;
+  routePrefix?: string;
 }
 
 export default function ProductCard14({
@@ -39,10 +40,11 @@ export default function ProductCard14({
   priceColor = "#F55157",
   onAddToCart,
   onBuyNow,
+  routePrefix = "",
 }: ProductCard14Props) {
   return (
     <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer flex">
-      <Link href={`/products/${handle}`} className="flex w-full">
+      <Link href={`${routePrefix}/products/${handle}`} className="flex w-full">
         {/* Image Container */}
         <div className="relative shrink-0 w-20 h-20 sm:w-28 sm:h-28 lg:w-1/3 lg:h-[120px]">
           <Image

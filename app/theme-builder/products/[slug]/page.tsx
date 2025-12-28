@@ -13,16 +13,17 @@ import { useParams } from "next/navigation";
 import { useThemeBuilder } from "@/hooks/useThemeBuilder";
 import { useProductDetails } from "@/hooks";
 import ProductDetailsPageRenderer from "@/components/renderers/page-renderer/product-details-page-renderer";
+import { useRoutePrefix } from "@/providers/RoutePrefixProvider";
 import type { Section } from "@/lib/types";
 
 export default function ThemeBuilderProductDetailsPage() {
+  const { routePrefix } = useRoutePrefix();
   const params = useParams();
   const slug = params.slug as string;
   
   const { productDetailsPage, isLoading: isThemeLoading } = useThemeBuilder();
   const {
     product,
-    sections: apiSections,
     selectedVariants,
     quantity,
     computedPrice,
@@ -90,53 +91,22 @@ export default function ThemeBuilderProductDetailsPage() {
     );
   }
 
-  // Default sections if no theme builder data
-  const defaultSections: Section[] = [
-    {
-      id: "product_breadcrumb",
-      type: "product-breadcrumb-1",
-      enabled: true,
-      settings: {
-        show_home: true,
-        show_category: true,
-      },
-    },
-    {
-      id: "product_gallery",
-      type: "product-gallery-1",
-      enabled: true,
-      settings: {
-        show_thumbnails: true,
-        enable_zoom: true,
-      },
-    },
-    {
-      id: "product_info",
-      type: "product-info-1",
-      enabled: true,
-      settings: {
-        show_price: true,
-        show_variants: true,
-        show_quantity: true,
-        show_add_to_cart: true,
-      },
-    },
-    {
-      id: "product_reviews",
-      type: "product-reviews-1",
-      enabled: true,
-      settings: {
-        show_rating: true,
-        show_review_count: true,
-      },
-    },
-  ];
+  // No default sections - only show what merchant configured
+  const pageSections = (productDetailsPage?.data?.sections || []) as Section[];
 
-  // Get sections from theme builder or use defaults
-  const themeBuilderSections = productDetailsPage?.data?.sections || [];
-  const pageSections = themeBuilderSections.length > 0
-    ? (themeBuilderSections as Section[])
-    : (apiSections.length > 0 ? apiSections : defaultSections);
+  // No sections configured - show empty state
+  if (pageSections.length === 0) {
+    return (
+      <main className="flex items-center justify-center min-h-[50vh]">
+        <div className="text-center">
+          <p className="text-gray-500 mb-2">No sections configured for product details page</p>
+          <p className="text-gray-400 text-sm">
+            Add sections to the product details page in the theme builder and publish
+          </p>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="zatiq-theme-builder-product-details-page min-h-screen bg-white">
@@ -150,6 +120,7 @@ export default function ThemeBuilderProductDetailsPage() {
         onQuantityChange={setQuantity}
         onIncrementQuantity={incrementQuantity}
         onDecrementQuantity={decrementQuantity}
+        routePrefix={routePrefix}
       />
     </main>
   );

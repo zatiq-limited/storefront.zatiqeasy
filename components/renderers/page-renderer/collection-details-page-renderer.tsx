@@ -28,6 +28,7 @@ interface CollectionDetailsPageRendererProps {
   collection: CollectionDetails;
   isLoading?: boolean;
   className?: string;
+  routePrefix?: string;
 }
 
 export default function CollectionDetailsPageRenderer({
@@ -35,6 +36,7 @@ export default function CollectionDetailsPageRenderer({
   collection,
   isLoading = false,
   className = "",
+  routePrefix = "",
 }: CollectionDetailsPageRendererProps) {
   const renderSection = (section: Section) => {
     if (section.enabled === false) return null;
@@ -102,6 +104,7 @@ export default function CollectionDetailsPageRenderer({
             <CollectionSubcategories1
               settings={settings}
               collection={collection}
+              routePrefix={routePrefix}
             />
           </div>
         );
@@ -116,6 +119,7 @@ export default function CollectionDetailsPageRenderer({
             <CollectionSubcategories2
               settings={settings}
               collection={collection}
+              routePrefix={routePrefix}
             />
           </div>
         );

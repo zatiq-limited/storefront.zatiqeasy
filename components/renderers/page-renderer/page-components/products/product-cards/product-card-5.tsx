@@ -27,6 +27,7 @@ interface ProductCard5Props {
   buyNowEnabled?: boolean;
   onAddToCart?: () => void;
   onBuyNow?: () => void;
+  routePrefix?: string;
 }
 
 export default function ProductCard5({
@@ -44,6 +45,7 @@ export default function ProductCard5({
   buyNowEnabled = true,
   onAddToCart,
   onBuyNow,
+  routePrefix = "",
 }: ProductCard5Props) {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -54,7 +56,7 @@ export default function ProductCard5({
 
   return (
     <Link
-      href={`/products/${handle}`}
+      href={`${routePrefix}/products/${handle}`}
       className="block w-full h-full"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}

@@ -14,6 +14,7 @@ import type { CollectionDetails as Collection } from "@/hooks/useCollectionDetai
 interface CollectionSubcategories1Props {
   settings?: Record<string, unknown>;
   collection: Collection;
+  routePrefix?: string;
 }
 
 interface CollectionSubcategories1Settings {
@@ -38,6 +39,7 @@ interface CollectionSubcategories1Settings {
 export default function CollectionSubcategories1({
   settings = {},
   collection,
+  routePrefix = "",
 }: CollectionSubcategories1Props) {
   const s = convertSettingsKeys<CollectionSubcategories1Settings>(settings);
 
@@ -109,7 +111,7 @@ export default function CollectionSubcategories1({
             {subcategories.map((subcategory, index) => (
               <Link
                 key={subcategory.id}
-                href={`/collections/${subcategory.slug}`}
+                href={`${routePrefix}/collections/${subcategory.slug}`}
                 className="group flex flex-col items-center text-center p-4 rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-xl"
                 style={{
                   animation: `fadeInUp 0.6s ease-out ${index * 0.1}s both`,

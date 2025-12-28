@@ -24,6 +24,7 @@ interface CollectionsPageRendererProps {
   collections: Collection[];
   isLoading?: boolean;
   className?: string;
+  routePrefix?: string;
 }
 
 export default function CollectionsPageRenderer({
@@ -31,6 +32,7 @@ export default function CollectionsPageRenderer({
   collections,
   isLoading = false,
   className = "",
+  routePrefix = "",
 }: CollectionsPageRendererProps) {
   const renderSection = (section: Section) => {
     if (section.enabled === false) return null;
@@ -77,6 +79,7 @@ export default function CollectionsPageRenderer({
               settings={settings}
               collections={collections}
               isLoading={isLoading}
+              routePrefix={routePrefix}
             />
           </div>
         );
@@ -92,6 +95,7 @@ export default function CollectionsPageRenderer({
               settings={settings}
               collections={collections}
               isLoading={isLoading}
+              routePrefix={routePrefix}
             />
           </div>
         );

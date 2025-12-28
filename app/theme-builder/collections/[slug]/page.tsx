@@ -13,16 +13,17 @@ import { useParams } from "next/navigation";
 import { useThemeBuilder } from "@/hooks/useThemeBuilder";
 import { useCollectionDetails } from "@/hooks";
 import CollectionDetailsPageRenderer from "@/components/renderers/page-renderer/collection-details-page-renderer";
+import { useRoutePrefix } from "@/providers/RoutePrefixProvider";
 import type { Section } from "@/lib/types";
 
 export default function ThemeBuilderCollectionDetailsPage() {
+  const { routePrefix } = useRoutePrefix();
   const params = useParams();
   const slug = params.slug as string;
   
   const { collectionDetailsPage, isLoading: isThemeLoading } = useThemeBuilder();
   const {
     collection,
-    sections: apiSections,
     isLoading: isCollectionLoading,
     isPageConfigLoading,
     error,
@@ -84,41 +85,22 @@ export default function ThemeBuilderCollectionDetailsPage() {
     );
   }
 
-  // Default sections if no theme builder data
-  const defaultSections: Section[] = [
-    {
-      id: "collection_breadcrumb",
-      type: "collection-breadcrumb-1",
-      enabled: true,
-      settings: {
-        show_home: true,
-      },
-    },
-    {
-      id: "collection_banner",
-      type: "collection-banner-1",
-      enabled: true,
-      settings: {
-        show_description: true,
-        show_product_count: true,
-      },
-    },
-    {
-      id: "collection_products",
-      type: "collection-products-1",
-      enabled: true,
-      settings: {
-        columns: 4,
-        show_pagination: true,
-      },
-    },
-  ];
+  // No default sections - only show what merchant configured
+  const pageSections = (collectionDetailsPage?.data?.sections || []) as Section[];
 
-  // Get sections from theme builder or use defaults
-  const themeBuilderSections = collectionDetailsPage?.data?.sections || [];
-  const pageSections = themeBuilderSections.length > 0
-    ? (themeBuilderSections as Section[])
-    : (apiSections.length > 0 ? apiSections : defaultSections);
+  // No sections configured - show empty state
+  if (pageSections.length === 0) {
+    return (
+      <main className="flex items-center justify-center min-h-[50vh]">
+        <div className="text-center">
+          <p className="text-gray-500 mb-2">No sections configured for collection details page</p>
+          <p className="text-gray-400 text-sm">
+            Add sections to the collection details page in the theme builder and publish
+          </p>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="zatiq-theme-builder-collection-details-page min-h-screen bg-gray-50">
@@ -126,6 +108,7 @@ export default function ThemeBuilderCollectionDetailsPage() {
         sections={pageSections}
         collection={collection}
         isLoading={isCollectionLoading}
+        routePrefix={routePrefix}
       />
     </main>
   );

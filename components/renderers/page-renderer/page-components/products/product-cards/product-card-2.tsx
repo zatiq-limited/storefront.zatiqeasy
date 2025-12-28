@@ -30,6 +30,7 @@ interface ProductCard2Props {
   priceColor?: string;
   oldPriceColor?: string;
   onAddToCart?: () => void;
+  routePrefix?: string;
 }
 
 export default function ProductCard2({
@@ -50,6 +51,7 @@ export default function ProductCard2({
   priceColor = "#F55157",
   oldPriceColor = "#A5A5A5",
   onAddToCart,
+  routePrefix = "",
 }: ProductCard2Props) {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -62,7 +64,7 @@ export default function ProductCard2({
 
   return (
     <Link
-      href={`/products/${handle}`}
+      href={`${routePrefix}/products/${handle}`}
       className="block w-full h-full"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}

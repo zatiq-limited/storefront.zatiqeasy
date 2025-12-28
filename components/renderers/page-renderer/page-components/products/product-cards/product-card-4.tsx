@@ -32,6 +32,7 @@ interface ProductCard4Props {
   oldPriceColor?: string;
   onAddToCart?: () => void;
   onBuyNow?: () => void;
+  routePrefix?: string;
 }
 
 export default function ProductCard4({
@@ -54,6 +55,7 @@ export default function ProductCard4({
   oldPriceColor = "#9CA3AF",
   onAddToCart,
   onBuyNow,
+  routePrefix = "",
 }: ProductCard4Props) {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -66,7 +68,7 @@ export default function ProductCard4({
 
   return (
     <Link
-      href={`/products/${handle}`}
+      href={`${routePrefix}/products/${handle}`}
       className="block w-full h-full"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
