@@ -38,14 +38,28 @@ export const paymentService = {
       // Interceptor will handle encryption automatically
       const { data } = await apiClient.post("/api/v1/live/receipts", payload);
 
+      // Type assertion for decrypted response
+      type CreateOrderResponse = {
+        payment_url?: string;
+        receipt_id?: string;
+        receipt_url?: string;
+        data?: {
+          receipt_id?: string;
+          receipt_url?: string;
+          [key: string]: unknown;
+        };
+        [key: string]: unknown;
+      };
+      const responseData = data as CreateOrderResponse;
+
       // Interceptor will handle decryption automatically
       return {
         success: true,
         data: {
-          payment_url: data.payment_url,
-          receipt_id: data.data?.receipt_id || data.receipt_id,
-          receipt_url: data.data?.receipt_url || data.receipt_url,
-          ...data.data,
+          payment_url: responseData.payment_url,
+          receipt_id: responseData.data?.receipt_id || responseData.receipt_id,
+          receipt_url: responseData.data?.receipt_url || responseData.receipt_url,
+          ...responseData.data,
         },
       };
     } catch (error: unknown) {
@@ -73,10 +87,17 @@ export const paymentService = {
         payload
       );
 
+      // Type assertion for decrypted response
+      type PaymentData = {
+        payment_url?: string;
+        transaction_id?: string;
+        [key: string]: unknown;
+      };
+
       // Interceptor will handle decryption automatically
       return {
         success: true,
-        data: data,
+        data: data as PaymentData,
       };
     } catch (error: unknown) {
       if (process.env.NODE_ENV === "development") {
@@ -106,12 +127,17 @@ export const paymentService = {
         }
       );
 
-      // Interceptor handles decryption if needed
-      const receiptData = data.data || data;
+      // Type assertion for response
+      type ReceiptResponse = {
+        data?: ReceiptDetails;
+      } & ReceiptDetails;
 
+      const receiptData = data as ReceiptResponse;
+
+      // Interceptor handles decryption if needed
       return {
         success: true,
-        data: receiptData,
+        data: receiptData.data || receiptData,
       };
     } catch (error: unknown) {
       if (process.env.NODE_ENV === "development") {
@@ -129,10 +155,9 @@ export const paymentService = {
    */
   async downloadReceipt(receiptId: string): Promise<Blob> {
     try {
-      const { data } = await apiClient.get(
+      const { data } = await apiClient.get<Blob>(
         `${PAYMENT_API_BASE}/receipts/${receiptId}/download`,
         {
-          responseType: "blob",
           headers: {
             "Device-Type": "Web",
             "Application-Type": "Online_Shop",
@@ -140,7 +165,8 @@ export const paymentService = {
         }
       );
 
-      return data;
+      // Response is handled as Blob by the fetch client
+      return data as Blob;
     } catch (error: unknown) {
       if (process.env.NODE_ENV === "development") {
         console.error("Download receipt error:", error);
@@ -170,10 +196,17 @@ export const paymentService = {
         }
       );
 
+      // Type assertion for payment status response
+      type PaymentStatusData = {
+        status: PaymentStatus;
+        transaction_id?: string;
+        payment_details?: Record<string, unknown>;
+      };
+
       // Interceptor handles decryption if needed
       return {
         success: true,
-        data: data,
+        data: data as PaymentStatusData,
       };
     } catch (error: unknown) {
       if (process.env.NODE_ENV === "development") {
@@ -197,10 +230,17 @@ export const paymentService = {
         `${PAYMENT_API_BASE}/live/payment/verify/${transactionId}`
       );
 
+      // Type assertion for response
+      type VerificationResponse = ApiResponse<{ status: string }> & {
+        message?: string;
+      };
+
+      const response = data as VerificationResponse;
+
       return {
         success: true,
-        status: data.data?.status,
-        message: data.message,
+        status: response.data?.status,
+        message: response.message,
       };
     } catch (error) {
       if (process.env.NODE_ENV === "development") {
@@ -234,7 +274,7 @@ export const paymentService = {
 
       return {
         success: true,
-        data: data,
+        data: data as Record<string, unknown>,
       };
     } catch (error: unknown) {
       if (process.env.NODE_ENV === "development") {
@@ -302,7 +342,7 @@ export const paymentService = {
 
       return {
         success: true,
-        data: data,
+        data: data as Record<string, unknown>,
       };
     } catch (error: unknown) {
       if (process.env.NODE_ENV === "development") {
@@ -326,9 +366,12 @@ export const paymentService = {
         `${PAYMENT_API_BASE}/live/payment-methods/${shopId}`
       );
 
+      type PaymentMethodsResponse = ApiResponse<{ methods: string[] }>;
+      const response = data as PaymentMethodsResponse;
+
       return {
         success: true,
-        methods: data.data?.methods || [],
+        methods: response.data?.methods || [],
       };
     } catch (error) {
       if (process.env.NODE_ENV === "development") {

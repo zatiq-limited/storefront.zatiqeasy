@@ -29,8 +29,11 @@ export async function POST(request: NextRequest) {
       identifier: shop_uuid,
     });
 
+    // Type assertion for API response
+    const responseData = data as { data?: unknown[] } | undefined;
+
     // Check if products data exists
-    if (!data?.data) {
+    if (!responseData?.data) {
       return NextResponse.json(
         {
           success: true,
@@ -47,7 +50,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         success: true,
-        data: data.data,
+        data: responseData.data,
       },
       {
         headers: {
