@@ -13,6 +13,7 @@ import {
 import { useProductsStore } from "@/stores/productsStore";
 import { FallbackImage } from "@/components/ui/fallback-image";
 import { CartFloatingBtn } from "@/components/features/cart/cart-floating-btn";
+import { VariantSelectorModal } from "@/components/products/variant-selector-modal";
 import {
   cn,
   getInventoryThumbImageUrl,
@@ -52,6 +53,7 @@ export function PremiumProductDetailPage({
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isShowVideo, setIsShowVideo] = useState(false);
   const [quantity, setQuantity] = useState(1);
+  const [selectedRelatedProduct, setSelectedRelatedProduct] = useState<Product | null>(null);
 
   const {
     id,
@@ -326,6 +328,13 @@ export function PremiumProductDetailPage({
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      {/* Variant Selector Modal for Related Products */}
+      <VariantSelectorModal
+        product={selectedRelatedProduct}
+        isOpen={!!selectedRelatedProduct}
+        onClose={() => setSelectedRelatedProduct(null)}
+      />
+
       <div className="container py-6 md:py-10">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 mb-6">
@@ -733,6 +742,7 @@ export function PremiumProductDetailPage({
                 <PremiumProductCard
                   key={relatedProduct.id}
                   product={relatedProduct}
+                  onSelectProduct={() => setSelectedRelatedProduct(relatedProduct)}
                   onNavigate={() => navigateProductDetails(relatedProduct.id)}
                 />
               ))}

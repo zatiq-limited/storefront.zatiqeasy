@@ -14,6 +14,7 @@ import { LuxuraProductCard } from "../../components/cards";
 import { SectionHeader } from "../home/sections/section-header";
 import { formatPrice } from "@/lib/utils/formatting";
 import { cn } from "@/lib/utils";
+import type { VariantsState, VariantState } from "@/types/cart.types";
 
 export function LuxuraProductDetailPage() {
   const params = useParams();
@@ -26,7 +27,7 @@ export function LuxuraProductDetailPage() {
   const products = useProductsStore((state) => state.products);
   const totalCartProducts = useCartStore(selectTotalItems);
   const totalPrice = useCartStore(selectSubtotal);
-  const { addProduct, getProductsByInventoryId } = useCartStore();
+  const { addProduct, removeProduct } = useCartStore();
 
   const [quantity, setQuantity] = useState(1);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
@@ -71,9 +72,18 @@ export function LuxuraProductDetailPage() {
     return product.image_url ? [product.image_url] : [];
   }, [product]);
 
-  // Check cart status
-  const cartProducts = product ? getProductsByInventoryId(Number(product.id)) : [];
+  // Get cart products for this product - subscribe to products state to track cart changes
+  // Then filter to get only this product's cart items (reactive approach like basic/premium themes)
+  const allCartProducts = useCartStore((state) => state.products);
+  const cartProducts = useMemo(
+    () =>
+      product?.id
+        ? Object.values(allCartProducts).filter((p) => p.id === Number(product.id))
+        : [],
+    [product?.id, allCartProducts]
+  );
   const cartQuantity = cartProducts.reduce((acc, p) => acc + (p.qty || 0), 0);
+  const isInCart = cartProducts.length > 0;
 
   // For non-variant products, find the cart item directly
   // For variant products, find the matching variant combination
@@ -114,8 +124,14 @@ export function LuxuraProductDetailPage() {
   const handleAddToCart = useCallback(() => {
     if (!product || isOutOfStock) return;
 
+    // For products already in cart (matching selected variants), remove old cart item first
+    // Same logic as premium theme
+    if (matchingCartItem) {
+      removeProduct(matchingCartItem.cartId);
+    }
+
     // Build selected variants if any
-    const selectedVariants: Record<number, { variant_type_id: number; variant_id: number; price: number; variant_name: string }> = {};
+    const selectedVariants: VariantsState = {};
     if (selectedVariant) {
       selectedVariants[selectedVariant.id] = {
         variant_type_id: selectedVariant.id,
@@ -138,14 +154,18 @@ export function LuxuraProductDetailPage() {
       stocks: product.stocks ?? [],
       reviews: [],
     } as unknown as Parameters<typeof addProduct>[0]);
-  }, [product, isOutOfStock, addProduct, currentPrice, images, quantity, selectedVariant]);
+  }, [product, isOutOfStock, matchingCartItem, removeProduct, addProduct, currentPrice, images, quantity, selectedVariant]);
 
   // Handle buy now
   const handleBuyNow = useCallback(() => {
     if (!product || isOutOfStock) return;
-    handleAddToCart();
+
+    if (!isInCart) {
+      handleAddToCart();
+    }
+
     router.push(`${baseUrl}/checkout`);
-  }, [product, isOutOfStock, handleAddToCart, router, baseUrl]);
+  }, [product, isOutOfStock, isInCart, handleAddToCart, router, baseUrl]);
 
   // Navigate to product
   const navigateProductDetails = useCallback(
@@ -269,6 +289,13 @@ export function LuxuraProductDetailPage() {
               <p className="text-green-600 font-medium">{t("in_stock")}</p>
             )}
 
+            {/* Already in Cart Message */}
+            {isInCart && (
+              <p className="text-sm text-blue-600 font-medium">
+                Already in your cart ({cartQuantity})
+              </p>
+            )}
+
             {/* Variants */}
             {product.variant_types?.map((variantType) => (
               <div key={variantType.id} className="space-y-3">
@@ -329,7 +356,7 @@ export function LuxuraProductDetailPage() {
                 )}
               >
                 <ShoppingCart size={20} />
-                {t("add_to_cart")}
+                {isInCart ? t("update_cart") : t("add_to_cart")}
               </button>
               <button
                 onClick={handleBuyNow}

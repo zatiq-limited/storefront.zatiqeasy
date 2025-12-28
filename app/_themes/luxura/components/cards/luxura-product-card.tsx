@@ -29,25 +29,33 @@ export function LuxuraProductCard({
   const router = useRouter();
   const { t } = useTranslation();
   const { shopDetails } = useShopStore();
-  const { addProduct, removeProduct, getProductsByInventoryId, updateQuantity } = useCartStore();
+  const {
+    addProduct,
+    removeProduct,
+    getProductsByInventoryId,
+    updateQuantity,
+  } = useCartStore();
 
   const baseUrl = shopDetails?.baseUrl || "";
   const currency = shopDetails?.country_currency || "BDT";
-  const showBuyNow = shopDetails?.shop_theme?.enable_buy_now_on_product_card ?? false;
+  const showBuyNow =
+    shopDetails?.shop_theme?.enable_buy_now_on_product_card ?? false;
 
   // Check if product is in cart
   const cartProducts = getProductsByInventoryId(Number(product.id));
   const totalInCart = cartProducts.reduce((acc, p) => acc + (p.qty || 0), 0);
 
   // Check stock status
-  const isOutOfStock = product.quantity === 0;
+  const isOutOfStock = (product.quantity ?? 0) <= 0;
 
   // Calculate max stock for cart
   const getMaxStock = () => {
     if (cartProducts.length > 0) {
       const cartItem = cartProducts[0];
       if (cartItem.is_stock_manage_by_variant && cartItem.stocks?.length > 0) {
-        const selectedVariantIds = Object.values(cartItem.selectedVariants || {})
+        const selectedVariantIds = Object.values(
+          cartItem.selectedVariants || {}
+        )
           .filter((v) => v)
           .map((v: unknown) => (v as { variant_id: string }).variant_id);
 
@@ -66,7 +74,8 @@ export function LuxuraProductCard({
   };
 
   const maxStock = getMaxStock();
-  const isCartIncrementDisabled = typeof maxStock === "number" && totalInCart >= maxStock;
+  const isCartIncrementDisabled =
+    typeof maxStock === "number" && totalInCart >= maxStock;
 
   // Get product image
   const imageUrl = product.images?.[0] || product.image_url || "";
@@ -170,13 +179,13 @@ export function LuxuraProductCard({
         <div
           role="button"
           onClick={handleClick}
-          className="relative w-full aspect-[420/360] rounded-xl cursor-pointer"
+          className="relative w-full aspect-420/360 rounded-xl cursor-pointer"
         >
           <FallbackImage
             src={imageUrl}
             fill
             alt={product.name}
-            className="w-full aspect-[420/360] object-cover rounded-lg md:rounded-xl"
+            className="w-full aspect-420/360 object-cover rounded-lg md:rounded-xl"
           />
 
           {/* Out of Stock Overlay */}
@@ -210,7 +219,13 @@ export function LuxuraProductCard({
                         {currency} {product.old_price}
                       </p>
                       <span className="text-gray-200 font-bold">
-                        -{Math.round(((product.old_price! - product.price) / product.old_price!) * 100)}%
+                        -
+                        {Math.round(
+                          ((product.old_price! - product.price) /
+                            product.old_price!) *
+                            100
+                        )}
+                        %
                       </span>
                     </>
                   )}

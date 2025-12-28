@@ -83,7 +83,7 @@ export function CustomerReviews({ reviews }: CustomerReviewsProps) {
   const hasMore = reviews.length > visibleReviews;
 
   return (
-    <section className="w-full container px-4 xl:px-0 py-6 sm:py-8 lg:py-10 border border-gray-200 dark:border-gray-700 rounded-lg">
+    <section className="w-full py-6 sm:py-8 lg:py-10 border border-gray-200 dark:border-gray-700 rounded-lg">
       {/* Image Modal */}
       <ImageModal
         isOpen={modalOpen}
@@ -111,7 +111,7 @@ export function CustomerReviews({ reviews }: CustomerReviewsProps) {
               <div className="flex sm:items-start gap-2 sm:gap-0 mb-3 sm:mb-4">
                 {review.name && (
                   <div className="flex items-center gap-2 sm:gap-3">
-                    <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-600 dark:text-gray-300 font-semibold text-sm flex-shrink-0">
+                    <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-600 dark:text-gray-300 font-semibold text-sm shrink-0">
                       {getInitials(review.name || "Anonymous")}
                     </div>
                     <div>
@@ -158,7 +158,7 @@ export function CustomerReviews({ reviews }: CustomerReviewsProps) {
               {/* Review Images */}
               {review.images && review.images.length > 0 && (
                 <div
-                  className="mb-3 sm:mb-4 ml-0 sm:ml-14 cursor-pointer rounded-lg overflow-hidden w-56 sm:w-72 aspect-[3/4]"
+                  className="mb-3 sm:mb-4 ml-0 sm:ml-14 cursor-pointer rounded-lg overflow-hidden w-56 sm:w-72 aspect-3/4"
                   onClick={() =>
                     handleImageClick(review.images![0], review.name || "Review")
                   }

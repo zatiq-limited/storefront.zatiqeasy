@@ -5,7 +5,11 @@ import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { X, SlidersHorizontal, Square, SquareCheckBig } from "lucide-react";
 import { useShopStore } from "@/stores/shopStore";
-import { useCartStore, selectTotalItems, selectSubtotal } from "@/stores/cartStore";
+import {
+  useCartStore,
+  selectTotalItems,
+  selectSubtotal,
+} from "@/stores/cartStore";
 import { useProductsStore, type Product } from "@/stores/productsStore";
 import { GridContainer } from "../../components/core";
 import { LuxuraProductCard } from "../../components/cards";
@@ -48,15 +52,18 @@ export function LuxuraAllProducts() {
   const hasItems = totalCartProducts > 0;
 
   // Default price filters
-  const priceFilters: PriceRange[] = useMemo(() => [
-    { id: "1", min: 0, max: 500 },
-    { id: "2", min: 500, max: 1000 },
-    { id: "3", min: 1000, max: 2000 },
-    { id: "4", min: 2000, max: 5000 },
-  ], []);
+  const priceFilters: PriceRange[] = useMemo(
+    () => [
+      { id: "1", min: 0, max: 500 },
+      { id: "2", min: 500, max: 1000 },
+      { id: "3", min: 1000, max: 2000 },
+      { id: "4", min: 2000, max: 5000 },
+    ],
+    []
+  );
 
   // Compute filtered products
-  const { filteredProducts, totalPages, } = useMemo(() => {
+  const { filteredProducts, totalPages } = useMemo(() => {
     let filtered = [...products];
 
     // Apply search filter
@@ -81,7 +88,8 @@ export function LuxuraAllProducts() {
     if (selectedRange) {
       filtered = filtered.filter(
         (product) =>
-          product.price >= selectedRange.min && product.price <= selectedRange.max
+          product.price >= selectedRange.min &&
+          product.price <= selectedRange.max
       );
     }
 
@@ -196,13 +204,11 @@ export function LuxuraAllProducts() {
         </div>
       )}
 
-      {/* Page Content - Premium 78% width */}
-      <div className="pt-6 md:pt-9 w-[95%] md:w-[90%] lg:w-[78%] mx-auto">
+      {/* Page Content */}
+      <div className="container pt-6 md:pt-9">
         {/* Header Row */}
         <div className="flex justify-between items-center mb-6">
-          <SectionHeader
-            text={t("all_products")}
-          />
+          <SectionHeader text={`${t("all_products")} (${filteredProducts.length})`} />
           <div className="flex items-center gap-4">
             <button
               onClick={() => setShowMobileFilter(true)}
@@ -281,7 +287,9 @@ export function LuxuraAllProducts() {
               </GridContainer>
             ) : (
               <div className="flex items-center justify-center py-20">
-                <p className="text-gray-500 text-lg">{t("no_products_found")}</p>
+                <p className="text-gray-500 text-lg">
+                  {t("no_products_found")}
+                </p>
               </div>
             )}
 

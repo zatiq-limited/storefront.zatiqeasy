@@ -2,13 +2,14 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import { ShoppingCart, ShoppingBag } from "lucide-react";
+import { Minus, Plus, ShoppingCart, ShoppingBag } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import { useShopStore } from "@/stores/shopStore";
 import { useCartStore } from "@/stores/cartStore";
 import { FallbackImage } from "@/components/ui/fallback-image";
 import { getInventoryThumbImageUrl } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import type { Product } from "@/stores/productsStore";
 
 const productCartAnimateVariants = {
@@ -33,7 +34,7 @@ export function SelloraProductCard({
   const router = useRouter();
   const { t } = useTranslation();
   const { shopDetails } = useShopStore();
-  const { addProduct, getProductsByInventoryId } = useCartStore();
+  const { addProduct, removeProduct, getProductsByInventoryId, updateQuantity } = useCartStore();
 
   const baseUrl = shopDetails?.baseUrl || "";
   const currency = shopDetails?.country_currency || "BDT";
@@ -86,6 +87,41 @@ export function SelloraProductCard({
       stocks: product.stocks ?? [],
       reviews: (productRecord.reviews as Array<unknown>) ?? [],
     } as Parameters<typeof addProduct>[0]);
+  };
+
+  // Handle increment
+  const handleIncrement = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (isStockOut) return;
+
+    if (hasVariants && onSelectProduct) {
+      onSelectProduct();
+      return;
+    }
+
+    if (cartProducts.length > 0) {
+      const cartItem = cartProducts[0];
+      updateQuantity(cartItem.cartId, cartItem.qty + 1);
+    }
+  };
+
+  // Handle decrement
+  const handleDecrement = (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    if (hasVariants && onSelectProduct) {
+      onSelectProduct();
+      return;
+    }
+
+    if (cartProducts.length > 0) {
+      const cartItem = cartProducts[0];
+      if (cartItem.qty > 1) {
+        updateQuantity(cartItem.cartId, cartItem.qty - 1);
+      } else {
+        removeProduct(cartItem.cartId);
+      }
+    }
   };
 
   // Handle buy now
@@ -164,10 +200,33 @@ export function SelloraProductCard({
                   className="flex items-center justify-center rounded-md h-full bg-white dark:bg-black shadow-lg"
                 >
                   {totalInCart > 0 ? (
-                    <span className="text-sm font-medium text-black dark:text-white">
-                      {t("in_cart")} ({totalInCart})
-                    </span>
+                    // Quantity Controls
+                    <div className="flex items-center justify-center gap-3 w-full px-1">
+                      <button
+                        onClick={handleDecrement}
+                        className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition-colors"
+                        aria-label="Decrease quantity"
+                      >
+                        <Minus size={16} />
+                      </button>
+
+                      <span className="text-sm font-medium min-w-5 text-center">
+                        {totalInCart}
+                      </span>
+
+                      <button
+                        onClick={handleIncrement}
+                        className={cn(
+                          "p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition-colors",
+                          isStockOut && "opacity-50 cursor-not-allowed"
+                        )}
+                        aria-label="Increase quantity"
+                      >
+                        <Plus size={16} />
+                      </button>
+                    </div>
                   ) : (
+                    // Add to Cart Button
                     <button
                       disabled={isStockOut}
                       onClick={handleAddToCart}

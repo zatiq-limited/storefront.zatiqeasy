@@ -50,7 +50,7 @@ export function SelloraProductDetailPage({
   const router = useRouter();
   const { t } = useTranslation();
   const { shopDetails } = useShopStore();
-  const { addProduct, getProductsByInventoryId } = useCartStore();
+  const { addProduct, removeProduct } = useCartStore();
   const totalCartItems = useCartStore(selectTotalItems);
   const totalPrice = useCartStore(selectSubtotal);
 
@@ -104,9 +104,18 @@ export function SelloraProductDetailPage({
   // Video ID for YouTube
   const videoId = useMemo(() => extractVideoId(video_link || ""), [video_link]);
 
-  // Check if product is in cart
-  const cartProducts = id ? getProductsByInventoryId(Number(id)) : [];
+  // Get cart products for this product - subscribe to products state to track cart changes
+  // Then filter to get only this product's cart items (reactive approach like basic/premium themes)
+  const allCartProducts = useCartStore((state) => state.products);
+  const cartProducts = useMemo(
+    () =>
+      id
+        ? Object.values(allCartProducts).filter((p) => p.id === Number(id))
+        : [],
+    [id, allCartProducts]
+  );
   const isInCart = cartProducts.length > 0;
+  const cartQty = cartProducts.reduce((acc, p) => acc + (p.qty || 0), 0);
 
   // For non-variant products, find the cart item directly
   // For variant products, find the matching variant combination
@@ -183,6 +192,12 @@ export function SelloraProductDetailPage({
   const handleAddToCart = useCallback(() => {
     if (isStockOut || !product) return;
 
+    // For products already in cart (matching selected variants), remove old cart item first
+    // Same logic as premium theme
+    if (matchingCartItem) {
+      removeProduct(matchingCartItem.cartId);
+    }
+
     const productRecord = product as unknown as Record<string, unknown>;
     addProduct({
       ...product,
@@ -204,6 +219,8 @@ export function SelloraProductDetailPage({
     image_url,
     quantity,
     selectedVariants,
+    matchingCartItem,
+    removeProduct,
     addProduct,
   ]);
 
@@ -476,11 +493,11 @@ export function SelloraProductDetailPage({
 
       {/* Product Video Section */}
       {video_link && (
-        <div className="max-w-7xl mx-auto px-1 sm:px-4 xl:px-0 py-6 sm:py-8 lg:py-10">
-          <h2 className="text-xl sm:text-2xl font-semibold text-foreground mb-4 sm:mb-6">
+        <div className="container py-6 sm:py-8 lg:py-10">
+          <h2 className="text-2xl md:text-3xl font-normal text-black dark:text-white mb-4 sm:mb-6">
             {t("product_video") || "Product Video"}
           </h2>
-          <div className="relative w-full aspect-video bg-black rounded-lg overflow-hidden">
+          <div className="relative max-w-7xl mx-auto aspect-video bg-black rounded-lg overflow-hidden">
             {videoId ? (
               <iframe
                 width="100%"
@@ -505,7 +522,7 @@ export function SelloraProductDetailPage({
 
       {/* Customer Reviews */}
       {reviews && reviews.length > 0 && (
-        <div className="py-6 sm:py-8 lg:py-10 px-1 sm:px-4 xl:px-0">
+        <div className="container py-6 sm:py-8 lg:py-10">
           <CustomerReviews
             reviews={
               reviews as {

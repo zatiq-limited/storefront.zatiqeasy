@@ -493,7 +493,7 @@ export function CommonCheckoutForm({ onSubmit, onOrderComplete, preventRedirect 
   return (
     <form
       onSubmit={handleSubmit(handleFormSubmit)}
-      className="container flex flex-col lg:flex-row justify-center gap-6 lg:gap-8 pt-6"
+      className="flex flex-col lg:flex-row justify-center gap-6 lg:gap-8"
     >
       {/* Left section - Contact and Shipping Form */}
       <div className="flex-1 basis-full lg:basis-1/2 lg:pr-8 xl:pr-16">

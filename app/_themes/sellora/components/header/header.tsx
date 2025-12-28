@@ -83,7 +83,10 @@ export function SelloraHeader() {
       <header
         className={cn(
           `h-12 md:h-20 w-full ${
-            pathname.includes("/single-product") ? "sticky" : "fixed"
+            pathname.includes("/single-product") ||
+            pathname.includes("/checkout")
+              ? "sticky"
+              : "fixed"
           }  top-8.5 sm:top-12 left-0 z-50 flex items-center justify-center transition-all duration-300`,
           {
             "bg-white top-0! shadow-sm": scrollY > 20,

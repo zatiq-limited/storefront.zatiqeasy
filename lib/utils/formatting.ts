@@ -119,20 +119,27 @@ export const getInventoryThumbImageUrl = (input?: string): string => {
 /**
  * Transform slider image URL to use CDN optimization for carousel banners
  * Optimizes for 1720x1080 resolution
+ * Returns original URL if transformations don't apply
  */
 export const getSliderImage = (input?: string): string => {
   if (!input) return placeholderImageDataUrl;
 
+  // Return original URL if it doesn't match expected patterns
   const startsWithProtocol =
     input.startsWith("http:") ||
     input.startsWith("https:") ||
     input.startsWith("/");
 
-  if (!startsWithProtocol) return placeholderImageDataUrl;
+  if (!startsWithProtocol) return input;
 
-  return input
-    .replace("/shops/", "/shops/fit-in/1720x1080/")
-    .replace("d10rvdv6rxomuk.cloudfront.net", "www.easykoro.com");
+  // Try to apply CDN transformations - if URL contains /shops/, add fit-in parameter
+  // Otherwise return original URL unchanged
+  let result = input;
+  if (result.includes("/shops/")) {
+    result = result.replace("/shops/", "/shops/fit-in/1720x1080/");
+  }
+
+  return result;
 };
 
 /**

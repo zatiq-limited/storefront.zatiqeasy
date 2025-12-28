@@ -23,7 +23,7 @@ export const FallbackImage = ({
   fallbackSrc = "/placeholder.jpg",
   alt = "",
   priority = false,
-  quality = 80, // Slightly lower quality = smaller file size
+  quality = 100,
   sizes = "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw",
   fill,
   width,

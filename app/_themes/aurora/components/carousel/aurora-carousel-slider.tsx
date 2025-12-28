@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useShopStore } from "@/stores/shopStore";
 import { FallbackImage } from "@/components/ui/fallback-image";
-import { getSliderImage, isValidURL } from "@/lib/utils";
+import { isValidURL } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 
 interface AuroraCarouselSliderProps {
@@ -105,7 +105,7 @@ const AuroraCarouselSlider: React.FC<AuroraCarouselSliderProps> = ({
         {/* Image Container */}
         <div className="w-full h-full relative overflow-hidden">
           <FallbackImage
-            src={getSliderImage(currentCarousel?.image_url || "")}
+            src={currentCarousel?.image_url || ""}
             alt={`Slide ${currentIndex + 1}`}
             fill
             className="aspect-335/151 md:aspect-1920/720 object-cover"

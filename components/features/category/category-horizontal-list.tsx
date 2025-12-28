@@ -165,6 +165,10 @@ export function CategoryHorizontalList({
       );
 
       if (foundCategory) {
+        /** Old logic to check for subcategories before deciding params
+         * 
+         * 
+         * 
         // Check if this category has subcategories
         const hasSubcategories = categories.some(
           (cat) => String(cat.parent_id) === String(foundCategory.id)
@@ -188,19 +192,23 @@ export function CategoryHorizontalList({
             })
           );
         }
+         * 
+         * 
+         * 
+         */
+
+        // Set both category_id and selected_category when selecting any category
+        router.push(
+          buildUrl({
+            category_id: categoryIdStr,
+            selected_category: categoryIdStr,
+          })
+        );
       } else {
         router.push(buildUrl({ selected_category: categoryIdStr }));
       }
     },
-    [
-      fromCategory,
-      baseUrl,
-      categories,
-      currentRootCategory,
-      categoryIdParam,
-      router,
-      buildUrl,
-    ]
+    [fromCategory, baseUrl, categories, currentRootCategory, router, buildUrl]
   );
 
   if (!categories.length) {
