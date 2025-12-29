@@ -3,73 +3,57 @@
 import { useState } from "react";
 import { convertSettingsKeys } from "@/lib/settings-utils";
 
+interface FormField {
+  id: string;
+  type: string;
+  settings: {
+    name: string;
+    label?: string;
+    placeholder?: string;
+    type?: string;
+    required?: boolean;
+    width?: string;
+    rows?: number;
+  };
+}
+
 interface ContactForm1Settings {
   backgroundColor?: string;
   textColor?: string;
   title?: string;
   subtitle?: string;
   submitButtonText?: string;
-  submitButtonColor?: string;
+  submitButtonBgColor?: string;
+  submitButtonTextColor?: string;
+  inputBgColor?: string;
+  inputBorderColor?: string;
+  inputTextColor?: string;
+  inputPlaceholderColor?: string;
+  labelColor?: string;
   formEndpoint?: string;
   successMessage?: string;
   errorMessage?: string;
-  showTermsCheckbox?: boolean;
+  showTerms?: boolean;
   termsText?: string;
 }
 
 interface ContactForm1Props {
   settings?: ContactForm1Settings;
+  blocks?: FormField[];
 }
 
-export default function ContactForm1({ settings = {} }: ContactForm1Props) {
+export default function ContactForm1({ settings = {}, blocks = [] }: ContactForm1Props) {
   const s = convertSettingsKeys(settings as Record<string, unknown>) as ContactForm1Settings;
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [termsAccepted, setTermsAccepted] = useState(false);
 
-  // Default form fields
-  const defaultFields = [
-    {
-      id: "field_name",
-      settings: {
-        name: "name",
-        placeholder: "Your Name",
-        required: true,
-      },
-    },
-    {
-      id: "field_email",
-      settings: {
-        name: "email",
-        type: "email",
-        placeholder: "Your Email",
-        required: true,
-      },
-    },
-    {
-      id: "field_phone",
-      settings: {
-        name: "phone",
-        type: "tel",
-        placeholder: "Your Phone",
-        required: false,
-      },
-    },
-    {
-      id: "field_message",
-      settings: {
-        name: "message",
-        type: "textarea",
-        placeholder: "Your Message",
-        required: true,
-        rows: 6,
-      },
-    },
-  ];
+  // Use blocks from builder or fallback to empty array
+  const formFields = blocks.length > 0 ? blocks : [];
 
   // Separate textarea fields from other fields
-  const textareaFields = defaultFields.filter((field) => field.settings.type === "textarea");
-  const otherFields = defaultFields.filter((field) => field.settings.type !== "textarea");
+  const textareaFields = formFields.filter((field) => field.settings.type === "textarea");
+  const otherFields = formFields.filter((field) => field.settings.type !== "textarea");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -138,7 +122,7 @@ export default function ContactForm1({ settings = {} }: ContactForm1Props) {
             <button
               onClick={() => setStatus("idle")}
               className="px-6 py-3 rounded-full font-medium text-white transition-opacity hover:opacity-90"
-              style={{ backgroundColor: s.submitButtonColor || "#111827" }}
+              style={{ backgroundColor: s.submitButtonBgColor || "#111827" }}
             >
               Send Another Message
             </button>
@@ -165,7 +149,7 @@ export default function ContactForm1({ settings = {} }: ContactForm1Props) {
                 ))}
 
                 {/* Terms Checkbox */}
-                {s.showTermsCheckbox && s.termsText && (
+                {s.showTerms && s.termsText && (
                   <div className="flex items-start gap-3 pt-2">
                     <input
                       type="checkbox"
@@ -227,9 +211,9 @@ export default function ContactForm1({ settings = {} }: ContactForm1Props) {
             <div className="flex justify-end mt-6">
               <button
                 type="submit"
-                disabled={status === "loading" || (s.showTermsCheckbox && !termsAccepted)}
+                disabled={status === "loading" || (s.showTerms && !termsAccepted)}
                 className="px-8 py-3.5 rounded-full text-white font-medium transition-all duration-200 hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-                style={{ backgroundColor: s.submitButtonColor || "#111827" }}
+                style={{ backgroundColor: s.submitButtonBgColor || "#111827", color: s.submitButtonTextColor || "#FFFFFF" }}
               >
                 {status === "loading" ? (
                   <>

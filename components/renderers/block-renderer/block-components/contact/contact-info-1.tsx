@@ -3,27 +3,24 @@
 import { convertSettingsKeys } from "@/lib/settings-utils";
 import * as LucideIcons from "lucide-react";
 
+interface InfoItem {
+  id: string;
+  icon: string;
+  title: string;
+  content: string;
+  link?: string;
+}
+
 interface ContactInfo1Settings {
   backgroundColor?: string;
   textColor?: string;
   accentColor?: string;
   title?: string;
   titleStyle?: 'script' | 'normal';
+  showSubtitle?: boolean;
+  subtitle?: string;
   iconBackgroundColor?: string;
-  info1Icon?: string;
-  info1Title?: string;
-  info1Content?: string;
-  info1Link?: string;
-  info2Icon?: string;
-  info2Title?: string;
-  info2Content?: string;
-  info2Link?: string;
-  info3Icon?: string;
-  info3Title?: string;
-  info3Content?: string;
-  info3Link?: string;
-  // Allow additional properties for dynamic access
-  [key: string]: string | undefined;
+  infoItems?: InfoItem[];
 }
 
 interface ContactInfo1Props {
@@ -75,29 +72,11 @@ const getIcon = (iconName?: string, size = 28, color?: string) => {
   return <LucideIcons.MapPin size={size} strokeWidth={1.5} color={color} />;
 };
 
-const ContactInfoItems = [
-  {
-    icon: 'info1Icon',
-    title: 'info1Title',
-    content: 'info1Content',
-    link: 'info1Link'
-  },
-  {
-    icon: 'info2Icon',
-    title: 'info2Title',
-    content: 'info2Content',
-    link: 'info2Link'
-  },
-  {
-    icon: 'info3Icon',
-    title: 'info3Title',
-    content: 'info3Content',
-    link: 'info3Link'
-  }
-];
-
 export default function ContactInfo1({ settings = {} }: ContactInfo1Props) {
   const s = convertSettingsKeys(settings as Record<string, unknown>) as ContactInfo1Settings;
+  
+  // Get infoItems from settings
+  const infoItems = s.infoItems || [];
 
   return (
     <section
@@ -119,18 +98,23 @@ export default function ContactInfo1({ settings = {} }: ContactInfo1Props) {
           </h2>
         )}
 
+        {/* Subtitle */}
+        {s.showSubtitle && s.subtitle && (
+          <p 
+            className="text-center mb-10 md:mb-14 text-base md:text-lg"
+            style={{ color: s.textColor || "#6B7280" }}
+          >
+            {s.subtitle}
+          </p>
+        )}
+
         {/* Contact Cards - Centered Grid */}
         <div className="grid gap-8 md:gap-12 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto">
-          {ContactInfoItems.map((item, index) => {
-            const iconName = s[item.icon];
-            const title = s[item.title];
-            const content = s[item.content];
-            const link = s[item.link];
-
-            if (!title && !content) return null;
+          {infoItems.map((item, index) => {
+            if (!item.title && !item.content) return null;
 
             return (
-              <div key={index} className="flex flex-col items-center text-center">
+              <div key={item.id || index} className="flex flex-col items-center text-center">
                 {/* Icon Circle */}
                 <div
                   className="flex items-center justify-center w-20 h-20 md:w-24 md:h-24 rounded-full mb-5"
@@ -139,28 +123,28 @@ export default function ContactInfo1({ settings = {} }: ContactInfo1Props) {
                     color: s.accentColor || "#8B4513",
                   }}
                 >
-                  {getIcon(iconName, 32, s.accentColor || "#8B4513")}
+                  {getIcon(item.icon, 32, s.accentColor || "#8B4513")}
                 </div>
 
                 {/* Title */}
-                {title && (
+                {item.title && (
                   <h3
                     className="text-sm font-semibold uppercase tracking-wider mb-2"
                     style={{ color: s.textColor || "#111827" }}
                   >
-                    {title}
+                    {item.title}
                   </h3>
                 )}
 
                 {/* Content */}
-                {link ? (
+                {item.link ? (
                   <a
-                    href={link}
+                    href={item.link}
                     className="text-gray-600 hover:underline transition-colors text-sm md:text-base"
                   >
                     <span
                       dangerouslySetInnerHTML={{
-                        __html: (content || "").replace(/\n/g, "<br/>"),
+                        __html: (item.content || "").replace(/\n/g, "<br/>"),
                       }}
                     />
                   </a>
@@ -168,7 +152,7 @@ export default function ContactInfo1({ settings = {} }: ContactInfo1Props) {
                   <p
                     className="text-gray-600 text-sm md:text-base"
                     dangerouslySetInnerHTML={{
-                      __html: (content || "").replace(/\n/g, "<br/>"),
+                      __html: (item.content || "").replace(/\n/g, "<br/>"),
                     }}
                   />
                 )}

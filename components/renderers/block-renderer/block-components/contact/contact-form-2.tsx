@@ -3,40 +3,59 @@
 import { useState } from "react";
 import { convertSettingsKeys } from "@/lib/settings-utils";
 
+interface FormField {
+  id: string;
+  type: string;
+  settings: {
+    name: string;
+    label?: string;
+    placeholder?: string;
+    type?: string;
+    required?: boolean;
+    width?: string;
+    rows?: number;
+  };
+}
+
 interface ContactForm2Settings {
   backgroundColor?: string;
   textColor?: string;
   title?: string;
   titleStyle?: 'script' | 'normal';
   submitButtonText?: string;
-  submitButtonColor?: string;
+  submitButtonBgColor?: string;
+  submitButtonTextColor?: string;
+  inputBgColor?: string;
+  inputBorderColor?: string;
+  inputTextColor?: string;
+  inputPlaceholderColor?: string;
+  labelColor?: string;
   successMessage?: string;
   errorMessage?: string;
-  showTermsCheckbox?: boolean;
+  showTerms?: boolean;
   termsText?: string;
 }
 
 interface ContactForm2Props {
   settings?: ContactForm2Settings;
+  blocks?: FormField[];
 }
 
-export default function ContactForm2({ settings = {} }: ContactForm2Props) {
+export default function ContactForm2({ settings = {}, blocks = [] }: ContactForm2Props) {
   const s = convertSettingsKeys(settings as Record<string, unknown>) as ContactForm2Settings;
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: '',
-    terms: false,
-  });
+  const [formData, setFormData] = useState<Record<string, string | boolean>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [termsAccepted, setTermsAccepted] = useState(false);
+
+  // Use blocks from builder
+  const formFields = blocks.length > 0 ? blocks : [];
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value, type } = e.target;
+    const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value,
+      [name]: value,
     }));
   };
 
@@ -56,13 +75,8 @@ export default function ContactForm2({ settings = {} }: ContactForm2Props) {
 
       if (response.ok) {
         setSubmitStatus('success');
-        setFormData({
-          name: '',
-          email: '',
-          subject: '',
-          message: '',
-          terms: false,
-        });
+        setFormData({});
+        setTermsAccepted(false);
       } else {
         setSubmitStatus('error');
       }
@@ -72,6 +86,14 @@ export default function ContactForm2({ settings = {} }: ContactForm2Props) {
       setIsSubmitting(false);
     }
   };
+
+  // Separate full-width and half-width fields
+  const fullWidthFields = formFields.filter((field) => 
+    field.settings.width === 'full' || field.settings.type === 'textarea'
+  );
+  const halfWidthFields = formFields.filter((field) => 
+    field.settings.width === 'half' && field.settings.type !== 'textarea'
+  );
 
   return (
     <section
@@ -93,98 +115,101 @@ export default function ContactForm2({ settings = {} }: ContactForm2Props) {
 
         {/* Contact form */}
         <form onSubmit={handleSubmit} className="max-w-2xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Name field */}
-            <div>
-              <label
-                htmlFor="name"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Name
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                required
-                className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
+          {/* Half-width fields in grid */}
+          {halfWidthFields.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              {halfWidthFields.map((field) => (
+                <div key={field.id}>
+                  {field.settings.label && (
+                    <label
+                      htmlFor={field.settings.name}
+                      className="block text-sm font-medium mb-2"
+                      style={{ color: s.labelColor || '#374151' }}
+                    >
+                      {field.settings.label}
+                    </label>
+                  )}
+                  <input
+                    type={field.settings.type || 'text'}
+                    id={field.settings.name}
+                    name={field.settings.name}
+                    placeholder={field.settings.placeholder}
+                    value={(formData[field.settings.name] as string) || ''}
+                    onChange={handleInputChange}
+                    required={field.settings.required}
+                    className="w-full px-4 py-3 border focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    style={{
+                      backgroundColor: s.inputBgColor || '#FFFFFF',
+                      borderColor: s.inputBorderColor || '#E5E7EB',
+                      color: s.inputTextColor || '#1F2937',
+                    }}
+                  />
+                </div>
+              ))}
             </div>
+          )}
 
-            {/* Email field */}
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                required
-                className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
+          {/* Full-width fields */}
+          {fullWidthFields.map((field) => (
+            <div key={field.id} className="mb-6">
+              {field.settings.label && (
+                <label
+                  htmlFor={field.settings.name}
+                  className="block text-sm font-medium mb-2"
+                  style={{ color: s.labelColor || '#374151' }}
+                >
+                  {field.settings.label}
+                </label>
+              )}
+              {field.settings.type === 'textarea' ? (
+                <textarea
+                  id={field.settings.name}
+                  name={field.settings.name}
+                  rows={field.settings.rows || 6}
+                  placeholder={field.settings.placeholder}
+                  value={(formData[field.settings.name] as string) || ''}
+                  onChange={handleInputChange}
+                  required={field.settings.required}
+                  className="w-full px-4 py-3 border focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  style={{
+                    backgroundColor: s.inputBgColor || '#FFFFFF',
+                    borderColor: s.inputBorderColor || '#E5E7EB',
+                    color: s.inputTextColor || '#1F2937',
+                  }}
+                />
+              ) : (
+                <input
+                  type={field.settings.type || 'text'}
+                  id={field.settings.name}
+                  name={field.settings.name}
+                  placeholder={field.settings.placeholder}
+                  value={(formData[field.settings.name] as string) || ''}
+                  onChange={handleInputChange}
+                  required={field.settings.required}
+                  className="w-full px-4 py-3 border focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  style={{
+                    backgroundColor: s.inputBgColor || '#FFFFFF',
+                    borderColor: s.inputBorderColor || '#E5E7EB',
+                    color: s.inputTextColor || '#1F2937',
+                  }}
+                />
+              )}
             </div>
-          </div>
-
-          {/* Subject field */}
-          <div className="mb-6">
-            <label
-              htmlFor="subject"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
-              Subject
-            </label>
-            <input
-              type="text"
-              id="subject"
-              name="subject"
-              value={formData.subject}
-              onChange={handleInputChange}
-              required
-              className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-          </div>
-
-          {/* Message field */}
-          <div className="mb-6">
-            <label
-              htmlFor="message"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
-              Message
-            </label>
-            <textarea
-              id="message"
-              name="message"
-              rows={6}
-              value={formData.message}
-              onChange={handleInputChange}
-              required
-              className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-          </div>
+          ))}
 
           {/* Terms checkbox */}
-          {s.showTermsCheckbox && (
+          {s.showTerms && s.termsText && (
             <div className="mb-6">
               <label className="flex items-start">
                 <input
                   type="checkbox"
-                  name="terms"
-                  checked={formData.terms}
-                  onChange={handleInputChange}
+                  checked={termsAccepted}
+                  onChange={(e) => setTermsAccepted(e.target.checked)}
                   required
                   className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 mt-1"
                 />
                 <span className="ml-2 text-sm text-gray-600">
-                  {s.termsText || 'I accept the terms & conditions and I understand that my data will be hold securely in accordance with the privacy policy.'}
+                  {s.termsText}
                 </span>
               </label>
             </div>
@@ -194,9 +219,12 @@ export default function ContactForm2({ settings = {} }: ContactForm2Props) {
           <div className="text-center">
             <button
               type="submit"
-              disabled={isSubmitting}
-              className="px-8 py-3 text-white font-medium hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
-              style={{ backgroundColor: s.submitButtonColor || '#8B4513' }}
+              disabled={isSubmitting || (s.showTerms && !termsAccepted)}
+              className="px-8 py-3 font-medium hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+              style={{ 
+                backgroundColor: s.submitButtonBgColor || '#8B4513',
+                color: s.submitButtonTextColor || '#FFFFFF'
+              }}
             >
               {isSubmitting ? 'SENDING...' : (s.submitButtonText || 'SEND MESSAGE')}
             </button>

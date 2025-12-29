@@ -161,7 +161,7 @@ export interface ThemeBuilderData {
   is_active: boolean;
   last_published: string;
   theme: TransformedTheme | null;
-  pages: ThemeBuilderAPIResponse['pages'] | null;
+  pages: DecompressedThemeData['pages'] | null;
 }
 
 // ============================================

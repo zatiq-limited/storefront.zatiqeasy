@@ -2,61 +2,38 @@
 
 import React from "react";
 import type { Section } from "@/lib/types";
-import {
-  ContactHero1,
-  ContactHero2,
-  ContactInfo1,
-  ContactInfo2,
-  ContactMap1,
-  ContactMap2,
-  ContactForm1,
-  ContactForm2,
-} from "@/components/renderers/block-renderer/block-components/contact";
+import BlockRenderer from "@/components/renderers/block-renderer";
+import type { Block } from "@/components/renderers/block-renderer";
+import type { SectionBlock } from "@/lib/api/services/theme-builder.service";
 
 interface ContactPageRendererProps {
   sections: Section[];
 }
 
+/**
+ * Contact Page Renderer
+ * Uses BlockRenderer to render V3.0 block schema sections
+ * Same pattern as About page renderer
+ */
 export default function ContactPageRenderer({ sections }: ContactPageRendererProps) {
-  const renderSection = (section: Section) => {
-    if (!section.enabled) return null;
-
-    const { type, settings = {} } = section;
-
-    switch (type) {
-      case "contact-hero-1":
-        return <ContactHero1 key={section.id} settings={settings} />;
-
-      case "contact-hero-2":
-        return <ContactHero2 key={section.id} settings={settings} />;
-
-      case "contact-info-1":
-        return <ContactInfo1 key={section.id} settings={settings as any} />;
-
-      case "contact-info-2":
-        return <ContactInfo2 key={section.id} settings={settings} />;
-
-      case "contact-map-1":
-        return <ContactMap1 key={section.id} settings={settings} />;
-
-      case "contact-map-2":
-        return <ContactMap2 key={section.id} settings={settings} />;
-
-      case "contact-form-1":
-        return <ContactForm1 key={section.id} settings={settings} />;
-
-      case "contact-form-2":
-        return <ContactForm2 key={section.id} settings={settings} />;
-
-      default:
-        console.warn(`Unknown contact section type: ${type}`);
-        return null;
-    }
-  };
-
   return (
     <>
-      {sections.map((section) => renderSection(section))}
+      {sections.map((section, index) => {
+        // Skip disabled sections
+        if (!section.enabled) return null;
+
+        // Get the first block from each section (V3.0 block schema)
+        const block = (section.blocks as unknown as SectionBlock[])?.[0];
+        if (!block) return null;
+
+        return (
+          <BlockRenderer
+            key={section.id || `section-${index}`}
+            block={block as Block}
+            data={(block.data as Record<string, unknown>) || {}}
+          />
+        );
+      })}
     </>
   );
 }

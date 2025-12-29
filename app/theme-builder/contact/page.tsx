@@ -4,7 +4,7 @@
  * ========================================
  *
  * Renders the contact page using theme builder's published sections
- * via the BlockRenderer (similar to home page pattern).
+ * via the BlockRenderer (same pattern as about page).
  */
 
 "use client";
