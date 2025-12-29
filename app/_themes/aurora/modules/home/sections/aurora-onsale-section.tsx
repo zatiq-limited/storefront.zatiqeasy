@@ -6,7 +6,7 @@ import { useShopStore } from "@/stores/shopStore";
 import { GridContainer } from "../../../components/core";
 import { AuroraProductCard } from "../../../components/cards";
 import SectionHeader from "./section-header";
-import ViewAllButton from "./view-all-button";
+import ViewAllButton from "../../../../../../components/shared/view-all-button";
 import type { Product } from "@/stores/productsStore";
 
 interface AuroraOnSaleSectionProps {
@@ -22,8 +22,9 @@ export function AuroraOnSaleSection({
   const { shopDetails } = useShopStore();
 
   const baseUrl = shopDetails?.baseUrl || "";
-  const onSaleProducts: Product[] =
-    ((shopDetails?.shop_theme?.on_sale_inventories as unknown as Product[]) || []).slice(0, 8);
+  const onSaleProducts: Product[] = (
+    (shopDetails?.shop_theme?.on_sale_inventories as unknown as Product[]) || []
+  ).slice(0, 8);
 
   if (onSaleProducts.length === 0) {
     return null;

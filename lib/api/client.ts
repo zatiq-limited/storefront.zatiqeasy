@@ -165,7 +165,7 @@ async function fetchWithEncryption<T = unknown>(
     const responseText = await response.text();
 
     // Try to parse as JSON
-    let responseData: any;
+    let responseData: unknown;
     try {
       responseData = JSON.parse(responseText);
     } catch {
@@ -176,9 +176,16 @@ async function fetchWithEncryption<T = unknown>(
     // Handle decryption
     if (!skipDecryption && shouldEnc) {
       // Case 1: Response has payload property
-      if (responseData?.payload) {
+      if (
+        responseData &&
+        typeof responseData === "object" &&
+        "payload" in responseData &&
+        typeof (responseData as { payload: string }).payload === "string"
+      ) {
         try {
-          const decrypted = decryptData(responseData.payload);
+          const decrypted = decryptData(
+            (responseData as { payload: string }).payload
+          );
           return { data: decrypted as T };
         } catch (error) {
           if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV") {

@@ -3,7 +3,7 @@
 import { useTranslation } from "react-i18next";
 import { useShopStore } from "@/stores/shopStore";
 import { CommonCheckoutForm } from "@/components/features/checkout";
-import { PageHeader } from "@/app/_themes/sellora/components/page-header";
+import PageHeader from "@/components/shared/page-header";
 
 export default function MerchantCheckoutPage() {
   const { t } = useTranslation();

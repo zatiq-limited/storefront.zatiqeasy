@@ -1,6 +1,8 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { getThemeData } from "@/lib/utils/theme-constants";
+import { useShopStore } from "@/stores";
 
 type Props = {
   titleElement: React.ReactNode;
@@ -9,13 +11,19 @@ type Props = {
   className?: string;
 };
 
-const LuxuraPageHeader = ({ titleElement, number, subtitle, className }: Props) => {
+const PageHeader = ({ titleElement, number, subtitle, className }: Props) => {
+  const { shopDetails } = useShopStore();
+
   return (
     <h1
       className={cn(
         "text-9.5 md:text-16 font-normal text-blue-zatiq",
         className
       )}
+      style={{
+        fontFamily: getThemeData(shopDetails?.shop_theme?.theme_name)
+          .secondaryFont,
+      }}
     >
       {titleElement}
       {(number ?? 0) > 0 && (
@@ -27,5 +35,4 @@ const LuxuraPageHeader = ({ titleElement, number, subtitle, className }: Props) 
   );
 };
 
-export { LuxuraPageHeader };
-export default LuxuraPageHeader;
+export default PageHeader;

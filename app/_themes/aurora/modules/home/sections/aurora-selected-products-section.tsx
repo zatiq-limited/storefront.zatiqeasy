@@ -8,7 +8,7 @@ import { GridContainer } from "../../../components/core";
 import { AuroraProductCard } from "../../../components/cards";
 import { FallbackImage } from "@/components/ui/fallback-image";
 import SectionHeader from "./section-header";
-import ViewAllButton from "./view-all-button";
+import ViewAllButton from "../../../../../../components/shared/view-all-button";
 import type { Product } from "@/stores/productsStore";
 
 interface SelectedCategory {
