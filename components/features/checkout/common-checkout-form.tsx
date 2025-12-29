@@ -62,9 +62,15 @@ interface CommonCheckoutFormProps {
   onSubmit?: (orderData: OrderData) => void;
   onOrderComplete?: (result: { orderId: string; trackLink?: string; receiptUrl?: string }) => void;
   preventRedirect?: boolean;
+  showVariantSelector?: boolean;
 }
 
-export function CommonCheckoutForm({ onSubmit, onOrderComplete, preventRedirect }: CommonCheckoutFormProps) {
+export function CommonCheckoutForm({
+  onSubmit,
+  onOrderComplete,
+  preventRedirect,
+  showVariantSelector = false,
+}: CommonCheckoutFormProps) {
   const {
     register,
     handleSubmit,
@@ -616,6 +622,7 @@ export function CommonCheckoutForm({ onSubmit, onOrderComplete, preventRedirect 
           showTermsError={showTermsError}
           setShowTermsError={setShowTermsError}
           isDisabled={order_verification_enabled && !isPhoneVerified}
+          showVariantSelector={showVariantSelector}
         />
       </div>
     </form>

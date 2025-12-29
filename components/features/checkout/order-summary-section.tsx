@@ -36,6 +36,7 @@ type OrderSummarySectionProps = {
   showTermsError?: boolean;
   setShowTermsError?: (value: boolean) => void;
   isDisabled?: boolean;
+  showVariantSelector?: boolean;
 };
 
 export function OrderSummarySection({
@@ -64,6 +65,7 @@ export function OrderSummarySection({
   showTermsError,
   setShowTermsError,
   isDisabled = false,
+  showVariantSelector = false,
 }: OrderSummarySectionProps) {
   const { t } = useTranslation();
 
@@ -114,7 +116,7 @@ export function OrderSummarySection({
   return (
     <div className="flex-1 basis-full lg:basis-1/3 lg:sticky lg:top-8 lg:self-start">
       {/* Cart Details */}
-      <CommonCheckoutCartDetails />
+      <CommonCheckoutCartDetails showVariantSelector={showVariantSelector} />
       {/* Promo Code and Order Summary Card */}
       <div className="border border-gray-300 dark:border-gray-600 bg-white dark:bg-transparent rounded-lg p-4 md:p-6 space-y-4 mt-6">
         {/* Promo Code Section - Only show if enabled */}

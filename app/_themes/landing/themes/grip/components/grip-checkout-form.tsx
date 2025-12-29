@@ -49,6 +49,7 @@ export function GripCheckoutForm({ onOrderPlaced }: GripCheckoutFormProps) {
         <CommonCheckoutForm
           preventRedirect
           onOrderComplete={handleOrderComplete}
+          showVariantSelector={true}
         />
       </div>
     </section>
