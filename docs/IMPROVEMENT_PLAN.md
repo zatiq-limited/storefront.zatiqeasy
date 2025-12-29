@@ -188,7 +188,10 @@ All encryption/decryption is handled automatically in axios interceptors.
        key: process.env.NEXT_PUBLIC_ENCRYPTION_KEY!,
      },
      system: {
-       env: process.env.NEXT_PUBLIC_SYSTEM_ENV as "SHOPLINK" | "STANDALONE" | "development",
+       env: process.env.NEXT_PUBLIC_SYSTEM_ENV as
+         | "SHOPLINK"
+         | "STANDALONE"
+         | "DEV",
        theme: process.env.NEXT_PUBLIC_THEME_NAME || "Basic",
      },
    } as const;
@@ -202,7 +205,7 @@ All encryption/decryption is handled automatically in axios interceptors.
    type LogLevel = "debug" | "info" | "warn" | "error";
 
    class Logger {
-     private isDev = process.env.NEXT_PUBLIC_SYSTEM_ENV === "development";
+     private isDev = process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV";
 
      private shouldLog(level: LogLevel): boolean {
        if (!this.isDev && level === "debug") return false;

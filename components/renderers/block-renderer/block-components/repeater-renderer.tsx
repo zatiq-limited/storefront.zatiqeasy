@@ -59,7 +59,7 @@ export default function RepeaterRenderer({
   }
 
   if (!Array.isArray(sourceArray)) {
-    if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "development") {
+    if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV") {
       console.warn(`RepeaterRenderer: Source "${source}" is not an array`, {
         data: mergedData,
         context,

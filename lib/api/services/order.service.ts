@@ -48,7 +48,7 @@ export const orderService = {
           },
         };
       } catch (error: unknown) {
-        if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "development") {
+        if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV") {
           console.error(`Order creation attempt ${attempt} failed:`, error);
         }
 
@@ -88,7 +88,7 @@ export const orderService = {
       }
       return null;
     } catch (error) {
-      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "development") {
+      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV") {
         console.error("Error fetching receipt:", error);
       }
       return null;
@@ -113,7 +113,7 @@ export const orderService = {
         message: data.message,
       };
     } catch (error) {
-      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "development") {
+      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV") {
         console.error("Error updating order status:", error);
       }
       const errorMessage =

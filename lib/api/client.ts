@@ -181,7 +181,7 @@ async function fetchWithEncryption<T = unknown>(
           const decrypted = decryptData(responseData.payload);
           return { data: decrypted as T };
         } catch (error) {
-          if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "development") {
+          if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV") {
             console.error("Failed to decrypt response.payload:", error);
           }
         }
@@ -192,7 +192,7 @@ async function fetchWithEncryption<T = unknown>(
           const decrypted = decryptData(responseData);
           return { data: decrypted as T };
         } catch (error) {
-          if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "development") {
+          if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV") {
             console.error("Failed to decrypt response string:", error);
           }
         }
@@ -216,13 +216,13 @@ async function fetchWithEncryption<T = unknown>(
       }
 
       if (response.status === 403) {
-        if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "development") {
+        if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV") {
           console.error("Access forbidden:", responseData);
         }
       }
 
       if (response.status >= 500) {
-        if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "development") {
+        if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV") {
           console.error("Server error:", responseData);
         }
       }
@@ -238,7 +238,7 @@ async function fetchWithEncryption<T = unknown>(
 
     // Handle network error
     if (error instanceof TypeError) {
-      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "development") {
+      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV") {
         console.error("Network error:", error.message);
       }
       throw new ApiError("Network error", undefined, undefined, undefined);

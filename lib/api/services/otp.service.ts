@@ -21,7 +21,7 @@ export const otpService = {
   async sendOTP(payload: SendOTPRequest): Promise<SendOTPResponse> {
     try {
       // In development mode, simulate the API call
-      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "development") {
+      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV") {
         await new Promise((resolve) => setTimeout(resolve, 1000));
 
         return {
@@ -48,7 +48,7 @@ export const otpService = {
 
       return await response.json();
     } catch (error) {
-      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "development") {
+      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV") {
         console.error("Send OTP error:", error);
       }
       const errorMessage =
@@ -66,7 +66,7 @@ export const otpService = {
   async verifyOTP(payload: VerifyOTPRequest): Promise<VerifyOTPResponse> {
     try {
       // In development mode, simulate the API call
-      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "development") {
+      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV") {
         await new Promise((resolve) => setTimeout(resolve, 800));
 
         // Simulate success for any 6-digit OTP
@@ -101,7 +101,7 @@ export const otpService = {
 
       return await response.json();
     } catch (error) {
-      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "development") {
+      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV") {
         console.error("Verify OTP error:", error);
       }
       const errorMessage =
@@ -119,7 +119,7 @@ export const otpService = {
   async resendOTP(payload: ResendOTPRequest): Promise<ResendOTPResponse> {
     try {
       // In development mode, simulate the API call
-      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "development") {
+      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV") {
         await new Promise((resolve) => setTimeout(resolve, 1000));
 
         return {
@@ -146,7 +146,7 @@ export const otpService = {
 
       return await response.json();
     } catch (error) {
-      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "development") {
+      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV") {
         console.error("Resend OTP error:", error);
       }
       const errorMessage =

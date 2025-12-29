@@ -64,7 +64,7 @@ export const paymentService = {
         },
       };
     } catch (error: unknown) {
-      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "development") {
+      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV") {
         console.error("Create order error:", error);
       }
       return {
@@ -101,7 +101,7 @@ export const paymentService = {
         data: data as PaymentData,
       };
     } catch (error: unknown) {
-      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "development") {
+      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV") {
         console.error("Payment processing error:", error);
       }
       return {
@@ -141,7 +141,7 @@ export const paymentService = {
         data: receiptData.data || receiptData,
       };
     } catch (error: unknown) {
-      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "development") {
+      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV") {
         console.error("Get receipt details error:", error);
       }
       return {
@@ -169,7 +169,7 @@ export const paymentService = {
       // Response is handled as Blob by the fetch client
       return data as Blob;
     } catch (error: unknown) {
-      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "development") {
+      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV") {
         console.error("Download receipt error:", error);
       }
       throw new Error(getErrorMessage(error, "Failed to download receipt"));
@@ -210,7 +210,7 @@ export const paymentService = {
         data: data as PaymentStatusData,
       };
     } catch (error: unknown) {
-      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "development") {
+      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV") {
         console.error("Check payment status error:", error);
       }
       return {
@@ -244,7 +244,7 @@ export const paymentService = {
         message: response.message,
       };
     } catch (error) {
-      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "development") {
+      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV") {
         console.error("Payment verification error:", error);
       }
       return {
@@ -278,7 +278,7 @@ export const paymentService = {
         data: data as Record<string, unknown>,
       };
     } catch (error: unknown) {
-      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "development") {
+      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV") {
         console.error("Handle webhook error:", error);
       }
       return {
@@ -313,7 +313,7 @@ export const paymentService = {
       // Process payment
       return await this.processPayment(paymentPayload);
     } catch (error: unknown) {
-      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "development") {
+      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV") {
         console.error("Retry payment error:", error);
       }
       return {
@@ -346,7 +346,7 @@ export const paymentService = {
         data: data as Record<string, unknown>,
       };
     } catch (error: unknown) {
-      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "development") {
+      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV") {
         console.error("Cancel order error:", error);
       }
       return {
@@ -375,7 +375,7 @@ export const paymentService = {
         methods: response.data?.methods || [],
       };
     } catch (error) {
-      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "development") {
+      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV") {
         console.error("Error fetching payment methods:", error);
       }
       return {

@@ -419,7 +419,7 @@ export default function SwiperRenderer({
     }
 
     if (sourceArray.length === 0) {
-      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "development") {
+      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV") {
         console.warn(`SwiperRenderer: Source "${source}" not found or empty`, {
           data: mergedData,
           context,

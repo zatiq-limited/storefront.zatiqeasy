@@ -721,7 +721,7 @@ export default function ProductsPageRenderer({
         );
 
       default:
-        if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "development") {
+        if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV") {
           return (
             <div
               key={section.id}

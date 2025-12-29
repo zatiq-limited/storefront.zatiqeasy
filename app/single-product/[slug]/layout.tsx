@@ -18,7 +18,7 @@ export async function generateMetadata({
   const headersList = await headers();
   const host = headersList.get("host") || "";
   const protocol =
-    process.env.NEXT_PUBLIC_SYSTEM_ENV === "development" ? "http" : "https";
+    process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV" ? "http" : "https";
   const baseUrl = `${protocol}://${host}`;
 
   try {
@@ -94,7 +94,7 @@ export default async function LandingPageLayout({
   const headersList = await headers();
   const host = headersList.get("host") || "";
   const protocol =
-    process.env.NEXT_PUBLIC_SYSTEM_ENV === "development" ? "http" : "https";
+    process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV" ? "http" : "https";
   const baseUrl = `${protocol}://${host}`;
 
   // Fetch shop details for the landing page

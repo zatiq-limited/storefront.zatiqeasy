@@ -33,7 +33,7 @@ export const contactService = {
         message: data.message || "Message sent successfully",
       };
     } catch (error) {
-      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "development") {
+      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV") {
         console.error("Contact form submission error:", error);
       }
       const errorMessage =
