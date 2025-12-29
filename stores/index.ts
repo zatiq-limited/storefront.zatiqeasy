@@ -39,6 +39,7 @@ export {
 
 // Theme Builder stores
 export { useThemeStore } from "./themeStore";
+export { useThemeBuilderStore } from "./themeBuilderStore";
 
 export { useHomepageStore } from "./homepageStore";
 
