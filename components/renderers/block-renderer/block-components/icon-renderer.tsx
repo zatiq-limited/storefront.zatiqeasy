@@ -237,7 +237,7 @@ export default function IconRenderer({
 
   if (!IconComponent) {
     // Development warning
-    if (process.env.NODE_ENV === "development") {
+    if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "development") {
       console.warn(`Icon not found: ${icon} (normalized: ${normalizedIcon})`);
     }
     // Return an empty span as fallback

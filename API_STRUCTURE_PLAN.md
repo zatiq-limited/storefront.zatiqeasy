@@ -520,10 +520,10 @@ class Logger {
       level,
       message,
       ...context,
-      environment: process.env.NODE_ENV,
+      environment: process.env.NEXT_PUBLIC_SYSTEM_ENV,
     };
 
-    if (process.env.NODE_ENV === "production") {
+    if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "production") {
       // Send to logging service (Datadog, LogRocket, etc.)
       console.log(JSON.stringify(logEntry));
     } else {

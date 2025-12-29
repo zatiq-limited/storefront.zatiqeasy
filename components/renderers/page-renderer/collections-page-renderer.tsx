@@ -97,7 +97,7 @@ export default function CollectionsPageRenderer({
         );
 
       default:
-        if (process.env.NODE_ENV === "development") {
+        if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "development") {
           return (
             <div
               key={section.id}

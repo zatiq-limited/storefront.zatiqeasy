@@ -131,7 +131,9 @@ async function fetchWithEncryption<T = unknown>(
   let processedBody: BodyInit | undefined;
   if (body) {
     if (shouldEnc) {
-      const encryptedPayload = encryptData(body as unknown as Record<string, unknown>);
+      const encryptedPayload = encryptData(
+        body as unknown as Record<string, unknown>
+      );
       processedBody = JSON.stringify({ payload: encryptedPayload });
     } else {
       processedBody = JSON.stringify(body);
@@ -147,7 +149,9 @@ async function fetchWithEncryption<T = unknown>(
   // Add auth token if available
   const token = getAuthToken();
   if (token) {
-    (requestHeaders as Record<string, string>)["Authorization"] = `Bearer ${token}`;
+    (requestHeaders as Record<string, string>)[
+      "Authorization"
+    ] = `Bearer ${token}`;
   }
 
   try {
@@ -157,17 +161,41 @@ async function fetchWithEncryption<T = unknown>(
       body: processedBody,
     });
 
-    // Parse response as JSON
-    const responseData = await response.json().catch(() => ({}));
+    // Get response text first
+    const responseText = await response.text();
 
-    // Handle decryption - ONLY if payload exists (error responses don't have payload)
-    if (!skipDecryption && shouldEnc && responseData?.payload) {
-      try {
-        const decrypted = decryptData(responseData.payload);
-        return { data: decrypted as T };
-      } catch (error) {
-        console.error("Failed to decrypt response:", error);
-        // Return original data if decryption fails
+    // Try to parse as JSON
+    let responseData: any;
+    try {
+      responseData = JSON.parse(responseText);
+    } catch {
+      // If not JSON, treat as plain text (might be encrypted string)
+      responseData = responseText;
+    }
+
+    // Handle decryption
+    if (!skipDecryption && shouldEnc) {
+      // Case 1: Response has payload property
+      if (responseData?.payload) {
+        try {
+          const decrypted = decryptData(responseData.payload);
+          return { data: decrypted as T };
+        } catch (error) {
+          if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "development") {
+            console.error("Failed to decrypt response.payload:", error);
+          }
+        }
+      }
+      // Case 2: Response is directly an encrypted string
+      else if (typeof responseData === "string" && responseData.length > 0) {
+        try {
+          const decrypted = decryptData(responseData);
+          return { data: decrypted as T };
+        } catch (error) {
+          if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "development") {
+            console.error("Failed to decrypt response string:", error);
+          }
+        }
       }
     }
 
@@ -188,13 +216,13 @@ async function fetchWithEncryption<T = unknown>(
       }
 
       if (response.status === 403) {
-        if (process.env.NODE_ENV === "development") {
+        if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "development") {
           console.error("Access forbidden:", responseData);
         }
       }
 
       if (response.status >= 500) {
-        if (process.env.NODE_ENV === "development") {
+        if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "development") {
           console.error("Server error:", responseData);
         }
       }
@@ -210,7 +238,7 @@ async function fetchWithEncryption<T = unknown>(
 
     // Handle network error
     if (error instanceof TypeError) {
-      if (process.env.NODE_ENV === "development") {
+      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "development") {
         console.error("Network error:", error.message);
       }
       throw new ApiError("Network error", undefined, undefined, undefined);
@@ -238,7 +266,11 @@ async function post<T = unknown>(
   data?: unknown,
   options?: Omit<Parameters<typeof fetchWithEncryption>[1], "method">
 ): Promise<{ data: T }> {
-  return fetchWithEncryption<T>(endpoint, { ...options, method: "POST", body: data as BodyInit });
+  return fetchWithEncryption<T>(endpoint, {
+    ...options,
+    method: "POST",
+    body: data as BodyInit,
+  });
 }
 
 /**
@@ -249,7 +281,11 @@ async function put<T = unknown>(
   data?: unknown,
   options?: Omit<Parameters<typeof fetchWithEncryption>[1], "method">
 ): Promise<{ data: T }> {
-  return fetchWithEncryption<T>(endpoint, { ...options, method: "PUT", body: data as BodyInit });
+  return fetchWithEncryption<T>(endpoint, {
+    ...options,
+    method: "PUT",
+    body: data as BodyInit,
+  });
 }
 
 /**
@@ -260,7 +296,11 @@ async function patch<T = unknown>(
   data?: unknown,
   options?: Omit<Parameters<typeof fetchWithEncryption>[1], "method">
 ): Promise<{ data: T }> {
-  return fetchWithEncryption<T>(endpoint, { ...options, method: "PATCH", body: data as BodyInit });
+  return fetchWithEncryption<T>(endpoint, {
+    ...options,
+    method: "PATCH",
+    body: data as BodyInit,
+  });
 }
 
 /**

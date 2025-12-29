@@ -36,7 +36,7 @@ export const analyticsService = {
     } catch (error) {
       // Analytics errors should not break the app
       // Log in development but fail silently in production
-      if (process.env.NODE_ENV === "development") {
+      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "development") {
         console.error("Analytics tracking error:", error);
       }
       return {
