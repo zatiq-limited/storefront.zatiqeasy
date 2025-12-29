@@ -17,7 +17,7 @@ const PageHeader = ({ titleElement, number, subtitle, className }: Props) => {
   return (
     <h1
       className={cn(
-        "text-9.5 md:text-16 font-normal text-blue-zatiq",
+        "text-[38px] md:text-[64px] font-normal text-blue-zatiq",
         className
       )}
       style={{
@@ -27,7 +27,7 @@ const PageHeader = ({ titleElement, number, subtitle, className }: Props) => {
     >
       {titleElement}
       {(number ?? 0) > 0 && (
-        <span className="text-4.5 md:text-7.5 text-gray-400 ml-2">
+        <span className="text-[20px] md:text-[30px] text-gray-400 ml-2">
           ({number} {subtitle})
         </span>
       )}
