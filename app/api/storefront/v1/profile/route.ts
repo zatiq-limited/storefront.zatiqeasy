@@ -11,8 +11,11 @@ export async function POST(request: NextRequest) {
     // Call external API using apiClient directly
     const { data } = await apiClient.post("/api/v1/live/profile", body);
 
+    // Type assertion for API response
+    const responseData = data as { data?: { id?: unknown } } | undefined;
+
     // Check if profile data exists
-    if (!data?.data?.id) {
+    if (!responseData?.data?.id) {
       return NextResponse.json(
         {
           success: false,
@@ -30,7 +33,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         success: true,
-        data: data.data,
+        data: responseData.data,
       },
       {
         headers: {

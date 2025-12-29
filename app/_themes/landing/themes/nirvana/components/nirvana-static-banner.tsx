@@ -9,7 +9,10 @@ interface NirvanaStaticBannerProps {
   onBuyNow?: (link: string | null) => void;
 }
 
-export function NirvanaStaticBanner({ content, onBuyNow }: NirvanaStaticBannerProps) {
+export function NirvanaStaticBanner({
+  content,
+  onBuyNow,
+}: NirvanaStaticBannerProps) {
   const { shopDetails } = useShopStore();
 
   if (!content) {
@@ -23,7 +26,7 @@ export function NirvanaStaticBanner({ content, onBuyNow }: NirvanaStaticBannerPr
           <div className="mx-auto transform transition-transform duration-500 group-hover:scale-[1.02]">
             {/* Title */}
             {content.title && (
-              <h1 className="max-w-6xl mx-auto text-center text-4xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-landing-primary to-landing-secondary leading-tight tracking-tight">
+              <h1 className="max-w-6xl mx-auto text-center text-4xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-linear-to-r from-landing-primary to-landing-secondary leading-tight tracking-tight">
                 {content.title}
               </h1>
             )}
@@ -51,7 +54,7 @@ export function NirvanaStaticBanner({ content, onBuyNow }: NirvanaStaticBannerPr
               <div className="flex justify-center mt-8 md:mt-12">
                 <button
                   onClick={() => onBuyNow?.(content.link)}
-                  className="px-8 py-4 bg-gradient-to-r from-landing-primary to-landing-secondary text-white font-bold rounded-full hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer"
+                  className="px-8 py-4 bg-linear-to-r from-landing-primary to-landing-secondary text-white font-bold rounded-full hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer"
                 >
                   {content.button_text}
                 </button>

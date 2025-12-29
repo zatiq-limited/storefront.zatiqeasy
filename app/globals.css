@@ -61,15 +61,15 @@
 
   /* Black color variants */
   --color-black-zatiq: #383838;
-  --color-black-2: #4A4A4A;
-  --color-black-3: #CDCDCD;
-  --color-black-4: #E8E8E8;
-  --color-black-1-1: #16151A;
-  --color-black-1-2: #1F1E25;
-  --color-black-18: #18181B;
+  --color-black-2: #4a4a4a;
+  --color-black-3: #cdcdcd;
+  --color-black-4: #e8e8e8;
+  --color-black-1-1: #16151a;
+  --color-black-1-2: #1f1e25;
+  --color-black-18: #18181b;
   --color-black-27: #272727;
   --color-black-3f: #3f3f46;
-  --color-black-disabled: #AFAFAF;
+  --color-black-disabled: #afafaf;
 
   /* Landing page theme colors */
   --color-landing-primary: var(--landing-primary-color);
@@ -89,7 +89,7 @@
   --foreground: oklch(0.145 0 0);
 
   /* Default theme colors (will be overwritten by shop theme) */
-  --primary-color: #2563EB;
+  --primary-color: #2563eb;
   --primary-color-10: rgba(37, 99, 235, 0.1);
   --primary-color-15: rgba(37, 99, 235, 0.15);
   --primary-color-25: rgba(37, 99, 235, 0.25);
@@ -97,12 +97,12 @@
   --primary-color-75: rgba(37, 99, 235, 0.75);
 
   /* Landing page default colors */
-  --landing-primary-color: #2563EB;
+  --landing-primary-color: #2563eb;
   --landing-primary-color-10: rgba(37, 99, 235, 0.1);
   --landing-primary-color-15: rgba(37, 99, 235, 0.15);
   --landing-primary-color-25: rgba(37, 99, 235, 0.25);
   --landing-primary-color-50: rgba(37, 99, 235, 0.5);
-  --landing-secondary-color: #1E40AF;
+  --landing-secondary-color: #1e40af;
   --landing-secondary-color-10: rgba(30, 64, 175, 0.1);
   --landing-secondary-color-15: rgba(30, 64, 175, 0.15);
   --landing-secondary-color-25: rgba(30, 64, 175, 0.25);
@@ -182,6 +182,10 @@
   }
   .container {
     @apply mx-auto px-4 md:px-6 lg:px-8;
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
   }
 }
 

@@ -6,7 +6,10 @@ import Image from "next/image";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { useShopStore } from "@/stores/shopStore";
 import { cn } from "@/lib/utils";
-import { socialIcons, type Sociallinks } from "@/components/shared/icons/social-links-svg-icon";
+import {
+  socialIcons,
+  type Sociallinks,
+} from "@/components/shared/icons/social-links-svg-icon";
 import { isSubscribed } from "@/lib/utils/subscription-utils";
 
 interface AuroraFooterProps {
@@ -23,7 +26,6 @@ export function AuroraFooter({ bgStyle }: AuroraFooterProps) {
     shop_email = "",
     social_links = {},
     baseUrl = "",
-    payment_methods = [],
     image_url = "",
   } = shopDetails || {};
 
@@ -32,7 +34,7 @@ export function AuroraFooter({ bgStyle }: AuroraFooterProps) {
     "about-us",
     "privacy-policy",
     "terms-and-conditions",
-    "return-and-cancellation-policy",
+    "return-policy",
   ];
 
   // Build social links
@@ -64,7 +66,7 @@ export function AuroraFooter({ bgStyle }: AuroraFooterProps) {
     <footer className={cn(bgStyle)}>
       {/* Main Footer */}
       <div className="w-full shadow-black-1.1 bg-white mt-8 dark:bg-black-27 pt-8 pb-8 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto flex flex-col gap-6">
+        <div className="container flex flex-col gap-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {/* Logo Section */}
             <div className="p-4 space-y-3">
@@ -74,7 +76,7 @@ export function AuroraFooter({ bgStyle }: AuroraFooterProps) {
                   width={200}
                   alt={shop_name || "Shop Logo"}
                   src={image_url}
-                  className="h-8 md:h-10 w-auto max-w-[200px] object-contain"
+                  className="h-8 md:h-10 w-auto max-w-50 object-contain"
                 />
               )}
             </div>

@@ -1,19 +1,11 @@
 "use client";
 
-import React from "react";
-import { useTranslation } from "react-i18next";
 import { useShopStore } from "@/stores/shopStore";
+import { useProductsStore, type Product } from "@/stores/productsStore";
 import { GridContainer } from "../../../components/core";
 import { LuxuraProductCard } from "../../../components/cards";
 import { SectionHeader } from "./section-header";
-import type { Product } from "@/stores/productsStore";
-
-interface SelectedCategoryInventory {
-  category_id: number;
-  category_name: string;
-  products?: Product[];
-  inventories?: Product[];
-}
+import { FallbackImage } from "@/components/ui/fallback-image";
 
 interface LuxuraSelectedProductsByCategorySectionProps {
   setSelectedProduct: (product: Product | null) => void;
@@ -24,44 +16,66 @@ export function LuxuraSelectedProductsByCategorySection({
   setSelectedProduct,
   navigateProductDetails,
 }: LuxuraSelectedProductsByCategorySectionProps) {
-  const { t } = useTranslation();
   const { shopDetails } = useShopStore();
+  const allProducts = useProductsStore((state) => state.products);
 
-  const baseUrl = shopDetails?.baseUrl || "";
+  // Get selected categories from shop theme
+  const selectedCategories = shopDetails?.shop_theme?.selected_categories || [];
 
-  // Get selected category inventories from shop theme
-  const selectedCategoryInventories: SelectedCategoryInventory[] =
-    ((shopDetails?.shop_theme as unknown as { selected_category_inventories?: SelectedCategoryInventory[] })?.selected_category_inventories) || [];
-
-  if (selectedCategoryInventories.length === 0) {
+  if (selectedCategories.length === 0) {
     return null;
   }
 
   return (
-    <div className="w-[95%] md:w-[90%] lg:w-[78%] mx-auto flex flex-col gap-[36px] md:gap-[60px] xl:gap-[84px]">
-      {selectedCategoryInventories.map((categoryData) => {
-        const products = categoryData.products || categoryData.inventories || [];
+    <div className="container">
+      {selectedCategories.map((category: {
+        id: number | string;
+        name: string;
+        banner_url?: string;
+        image_url?: string;
+      }, index: number) => {
+        // Filter products that belong to this category
+        const filteredProducts = allProducts?.filter((product) =>
+          product?.categories?.some((cat) => cat?.id === category?.id)
+        ) || [];
 
-        if (products.length === 0) return null;
+        if (filteredProducts.length === 0) return null;
 
         return (
-          <div key={categoryData.category_id}>
-            <SectionHeader
-              text={categoryData.category_name}
-              viewAllLink={`${baseUrl}/categories/${categoryData.category_id}?selected_category=${categoryData.category_id}`}
-              showViewAll={true}
-            />
-
-            <GridContainer>
-              {products.slice(0, 8).map((product) => (
-                <LuxuraProductCard
-                  key={product.id}
-                  product={product}
-                  onSelectProduct={() => setSelectedProduct(product)}
-                  onNavigate={() => navigateProductDetails(product.id)}
+          <div
+            className="w-full flex flex-col gap-12 md:gap-15 xl:gap-28 mt-12 md:mt-15 xl:mt-28 first:mt-0"
+            key={category.id || index}
+          >
+            {/* Category Banner */}
+            {category?.banner_url && (
+              <div>
+                <FallbackImage
+                  src={category.banner_url}
+                  alt={category.name}
+                  height={380}
+                  width={1300}
+                  className="w-full aspect-335/150 md:aspect-1300/380 object-cover rounded-lg md:rounded-none"
                 />
-              ))}
-            </GridContainer>
+              </div>
+            )}
+
+            {/* Products Grid */}
+            <div>
+              <SectionHeader
+                text={category?.name}
+                link={`/categories/${category?.id}`}
+              />
+              <GridContainer>
+                {filteredProducts.slice(0, 4).map((product) => (
+                  <LuxuraProductCard
+                    key={product.id}
+                    product={product}
+                    onSelectProduct={() => setSelectedProduct(product)}
+                    onNavigate={() => navigateProductDetails(product.id)}
+                  />
+                ))}
+              </GridContainer>
+            </div>
           </div>
         );
       })}

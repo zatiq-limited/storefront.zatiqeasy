@@ -75,9 +75,13 @@ export interface Category {
 export interface OrderItem {
   inventory_id: number;
   name: string;
-  quantity: number;
+  qty: number;
   price: number;
-  total_price: number;
+  image_url?: string;
+  variants?: {
+    variant_type_id?: number;
+    variant_id?: number;
+  }[];
 }
 
 export interface CreateOrderPayload {

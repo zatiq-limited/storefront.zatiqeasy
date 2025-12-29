@@ -90,16 +90,15 @@ export default function CollectionBreadcrumb1({
         backgroundColor: s.backgroundColor
           ? `${s.backgroundColor}F0`
           : "#ffffffF0",
-        borderColor: s.separatorColor
-          ? `${s.separatorColor}30`
-          : "#e5e7eb30",
-        boxShadow: s.shadowSize === "none"
-          ? "none"
-          : s.shadowSize === "sm"
-          ? "0 1px 3px rgba(0,0,0,0.05)"
-          : s.shadowSize === "lg"
-          ? "0 4px 20px rgba(0,0,0,0.08)"
-          : "0 2px 8px rgba(0,0,0,0.06)",
+        borderColor: s.separatorColor ? `${s.separatorColor}30` : "#e5e7eb30",
+        boxShadow:
+          s.shadowSize === "none"
+            ? "none"
+            : s.shadowSize === "sm"
+            ? "0 1px 3px rgba(0,0,0,0.05)"
+            : s.shadowSize === "lg"
+            ? "0 4px 20px rgba(0,0,0,0.08)"
+            : "0 2px 8px rgba(0,0,0,0.06)",
       }}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -128,7 +127,9 @@ export default function CollectionBreadcrumb1({
                   <span className="transform transition-transform group-hover:scale-110">
                     {item.icon}
                   </span>
-                  <span className="font-medium hidden sm:inline">{item.label}</span>
+                  <span className="font-medium hidden sm:inline">
+                    {item.label}
+                  </span>
                   <span className="font-medium sm:hidden">
                     {item.label.slice(0, 1)}
                   </span>
@@ -218,7 +219,7 @@ export default function CollectionBreadcrumb1({
           <div className="hidden md:block">
             <div className="w-20 h-1 bg-gray-200 rounded-full overflow-hidden">
               <div
-                className="h-full bg-gradient-to-r from-blue-500 to-purple-600 rounded-full transform origin-left transition-transform duration-300 scroll-progress"
+                className="h-full bg-linear-to-r from-blue-500 to-purple-600 rounded-full transform origin-left transition-transform duration-300 scroll-progress"
                 style={{ transform: "scaleX(0)" }}
               />
             </div>
@@ -247,8 +248,9 @@ export default function CollectionBreadcrumb1({
         }
       `}</style>
 
-      <script dangerouslySetInnerHTML={{
-        __html: `
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
           window.addEventListener('scroll', () => {
             const scrollProgress = document.querySelector('.scroll-progress');
             if (scrollProgress) {
@@ -258,8 +260,9 @@ export default function CollectionBreadcrumb1({
               scrollProgress.style.transform = 'scaleX(' + progress + ')';
             }
           });
-        `
-      }} />
+        `,
+        }}
+      />
     </nav>
   );
 }

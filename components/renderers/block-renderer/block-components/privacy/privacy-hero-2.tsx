@@ -18,7 +18,9 @@ interface PrivacyHero2Props {
 }
 
 export default function PrivacyHero2({ settings = {} }: PrivacyHero2Props) {
-  const s = convertSettingsKeys(settings as Record<string, unknown>) as PrivacyHero2Settings;
+  const s = convertSettingsKeys(
+    settings as Record<string, unknown>
+  ) as PrivacyHero2Settings;
 
   // If no headline provided, don't render
   if (!s.headline) return null;
@@ -28,7 +30,7 @@ export default function PrivacyHero2({ settings = {} }: PrivacyHero2Props) {
       className="py-16 md:py-20 lg:py-24"
       style={{ backgroundColor: s.backgroundColor || "#FFFFFF" }}
     >
-      <div className="max-w-[1440px] mx-auto px-4 2xl:px-0">
+      <div className="container px-4 2xl:px-0">
         {/* Breadcrumb */}
         {s.showBreadcrumb && (
           <nav className="mb-8">
@@ -39,7 +41,10 @@ export default function PrivacyHero2({ settings = {} }: PrivacyHero2Props) {
                 </a>
               </li>
               <li>→</li>
-              <li className="text-gray-900" style={{ color: s.textColor || "#111827" }}>
+              <li
+                className="text-gray-900"
+                style={{ color: s.textColor || "#111827" }}
+              >
                 Privacy Policy
               </li>
             </ol>

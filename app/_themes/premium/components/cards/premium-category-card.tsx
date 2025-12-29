@@ -14,7 +14,7 @@ interface Category {
 
 interface PremiumCategoryCardProps {
   category: Category;
-  isLarge?: boolean; // For featured category 2x2 grid
+  isLarge?: boolean;
   className?: string;
 }
 
@@ -28,36 +28,25 @@ export function PremiumCategoryCard({
 
   return (
     <Link
-      href={`${baseUrl}/categories/${category.id}?selected_category=${category.id}`}
+      href={`${baseUrl}/categories/${category.id}`}
       className={cn(
-        "group relative block overflow-hidden rounded-xl",
-        isLarge ? "aspect-square" : "aspect-[3/4]",
+        "flex flex-col items-center justify-center relative aspect-square",
+        isLarge ? "xl:h-[640px] xl:col-span-2 xl:row-span-2" : "xl:h-[310px]",
         className
       )}
     >
-      {/* Background Image */}
       <FallbackImage
         src={category.image_url || ""}
         alt={category.name}
-        fill
-        className="object-cover transition-transform duration-500 group-hover:scale-110"
+        height={100}
+        width={140}
+        className="w-full rounded-lg lg:rounded-none object-cover aspect-square"
       />
-
-      {/* Dark Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-
-      {/* Category Name */}
-      <div className="absolute bottom-0 left-0 right-0 p-4">
-        <h3 className={cn(
-          "font-bold text-white",
-          isLarge ? "text-xl md:text-2xl" : "text-base md:text-lg"
-        )}>
+      <div className="absolute bottom-0 w-full bg-linear-to-t from-black/50 to-transparent pt-5 pl-3 lg:pl-6 pb-2 lg:pb-3 rounded-lg lg:rounded-none">
+        <h3 className="bottom-2 lg:bottom-3 text-white text-sm sm:text-xl md:text-2xl lg:text-3xl font-bold">
           {category.name}
         </h3>
       </div>
-
-      {/* Hover Overlay */}
-      <div className="absolute inset-0 bg-blue-zatiq/0 group-hover:bg-blue-zatiq/20 transition-colors duration-300" />
     </Link>
   );
 }

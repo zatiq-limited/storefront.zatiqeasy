@@ -9,7 +9,9 @@ interface ArcadiaProductPricingProps {
   onBuyNow?: (link: string | null) => void;
 }
 
-export function ArcadiaProductPricing({ onBuyNow }: ArcadiaProductPricingProps) {
+export function ArcadiaProductPricing({
+  onBuyNow,
+}: ArcadiaProductPricingProps) {
   const { shopDetails } = useShopStore();
   const { product, productPricing } = useLandingProduct();
 
@@ -29,8 +31,8 @@ export function ArcadiaProductPricing({ onBuyNow }: ArcadiaProductPricingProps) 
   }
 
   return (
-    <section className="py-12 md:py-28 bg-gradient-to-br from-white to-violet-50">
-      <div className="max-w-7xl mx-auto px-4 text-center">
+    <section className="py-12 md:py-28 bg-linear-to-br from-white to-violet-50">
+      <div className="container px-4 text-center">
         <div className="bg-landing-primary/10 p-8 rounded-2xl backdrop-blur-lg max-w-2xl mx-auto">
           {/* Badge */}
           <span className="text-sm font-semibold bg-white/60 px-4 py-1 rounded-full text-landing-primary">

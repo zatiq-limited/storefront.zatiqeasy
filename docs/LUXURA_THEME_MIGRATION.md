@@ -1066,7 +1066,7 @@ export function LuxuraHeroSection() {
                 <div className="w-full h-full flex items-center relative">
                   {/* Text Overlay */}
                   {(item.title || item.sub_title) && (
-                    <div className="w-1/2 p-3 md:p-5 lg:p-8 xl:pl-12 relative z-20 h-full flex flex-col justify-center bg-gradient-to-r from-white/50 to-transparent">
+                    <div className="w-1/2 p-3 md:p-5 lg:p-8 xl:pl-12 relative z-20 h-full flex flex-col justify-center bg-linear-to-r from-white/50 to-transparent">
                       {item?.title && (
                         <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold leading-none line-clamp-2">
                           {item.title}

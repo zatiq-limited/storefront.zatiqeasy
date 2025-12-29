@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { cn } from "@/lib/utils";
 
 interface GridContainerProps {
@@ -17,10 +16,8 @@ export function GridContainer({
   return (
     <div
       className={cn(
-        "grid gap-4 md:gap-6",
-        is4Column
-          ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
-          : "grid-cols-2 md:grid-cols-3 xl:grid-cols-4",
+        "grid grid-cols-2 md:grid-cols-3 gap-5",
+        is4Column && "xl:grid-cols-4",
         className
       )}
     >

@@ -3,9 +3,10 @@
 import { useTranslation } from "react-i18next";
 import { useShopStore } from "@/stores/shopStore";
 import { useProductsStore } from "@/stores/productsStore";
-import { GridContainer, AuroraPageHeader } from "../../components/core";
+import { GridContainer } from "../../components/core";
 import { CategoryCard } from "../../components/cards";
 import ProductSkeleton from "@/components/shared/skeletons/product-skeleton";
+import PageHeader from "@/components/shared/page-header";
 
 export function AuroraAllCategoriesPage() {
   const { shopDetails } = useShopStore();
@@ -23,7 +24,7 @@ export function AuroraAllCategoriesPage() {
     <div className="container pt-6 md:pt-9 pb-12 md:pb-21">
       {/* Page Header */}
       {totalCategories > 0 && (
-        <AuroraPageHeader
+        <PageHeader
           titleElement={t("all_categories")}
           number={totalCategories}
           className="mb-6 md:mb-9"

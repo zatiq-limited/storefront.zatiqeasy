@@ -125,7 +125,7 @@ This document outlines the strategy to integrate the **static theme system** fro
 - `/checkout` - Checkout with delivery/payment
 - `/payment-confirm` - Payment confirmation
 - `/receipt/[id]` - Order receipt
-- `/about-us`, `/privacy-policy`, `/terms-and-conditions`, `/return-and-cancellation-policy`
+- `/about-us`, `/privacy-policy`, `/terms-and-conditions`, `/return-policy`
 - `/single-product/[slug]` - Custom landing pages
 - `/merchant/[shopId]/*` - Multi-tenant routes (13 routes)
 - `/api/*` - API routes (sitemaps, robots, facebook-feed, image download)
@@ -219,7 +219,7 @@ storefront.zatiqeasy/
 │   │   │   │   └── page.tsx
 │   │   │   ├── terms-and-conditions/
 │   │   │   │   └── page.tsx
-│   │   │   └── return-and-cancellation-policy/
+│   │   │   └── return-policy/
 │   │   │       └── page.tsx
 │   │   ├── merchant/                     # Multi-tenant routes
 │   │   │   └── [shopId]/

@@ -1,18 +1,12 @@
 "use client";
 
-import React, { useEffect, useState, useMemo, useCallback } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { useLandingStore } from "@/stores/landingStore";
 import { useCartStore } from "@/stores/cartStore";
-import { useShopStore } from "@/stores/shopStore";
 import { LandingProductProvider, useLandingProduct } from "../../context/landing-product-context";
 import { VariantSelectorModal } from "@/components/products/variant-selector-modal";
 import { getThemeColors } from "@/lib/utils";
-import type {
-  SingleProductPage,
-  ContentType,
-  ContentInterface,
-  ProductVideoType,
-} from "@/types/landing-page.types";
+import type { SingleProductPage } from "@/types/landing-page.types";
 import type { Product } from "@/stores/productsStore";
 
 import {
@@ -37,7 +31,6 @@ interface GripLandingPageProps {
 function GripLandingContent({ landingData }: GripLandingPageProps) {
   const { product, defaultVariants, productActionController, scrollToCheckout } = useLandingProduct();
   const { products: cartProducts, addProduct } = useCartStore();
-  const { shopDetails } = useShopStore();
   const { primaryColor, orderPlaced } = useLandingStore();
 
   // Variant modal state
@@ -68,8 +61,8 @@ function GripLandingContent({ landingData }: GripLandingPageProps) {
     return themeData?.banners?.filter((b) => b.type === "IMAGE_BANNER") || [];
   }, [themeData?.banners]);
 
-  const featuredVideo = useMemo(() => {
-    return themeData?.product_videos?.find((v) => v.type === "FEATURED") || null;
+  const productVideos = useMemo(() => {
+    return themeData?.product_videos || [];
   }, [themeData?.product_videos]);
 
   // Get cart products for this inventory
@@ -127,6 +120,7 @@ function GripLandingContent({ landingData }: GripLandingPageProps) {
         reviews: [],
       } as Parameters<typeof addProduct>[0]);
 
+      // Mark as added after adding
       setHasAutoAdded(true);
     }
   }, [shouldAutoAdd, product, addProduct, defaultVariants, orderPlaced]);
@@ -182,41 +176,28 @@ function GripLandingContent({ landingData }: GripLandingPageProps) {
   }, [primaryColor]);
 
   return (
-    <div className="min-h-screen flex flex-col">
-      {/* Message on Top */}
-      {themeData?.message_on_top && (
-        <div className="bg-landing-primary text-white text-center py-2 px-4 text-sm">
-          {themeData.message_on_top}
-        </div>
-      )}
-
-      {/* Navbar */}
+    <div className="min-h-screen flex flex-col bg-white dark:bg-black">
+      {/* Grip Navbar (includes message on top) */}
       <GripNavbar />
 
       {/* Main Content */}
       <main className="flex-1">
         {/* Top Carousel */}
-        {topBanners.length > 0 && (
-          <GripTopCarousel content={topBanners} onBuyNow={handleBuyNow} />
-        )}
+        <GripTopCarousel content={topBanners} onBuyNow={handleBuyNow} />
 
-        {/* Featured Sections */}
-        {featuredBanners.length > 0 && (
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Image Banners (before featured) */}
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          {imageBanners.length > 0 && <GripImageBanner content={imageBanners} />}
+
+          {/* Featured Sections */}
+          {featuredBanners.length > 0 && (
             <GripFeatured content={featuredBanners} onBuyNow={handleBuyNow} />
-          </div>
-        )}
+          )}
+        </div>
 
-        {/* Image Banner (first) */}
-        {imageBanners.length > 0 && (
-          <GripImageBanner content={imageBanners[0]} />
-        )}
-
-        {/* Product Video */}
-        {featuredVideo && (
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <GripProductVideo content={featuredVideo} onBuyNow={handleBuyNow} />
-          </div>
+        {/* Product Video (full width section with gradient bg) */}
+        {productVideos.length > 0 && (
+          <GripProductVideo content={productVideos} onBuyNow={handleBuyNow} />
         )}
 
         {/* Showcase/Buy Now Section */}
@@ -226,11 +207,6 @@ function GripLandingContent({ landingData }: GripLandingPageProps) {
           </div>
         )}
 
-        {/* Image Banner (second) */}
-        {imageBanners.length > 1 && (
-          <GripImageBanner content={imageBanners[1]} />
-        )}
-
         {/* Standalone Section */}
         {standaloneBanner && (
           <GripStandalone content={standaloneBanner} onBuyNow={handleBuyNow} />
@@ -238,9 +214,7 @@ function GripLandingContent({ landingData }: GripLandingPageProps) {
 
         {/* Product Images */}
         {themeData?.product_image && (
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <GripProductImages content={themeData.product_image} />
-          </div>
+          <GripProductImages content={themeData.product_image} />
         )}
 
         {/* Order Status (shown after successful order) */}

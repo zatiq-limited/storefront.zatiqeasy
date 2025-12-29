@@ -132,7 +132,7 @@ function ArcadiaLandingContent({ landingData }: ArcadiaLandingPageProps) {
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      {/* Navbar */}
+      {/* Arcadia Navbar */}
       <ArcadiaNavbar />
 
       {/* Main Content */}

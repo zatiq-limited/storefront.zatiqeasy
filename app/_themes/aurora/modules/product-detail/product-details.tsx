@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
-import { Minus, Plus, ZoomIn, Download, Play } from "lucide-react";
+import { Minus, Plus, Download, Play } from "lucide-react";
 import { useShopStore } from "@/stores/shopStore";
 import { useCartStore } from "@/stores/cartStore";
 import { FallbackImage } from "@/components/ui/fallback-image";
@@ -12,9 +12,10 @@ import {
   getInventoryThumbImageUrl,
   getDetailPageImageUrl,
 } from "@/lib/utils";
-import type { Product, VariantType, Variant } from "@/stores/productsStore";
-import type { VariantsState, VariantState } from "@/types/cart.types";
+import type { Product } from "@/stores/productsStore";
+import type { VariantState } from "@/types/cart.types";
 import { CustomerReviews } from "@/components/products/customer-reviews";
+import { VariantSelectorModal } from "@/components/products/variant-selector-modal";
 import AuroraRelatedProducts from "@/app/_themes/aurora/components/product-details/aurora-related-products";
 import { ProductVariants } from "@/components/products/product-variants";
 
@@ -98,18 +99,88 @@ export function ProductDetails({ product }: ProductDetailsProps) {
   const router = useRouter();
   const { t } = useTranslation();
   const { shopDetails } = useShopStore();
-  const { addProduct, getProductsByInventoryId } = useCartStore();
+  const { addProduct, removeProduct } = useCartStore();
+
+  // Extract id and variant_types early for lazy initialization
+  const { id: productId, variant_types: variantTypes = [] } = product;
+
+  // Get cart store state for lazy initialization
+  const cartStoreState = useCartStore.getState();
+
+  // Helper to compute default variants (first variant of each type)
+  const computeDefaultVariants = (
+    types: typeof variantTypes
+  ): Record<
+    number,
+    { id: number; name: string; price?: number; image_url?: string | null }
+  > => {
+    const defaults: Record<
+      number,
+      { id: number; name: string; price?: number; image_url?: string | null }
+    > = {};
+    if (types && types.length > 0) {
+      types.forEach((variantType) => {
+        if (variantType.variants && variantType.variants.length > 0) {
+          const firstVariant = variantType.variants[0];
+          defaults[variantType.id] = {
+            id: firstVariant.id,
+            name: firstVariant.name,
+            price: firstVariant.price,
+            image_url: firstVariant.image_url,
+          };
+        }
+      });
+    }
+    return defaults;
+  };
 
   const [selectedImageIdx, setSelectedImageIdx] = useState(0);
   const [quantity, setQuantity] = useState(1);
+  const [selectedRelatedProduct, setSelectedRelatedProduct] = useState<Product | null>(null);
+
+  // Initialize selected variants - prioritize cart variants, then defaults
   const [selectedVariants, setSelectedVariants] = useState<
     Record<
       number,
       { id: number; name: string; price?: number; image_url?: string | null }
     >
-  >({});
+  >(() => {
+    // Check if product has variants in cart
+    const allProducts = cartStoreState.products;
+    const productCartItems = Object.values(allProducts).filter(
+      (p) => p.id === Number(productId)
+    );
+    if (productCartItems.length > 0) {
+      const firstCartItem = productCartItems[0];
+      const cartVariants = firstCartItem.selectedVariants;
+      if (cartVariants && Object.keys(cartVariants).length > 0) {
+        // Transform from VariantsState to Aurora format
+        const auroraVariants: Record<
+          number,
+          {
+            id: number;
+            name: string;
+            price?: number;
+            image_url?: string | null;
+          }
+        > = {};
+        Object.entries(cartVariants).forEach(
+          ([variantTypeId, variantState]) => {
+            auroraVariants[Number(variantTypeId)] = {
+              id: variantState.variant_id,
+              name: variantState.variant_name,
+              price: variantState.price,
+              image_url: variantState.image_url,
+            };
+          }
+        );
+        return auroraVariants;
+      }
+    }
+    return computeDefaultVariants(variantTypes);
+  });
+
   const [isShowVideo, setIsShowVideo] = useState(false);
-  const [openLightbox, setOpenLightbox] = useState(false);
 
   const {
     id,
@@ -118,9 +189,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
     old_price,
     images = [],
     image_url,
-    short_description,
     description,
-    variant_types = [],
     custom_fields,
     warranty,
     video_link,
@@ -153,34 +222,57 @@ export function ProductDetails({ product }: ProductDetailsProps) {
     return allImages[selectedImageIdx] || image_url || "";
   }, [allImages, selectedImageIdx, image_url]);
 
-  // Auto-select first variant of each type on initial load
-  useEffect(() => {
-    if (variant_types && variant_types.length > 0) {
-      const initialVariants: Record<
-        number,
-        { id: number; name: string; price?: number; image_url?: string | null }
-      > = {};
-
-      variant_types.forEach((variantType) => {
-        if (variantType.variants && variantType.variants.length > 0) {
-          // Select the first variant of each type
-          const firstVariant = variantType.variants[0];
-          initialVariants[variantType.id] = {
-            id: firstVariant.id,
-            name: firstVariant.name,
-            price: firstVariant.price,
-            image_url: firstVariant.image_url,
-          };
-        }
-      });
-
-      setSelectedVariants(initialVariants);
-    }
-  }, [variant_types]);
-
-  // Check if product is in cart
-  const cartProducts = getProductsByInventoryId(Number(id));
+  // Get cart products for this product - subscribe to products state to track cart changes
+  // Then filter to get only this product's cart items (reactive approach like basic/premium themes)
+  const allProducts = useCartStore((state) => state.products);
+  const cartProducts = useMemo(
+    () =>
+      id ? Object.values(allProducts).filter((p) => p.id === Number(id)) : [],
+    [id, allProducts]
+  );
   const isInCart = cartProducts.length > 0;
+  const cartQty = cartProducts.reduce((acc, p) => acc + (p.qty || 0), 0);
+
+  // For non-variant products, find the cart item directly
+  // For variant products, find the matching variant combination
+  const matchingCartItem = useMemo(() => {
+    if (cartProducts.length === 0) return null;
+    // For non-variant products, return first cart item
+    if (!variantTypes || variantTypes.length === 0) {
+      return cartProducts[0];
+    }
+    // For variant products, find matching selected variants
+    return (
+      cartProducts.find((item) => {
+        const itemVariants = item.selectedVariants || {};
+        const itemValues = Object.values(itemVariants);
+        // Use Object.entries to get both variantTypeId (key) and variant (value)
+        const selectedEntries = Object.entries(selectedVariants);
+        if (selectedEntries.length !== itemValues.length) return false;
+        return selectedEntries.every(([variantTypeId, variant]) => {
+          return itemValues.some(
+            (itemVariant) =>
+              itemVariant.variant_type_id === Number(variantTypeId) &&
+              itemVariant.variant_id === variant.id
+          );
+        });
+      }) || null
+    );
+  }, [cartProducts, selectedVariants, variantTypes]);
+
+  // Check if the specific variant combination is in cart (for button label)
+  const isVariantInCart = matchingCartItem !== null;
+
+  // Sync quantity with matching cart item
+  // Use matchingCartItem?.qty in dependency to detect actual value changes
+  const matchingCartQty = matchingCartItem?.qty ?? 0;
+  useEffect(() => {
+    if (matchingCartQty > 0) {
+      setQuantity(matchingCartQty);
+    } else {
+      setQuantity(1);
+    }
+  }, [matchingCartQty]);
 
   // Check stock status
   const isStockOut = (product.quantity ?? 0) <= 0;
@@ -273,8 +365,14 @@ export function ProductDetails({ product }: ProductDetailsProps) {
   };
 
   // Handle add to cart
-  const handleAddToCart = () => {
+  const handleAddToCart = useCallback(() => {
     if (isStockOut) return;
+
+    // For products already in cart (matching selected variants), remove old cart item first
+    // Same logic as premium theme
+    if (matchingCartItem) {
+      removeProduct(matchingCartItem.cartId);
+    }
 
     // Transform selectedVariants to match VariantState structure
     const transformedVariants: Record<number, VariantState> = {};
@@ -285,7 +383,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
         price: variant.price ?? 0,
         variant_name: variant.name,
         variant_type_name:
-          variant_types?.find((vt) => vt.id === Number(key))?.title || "",
+          variantTypes.find((vt) => vt.id === Number(key))?.title || "",
         image_url: variant.image_url ?? undefined,
       };
     });
@@ -302,10 +400,25 @@ export function ProductDetails({ product }: ProductDetailsProps) {
       stocks: product.stocks ?? [],
       reviews: (productRecord.reviews as Array<unknown>) ?? [],
     } as Parameters<typeof addProduct>[0]);
-  };
+  }, [
+    isStockOut,
+    product,
+    id,
+    selectedImageUrl,
+    allImages,
+    image_url,
+    quantity,
+    selectedVariants,
+    variantTypes,
+    totalInventorySold,
+    productRecord,
+    matchingCartItem,
+    removeProduct,
+    addProduct,
+  ]);
 
   // Handle buy now
-  const handleBuyNow = () => {
+  const handleBuyNow = useCallback(() => {
     if (isStockOut) return;
 
     if (!isInCart) {
@@ -313,9 +426,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
     }
 
     router.push(`${baseUrl}/checkout`);
-  };
-
-  const actionButtonLabel = isInCart ? t("update_cart") : t("add_to_cart");
+  }, [isStockOut, isInCart, handleAddToCart, router, baseUrl]);
 
   return (
     <>
@@ -412,18 +523,12 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                   )
                 )}
 
-                {/* Zoom and Download Buttons */}
-                {allImages && !isShowVideo && (
-                  <div className="absolute top-2 right-2 z-10 flex gap-2">
-                    <button
-                      onClick={() => setOpenLightbox(true)}
-                      className="bg-blue-zatiq/15 backdrop-blur-sm p-3 rounded-full cursor-pointer hover:bg-blue-zatiq/25 transition-all duration-200 shadow-lg"
-                      aria-label="Zoom image"
-                      type="button"
-                    >
-                      <ZoomIn className="text-white dark:text-gray-700 w-5 h-5 md:w-7 md:h-7" />
-                    </button>
-                    {allowDownload && selectedImageUrl && (
+                {/* Download Button */}
+                {allImages &&
+                  !isShowVideo &&
+                  allowDownload &&
+                  selectedImageUrl && (
+                    <div className="absolute top-2 right-2 z-10">
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
@@ -439,9 +544,8 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                       >
                         <Download className="text-white dark:text-gray-700 w-5 h-5 md:w-7 md:h-7" />
                       </button>
-                    )}
-                  </div>
-                )}
+                    </div>
+                  )}
 
                 {/* Mobile Horizontal Thumbnails */}
                 <div className="xl:hidden flex px-1">
@@ -604,15 +708,15 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                     {isInCart && (
                       <div>
                         <p className="text-sm text-blue-zatiq font-medium">
-                          Already in your cart
+                          Already in your cart ({cartQty})
                         </p>
                       </div>
                     )}
 
                     {/* Product Variants */}
-                    {variant_types && variant_types.length > 0 && (
+                    {variantTypes && variantTypes.length > 0 && (
                       <ProductVariants
-                        variantTypes={variant_types}
+                        variantTypes={variantTypes}
                         selectedVariants={selectedVariants}
                         onSelectVariant={handleVariantSelect}
                         onImageUpdate={handleImageUpdate}
@@ -692,7 +796,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                     onClick={handleAddToCart}
                     className="md:w-1/2 text-center p-3 text-sm md:text-base font-medium capitalize disabled:bg-black-disabled w-full border-[1.2px] border-blue-zatiq text-blue-zatiq disabled:text-white disabled:border-black-disabled cursor-pointer"
                   >
-                    {actionButtonLabel}
+                    {isVariantInCart ? t("update_cart") : t("add_to_cart")}
                   </button>
                 </div>
 
@@ -764,8 +868,19 @@ export function ProductDetails({ product }: ProductDetailsProps) {
         <CustomerReviews reviews={product.reviews} />
       )}
 
+      {/* Variant Selector Modal for Related Products */}
+      <VariantSelectorModal
+        product={selectedRelatedProduct}
+        isOpen={!!selectedRelatedProduct}
+        onClose={() => setSelectedRelatedProduct(null)}
+      />
+
       {/* Related Products */}
-      <AuroraRelatedProducts ignoreProductId={id} currentProduct={product} />
+      <AuroraRelatedProducts
+        ignoreProductId={id}
+        currentProduct={product}
+        onSelectProduct={setSelectedRelatedProduct}
+      />
     </>
   );
 }

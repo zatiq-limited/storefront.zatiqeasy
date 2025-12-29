@@ -17,14 +17,17 @@ interface LuxuraCarouselSliderProps {
   tag?: "primary" | "secondary";
 }
 
-export function LuxuraCarouselSlider({ tag = "primary" }: LuxuraCarouselSliderProps) {
+export function LuxuraCarouselSlider({
+  tag = "primary",
+}: LuxuraCarouselSliderProps) {
   const { shopDetails } = useShopStore();
   const swiperRef = useRef<SwiperType | null>(null);
 
   // Get carousels filtered by tag
-  const carousels = shopDetails?.shop_theme?.carousels?.filter(
-    (c) => (c as unknown as { tag?: string }).tag === tag
-  ) || [];
+  const carousels =
+    shopDetails?.shop_theme?.carousels?.filter(
+      (c) => (c as unknown as { tag?: string }).tag === tag
+    ) || [];
 
   if (carousels.length === 0) {
     return null;
@@ -46,62 +49,67 @@ export function LuxuraCarouselSlider({ tag = "primary" }: LuxuraCarouselSliderPr
         modules={[Autoplay, Navigation]}
         className="h-full rounded-xl"
       >
-        {carousels.map((item: {
-          id?: string | number;
-          image_url?: string;
-          title?: string;
-          sub_title?: string;
-          button_text?: string;
-          button_link?: string;
-        }, index: number) => (
-          <SwiperSlide
-            key={item.id || index}
-            onClick={() => item.button_link && window.open(item.button_link)}
-            className={item.button_link ? "cursor-pointer" : ""}
-          >
-            <div className="w-full h-full flex items-center relative">
-              {/* Text Overlay */}
-              {(item.title || item.sub_title) && (
-                <div className="w-1/2 p-3 md:p-5 lg:p-8 xl:pl-12 relative z-20 h-full flex flex-col justify-center bg-gradient-to-r from-white/50 to-transparent">
-                  {item.title && (
-                    <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold leading-none line-clamp-2 text-gray-900">
-                      {item.title}
-                    </h1>
-                  )}
-                  {item.sub_title && (
-                    <p className="line-clamp-3 mt-3 md:mt-4 xl:mt-5 text-gray-700">
-                      {item.sub_title}
-                    </p>
-                  )}
-                  {item.button_link && (
-                    <div className="mt-4 md:mt-6 xl:mt-8">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          window.open(item.button_link);
-                        }}
-                        className="bg-black/75 px-5 py-2 text-xs md:text-sm xl:text-base rounded-md xl:rounded-xl text-white hover:bg-black transition"
-                      >
-                        {item.button_text || "Shop Now"}
-                      </button>
-                    </div>
-                  )}
-                </div>
-              )}
+        {carousels.map(
+          (
+            item: {
+              id?: string | number;
+              image_url?: string;
+              title?: string;
+              sub_title?: string;
+              button_text?: string;
+              button_link?: string;
+            },
+            index: number
+          ) => (
+            <SwiperSlide
+              key={item.id || index}
+              onClick={() => item.button_link && window.open(item.button_link)}
+              className={item.button_link ? "cursor-pointer" : ""}
+            >
+              <div className="w-full h-full flex items-center relative">
+                {/* Text Overlay */}
+                {(item.title || item.sub_title) && (
+                  <div className="w-1/2 p-3 md:p-5 lg:p-8 xl:pl-12 relative z-20 h-full flex flex-col justify-center bg-linear-to-r from-white/50 to-transparent">
+                    {item.title && (
+                      <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold leading-none line-clamp-2 text-gray-900">
+                        {item.title}
+                      </h1>
+                    )}
+                    {item.sub_title && (
+                      <p className="line-clamp-3 mt-3 md:mt-4 xl:mt-5 text-gray-700">
+                        {item.sub_title}
+                      </p>
+                    )}
+                    {item.button_link && (
+                      <div className="mt-4 md:mt-6 xl:mt-8">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            window.open(item.button_link);
+                          }}
+                          className="bg-black/75 px-5 py-2 text-xs md:text-sm xl:text-base rounded-md xl:rounded-xl text-white hover:bg-black transition"
+                        >
+                          {item.button_text || "Shop Now"}
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
 
-              {/* Background Image */}
-              {item.image_url && (
-                <Image
-                  src={item.image_url}
-                  alt={item.title || "Carousel"}
-                  fill
-                  className="object-cover absolute inset-0 rounded-xl"
-                  priority={index === 0}
-                />
-              )}
-            </div>
-          </SwiperSlide>
-        ))}
+                {/* Background Image */}
+                {item.image_url && (
+                  <Image
+                    src={item.image_url}
+                    alt={item.title || "Carousel"}
+                    fill
+                    className="object-cover absolute inset-0 rounded-xl"
+                    priority={index === 0}
+                  />
+                )}
+              </div>
+            </SwiperSlide>
+          )
+        )}
       </Swiper>
 
       {/* Navigation Buttons */}

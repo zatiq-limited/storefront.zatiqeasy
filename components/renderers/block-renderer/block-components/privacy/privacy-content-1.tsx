@@ -19,15 +19,23 @@ interface PrivacyContent1Props {
   settings?: PrivacyContent1Settings;
 }
 
-export default function PrivacyContent1({ settings = {} }: PrivacyContent1Props) {
-  const s = convertSettingsKeys(settings as Record<string, unknown>) as PrivacyContent1Settings;
+export default function PrivacyContent1({
+  settings = {},
+}: PrivacyContent1Props) {
+  const s = convertSettingsKeys(
+    settings as Record<string, unknown>
+  ) as PrivacyContent1Settings;
   const [activeSection, setActiveSection] = useState<string>("");
   const [contentSections, setContentSections] = useState<ContentSection[]>([]);
 
   useEffect(() => {
     try {
       const sections = s.contentSections ? JSON.parse(s.contentSections) : [];
-      setContentSections(sections.filter((section: ContentSection) => section.title && section.title.trim()));
+      setContentSections(
+        sections.filter(
+          (section: ContentSection) => section.title && section.title.trim()
+        )
+      );
 
       // Set first section as active
       if (sections.length > 0 && sections[0].title) {
@@ -41,9 +49,11 @@ export default function PrivacyContent1({ settings = {} }: PrivacyContent1Props)
 
   const handleSectionClick = (title: string) => {
     setActiveSection(title);
-    const element = document.getElementById(title.replace(/\s+/g, '-').toLowerCase());
+    const element = document.getElementById(
+      title.replace(/\s+/g, "-").toLowerCase()
+    );
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
 
@@ -56,7 +66,7 @@ export default function PrivacyContent1({ settings = {} }: PrivacyContent1Props)
       className="py-12 md:py-16 lg:py-20"
       style={{ backgroundColor: s.backgroundColor || "#FFFFFF" }}
     >
-      <div className="max-w-[1440px] mx-auto px-4 2xl:px-0">
+      <div className="container px-4 2xl:px-0">
         <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-8 lg:gap-12">
           {/* Table of Contents - Sidebar */}
           <div className="lg:sticky lg:top-8 lg:h-fit">
@@ -78,17 +88,32 @@ export default function PrivacyContent1({ settings = {} }: PrivacyContent1Props)
                         : "hover:bg-gray-50"
                     }`}
                     style={{
-                      backgroundColor: activeSection === section.title ? (s.accentColor || "#2563EB") + "15" : "transparent",
-                      color: activeSection === section.title ? (s.accentColor || "#2563EB") : (s.textColor || "#111827"),
-                      borderLeft: activeSection === section.title ? `3px solid ${s.accentColor || "#2563EB"}` : "3px solid transparent",
+                      backgroundColor:
+                        activeSection === section.title
+                          ? (s.accentColor || "#2563EB") + "15"
+                          : "transparent",
+                      color:
+                        activeSection === section.title
+                          ? s.accentColor || "#2563EB"
+                          : s.textColor || "#111827",
+                      borderLeft:
+                        activeSection === section.title
+                          ? `3px solid ${s.accentColor || "#2563EB"}`
+                          : "3px solid transparent",
                     }}
                   >
                     <span className="flex items-center">
                       <span
                         className="inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-semibold mr-3"
                         style={{
-                          backgroundColor: activeSection === section.title ? (s.accentColor || "#2563EB") : (s.textColor || "#111827") + "20",
-                          color: activeSection === section.title ? "#FFFFFF" : (s.textColor || "#111827"),
+                          backgroundColor:
+                            activeSection === section.title
+                              ? s.accentColor || "#2563EB"
+                              : (s.textColor || "#111827") + "20",
+                          color:
+                            activeSection === section.title
+                              ? "#FFFFFF"
+                              : s.textColor || "#111827",
                         }}
                       >
                         {index + 1}
@@ -107,7 +132,7 @@ export default function PrivacyContent1({ settings = {} }: PrivacyContent1Props)
               {contentSections.map((section, index) => (
                 <div
                   key={index}
-                  id={section.title.replace(/\s+/g, '-').toLowerCase()}
+                  id={section.title.replace(/\s+/g, "-").toLowerCase()}
                   className="mb-12 scroll-mt-24"
                   style={{ color: s.textColor || "#111827" }}
                 >

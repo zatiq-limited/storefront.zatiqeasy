@@ -93,7 +93,7 @@ export function RelatedProducts({
         onClose={() => setSelectedProduct(null)}
       />
 
-      <div className="max-w-7xl mx-auto px-4 xl:px-0 pb-10 sm:pb-24">
+      <div className="container pb-10 sm:pb-24">
         {/* Header with Navigation Buttons */}
         <div className="flex items-center justify-between mb-4 md:mb-8">
           <h2 className="text-2xl md:text-3xl font-normal text-black dark:text-white">
@@ -134,7 +134,7 @@ export function RelatedProducts({
               768: { slidesPerView: 3, spaceBetween: 20 },
               1024: { slidesPerView: 4, spaceBetween: 20 },
             }}
-            className="!pb-12"
+            className="pb-12!"
             pagination={{
               clickable: true,
               dynamicBullets: true,

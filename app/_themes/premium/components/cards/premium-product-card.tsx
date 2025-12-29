@@ -1,45 +1,50 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Minus, Plus, ShoppingCart } from "lucide-react";
+import { Minus, Plus } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useShopStore } from "@/stores/shopStore";
 import { useCartStore } from "@/stores/cartStore";
 import type { Product } from "@/stores/productsStore";
 import { FallbackImage } from "@/components/ui/fallback-image";
-import { formatPrice } from "@/lib/utils/formatting";
 import { cn } from "@/lib/utils";
 
-// Animation variants for cart button
+// Animation variants for cart button - matches old project
 const productCartAnimateVariants = {
-  initial: { y: "100%", opacity: 0 },
-  animate: { y: 0, opacity: 1 },
-  exit: { y: "-100%", opacity: 0 },
+  initial: { y: "100%" },
+  animate: { y: 0 },
+  exit: { y: "-100%" },
 };
 
 interface PremiumProductCardProps {
   product: Product;
   onSelectProduct?: () => void;
   onNavigate?: () => void;
+  imagePriority?: boolean; // For above-the-fold images
 }
 
 export function PremiumProductCard({
   product,
   onSelectProduct,
   onNavigate,
+  imagePriority = false,
 }: PremiumProductCardProps) {
   const router = useRouter();
   const { t } = useTranslation();
   const { shopDetails } = useShopStore();
-  const { addProduct, removeProduct, getProductsByInventoryId } = useCartStore();
-
-  const [isHovered, setIsHovered] = useState(false);
+  const {
+    addProduct,
+    removeProduct,
+    getProductsByInventoryId,
+    updateQuantity,
+  } = useCartStore();
 
   const baseUrl = shopDetails?.baseUrl || "";
   const currency = shopDetails?.country_currency || "BDT";
-  const showBuyNow = shopDetails?.shop_theme?.enable_buy_now_on_product_card ?? false;
+  const showBuyNow =
+    shopDetails?.shop_theme?.enable_buy_now_on_product_card ?? false;
 
   // Check if product is in cart
   const cartProducts = getProductsByInventoryId(Number(product.id));
@@ -48,11 +53,15 @@ export function PremiumProductCard({
 
   // Check stock status
   const isOutOfStock = product.quantity === 0;
+  const hasVariant =
+    product.has_variant && (product.variant_types?.length ?? 0) > 0;
 
   // Calculate discount percentage
   const discountPercent = useMemo(() => {
     if (product.old_price && product.old_price > product.price) {
-      return Math.round(((product.old_price - product.price) / product.old_price) * 100);
+      return Math.round(
+        ((product.old_price - product.price) / product.old_price) * 100
+      );
     }
     return 0;
   }, [product.price, product.old_price]);
@@ -67,7 +76,7 @@ export function PremiumProductCard({
     if (isOutOfStock) return;
 
     // If has variants, open variant selector
-    if (product.has_variant && product.variant_types?.length) {
+    if (hasVariant) {
       onSelectProduct?.();
       return;
     }
@@ -87,27 +96,41 @@ export function PremiumProductCard({
     } as unknown as Parameters<typeof addProduct>[0]);
   };
 
-  // Handle quantity change
+  // Handle increment
   const handleIncrement = (e: React.MouseEvent) => {
     e.stopPropagation();
-    addProduct({
-      ...product,
-      id: Number(product.id),
-      image_url: imageUrl,
-      qty: 1,
-      selectedVariants: {},
-      total_inventory_sold: 0,
-      categories: product.categories ?? [],
-      variant_types: product.variant_types ?? [],
-      stocks: product.stocks ?? [],
-      reviews: [],
-    } as unknown as Parameters<typeof addProduct>[0]);
+
+    // For variant products, open variant selector modal
+    if (hasVariant) {
+      onSelectProduct?.();
+      return;
+    }
+
+    // For non-variant products, increment existing cart item's quantity
+    if (cartProducts.length > 0) {
+      const cartItem = cartProducts[0];
+      updateQuantity(cartItem.cartId, cartItem.qty + 1);
+    }
   };
 
+  // Handle decrement
   const handleDecrement = (e: React.MouseEvent) => {
     e.stopPropagation();
+
+    // For variant products, open variant selector modal
+    if (hasVariant) {
+      onSelectProduct?.();
+      return;
+    }
+
+    // For non-variant products, remove one
     if (cartProducts.length > 0) {
-      removeProduct(cartProducts[0].cartId);
+      const cartItem = cartProducts[0];
+      if (cartItem.qty > 1) {
+        updateQuantity(cartItem.cartId, cartItem.qty - 1);
+      } else {
+        removeProduct(cartItem.cartId);
+      }
     }
   };
 
@@ -129,145 +152,139 @@ export function PremiumProductCard({
     }
   };
 
+  // Check if increment should be disabled (stock limit)
+  const isIncrementDisabled =
+    isOutOfStock || (!hasVariant && cartQuantity >= (product.quantity ?? 999));
+
   return (
-    <motion.div
-      className="group relative bg-white dark:bg-black-27 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      onClick={handleClick}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      whileHover={{ scale: 1.02 }}
-    >
-      {/* Image Container - Premium uses 244:304 aspect ratio */}
-      <div className="relative aspect-[244/304] overflow-hidden bg-gray-100 dark:bg-gray-800">
-        <FallbackImage
-          src={imageUrl}
-          alt={product.name}
-          fill
-          className={cn(
-            "object-cover transition-transform duration-500",
-            isHovered && "scale-105"
+    <div className="flex flex-col gap-4 mb-4">
+      {/* Product Image - Clickable */}
+      <div role="button" onClick={handleClick} className="cursor-pointer">
+        <div className="relative w-full aspect-244/304">
+          <FallbackImage
+            src={imageUrl}
+            alt={product.name}
+            fill
+            priority={imagePriority}
+            sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
+            className="w-full aspect-244/304 object-cover rounded-lg md:rounded-none"
+          />
+
+          {/* Out of Stock Overlay */}
+          {isOutOfStock && (
+            <div className="absolute w-full py-2 top-[50%] translate-y-[-50%] text-sm text-center bg-black-1.1/60 text-white backdrop-blur-xs">
+              Out of Stock
+            </div>
           )}
-        />
 
-        {/* Discount Badge */}
-        {discountPercent > 0 && (
-          <div className="absolute top-2 left-2 bg-[#E97171] text-white text-xs font-bold px-2 py-1 rounded">
-            {t("save")} {discountPercent}%
-          </div>
-        )}
-
-        {/* Out of Stock Overlay */}
-        {isOutOfStock && (
-          <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-            <span className="bg-red-500 text-white text-sm font-medium px-3 py-1 rounded">
-              {t("out_of_stock")}
-            </span>
-          </div>
-        )}
-      </div>
-
-      {/* Content */}
-      <div className="p-3 md:p-4">
-        {/* Product Name */}
-        <h3 className="text-sm md:text-base font-medium text-gray-900 dark:text-gray-100 line-clamp-2 mb-2 min-h-[40px]">
-          {product.name}
-        </h3>
-
-        {/* Price */}
-        <div className="flex items-center gap-2 mb-3">
-          <span className="text-base md:text-lg font-bold text-blue-zatiq">
-            {formatPrice(product.price, currency)}
-          </span>
-          {product.old_price && product.old_price > product.price && (
-            <span className="text-sm text-gray-400 line-through">
-              {formatPrice(product.old_price, currency)}
-            </span>
+          {/* Discount Badge */}
+          {discountPercent > 0 && (
+            <div className="absolute top-2 md:top-3.5 left-2 md:left-3.5">
+              <span className="px-2.5 py-1.5 bg-[#E97171] rounded-full text-white text-xs">
+                Save {discountPercent}%
+              </span>
+            </div>
           )}
         </div>
-
-        {/* Action Buttons */}
-        <AnimatePresence mode="wait">
-          {isInCart && !product.has_variant ? (
-            <motion.div
-              key="quantity"
-              variants={productCartAnimateVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              className="flex items-center justify-between gap-2"
-            >
-              {/* Quantity Controls */}
-              <div className="flex items-center gap-2 flex-1">
-                <button
-                  onClick={handleDecrement}
-                  className="w-8 h-8 flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-                  aria-label="Decrease quantity"
-                >
-                  <Minus size={16} />
-                </button>
-                <span className="min-w-[24px] text-center font-medium text-gray-900 dark:text-white">
-                  {cartQuantity}
-                </span>
-                <button
-                  onClick={handleIncrement}
-                  className="w-8 h-8 flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-                  aria-label="Increase quantity"
-                >
-                  <Plus size={16} />
-                </button>
-              </div>
-
-              {/* Buy Now */}
-              {showBuyNow && (
-                <button
-                  onClick={handleBuyNow}
-                  className="px-3 py-2 bg-blue-zatiq text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition-colors"
-                >
-                  {t("buy_now")}
-                </button>
-              )}
-            </motion.div>
-          ) : (
-            <motion.div
-              key="add"
-              variants={productCartAnimateVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              className="flex items-center gap-2"
-            >
-              {/* Add to Cart */}
-              <button
-                onClick={handleAddToCart}
-                disabled={isOutOfStock}
-                className={cn(
-                  "flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg font-medium text-sm transition-colors",
-                  isOutOfStock
-                    ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                    : "bg-blue-zatiq text-white hover:bg-blue-600"
-                )}
-              >
-                <ShoppingCart size={16} />
-                {t("add_to_cart")}
-              </button>
-
-              {/* Buy Now */}
-              {showBuyNow && !isOutOfStock && (
-                <button
-                  onClick={handleBuyNow}
-                  className="px-3 py-2 border border-blue-zatiq text-blue-zatiq text-sm font-medium rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
-                >
-                  {t("buy_now")}
-                </button>
-              )}
-            </motion.div>
-          )}
-        </AnimatePresence>
       </div>
-    </motion.div>
+
+      {/* Product Info */}
+      <div>
+        <div className="text-gray-700 dark:text-gray-200 text-base font-normal max-w-[95%] leading-[155%] mb-0 pb-0 h-12.5">
+          <p className="line-clamp-2">{product.name}</p>
+        </div>
+        <div className="flex items-center gap-2 mt-3 lg:mt-2">
+          <p className="text-gray-700 dark:text-gray-200 text-base font-bold leading-4.5">
+            {currency} {product.price}
+          </p>
+          {product.old_price && product.old_price > product.price && (
+            <p className="text-gray-400 dark:text-gray-500 text-sm font-normal leading-4.5 line-through">
+              {currency} {product.old_price}
+            </p>
+          )}
+        </div>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="flex flex-col gap-3">
+        {/* Add to Cart / Quantity Control - Animated */}
+        <div className="w-full max-h-9.5 h-9.5 overflow-hidden bg-white dark:bg-transparent">
+          <AnimatePresence initial={false} mode="wait">
+            <motion.div
+              key={cartQuantity}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              transition={{ duration: 0.2 }}
+              variants={productCartAnimateVariants}
+              className={cn(
+                "flex items-center justify-center h-full rounded-lg md:rounded-none",
+                isOutOfStock
+                  ? "bg-gray-200 border-none text-gray-500 dark:bg-gray-200 dark:border dark:border-gray-200"
+                  : "border border-blue-zatiq text-blue-zatiq dark:bg-transparent dark:text-blue-zatiq dark:border-blue-zatiq"
+              )}
+            >
+              {cartQuantity > 0 ? (
+                // Quantity Controls
+                <div className="flex items-center justify-center gap-4 w-full px-2">
+                  {/* Decrement Button */}
+                  <button
+                    onClick={handleDecrement}
+                    className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition-colors"
+                    aria-label="Decrease quantity"
+                  >
+                    <Minus size={18} />
+                  </button>
+
+                  {/* Quantity Display */}
+                  <span className="text-base font-medium min-w-6 text-center">
+                    {cartQuantity}
+                  </span>
+
+                  {/* Increment Button */}
+                  <button
+                    onClick={handleIncrement}
+                    disabled={isIncrementDisabled}
+                    className={cn(
+                      "p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition-colors",
+                      isIncrementDisabled && "opacity-50 cursor-not-allowed"
+                    )}
+                    aria-label="Increase quantity"
+                  >
+                    <Plus size={18} />
+                  </button>
+                </div>
+              ) : (
+                // Add to Cart Button
+                <button
+                  disabled={isOutOfStock}
+                  className="w-full text-sm sm:text-base uppercase font-medium pt-1.25 disabled:cursor-not-allowed cursor-pointer"
+                  onClick={handleAddToCart}
+                >
+                  {isOutOfStock ? t("out_of_stock") : t("add_to_cart")}
+                </button>
+              )}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Buy Now Button */}
+        {showBuyNow && (
+          <button
+            onClick={handleBuyNow}
+            disabled={isOutOfStock}
+            className={cn(
+              "w-full py-2 text-sm uppercase font-medium rounded-lg md:rounded-none transition-colors",
+              isOutOfStock
+                ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                : "bg-blue-zatiq text-white hover:bg-blue-600"
+            )}
+          >
+            {t("buy_now")}
+          </button>
+        )}
+      </div>
+    </div>
   );
 }
 

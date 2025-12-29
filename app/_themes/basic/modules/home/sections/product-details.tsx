@@ -212,7 +212,7 @@ export function ProductDetails() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
+    <div className="container px-4 py-8">
       <div className="grid lg:grid-cols-2 gap-8">
         {/* Product Images */}
         <div className="space-y-4">

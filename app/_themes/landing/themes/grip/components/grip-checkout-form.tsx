@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { CommonCheckoutForm } from "@/components/features/checkout/common-checkout-form";
 import { useLandingStore } from "@/stores/landingStore";
 
@@ -37,26 +36,21 @@ export function GripCheckoutForm({ onOrderPlaced }: GripCheckoutFormProps) {
   return (
     <section
       id="checkout-form-section"
-      className="py-10 md:py-16 bg-gray-50 dark:bg-gray-900"
+      className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 md:pt-16 lg:pt-24 xl:pt-28"
     >
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="border border-[#00000041] dark:border-gray-400 rounded-2xl px-4 md:px-6 lg:px-10 py-4 md:py-6 lg:py-8">
         {/* Section Header */}
-        <div className="text-center mb-8 md:mb-12">
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground mb-3">
-            Complete Your Order
-          </h2>
-          <p className="text-muted-foreground text-base md:text-lg max-w-2xl mx-auto">
-            Fill in your details below to place your order
-          </p>
-        </div>
+        <h2 className="text-2xl lg:text-3xl max-w-2xl mx-auto dark:text-white font-bold text-center mb-6 lg:mb-8">
+          To place your order, please complete the form below with accurate
+          information.
+        </h2>
 
         {/* Checkout Form */}
-        <div className="max-w-6xl mx-auto">
-          <CommonCheckoutForm
-            preventRedirect
-            onOrderComplete={handleOrderComplete}
-          />
-        </div>
+        <CommonCheckoutForm
+          preventRedirect
+          onOrderComplete={handleOrderComplete}
+          showVariantSelector={true}
+        />
       </div>
     </section>
   );

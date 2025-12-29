@@ -13,19 +13,21 @@ import { AuroraShoppingCart } from "./aurora-shopping-cart";
 import LanguageToggler from "./language-toggler";
 import MobileNav from "./mobile-nav";
 import SearchModal from "../search/search-modal";
-import { TopbarMessage } from "@/app/_themes/basic/components/core";
+import TopbarMessage from "@/components/ui/topbar-message";
 
 // Custom hook for window scroll position
 function useWindowScroll() {
-  const [scrollY, setScrollY] = useState(0);
+  const [scrollY, setScrollY] = useState(() => {
+    if (typeof window !== "undefined") {
+      return window.scrollY;
+    }
+    return 0;
+  });
 
   useEffect(() => {
     const handleScroll = () => {
       setScrollY(window.scrollY);
     };
-
-    // Set initial value
-    setScrollY(window.scrollY);
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
@@ -44,9 +46,13 @@ export function AuroraHeader() {
 
   // Local state
   const [showMobileNav, setShowMobileNav] = useState(false);
-  const [langValue, setLangValue] = useState(
-    shopDetails?.default_language_code ?? "en"
-  );
+  const [langValue, setLangValue] = useState(() => {
+    if (typeof window !== "undefined") {
+      const storedLocale = localStorage.getItem("locale");
+      if (storedLocale) return storedLocale;
+    }
+    return shopDetails?.default_language_code ?? "en";
+  });
   const { y: scrollY } = useWindowScroll();
 
   const baseUrl = shopDetails?.baseUrl || "";
@@ -56,11 +62,6 @@ export function AuroraHeader() {
       (match: string) => match.charAt(0) + match.charAt(3)
     ) ?? "#3B82F6";
   const isDark = shopDetails?.shop_theme?.theme_mode === "dark";
-
-  useEffect(() => {
-    const storedLocale = localStorage.getItem("locale");
-    if (storedLocale) setLangValue(storedLocale);
-  }, []);
 
   const handleSearchClose = () => {
     setSearchModalOpen(false);

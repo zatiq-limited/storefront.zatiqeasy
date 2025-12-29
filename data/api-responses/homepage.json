@@ -76,7 +76,7 @@
               {
                 "wrapper": "div",
                 "type": "swiper",
-                "class": "relative w-full max-w-[1440px] mx-auto rounded-2xl overflow-hidden",
+                "class": "relative w-full container rounded-2xl overflow-hidden",
                 "config": {
                   "loop": true,
                   "slides_per_view": 1,
@@ -339,7 +339,7 @@
             "blocks": [
               {
                 "wrapper": "div",
-                "class": "relative w-full max-w-[1440px] mx-auto rounded-2xl overflow-hidden",
+                "class": "relative w-full container rounded-2xl overflow-hidden",
                 "state": {
                   "current_slide": 0,
                   "is_animating": false
@@ -621,7 +621,7 @@
             "blocks": [
               {
                 "wrapper": "div",
-                "class": "relative w-full max-w-[1440px] mx-auto rounded-2xl overflow-hidden",
+                "class": "relative w-full container rounded-2xl overflow-hidden",
                 "state": {
                   "current_slide": 0,
                   "is_animating": false
@@ -864,7 +864,7 @@
             "blocks": [
               {
                 "wrapper": "div",
-                "class": "relative w-full max-w-[1440px] mx-auto rounded-2xl overflow-hidden",
+                "class": "relative w-full container rounded-2xl overflow-hidden",
                 "state": {
                   "current_slide": 0,
                   "is_animating": false
@@ -1084,7 +1084,7 @@
           {
             "wrapper": "section#static-banner-1-1765693511839",
             "type": "static_banner",
-            "class": "w-full max-w-[1440px] mx-auto px-4 2xl:px-0 mb-8 sm:mb-14",
+            "class": "w-full container px-4 2xl:px-0 mb-8 sm:mb-14",
             "data": {
               "image": "https://i.ibb.co.com/5x6wzDWj/laptop-cover.webp",
               "image_mobile": "",
@@ -1266,7 +1266,7 @@
           {
             "wrapper": "section#static-banner-2-1765693511839",
             "type": "static_banner",
-            "class": "w-full max-w-[1440px] mx-auto px-4 2xl:px-0 mb-8 sm:mb-14",
+            "class": "w-full container px-4 2xl:px-0 mb-8 sm:mb-14",
             "data": {
               "image": "https://i.ibb.co.com/5x6wzDWj/laptop-cover.webp",
               "image_mobile": "",
@@ -1448,7 +1448,7 @@
           {
             "wrapper": "section#static-banner-3-1765693511839",
             "type": "static_banner",
-            "class": "w-full max-w-[1440px] mx-auto px-4 2xl:px-0 mb-8 sm:mb-14",
+            "class": "w-full container px-4 2xl:px-0 mb-8 sm:mb-14",
             "data": {
               "image": "https://i.ibb.co.com/hFFnFv7d/cfbb60dfce2e0d1d9e0cea50b2dd07f49c9ffa16.png",
               "image_mobile": "",
@@ -1631,7 +1631,7 @@
           {
             "wrapper": "section#static-banner-4-1765693511839",
             "type": "static_banner",
-            "class": "w-full max-w-[1440px] mx-auto px-4 2xl:px-0 mb-8 sm:mb-14",
+            "class": "w-full container px-4 2xl:px-0 mb-8 sm:mb-14",
             "data": {
               "image": "https://i.ibb.co.com/S7tRxXFV/5b7570c356e38425d2905221dd2394ba09b54a98.png",
               "image_mobile": "",
@@ -1687,7 +1687,7 @@
                   {
                     "wrapper": "div",
                     "type": "gradient_overlay",
-                    "class": "absolute inset-0 bg-gradient-to-b from-black/20 via-black/10 to-black/30"
+                    "class": "absolute inset-0 bg-linear-to-b from-black/20 via-black/10 to-black/30"
                   },
                   {
                     "wrapper": "div",
@@ -3016,7 +3016,7 @@
           {
             "wrapper": "section#special-offers-slider-1-1765693511840",
             "type": "special_offers_slider",
-            "class": "w-full max-w-[1440px] mx-auto font-sans px-4 2xl:px-2 pb-8 md:pb-14",
+            "class": "w-full container font-sans px-4 2xl:px-2 pb-8 md:pb-14",
             "data": {
               "title": "Special offers for you 1",
               "title_color": "#000000",
@@ -3307,7 +3307,7 @@
           {
             "wrapper": "section#special-offers-slider-2-1765693511840",
             "type": "special_offers_slider",
-            "class": "w-full max-w-[1440px] mx-auto font-sans px-4 2xl:px-2 pb-8 md:pb-14",
+            "class": "w-full container font-sans px-4 2xl:px-2 pb-8 md:pb-14",
             "data": {
               "title": "Special offers for you 2",
               "title_color": "#000000",
@@ -3681,7 +3681,7 @@
             "blocks": [
               {
                 "wrapper": "div",
-                "class": "max-w-[1440px] mx-auto",
+                "class": "container",
                 "blocks": [
                   {
                     "wrapper": "div",
@@ -3974,7 +3974,7 @@
             "blocks": [
               {
                 "wrapper": "div",
-                "class": "w-full max-w-[1440px] mx-auto",
+                "class": "w-full container",
                 "blocks": [
                   {
                     "wrapper": "div",
@@ -4211,7 +4211,7 @@
             "blocks": [
               {
                 "wrapper": "div",
-                "class": "max-w-[1440px] mx-auto",
+                "class": "container",
                 "blocks": [
                   {
                     "wrapper": "div",

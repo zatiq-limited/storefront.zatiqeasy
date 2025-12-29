@@ -1,17 +1,29 @@
 "use client";
 
-import React, { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { SlidersHorizontal } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useShopStore } from "@/stores/shopStore";
 import { useProductsStore, type Product } from "@/stores/productsStore";
-import { useCartStore, selectTotalItems, selectSubtotal } from "@/stores/cartStore";
+import {
+  useCartStore,
+  selectTotalItems,
+  selectSubtotal,
+} from "@/stores/cartStore";
 import { CartFloatingBtn } from "@/components/features/cart/cart-floating-btn";
 import { VariantSelectorModal } from "@/components/products/variant-selector-modal";
 import { FallbackImage } from "@/components/ui/fallback-image";
 import { SelloraProductCard } from "../../components/cards";
 import { GridContainer, Pagination } from "../../components/core";
+import { FeaturedCollections } from "../../components/featured-collections";
+import {
+  PriceFilterSection,
+  SortBySection,
+  MobilePriceFilter,
+  type PriceRange,
+  type SortOption,
+} from "../../components/all-products";
 
 const PRODUCTS_PER_PAGE = 12;
 
@@ -27,32 +39,56 @@ export function SelloraAllProducts() {
   const { t } = useTranslation();
   const { shopDetails } = useShopStore();
   const products = useProductsStore((state) => state.products);
-  const categories = useProductsStore((state) => state.categories);
   const totalCartItems = useCartStore(selectTotalItems);
   const totalPrice = useCartStore(selectSubtotal);
 
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [sortOrder, setSortOrder] = useState<string>("");
+  const [sortOrder, setSortOrder] = useState<SortOption>("");
+  const [selectedPriceRange, setSelectedPriceRange] =
+    useState<PriceRange | null>(null);
   const [showMobileFilter, setShowMobileFilter] = useState(false);
+
+  // Generate price ranges based on products
+  const priceRanges = useMemo((): PriceRange[] => {
+    if (products.length === 0) return [];
+
+    const prices = products.map((p) => p.price || 0);
+    const minPrice = Math.min(...prices);
+    const maxPrice = Math.max(...prices);
+
+    if (minPrice === maxPrice) return [];
+
+    const range = maxPrice - minPrice;
+    const step = Math.ceil(range / 4);
+
+    return [
+      { id: 1, min: minPrice, max: minPrice + step },
+      { id: 2, min: minPrice + step + 1, max: minPrice + step * 2 },
+      { id: 3, min: minPrice + step * 2 + 1, max: minPrice + step * 3 },
+      { id: 4, min: minPrice + step * 3 + 1, max: maxPrice },
+    ].filter((r) => r.min <= maxPrice);
+  }, [products]);
 
   const baseUrl = shopDetails?.baseUrl || "";
   const hasItems = totalCartItems > 0;
 
   // Get first carousel for hero
-  const carousels = (shopDetails?.shop_theme as unknown as { carousels?: Carousel[] })?.carousels || [];
+  const carousels =
+    (shopDetails?.shop_theme as unknown as { carousels?: Carousel[] })
+      ?.carousels || [];
   const heroCarousel = carousels[0];
 
   // Filter and sort products
   const filteredProducts = useMemo(() => {
     let filtered = [...products];
 
-    // Filter by category
-    if (selectedCategory) {
-      filtered = filtered.filter((p) =>
-        p.categories?.some((c) => String(c.id) === selectedCategory)
-      );
+    // Filter by price range
+    if (selectedPriceRange) {
+      filtered = filtered.filter((p) => {
+        const price = p.price || 0;
+        return price >= selectedPriceRange.min && price <= selectedPriceRange.max;
+      });
     }
 
     // Sort
@@ -60,12 +96,10 @@ export function SelloraAllProducts() {
       filtered.sort((a, b) => (a.price || 0) - (b.price || 0));
     } else if (sortOrder === "price_desc") {
       filtered.sort((a, b) => (b.price || 0) - (a.price || 0));
-    } else if (sortOrder === "name_asc") {
-      filtered.sort((a, b) => a.name.localeCompare(b.name));
     }
 
     return filtered;
-  }, [products, selectedCategory, sortOrder]);
+  }, [products, selectedPriceRange, sortOrder]);
 
   // Pagination
   const totalPages = Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE);
@@ -97,8 +131,20 @@ export function SelloraAllProducts() {
         onClose={() => setSelectedProduct(null)}
       />
 
+      {/* Mobile Price Filter */}
+      <MobilePriceFilter
+        showMobileFilter={showMobileFilter}
+        setShowMobileFilter={setShowMobileFilter}
+        priceRanges={priceRanges}
+        selectedRange={selectedPriceRange}
+        onRangeSelect={(range) => {
+          setSelectedPriceRange(range);
+          setCurrentPage(1);
+        }}
+      />
+
       {/* Hero Banner */}
-      <div className="relative h-[200px] sm:h-[280px] md:h-[360px] lg:h-[400px] w-screen overflow-hidden -ml-[50vw] left-[50%]">
+      <div className="relative h-50 sm:h-70 md:h-90 lg:h-100 w-screen overflow-hidden -ml-[50vw] left-[50%]">
         <div className="absolute inset-0">
           {heroCarousel?.image_url ? (
             <FallbackImage
@@ -109,16 +155,16 @@ export function SelloraAllProducts() {
               priority
             />
           ) : (
-            <div className="w-full h-full bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 dark:from-gray-800 dark:to-gray-900" />
+            <div className="w-full h-full bg-linear-to-r from-gray-200 via-gray-300 to-gray-200 dark:from-gray-800 dark:to-gray-900" />
           )}
         </div>
 
         {/* Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent dark:from-black/80 dark:via-black/50" />
+        <div className="absolute inset-0 bg-linear-to-r from-black/70 via-black/40 to-transparent dark:from-black/80 dark:via-black/50" />
 
         {/* Content */}
         <div className="relative h-full flex items-end pb-10 sm:pb-20">
-          <div className="max-w-7xl mx-auto w-full px-3 sm:px-4 xl:px-0">
+          <div className="container w-full">
             <div className="max-w-full sm:max-w-xl md:max-w-2xl">
               <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl text-white mb-2 sm:mb-3 md:mb-4 lg:mb-6">
                 {heroCarousel?.title || t("all_products")}
@@ -134,78 +180,53 @@ export function SelloraAllProducts() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto mt-4 sm:mt-6 md:mt-8 lg:mt-10 px-3 sm:px-4 xl:px-0">
+      <div className="container mt-4 sm:mt-6 md:mt-8 lg:mt-10">
         {/* Header with Filter Button */}
         <div className="pb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
-          <p className="text-sm text-gray-600 dark:text-gray-400">
-            {filteredProducts.length} {t("products")}
-          </p>
           <div className="flex items-center gap-2 sm:gap-3 md:gap-4 w-full sm:w-auto justify-between sm:justify-end">
             {/* Mobile Filter Button */}
             <button
               onClick={() => setShowMobileFilter(!showMobileFilter)}
               className="lg:hidden flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-xs sm:text-sm font-medium text-foreground hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
             >
-              <SlidersHorizontal size={16} />
-              <span className="text-base">{t("filter")}</span>
+              <SlidersHorizontal
+                size={16}
+                className="sm:w-4.5 sm:h-4.5"
+              />
+              <span className="inline text-base">{t("filter")}</span>
             </button>
-
-            {/* Sort Dropdown */}
-            <select
-              value={sortOrder}
-              onChange={(e) => setSortOrder(e.target.value)}
-              className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-800"
-            >
-              <option value="">{t("sort_by") || "Sort by"}</option>
-              <option value="price_asc">{t("price_low_high") || "Price: Low to High"}</option>
-              <option value="price_desc">{t("price_high_low") || "Price: High to Low"}</option>
-              <option value="name_asc">{t("name_a_z") || "Name: A to Z"}</option>
-            </select>
           </div>
         </div>
 
         {/* Main Content with Sidebar */}
         <div className="flex flex-col lg:flex-row gap-4 md:gap-6 lg:gap-8">
           {/* Sidebar Filters */}
-          <aside className={`${showMobileFilter ? "block" : "hidden"} lg:block w-full lg:w-56 xl:w-64 flex-shrink-0`}>
-            <div className="lg:sticky lg:top-24 space-y-4 lg:space-y-5 p-4 lg:p-0 bg-gray-50 dark:bg-gray-800 lg:bg-transparent rounded-lg lg:rounded-none">
-              {/* Categories Filter */}
-              <div>
-                <h3 className="font-semibold text-base mb-3">{t("categories")}</h3>
-                <div className="space-y-2">
-                  <button
-                    onClick={() => {
-                      setSelectedCategory(null);
+          {priceRanges.length > 0 && (
+            <aside className="hidden lg:block w-full lg:w-56 xl:w-64 shrink-0">
+              <div className="lg:sticky lg:top-24 space-y-4 lg:space-y-5">
+                {/* Price Filter Section */}
+                <PriceFilterSection
+                  priceRanges={priceRanges}
+                  selectedRange={selectedPriceRange}
+                  onRangeSelect={(range) => {
+                    setSelectedPriceRange(range);
+                    setCurrentPage(1);
+                  }}
+                />
+
+                {/* Sort By Section */}
+                {filteredProducts.length >= 1 && (
+                  <SortBySection
+                    selectedSort={sortOrder}
+                    onSortChange={(sort) => {
+                      setSortOrder(sort);
                       setCurrentPage(1);
                     }}
-                    className={`block w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
-                      !selectedCategory
-                        ? "bg-blue-zatiq text-white"
-                        : "hover:bg-gray-100 dark:hover:bg-gray-700"
-                    }`}
-                  >
-                    {t("all_categories") || "All Categories"}
-                  </button>
-                  {categories.map((category) => (
-                    <button
-                      key={category.id}
-                      onClick={() => {
-                        setSelectedCategory(String(category.id));
-                        setCurrentPage(1);
-                      }}
-                      className={`block w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
-                        selectedCategory === String(category.id)
-                          ? "bg-blue-zatiq text-white"
-                          : "hover:bg-gray-100 dark:hover:bg-gray-700"
-                      }`}
-                    >
-                      {category.name}
-                    </button>
-                  ))}
-                </div>
+                  />
+                )}
               </div>
-            </div>
-          </aside>
+            </aside>
+          )}
 
           {/* Products Grid */}
           <div className="flex-1 min-w-0">
@@ -239,6 +260,9 @@ export function SelloraAllProducts() {
             />
           </div>
         </div>
+
+        {/* Featured Collections Section */}
+        <FeaturedCollections title={t("featured_collections")} />
       </div>
 
       {/* Floating Cart Button */}

@@ -9,6 +9,7 @@ import type { Product } from "@/stores/productsStore";
 interface AuroraRelatedProductsProps {
   ignoreProductId: number | string;
   currentProduct?: Product;
+  onSelectProduct?: (product: Product) => void;
 }
 
 // Helper function to get all category combinations
@@ -37,6 +38,7 @@ const getAllCombinations = (
 const AuroraRelatedProducts = ({
   ignoreProductId,
   currentProduct,
+  onSelectProduct,
 }: AuroraRelatedProductsProps) => {
   const { t } = useTranslation();
   const { products } = useProductsStore();
@@ -111,7 +113,11 @@ const AuroraRelatedProducts = ({
       </h4>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
         {relatedProducts.map((product) => (
-          <AuroraProductCard key={product.id} product={product} />
+          <AuroraProductCard
+            key={product.id}
+            product={product}
+            onSelectProduct={() => onSelectProduct?.(product)}
+          />
         ))}
       </div>
     </div>

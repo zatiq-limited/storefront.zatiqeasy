@@ -3,11 +3,19 @@
 import React, { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useShopStore } from "@/stores/shopStore";
-import { useCartStore, selectTotalItems, selectSubtotal } from "@/stores/cartStore";
+import {
+  useCartStore,
+  selectTotalItems,
+  selectSubtotal,
+} from "@/stores/cartStore";
 import { CartFloatingBtn } from "@/components/features/cart/cart-floating-btn";
 import { VariantSelectorModal } from "@/components/products/variant-selector-modal";
 import { HeroCarousel } from "../../components/carousel";
-import { OurCollectionSection, FeaturedProductsSection, OnSaleSection } from "./sections";
+import {
+  OurCollectionSection,
+  FeaturedProductsSection,
+  OnSaleSection,
+} from "./sections";
 import type { Product } from "@/stores/productsStore";
 
 interface Carousel {
@@ -31,9 +39,13 @@ export function SelloraHomePage() {
   const hasItems = totalProducts > 0;
 
   // Get carousels
-  const carousels = (shopDetails?.shop_theme as unknown as { carousels?: Carousel[] })?.carousels || [];
+  const carousels =
+    (shopDetails?.shop_theme as unknown as { carousels?: Carousel[] })
+      ?.carousels || [];
   const hasSecondaryCarousel = carousels.some((c) => c.tag === "secondary");
-  const hasOnSale = (shopDetails?.shop_theme as unknown as { on_sale_inventories?: Product[] })?.on_sale_inventories?.length ?? 0 > 0;
+  const hasOnSale =
+    (shopDetails?.shop_theme as unknown as { on_sale_inventories?: Product[] })
+      ?.on_sale_inventories?.length ?? 0 > 0;
 
   // Navigate to product details
   const navigateProductDetails = useCallback(
@@ -64,7 +76,7 @@ export function SelloraHomePage() {
       <OurCollectionSection />
 
       {/* Featured Products */}
-      <div className="max-w-7xl mx-auto flex flex-col">
+      <div className="container flex flex-col">
         <FeaturedProductsSection
           setSelectedProduct={setSelectedProduct}
           navigateProductDetails={navigateProductDetails}

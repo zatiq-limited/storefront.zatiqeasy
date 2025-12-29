@@ -74,7 +74,7 @@ export function GripBuyNow({ content, onBuyNow }: GripBuyNowProps) {
                 {item.button_text && item.link && (
                   <button
                     onClick={() => onBuyNow?.(item.link)}
-                    className="inline-flex items-center px-6 md:px-8 py-3 md:py-4 bg-gradient-to-r from-landing-primary to-landing-primary text-white font-medium rounded-full transition-all duration-300 hover:shadow-xl cursor-pointer mt-4"
+                    className="inline-flex items-center px-6 md:px-8 py-3 md:py-4 bg-linear-to-r from-landing-primary to-landing-primary text-white font-medium rounded-full transition-all duration-300 hover:shadow-xl cursor-pointer mt-4"
                   >
                     {item.button_text}
                   </button>

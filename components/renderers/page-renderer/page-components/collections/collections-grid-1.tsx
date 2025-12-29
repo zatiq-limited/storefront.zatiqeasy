@@ -72,7 +72,7 @@ export default function CollectionsGrid1({
   if (isLoading) {
     return (
       <section className="py-16 md:py-24" style={{ backgroundColor }}>
-        <div className="max-w-[1440px] mx-auto px-4 2xl:px-0">
+        <div className="container px-4 2xl:px-0">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {[...Array(6)].map((_, i) => (
               <div
@@ -93,7 +93,7 @@ export default function CollectionsGrid1({
   if (!collections || collections.length === 0) {
     return (
       <section className="py-16 md:py-24" style={{ backgroundColor }}>
-        <div className="max-w-[1440px] mx-auto px-4 2xl:px-0">
+        <div className="container px-4 2xl:px-0">
           <div className="text-center py-12">
             <svg
               className="w-16 h-16 mx-auto text-gray-300 mb-4"
@@ -122,7 +122,7 @@ export default function CollectionsGrid1({
 
   return (
     <section className="py-16 md:py-24" style={{ backgroundColor }}>
-      <div className="max-w-[1440px] mx-auto px-4 2xl:px-0">
+      <div className="container px-4 2xl:px-0">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {collections.map((collection, index) => {
             const isFirstCard = index === 0;
@@ -162,7 +162,7 @@ export default function CollectionsGrid1({
 
                     {/* Dark Overlay */}
                     <div
-                      className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-black/20"
+                      className="absolute inset-0 bg-linear-to-t from-black/95 via-black/60 to-black/20"
                       style={{ opacity: (cardOverlayOpacity / 100) * 2.5 }}
                     />
 
@@ -251,7 +251,7 @@ export default function CollectionsGrid1({
                             className="object-cover transition-transform duration-500 group-hover/child:scale-110"
                           />
                           {/* Dark overlay for text visibility */}
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
+                          <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/50 to-transparent" />
 
                           {/* Text overlay on image */}
                           <div className="absolute bottom-0 left-0 right-0 p-3 z-10">

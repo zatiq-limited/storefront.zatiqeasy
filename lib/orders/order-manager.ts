@@ -87,9 +87,8 @@ export class OrderManager {
         return {
           name: item.name,
           inventory_id: item.id,
-          quantity: item.qty,
+          qty: item.qty,
           price: item.price,
-          total_price: item.price * item.qty,
           image_url: item.image_url,
           variants: item.selectedVariants
             ? Object.values(item.selectedVariants)
@@ -122,7 +121,7 @@ export class OrderManager {
       // Create order with retry mechanism
       return await this.createOrderWithRetry(orderPayload);
     } catch (error) {
-      if (process.env.NODE_ENV === "development") {
+      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV") {
         console.error("Create order from cart error:", error);
       }
       return {
@@ -146,7 +145,7 @@ export class OrderManager {
     } catch (error) {
       this.retryCount++;
       if (this.retryCount < this.maxRetries) {
-        if (process.env.NODE_ENV === "development") {
+        if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV") {
           console.warn(
             `Order creation failed, retrying... (${this.retryCount}/${this.maxRetries})`
           );
@@ -172,7 +171,7 @@ export class OrderManager {
       }
       return null;
     } catch (error) {
-      if (process.env.NODE_ENV === "development") {
+      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV") {
         console.error("Get order details error:", error);
       }
       return null;
@@ -342,7 +341,7 @@ Track your order: ${this.generateReceiptUrl(String(orderSummary.receiptId))}
         };
       }
     } catch (error) {
-      if (process.env.NODE_ENV === "development") {
+      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV") {
         console.error("Update payment status error:", error);
       }
       return {
@@ -364,7 +363,7 @@ Track your order: ${this.generateReceiptUrl(String(orderSummary.receiptId))}
   ) {
     try {
       // TODO: Implement notification system (SMS/Email)
-      if (process.env.NODE_ENV === "development") {
+      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV") {
         console.log(
           `Payment confirmed for order ${order.receipt_id} with transaction ${transactionId}`
         );
@@ -379,11 +378,11 @@ Track your order: ${this.generateReceiptUrl(String(orderSummary.receiptId))}
         timestamp: new Date().toISOString(),
       };
 
-      if (process.env.NODE_ENV === "development") {
+      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV") {
         console.log("Payment confirmation notification:", notification);
       }
     } catch (error) {
-      if (process.env.NODE_ENV === "development") {
+      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV") {
         console.error("Send notification error:", error);
       }
     }

@@ -40,7 +40,7 @@ export function BasicFooter() {
     "about-us",
     "privacy-policy",
     "terms-and-conditions",
-    "return-and-cancellation-policy",
+    "return-policy",
   ];
 
   const baseUrl = shopDetails?.baseUrl || "/";

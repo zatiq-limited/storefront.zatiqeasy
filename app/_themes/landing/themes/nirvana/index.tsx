@@ -4,7 +4,10 @@ import React, { useEffect, useMemo, useCallback, useState } from "react";
 import { useLandingStore } from "@/stores/landingStore";
 import { useCartStore } from "@/stores/cartStore";
 import { useShopStore } from "@/stores/shopStore";
-import { LandingProductProvider, useLandingProduct } from "../../context/landing-product-context";
+import {
+  LandingProductProvider,
+  useLandingProduct,
+} from "../../context/landing-product-context";
 import { VariantSelectorModal } from "@/components/products/variant-selector-modal";
 import { getThemeColors } from "@/lib/utils";
 import { CustomerReviews } from "@/components/products/customer-reviews";
@@ -90,7 +93,8 @@ function NirvanaLandingContent({ landingData }: NirvanaLandingPageProps) {
 
         if (
           mandatoryTypes.length > 1 ||
-          (mandatoryTypes.length === 1 && (mandatoryTypes[0].variants?.length || 0) > 1)
+          (mandatoryTypes.length === 1 &&
+            (mandatoryTypes[0].variants?.length || 0) > 1)
         ) {
           // Open variant modal for selection
           setIsVariantModalOpen(true);
@@ -147,7 +151,7 @@ function NirvanaLandingContent({ landingData }: NirvanaLandingPageProps) {
 
   return (
     <div className="min-h-screen flex flex-col font-sans text-gray-900 leading-snug">
-      {/* Navbar */}
+      {/* Nirvana Navbar */}
       <NirvanaNavbar />
 
       {/* Main Content */}
@@ -160,14 +164,23 @@ function NirvanaLandingContent({ landingData }: NirvanaLandingPageProps) {
         {/* Conditional rendering based on product video presence */}
         {productVideos ? (
           <>
-            <NirvanaProductVideo content={productVideos} onBuyNow={handleBuyNow} />
+            <NirvanaProductVideo
+              content={productVideos}
+              onBuyNow={handleBuyNow}
+            />
             <NirvanaStaticBanner content={standaloneBanner} />
-            <NirvanaFocusedInfo content={textOnlyContent[0]} onBuyNow={handleBuyNow} />
+            <NirvanaFocusedInfo
+              content={textOnlyContent[0]}
+              onBuyNow={handleBuyNow}
+            />
           </>
         ) : (
           <>
             <NirvanaStaticBanner content={standaloneBanner} />
-            <NirvanaFocusedInfo content={textOnlyContent[0]} onBuyNow={handleBuyNow} />
+            <NirvanaFocusedInfo
+              content={textOnlyContent[0]}
+              onBuyNow={handleBuyNow}
+            />
           </>
         )}
 
@@ -175,7 +188,10 @@ function NirvanaLandingContent({ landingData }: NirvanaLandingPageProps) {
         {simpleFeatures && <NirvanaFeatures content={simpleFeatures} />}
 
         {/* Highlighted Information */}
-        <NirvanaHighlightedInfo content={textContent[0]} onBuyNow={handleBuyNow} />
+        <NirvanaHighlightedInfo
+          content={textContent[0]}
+          onBuyNow={handleBuyNow}
+        />
 
         {/* Product Images */}
         <NirvanaProductImages content={productImages} />
@@ -190,7 +206,7 @@ function NirvanaLandingContent({ landingData }: NirvanaLandingPageProps) {
         {/* Customer Reviews */}
         {productReviews.length > 0 && (
           <div className="container mx-auto px-4 py-16">
-            <h2 className="text-4xl md:text-6xl font-extrabold text-center bg-gradient-to-r from-landing-primary to-landing-secondary bg-clip-text text-transparent mb-12">
+            <h2 className="text-4xl md:text-6xl font-extrabold text-center bg-linear-to-r from-landing-primary to-landing-secondary bg-clip-text text-transparent mb-12">
               Customer Reviews
             </h2>
             <CustomerReviews reviews={productReviews} />
@@ -206,7 +222,11 @@ function NirvanaLandingContent({ landingData }: NirvanaLandingPageProps) {
         <VariantSelectorModal
           isOpen={isVariantModalOpen}
           onClose={() => setIsVariantModalOpen(false)}
-          product={product as unknown as Parameters<typeof VariantSelectorModal>[0]["product"]}
+          product={
+            product as unknown as Parameters<
+              typeof VariantSelectorModal
+            >[0]["product"]
+          }
           onAddToCart={handleVariantSelect}
         />
       )}

@@ -98,13 +98,22 @@ export default function CollectionSubcategories1({
               {s.title}
             </h2>
           )}
-          <div className="w-20 h-1 mx-auto rounded-full" style={{ backgroundColor: s.accentColor || "#7c3aed" }}></div>
+          <div
+            className="w-20 h-1 mx-auto rounded-full"
+            style={{ backgroundColor: s.accentColor || "#7c3aed" }}
+          ></div>
         </div>
 
         {/* Subcategories Grid */}
         <div className="overflow-x-auto pb-4 scrollbar-hide">
           <div
-            className={`grid ${columnClasses[Number(s.columns) as keyof typeof columnClasses] || columnClasses[6]} ${spacingClasses[s.spacing as keyof typeof spacingClasses] || spacingClasses.normal} min-w-max`}
+            className={`grid ${
+              columnClasses[Number(s.columns) as keyof typeof columnClasses] ||
+              columnClasses[6]
+            } ${
+              spacingClasses[s.spacing as keyof typeof spacingClasses] ||
+              spacingClasses.normal
+            } min-w-max`}
           >
             {subcategories.map((subcategory, index) => (
               <Link
@@ -117,10 +126,14 @@ export default function CollectionSubcategories1({
                   backdropFilter: "blur(10px)",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = `${s.hoverColor || "#7c3aed"}10`;
+                  e.currentTarget.style.backgroundColor = `${
+                    s.hoverColor || "#7c3aed"
+                  }10`;
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = `${s.backgroundColor || "#ffffff"}50`;
+                  e.currentTarget.style.backgroundColor = `${
+                    s.backgroundColor || "#ffffff"
+                  }50`;
                 }}
               >
                 {/* Image Container */}
@@ -129,14 +142,20 @@ export default function CollectionSubcategories1({
                   <div
                     className="absolute inset-0 rounded-full opacity-0 group-hover/image:opacity-100 transition-opacity duration-300 blur-xl"
                     style={{
-                      background: `radial-gradient(circle, ${s.accentColor || "#7c3aed"}40 0%, transparent 70%)`,
+                      background: `radial-gradient(circle, ${
+                        s.accentColor || "#7c3aed"
+                      }40 0%, transparent 70%)`,
                       transform: "scale(1.2)",
                     }}
                   />
 
                   {/* Image */}
                   <div
-                    className={`relative ${imageSizeClasses[s.imageSize as keyof typeof imageSizeClasses] || imageSizeClasses.medium} rounded-full overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 border-4 border-white shadow-lg group-hover/image:shadow-2xl transition-all duration-300`}
+                    className={`relative ${
+                      imageSizeClasses[
+                        s.imageSize as keyof typeof imageSizeClasses
+                      ] || imageSizeClasses.medium
+                    } rounded-full overflow-hidden bg-linear-to-br from-gray-100 to-gray-200 border-4 border-white shadow-lg group-hover/image:shadow-2xl transition-all duration-300`}
                   >
                     {subcategory.image_url ? (
                       <Image
@@ -146,8 +165,16 @@ export default function CollectionSubcategories1({
                         className="object-cover transition-transform duration-500 group-hover/image:scale-110"
                       />
                     ) : (
-                      <div className="flex items-center justify-center w-full h-full" style={{ backgroundColor: s.accentColor || "#7c3aed" }}>
-                        <svg className="w-1/2 h-1/2 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <div
+                        className="flex items-center justify-center w-full h-full"
+                        style={{ backgroundColor: s.accentColor || "#7c3aed" }}
+                      >
+                        <svg
+                          className="w-1/2 h-1/2 text-white"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
                           <path
                             strokeLinecap="round"
                             strokeLinejoin="round"
@@ -159,11 +186,18 @@ export default function CollectionSubcategories1({
                     )}
 
                     {/* Floating Badge */}
-                    <div
-                      className="absolute -top-1 -right-1 w-6 h-6 bg-white rounded-full shadow-md flex items-center justify-center opacity-0 group-hover/image:opacity-100 transition-opacity duration-300"
-                    >
-                      <svg className="w-3 h-3" style={{ color: s.accentColor || "#7c3aed" }} fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                    <div className="absolute -top-1 -right-1 w-6 h-6 bg-white rounded-full shadow-md flex items-center justify-center opacity-0 group-hover/image:opacity-100 transition-opacity duration-300">
+                      <svg
+                        className="w-3 h-3"
+                        style={{ color: s.accentColor || "#7c3aed" }}
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                          clipRule="evenodd"
+                        />
                       </svg>
                     </div>
                   </div>
@@ -175,7 +209,9 @@ export default function CollectionSubcategories1({
                     className="font-semibold text-sm sm:text-base mb-2 transition-colors duration-300 group-hover:text-transparent"
                     style={{
                       color: s.textColor || "#374151",
-                      backgroundImage: `linear-gradient(135deg, ${s.textColor || "#374151"} 0%, ${s.hoverColor || "#7c3aed"} 100%)`,
+                      backgroundImage: `linear-gradient(135deg, ${
+                        s.textColor || "#374151"
+                      } 0%, ${s.hoverColor || "#7c3aed"} 100%)`,
                       backgroundClip: "text",
                       WebkitBackgroundClip: "text",
                     }}
@@ -201,7 +237,12 @@ export default function CollectionSubcategories1({
                         border: `1px solid ${s.accentColor || "#7c3aed"}30`,
                       }}
                     >
-                      <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg
+                        className="w-3 h-3 mr-1"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -230,16 +271,24 @@ export default function CollectionSubcategories1({
                 border: `1px solid ${s.accentColor || "#7c3aed"}30`,
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = s.accentColor || "#7c3aed";
+                e.currentTarget.style.backgroundColor =
+                  s.accentColor || "#7c3aed";
                 e.currentTarget.style.color = "#ffffff";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = `${s.accentColor || "#7c3aed"}10`;
+                e.currentTarget.style.backgroundColor = `${
+                  s.accentColor || "#7c3aed"
+                }10`;
                 e.currentTarget.style.color = s.accentColor || "#7c3aed";
               }}
             >
               <span>View All Categories</span>
-              <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                className="w-4 h-4 transform group-hover:translate-x-1 transition-transform"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"

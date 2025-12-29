@@ -46,7 +46,10 @@ function StarRight() {
   );
 }
 
-export function ArcadiaStandalone({ content, onBuyNow }: ArcadiaStandaloneProps) {
+export function ArcadiaStandalone({
+  content,
+  onBuyNow,
+}: ArcadiaStandaloneProps) {
   const { shopDetails } = useShopStore();
 
   if (!content) {
@@ -55,7 +58,7 @@ export function ArcadiaStandalone({ content, onBuyNow }: ArcadiaStandaloneProps)
 
   return (
     <div className="relative overflow-hidden group cursor-pointer">
-      <div className="w-full bg-gradient-to-b from-white to-violet-50 py-10 md:py-24 lg:py-28 xl:py-32 2xl:py-40 transition-all duration-500">
+      <div className="w-full bg-linear-to-b from-white to-violet-50 py-10 md:py-24 lg:py-28 xl:py-32 2xl:py-40 transition-all duration-500">
         <div className="w-[90%] mx-auto flex justify-center items-center">
           <div className="max-w-[720px] xl:max-w-none mx-auto text-white transform transition-transform duration-500 group-hover:scale-[1.02]">
             {/* Title */}

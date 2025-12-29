@@ -6,7 +6,7 @@ import { useShopStore } from "@/stores/shopStore";
 import { GridContainer } from "../../../components/core";
 import { CategoryCard } from "../../../components/cards";
 import SectionHeader from "./section-header";
-import ViewAllButton from "./view-all-button";
+import ViewAllButton from "../../../../../../components/shared/view-all-button";
 
 export function AuroraCategorySection() {
   const { t } = useTranslation();

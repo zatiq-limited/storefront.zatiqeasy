@@ -492,7 +492,7 @@
             "blocks": [
               {
                 "wrapper": "div",
-                "class": "max-w-[1440px] mx-auto w-full",
+                "class": "container w-full",
                 "blocks": [
                   {
                     "wrapper": "div",
@@ -943,7 +943,7 @@
                 "blocks": [
                   {
                     "wrapper": "div",
-                    "class": "max-w-7xl mx-auto",
+                    "class": "container",
                     "blocks": [
                       {
                         "wrapper": "div",
@@ -1282,7 +1282,7 @@
                 "blocks": [
                   {
                     "wrapper": "div",
-                    "class": "max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4",
+                    "class": "container flex flex-col md:flex-row justify-between items-center gap-4",
                     "blocks": [
                       {
                         "wrapper": "p",

@@ -37,9 +37,12 @@ export default function CollectionBanner1({
   const bannerImage = collection.image_url || collection.banner_url;
 
   const heightClasses = {
-    small: "h-[40vh] min-h-[300px] sm:h-[45vh] sm:min-h-[350px] md:h-[50vh] md:min-h-[400px] lg:h-[55vh] lg:min-h-[450px]",
-    medium: "h-[50vh] min-h-[350px] sm:h-[60vh] sm:min-h-[400px] md:h-[70vh] md:min-h-[500px] lg:h-[80vh] lg:min-h-[600px]",
-    large: "h-[60vh] min-h-[400px] sm:h-[70vh] sm:min-h-[500px] md:h-[80vh] md:min-h-[600px] lg:h-[90vh] lg:min-h-[700px]",
+    small:
+      "h-[40vh] min-h-[300px] sm:h-[45vh] sm:min-h-[350px] md:h-[50vh] md:min-h-[400px] lg:h-[55vh] lg:min-h-[450px]",
+    medium:
+      "h-[50vh] min-h-[350px] sm:h-[60vh] sm:min-h-[400px] md:h-[70vh] md:min-h-[500px] lg:h-[80vh] lg:min-h-[600px]",
+    large:
+      "h-[60vh] min-h-[400px] sm:h-[70vh] sm:min-h-[500px] md:h-[80vh] md:min-h-[600px] lg:h-[90vh] lg:min-h-[700px]",
   };
 
   const textPositionClasses = {
@@ -49,7 +52,11 @@ export default function CollectionBanner1({
   };
 
   return (
-    <section className={`relative ${heightClasses[s.height || "medium"]} overflow-hidden bg-gray-900`}>
+    <section
+      className={`relative ${
+        heightClasses[s.height || "medium"]
+      } overflow-hidden bg-gray-900`}
+    >
       {/* Background Image with enhanced effects */}
       {s.showBanner && bannerImage && (
         <div className="absolute inset-0">
@@ -62,7 +69,7 @@ export default function CollectionBanner1({
           />
           {/* Enhanced gradient overlay */}
           <div
-            className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/50 md:from-transparent md:via-black/20 md:to-black/0"
+            className="absolute inset-0 bg-linear-to-b from-black/40 via-black/20 to-black/50 md:from-transparent md:via-black/20 md:to-black/0"
             style={{ opacity: parseFloat(s.overlayOpacity || "0.5") }}
           />
           {/* Vignette effect */}
@@ -72,13 +79,13 @@ export default function CollectionBanner1({
 
       {/* No image fallback - modern gradient */}
       {(!s.showBanner || !bannerImage) && (
-        <div className="absolute inset-0 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900">
+        <div className="absolute inset-0 bg-linear-to-br from-indigo-900 via-purple-900 to-pink-900">
           <div
             className="absolute inset-0 opacity-30"
             style={{
               backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M36 18c3.314 0 6 2.686 6 6s-2.686 6-6 6-6-2.686-6-6 2.686-6 6-6zm0 2c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 2c1.105 0 2 .895 2 2s-.895 2-2 2-2-.895-2-2 .895-2 2-2z' fill='%23fff' opacity='.05'/%3E%3C/g%3E%3C/svg%3E")`,
               backgroundRepeat: "repeat",
-              backgroundSize: "60px 60px"
+              backgroundSize: "60px 60px",
             }}
           />
         </div>
@@ -86,9 +93,11 @@ export default function CollectionBanner1({
 
       {/* Content */}
       <div className="relative h-full flex items-center">
-        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full container px-4 sm:px-6 lg:px-8">
           <div
-            className={`flex flex-col ${textPositionClasses[s.textPosition || "center"]} max-w-full sm:max-w-xl md:max-w-2xl lg:max-w-3xl xl:max-w-4xl ${
+            className={`flex flex-col ${
+              textPositionClasses[s.textPosition || "center"]
+            } max-w-full sm:max-w-xl md:max-w-2xl lg:max-w-3xl xl:max-w-4xl ${
               s.textPosition === "center" ? "mx-auto" : ""
             }`}
           >
@@ -155,7 +164,7 @@ export default function CollectionBanner1({
                     color: s.badgeTextColor || "#111827",
                   }}
                 >
-                  <span className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <span className="absolute inset-0 bg-linear-to-r from-indigo-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   <span className="relative z-10 flex items-center justify-center group-hover:text-white transition-colors">
                     {s.bannerButtonText}
                     <svg
@@ -204,7 +213,7 @@ export default function CollectionBanner1({
       </a>
 
       {/* Decorative bottom fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-12 sm:h-16 md:h-24 lg:h-32 bg-gradient-to-t from-white/80 to-transparent pointer-events-none" />
+      <div className="absolute bottom-0 left-0 right-0 h-12 sm:h-16 md:h-24 lg:h-32 bg-linear-to-t from-white/80 to-transparent pointer-events-none" />
 
       {/* Enhanced animations */}
       <style>{`

@@ -1,15 +1,12 @@
 "use client";
 
-import React from "react";
 import { ShoppingCart, ArrowRight } from "lucide-react";
 import { useShopStore } from "@/stores/shopStore";
 import { useCartStore } from "@/stores/cartStore";
-import { useLandingProduct } from "../../../context/landing-product-context";
 
 export function ArcadiaCheckoutRedirect() {
   const { shopDetails } = useShopStore();
   const cartProducts = useCartStore((state) => state.products);
-  const { productPricing } = useLandingProduct();
 
   const baseUrl = shopDetails?.baseUrl || "";
   const currency = shopDetails?.country_currency || "BDT";
@@ -30,7 +27,7 @@ export function ArcadiaCheckoutRedirect() {
   };
 
   return (
-    <section className="py-12 md:py-20 bg-gradient-to-br from-violet-50 via-indigo-50 to-white">
+    <section className="py-12 md:py-20 bg-linear-to-br from-violet-50 via-indigo-50 to-white">
       <div className="container mx-auto px-4">
         <div className="max-w-2xl mx-auto text-center">
           {/* Header */}
@@ -60,7 +57,7 @@ export function ArcadiaCheckoutRedirect() {
           {/* CTA Button */}
           <button
             onClick={handleCheckout}
-            className="inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-landing-primary to-blue-600 text-white font-bold text-lg rounded-full hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer"
+            className="inline-flex items-center gap-3 px-10 py-5 bg-linear-to-r from-landing-primary to-blue-600 text-white font-bold text-lg rounded-full hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer"
           >
             <span>Proceed to Checkout</span>
             <ArrowRight className="w-6 h-6" />

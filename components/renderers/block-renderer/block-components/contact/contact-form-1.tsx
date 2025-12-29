@@ -22,9 +22,13 @@ interface ContactForm1Props {
 }
 
 export default function ContactForm1({ settings = {} }: ContactForm1Props) {
-  const s = convertSettingsKeys(settings as Record<string, unknown>) as ContactForm1Settings;
+  const s = convertSettingsKeys(
+    settings as Record<string, unknown>
+  ) as ContactForm1Settings;
   const [formData, setFormData] = useState<Record<string, string>>({});
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
   const [termsAccepted, setTermsAccepted] = useState(false);
 
   // Default form fields
@@ -68,10 +72,16 @@ export default function ContactForm1({ settings = {} }: ContactForm1Props) {
   ];
 
   // Separate textarea fields from other fields
-  const textareaFields = defaultFields.filter((field) => field.settings.type === "textarea");
-  const otherFields = defaultFields.filter((field) => field.settings.type !== "textarea");
+  const textareaFields = defaultFields.filter(
+    (field) => field.settings.type === "textarea"
+  );
+  const otherFields = defaultFields.filter(
+    (field) => field.settings.type !== "textarea"
+  );
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -92,7 +102,7 @@ export default function ContactForm1({ settings = {} }: ContactForm1Props) {
       className="py-12 md:py-16 lg:py-20"
       style={{ backgroundColor: s.backgroundColor || "#FFFFFF" }}
     >
-      <div className="max-w-[1440px] mx-auto px-4 2xl:px-0">
+      <div className="container px-4 2xl:px-0">
         {/* Header */}
         {(s.title || s.subtitle) && (
           <div className="text-center mb-10 md:mb-12">
@@ -227,13 +237,20 @@ export default function ContactForm1({ settings = {} }: ContactForm1Props) {
             <div className="flex justify-end mt-6">
               <button
                 type="submit"
-                disabled={status === "loading" || (s.showTermsCheckbox && !termsAccepted)}
+                disabled={
+                  status === "loading" ||
+                  (s.showTermsCheckbox && !termsAccepted)
+                }
                 className="px-8 py-3.5 rounded-full text-white font-medium transition-all duration-200 hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                 style={{ backgroundColor: s.submitButtonColor || "#111827" }}
               >
                 {status === "loading" ? (
                   <>
-                    <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                    <svg
+                      className="w-5 h-5 animate-spin"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
                       <circle
                         className="opacity-25"
                         cx="12"

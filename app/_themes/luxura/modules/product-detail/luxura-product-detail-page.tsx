@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import { Minus, Plus, ShoppingCart, ChevronLeft, ChevronRight } from "lucide-react";
 import { useShopStore } from "@/stores/shopStore";
-import { useProductsStore, type Product } from "@/stores/productsStore";
+import { useProductsStore } from "@/stores/productsStore";
 import { useCartStore, selectTotalItems, selectSubtotal } from "@/stores/cartStore";
 import { CartFloatingBtn } from "@/components/features/cart/cart-floating-btn";
 import { GridContainer } from "../../components/core";
@@ -14,6 +14,8 @@ import { LuxuraProductCard } from "../../components/cards";
 import { SectionHeader } from "../home/sections/section-header";
 import { formatPrice } from "@/lib/utils/formatting";
 import { cn } from "@/lib/utils";
+import type { VariantsState, VariantState } from "@/types/cart.types";
+import { useProductDetails } from "@/hooks";
 
 export function LuxuraProductDetailPage() {
   const params = useParams();
@@ -26,26 +28,26 @@ export function LuxuraProductDetailPage() {
   const products = useProductsStore((state) => state.products);
   const totalCartProducts = useCartStore(selectTotalItems);
   const totalPrice = useCartStore(selectSubtotal);
-  const { addProduct, removeProduct, getProductsByInventoryId } = useCartStore();
+  const { addProduct, removeProduct } = useCartStore();
 
-  const [quantity, setQuantity] = useState(1);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-  const [selectedVariant, setSelectedVariant] = useState<{
-    id: number;
-    name: string;
-    price?: number;
-  } | null>(null);
 
   const baseUrl = shopDetails?.baseUrl || "";
   const currency = shopDetails?.country_currency || "BDT";
   const hasItems = totalCartProducts > 0;
 
-  // Find product by handle/id
-  const product = useMemo(() => {
-    return products.find(
-      (p) => String(p.id) === productHandle || (p as unknown as { handle?: string }).handle === productHandle
-    );
-  }, [products, productHandle]);
+  // Use product details hook for state management (same as Basic/Premium themes)
+  const {
+    product,
+    selectedVariants,
+    quantity,
+    selectVariant,
+    setQuantity,
+    incrementQuantity,
+    decrementQuantity,
+    isInStock,
+    stockQuantity,
+  } = useProductDetails(productHandle);
 
   // Get related products (same category, excluding current)
   const relatedProducts = useMemo(() => {
@@ -71,30 +73,159 @@ export function LuxuraProductDetailPage() {
     return product.image_url ? [product.image_url] : [];
   }, [product]);
 
-  // Check cart status
-  const cartProducts = product ? getProductsByInventoryId(Number(product.id)) : [];
-  const cartQuantity = cartProducts.reduce((acc, p) => acc + (p.qty || 0), 0);
+  // Get cart products for this product - subscribe to products state to track cart changes
+  // Then filter to get only this product's cart items (same as Basic/Premium themes)
+  const allCartProducts = useCartStore((state) => state.products);
+  const cartProducts = useMemo(
+    () =>
+      product?.id
+        ? Object.values(allCartProducts).filter((p) => p.id === Number(product.id))
+        : [],
+    [product?.id, allCartProducts]
+  );
+  const isInCartDirect = cartProducts.length > 0;
+  const cartQty = cartProducts.reduce((acc, p) => acc + (p.qty || 0), 0);
 
-  // Check stock
-  const isOutOfStock = product?.quantity === 0;
+  // Helper to check if two variant selections match (same as Basic/Premium themes)
+  const isSameVariantsCombination = useCallback(
+    (variants1: VariantsState, variants2: VariantsState): boolean => {
+      const keys1 = Object.keys(variants1);
+      const keys2 = Object.keys(variants2);
+      if (keys1.length !== keys2.length) return false;
+      return keys1.every((key) => {
+        const v1 = variants1[key];
+        const v2 = variants2[key];
+        return v1?.variant_id === v2?.variant_id;
+      });
+    },
+    []
+  );
 
-  // Calculate price with variant
-  const currentPrice = selectedVariant?.price || product?.price || 0;
-
-  // Handle add to cart
-  const handleAddToCart = useCallback(() => {
-    if (!product || isOutOfStock) return;
-
-    // Build selected variants if any
-    const selectedVariants: Record<number, { variant_type_id: number; variant_id: number; price: number; variant_name: string }> = {};
-    if (selectedVariant) {
-      selectedVariants[selectedVariant.id] = {
-        variant_type_id: selectedVariant.id,
-        variant_id: selectedVariant.id,
-        price: selectedVariant.price || product.price,
-        variant_name: selectedVariant.name,
+  // Transform selectedVariants to VariantsState format for comparison (same as Basic theme)
+  const selectedVariantsAsState = useMemo(() => {
+    const state: VariantsState = {};
+    Object.entries(selectedVariants).forEach(([key, variant]) => {
+      state[Number(key)] = {
+        variant_type_id: Number(key),
+        variant_id: variant.id,
+        price: variant.price || 0,
+        variant_name: variant.name,
+        image_url: variant.image_url,
       };
+    });
+    return state;
+  }, [selectedVariants]);
+
+  // Find matching cart item based on variants (same as Basic theme)
+  const matchingCartItem = useMemo(() => {
+    if (cartProducts.length === 0) return null;
+    // For non-variant products, return first cart item
+    if (!product?.variant_types || product.variant_types.length === 0) {
+      return cartProducts[0];
     }
+    // For variant products, find matching selected variants
+    return (
+      cartProducts.find((item) =>
+        isSameVariantsCombination(
+          item.selectedVariants || {},
+          selectedVariantsAsState
+        )
+      ) || null
+    );
+  }, [
+    cartProducts,
+    product,
+    isSameVariantsCombination,
+    selectedVariantsAsState,
+  ]);
+
+  // Sync quantity with matching cart item (same as Basic theme)
+  const matchingCartQty = matchingCartItem?.qty ?? 0;
+  useEffect(() => {
+    if (matchingCartQty > 0) {
+      setQuantity(matchingCartQty);
+    } else {
+      setQuantity(1);
+    }
+  }, [matchingCartQty, setQuantity]);
+
+  // Restore selected variants from cart (when product page loads)
+  // This ensures the variants that were added to cart are pre-selected
+  useEffect(() => {
+    if (!product || !product.variant_types || product.variant_types.length === 0) {
+      return;
+    }
+
+    // Find the first cart item for this product
+    const firstCartItem = cartProducts[0];
+    if (!firstCartItem?.selectedVariants) {
+      return;
+    }
+
+    // Restore each variant from the cart
+    Object.entries(firstCartItem.selectedVariants).forEach(([variantTypeId, variantState]) => {
+      const typeId = Number(variantTypeId);
+      const variantId = variantState.variant_id;
+
+      // Find the variant in the product's variant types
+      const variantType = product.variant_types?.find((vt) => vt.id === typeId);
+      if (variantType?.variants) {
+        const variant = variantType.variants.find((v) => v.id === variantId);
+        if (variant) {
+          selectVariant(typeId, variant);
+        }
+      }
+    });
+  }, [product, cartProducts, selectVariant]);
+
+  // Check stock (use hook's isInStock)
+  const isOutOfStock = !isInStock;
+
+  // Calculate price with variants (same as Basic theme)
+  const currentPrice = useMemo(() => {
+    const basePrice = product?.price || 0;
+    const variantPrice = Object.values(selectedVariants).reduce(
+      (sum, v) => sum + (v.price || 0),
+      0
+    );
+    return basePrice + variantPrice;
+  }, [product, selectedVariants]);
+
+  // Handle add to cart (same as Basic/Premium themes)
+  const handleAddToCart = useCallback(() => {
+    if (!product || !isInStock) return;
+
+    // Check if all mandatory variants are selected
+    if (product.variant_types && product.variant_types.length > 0) {
+      const mandatoryVariants = product.variant_types.filter(
+        (vt) => vt.is_mandatory
+      );
+      const allMandatorySelected = mandatoryVariants.every(
+        (vt) => selectedVariants[vt.id]
+      );
+
+      if (!allMandatorySelected) {
+        alert("Please select all required variants");
+        return;
+      }
+    }
+
+    // For products already in cart (matching selected variants), remove old cart item first
+    if (matchingCartItem) {
+      removeProduct(matchingCartItem.cartId);
+    }
+
+    // Transform selectedVariants to match VariantState structure
+    const transformedVariants: VariantsState = {};
+    Object.entries(selectedVariants).forEach(([key, variant]) => {
+      transformedVariants[Number(key)] = {
+        variant_type_id: Number(key),
+        variant_id: variant.id,
+        price: variant.price || 0,
+        variant_name: variant.name,
+        image_url: variant.image_url,
+      };
+    });
 
     addProduct({
       ...product,
@@ -102,21 +233,87 @@ export function LuxuraProductDetailPage() {
       price: currentPrice,
       image_url: images[0] || "",
       qty: quantity,
-      selectedVariants,
+      selectedVariants: transformedVariants,
       total_inventory_sold: 0,
       categories: product.categories ?? [],
       variant_types: product.variant_types ?? [],
       stocks: product.stocks ?? [],
       reviews: [],
     } as unknown as Parameters<typeof addProduct>[0]);
-  }, [product, isOutOfStock, addProduct, currentPrice, images, quantity, selectedVariant]);
+  }, [
+    product,
+    isInStock,
+    matchingCartItem,
+    removeProduct,
+    addProduct,
+    currentPrice,
+    images,
+    quantity,
+    selectedVariants,
+  ]);
 
-  // Handle buy now
+  // Handle buy now (same as Basic theme)
   const handleBuyNow = useCallback(() => {
-    if (!product || isOutOfStock) return;
-    handleAddToCart();
+    if (!product || !isInStock) return;
+
+    // If not in cart, add it first
+    if (!matchingCartItem) {
+      // Check if all mandatory variants are selected
+      if (product.variant_types && product.variant_types.length > 0) {
+        const mandatoryVariants = product.variant_types.filter(
+          (vt) => vt.is_mandatory
+        );
+        const allMandatorySelected = mandatoryVariants.every(
+          (vt) => selectedVariants[vt.id]
+        );
+
+        if (!allMandatorySelected) {
+          alert("Please select all required variants");
+          return;
+        }
+      }
+
+      // Transform selectedVariants to match VariantState structure
+      const transformedVariants: VariantsState = {};
+      Object.entries(selectedVariants).forEach(([key, variant]) => {
+        transformedVariants[Number(key)] = {
+          variant_type_id: Number(key),
+          variant_id: variant.id,
+          price: variant.price || 0,
+          variant_name: variant.name,
+          image_url: variant.image_url,
+        };
+      });
+
+      // Add product to cart
+      addProduct({
+        ...product,
+        id: Number(product.id),
+        price: currentPrice,
+        image_url: images[0] || "",
+        qty: quantity,
+        selectedVariants: transformedVariants,
+        total_inventory_sold: 0,
+        categories: product.categories ?? [],
+        variant_types: product.variant_types ?? [],
+        stocks: product.stocks ?? [],
+        reviews: [],
+      } as unknown as Parameters<typeof addProduct>[0]);
+    }
+
     router.push(`${baseUrl}/checkout`);
-  }, [product, isOutOfStock, handleAddToCart, router, baseUrl]);
+  }, [
+    product,
+    isInStock,
+    matchingCartItem,
+    router,
+    baseUrl,
+    selectedVariants,
+    currentPrice,
+    images,
+    quantity,
+    addProduct,
+  ]);
 
   // Navigate to product
   const navigateProductDetails = useCallback(
@@ -188,7 +385,7 @@ export function LuxuraProductDetailPage() {
                     key={index}
                     onClick={() => setSelectedImageIndex(index)}
                     className={cn(
-                      "w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 border-2 transition-colors",
+                      "w-20 h-20 rounded-lg overflow-hidden shrink-0 border-2 transition-colors",
                       selectedImageIndex === index
                         ? "border-blue-zatiq"
                         : "border-transparent"
@@ -240,6 +437,13 @@ export function LuxuraProductDetailPage() {
               <p className="text-green-600 font-medium">{t("in_stock")}</p>
             )}
 
+            {/* Already in Cart Message */}
+            {isInCartDirect && (
+              <p className="text-sm text-blue-600 font-medium">
+                Already in your cart ({cartQty})
+              </p>
+            )}
+
             {/* Variants */}
             {product.variant_types?.map((variantType) => (
               <div key={variantType.id} className="space-y-3">
@@ -247,20 +451,23 @@ export function LuxuraProductDetailPage() {
                   {variantType.title}
                 </h3>
                 <div className="flex flex-wrap gap-2">
-                  {variantType.variants?.map((variant) => (
-                    <button
-                      key={variant.id}
-                      onClick={() => setSelectedVariant(variant)}
-                      className={cn(
-                        "px-4 py-2 rounded-lg border transition-colors",
-                        selectedVariant?.id === variant.id
-                          ? "border-blue-zatiq bg-blue-50 dark:bg-blue-900/20"
-                          : "border-gray-300 hover:border-blue-zatiq"
-                      )}
-                    >
-                      {variant.name}
-                    </button>
-                  ))}
+                  {variantType.variants?.map((variant) => {
+                    const isSelected = selectedVariants[variantType.id]?.id === variant.id;
+                    return (
+                      <button
+                        key={variant.id}
+                        onClick={() => selectVariant(variantType.id, variant)}
+                        className={cn(
+                          "px-4 py-2 rounded-lg border transition-colors",
+                          isSelected
+                            ? "border-blue-zatiq bg-blue-50 dark:bg-blue-900/20"
+                            : "border-gray-300 hover:border-blue-zatiq"
+                        )}
+                      >
+                        {variant.name}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             ))}
@@ -272,14 +479,14 @@ export function LuxuraProductDetailPage() {
               </h3>
               <div className="flex items-center gap-4">
                 <button
-                  onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                  onClick={decrementQuantity}
                   className="w-10 h-10 flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
                 >
                   <Minus size={18} />
                 </button>
                 <span className="text-xl font-medium w-12 text-center">{quantity}</span>
                 <button
-                  onClick={() => setQuantity((q) => q + 1)}
+                  onClick={incrementQuantity}
                   className="w-10 h-10 flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
                 >
                   <Plus size={18} />
@@ -300,7 +507,7 @@ export function LuxuraProductDetailPage() {
                 )}
               >
                 <ShoppingCart size={20} />
-                {t("add_to_cart")}
+                {isInCartDirect ? t("update_cart") : t("add_to_cart")}
               </button>
               <button
                 onClick={handleBuyNow}
@@ -336,7 +543,7 @@ export function LuxuraProductDetailPage() {
           <div className="mt-16">
             <SectionHeader
               text={t("related_products")}
-              viewAllLink={`${baseUrl}/products`}
+              link="/products"
             />
             <GridContainer>
               {relatedProducts.map((p) => (

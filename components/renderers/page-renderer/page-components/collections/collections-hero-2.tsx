@@ -103,7 +103,7 @@ export default function CollectionsHero2({
 
   return (
     <section className="relative overflow-hidden" style={{ backgroundColor }}>
-      <div className="max-w-[1440px] mx-auto px-4 2xl:px-0">
+      <div className="container px-4 2xl:px-0">
         <div
           className={`grid lg:grid-cols-2 gap-0 min-h-[500px] lg:min-h-[600px] ${
             isImageLeft ? "lg:flex-row-reverse" : ""
@@ -258,7 +258,7 @@ export default function CollectionsHero2({
             />
 
             {/* Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-black/20 to-transparent" />
+            <div className="absolute inset-0 bg-linear-to-t lg:bg-linear-to-r from-black/20 to-transparent" />
 
             {/* Decorative Elements */}
             <div className="absolute top-10 right-10 w-24 h-24 bg-white/10 backdrop-blur-sm rounded-full" />

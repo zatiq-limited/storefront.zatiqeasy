@@ -431,7 +431,7 @@ export const ContactSection = ({
                     placeholder="Country"
                   />
                 </div>
-                <div className="flex flex-auto">
+                <div className="flex flex-auto gap-2">
                   <input
                     id="customer_phone"
                     type="text"

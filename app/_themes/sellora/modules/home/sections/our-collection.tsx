@@ -20,12 +20,15 @@ export function OurCollectionSection() {
   const baseUrl = shopDetails?.baseUrl || "";
 
   // Get selected categories from theme
-  const categories = (shopDetails?.shop_theme as unknown as { selected_categories?: Category[] })?.selected_categories?.slice(0, 6) || [];
+  const categories =
+    (
+      shopDetails?.shop_theme as unknown as { selected_categories?: Category[] }
+    )?.selected_categories?.slice(0, 6) || [];
 
   if (categories.length === 0) return null;
 
   return (
-    <div className="py-10 sm:py-14 px-3 sm:px-4 xl:px-0 max-w-7xl mx-auto">
+    <div className="container py-10 sm:py-14">
       {/* Header with View All */}
       <div className="flex items-center justify-between mb-4 md:mb-8">
         <h2

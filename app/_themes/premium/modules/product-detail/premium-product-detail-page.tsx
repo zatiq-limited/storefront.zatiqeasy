@@ -1,15 +1,24 @@
 "use client";
 
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { Minus, Plus, Play, Download, ChevronLeft } from "lucide-react";
 import { useShopStore } from "@/stores/shopStore";
-import { useCartStore, selectTotalItems, selectSubtotal } from "@/stores/cartStore";
+import {
+  useCartStore,
+  selectTotalItems,
+  selectSubtotal,
+} from "@/stores/cartStore";
 import { useProductsStore } from "@/stores/productsStore";
 import { FallbackImage } from "@/components/ui/fallback-image";
 import { CartFloatingBtn } from "@/components/features/cart/cart-floating-btn";
-import { cn, getInventoryThumbImageUrl, getDetailPageImageUrl } from "@/lib/utils";
+import { VariantSelectorModal } from "@/components/products/variant-selector-modal";
+import {
+  cn,
+  getInventoryThumbImageUrl,
+  getDetailPageImageUrl,
+} from "@/lib/utils";
 import { GridContainer } from "../../components/core";
 import { PremiumProductCard } from "../../components/cards";
 import { ProductPricing, ProductVariants } from "./sections";
@@ -29,11 +38,14 @@ function extractVideoId(url: string): string | null {
   return match ? match[1] : null;
 }
 
-export function PremiumProductDetailPage({ product }: PremiumProductDetailPageProps) {
+export function PremiumProductDetailPage({
+  product,
+}: PremiumProductDetailPageProps) {
   const router = useRouter();
   const { t } = useTranslation();
   const { shopDetails } = useShopStore();
-  const { addProduct, getProductsByInventoryId } = useCartStore();
+  const { addProduct, getProductsByInventoryId, removeProduct } =
+    useCartStore();
   const allProducts = useProductsStore((state) => state.products);
   const totalCartItems = useCartStore(selectTotalItems);
   const totalPrice = useCartStore(selectSubtotal);
@@ -41,7 +53,7 @@ export function PremiumProductDetailPage({ product }: PremiumProductDetailPagePr
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isShowVideo, setIsShowVideo] = useState(false);
   const [quantity, setQuantity] = useState(1);
-  const [selectedVariants, setSelectedVariants] = useState<VariantsState>({});
+  const [selectedRelatedProduct, setSelectedRelatedProduct] = useState<Product | null>(null);
 
   const {
     id,
@@ -62,9 +74,20 @@ export function PremiumProductDetailPage({ product }: PremiumProductDetailPagePr
   const baseUrl = shopDetails?.baseUrl || "";
   const hasItems = totalCartItems > 0;
 
+  // Don't show video by default - only show if user clicks
+  useEffect(() => {
+    if (!video_link) {
+      setIsShowVideo(false);
+    }
+  }, [video_link]);
+
   // Check if download is allowed
   const allowDownload = Boolean(
-    (shopDetails?.metadata?.settings?.shop_settings as { enable_product_image_download?: boolean } | undefined)?.enable_product_image_download
+    (
+      shopDetails?.metadata?.settings?.shop_settings as
+        | { enable_product_image_download?: boolean }
+        | undefined
+    )?.enable_product_image_download
   );
 
   // All product images
@@ -84,10 +107,96 @@ export function PremiumProductDetailPage({ product }: PremiumProductDetailPagePr
   // Video ID for YouTube
   const videoId = useMemo(() => extractVideoId(video_link || ""), [video_link]);
 
+  // Compute default variants (select first variant of each mandatory type) - matches old project
+  const defaultVariants = useMemo<VariantsState>(() => {
+    if (variant_types && variant_types.length > 0) {
+      const defaults: VariantsState = {};
+      variant_types.forEach((type) => {
+        if (type.variants && type.variants.length > 0 && type.is_mandatory) {
+          const firstVariant = type.variants[0];
+          if (firstVariant?.id !== undefined && firstVariant?.id !== null) {
+            defaults[type.id] = {
+              variant_type_id: type.id,
+              variant_id: firstVariant.id,
+              price: firstVariant.price,
+              variant_name: firstVariant.name,
+              image_url: firstVariant.image_url ?? undefined,
+            };
+          }
+        }
+      });
+      return defaults;
+    }
+    return {};
+  }, [variant_types]);
+
   // Check if product is in cart
   const cartProducts = getProductsByInventoryId(Number(id));
   const isInCart = cartProducts.length > 0;
   const cartQty = cartProducts.reduce((acc, p) => acc + (p.qty || 0), 0);
+  const firstCartItem = cartProducts[0];
+
+  // Helper to check if two variant selections match (similar to old project's isSameVariantsCombination)
+  const isSameVariantsCombination = useCallback(
+    (variants1: VariantsState, variants2: VariantsState): boolean => {
+      const keys1 = Object.keys(variants1);
+      const keys2 = Object.keys(variants2);
+      if (keys1.length !== keys2.length) return false;
+      return keys1.every((key) => {
+        const v1 = variants1[key];
+        const v2 = variants2[key];
+        return v1?.variant_id === v2?.variant_id;
+      });
+    },
+    []
+  );
+
+  // Initialize selected variants - matches old project logic
+  // 1. Use lazy initializer to get initial value
+  // 2. If first cart item exists with variants, use its selectedVariants
+  // 3. Otherwise use defaultVariants (first variant of each mandatory type)
+  const [selectedVariants, setSelectedVariants] = useState<VariantsState>(
+    () => {
+      if (
+        firstCartItem &&
+        Object.keys(firstCartItem.selectedVariants || {}).length > 0
+      ) {
+        return firstCartItem.selectedVariants;
+      }
+      return defaultVariants;
+    }
+  );
+
+  // Find cart item that matches current selected variants (after selectedVariants is declared)
+  const matchingCartItem = useMemo(() => {
+    if (cartProducts.length === 0) return null;
+    // For non-variant products, return first cart item
+    if (!variant_types || variant_types.length === 0) {
+      return cartProducts[0];
+    }
+    // For variant products, find matching selected variants
+    return (
+      cartProducts.find((item) =>
+        isSameVariantsCombination(item.selectedVariants || {}, selectedVariants)
+      ) || null
+    );
+  }, [
+    cartProducts,
+    selectedVariants,
+    variant_types,
+    isSameVariantsCombination,
+  ]);
+
+  // Sync quantity with matching cart item - matches old project logic
+  // Use matchingCartItem?.qty in dependency to detect actual value changes
+  const matchingCartQty = matchingCartItem?.qty ?? 0;
+  useEffect(() => {
+    if (matchingCartQty > 0) {
+      setQuantity(matchingCartQty);
+    } else {
+      setQuantity(1);
+    }
+  }, [matchingCartQty]);
 
   // Check stock status
   const isStockOut = product.quantity === 0;
@@ -97,7 +206,7 @@ export function PremiumProductDetailPage({ product }: PremiumProductDetailPagePr
   const currentPrice = price || 0;
   const regularPrice = old_price || price || 0;
   const hasSavePrice = (old_price ?? 0) > (price ?? 0);
-  const savePrice = hasSavePrice ? (old_price! - price!) : 0;
+  const savePrice = hasSavePrice ? old_price! - price! : 0;
 
   // Related products (same category, excluding current product)
   const relatedProducts = useMemo(() => {
@@ -134,9 +243,14 @@ export function PremiumProductDetailPage({ product }: PremiumProductDetailPagePr
     [quantity, product.quantity]
   );
 
-  // Handle add to cart
+  // Handle add to cart / update cart
   const handleAddToCart = useCallback(() => {
     if (isStockOut) return;
+
+    // For products already in cart (matching selected variants), remove old cart item first
+    if (matchingCartItem) {
+      removeProduct(matchingCartItem.cartId);
+    }
 
     const productRecord = product as unknown as Record<string, unknown>;
     addProduct({
@@ -159,6 +273,8 @@ export function PremiumProductDetailPage({ product }: PremiumProductDetailPagePr
     image_url,
     quantity,
     selectedVariants,
+    matchingCartItem,
+    removeProduct,
     addProduct,
   ]);
 
@@ -178,7 +294,9 @@ export function PremiumProductDetailPage({ product }: PremiumProductDetailPagePr
     if (!allowDownload || !selectedImageUrl) return;
 
     try {
-      const proxyUrl = `/api/download-image?url=${encodeURIComponent(selectedImageUrl)}`;
+      const proxyUrl = `/api/download-image?url=${encodeURIComponent(
+        selectedImageUrl
+      )}`;
       const response = await fetch(proxyUrl);
 
       if (!response.ok) throw new Error("Download failed");
@@ -210,7 +328,14 @@ export function PremiumProductDetailPage({ product }: PremiumProductDetailPagePr
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <div className="w-[95%] md:w-[90%] lg:w-[85%] max-w-[1400px] mx-auto py-6 md:py-10">
+      {/* Variant Selector Modal for Related Products */}
+      <VariantSelectorModal
+        product={selectedRelatedProduct}
+        isOpen={!!selectedRelatedProduct}
+        onClose={() => setSelectedRelatedProduct(null)}
+      />
+
+      <div className="container py-6 md:py-10">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 mb-6">
           <button
@@ -223,16 +348,16 @@ export function PremiumProductDetailPage({ product }: PremiumProductDetailPagePr
         </div>
 
         {/* Main Product Section */}
-        <div className="flex items-start xl:flex-row flex-col gap-[26px]">
+        <div className="flex items-start xl:flex-row flex-col gap-6.5">
           {/* Desktop Vertical Thumbnail Strip */}
-          <div className="overflow-auto xl:w-[10%] xl:h-[calc(100vh-120px)] xl:flex hidden xl:pl-1">
+          <div className="overflow-auto xl:w-[10%] h-auto xl:flex hidden xl:pl-1">
             {allImages.length > 0 && (
               <ul className="flex flex-col gap-2 mt-2 w-full pb-1">
                 {/* Video Thumbnail */}
                 {video_link && videoId && (
                   <div
                     className={cn(
-                      "relative w-[90px] h-[116px] p-1 ring-[1px] ring-transparent bg-[#E4E4E7] dark:bg-transparent cursor-pointer",
+                      "relative w-22.5 h-29 p-1 ring-[1px] ring-transparent bg-[#E4E4E7] dark:bg-transparent cursor-pointer",
                       isShowVideo && "ring-blue-zatiq"
                     )}
                     onClick={() => setIsShowVideo(true)}
@@ -242,6 +367,7 @@ export function PremiumProductDetailPage({ product }: PremiumProductDetailPagePr
                       alt="Video thumbnail"
                       width={200}
                       height={200}
+                      sizes="90px"
                       className="w-full h-full object-cover"
                     />
                     <Play
@@ -261,8 +387,10 @@ export function PremiumProductDetailPage({ product }: PremiumProductDetailPagePr
                     }}
                     key={key}
                     className={cn(
-                      "cursor-pointer w-[90px] h-[116px] p-1 ring-[1px] ring-transparent bg-[#E4E4E7] dark:bg-transparent",
-                      key === selectedImageIndex && !isShowVideo && "ring-blue-zatiq"
+                      "cursor-pointer w-22.5 h-29 p-1 ring-[1px] ring-transparent bg-[#E4E4E7] dark:bg-transparent",
+                      key === selectedImageIndex &&
+                        !isShowVideo &&
+                        "ring-blue-zatiq"
                     )}
                   >
                     <FallbackImage
@@ -270,6 +398,7 @@ export function PremiumProductDetailPage({ product }: PremiumProductDetailPagePr
                       src={getInventoryThumbImageUrl(img)}
                       width={200}
                       height={200}
+                      sizes="90px"
                       className="w-full h-full object-cover"
                     />
                   </li>
@@ -280,9 +409,9 @@ export function PremiumProductDetailPage({ product }: PremiumProductDetailPagePr
 
           {/* Main Content */}
           <div className="xl:w-[90%] w-full pt-1">
-            <div className="w-full flex xl:flex-row flex-col items-start gap-5 xl:gap-[30px] h-full rounded-xl">
+            <div className="w-full flex xl:flex-row flex-col items-start gap-5 xl:gap-7.5 h-full rounded-xl">
               {/* Image/Video Section */}
-              <div className="w-full xl:w-[639px]">
+              <div className="w-full xl:w-160">
                 <div className="relative">
                   {/* Video Player */}
                   {isShowVideo && video_link && videoId ? (
@@ -295,7 +424,7 @@ export function PremiumProductDetailPage({ product }: PremiumProductDetailPagePr
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                         referrerPolicy="strict-origin-when-cross-origin"
                         allowFullScreen
-                        className="w-full max-h-[300px] md:max-h-[500px] object-contain transition ease-in duration-500"
+                        className="w-full max-h-75 md:max-h-125 object-contain transition ease-in duration-500"
                       />
                     </div>
                   ) : (
@@ -305,25 +434,30 @@ export function PremiumProductDetailPage({ product }: PremiumProductDetailPagePr
                         src={getDetailPageImageUrl(selectedImageUrl)}
                         width={512}
                         height={512}
-                        className="w-full max-h-[900px] object-contain transition ease-in duration-500"
+                        priority={true}
+                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 70vw, 50vw"
+                        className="w-full max-h-225 object-contain transition ease-in duration-500"
                         alt={name || "Product"}
                       />
                     )
                   )}
 
                   {/* Image Action Buttons */}
-                  {allImages.length > 0 && !isShowVideo && allowDownload && selectedImageUrl && (
-                    <div className="absolute top-2 right-2 z-10 flex gap-2">
-                      <button
-                        onClick={handleDownloadImage}
-                        className="bg-blue-zatiq/15 backdrop-blur-sm p-3 rounded-full cursor-pointer hover:bg-blue-zatiq/25 transition-all duration-200 shadow-lg"
-                        aria-label="Download image"
-                        type="button"
-                      >
-                        <Download className="text-white dark:text-gray-700 w-5 h-5 md:w-7 md:h-7" />
-                      </button>
-                    </div>
-                  )}
+                  {allImages.length > 0 &&
+                    !isShowVideo &&
+                    allowDownload &&
+                    selectedImageUrl && (
+                      <div className="absolute top-2 right-2 z-10 flex gap-2">
+                        <button
+                          onClick={handleDownloadImage}
+                          className="bg-blue-zatiq/15 backdrop-blur-sm p-3 rounded-full cursor-pointer hover:bg-blue-zatiq/25 transition-all duration-200 shadow-lg"
+                          aria-label="Download image"
+                          type="button"
+                        >
+                          <Download className="text-white dark:text-gray-700 w-5 h-5 md:w-7 md:h-7" />
+                        </button>
+                      </div>
+                    )}
 
                   {/* Mobile Thumbnail Strip */}
                   <div className="xl:hidden flex px-1">
@@ -332,7 +466,7 @@ export function PremiumProductDetailPage({ product }: PremiumProductDetailPagePr
                         {video_link && videoId && (
                           <div
                             className={cn(
-                              "w-[50px] min-w-[50px] h-[50px] sm:min-w-[75px] sm:h-[75px] sm:w-[75px] relative overflow-hidden ring ring-transparent p-1 cursor-pointer",
+                              "w-12.5 min-w-12.5 h-12.5 sm:min-w-18.75 sm:h-18.75 sm:w-18.75 relative overflow-hidden ring ring-transparent p-1 cursor-pointer",
                               isShowVideo && "ring-blue-zatiq"
                             )}
                             onClick={() => setIsShowVideo(true)}
@@ -342,6 +476,7 @@ export function PremiumProductDetailPage({ product }: PremiumProductDetailPagePr
                               alt="Video thumbnail"
                               width={200}
                               height={200}
+                              sizes="75px"
                               className="w-full h-full object-cover"
                             />
                             <Play
@@ -359,8 +494,10 @@ export function PremiumProductDetailPage({ product }: PremiumProductDetailPagePr
                             }}
                             key={key}
                             className={cn(
-                              "w-[50px] min-w-[50px] h-[50px] sm:min-w-[75px] sm:h-[75px] sm:w-[75px] relative overflow-hidden ring-3 ring-transparent p-1",
-                              key === selectedImageIndex && !isShowVideo && "ring-blue-zatiq"
+                              "w-12.5 min-w-12.5 h-12.5 sm:min-w-18.75 sm:h-18.75 sm:w-18.75 relative overflow-hidden ring-3 ring-transparent p-1",
+                              key === selectedImageIndex &&
+                                !isShowVideo &&
+                                "ring-blue-zatiq"
                             )}
                           >
                             <FallbackImage
@@ -368,6 +505,7 @@ export function PremiumProductDetailPage({ product }: PremiumProductDetailPagePr
                               src={getInventoryThumbImageUrl(img)}
                               width={200}
                               height={200}
+                              sizes="75px"
                               className="w-full h-full object-cover"
                             />
                           </li>
@@ -377,7 +515,7 @@ export function PremiumProductDetailPage({ product }: PremiumProductDetailPagePr
                   </div>
 
                   {/* Desktop Product Details & Description */}
-                  <div className="text-sm mt-[40px] hidden xl:block">
+                  <div className="text-sm mt-10 hidden xl:block">
                     {/* Custom Fields */}
                     {(custom_fields || warranty) && (
                       <div className="bg-blue-zatiq/10 dark:bg-black-18 border border-blue-zatiq/50 dark:border-gray-700 px-5 py-5 text-black-1.2 dark:text-white mb-4">
@@ -392,7 +530,11 @@ export function PremiumProductDetailPage({ product }: PremiumProductDetailPagePr
                                   {key}
                                 </div>
                                 <div className="col-span-3 text-right text-[#374151] dark:text-gray-100">
-                                  {(custom_fields as Record<string, string>)[key]}
+                                  {
+                                    (custom_fields as Record<string, string>)[
+                                      key
+                                    ]
+                                  }
                                 </div>
                               </li>
                             ))}
@@ -425,7 +567,7 @@ export function PremiumProductDetailPage({ product }: PremiumProductDetailPagePr
 
               {/* Product Info Section */}
               <div className="flex flex-col flex-1 w-full">
-                <div className="grid gap-[18px]">
+                <div className="grid gap-4.5">
                   {/* Title */}
                   <h1 className="text-[20px] md:text-4xl text-blue-zatiq capitalize">
                     {name}
@@ -439,7 +581,7 @@ export function PremiumProductDetailPage({ product }: PremiumProductDetailPagePr
                   )}
 
                   {/* Pricing */}
-                  <div className="flex flex-col gap-[30px]">
+                  <div className="flex flex-col gap-7.5">
                     <div className="flex items-end gap-2">
                       <ProductPricing
                         currentPrice={currentPrice}
@@ -459,7 +601,7 @@ export function PremiumProductDetailPage({ product }: PremiumProductDetailPagePr
                     )}
 
                     {/* Already in Cart Notice */}
-                    <div className="flex flex-col gap-[18px]">
+                    <div className="flex flex-col gap-4.5">
                       {cartQty > 0 && (
                         <div>
                           <p className="text-sm text-blue-zatiq font-medium">
@@ -600,6 +742,7 @@ export function PremiumProductDetailPage({ product }: PremiumProductDetailPagePr
                 <PremiumProductCard
                   key={relatedProduct.id}
                   product={relatedProduct}
+                  onSelectProduct={() => setSelectedRelatedProduct(relatedProduct)}
                   onNavigate={() => navigateProductDetails(relatedProduct.id)}
                 />
               ))}

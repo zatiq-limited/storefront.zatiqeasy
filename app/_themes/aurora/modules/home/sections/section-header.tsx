@@ -2,6 +2,8 @@
 
 import React from "react";
 import { cn } from "@/lib/utils";
+import { getThemeData } from "@/lib/utils/theme-constants";
+import { useShopStore } from "@/stores/shopStore";
 
 interface SectionHeaderProps {
   text: string;
@@ -9,6 +11,11 @@ interface SectionHeaderProps {
 }
 
 export function SectionHeader({ text, className }: SectionHeaderProps) {
+  const { shopDetails } = useShopStore();
+
+  // Get theme data for fontFamily
+  const themeData = getThemeData(shopDetails?.shop_theme?.theme_name);
+
   return (
     <h2
       className={cn(
@@ -17,6 +24,7 @@ export function SectionHeader({ text, className }: SectionHeaderProps) {
         "mb-12 md:mb-16 xl:mb-21",
         className
       )}
+      style={{ fontFamily: themeData.secondaryFont || themeData.fontFamily }}
     >
       {text}
     </h2>

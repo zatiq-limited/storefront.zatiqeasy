@@ -18,7 +18,10 @@ function extractVideoId(url: string): string | null {
   return match ? match[1] : null;
 }
 
-export function ArcadiaProductVideo({ content, onBuyNow }: ArcadiaProductVideoProps) {
+export function ArcadiaProductVideo({
+  content,
+  onBuyNow,
+}: ArcadiaProductVideoProps) {
   // Support both single video and array of videos
   const productVideo = Array.isArray(content)
     ? content.find((v) => v.type === "FEATURED") || content[0]
@@ -29,7 +32,8 @@ export function ArcadiaProductVideo({ content, onBuyNow }: ArcadiaProductVideoPr
   const [error, setError] = useState<string | null>(null);
 
   const videoId = useMemo(
-    () => (productVideo?.video_url ? extractVideoId(productVideo.video_url) : null),
+    () =>
+      productVideo?.video_url ? extractVideoId(productVideo.video_url) : null,
     [productVideo?.video_url]
   );
 
@@ -53,8 +57,8 @@ export function ArcadiaProductVideo({ content, onBuyNow }: ArcadiaProductVideoPr
   if (!productVideo?.title && !videoId) return null;
 
   return (
-    <div className="w-full bg-gradient-to-b from-white to-violet-50 py-16 md:py-20 xl:py-24">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="w-full bg-linear-to-b from-white to-violet-50 py-16 md:py-20 xl:py-24">
+      <div className="container px-4 sm:px-6 lg:px-8">
         {/* Title with animated underline */}
         {productVideo?.title && (
           <div className="text-center mb-12 md:mb-16 cursor-pointer">

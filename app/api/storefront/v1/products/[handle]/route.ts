@@ -16,8 +16,11 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     // Note: This endpoint does NOT require encryption (GET request)
     const { data } = await apiClient.get(`/api/v1/live/inventory/${handle}`);
 
+    // Type assertion for API response
+    const responseData = data as { data?: Record<string, unknown> } | undefined;
+
     // Check if product data exists
-    if (!data?.data) {
+    if (!responseData?.data) {
       return NextResponse.json(
         {
           success: false,
@@ -36,7 +39,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       {
         success: true,
         data: {
-          product: data.data,
+          product: responseData.data,
         },
       },
       {

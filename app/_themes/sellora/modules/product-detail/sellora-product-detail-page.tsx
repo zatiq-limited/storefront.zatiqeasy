@@ -1,15 +1,20 @@
 "use client";
 
-import React, { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
-import { Minus, Plus, ZoomIn, Download, Play } from "lucide-react";
+import { Minus, Plus, ZoomIn, Download } from "lucide-react";
 import { useShopStore } from "@/stores/shopStore";
-import { useCartStore, selectTotalItems, selectSubtotal } from "@/stores/cartStore";
+import {
+  useCartStore,
+  selectTotalItems,
+  selectSubtotal,
+} from "@/stores/cartStore";
 import { FallbackImage } from "@/components/ui/fallback-image";
 import { CartFloatingBtn } from "@/components/features/cart/cart-floating-btn";
 import { ImageLightbox } from "@/components/products/image-lightbox";
 import { cn, titleCase, getDetailPageImageUrl } from "@/lib/utils";
+import { useProductDetails } from "@/hooks";
 import {
   ProductPricing,
   ProductVariants,
@@ -17,11 +22,10 @@ import {
   CustomerReviews,
   RelatedProducts,
 } from "./sections";
-import type { Product } from "@/stores/productsStore";
 import type { VariantsState, VariantState } from "@/types/cart.types";
 
 interface SelloraProductDetailPageProps {
-  product: Product;
+  handle: string;
 }
 
 // Extract YouTube video ID from URL
@@ -33,42 +37,54 @@ function extractVideoId(url: string): string | null {
   return match ? match[1] : null;
 }
 
-export function SelloraProductDetailPage({ product }: SelloraProductDetailPageProps) {
+// Loading component
+const LoadingFallback = () => (
+  <div className="min-h-screen flex items-center justify-center">
+    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600" />
+  </div>
+);
+
+export function SelloraProductDetailPage({
+  handle,
+}: SelloraProductDetailPageProps) {
   const router = useRouter();
   const { t } = useTranslation();
   const { shopDetails } = useShopStore();
-  const { addProduct, getProductsByInventoryId } = useCartStore();
+  const { addProduct, removeProduct } = useCartStore();
   const totalCartItems = useCartStore(selectTotalItems);
   const totalPrice = useCartStore(selectSubtotal);
+
+  // Fetch product details using hook
+  const { product, isLoading, error } = useProductDetails(handle);
 
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [selectedVariants, setSelectedVariants] = useState<VariantsState>({});
 
-  const {
-    id,
-    name,
-    price = 0,
-    old_price,
-    images = [],
-    image_url,
-    description,
-    variant_types = [],
-    custom_fields,
-    warranty,
-    video_link,
-    reviews,
-    categories = [],
-    image_variant_type_id,
-  } = product;
+  // Extract product properties with defaults - wrap in useMemo for performance
+  const id = useMemo(() => product?.id, [product?.id]);
+  const name = useMemo(() => product?.name || "", [product?.name]);
+  const price = useMemo(() => product?.price ?? 0, [product?.price]);
+  const old_price = useMemo(() => product?.old_price, [product?.old_price]);
+  const images = useMemo(() => product?.images ?? [], [product?.images]);
+  const image_url = useMemo(() => product?.image_url, [product?.image_url]);
+  const variant_types = useMemo(() => product?.variant_types ?? [], [product?.variant_types]);
+  const video_link = useMemo(() => product?.video_link, [product?.video_link]);
+  const reviews = useMemo(() => product?.reviews, [product?.reviews]);
+  const categories = useMemo(() => product?.categories ?? [], [product?.categories]);
+  const image_variant_type_id = useMemo(() => product?.image_variant_type_id, [product?.image_variant_type_id]);
 
   const baseUrl = shopDetails?.baseUrl || "";
   const hasItems = totalCartItems > 0;
 
   // Check if download is allowed
   const allowDownload = Boolean(
-    (shopDetails?.metadata?.settings?.shop_settings as { enable_product_image_download?: boolean } | undefined)?.enable_product_image_download
+    (
+      shopDetails?.metadata?.settings?.shop_settings as
+        | { enable_product_image_download?: boolean }
+        | undefined
+    )?.enable_product_image_download
   );
 
   // All product images
@@ -88,20 +104,65 @@ export function SelloraProductDetailPage({ product }: SelloraProductDetailPagePr
   // Video ID for YouTube
   const videoId = useMemo(() => extractVideoId(video_link || ""), [video_link]);
 
-  // Check if product is in cart
-  const cartProducts = getProductsByInventoryId(Number(id));
+  // Get cart products for this product - subscribe to products state to track cart changes
+  // Then filter to get only this product's cart items (reactive approach like basic/premium themes)
+  const allCartProducts = useCartStore((state) => state.products);
+  const cartProducts = useMemo(
+    () =>
+      id
+        ? Object.values(allCartProducts).filter((p) => p.id === Number(id))
+        : [],
+    [id, allCartProducts]
+  );
   const isInCart = cartProducts.length > 0;
-  const cartQty = cartProducts.reduce((acc, p) => acc + (p.qty || 0), 0);
+
+  // For non-variant products, find the cart item directly
+  // For variant products, find the matching variant combination
+  const matchingCartItem = useMemo(() => {
+    if (cartProducts.length === 0) return null;
+    // For non-variant products, return first cart item
+    if (!variant_types || variant_types.length === 0) {
+      return cartProducts[0];
+    }
+    // For variant products, find matching selected variants
+    return (
+      cartProducts.find((item) => {
+        const itemVariants = item.selectedVariants || {};
+        const selectedKeys = Object.keys(selectedVariants);
+        const itemKeys = Object.keys(itemVariants);
+        if (selectedKeys.length !== itemKeys.length) return false;
+        return selectedKeys.every((key) => {
+          const numKey = Number(key);
+          return (
+            selectedVariants[numKey]?.variant_id ===
+            itemVariants[numKey]?.variant_id
+          );
+        });
+      }) || null
+    );
+  }, [cartProducts, selectedVariants, variant_types]);
+
+  // Sync quantity with matching cart item
+  // Use matchingCartItem?.qty in dependency to detect actual value changes
+  const matchingCartQty = matchingCartItem?.qty ?? 0;
+  useEffect(() => {
+    if (matchingCartQty > 0) {
+      setQuantity(matchingCartQty);
+    } else {
+      setQuantity(1);
+    }
+  }, [matchingCartQty]);
 
   // Check stock status
-  const isStockOut = product.quantity === 0;
-  const isStockNotAvailable = isStockOut || quantity >= (product.quantity || 0);
+  const isStockOut = product?.quantity === 0;
+  const isStockNotAvailable =
+    isStockOut || quantity >= (product?.quantity || 0);
 
   // Calculate pricing
   const currentPrice = price || 0;
   const regularPrice = old_price || price || 0;
   const hasSavePrice = (old_price ?? 0) > (price ?? 0);
-  const savePrice = hasSavePrice ? (old_price! - price!) : 0;
+  const savePrice = hasSavePrice ? old_price! - price! : 0;
 
   // Category IDs for related products
   const categoryIds = useMemo(() => categories.map((c) => c.id), [categories]);
@@ -117,20 +178,61 @@ export function SelloraProductDetailPage({ product }: SelloraProductDetailPagePr
     []
   );
 
+  // Restore selected variants from cart (when product page loads)
+  // This ensures the variants that were added to cart are pre-selected
+  useEffect(() => {
+    if (!product || !variant_types || variant_types.length === 0) {
+      return;
+    }
+
+    // Find the first cart item for this product
+    const firstCartItem = cartProducts[0];
+    if (!firstCartItem?.selectedVariants) {
+      return;
+    }
+
+    // Restore each variant from the cart
+    Object.entries(firstCartItem.selectedVariants).forEach(([variantTypeId, variantState]) => {
+      const typeId = Number(variantTypeId);
+      const variantId = variantState.variant_id;
+
+      // Find the variant in the product's variant types
+      const variantType = variant_types.find((vt) => vt.id === typeId);
+      if (variantType?.variants) {
+        const variant = variantType.variants.find((v) => v.id === variantId);
+        if (variant) {
+          handleVariantSelect(typeId, {
+            variant_type_id: variantState.variant_type_id,
+            variant_id: variantId,
+            price: variantState.price || 0,
+            variant_name: variantState.variant_name || variant.name || "",
+            image_url: variant.image_url || undefined,
+          });
+        }
+      }
+    });
+  }, [product, cartProducts, variant_types, handleVariantSelect]);
+
   // Handle quantity change
   const handleQuantityChange = useCallback(
     (delta: number) => {
       const newQty = quantity + delta;
-      if (newQty >= 1 && newQty <= (product.quantity || 999)) {
+      if (newQty >= 1 && newQty <= (product?.quantity || 999)) {
         setQuantity(newQty);
       }
     },
-    [quantity, product.quantity]
+    [quantity, product?.quantity]
   );
 
   // Handle add to cart
   const handleAddToCart = useCallback(() => {
-    if (isStockOut) return;
+    if (isStockOut || !product) return;
+
+    // For products already in cart (matching selected variants), remove old cart item first
+    // Same logic as premium theme
+    if (matchingCartItem) {
+      removeProduct(matchingCartItem.cartId);
+    }
 
     const productRecord = product as unknown as Record<string, unknown>;
     addProduct({
@@ -153,6 +255,8 @@ export function SelloraProductDetailPage({ product }: SelloraProductDetailPagePr
     image_url,
     quantity,
     selectedVariants,
+    matchingCartItem,
+    removeProduct,
     addProduct,
   ]);
 
@@ -168,53 +272,80 @@ export function SelloraProductDetailPage({ product }: SelloraProductDetailPagePr
   }, [isStockOut, isInCart, handleAddToCart, router, baseUrl]);
 
   // Handle download image
-  const handleDownloadImage = useCallback(async (imageUrl: string, index: number) => {
-    if (!allowDownload || !imageUrl) return;
+  const handleDownloadImage = useCallback(
+    async (imageUrl: string, index: number) => {
+      if (!allowDownload || !imageUrl) return;
 
-    try {
-      const proxyUrl = `/api/download-image?url=${encodeURIComponent(imageUrl)}`;
-      const response = await fetch(proxyUrl);
+      try {
+        const proxyUrl = `/api/download-image?url=${encodeURIComponent(
+          imageUrl
+        )}`;
+        const response = await fetch(proxyUrl);
 
-      if (!response.ok) throw new Error("Download failed");
+        if (!response.ok) throw new Error("Download failed");
 
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `${name}-image-${index + 1}.jpg`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error("Download failed:", error);
-    }
-  }, [allowDownload, name]);
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `${name}-image-${index + 1}.jpg`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      } catch (error) {
+        console.error("Download failed:", error);
+      }
+    },
+    [allowDownload, name]
+  );
 
   // Action button label
   const actionButtonLabel = isInCart ? t("update_cart") : t("add_to_cart");
+
+  // Show loading state - AFTER all hooks
+  if (isLoading || !product) {
+    return <LoadingFallback />;
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+            Error Loading Product
+          </h2>
+          <p className="text-gray-600">{(error as Error).message}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
       {/* Image Lightbox */}
       <ImageLightbox
-        product={{ images: allImages.map((img) => getDetailPageImageUrl(img)), name: name || "" }}
+        product={{
+          images: allImages.map((img) => getDetailPageImageUrl(img)),
+          name: name || "",
+        }}
         open={lightboxOpen}
         setOpen={setLightboxOpen}
         selectedImageIdx={selectedImageIndex}
       />
 
       {/* Main Product Section */}
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-8 px-3 sm:px-4 xl:px-0 pt-10 sm:pt-20 lg:items-start">
+      <div className="container grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-8 pt-10 sm:pt-20 lg:items-start">
         {/* Left Side - Images Grid */}
-        <div className="lg:col-span-3 py-6 sm:py-8 lg:py-10">
+        <div className="lg:col-span-3 flex flex-col lg:flex-row gap-3 sm:gap-4 py-6 sm:py-8 lg:py-10">
           {allImages.length > 0 && (
             <div className="grid grid-cols-2 gap-3 sm:gap-5">
               {allImages.map((img, idx) => (
                 <div
                   key={idx}
                   className={cn(
-                    "relative w-full aspect-[3/4] bg-gray-100 dark:bg-gray-800 overflow-hidden cursor-pointer group transition-all duration-200",
+                    "relative w-full aspect-3/4 bg-gray-100 dark:bg-gray-800 overflow-hidden cursor-pointer group transition-all duration-200",
                     selectedImageIndex === idx &&
                       "ring-2 ring-blue-500 ring-offset-2 dark:ring-offset-gray-900"
                   )}
@@ -280,28 +411,30 @@ export function SelloraProductDetailPage({ product }: SelloraProductDetailPagePr
         </div>
 
         {/* Right Side - Product Info (Sticky) */}
-        <div className="lg:col-span-2 px-0 lg:px-8 xl:px-12 flex flex-col lg:sticky lg:top-20 lg:self-start">
+        <div className="lg:col-span-2 px-0 lg:px-12 xl:px-20 flex flex-col lg:sticky lg:top-20 lg:self-start">
           {/* Category Name */}
-          {categories[0]?.name && (
-            <p className="text-xs sm:text-sm font-normal text-gray-500 dark:text-gray-400 mb-1.5 sm:mb-2">
-              {categories[0].name}
-            </p>
-          )}
+          <div className="mb-3 sm:mb-4">
+            {categories[0]?.name && (
+              <p className="text-xs sm:text-sm font-normal text-[#9C9B9B] mb-1.5 sm:mb-2 sm:pt-2">
+                {categories[0].name}
+              </p>
+            )}
 
-          {/* Product Title */}
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold text-foreground mb-3">
-            {titleCase(name)}
-          </h1>
+            {/* Product Title */}
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold text-foreground mb-2">
+              {titleCase(name)}
+            </h1>
 
-          {/* Stock Out Badge */}
-          {isStockOut && (
-            <span className="inline-block text-xs sm:text-sm font-medium text-red-500 bg-red-50 dark:bg-red-900/20 px-2.5 sm:px-3 py-1 rounded mb-3">
-              {t("out_of_stock") || "Out of stock"}
-            </span>
-          )}
+            {/* Stock Out Badge */}
+            {isStockOut && (
+              <span className="inline-block text-xs sm:text-sm font-medium text-red-500 bg-red-50 dark:bg-red-900/20 px-2.5 sm:px-3 py-1 rounded">
+                {t("out_of_stock") || "Out of stock"}
+              </span>
+            )}
+          </div>
 
           {/* Pricing */}
-          <div className="mb-5 sm:mb-6">
+          <div className="mb-4 sm:mb-5 md:mb-8">
             <ProductPricing
               currentPrice={currentPrice}
               regularPrice={regularPrice}
@@ -312,18 +445,9 @@ export function SelloraProductDetailPage({ product }: SelloraProductDetailPagePr
             />
           </div>
 
-          {/* Already in Cart Notice */}
-          {cartQty > 0 && (
-            <div className="mb-4 p-2.5 sm:p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-              <p className="text-xs sm:text-sm text-blue-600 dark:text-blue-400 font-medium">
-                ✓ {t("already_in_cart") || "Already in cart"} ({cartQty})
-              </p>
-            </div>
-          )}
-
           {/* Product Variants */}
           {variant_types.length > 0 && (
-            <div className="mb-6 sm:mb-7">
+            <div className="mb-6 sm:mb-7 md:mb-8">
               <ProductVariants
                 variantTypes={variant_types}
                 selectedVariants={selectedVariants}
@@ -336,7 +460,7 @@ export function SelloraProductDetailPage({ product }: SelloraProductDetailPagePr
           )}
 
           {/* Quantity and Actions */}
-          <div className="mb-4 sm:mb-5">
+          <div className="mb-4 sm:mb-5 md:mb-6">
             <div className="flex gap-2 sm:gap-3 mb-2 sm:mb-3">
               {/* Quantity Control */}
               <div className="flex-1 flex items-center justify-between min-h-12 sm:min-h-14 px-4 bg-transparent border-2 border-gray-300 dark:border-gray-700 rounded-md">
@@ -398,48 +522,61 @@ export function SelloraProductDetailPage({ product }: SelloraProductDetailPagePr
 
           {/* Description & Details Accordion */}
           <div className="pb-6 sm:pb-8 lg:pb-10">
-            <DescriptionDetails
-              description={description}
-              customFields={custom_fields as Record<string, string>}
-              warranty={warranty}
-            />
+            <DescriptionDetails product={product} />
           </div>
         </div>
       </div>
 
       {/* Product Video Section */}
-      {video_link && videoId && (
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 xl:px-0 py-8 sm:py-12">
-          <h2 className="text-xl sm:text-2xl font-semibold text-foreground mb-4 sm:mb-6">
+      {video_link && (
+        <div className="container py-6 sm:py-8 lg:py-10">
+          <h2 className="text-2xl md:text-3xl font-normal text-black dark:text-white mb-4 sm:mb-6">
             {t("product_video") || "Product Video"}
           </h2>
-          <div className="relative w-full aspect-video bg-black rounded-lg overflow-hidden">
-            <iframe
-              width="100%"
-              height="100%"
-              src={`https://www.youtube.com/embed/${videoId}?rel=0`}
-              title={name || "Product video"}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerPolicy="strict-origin-when-cross-origin"
-              allowFullScreen
-              className="absolute inset-0"
-            />
+          <div className="relative max-w-7xl mx-auto aspect-video bg-black rounded-lg overflow-hidden">
+            {videoId ? (
+              <iframe
+                width="100%"
+                height="100%"
+                src={`https://www.youtube.com/embed/${videoId}?rel=0`}
+                title={name || "Product video"}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+                className="absolute inset-0"
+              />
+            ) : (
+              <video
+                src={video_link}
+                controls
+                className="w-full h-full object-contain"
+              />
+            )}
           </div>
         </div>
       )}
 
       {/* Customer Reviews */}
       {reviews && reviews.length > 0 && (
-        <div className="py-6 sm:py-8 lg:py-10 px-3 sm:px-4 xl:px-0">
-          <CustomerReviews reviews={reviews as { name?: string; description?: string; images?: string[]; rating?: number; created_at?: string }[]} />
+        <div className="container py-6 sm:py-8 lg:py-10">
+          <CustomerReviews
+            reviews={
+              reviews as {
+                name?: string;
+                description?: string;
+                images?: string[];
+                rating?: number;
+                created_at?: string;
+              }[]
+            }
+          />
         </div>
       )}
 
       {/* Related Products */}
-      <RelatedProducts
-        currentProductId={id}
-        categoryIds={categoryIds}
-      />
+      <div className="px-4 sm:px-6 lg:px-8">
+        <RelatedProducts currentProductId={id!} categoryIds={categoryIds} />
+      </div>
 
       {/* Floating Cart Button */}
       <CartFloatingBtn

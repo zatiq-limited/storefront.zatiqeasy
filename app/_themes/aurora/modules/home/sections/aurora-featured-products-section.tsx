@@ -6,7 +6,7 @@ import { useShopStore } from "@/stores/shopStore";
 import { GridContainer } from "../../../components/core";
 import { AuroraProductCard } from "../../../components/cards";
 import SectionHeader from "./section-header";
-import ViewAllButton from "./view-all-button";
+import ViewAllButton from "../../../../../../components/shared/view-all-button";
 import type { Product } from "@/stores/productsStore";
 
 interface AuroraFeaturedProductsSectionProps {

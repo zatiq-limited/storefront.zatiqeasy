@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback } from "react";
+import { useCallback } from "react";
 import { cn, getInventoryThumbImageUrl } from "@/lib/utils";
 import { FallbackImage } from "@/components/ui/fallback-image";
 import type { VariantType, Variant } from "@/stores/productsStore";
@@ -9,11 +9,25 @@ import type { VariantsState, VariantState } from "@/types/cart.types";
 interface ProductVariantsProps {
   variantTypes: VariantType[];
   selectedVariants: VariantsState;
-  onSelectVariant: (variantTypeId: number | string, variantState: VariantState) => void;
+  onSelectVariant: (
+    variantTypeId: number | string,
+    variantState: VariantState
+  ) => void;
   onImageChange?: (index: number) => void;
   images?: string[];
   imageVariantTypeId?: number;
 }
+
+// Normalize URL for comparison (remove query params, trailing slashes, protocol differences)
+const normalizeUrl = (url?: string | null): string => {
+  if (!url) return "";
+  try {
+    const cleanUrl = url.split("?")[0].split("#")[0];
+    return cleanUrl.replace(/\/$/, "").toLowerCase();
+  } catch {
+    return url.toLowerCase();
+  }
+};
 
 export function ProductVariants({
   variantTypes,
@@ -44,8 +58,8 @@ export function ProductVariants({
         variant.image_url &&
         onImageChange
       ) {
-        const imageIndex = images.findIndex((img) =>
-          img.includes(variant.image_url!)
+        const imageIndex = images.findIndex(
+          (img) => normalizeUrl(img) === normalizeUrl(variant.image_url)
         );
         if (imageIndex !== -1) {
           onImageChange(imageIndex);
@@ -60,47 +74,43 @@ export function ProductVariants({
   }
 
   return (
-    <div className="space-y-5">
+    <ul className="flex flex-col gap-4.5">
       {variantTypes.map((variantType) => {
         const selectedVariant = selectedVariants[variantType.id];
         const isImageVariant = imageVariantTypeId === variantType.id;
 
+        if (!variantType.variants?.length) return null;
+
         return (
-          <div key={variantType.id} className="space-y-2">
+          <li key={variantType.id} className="flex flex-col gap-3">
             {/* Variant Type Label */}
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-foreground">
-                {variantType.title}:
-              </span>
-              {selectedVariant && (
-                <span className="text-sm text-muted-foreground">
-                  {selectedVariant.variant_name}
-                </span>
-              )}
-            </div>
+            <label className="text-sm sm:text-base font-[450] text-[#4B5563] dark:text-gray-300 capitalize">
+              {variantType.title}
+            </label>
 
             {/* Variant Options */}
-            <div className="flex flex-wrap gap-2">
-              {variantType.variants?.map((variant) => {
+            <ul className="flex gap-3 flex-wrap">
+              {variantType.variants.map((variant) => {
                 const isSelected = selectedVariant?.variant_id === variant.id;
                 const hasImage = Boolean(variant.image_url);
 
                 return (
-                  <button
+                  <li
+                    role="button"
                     key={variant.id}
                     onClick={() => handleVariantSelect(variantType, variant)}
                     className={cn(
-                      "relative transition-all duration-200",
+                      "cursor-pointer transition-colors duration-150 flex items-center justify-center font-medium",
                       isImageVariant && hasImage
-                        ? "w-14 h-14 sm:w-16 sm:h-16 p-0.5 rounded-md overflow-hidden"
-                        : "px-4 py-2 text-sm font-medium rounded-md border",
+                        ? "w-14 h-14 sm:w-16 sm:h-16 p-0.5 rounded-md overflow-hidden border"
+                        : "lg:pb-2 lg:pt-2.25 lg:px-6 px-6 pb-2 pt-2.25 rounded-full border-[1.2px] border-[#D1D5DB] dark:border-gray-500 bg-white dark:bg-black-18 text-black-1.2 dark:text-gray-200",
                       isSelected
                         ? isImageVariant && hasImage
-                          ? "ring-2 ring-foreground ring-offset-2"
-                          : "bg-foreground text-background border-foreground"
+                          ? "ring-2 ring-blue-zatiq ring-offset-2 dark:ring-offset-gray-900"
+                          : "border-2 border-blue-zatiq/50 dark:border-blue-zatiq/50 bg-blue-zatiq/10 dark:bg-blue-zatiq/10"
                         : isImageVariant && hasImage
-                        ? "border border-gray-200 dark:border-gray-700 hover:border-foreground"
-                        : "bg-transparent text-foreground border-gray-300 dark:border-gray-600 hover:border-foreground"
+                          ? "border-gray-200 dark:border-gray-700 hover:border-foreground"
+                          : ""
                     )}
                   >
                     {isImageVariant && hasImage ? (
@@ -112,16 +122,18 @@ export function ProductVariants({
                         className="w-full h-full object-cover rounded"
                       />
                     ) : (
-                      variant.name
+                      <span className="leading-none text-base text-[#4B5563] dark:text-gray-300 font-medium capitalize">
+                        {variant.name}
+                      </span>
                     )}
-                  </button>
+                  </li>
                 );
               })}
-            </div>
-          </div>
+            </ul>
+          </li>
         );
       })}
-    </div>
+    </ul>
   );
 }
 

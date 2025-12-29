@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import { useRef } from "react";
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation } from "swiper/modules";
@@ -8,6 +8,7 @@ import type { Swiper as SwiperType } from "swiper";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useShopStore } from "@/stores/shopStore";
 import SidebarCategory from "@/components/features/category/sidebar-category";
+import TrustCard from "../../../components/trust-card";
 
 // Import Swiper styles
 import "swiper/css";
@@ -25,13 +26,13 @@ export function LuxuraHeroSection() {
   return (
     <div className="flex gap-6 items-stretch">
       {/* Sidebar Categories - Desktop Only */}
-      <div className="hidden lg:block w-[25%] bg-white dark:bg-black-27 lg:h-[420px] xl:h-[600px] overflow-auto shadow-md border dark:border-gray-700 rounded-xl">
+      <div className="hidden lg:block w-[25%] bg-white dark:bg-black-27 lg:h-105 xl:h-150 overflow-auto shadow-md border dark:border-gray-700 rounded-xl">
         <SidebarCategory />
       </div>
 
       {/* Hero Carousel */}
       <div className="w-full lg:max-w-[75%] overflow-hidden">
-        <div className="w-full bg-blue-zatiq h-[280px] sm:h-[320px] md:h-[360px] lg:h-[420px] xl:h-[600px] rounded-xl relative">
+        <div className="w-full bg-blue-zatiq h-70 sm:h-80 md:h-90 lg:h-105 xl:h-150 rounded-xl relative">
           {carousels.length > 0 ? (
             <>
               <Swiper
@@ -64,7 +65,7 @@ export function LuxuraHeroSection() {
                     <div className="w-full h-full flex items-center relative">
                       {/* Text Overlay */}
                       {(item.title || item.sub_title) && (
-                        <div className="w-1/2 p-3 md:p-5 lg:p-8 xl:pl-12 relative z-20 h-full flex flex-col justify-center bg-gradient-to-r from-white/50 to-transparent">
+                        <div className="w-1/2 p-3 md:p-5 lg:p-8 xl:pl-12 relative z-20 h-full flex flex-col justify-center bg-linear-to-r from-white/50 to-transparent">
                           {item.title && (
                             <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold leading-none line-clamp-2 text-gray-900">
                               {item.title}
@@ -127,10 +128,15 @@ export function LuxuraHeroSection() {
               )}
             </>
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl">
+            <div className="w-full h-full flex items-center justify-center bg-linear-to-br from-blue-400 to-blue-600 rounded-xl">
               <p className="text-white text-xl font-medium">Welcome to {shopDetails?.shop_name}</p>
             </div>
           )}
+        </div>
+
+        {/* Trust Card */}
+        <div className="mt-3 md:mt-4 xl:mt-5">
+          <TrustCard isWide />
         </div>
       </div>
     </div>

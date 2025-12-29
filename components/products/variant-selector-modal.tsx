@@ -54,11 +54,12 @@ export function VariantSelectorModal({
   const existingCartProduct = useMemo(() => {
     return cartProducts.find((cartProduct) => {
       const selectedKeys = Object.keys(selectedVariants);
-      const cartKeys = Object.keys(cartProduct.selectedVariants);
+      const cartKeys = Object.keys(cartProduct.selectedVariants || {});
       if (selectedKeys.length !== cartKeys.length) return false;
+      if (selectedKeys.length === 0) return true; // Both have no variants
       return selectedKeys.every(
         (key) =>
-          cartProduct.selectedVariants[key]?.variant_id ===
+          cartProduct.selectedVariants?.[key]?.variant_id ===
           selectedVariants[key]?.variant_id
       );
     });
@@ -85,35 +86,37 @@ export function VariantSelectorModal({
         }
       });
 
-      // If the product with this variant selection already exists in cart, use that state
-      if (existingCartProduct) {
+      // Use the first cart product for this inventory (if any) as the initial state
+      // This ensures we start with whatever variant is already in cart
+      const firstCartProduct = cartProducts[0];
+      if (firstCartProduct) {
         setSelectedVariants(
-          existingCartProduct.selectedVariants &&
-            Object.keys(existingCartProduct.selectedVariants).length > 0
-            ? existingCartProduct.selectedVariants
+          firstCartProduct.selectedVariants &&
+            Object.keys(firstCartProduct.selectedVariants).length > 0
+            ? firstCartProduct.selectedVariants
             : defaultVariants
         );
-        setQty(existingCartProduct.qty || 1);
-        return;
+        setQty(firstCartProduct.qty || 1);
+      } else {
+        setSelectedVariants(defaultVariants);
+        setQty(1);
       }
-
-      setSelectedVariants(defaultVariants);
-      setQty(1);
     };
 
     initializeState();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen, product?.id, existingCartProduct?.cartId]);
+  }, [isOpen, product?.id, cartProducts]);
 
-  // Sync quantity if cart hydration finishes after initial render while modal is open
+  // Sync quantity when variants change to match cart
   useEffect(() => {
-    if (!isOpen || !existingCartProduct) return;
-    setQty(existingCartProduct.qty || 1);
-    if (
-      existingCartProduct.selectedVariants &&
-      Object.keys(existingCartProduct.selectedVariants).length > 0
-    ) {
-      setSelectedVariants(existingCartProduct.selectedVariants);
+    if (!isOpen) return;
+
+    if (existingCartProduct) {
+      // Product with this variant combination exists in cart - use its quantity
+      setQty(existingCartProduct.qty || 1);
+    } else {
+      // No product with this variant combination in cart - reset to 1
+      setQty(1);
     }
   }, [isOpen, existingCartProduct]);
 

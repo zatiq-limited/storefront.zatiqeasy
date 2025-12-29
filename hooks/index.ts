@@ -22,3 +22,9 @@ export * from "./usePriceFormatting";
 // Landing page hooks
 export * from "./useLandingPage";
 export * from "./useCategoryProducts";
+
+// Shop custom pages
+export * from "./useShopCustomPages";
+
+// Utility hooks
+export * from "./use-media-query";

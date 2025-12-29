@@ -26,7 +26,7 @@ export const shopService = {
       }
       return null;
     } catch (error) {
-      if (process.env.NODE_ENV === "development") {
+      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV") {
         console.error("Error fetching shop profile:", error);
       }
       return null;
@@ -59,7 +59,7 @@ export const shopService = {
       }
       return null;
     } catch (error) {
-      if (process.env.NODE_ENV === "development") {
+      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV") {
         console.error("Error fetching shop products:", error);
       }
       return null;
@@ -91,7 +91,7 @@ export const shopService = {
       }
       return null;
     } catch (error) {
-      if (process.env.NODE_ENV === "development") {
+      if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV") {
         console.error("Error fetching shop categories:", error);
       }
       return null;

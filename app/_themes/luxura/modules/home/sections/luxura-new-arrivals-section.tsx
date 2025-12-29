@@ -20,8 +20,6 @@ export function LuxuraNewArrivalsSection({
   const { t } = useTranslation();
   const { shopDetails } = useShopStore();
 
-  const baseUrl = shopDetails?.baseUrl || "";
-
   // Get new arrivals from shop theme
   const newArrivals: Product[] =
     (shopDetails?.shop_theme?.new_arrival_inventories as unknown as Product[])?.slice(0, 8) ||
@@ -35,8 +33,7 @@ export function LuxuraNewArrivalsSection({
     <div className="w-[95%] md:w-[90%] lg:w-[78%] mx-auto">
       <SectionHeader
         text={t("new_arrivals")}
-        viewAllLink={`${baseUrl}/products`}
-        showViewAll={true}
+        link="/products"
       />
 
       <GridContainer>

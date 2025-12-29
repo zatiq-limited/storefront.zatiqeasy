@@ -60,6 +60,7 @@ export interface Category {
   image_url?: string;
   parent_id?: number | string | null;
   sub_categories?: Category[];
+  serial?: number;
 }
 
 export interface VariantType {

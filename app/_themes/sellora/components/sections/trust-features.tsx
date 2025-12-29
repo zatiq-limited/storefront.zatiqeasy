@@ -11,7 +11,8 @@ export function TrustFeaturesBar() {
     {
       icon: ShieldCheck,
       title: t("shop_with_confidence") || "Shop with Confidence",
-      description: t("trusted_by_happy_customers") || "Trusted by happy customers",
+      description:
+        t("trusted_by_happy_customers") || "Trusted by happy customers",
     },
     {
       icon: MessagesSquare,
@@ -21,18 +22,21 @@ export function TrustFeaturesBar() {
     {
       icon: Tags,
       title: t("trusted_online_store") || "Trusted Online Store",
-      description: t("quality_products_expert_support") || "Quality products & expert support",
+      description:
+        t("quality_products_expert_support") ||
+        "Quality products & expert support",
     },
     {
       icon: Truck,
       title: t("shop_smart_save_more") || "Shop Smart, Save More",
-      description: t("exclusive_deals_top_quality") || "Exclusive deals & top quality",
+      description:
+        t("exclusive_deals_top_quality") || "Exclusive deals & top quality",
     },
   ];
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8 bg-black text-white">
-      <div className="max-w-7xl mx-auto py-10">
+    <div className="bg-black text-white">
+      <div className="container py-10">
         <div className="flex flex-col w-auto sm:flex-row sm:flex-wrap lg:flex-nowrap items-center justify-center sm:justify-between gap-6 sm:gap-8 lg:gap-10">
           {trustFeatures.map((feature, index) => {
             const Icon = feature.icon;
@@ -41,7 +45,7 @@ export function TrustFeaturesBar() {
                 key={index}
                 className="flex items-center gap-3 sm:gap-4 lg:gap-5 w-fit sm:w-[calc(50%-1rem)] lg:w-auto lg:flex-1 max-w-sm sm:max-w-none"
               >
-                <div className="flex-shrink-0">
+                <div className="shrink-0">
                   <Icon
                     className="w-7 h-7 sm:w-8 sm:h-8 text-white"
                     strokeWidth={1.5}

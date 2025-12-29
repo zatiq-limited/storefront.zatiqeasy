@@ -22,9 +22,8 @@ import { toast } from "react-hot-toast";
 interface ReceiptItem {
   name: string;
   inventory_id: number;
-  quantity: number;
+  qty: number;
   price: number;
-  total_price: number;
   image_url?: string;
   variants: Array<{
     variant_type_id: number;
@@ -38,23 +37,40 @@ interface OrderData {
   customer_phone: string;
   customer_address: string;
   delivery_charge: number;
+  delivery_zone?: string;
   tax_amount: number;
+  tax_percentage?: number;
   total_amount: number;
   payment_type: PaymentType;
   pay_now_amount: number;
+  advance_payment_amount?: number;
+  discount_amount?: number;
+  discount_percentage?: number;
   receipt_items: ReceiptItem[];
   type: "Online";
   status: OrderStatus;
-  note: string;
+  notes?: string;
+  redirect_root_url?: string;
+  district?: string;
+  email?: string;
+  mfs_provider?: string;
+  mfs_payment_phone?: string;
+  mfs_transaction_id?: string;
 }
 
 interface CommonCheckoutFormProps {
   onSubmit?: (orderData: OrderData) => void;
   onOrderComplete?: (result: { orderId: string; trackLink?: string; receiptUrl?: string }) => void;
   preventRedirect?: boolean;
+  showVariantSelector?: boolean;
 }
 
-export function CommonCheckoutForm({ onSubmit, onOrderComplete, preventRedirect }: CommonCheckoutFormProps) {
+export function CommonCheckoutForm({
+  onSubmit,
+  onOrderComplete,
+  preventRedirect,
+  showVariantSelector = false,
+}: CommonCheckoutFormProps) {
   const {
     register,
     handleSubmit,
@@ -125,20 +141,46 @@ export function CommonCheckoutForm({ onSubmit, onOrderComplete, preventRedirect 
   const totaltax = taxAmount; // Alias to match old project
   const grandTotal = totalPrice + deliveryCharge + taxAmount - discountAmount;
 
-  // Check if full online payment is required
-  const isFullOnlinePayment = selectedPaymentMethod !== "cod";
+  // State for full online payment toggle (used by Advanced Payment Options)
+  const [isFullOnlinePayment, setIsFullOnlinePayment] = useState(true);
 
-  // Get pay now amount
-  const getPayNowAmount = () => {
-    if (selectedPaymentMethod === "cod") return 0;
+  // Calculate the advance amount based on shop settings (always calculates advance, not full)
+  const calculateAdvanceAmount = (): number => {
+    const advancePaymentType = shopDetails?.advance_payment_type ?? "Full Payment";
+
+    if (advancePaymentType === "Delivery Charge Only") {
+      return deliveryCharge < 5 ? 5 : deliveryCharge;
+    } else if (advancePaymentType === "Percentage" && shopDetails?.advanced_payment_percentage) {
+      return Math.ceil(grandTotal * (shopDetails.advanced_payment_percentage / 100));
+    } else if (advancePaymentType === "Fixed Amount" && shopDetails?.advanced_payment_fixed_amount) {
+      return grandTotal < shopDetails.advanced_payment_fixed_amount
+        ? grandTotal
+        : shopDetails.advanced_payment_fixed_amount;
+    }
+
     return grandTotal;
   };
 
+  // Get pay now amount - when forceAdvance is true, always return advance amount (for display)
+  const getPayNowAmount = (forceAdvance: boolean = false): string | number => {
+    if (selectedPaymentMethod === "cod") return forceAdvance ? calculateAdvanceAmount().toLocaleString() : 0;
+
+    // If forceAdvance is true (used for display), always show advance amount
+    if (forceAdvance) {
+      return calculateAdvanceAmount().toLocaleString();
+    }
+
+    // Otherwise return based on isFullOnlinePayment selection
+    if (isFullOnlinePayment) {
+      return grandTotal;
+    }
+
+    return calculateAdvanceAmount();
+  };
+
   // Handle full online payment toggle (used by OrderSummarySection)
-  const handleChange = (value: boolean) => {
-    // This handles the full online payment checkbox toggle
-    // The value represents whether full payment is selected
-    console.log("Full online payment:", value);
+  const handleChange = (isFullOnline: boolean) => {
+    setIsFullOnlinePayment(isFullOnline);
   };
 
   // Handle promo code apply
@@ -332,13 +374,12 @@ export function CommonCheckoutForm({ onSubmit, onOrderComplete, preventRedirect 
         throw new Error("Your cart is empty");
       }
 
-      // Prepare order items
+      // Prepare order items - using 'qty' and 'price' as total price (matching old project)
       const receiptItems = cartProducts.map((item) => ({
         name: item.name,
         inventory_id: item.id,
-        quantity: item.qty,
-        price: item.price,
-        total_price: item.price * item.qty,
+        qty: item.qty,
+        price: item.price * item.qty,
         image_url: item.image_url,
         variants: item.selectedVariants
           ? Object.values(item.selectedVariants)
@@ -362,21 +403,38 @@ export function CommonCheckoutForm({ onSubmit, onOrderComplete, preventRedirect 
         return mapping[method] || PaymentType.COD;
       };
 
-      // Create order payload
+      // Build redirect URL matching old project pattern
+      const baseUrl = typeof window !== "undefined" ? window.location.origin : "";
+      const shopBaseUrl = shopDetails?.baseUrl || "";
+      const redirectRootUrl = `${baseUrl}${shopBaseUrl}/payment-confirm`;
+
+      // Create order payload - matching old project structure exactly
       const orderPayload = {
         shop_id: shopDetails?.id || 1,
         customer_name: data.customer_name,
         customer_phone: fullPhoneNumber || data.customer_phone,
         customer_address: data.customer_address,
         delivery_charge: deliveryCharge,
+        delivery_zone: selectedSpecificDeliveryZone || "Others",
         tax_amount: taxAmount,
+        tax_percentage: shopDetails?.vat_tax || 0,
         total_amount: grandTotal,
         payment_type: paymentMethodToType(selectedPaymentMethod || "cod"),
-        pay_now_amount: getPayNowAmount(),
+        pay_now_amount: getPayNowAmount() as number,
+        advance_payment_amount: isFullOnlinePayment ? grandTotal : calculateAdvanceAmount(),
+        discount_amount: discountAmount,
+        discount_percentage: 0,
         receipt_items: receiptItems,
         type: "Online" as const,
         status: OrderStatus.ORDER_PLACED,
-        note: data.note || "",
+        notes: data.note || "",
+        redirect_root_url: redirectRootUrl,
+        district: selectedDistrict || "",
+        email: data.customer_email || "",
+        // Self MFS fields
+        mfs_provider: data.mfs_provider || "",
+        mfs_payment_phone: data.mfs_payment_phone || "",
+        mfs_transaction_id: data.mfs_transaction_id || "",
       };
 
       // Create order
@@ -441,7 +499,7 @@ export function CommonCheckoutForm({ onSubmit, onOrderComplete, preventRedirect 
   return (
     <form
       onSubmit={handleSubmit(handleFormSubmit)}
-      className="container flex flex-col lg:flex-row justify-center gap-6 lg:gap-8 pt-6"
+      className="flex flex-col lg:flex-row justify-center gap-6 lg:gap-8"
     >
       {/* Left section - Contact and Shipping Form */}
       <div className="flex-1 basis-full lg:basis-1/2 lg:pr-8 xl:pr-16">
@@ -564,6 +622,7 @@ export function CommonCheckoutForm({ onSubmit, onOrderComplete, preventRedirect 
           showTermsError={showTermsError}
           setShowTermsError={setShowTermsError}
           isDisabled={order_verification_enabled && !isPhoneVerified}
+          showVariantSelector={showVariantSelector}
         />
       </div>
     </form>

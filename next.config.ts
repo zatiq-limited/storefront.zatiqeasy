@@ -3,6 +3,11 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   images: {
+    unoptimized: true,
+
+    minimumCacheTTL: 604800, // Cache images for one week (in seconds)
+
+    // Remote image patterns
     remotePatterns: [
       {
         protocol: "https",
@@ -36,11 +41,23 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "*.zatiq.app",
       },
+      {
+        protocol: "https",
+        hostname: "**.ufileos.com", // For UCloud CDN
+      },
+      {
+        protocol: "https",
+        hostname: "**.cn-wlcb.ufileos.com",
+      },
+      {
+        protocol: "https",
+        hostname: "img.youtube.com",
+      },
     ],
-    unoptimized: true,
-    minimumCacheTTL: 604800, // Cache images for one week (in seconds)
   },
+
   turbopack: {}, // Empty turbopack config to silence the warning
+
   webpack: (config) => {
     // Fix for module resolution
     config.resolve.alias = {

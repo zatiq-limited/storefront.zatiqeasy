@@ -14,7 +14,7 @@ import {
   selectShopDetails,
 } from "@/stores";
 import { cn } from "@/lib/utils";
-import TopbarMessage from "../core/topbar-message";
+import TopbarMessage from "@/components/ui/topbar-message";
 
 /**
  * Basic Header Component

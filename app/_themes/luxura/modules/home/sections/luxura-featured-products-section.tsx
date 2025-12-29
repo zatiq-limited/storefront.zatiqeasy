@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { useTranslation } from "react-i18next";
 import { useShopStore } from "@/stores/shopStore";
 import { GridContainer } from "../../../components/core";
@@ -24,8 +23,6 @@ export function LuxuraFeaturedProductsSection({
   const { t } = useTranslation();
   const { shopDetails } = useShopStore();
 
-  const baseUrl = shopDetails?.baseUrl || "";
-
   // Use provided products or get from shop theme
   const featuredProducts: Product[] = products ||
     ((shopDetails?.shop_theme as unknown as { selected_inventories?: Product[] })?.selected_inventories?.slice(0, 8)) ||
@@ -36,11 +33,11 @@ export function LuxuraFeaturedProductsSection({
   }
 
   return (
-    <div>
+    <div className="px-4 md:px-0">
       <SectionHeader
         text={t(title)}
-        viewAllLink={`${baseUrl}/products`}
-        showViewAll={true}
+        link="/products"
+        viewMoreTextKey="view_all"
       />
 
       <GridContainer>

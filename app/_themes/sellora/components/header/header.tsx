@@ -11,25 +11,36 @@ import { FallbackImage } from "@/components/ui/fallback-image";
 import { cn } from "@/lib/utils";
 import { SelloraMobileNav } from "./mobile-nav";
 import { SelloraSearchModal } from "../sections/search-modal";
+import TopbarMessage from "@/components/ui/topbar-message";
+import LanguageToggler from "./language-toggler";
 
 export function SelloraHeader() {
   const router = useRouter();
   const pathname = usePathname();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { shopDetails } = useShopStore();
   const totalItems = useCartStore(selectTotalItems);
 
   const [scrollY, setScrollY] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [langValue, setLangValue] = useState(() => {
+    if (typeof window !== "undefined") {
+      const storedLocale = localStorage.getItem("locale");
+      if (storedLocale) return storedLocale;
+    }
+    return shopDetails?.default_language_code ?? "en";
+  });
 
   const baseUrl = shopDetails?.baseUrl || "";
   const shopName = shopDetails?.shop_name || "Shop";
   const shopLogo = shopDetails?.image_url;
 
   // Check if current page is home page or products page (not product details)
-  const isHomePage = pathname === "/" || pathname === baseUrl || pathname === `${baseUrl}/`;
-  const isProductsPage = pathname?.includes("/products") && !pathname?.includes("/products/");
+  const isHomePage =
+    pathname === "/" || pathname === baseUrl || pathname === `${baseUrl}/`;
+  const isProductsPage =
+    pathname?.includes("/products") && !pathname?.includes("/products/");
   const shouldUseLightText = (isHomePage || isProductsPage) && scrollY <= 20;
 
   // Handle scroll
@@ -50,6 +61,19 @@ export function SelloraHeader() {
         onClose={() => setIsSearchOpen(false)}
       />
 
+      {/* Top marquee section */}
+      {shopDetails?.message_on_top && (
+        <div className="bg-blue-zatiq">
+          <div className="container">
+            <TopbarMessage
+              message={shopDetails.message_on_top}
+              marqueeStyle="py-2 md:py-[11px] md:pt-[13px] text-white"
+              textStyle="font-inter text-sm md:text-base font-semibold"
+            />
+          </div>
+        </div>
+      )}
+
       {/* Mobile Navigation */}
       <SelloraMobileNav
         isOpen={isMobileMenuOpen}
@@ -58,15 +82,20 @@ export function SelloraHeader() {
 
       <header
         className={cn(
-          "h-12 md:h-20 w-full fixed top-0 left-0 z-50 flex items-center justify-center transition-all duration-300",
+          `h-12 md:h-20 w-full ${
+            pathname.includes("/single-product") ||
+            pathname.includes("/checkout")
+              ? "sticky"
+              : "fixed"
+          }  top-8.5 sm:top-12 left-0 z-50 flex items-center justify-center transition-all duration-300`,
           {
-            "bg-white !top-0 shadow-sm": scrollY > 20,
+            "bg-white top-0! shadow-sm": scrollY > 20,
             "bg-white/5 dark:bg-black-18/40 backdrop-blur-sm": scrollY <= 20,
           }
         )}
       >
         <div className="relative w-full top-0 left-0 z-50 flex items-center justify-center transition-all duration-300">
-          <nav className="max-w-7xl mx-auto w-full items-center flex px-3 sm:px-4 xl:px-0 relative">
+          <nav className="container w-full items-center flex relative">
             <div className="flex items-center justify-between w-full relative">
               {/* Mobile Menu Button */}
               <button
@@ -79,7 +108,8 @@ export function SelloraHeader() {
                     "transition-colors duration-300 size-4 sm:size-5",
                     {
                       "text-gray-300": shouldUseLightText,
-                      "text-gray-800 dark:text-gray-200": !shouldUseLightText && scrollY <= 20,
+                      "text-gray-800 dark:text-gray-200":
+                        !shouldUseLightText && scrollY <= 20,
                       "text-gray-800": scrollY > 20,
                     }
                   )}
@@ -103,7 +133,8 @@ export function SelloraHeader() {
                         "text-[22px] lg:text-[28px] font-bold transition-colors duration-300",
                         {
                           "text-gray-300": shouldUseLightText,
-                          "text-gray-800 dark:text-gray-200": !shouldUseLightText,
+                          "text-gray-800 dark:text-gray-200":
+                            !shouldUseLightText,
                         }
                       )}
                     >
@@ -118,7 +149,8 @@ export function SelloraHeader() {
                     "lg:flex font-semibold items-center justify-center w-full hidden text-base transition-colors duration-300",
                     {
                       "text-gray-300": shouldUseLightText,
-                      "text-gray-900 dark:text-gray-200": !shouldUseLightText && scrollY <= 20,
+                      "text-gray-900 dark:text-gray-200":
+                        !shouldUseLightText && scrollY <= 20,
                       "text-gray-900": scrollY > 20,
                     }
                   )}
@@ -157,7 +189,8 @@ export function SelloraHeader() {
                       "transition-colors duration-300 size-4 sm:size-5",
                       {
                         "text-gray-300": shouldUseLightText,
-                        "text-gray-800 dark:text-gray-200": !shouldUseLightText && scrollY <= 20,
+                        "text-gray-800 dark:text-gray-200":
+                          !shouldUseLightText && scrollY <= 20,
                         "text-gray-800": scrollY > 20,
                       }
                     )}
@@ -180,12 +213,21 @@ export function SelloraHeader() {
                       "transition-colors duration-300 size-4 sm:size-5",
                       {
                         "text-gray-300": shouldUseLightText,
-                        "text-gray-800 dark:text-gray-200": !shouldUseLightText && scrollY <= 20,
+                        "text-gray-800 dark:text-gray-200":
+                          !shouldUseLightText && scrollY <= 20,
                         "text-gray-800": scrollY > 20,
                       }
                     )}
                   />
                 </button>
+
+                {/* Language Toggle */}
+                <LanguageToggler
+                  langValue={langValue}
+                  setLangValue={setLangValue}
+                  i18n={i18n}
+                  className="hidden lg:flex"
+                />
               </div>
             </div>
           </nav>

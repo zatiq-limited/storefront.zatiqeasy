@@ -2,6 +2,9 @@
 
 import { useShopStore } from "@/stores/shopStore";
 import { AuroraAllCategoriesPage } from "@/app/_themes/aurora/modules/category";
+import { PremiumAllCategoriesPage } from "@/app/_themes/premium/modules/category";
+import { LuxuraAllCategoriesPage } from "@/app/_themes/luxura/modules/category";
+import { SelloraAllCategoriesPage } from "@/app/_themes/sellora/modules/category";
 import { BasicHomePage } from "@/app/_themes/basic";
 
 /**
@@ -22,43 +25,13 @@ export function AllCategoriesRenderer() {
       return <AuroraAllCategoriesPage />;
 
     case "Premium":
-      // TODO: Create PremiumAllCategoriesPage when Premium theme is migrated
-      return (
-        <div className="min-h-[50vh] flex items-center justify-center">
-          <div className="text-center">
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">
-              Premium Theme Categories
-            </h2>
-            <p className="text-gray-600">Coming soon...</p>
-          </div>
-        </div>
-      );
+      return <PremiumAllCategoriesPage />;
 
     case "Luxura":
-      // TODO: Create LuxuraAllCategoriesPage when Luxura theme is migrated
-      return (
-        <div className="min-h-[50vh] flex items-center justify-center">
-          <div className="text-center">
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">
-              Luxura Theme Categories
-            </h2>
-            <p className="text-gray-600">Coming soon...</p>
-          </div>
-        </div>
-      );
+      return <LuxuraAllCategoriesPage />;
 
     case "Sellora":
-      // TODO: Create SelloraAllCategoriesPage when Sellora theme is migrated
-      return (
-        <div className="min-h-[50vh] flex items-center justify-center">
-          <div className="text-center">
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">
-              Sellora Theme Categories
-            </h2>
-            <p className="text-gray-600">Coming soon...</p>
-          </div>
-        </div>
-      );
+      return <SelloraAllCategoriesPage />;
 
     default:
       // Fallback to Aurora theme

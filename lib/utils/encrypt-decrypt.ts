@@ -1,5 +1,4 @@
 import CryptoJS from "crypto-js";
-import crypto from "crypto";
 
 /**
  * Decrypt encrypted data from API responses
@@ -8,9 +7,9 @@ import crypto from "crypto";
  */
 export function decryptData(encryptedData: string): unknown {
   const ENCRYPTION_KEY = process.env.NEXT_PUBLIC_ENCRYPTION_KEY || "";
-  const hash = crypto.createHash("sha256");
-  hash.update("");
-  const hashedIv = hash.digest("hex");
+
+  // Use crypto-js instead of Node.js crypto (works in browser and server)
+  const hashedIv = CryptoJS.SHA256("").toString();
   const ENCRYPTION_IV = hashedIv.slice(0, 16);
 
   const key = CryptoJS.enc.Utf8.parse(ENCRYPTION_KEY);
@@ -34,15 +33,16 @@ export function decryptData(encryptedData: string): unknown {
  */
 export function encryptData(plainData: unknown): string {
   const ENCRYPTION_KEY = process.env.NEXT_PUBLIC_ENCRYPTION_KEY || "";
-  const hash = crypto.createHash("sha256");
-  hash.update("");
-  const hashedIv = hash.digest("hex");
+
+  // Use crypto-js instead of Node.js crypto (works in browser and server)
+  const hashedIv = CryptoJS.SHA256("").toString();
   const ENCRYPTION_IV = hashedIv.slice(0, 16);
 
   const key = CryptoJS.enc.Utf8.parse(ENCRYPTION_KEY);
   const iv = CryptoJS.enc.Utf8.parse(ENCRYPTION_IV);
 
-  const base64Data = Buffer.from(JSON.stringify(plainData)).toString("base64");
+  // Convert to base64 using crypto-js (no Buffer dependency)
+  const base64Data = CryptoJS.enc.Utf8.parse(JSON.stringify(plainData)).toString(CryptoJS.enc.Base64);
 
   const encrypted = CryptoJS.AES.encrypt(
     CryptoJS.enc.Base64.parse(base64Data),
