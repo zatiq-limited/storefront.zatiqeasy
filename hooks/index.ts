@@ -1,5 +1,4 @@
 export * from "./useTheme";
-export * from "./useThemeBuilder";
 export * from "./useHomepage";
 export * from "./useProducts";
 export * from "./useProductDetails";

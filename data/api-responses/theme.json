@@ -1,7 +1,7 @@
 {
   "success": true,
   "data": {
-    "id": "theme_zatiq_custom_1765693512043",
+    "id": "theme_zatiq_custom_1767010863195",
     "version": "1.0.0",
     "global_settings": {
       "colors": {
@@ -43,56 +43,35 @@
     "global_sections": {
       "announcement": {
         "enabled": true,
-        "type": "announcement-bar-2",
+        "type": "announcement-bar-1",
         "settings": {
           "dismissible": true,
           "sticky": true
         },
         "blocks": [
           {
-            "wrapper": "div#announcement-bar-2-1765693512043",
+            "wrapper": "div#announcement-bar-1-1767010863195",
             "type": "announcement_marquee",
-            "class": "w-full overflow-hidden text-xs sm:text-sm",
+            "class": "w-full overflow-hidden font-bold text-xs sm:text-sm",
             "style": {
-              "background_color": "#23856D",
-              "color": "#FFFFFF"
+              "background": "linear-gradient(to right, #50D1F6, #B198FD)",
+              "color": "#000000"
             },
             "data": {
-              "phone": "(225) 555-0118",
-              "message": "Follow Us and get a chance to win 80% off",
-              "background_color": "#23856D",
-              "text_color": "#FFFFFF",
-              "show_phone": true,
-              "show_social": true,
-              "social_icons": [
-                {
-                  "platform": "instagram",
-                  "url": "#"
-                },
-                {
-                  "platform": "youtube",
-                  "url": "#"
-                },
-                {
-                  "platform": "facebook",
-                  "url": "#"
-                },
-                {
-                  "platform": "twitter",
-                  "url": "#"
-                }
-              ],
-              "instagram_url": "#",
-              "youtube_url": "#",
-              "facebook_url": "#",
-              "twitter_url": "#",
-              "marquee_speed": 10,
+              "message": "For a limited time, enjoy a 60% discount on all our products!",
+              "icon_left": "🔥",
+              "icon_right": "🔥",
+              "gradient_start": "#50D1F6",
+              "gradient_end": "#B198FD",
+              "text_color": "#000000",
+              "font_weight": "bold",
+              "marquee_speed": 6,
               "pause_on_hover": true
             },
             "blocks": [
               {
                 "wrapper": "div",
-                "class": "py-2 px-2 sm:py-3 sm:px-4",
+                "class": "py-2 sm:py-3",
                 "blocks": [
                   {
                     "wrapper": "div",
@@ -101,268 +80,140 @@
                     "animation": {
                       "type": "marquee",
                       "direction": "left",
-                      "duration": 10,
+                      "duration": 6,
                       "repeat": "infinite",
                       "pause_on_hover": true
                     },
                     "blocks": [
                       {
                         "wrapper": "div",
-                        "class": "flex items-center gap-4 px-2 sm:gap-8 sm:px-4 shrink-0",
+                        "class": "flex items-center gap-8 px-4 shrink-0",
                         "blocks": [
                           {
-                            "wrapper": "div",
-                            "class": "flex items-center gap-2",
-                            "blocks": [
-                              {
-                                "wrapper": "svg",
-                                "class": "w-4 h-4",
-                                "type": "icon",
-                                "icon": "phone"
-                              },
-                              {
-                                "wrapper": "span",
-                                "class": "font-bold whitespace-nowrap",
-                                "bind_content": "phone",
-                                "content": "(225) 555-0118"
-                              }
-                            ]
+                            "wrapper": "span",
+                            "bind_content": "icon_left",
+                            "content": "🔥"
                           },
                           {
                             "wrapper": "span",
-                            "class": "font-bold whitespace-nowrap",
+                            "class": "whitespace-nowrap",
                             "bind_content": "message",
-                            "content": "Follow Us and get a chance to win 80% off"
+                            "content": "For a limited time, enjoy a 60% discount on all our products!"
                           },
                           {
-                            "wrapper": "div",
-                            "class": "flex items-center gap-2",
-                            "blocks": [
-                              {
-                                "wrapper": "span",
-                                "class": "font-bold whitespace-nowrap",
-                                "content": "Follow Us:"
-                              },
-                              {
-                                "type": "repeater",
-                                "source": "social_icons",
-                                "iterator": "icon",
-                                "template": {
-                                  "wrapper": "a",
-                                  "class": "hover:opacity-80 transition-opacity",
-                                  "bind_href": "icon.url",
-                                  "events": {
-                                    "on_click": {
-                                      "action": "navigate",
-                                      "target": "icon.url"
-                                    }
-                                  },
-                                  "blocks": [
-                                    {
-                                      "wrapper": "svg",
-                                      "class": "w-4 h-4",
-                                      "type": "icon",
-                                      "bind_icon": "icon.platform"
-                                    }
-                                  ]
-                                }
-                              }
-                            ]
+                            "wrapper": "span",
+                            "bind_content": "icon_right",
+                            "content": "🔥"
                           }
                         ]
                       },
                       {
                         "wrapper": "div",
-                        "class": "flex items-center gap-4 px-2 sm:gap-8 sm:px-4 shrink-0",
+                        "class": "flex items-center gap-8 px-4 shrink-0",
                         "blocks": [
                           {
-                            "wrapper": "div",
-                            "class": "flex items-center gap-2",
-                            "blocks": [
-                              {
-                                "wrapper": "svg",
-                                "class": "w-4 h-4",
-                                "type": "icon",
-                                "icon": "phone"
-                              },
-                              {
-                                "wrapper": "span",
-                                "class": "font-bold whitespace-nowrap",
-                                "bind_content": "phone",
-                                "content": "(225) 555-0118"
-                              }
-                            ]
+                            "wrapper": "span",
+                            "bind_content": "icon_left",
+                            "content": "🔥"
                           },
                           {
                             "wrapper": "span",
-                            "class": "font-bold whitespace-nowrap",
+                            "class": "whitespace-nowrap",
                             "bind_content": "message",
-                            "content": "Follow Us and get a chance to win 80% off"
+                            "content": "For a limited time, enjoy a 60% discount on all our products!"
                           },
                           {
-                            "wrapper": "div",
-                            "class": "flex items-center gap-2",
-                            "blocks": [
-                              {
-                                "wrapper": "span",
-                                "class": "font-bold whitespace-nowrap",
-                                "content": "Follow Us:"
-                              },
-                              {
-                                "type": "repeater",
-                                "source": "social_icons",
-                                "iterator": "icon",
-                                "template": {
-                                  "wrapper": "a",
-                                  "class": "hover:opacity-80 transition-opacity",
-                                  "bind_href": "icon.url",
-                                  "events": {
-                                    "on_click": {
-                                      "action": "navigate",
-                                      "target": "icon.url"
-                                    }
-                                  },
-                                  "blocks": [
-                                    {
-                                      "wrapper": "svg",
-                                      "class": "w-4 h-4",
-                                      "type": "icon",
-                                      "bind_icon": "icon.platform"
-                                    }
-                                  ]
-                                }
-                              }
-                            ]
+                            "wrapper": "span",
+                            "bind_content": "icon_right",
+                            "content": "🔥"
                           }
                         ]
                       },
                       {
                         "wrapper": "div",
-                        "class": "flex items-center gap-4 px-2 sm:gap-8 sm:px-4 shrink-0",
+                        "class": "flex items-center gap-8 px-4 shrink-0",
                         "blocks": [
                           {
-                            "wrapper": "div",
-                            "class": "flex items-center gap-2",
-                            "blocks": [
-                              {
-                                "wrapper": "svg",
-                                "class": "w-4 h-4",
-                                "type": "icon",
-                                "icon": "phone"
-                              },
-                              {
-                                "wrapper": "span",
-                                "class": "font-bold whitespace-nowrap",
-                                "bind_content": "phone",
-                                "content": "(225) 555-0118"
-                              }
-                            ]
+                            "wrapper": "span",
+                            "bind_content": "icon_left",
+                            "content": "🔥"
                           },
                           {
                             "wrapper": "span",
-                            "class": "font-bold whitespace-nowrap",
+                            "class": "whitespace-nowrap",
                             "bind_content": "message",
-                            "content": "Follow Us and get a chance to win 80% off"
+                            "content": "For a limited time, enjoy a 60% discount on all our products!"
                           },
                           {
-                            "wrapper": "div",
-                            "class": "flex items-center gap-2",
-                            "blocks": [
-                              {
-                                "wrapper": "span",
-                                "class": "font-bold whitespace-nowrap",
-                                "content": "Follow Us:"
-                              },
-                              {
-                                "type": "repeater",
-                                "source": "social_icons",
-                                "iterator": "icon",
-                                "template": {
-                                  "wrapper": "a",
-                                  "class": "hover:opacity-80 transition-opacity",
-                                  "bind_href": "icon.url",
-                                  "events": {
-                                    "on_click": {
-                                      "action": "navigate",
-                                      "target": "icon.url"
-                                    }
-                                  },
-                                  "blocks": [
-                                    {
-                                      "wrapper": "svg",
-                                      "class": "w-4 h-4",
-                                      "type": "icon",
-                                      "bind_icon": "icon.platform"
-                                    }
-                                  ]
-                                }
-                              }
-                            ]
+                            "wrapper": "span",
+                            "bind_content": "icon_right",
+                            "content": "🔥"
                           }
                         ]
                       },
                       {
                         "wrapper": "div",
-                        "class": "flex items-center gap-4 px-2 sm:gap-8 sm:px-4 shrink-0",
+                        "class": "flex items-center gap-8 px-4 shrink-0",
                         "blocks": [
                           {
-                            "wrapper": "div",
-                            "class": "flex items-center gap-2",
-                            "blocks": [
-                              {
-                                "wrapper": "svg",
-                                "class": "w-4 h-4",
-                                "type": "icon",
-                                "icon": "phone"
-                              },
-                              {
-                                "wrapper": "span",
-                                "class": "font-bold whitespace-nowrap",
-                                "bind_content": "phone",
-                                "content": "(225) 555-0118"
-                              }
-                            ]
+                            "wrapper": "span",
+                            "bind_content": "icon_left",
+                            "content": "🔥"
                           },
                           {
                             "wrapper": "span",
-                            "class": "font-bold whitespace-nowrap",
+                            "class": "whitespace-nowrap",
                             "bind_content": "message",
-                            "content": "Follow Us and get a chance to win 80% off"
+                            "content": "For a limited time, enjoy a 60% discount on all our products!"
                           },
                           {
-                            "wrapper": "div",
-                            "class": "flex items-center gap-2",
-                            "blocks": [
-                              {
-                                "wrapper": "span",
-                                "class": "font-bold whitespace-nowrap",
-                                "content": "Follow Us:"
-                              },
-                              {
-                                "type": "repeater",
-                                "source": "social_icons",
-                                "iterator": "icon",
-                                "template": {
-                                  "wrapper": "a",
-                                  "class": "hover:opacity-80 transition-opacity",
-                                  "bind_href": "icon.url",
-                                  "events": {
-                                    "on_click": {
-                                      "action": "navigate",
-                                      "target": "icon.url"
-                                    }
-                                  },
-                                  "blocks": [
-                                    {
-                                      "wrapper": "svg",
-                                      "class": "w-4 h-4",
-                                      "type": "icon",
-                                      "bind_icon": "icon.platform"
-                                    }
-                                  ]
-                                }
-                              }
-                            ]
+                            "wrapper": "span",
+                            "bind_content": "icon_right",
+                            "content": "🔥"
+                          }
+                        ]
+                      },
+                      {
+                        "wrapper": "div",
+                        "class": "flex items-center gap-8 px-4 shrink-0",
+                        "blocks": [
+                          {
+                            "wrapper": "span",
+                            "bind_content": "icon_left",
+                            "content": "🔥"
+                          },
+                          {
+                            "wrapper": "span",
+                            "class": "whitespace-nowrap",
+                            "bind_content": "message",
+                            "content": "For a limited time, enjoy a 60% discount on all our products!"
+                          },
+                          {
+                            "wrapper": "span",
+                            "bind_content": "icon_right",
+                            "content": "🔥"
+                          }
+                        ]
+                      },
+                      {
+                        "wrapper": "div",
+                        "class": "flex items-center gap-8 px-4 shrink-0",
+                        "blocks": [
+                          {
+                            "wrapper": "span",
+                            "bind_content": "icon_left",
+                            "content": "🔥"
+                          },
+                          {
+                            "wrapper": "span",
+                            "class": "whitespace-nowrap",
+                            "bind_content": "message",
+                            "content": "For a limited time, enjoy a 60% discount on all our products!"
+                          },
+                          {
+                            "wrapper": "span",
+                            "bind_content": "icon_right",
+                            "content": "🔥"
                           }
                         ]
                       }
@@ -376,7 +227,7 @@
       },
       "header": {
         "enabled": true,
-        "type": "navbar-2",
+        "type": "navbar-1",
         "settings": {
           "logo": "https://i.ibb.co.com/4ww2cHtc/Pasted-image.png",
           "logo_width": 150,
@@ -393,48 +244,23 @@
           "menu_items": [
             {
               "label": "Home",
-              "type": "link",
               "url": "/"
             },
             {
               "label": "Products",
-              "type": "link",
               "url": "/products"
             },
             {
               "label": "Collections",
-              "type": "link",
               "url": "/collections"
-            },
-            {
-              "label": "Bags",
-              "type": "dropdown",
-              "items": [
-                {
-                  "label": "Handbags",
-                  "url": "#"
-                },
-                {
-                  "label": "Backpacks",
-                  "url": "#"
-                },
-                {
-                  "label": "Clutches",
-                  "url": "#"
-                },
-                {
-                  "label": "Tote Bags",
-                  "url": "#"
-                }
-              ]
             }
           ]
         },
         "blocks": [
           {
-            "wrapper": "nav#navbar-2-1765693512043",
+            "wrapper": "nav#navbar-1-1767010863195",
             "type": "navbar_content",
-            "class": "px-2 sm:px-4 md:px-8 lg:px-16 py-3 md:py-4 border-b border-gray-200 sticky top-0 z-50",
+            "class": "px-2 sm:px-4 md:px-8 lg:px-10 py-3 md:py-[18px] sticky top-0 z-50",
             "style": {
               "background_color": "#FFFFFF",
               "color": "#000000"
@@ -447,44 +273,18 @@
               "background_color": "#FFFFFF",
               "text_color": "#000000",
               "sticky": true,
-              "transparent": false,
               "menu_items": [
                 {
                   "label": "Home",
-                  "type": "link",
                   "url": "/"
                 },
                 {
                   "label": "Products",
-                  "type": "link",
                   "url": "/products"
                 },
                 {
                   "label": "Collections",
-                  "type": "link",
                   "url": "/collections"
-                },
-                {
-                  "label": "Bags",
-                  "type": "dropdown",
-                  "items": [
-                    {
-                      "label": "Handbags",
-                      "url": "#"
-                    },
-                    {
-                      "label": "Backpacks",
-                      "url": "#"
-                    },
-                    {
-                      "label": "Clutches",
-                      "url": "#"
-                    },
-                    {
-                      "label": "Tote Bags",
-                      "url": "#"
-                    }
-                  ]
                 }
               ],
               "cart_count": 0
@@ -492,7 +292,7 @@
             "blocks": [
               {
                 "wrapper": "div",
-                "class": "container w-full",
+                "class": "max-w-[1440px] mx-auto w-full",
                 "blocks": [
                   {
                     "wrapper": "div",
@@ -500,11 +300,11 @@
                     "blocks": [
                       {
                         "wrapper": "div",
-                        "class": "flex items-center gap-2 sm:gap-4 md:gap-8",
+                        "class": "flex items-center gap-2 sm:gap-4 md:gap-10",
                         "blocks": [
                           {
                             "wrapper": "div",
-                            "class": "shrink-0",
+                            "class": "flex items-center shrink-0",
                             "events": {
                               "on_click": {
                                 "action": "navigate",
@@ -514,7 +314,7 @@
                             "blocks": [
                               {
                                 "wrapper": "img",
-                                "class": "w-[90px] h-[22px]",
+                                "class": "h-5 w-20 sm:h-6 sm:w-24 md:h-8 md:w-32",
                                 "bind_src": "logo",
                                 "src": "https://i.ibb.co.com/4ww2cHtc/Pasted-image.png",
                                 "alt": "Logo"
@@ -523,76 +323,26 @@
                           },
                           {
                             "wrapper": "div",
-                            "class": "hidden lg:flex items-center gap-6",
+                            "class": "hidden lg:flex items-center gap-8",
                             "blocks": [
                               {
                                 "type": "repeater",
                                 "source": "menu_items",
                                 "iterator": "item",
                                 "template": {
-                                  "wrapper": "div",
-                                  "class": "relative group",
-                                  "blocks": [
-                                    {
-                                      "wrapper": "a",
-                                      "class": "hover:text-blue-600 font-assistant font-normal text-sm leading-[150%] tracking-[0.02em] transition-colors whitespace-nowrap flex items-center gap-1",
-                                      "bind_href": "item.url",
-                                      "style": {
-                                        "color": "#000000"
-                                      },
-                                      "events": {
-                                        "on_click": {
-                                          "action": "navigate",
-                                          "target": "item.url"
-                                        }
-                                      },
-                                      "blocks": [
-                                        {
-                                          "wrapper": "span",
-                                          "bind_content": "item.label"
-                                        },
-                                        {
-                                          "wrapper": "svg",
-                                          "class": "w-4 h-4",
-                                          "type": "icon",
-                                          "icon": "chevron_down",
-                                          "condition": {
-                                            "field": "item.type",
-                                            "op": "equals",
-                                            "value": "dropdown"
-                                          }
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "wrapper": "div",
-                                      "class": "absolute top-full left-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-xl py-2 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200",
-                                      "condition": {
-                                        "field": "item.type",
-                                        "op": "equals",
-                                        "value": "dropdown"
-                                      },
-                                      "blocks": [
-                                        {
-                                          "type": "repeater",
-                                          "source": "item.items",
-                                          "iterator": "subItem",
-                                          "template": {
-                                            "wrapper": "a",
-                                            "class": "block px-4 py-2 font-assistant font-normal text-sm leading-[150%] tracking-[0.02em] text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition-colors",
-                                            "bind_href": "subItem.url",
-                                            "bind_content": "subItem.label",
-                                            "events": {
-                                              "on_click": {
-                                                "action": "navigate",
-                                                "target": "subItem.url"
-                                              }
-                                            }
-                                          }
-                                        }
-                                      ]
+                                  "wrapper": "a",
+                                  "class": "hover:text-blue-600 font-inter font-medium text-sm leading-[18px] transition-colors whitespace-nowrap",
+                                  "bind_href": "item.url",
+                                  "bind_content": "item.label",
+                                  "style": {
+                                    "color": "#000000"
+                                  },
+                                  "events": {
+                                    "on_click": {
+                                      "action": "navigate",
+                                      "target": "item.url"
                                     }
-                                  ]
+                                  }
                                 }
                               }
                             ]
@@ -601,12 +351,68 @@
                       },
                       {
                         "wrapper": "div",
-                        "class": "flex items-center gap-1.5 sm:gap-2 shrink-0",
+                        "class": "flex items-center gap-2 shrink-0",
                         "blocks": [
+                          {
+                            "wrapper": "div",
+                            "class": "hidden md:block relative w-[362px]",
+                            "condition": {
+                              "field": "show_search",
+                              "op": "equals",
+                              "value": true
+                            },
+                            "blocks": [
+                              {
+                                "wrapper": "svg",
+                                "class": "w-6 h-6 text-gray-500 absolute left-2 top-2.5",
+                                "type": "icon",
+                                "icon": "search"
+                              },
+                              {
+                                "wrapper": "input",
+                                "class": "w-full h-11 px-4 pl-10 bg-gray-100 rounded-sm text-sm focus:outline-none focus:ring-2 focus:ring-blue-500",
+                                "type": "text_input",
+                                "placeholder": "Search for products or brands.....",
+                                "events": {
+                                  "on_submit": {
+                                    "action": "search",
+                                    "target": "search_results"
+                                  }
+                                }
+                              }
+                            ]
+                          },
                           {
                             "wrapper": "button",
                             "type": "icon_button",
-                            "class": "p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg transition-colors shrink-0",
+                            "class": "md:hidden p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg transition-colors shrink-0",
+                            "condition": {
+                              "field": "show_search",
+                              "op": "equals",
+                              "value": true
+                            },
+                            "events": {
+                              "on_click": {
+                                "action": "toggle_drawer",
+                                "target": "mobile_menu"
+                              }
+                            },
+                            "blocks": [
+                              {
+                                "wrapper": "svg",
+                                "class": "w-4 h-4 sm:w-5 sm:h-5",
+                                "type": "icon",
+                                "icon": "search",
+                                "style": {
+                                  "color": "#000000"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "wrapper": "button",
+                            "type": "icon_button",
+                            "class": "sm:p-1 hover:bg-gray-100 rounded-lg transition-colors shrink-0",
                             "condition": {
                               "field": "show_dark_mode",
                               "op": "equals",
@@ -630,34 +436,7 @@
                           {
                             "wrapper": "button",
                             "type": "icon_button",
-                            "class": "p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg transition-colors shrink-0",
-                            "condition": {
-                              "field": "show_search",
-                              "op": "equals",
-                              "value": true
-                            },
-                            "events": {
-                              "on_click": {
-                                "action": "toggle_drawer",
-                                "target": "mobile_menu"
-                              }
-                            },
-                            "blocks": [
-                              {
-                                "wrapper": "svg",
-                                "class": "w-5 h-5",
-                                "type": "icon",
-                                "icon": "search",
-                                "style": {
-                                  "color": "#000000"
-                                }
-                              }
-                            ]
-                          },
-                          {
-                            "wrapper": "button",
-                            "type": "icon_button",
-                            "class": "hover:bg-gray-100 rounded-lg transition-colors shrink-0",
+                            "class": "relative sm:p-1 hover:bg-gray-100 rounded-lg transition-colors shrink-0",
                             "condition": {
                               "field": "show_cart",
                               "op": "equals",
@@ -672,9 +451,15 @@
                             "blocks": [
                               {
                                 "wrapper": "svg",
-                                "class": "w-10 h-10",
+                                "class": "w-6 h-6",
                                 "type": "icon",
-                                "icon": "shopping_bag"
+                                "icon": "shopping_cart"
+                              },
+                              {
+                                "wrapper": "span",
+                                "class": "absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 w-4 h-4 md:w-5 md:h-5 bg-blue-600 text-white text-[9px] sm:text-[10px] md:text-xs rounded-full flex items-center justify-center font-medium",
+                                "bind_content": "cart_count",
+                                "content": "0"
                               }
                             ]
                           },
@@ -693,10 +478,7 @@
                                 "wrapper": "svg",
                                 "class": "w-6 h-6",
                                 "type": "icon",
-                                "icon": "menu",
-                                "style": {
-                                  "color": "#000000"
-                                }
+                                "icon": "menu"
                               }
                             ]
                           }
@@ -736,7 +518,13 @@
                                 "wrapper": "input",
                                 "class": "w-full h-9 px-4 pl-9 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500",
                                 "type": "text_input",
-                                "placeholder": "Search for products or brands....."
+                                "placeholder": "Search for products or brands.....",
+                                "events": {
+                                  "on_submit": {
+                                    "action": "search",
+                                    "target": "search_results"
+                                  }
+                                }
                               }
                             ]
                           }
@@ -751,71 +539,19 @@
                             "source": "menu_items",
                             "iterator": "item",
                             "template": {
-                              "wrapper": "div",
-                              "class": "border-b border-gray-100",
-                              "blocks": [
-                                {
-                                  "wrapper": "button",
-                                  "class": "flex items-center justify-between w-full py-2.5 text-center transition-colors",
-                                  "style": {
-                                    "color": "#000000"
-                                  },
-                                  "events": {
-                                    "on_click": {
-                                      "action": "toggle_accordion",
-                                      "target": "item.label"
-                                    }
-                                  },
-                                  "blocks": [
-                                    {
-                                      "wrapper": "span",
-                                      "bind_content": "item.label"
-                                    },
-                                    {
-                                      "wrapper": "svg",
-                                      "class": "w-4 h-4 transition-transform",
-                                      "type": "icon",
-                                      "icon": "chevron_down",
-                                      "condition": {
-                                        "field": "item.type",
-                                        "op": "equals",
-                                        "value": "dropdown"
-                                      }
-                                    }
-                                  ]
-                                },
-                                {
-                                  "wrapper": "div",
-                                  "class": "pb-2 flex flex-col",
-                                  "condition": {
-                                    "field": "item.type",
-                                    "op": "equals",
-                                    "value": "dropdown"
-                                  },
-                                  "state": {
-                                    "visible": false
-                                  },
-                                  "blocks": [
-                                    {
-                                      "type": "repeater",
-                                      "source": "item.items",
-                                      "iterator": "subItem",
-                                      "template": {
-                                        "wrapper": "a",
-                                        "class": "text-gray-500 hover:text-blue-600 transition-colors py-1.5 pl-4 text-sm",
-                                        "bind_href": "subItem.url",
-                                        "bind_content": "subItem.label",
-                                        "events": {
-                                          "on_click": {
-                                            "action": "navigate",
-                                            "target": "subItem.url"
-                                          }
-                                        }
-                                      }
-                                    }
-                                  ]
+                              "wrapper": "a",
+                              "class": "hover:text-blue-600 py-2.5 text-center transition-colors border-b border-gray-100 last:border-b-0",
+                              "bind_href": "item.url",
+                              "bind_content": "item.label",
+                              "style": {
+                                "color": "#000000"
+                              },
+                              "events": {
+                                "on_click": {
+                                  "action": "navigate",
+                                  "target": "item.url"
                                 }
-                              ]
+                              }
                             }
                           }
                         ]
@@ -838,7 +574,7 @@
         },
         "blocks": [
           {
-            "wrapper": "footer#footer-2-1765693512043",
+            "wrapper": "footer#footer-2-1767010863195",
             "type": "footer_content",
             "class": "w-full overflow-hidden font-sans",
             "style": {
@@ -915,19 +651,19 @@
               "show_payment_icons": true,
               "payment_icons": [
                 {
-                  "src": "/src/assets/image/payment/bkash.png",
+                  "image": "https://i.ibb.co.com/5W4mDXzk/bkash.png",
                   "alt": "bKash"
                 },
                 {
-                  "src": "/src/assets/image/payment/paypal.png",
-                  "alt": "PayPal"
+                  "image": "https://i.ibb.co.com/tPDYMFvk/nagad.png",
+                  "alt": "Nagad"
                 },
                 {
-                  "src": "/src/assets/image/payment/master.png",
+                  "image": "https://i.ibb.co.com/psTzX4Q/master.png",
                   "alt": "Mastercard"
                 },
                 {
-                  "src": "/src/assets/image/payment/visa.png",
+                  "image": "https://i.ibb.co.com/pBD3qRgZ/visa.png",
                   "alt": "Visa"
                 }
               ]
@@ -943,7 +679,7 @@
                 "blocks": [
                   {
                     "wrapper": "div",
-                    "class": "container",
+                    "class": "max-w-7xl mx-auto",
                     "blocks": [
                       {
                         "wrapper": "div",
@@ -972,7 +708,7 @@
                       },
                       {
                         "wrapper": "div",
-                        "class": "grid grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6 lg:gap-8",
+                        "class": "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6 lg:gap-8",
                         "blocks": [
                           {
                             "wrapper": "div",
@@ -1005,7 +741,7 @@
                             "blocks": [
                               {
                                 "wrapper": "h3",
-                                "class": "text-xs md:text-sm lg:text-base font-semibold text-gray-900 mb-3 md:mb-4",
+                                "class": "font-semibold text-gray-900 mb-3 md:mb-4",
                                 "bind_content": "contact_title",
                                 "content": "Contact us"
                               },
@@ -1089,7 +825,7 @@
                             "blocks": [
                               {
                                 "wrapper": "h3",
-                                "class": "text-xs md:text-sm lg:text-base font-semibold text-gray-900 mb-3 md:mb-4",
+                                "class": "font-semibold text-gray-900 mb-3 md:mb-4",
                                 "bind_content": "column1_title",
                                 "content": "My Account"
                               },
@@ -1129,7 +865,7 @@
                             "blocks": [
                               {
                                 "wrapper": "h3",
-                                "class": "text-xs md:text-sm lg:text-base font-semibold text-gray-900 mb-3 md:mb-4",
+                                "class": "font-semibold text-gray-900 mb-3 md:mb-4",
                                 "bind_content": "column2_title",
                                 "content": "Important Links"
                               },
@@ -1174,7 +910,7 @@
                             "blocks": [
                               {
                                 "wrapper": "h4",
-                                "class": "text-base font-semibold mb-4",
+                                "class": "text-sm md:text-base font-semibold mb-4",
                                 "style": {
                                   "color": "#000000"
                                 },
@@ -1182,7 +918,7 @@
                               },
                               {
                                 "wrapper": "div",
-                                "class": "flex gap-3",
+                                "class": "flex gap-4",
                                 "blocks": [
                                   {
                                     "type": "repeater",
@@ -1282,7 +1018,7 @@
                 "blocks": [
                   {
                     "wrapper": "div",
-                    "class": "container flex flex-col md:flex-row justify-between items-center gap-4",
+                    "class": "max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4",
                     "blocks": [
                       {
                         "wrapper": "p",
@@ -1306,7 +1042,7 @@
                             "template": {
                               "wrapper": "img",
                               "class": "h-8 object-contain",
-                              "bind_src": "payment.src",
+                              "bind_src": "payment.image",
                               "bind_alt": "payment.alt"
                             }
                           }
