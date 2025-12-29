@@ -24,6 +24,7 @@ interface ProductCard8Props {
   buttonTextColor?: string;
   priceColor?: string;
   onAddToCart?: () => void;
+  routePrefix?: string;
 }
 
 export default function ProductCard8({
@@ -40,13 +41,14 @@ export default function ProductCard8({
   buttonTextColor = "#FFFFFF",
   priceColor = "#10B981",
   onAddToCart,
+  routePrefix = "",
 }: ProductCard8Props) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
     <div className="font-poppins w-full h-full">
       <Link
-        href={`/products/${handle}`}
+        href={`${routePrefix}/products/${handle}`}
         className="w-full h-full bg-white rounded-lg overflow-hidden relative cursor-pointer transition-all duration-300 border border-gray-100 hover:shadow-lg flex flex-col block"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}

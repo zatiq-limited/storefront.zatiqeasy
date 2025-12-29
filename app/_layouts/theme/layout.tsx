@@ -57,6 +57,14 @@ export default function ThemeLayout({ children }: ThemeLayoutProps) {
 
   // Check if we're on a static theme route (merchant pages use static themes)
   const isStaticThemeRoute = pathname?.startsWith('/merchant/');
+  
+  // Check if we're on the theme-builder preview route (uses its own layout)
+  const isThemeBuilderRoute = pathname?.startsWith('/theme-builder');
+
+  // For theme-builder route, just render children (it has its own layout)
+  if (isThemeBuilderRoute) {
+    return <>{children}</>;
+  }
 
   // Extract theme data with proper typing
   const themeRaw = theme as ThemeData | null;

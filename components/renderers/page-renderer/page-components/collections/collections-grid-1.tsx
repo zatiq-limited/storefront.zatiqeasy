@@ -42,12 +42,14 @@ interface CollectionsGrid1Props {
   settings?: Record<string, unknown>;
   collections: Collection[];
   isLoading?: boolean;
+  routePrefix?: string;
 }
 
 export default function CollectionsGrid1({
   settings = {},
   collections,
   isLoading = false,
+  routePrefix = "",
 }: CollectionsGrid1Props) {
   // Convert snake_case settings to camelCase
   const s = convertSettingsKeys<CollectionsGrid1Settings>(settings);
@@ -141,7 +143,7 @@ export default function CollectionsGrid1({
               >
                 {/* Main Collection Card */}
                 <Link
-                  href={`/collections/${collection.slug || collection.id}`}
+                  href={`${routePrefix}/collections/${collection.slug || collection.id}`}
                   className="block relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300"
                   style={{ backgroundColor: cardBgColor }}
                 >
@@ -240,7 +242,7 @@ export default function CollectionsGrid1({
                     {collection.children.slice(0, 3).map((child) => (
                       <Link
                         key={child.id}
-                        href={`/collections/${child.slug || child.id}`}
+                        href={`${routePrefix}/collections/${child.slug || child.id}`}
                         className="group/child block relative overflow-hidden rounded-xl bg-white shadow hover:shadow-lg transition-all duration-300"
                       >
                         <div className="relative aspect-square overflow-hidden">

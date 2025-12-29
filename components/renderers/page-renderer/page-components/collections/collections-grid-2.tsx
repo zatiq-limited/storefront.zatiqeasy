@@ -46,12 +46,14 @@ interface CollectionsGrid2Props {
   settings?: Record<string, unknown>;
   collections: Collection[];
   isLoading?: boolean;
+  routePrefix?: string;
 }
 
 export default function CollectionsGrid2({
   settings = {},
   collections,
   isLoading = false,
+  routePrefix = "",
 }: CollectionsGrid2Props) {
   // Convert snake_case settings to camelCase
   const s = convertSettingsKeys<CollectionsGrid2Settings>(settings);
@@ -143,7 +145,7 @@ export default function CollectionsGrid2({
             >
               {/* Collection Card */}
               <Link
-                href={`/collections/${collection.slug || collection.id}`}
+                href={`${routePrefix}/collections/${collection.slug || collection.id}`}
                 className="block relative overflow-hidden rounded-2xl bg-gray-100 shadow-md hover:shadow-xl transition-all duration-300"
                 style={{ backgroundColor: cardBgColor }}
               >

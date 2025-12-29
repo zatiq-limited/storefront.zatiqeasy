@@ -26,6 +26,7 @@ interface ProductCard7Props {
   oldPriceColor?: string;
   onAddToCart?: () => void;
   onColorSelect?: (colorIndex: number) => void;
+  routePrefix?: string;
 }
 
 export default function ProductCard7({
@@ -44,6 +45,7 @@ export default function ProductCard7({
   oldPriceColor = "#9CA3AF",
   onAddToCart,
   onColorSelect,
+  routePrefix = "",
 }: ProductCard7Props) {
   const [isHovered, setIsHovered] = useState(false);
   const [selectedColor, setSelectedColor] = useState(0);
@@ -60,7 +62,7 @@ export default function ProductCard7({
   return (
     <div className="font-sans w-full h-full">
       <Link
-        href={`/products/${handle}`}
+        href={`${routePrefix}/products/${handle}`}
         className="w-full overflow-visible relative cursor-pointer transition-all duration-300 block"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}

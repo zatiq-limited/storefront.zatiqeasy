@@ -26,6 +26,7 @@ interface ProductCard9Props {
   oldPriceColor?: string;
   onAddToCart?: () => void;
   onBuyNow?: () => void;
+  routePrefix?: string;
 }
 
 export default function ProductCard9({
@@ -45,10 +46,11 @@ export default function ProductCard9({
   oldPriceColor = "#9CA3AF",
   onAddToCart,
   onBuyNow,
+  routePrefix = "",
 }: ProductCard9Props) {
   return (
     <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer">
-      <Link href={`/products/${handle}`} className="block">
+      <Link href={`${routePrefix}/products/${handle}`} className="block">
         {/* Image Container */}
         <div className="relative h-[140px] sm:h-[200px] lg:h-[228px]">
           <Image

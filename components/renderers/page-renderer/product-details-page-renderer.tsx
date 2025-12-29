@@ -32,15 +32,18 @@ interface ProductDetailsPageRendererProps {
   onIncrementQuantity: () => void;
   onDecrementQuantity: () => void;
   className?: string;
+  routePrefix?: string;
 }
 
 // Product Breadcrumb Component
 function ProductBreadcrumb({
   settings = {},
   product,
+  routePrefix = "",
 }: {
   settings?: Record<string, unknown>;
   product: Product;
+  routePrefix?: string;
 }) {
   const showHome = settings.show_home !== false;
   const showCategory = settings.show_category !== false;
@@ -49,13 +52,13 @@ function ProductBreadcrumb({
   const iconColor = (settings.icon_color as string) || "#9CA3AF";
 
   const breadcrumbs = [
-    ...(showHome ? [{ label: "Home", href: "/" }] : []),
-    { label: "Products", href: "/products" },
+    ...(showHome ? [{ label: "Home", href: routePrefix || "/" }] : []),
+    { label: "Products", href: `${routePrefix}/products` },
     ...(showCategory && product.categories?.[0]
       ? [
           {
             label: product.categories[0].name,
-            href: `/products?category=${product.categories[0].id}`,
+            href: `${routePrefix}/products?category=${product.categories[0].id}`,
           },
         ]
       : []),
@@ -705,9 +708,11 @@ function CustomerReviews({
 function RelatedProducts({
   settings = {},
   products = [],
+  routePrefix = "",
 }: {
   settings?: Record<string, unknown>;
   products?: Product[];
+  routePrefix?: string;
 }) {
   const title = (settings.title as string) || "You May Also Like";
   const subtitle =
@@ -749,7 +754,7 @@ function RelatedProducts({
             return (
               <Link
                 key={product.id}
-                href={`/products/${handle}`}
+                href={`${routePrefix}/products/${handle}`}
                 className="group block bg-white rounded-xl shadow-sm hover:shadow-xl transition-all overflow-hidden border border-gray-100"
               >
                 <div className="aspect-square overflow-hidden bg-gray-100 relative">
@@ -801,6 +806,7 @@ export default function ProductDetailsPageRenderer({
   onIncrementQuantity,
   onDecrementQuantity,
   className = "",
+  routePrefix = "",
 }: ProductDetailsPageRendererProps) {
   const renderSection = (section: Section) => {
     if (section.enabled === false) return null;
@@ -813,7 +819,7 @@ export default function ProductDetailsPageRenderer({
             data-section-id={section.id}
             data-section-type={section.type}
           >
-            <ProductBreadcrumb settings={section.settings} product={product} />
+            <ProductBreadcrumb settings={section.settings} product={product} routePrefix={routePrefix} />
           </div>
         );
 
@@ -863,6 +869,7 @@ export default function ProductDetailsPageRenderer({
             <RelatedProducts
               settings={section.settings}
               products={product.related_products}
+              routePrefix={routePrefix}
             />
           </div>
         );
