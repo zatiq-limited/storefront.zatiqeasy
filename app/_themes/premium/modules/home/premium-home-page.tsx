@@ -75,7 +75,7 @@ export function PremiumHomePage() {
 
       {/* Main Content */}
       <div className="container">
-        <div className="flex flex-col pt-[48px] md:pt-[60px] xl:pt-[84px] gap-[48px] md:gap-[60px] xl:gap-[84px]">
+        <div className="flex flex-col pt-12 md:pt-15 xl:pt-21 gap-12 md:gap-15 xl:gap-21">
           {/* Categories Section */}
           <PremiumCategorySection showHeader={true} />
 

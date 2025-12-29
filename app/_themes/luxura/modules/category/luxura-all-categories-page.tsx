@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useProductsStore } from "@/stores/productsStore";
 import { GridContainer } from "../../components/core";
 import { LuxuraCategoryCard } from "../../components/cards";
-import { PageHeader } from "../../../../../components/shared/page-header";
+import PageHeader from "@/components/shared/page-header";
 
 export function LuxuraAllCategoriesPage() {
   const { t } = useTranslation();

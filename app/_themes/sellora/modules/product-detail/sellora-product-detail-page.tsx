@@ -62,18 +62,18 @@ export function SelloraProductDetailPage({
   const [quantity, setQuantity] = useState(1);
   const [selectedVariants, setSelectedVariants] = useState<VariantsState>({});
 
-  // Extract product properties with defaults (handles null product)
-  const id = product?.id;
-  const name = product?.name || "";
-  const price = product?.price ?? 0;
-  const old_price = product?.old_price;
-  const images = product?.images ?? [];
-  const image_url = product?.image_url;
-  const variant_types = product?.variant_types ?? [];
-  const video_link = product?.video_link;
-  const reviews = product?.reviews;
-  const categories = product?.categories ?? [];
-  const image_variant_type_id = product?.image_variant_type_id;
+  // Extract product properties with defaults - wrap in useMemo for performance
+  const id = useMemo(() => product?.id, [product?.id]);
+  const name = useMemo(() => product?.name || "", [product?.name]);
+  const price = useMemo(() => product?.price ?? 0, [product?.price]);
+  const old_price = useMemo(() => product?.old_price, [product?.old_price]);
+  const images = useMemo(() => product?.images ?? [], [product?.images]);
+  const image_url = useMemo(() => product?.image_url, [product?.image_url]);
+  const variant_types = useMemo(() => product?.variant_types ?? [], [product?.variant_types]);
+  const video_link = useMemo(() => product?.video_link, [product?.video_link]);
+  const reviews = useMemo(() => product?.reviews, [product?.reviews]);
+  const categories = useMemo(() => product?.categories ?? [], [product?.categories]);
+  const image_variant_type_id = useMemo(() => product?.image_variant_type_id, [product?.image_variant_type_id]);
 
   const baseUrl = shopDetails?.baseUrl || "";
   const hasItems = totalCartItems > 0;
@@ -115,7 +115,6 @@ export function SelloraProductDetailPage({
     [id, allCartProducts]
   );
   const isInCart = cartProducts.length > 0;
-  const cartQty = cartProducts.reduce((acc, p) => acc + (p.qty || 0), 0);
 
   // For non-variant products, find the cart item directly
   // For variant products, find the matching variant combination
@@ -149,6 +148,8 @@ export function SelloraProductDetailPage({
   useEffect(() => {
     if (matchingCartQty > 0) {
       setQuantity(matchingCartQty);
+    } else {
+      setQuantity(1);
     }
   }, [matchingCartQty]);
 
@@ -176,6 +177,41 @@ export function SelloraProductDetailPage({
     },
     []
   );
+
+  // Restore selected variants from cart (when product page loads)
+  // This ensures the variants that were added to cart are pre-selected
+  useEffect(() => {
+    if (!product || !variant_types || variant_types.length === 0) {
+      return;
+    }
+
+    // Find the first cart item for this product
+    const firstCartItem = cartProducts[0];
+    if (!firstCartItem?.selectedVariants) {
+      return;
+    }
+
+    // Restore each variant from the cart
+    Object.entries(firstCartItem.selectedVariants).forEach(([variantTypeId, variantState]) => {
+      const typeId = Number(variantTypeId);
+      const variantId = variantState.variant_id;
+
+      // Find the variant in the product's variant types
+      const variantType = variant_types.find((vt) => vt.id === typeId);
+      if (variantType?.variants) {
+        const variant = variantType.variants.find((v) => v.id === variantId);
+        if (variant) {
+          handleVariantSelect(typeId, {
+            variant_type_id: variantState.variant_type_id,
+            variant_id: variantId,
+            price: variantState.price || 0,
+            variant_name: variantState.variant_name || variant.name || "",
+            image_url: variant.image_url || undefined,
+          });
+        }
+      }
+    });
+  }, [product, cartProducts, variant_types, handleVariantSelect]);
 
   // Handle quantity change
   const handleQuantityChange = useCallback(
