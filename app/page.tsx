@@ -2,12 +2,45 @@
 
 import { useHomepage } from "@/hooks";
 import { useHomepageStore } from "@/stores/homepageStore";
+import { useShopStore } from "@/stores";
 import BlockRenderer from "@/components/renderers/block-renderer";
+import { ShopIdInput } from "./components/shop-id-input";
+import { ShopProvider } from "./providers/shop-provider";
+import { ConditionalLayoutWrapper } from "./_layouts/conditional-layout-wrapper";
 
 export default function HomePage() {
+  const { shopProfile } = useShopStore();
   const { homepage } = useHomepageStore();
   const { isLoading, error } = useHomepage();
 
+  // If no shop profile in store, show shop ID input
+  if (!shopProfile) {
+    return <ShopIdInput />;
+  }
+
+  // Wrap content with ShopProvider and ConditionalLayoutWrapper
+  return (
+    <ShopProvider initialShopData={shopProfile}>
+      <ConditionalLayoutWrapper>
+        <HomePageContent
+          homepage={homepage}
+          isLoading={isLoading}
+          error={error}
+        />
+      </ConditionalLayoutWrapper>
+    </ShopProvider>
+  );
+}
+
+function HomePageContent({
+  homepage,
+  isLoading,
+  error,
+}: {
+  homepage: unknown;
+  isLoading: boolean;
+  error: unknown;
+}) {
   if (isLoading) {
     return (
       <main className="flex items-center justify-center min-h-[50vh]">

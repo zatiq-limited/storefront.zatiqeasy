@@ -34,8 +34,6 @@ export default async function RootLayout({
   // Get shop identifier from hostname
   const shopIdentifier = await getShopIdentifier();
 
-  console.log("RootLayout - shopIdentifier:", shopIdentifier);
-
   // Fetch shop profile if domain or subdomain is detected
   let shopProfile = null;
   if (shopIdentifier.domain || shopIdentifier.subdomain) {
@@ -46,8 +44,6 @@ export default async function RootLayout({
     }
   }
 
-  console.log("RootLayout - shopProfile:", shopProfile);
-
   return (
     <html lang="en" className={inter.variable}>
       <body
@@ -57,7 +53,9 @@ export default async function RootLayout({
           <I18nProvider>
             {shopProfile ? (
               <ShopProvider initialShopData={shopProfile}>
-                <ThemeLayout>{children}</ThemeLayout>
+                <ThemeLayout isStaticTheme={!shopProfile.legacy_theme}>
+                  {children}
+                </ThemeLayout>
               </ShopProvider>
             ) : (
               <ThemeLayout>{children}</ThemeLayout>

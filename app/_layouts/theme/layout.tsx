@@ -24,6 +24,7 @@ import BlockRenderer, {
 
 interface ThemeLayoutProps {
   children: React.ReactNode;
+  isStaticTheme?: boolean; // New prop to determine if we should render theme builder sections
 }
 
 // Type definitions for theme sections
@@ -50,13 +51,19 @@ interface ThemeData {
   global_sections?: GlobalSections;
 }
 
-export default function ThemeLayout({ children }: ThemeLayoutProps) {
+export default function ThemeLayout({
+  children,
+  isStaticTheme = false,
+}: ThemeLayoutProps) {
   const { theme } = useThemeStore();
   const { isLoading, error } = useTheme();
   const pathname = usePathname();
 
-  // Check if we're on a static theme route (merchant pages use static themes)
-  const isStaticThemeRoute = pathname?.startsWith('/merchant/');
+  // Determine if we should render theme builder sections
+  // For merchant routes, check pathname (backward compatibility)
+  // For root routes with shop, check isStaticTheme prop
+  const isMerchantRoute = pathname?.startsWith("/merchant/");
+  const shouldRenderThemeBuilder = !isMerchantRoute && !isStaticTheme;
 
   // Extract theme data with proper typing
   const themeRaw = theme as ThemeData | null;
@@ -102,8 +109,8 @@ export default function ThemeLayout({ children }: ThemeLayoutProps) {
 
   return (
     <>
-      {/* Only render theme builder header/footer for non-static theme routes */}
-      {!isStaticThemeRoute && (
+      {/* Only render theme builder header/footer when shouldRenderThemeBuilder is true */}
+      {shouldRenderThemeBuilder && (
         <>
           {/* Announcement Bar */}
           {announcement?.enabled && announcementBlock && (
@@ -126,7 +133,10 @@ export default function ThemeLayout({ children }: ThemeLayoutProps) {
             <BlockRenderer
               block={announcementAfterHeaderBlock}
               data={
-                (announcementAfterHeaderBlock.data as Record<string, unknown>) || {}
+                (announcementAfterHeaderBlock.data as Record<
+                  string,
+                  unknown
+                >) || {}
               }
             />
           )}
@@ -136,8 +146,8 @@ export default function ThemeLayout({ children }: ThemeLayoutProps) {
       {/* Main Content */}
       <div className="main-content">{children}</div>
 
-      {/* Only render theme builder footer for non-static theme routes */}
-      {!isStaticThemeRoute && (
+      {/* Only render theme builder footer when shouldRenderThemeBuilder is true */}
+      {shouldRenderThemeBuilder && (
         <>
           {/* Footer */}
           {footer?.enabled && footerBlock && (
