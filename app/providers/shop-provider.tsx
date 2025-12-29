@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useEffect } from 'react';
-import { useShopStore } from '@/stores';
+import React, { useEffect } from "react";
+import { useShopStore } from "@/stores";
+import type { ShopProfile } from "@/types/shop.types";
 
 interface ShopProviderProps {
   children: React.ReactNode;
-  initialShopData: any;
+  initialShopData: ShopProfile | null;
 }
 
 export function ShopProvider({ children, initialShopData }: ShopProviderProps) {

@@ -62,6 +62,8 @@ export default function ThemeLayout({ children }: ThemeLayoutProps) {
   const themeRaw = theme as ThemeData | null;
   const themeData = themeRaw?.data || themeRaw || {};
 
+  console.log("ThemeLayout - themeData:", themeData);
+
   // Get global sections from theme (support both camelCase and snake_case)
   const globalSections: GlobalSections =
     themeData?.globalSections || themeData?.global_sections || {};

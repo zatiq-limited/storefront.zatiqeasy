@@ -4,7 +4,8 @@
  */
 
 import { apiClient } from "../client";
-import type { ShopProfile, Product, Category, ApiResponse } from "../types";
+import type { Product, Category, ApiResponse } from "../types";
+import type { ShopProfile } from "@/types/shop.types";
 
 export const shopService = {
   /**
