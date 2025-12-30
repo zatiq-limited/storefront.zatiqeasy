@@ -23,6 +23,7 @@ export interface ShopProfile {
   baseFullUrl: string;
   shop_theme: ShopTheme;
   theme_color?: ThemeColor;
+  legacy_theme?: boolean; // true = use static themes, false = use theme builder
 
   // Analytics
   hasPixelAccess?: boolean;

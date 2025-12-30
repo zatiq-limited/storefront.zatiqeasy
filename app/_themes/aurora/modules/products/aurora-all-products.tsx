@@ -11,6 +11,7 @@ import {
   selectSubtotal,
 } from "@/stores/cartStore";
 import { useProductsStore, type Product } from "@/stores/productsStore";
+import { useShopInventories, useShopCategories } from "@/hooks";
 import { AuroraProductCard } from "../../components/cards";
 import { CartFloatingBtn } from "@/components/features/cart/cart-floating-btn";
 import CategoryHorizontalList from "@/components/features/category/category-horizontal-list";
@@ -63,10 +64,22 @@ export function AuroraAllProducts() {
   const totalCartProducts = useCartStore(selectTotalItems);
   const totalPrice = useCartStore(selectSubtotal);
 
-  // Get products from Zustand store (populated by useShopInventories in parent page)
+  // Get products from Zustand store
   const products = useProductsStore((state) => state.products);
   const filters = useProductsStore((state) => state.filters);
-  const isLoading = useProductsStore((state) => state.isLoading);
+  const productsStoreIsLoading = useProductsStore((state) => state.isLoading);
+
+  // Fetch shop inventories to populate products store (if not already fetched by parent)
+  const { isLoading: isInventoriesLoading } = useShopInventories(
+    { shopUuid: shopDetails?.shop_uuid ?? "" },
+    { enabled: !!shopDetails?.shop_uuid }
+  );
+
+  // Fetch categories
+  useShopCategories(
+    { shopUuid: shopDetails?.shop_uuid ?? "" },
+    { enabled: !!shopDetails?.shop_uuid }
+  );
 
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [selectedRange, setSelectedRange] = useState<PriceRange | null>(null);
@@ -77,6 +90,7 @@ export function AuroraAllProducts() {
   const baseUrl = shopDetails?.baseUrl || "";
   const countryCurrency = shopDetails?.country_currency || "BDT";
   const hasItems = totalCartProducts > 0;
+  const isLoading = isInventoriesLoading || productsStoreIsLoading;
 
   // Compute filtered products
   const { filteredProducts, totalPages, totalProducts } = useMemo(() => {

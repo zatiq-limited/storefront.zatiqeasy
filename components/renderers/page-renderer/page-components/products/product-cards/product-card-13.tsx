@@ -5,7 +5,7 @@
 
 "use client";
 
-import Image from "next/image";
+import { FallbackImage } from "@/components/ui/fallback-image";
 import Link from "next/link";
 
 interface ProductCard13Props {
@@ -43,7 +43,7 @@ export default function ProductCard13({
       <Link href={`/products/${handle}`} className="block">
         {/* Image Container with Gradient Overlay */}
         <div className="relative h-[200px] sm:h-60 lg:h-[280px]">
-          <Image
+          <FallbackImage
             src={image}
             alt={title}
             fill

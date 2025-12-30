@@ -11,6 +11,7 @@ import {
   selectTotalItems,
   selectSubtotal,
 } from "@/stores/cartStore";
+import { useShopInventories, useShopCategories } from "@/hooks";
 import { CartFloatingBtn } from "@/components/features/cart/cart-floating-btn";
 import { VariantSelectorModal } from "@/components/products/variant-selector-modal";
 import { FallbackImage } from "@/components/ui/fallback-image";
@@ -41,6 +42,19 @@ export function SelloraAllProducts() {
   const products = useProductsStore((state) => state.products);
   const totalCartItems = useCartStore(selectTotalItems);
   const totalPrice = useCartStore(selectSubtotal);
+  const productsStoreIsLoading = useProductsStore((state) => state.isLoading);
+
+  // Fetch shop inventories to populate products store (if not already fetched by parent)
+  const { isLoading: isInventoriesLoading } = useShopInventories(
+    { shopUuid: shopDetails?.shop_uuid ?? "" },
+    { enabled: !!shopDetails?.shop_uuid }
+  );
+
+  // Fetch categories
+  useShopCategories(
+    { shopUuid: shopDetails?.shop_uuid ?? "" },
+    { enabled: !!shopDetails?.shop_uuid }
+  );
 
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -48,6 +62,8 @@ export function SelloraAllProducts() {
   const [selectedPriceRange, setSelectedPriceRange] =
     useState<PriceRange | null>(null);
   const [showMobileFilter, setShowMobileFilter] = useState(false);
+
+  const isLoading = isInventoriesLoading || productsStoreIsLoading;
 
   // Generate price ranges based on products
   const priceRanges = useMemo((): PriceRange[] => {

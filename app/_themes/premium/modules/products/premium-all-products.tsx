@@ -11,6 +11,7 @@ import {
   selectTotalItems,
   selectSubtotal,
 } from "@/stores/cartStore";
+import { useShopInventories, useShopCategories } from "@/hooks";
 import { CartFloatingBtn } from "@/components/features/cart/cart-floating-btn";
 import { VariantSelectorModal } from "@/components/products/variant-selector-modal";
 import { PremiumProductCard } from "../../components/cards";
@@ -44,6 +45,19 @@ export function PremiumAllProducts() {
   const setFilters = useProductsStore((state) => state.setFilters);
   const totalCartItems = useCartStore(selectTotalItems);
   const totalPrice = useCartStore(selectSubtotal);
+  const productsStoreIsLoading = useProductsStore((state) => state.isLoading);
+
+  // Fetch shop inventories to populate products store (if not already fetched by parent)
+  const { isLoading: isInventoriesLoading } = useShopInventories(
+    { shopUuid: shopDetails?.shop_uuid ?? "" },
+    { enabled: !!shopDetails?.shop_uuid }
+  );
+
+  // Fetch categories
+  useShopCategories(
+    { shopUuid: shopDetails?.shop_uuid ?? "" },
+    { enabled: !!shopDetails?.shop_uuid }
+  );
 
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [showMobileFilter, setShowMobileFilter] = useState(false);
@@ -53,6 +67,7 @@ export function PremiumAllProducts() {
   const baseUrl = shopDetails?.baseUrl || "";
   const countryCurrency = shopDetails?.country_currency || "৳";
   const hasItems = totalCartItems > 0;
+  const isLoading = isInventoriesLoading || productsStoreIsLoading;
 
   // Handle price range selection
   const handleRangeSelect = (range: PriceRange | null) => () => {

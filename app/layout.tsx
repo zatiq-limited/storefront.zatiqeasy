@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { QueryProvider } from "@/providers/QueryProvider";
-import ThemeLayout from "@/app/_layouts/theme/layout";
 import I18nProvider from "@/providers/I18nProvider";
 import { Toaster } from "react-hot-toast";
 import { getShopIdentifier } from "@/lib/utils/shop-identifier";
 import { shopService } from "@/lib/api/services/shop.service";
 import { ShopProvider } from "@/app/providers/shop-provider";
+import { AppWrapper } from "@/components/app-wrapper";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -31,22 +31,25 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Get shop identifier from hostname
+  // Get shop identifier from hostname (including localhost with DEV_SHOP_ID)
   const shopIdentifier = await getShopIdentifier();
 
   console.log("RootLayout - shopIdentifier:", shopIdentifier);
 
-  // Fetch shop profile if domain or subdomain is detected
+  // Fetch shop profile if shop_id, domain, or subdomain is detected
   let shopProfile = null;
-  if (shopIdentifier.domain || shopIdentifier.subdomain) {
+  if (
+    shopIdentifier.shop_id ||
+    shopIdentifier.domain ||
+    shopIdentifier.subdomain
+  ) {
     try {
       shopProfile = await shopService.getProfile(shopIdentifier);
+      console.log("RootLayout - shopProfile loaded:", shopProfile?.shop_name);
     } catch (error) {
       console.error("Failed to load shop profile:", error);
     }
   }
-
-  console.log("RootLayout - shopProfile:", shopProfile);
 
   return (
     <html lang="en" className={inter.variable}>
@@ -57,10 +60,10 @@ export default async function RootLayout({
           <I18nProvider>
             {shopProfile ? (
               <ShopProvider initialShopData={shopProfile}>
-                <ThemeLayout>{children}</ThemeLayout>
+                <AppWrapper>{children}</AppWrapper>
               </ShopProvider>
             ) : (
-              <ThemeLayout>{children}</ThemeLayout>
+              <AppWrapper>{children}</AppWrapper>
             )}
           </I18nProvider>
         </QueryProvider>

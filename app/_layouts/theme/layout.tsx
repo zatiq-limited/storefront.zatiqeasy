@@ -17,7 +17,7 @@
 
 import { useTheme } from "@/hooks";
 import { useThemeStore } from "@/stores/themeStore";
-import { usePathname } from "next/navigation";
+import { useShopStore } from "@/stores";
 import BlockRenderer, {
   type Block,
 } from "@/components/renderers/block-renderer";
@@ -53,16 +53,21 @@ interface ThemeData {
 export default function ThemeLayout({ children }: ThemeLayoutProps) {
   const { theme } = useThemeStore();
   const { isLoading, error } = useTheme();
-  const pathname = usePathname();
+  const { shopDetails } = useShopStore();
 
-  // Check if we're on a static theme route (merchant pages use static themes)
-  const isStaticThemeRoute = pathname?.startsWith('/merchant/');
+  // Check if using legacy theme (static themes)
+  const isLegacyTheme = shopDetails?.legacy_theme ?? true;
+
+  // Don't render theme builder header/footer if:
+  // 1. Using legacy theme (static themes handle their own header/footer)
+  // 2. On a static theme route
+  const shouldRenderThemeBuilderHeader = !isLegacyTheme;
 
   // Extract theme data with proper typing
   const themeRaw = theme as ThemeData | null;
   const themeData = themeRaw?.data || themeRaw || {};
 
-  console.log("ThemeLayout - themeData:", themeData);
+  console.log("ThemeLayout - isLegacyTheme:", isLegacyTheme);
 
   // Get global sections from theme (support both camelCase and snake_case)
   const globalSections: GlobalSections =
@@ -102,8 +107,8 @@ export default function ThemeLayout({ children }: ThemeLayoutProps) {
 
   return (
     <>
-      {/* Only render theme builder header/footer for non-static theme routes */}
-      {!isStaticThemeRoute && (
+      {/* Only render theme builder header/footer when NOT using legacy theme */}
+      {shouldRenderThemeBuilderHeader && (
         <>
           {/* Announcement Bar */}
           {announcement?.enabled && announcementBlock && (
@@ -126,7 +131,10 @@ export default function ThemeLayout({ children }: ThemeLayoutProps) {
             <BlockRenderer
               block={announcementAfterHeaderBlock}
               data={
-                (announcementAfterHeaderBlock.data as Record<string, unknown>) || {}
+                (announcementAfterHeaderBlock.data as Record<
+                  string,
+                  unknown
+                >) || {}
               }
             />
           )}
@@ -136,8 +144,8 @@ export default function ThemeLayout({ children }: ThemeLayoutProps) {
       {/* Main Content */}
       <div className="main-content">{children}</div>
 
-      {/* Only render theme builder footer for non-static theme routes */}
-      {!isStaticThemeRoute && (
+      {/* Only render theme builder footer when NOT using legacy theme */}
+      {shouldRenderThemeBuilderHeader && (
         <>
           {/* Footer */}
           {footer?.enabled && footerBlock && (

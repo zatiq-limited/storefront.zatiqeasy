@@ -6,7 +6,7 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
+import { FallbackImage } from "@/components/ui/fallback-image";
 import Link from "next/link";
 
 interface ProductCard8Props {
@@ -53,7 +53,7 @@ export default function ProductCard8({
       >
         {/* Image Container */}
         <div className="w-full aspect-[298/246] relative bg-[#FAFAFA] overflow-hidden">
-          <Image
+          <FallbackImage
             src={isHovered && hoverImage ? hoverImage : image}
             alt={title}
             fill

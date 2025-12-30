@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { shopService } from "@/lib/api/services/shop.service";
-import { ConditionalThemeHandler } from "@/app/lib/conditional-theme-handler";
 import { ShopProvider } from "@/app/providers/shop-provider";
 import { BreadcrumbWrapper } from "@/app/_themes/_components/breadcrumb-wrapper";
+import { ThemeRouter } from "@/components/theme-router";
+import ThemeLayout from "@/app/_layouts/theme/layout";
 
 interface MerchantLayoutProps {
   children: React.ReactNode;
@@ -64,16 +65,25 @@ export default async function MerchantLayout({
     shop_id: shopId,
   });
 
+  const isLegacyTheme = shopProfile?.legacy_theme ?? true;
+
+  console.log("MerchantLayout - isLegacyTheme:", isLegacyTheme);
+
   return (
     <ShopProvider initialShopData={shopProfile}>
-      <div className="min-h-screen bg-gray-50">
-        <ConditionalThemeHandler>
-          {/* Breadcrumb wrapper - conditionally rendered based on theme and route */}
+      {isLegacyTheme ? (
+        // Legacy mode: ThemeRouter handles ConditionalThemeHandler wrapping
+        // BreadcrumbWrapper is rendered separately (shown for non-homepage pages)
+        <>
           <BreadcrumbWrapper />
-
-          {children}
-        </ConditionalThemeHandler>
-      </div>
+          <ThemeRouter>{children}</ThemeRouter>
+        </>
+      ) : (
+        // Theme Builder mode: Use ThemeRouter with ThemeLayout
+        <ThemeRouter>
+          <ThemeLayout>{children}</ThemeLayout>
+        </ThemeRouter>
+      )}
     </ShopProvider>
   );
 }

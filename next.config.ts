@@ -1,13 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   images: {
     unoptimized: true,
-
     minimumCacheTTL: 604800, // Cache images for one week (in seconds)
 
-    // Remote image patterns
+    // Remote image patterns (Next.js 16 style)
     remotePatterns: [
       {
         protocol: "https",
@@ -35,11 +33,11 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "*.zatiqeasy.com",
+        hostname: "**.zatiqeasy.com",
       },
       {
         protocol: "https",
-        hostname: "*.zatiq.app",
+        hostname: "**.zatiq.app",
       },
       {
         protocol: "https",
@@ -56,7 +54,7 @@ const nextConfig: NextConfig = {
     ],
   },
 
-  turbopack: {}, // Empty turbopack config to silence the warning
+  turbopack: {},
 
   webpack: (config) => {
     // Fix for module resolution
@@ -66,6 +64,101 @@ const nextConfig: NextConfig = {
     };
     return config;
   },
+
+  // Cache headers for static files
+  async headers() {
+    return [
+      {
+        source: "/_next/static/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable", // Cache static files for a year
+          },
+        ],
+      },
+    ];
+  },
+
+  // Rewrites and redirects based on environment
+  ...(process.env.NEXT_PUBLIC_SYSTEM_ENV === "STANDALONE"
+    ? {
+        // Production/Standalone mode: Custom domains and subdomains
+        rewrites: async () => [
+          {
+            source: "/robots.txt",
+            destination: "/api/robots.txt",
+          },
+          {
+            source: "/r/:path*",
+            destination: "/receipt/:path",
+          },
+          {
+            source: "/merchant/:path*",
+            destination: "/404",
+          },
+        ],
+        redirects: async () => [
+          {
+            source: "/",
+            has: [{ type: "query", key: "product" }],
+            destination: "/products/:product",
+            permanent: true,
+          },
+          {
+            source: "/",
+            has: [{ type: "query", key: "category" }],
+            destination: "/categories/:category",
+            permanent: true,
+          },
+        ],
+      }
+    : {
+        // Development mode: /merchant/[shopId] routing
+        rewrites: async () => [
+          {
+            source: "/categories/:path*",
+            destination: "/404",
+          },
+          {
+            source: "/products/:path*",
+            destination: "/404",
+          },
+          {
+            source: "/r/:path*",
+            destination: "/receipt/:path",
+          },
+        ],
+        redirects: async () => [
+          // Only redirect root if NEXT_PUBLIC_REDIRECT_URL is explicitly set
+          ...(process.env.NEXT_PUBLIC_REDIRECT_URL
+            ? [
+                {
+                  source: "/",
+                  destination: process.env.NEXT_PUBLIC_REDIRECT_URL,
+                  permanent: true,
+                },
+              ]
+            : []),
+          {
+            source: "/:shopId(\\d+)/:path*",
+            destination: "/merchant/:shopId/:path*",
+            permanent: false,
+          },
+          {
+            source: "/merchant/:path",
+            has: [{ type: "query", key: "product" }],
+            destination: "/merchant/:path/products/:product",
+            permanent: true,
+          },
+          {
+            source: "/merchant/:path",
+            has: [{ type: "query", key: "category" }],
+            destination: "/merchant/:path/categories/:category",
+            permanent: true,
+          },
+        ],
+      }),
 };
 
 export default nextConfig;

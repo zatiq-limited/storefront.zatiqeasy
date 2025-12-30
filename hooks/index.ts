@@ -1,6 +1,7 @@
 export * from "./useTheme";
 export * from "./useHomepage";
 export * from "./useProducts";
+export * from "./useProductsPage";
 export * from "./useProductDetails";
 export * from "./useCollections";
 export * from "./useCollectionDetails";
