@@ -1,0 +1,544 @@
+{
+  "success": true,
+  "data": {
+    "product": {
+      "id": 1,
+      "name": "Classic White Shirt",
+      "product_code": "CWS-001",
+      "slug": "classic-white-shirt",
+      "description": "Elevate your wardrobe with our Classic White Shirt. Crafted from premium 100% cotton fabric, this shirt offers unparalleled comfort and style. Perfect for both formal and casual occasions, it features a modern fit with attention to detail in every stitch.",
+      "short_description": "Premium 100% cotton white shirt with modern fit",
+      "price": 2500.0,
+      "old_price": 3200.0,
+      "image_url": "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=800&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=800&q=80",
+        "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=800&q=80",
+        "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=800&q=80",
+        "https://images.unsplash.com/photo-1603252109303-2751441dd157?w=800&q=80"
+      ],
+      "brand": "Premium Collection",
+      "quantity": 25,
+      "warranty": "30 days return policy",
+      "isApplyDefaultDeliveryCharge": false,
+      "specific_delivery_charges": {
+        "Dhaka": 60,
+        "Others": 120
+      },
+      "variant_types": [
+        {
+          "id": 1,
+          "title": "Size",
+          "is_mandatory": true,
+          "variants": [
+            {
+              "id": 1,
+              "name": "S",
+              "price": 0
+            },
+            {
+              "id": 2,
+              "name": "M",
+              "price": 0
+            },
+            {
+              "id": 3,
+              "name": "L",
+              "price": 0
+            },
+            {
+              "id": 4,
+              "name": "XL",
+              "price": 100
+            },
+            {
+              "id": 5,
+              "name": "XXL",
+              "price": 200
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "title": "Fit",
+          "is_mandatory": false,
+          "variants": [
+            {
+              "id": 6,
+              "name": "Slim Fit",
+              "price": 0
+            },
+            {
+              "id": 7,
+              "name": "Regular Fit",
+              "price": 0
+            },
+            {
+              "id": 8,
+              "name": "Relaxed Fit",
+              "price": 150
+            }
+          ]
+        }
+      ],
+      "custom_fields": {
+        "Material": "100% Premium Cotton",
+        "Pattern": "Solid",
+        "Sleeve Length": "Full Sleeve",
+        "Collar Style": "Classic Collar",
+        "Care Instructions": "Machine wash cold, tumble dry low",
+        "Country of Origin": "Bangladesh"
+      },
+      "review_summary": {
+        "average_rating": 4.5,
+        "total_reviews": 128
+      },
+      "related_products": [
+        {
+          "id": 3,
+          "name": "Striped Cotton Shirt",
+          "product_code": "SCS-001",
+          "price": 2200.0,
+          "old_price": 2800.0,
+          "buying_price": 1100.0,
+          "image_url": "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=800&q=80",
+          "images": [
+            "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=800&q=80",
+            "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=800&q=80"
+          ],
+          "quantity": 85,
+          "initial_product_sold": 42,
+          "inventory_view_count": 1234,
+          "inventory_type": "Clothing",
+          "unit_name": "piece",
+          "warranty": "30 days return policy",
+          "description": "Stylish striped cotton shirt perfect for casual and semi-formal occasions.",
+          "short_description": "Striped cotton shirt",
+          "brand": "ZatiqStyle",
+          "condition": "new",
+          "has_variant": true,
+          "categories": [
+            { "id": 2, "name": "Men's Fashion" },
+            { "id": 8, "name": "Shirts" }
+          ],
+          "review_summary": {
+            "average_rating": 4.3,
+            "total_reviews": 89,
+            "rating_distribution": { "5": 45, "4": 28, "3": 10, "2": 4, "1": 2 }
+          },
+          "isApplyDefaultDeliveryCharge": false,
+          "specific_delivery_charges": { "Dhaka": 50, "Others": 100 },
+          "is_active": true,
+          "serial": 3,
+          "shop_id": 1,
+          "created_at": "2024-02-20T10:00:00Z",
+          "updated_at": "2024-11-15T14:30:00Z"
+        },
+        {
+          "id": 4,
+          "name": "Blue Denim Shirt",
+          "product_code": "BDS-001",
+          "price": 2800.0,
+          "old_price": null,
+          "buying_price": 1400.0,
+          "image_url": "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=800&q=80",
+          "images": [
+            "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=800&q=80",
+            "https://images.unsplash.com/photo-1603252109303-2751441dd157?w=800&q=80"
+          ],
+          "quantity": 62,
+          "initial_product_sold": 78,
+          "inventory_view_count": 2156,
+          "inventory_type": "Clothing",
+          "unit_name": "piece",
+          "warranty": "30 days return policy",
+          "description": "Premium blue denim shirt with a relaxed fit for everyday comfort.",
+          "short_description": "Blue denim shirt",
+          "brand": "ZatiqDenim",
+          "condition": "new",
+          "has_variant": true,
+          "categories": [
+            { "id": 2, "name": "Men's Fashion" },
+            { "id": 8, "name": "Shirts" }
+          ],
+          "review_summary": {
+            "average_rating": 4.7,
+            "total_reviews": 156,
+            "rating_distribution": { "5": 102, "4": 38, "3": 12, "2": 3, "1": 1 }
+          },
+          "isApplyDefaultDeliveryCharge": true,
+          "specific_delivery_charges": null,
+          "is_active": true,
+          "serial": 4,
+          "shop_id": 1,
+          "created_at": "2024-03-05T10:00:00Z",
+          "updated_at": "2024-11-18T09:15:00Z"
+        },
+        {
+          "id": 5,
+          "name": "Slim Fit Black Shirt",
+          "product_code": "SFB-001",
+          "price": 2650.0,
+          "old_price": 3100.0,
+          "buying_price": 1300.0,
+          "image_url": "https://images.unsplash.com/photo-1603252109303-2751441dd157?w=800&q=80",
+          "images": [
+            "https://images.unsplash.com/photo-1603252109303-2751441dd157?w=800&q=80",
+            "https://images.unsplash.com/photo-1621072156002-e2fccdc0b176?w=800&q=80"
+          ],
+          "quantity": 95,
+          "initial_product_sold": 67,
+          "inventory_view_count": 1890,
+          "inventory_type": "Clothing",
+          "unit_name": "piece",
+          "warranty": "30 days return policy",
+          "description": "Modern slim fit black shirt perfect for formal occasions and evening events.",
+          "short_description": "Slim fit black shirt",
+          "brand": "ZatiqStyle",
+          "condition": "new",
+          "has_variant": true,
+          "categories": [
+            { "id": 2, "name": "Men's Fashion" },
+            { "id": 8, "name": "Shirts" }
+          ],
+          "review_summary": {
+            "average_rating": 4.5,
+            "total_reviews": 112,
+            "rating_distribution": { "5": 62, "4": 35, "3": 10, "2": 3, "1": 2 }
+          },
+          "isApplyDefaultDeliveryCharge": false,
+          "specific_delivery_charges": { "Dhaka": 60, "Others": 120 },
+          "is_active": true,
+          "serial": 5,
+          "shop_id": 1,
+          "created_at": "2024-03-10T10:00:00Z",
+          "updated_at": "2024-11-17T11:20:00Z"
+        },
+        {
+          "id": 6,
+          "name": "Oxford Button Down",
+          "product_code": "OBD-001",
+          "price": 2900.0,
+          "old_price": 3500.0,
+          "buying_price": 1450.0,
+          "image_url": "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=800&q=80",
+          "images": [
+            "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=800&q=80",
+            "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=800&q=80"
+          ],
+          "quantity": 110,
+          "initial_product_sold": 156,
+          "inventory_view_count": 3245,
+          "inventory_type": "Clothing",
+          "unit_name": "piece",
+          "warranty": "30 days return policy",
+          "description": "Classic Oxford button-down shirt. A timeless piece for any wardrobe.",
+          "short_description": "Oxford button down shirt",
+          "brand": "Premium Collection",
+          "condition": "new",
+          "has_variant": true,
+          "categories": [
+            { "id": 2, "name": "Men's Fashion" },
+            { "id": 8, "name": "Shirts" }
+          ],
+          "review_summary": {
+            "average_rating": 4.8,
+            "total_reviews": 203,
+            "rating_distribution": { "5": 158, "4": 32, "3": 10, "2": 2, "1": 1 }
+          },
+          "isApplyDefaultDeliveryCharge": true,
+          "specific_delivery_charges": null,
+          "is_active": true,
+          "serial": 6,
+          "shop_id": 1,
+          "created_at": "2024-03-15T10:00:00Z",
+          "updated_at": "2024-11-19T15:40:00Z"
+        },
+        {
+          "id": 7,
+          "name": "Casual Linen Shirt",
+          "product_code": "CLS-001",
+          "price": 3200.0,
+          "old_price": null,
+          "buying_price": 1600.0,
+          "image_url": "https://images.unsplash.com/photo-1621072156002-e2fccdc0b176?w=800&q=80",
+          "images": [
+            "https://images.unsplash.com/photo-1621072156002-e2fccdc0b176?w=800&q=80",
+            "https://images.unsplash.com/photo-1607345366928-199ea26cfe3e?w=800&q=80"
+          ],
+          "quantity": 48,
+          "initial_product_sold": 32,
+          "inventory_view_count": 987,
+          "inventory_type": "Clothing",
+          "unit_name": "piece",
+          "warranty": "30 days return policy",
+          "description": "Breathable linen shirt perfect for summer. Lightweight and comfortable.",
+          "short_description": "Casual linen shirt",
+          "brand": "ZatiqStyle",
+          "condition": "new",
+          "has_variant": true,
+          "categories": [
+            { "id": 2, "name": "Men's Fashion" },
+            { "id": 8, "name": "Shirts" }
+          ],
+          "review_summary": {
+            "average_rating": 4.2,
+            "total_reviews": 67,
+            "rating_distribution": { "5": 30, "4": 22, "3": 10, "2": 3, "1": 2 }
+          },
+          "isApplyDefaultDeliveryCharge": false,
+          "specific_delivery_charges": { "Dhaka": 50, "Others": 100 },
+          "is_active": true,
+          "serial": 7,
+          "shop_id": 1,
+          "created_at": "2024-04-01T10:00:00Z",
+          "updated_at": "2024-11-16T08:30:00Z"
+        },
+        {
+          "id": 8,
+          "name": "Formal Grey Shirt",
+          "product_code": "FGS-001",
+          "price": 2750.0,
+          "old_price": 3200.0,
+          "buying_price": 1375.0,
+          "image_url": "https://images.unsplash.com/photo-1607345366928-199ea26cfe3e?w=800&q=80",
+          "images": [
+            "https://images.unsplash.com/photo-1607345366928-199ea26cfe3e?w=800&q=80",
+            "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=800&q=80"
+          ],
+          "quantity": 72,
+          "initial_product_sold": 89,
+          "inventory_view_count": 1654,
+          "inventory_type": "Clothing",
+          "unit_name": "piece",
+          "warranty": "30 days return policy",
+          "description": "Elegant grey formal shirt for office and business meetings.",
+          "short_description": "Formal grey shirt",
+          "brand": "Premium Collection",
+          "condition": "new",
+          "has_variant": true,
+          "categories": [
+            { "id": 2, "name": "Men's Fashion" },
+            { "id": 8, "name": "Shirts" }
+          ],
+          "review_summary": {
+            "average_rating": 4.6,
+            "total_reviews": 134,
+            "rating_distribution": { "5": 85, "4": 35, "3": 10, "2": 3, "1": 1 }
+          },
+          "isApplyDefaultDeliveryCharge": true,
+          "specific_delivery_charges": null,
+          "is_active": true,
+          "serial": 8,
+          "shop_id": 1,
+          "created_at": "2024-04-10T10:00:00Z",
+          "updated_at": "2024-11-20T10:15:00Z"
+        },
+        {
+          "id": 9,
+          "name": "Navy Blue Polo",
+          "product_code": "NBP-001",
+          "price": 1850.0,
+          "old_price": 2200.0,
+          "buying_price": 925.0,
+          "image_url": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80",
+          "images": [
+            "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80",
+            "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80"
+          ],
+          "quantity": 180,
+          "initial_product_sold": 125,
+          "inventory_view_count": 2876,
+          "inventory_type": "Clothing",
+          "unit_name": "piece",
+          "warranty": "15 days return policy",
+          "description": "Classic navy blue polo shirt. Perfect for casual outings.",
+          "short_description": "Navy blue polo shirt",
+          "brand": "ZatiqBasics",
+          "condition": "new",
+          "has_variant": true,
+          "categories": [
+            { "id": 2, "name": "Men's Fashion" },
+            { "id": 11, "name": "T-Shirts" }
+          ],
+          "review_summary": {
+            "average_rating": 4.4,
+            "total_reviews": 98,
+            "rating_distribution": { "5": 52, "4": 30, "3": 12, "2": 3, "1": 1 }
+          },
+          "isApplyDefaultDeliveryCharge": false,
+          "specific_delivery_charges": { "Dhaka": 40, "Others": 80 },
+          "is_active": true,
+          "serial": 9,
+          "shop_id": 1,
+          "created_at": "2024-04-15T10:00:00Z",
+          "updated_at": "2024-11-18T14:45:00Z"
+        },
+        {
+          "id": 10,
+          "name": "Checked Flannel Shirt",
+          "product_code": "CFS-001",
+          "price": 2400.0,
+          "old_price": null,
+          "buying_price": 1200.0,
+          "image_url": "https://images.unsplash.com/photo-1589310243389-96a5483213a8?w=800&q=80",
+          "images": [
+            "https://images.unsplash.com/photo-1589310243389-96a5483213a8?w=800&q=80",
+            "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=800&q=80"
+          ],
+          "quantity": 55,
+          "initial_product_sold": 28,
+          "inventory_view_count": 756,
+          "inventory_type": "Clothing",
+          "unit_name": "piece",
+          "warranty": "30 days return policy",
+          "description": "Warm flannel shirt with classic check pattern. Great for winter.",
+          "short_description": "Checked flannel shirt",
+          "brand": "ZatiqStyle",
+          "condition": "new",
+          "has_variant": true,
+          "categories": [
+            { "id": 2, "name": "Men's Fashion" },
+            { "id": 8, "name": "Shirts" }
+          ],
+          "review_summary": {
+            "average_rating": 4.1,
+            "total_reviews": 45,
+            "rating_distribution": { "5": 20, "4": 15, "3": 7, "2": 2, "1": 1 }
+          },
+          "isApplyDefaultDeliveryCharge": true,
+          "specific_delivery_charges": null,
+          "is_active": true,
+          "serial": 10,
+          "shop_id": 1,
+          "created_at": "2024-04-20T10:00:00Z",
+          "updated_at": "2024-11-15T16:20:00Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": 1,
+          "name": "Sarah Johnson",
+          "rating": 5,
+          "reviewer_type": "verified_buyer",
+          "description": "Excellent quality shirt! The fabric is soft and comfortable. I've washed it multiple times and it still looks brand new. Highly recommend for anyone looking for a premium white shirt.",
+          "images": [
+            "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=400&q=80"
+          ],
+          "serial": 1,
+          "inventory_id": 1,
+          "shop_id": 1,
+          "created_at": "2024-11-10T10:00:00Z"
+        },
+        {
+          "id": 2,
+          "name": "Michael Chen",
+          "rating": 4,
+          "reviewer_type": "verified_buyer",
+          "description": "Perfect fit and great value for money. The slim fit option works perfectly for my body type. Only giving 4 stars because delivery took a bit longer than expected.",
+          "images": null,
+          "serial": 2,
+          "inventory_id": 1,
+          "shop_id": 1,
+          "created_at": "2024-11-08T14:30:00Z"
+        },
+        {
+          "id": 3,
+          "name": "Aisha Rahman",
+          "rating": 5,
+          "reviewer_type": "verified_buyer",
+          "description": "Bought this for my husband and he absolutely loves it! The cotton quality is exceptional and it doesn't wrinkle easily. Will definitely buy more colors.",
+          "images": [
+            "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400&q=80",
+            "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=400&q=80"
+          ],
+          "serial": 3,
+          "inventory_id": 1,
+          "shop_id": 1,
+          "created_at": "2024-11-05T09:15:00Z"
+        },
+        {
+          "id": 4,
+          "name": "David Park",
+          "rating": 5,
+          "reviewer_type": "verified_buyer",
+          "description": "This is my third purchase from this brand. Consistent quality every time. The classic collar style is perfect for both office and casual outings.",
+          "images": null,
+          "serial": 4,
+          "inventory_id": 1,
+          "shop_id": 1,
+          "created_at": "2024-11-02T16:45:00Z"
+        },
+        {
+          "id": 5,
+          "name": "Fatima Begum",
+          "rating": 4,
+          "reviewer_type": "verified_buyer",
+          "description": "Good quality shirt overall. The fabric feels premium but I wish there were more size options between L and XL. Fits a bit tight in the shoulders.",
+          "images": [
+            "https://images.unsplash.com/photo-1603252109303-2751441dd157?w=400&q=80"
+          ],
+          "serial": 5,
+          "inventory_id": 1,
+          "shop_id": 1,
+          "created_at": "2024-10-28T11:20:00Z"
+        },
+        {
+          "id": 6,
+          "name": "James Wilson",
+          "rating": 5,
+          "reviewer_type": "verified_buyer",
+          "description": "Finally found a white shirt that doesn't turn yellowish after a few washes! The care instructions really work. Great investment for your wardrobe.",
+          "images": null,
+          "serial": 6,
+          "inventory_id": 1,
+          "shop_id": 1,
+          "created_at": "2024-10-25T08:30:00Z"
+        },
+        {
+          "id": 7,
+          "name": "Priya Sharma",
+          "rating": 3,
+          "reviewer_type": "verified_buyer",
+          "description": "The shirt quality is good but expected better stitching for this price point. Some loose threads noticed around the buttonholes. Customer service was helpful though.",
+          "images": [
+            "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=400&q=80"
+          ],
+          "serial": 7,
+          "inventory_id": 1,
+          "shop_id": 1,
+          "created_at": "2024-10-20T14:00:00Z"
+        },
+        {
+          "id": 8,
+          "name": "Robert Kim",
+          "rating": 5,
+          "reviewer_type": "verified_buyer",
+          "description": "Best white shirt I've owned in years. The regular fit is true to size and the fabric breathes well even in hot weather. Already ordered two more!",
+          "images": [
+            "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=400&q=80",
+            "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400&q=80"
+          ],
+          "serial": 8,
+          "inventory_id": 1,
+          "shop_id": 1,
+          "created_at": "2024-10-15T19:45:00Z"
+        }
+      ],
+      "theme": {
+        "id": 1,
+        "slug": "classic-white-shirt",
+        "page_title": "Classic White Shirt - Premium Cotton | Demo Fashion Store",
+        "page_description": "Shop our Classic White Shirt made from 100% premium cotton. Free delivery across Bangladesh.",
+        "theme_name": "Modern Product",
+        "theme_data": {
+          "gallery_layout": "thumbnails_left",
+          "show_zoom": true,
+          "show_size_guide": true,
+          "show_share_buttons": true
+        },
+        "preview": "https://cdn.zatiq.com/themes/product-preview.jpg"
+      }
+    }
+  }
+}

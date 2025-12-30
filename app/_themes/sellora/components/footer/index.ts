@@ -1,0 +1,1 @@
+export { SelloraFooter } from "./footer";
