@@ -21,7 +21,6 @@ import {
   CollectionSubcategories1,
   CollectionSubcategories2,
 } from "@/components/renderers/page-renderer/page-components/collection-details";
-import BlockRenderer from "@/components/renderers/block-renderer";
 import { convertSettingsKeys } from "@/lib/settings-utils";
 
 interface CollectionDetailsPageRendererProps {

@@ -24,12 +24,18 @@ interface CollectionResponse {
 }
 
 interface CollectionDetailsPageConfigResponse {
-  sections: Array<{
-    id: string;
-    type: string;
-    enabled: boolean;
-    settings: Record<string, unknown>;
-  }>;
+  success: boolean;
+  data: {
+    template?: string;
+    sections: Array<{
+      id: string;
+      type: string;
+      enabled: boolean;
+      settings: Record<string, unknown>;
+      blocks?: unknown[];
+    }>;
+    seo?: Record<string, unknown>;
+  };
 }
 
 // Fetch single collection by slug
@@ -91,7 +97,7 @@ export function useCollectionDetails(slug: string) {
 
   return {
     collection: collectionQuery.data?.data?.collection,
-    sections: pageConfigQuery.data?.sections || [],
+    sections: pageConfigQuery.data?.data?.sections || [],
     isLoading: collectionQuery.isLoading,
     isPageConfigLoading: pageConfigQuery.isLoading,
     error,
