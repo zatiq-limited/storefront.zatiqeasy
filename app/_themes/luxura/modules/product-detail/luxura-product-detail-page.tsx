@@ -4,10 +4,20 @@ import React, { useState, useMemo, useCallback, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
-import { Minus, Plus, ShoppingCart, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  Minus,
+  Plus,
+  ShoppingCart,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { useShopStore } from "@/stores/shopStore";
 import { useProductsStore } from "@/stores/productsStore";
-import { useCartStore, selectTotalItems, selectSubtotal } from "@/stores/cartStore";
+import {
+  useCartStore,
+  selectTotalItems,
+  selectSubtotal,
+} from "@/stores/cartStore";
 import { CartFloatingBtn } from "@/components/features/cart/cart-floating-btn";
 import { GridContainer } from "../../components/core";
 import { LuxuraProductCard } from "../../components/cards";
@@ -79,7 +89,9 @@ export function LuxuraProductDetailPage() {
   const cartProducts = useMemo(
     () =>
       product?.id
-        ? Object.values(allCartProducts).filter((p) => p.id === Number(product.id))
+        ? Object.values(allCartProducts).filter(
+            (p) => p.id === Number(product.id)
+          )
         : [],
     [product?.id, allCartProducts]
   );
@@ -152,7 +164,11 @@ export function LuxuraProductDetailPage() {
   // Restore selected variants from cart (when product page loads)
   // This ensures the variants that were added to cart are pre-selected
   useEffect(() => {
-    if (!product || !product.variant_types || product.variant_types.length === 0) {
+    if (
+      !product ||
+      !product.variant_types ||
+      product.variant_types.length === 0
+    ) {
       return;
     }
 
@@ -163,19 +179,23 @@ export function LuxuraProductDetailPage() {
     }
 
     // Restore each variant from the cart
-    Object.entries(firstCartItem.selectedVariants).forEach(([variantTypeId, variantState]) => {
-      const typeId = Number(variantTypeId);
-      const variantId = variantState.variant_id;
+    Object.entries(firstCartItem.selectedVariants).forEach(
+      ([variantTypeId, variantState]) => {
+        const typeId = Number(variantTypeId);
+        const variantId = variantState.variant_id;
 
-      // Find the variant in the product's variant types
-      const variantType = product.variant_types?.find((vt) => vt.id === typeId);
-      if (variantType?.variants) {
-        const variant = variantType.variants.find((v) => v.id === variantId);
-        if (variant) {
-          selectVariant(typeId, variant);
+        // Find the variant in the product's variant types
+        const variantType = product.variant_types?.find(
+          (vt) => vt.id === typeId
+        );
+        if (variantType?.variants) {
+          const variant = variantType.variants.find((v) => v.id === variantId);
+          if (variant) {
+            selectVariant(typeId, variant);
+          }
         }
       }
-    });
+    );
   }, [product, cartProducts, selectVariant]);
 
   // Check stock (use hook's isInStock)
@@ -423,8 +443,11 @@ export function LuxuraProductDetailPage() {
                   </span>
                   <span className="bg-red-100 text-red-600 text-sm font-medium px-2 py-1 rounded">
                     {Math.round(
-                      ((product.old_price - product.price) / product.old_price) * 100
-                    )}% OFF
+                      ((product.old_price - product.price) /
+                        product.old_price) *
+                        100
+                    )}
+                    % OFF
                   </span>
                 </>
               )}
@@ -452,7 +475,8 @@ export function LuxuraProductDetailPage() {
                 </h3>
                 <div className="flex flex-wrap gap-2">
                   {variantType.variants?.map((variant) => {
-                    const isSelected = selectedVariants[variantType.id]?.id === variant.id;
+                    const isSelected =
+                      selectedVariants[variantType.id]?.id === variant.id;
                     return (
                       <button
                         key={variant.id}
@@ -484,7 +508,9 @@ export function LuxuraProductDetailPage() {
                 >
                   <Minus size={18} />
                 </button>
-                <span className="text-xl font-medium w-12 text-center">{quantity}</span>
+                <span className="text-xl font-medium w-12 text-center">
+                  {quantity}
+                </span>
                 <button
                   onClick={incrementQuantity}
                   className="w-10 h-10 flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
@@ -541,10 +567,7 @@ export function LuxuraProductDetailPage() {
         {/* Related Products */}
         {relatedProducts.length > 0 && (
           <div className="mt-16">
-            <SectionHeader
-              text={t("related_products")}
-              link="/products"
-            />
+            <SectionHeader text={t("related_products")} link="/products" />
             <GridContainer>
               {relatedProducts.map((p) => (
                 <LuxuraProductCard

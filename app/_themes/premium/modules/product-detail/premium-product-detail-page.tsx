@@ -53,7 +53,8 @@ export function PremiumProductDetailPage({
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isShowVideo, setIsShowVideo] = useState(false);
   const [quantity, setQuantity] = useState(1);
-  const [selectedRelatedProduct, setSelectedRelatedProduct] = useState<Product | null>(null);
+  const [selectedRelatedProduct, setSelectedRelatedProduct] =
+    useState<Product | null>(null);
 
   const {
     id,
@@ -742,7 +743,9 @@ export function PremiumProductDetailPage({
                 <PremiumProductCard
                   key={relatedProduct.id}
                   product={relatedProduct}
-                  onSelectProduct={() => setSelectedRelatedProduct(relatedProduct)}
+                  onSelectProduct={() =>
+                    setSelectedRelatedProduct(relatedProduct)
+                  }
                   onNavigate={() => navigateProductDetails(relatedProduct.id)}
                 />
               ))}

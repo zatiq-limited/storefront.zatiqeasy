@@ -220,7 +220,7 @@ export function BasicAllProducts() {
       {/* Main Content */}
       <div className="flex gap-8">
         {/* Sidebar (Desktop) */}
-        <aside className="hidden lg:block w-64 flex-shrink-0">
+        <aside className="hidden lg:block w-64 shrink-0">
           <div className="sticky top-4">
             <h3 className="font-semibold text-lg mb-4">Filters</h3>
             <div>
