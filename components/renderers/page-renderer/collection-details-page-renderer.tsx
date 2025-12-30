@@ -21,6 +21,7 @@ import {
   CollectionSubcategories1,
   CollectionSubcategories2,
 } from "@/components/renderers/page-renderer/page-components/collection-details";
+import BlockRenderer from "@/components/renderers/block-renderer";
 import { convertSettingsKeys } from "@/lib/settings-utils";
 
 interface CollectionDetailsPageRendererProps {
@@ -151,6 +152,23 @@ export default function CollectionDetailsPageRenderer({
         );
 
       default:
+        // Handle custom-sections with BlockRenderer
+        if (section.type.includes("custom-sections")) {
+          const block = section.blocks?.[0];
+          if (!block) return null;
+          return (
+            <div
+              key={section.id}
+              data-section-id={section.id}
+              data-section-type={section.type}
+            >
+              <BlockRenderer
+                block={block as import("@/components/renderers/block-renderer").Block}
+                data={(block.data as Record<string, unknown>) || {}}
+              />
+            </div>
+          );
+        }
         if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV") {
           return (
             <div

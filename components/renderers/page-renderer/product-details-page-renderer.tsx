@@ -19,6 +19,7 @@ import type {
   // VariantType,
   Review,
 } from "@/stores/productsStore";
+import BlockRenderer from "@/components/renderers/block-renderer";
 // import { convertSettingsKeys } from "@/lib/settings-utils";
 
 interface ProductDetailsPageRendererProps {
@@ -863,6 +864,23 @@ export default function ProductDetailsPageRenderer({
             <RelatedProducts
               settings={section.settings}
               products={product.related_products}
+            />
+          </div>
+        );
+
+      case section.type.includes("custom-sections"):
+        // Custom sections use BlockRenderer for V3.0 Schema blocks
+        const customBlock = section.blocks?.[0];
+        if (!customBlock) return null;
+        return (
+          <div
+            key={section.id}
+            data-section-id={section.id}
+            data-section-type={section.type}
+          >
+            <BlockRenderer
+              block={customBlock as import("@/components/renderers/block-renderer").Block}
+              data={(customBlock.data as Record<string, unknown>) || {}}
             />
           </div>
         );
