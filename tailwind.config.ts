@@ -8,45 +8,45 @@ const config: Config = {
     "./lib/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   // Safelist classes used in theme builder JSON blocks (not scannable by Tailwind)
-  safelist: [
-    // Height constraints for logos
-    "h-auto",
-    "max-h-6",
-    "max-h-8",
-    "max-h-10",
-    "max-h-12",
-    "max-h-14",
-    // Width constraints for logos
-    "w-auto",
-    "max-w-24",
-    "max-w-28",
-    "max-w-32",
-    "max-w-36",
-    "max-w-40",
-    "max-w-44",
-    "max-w-48",
-    // Object fit
-    "object-contain",
-    "object-cover",
-    // Responsive variants
-    "sm:max-h-8",
-    "sm:max-h-10",
-    "sm:max-h-12",
-    "sm:max-w-28",
-    "sm:max-w-32",
-    "sm:max-w-36",
-    "md:max-h-10",
-    "md:max-h-12",
-    "md:max-h-14",
-    "md:max-w-36",
-    "md:max-w-40",
-    "md:max-w-44",
-    "lg:max-h-12",
-    "lg:max-h-14",
-    // Shrink
-    "shrink-0",
-    "flex-shrink-0",
-  ],
+  // safelist: [
+  //   // Height constraints for logos
+  //   "h-auto",
+  //   "max-h-6",
+  //   "max-h-8",
+  //   "max-h-10",
+  //   "max-h-12",
+  //   "max-h-14",
+  //   // Width constraints for logos
+  //   "w-auto",
+  //   "max-w-24",
+  //   "max-w-28",
+  //   "max-w-32",
+  //   "max-w-36",
+  //   "max-w-40",
+  //   "max-w-44",
+  //   "max-w-48",
+  //   // Object fit
+  //   "object-contain",
+  //   "object-cover",
+  //   // Responsive variants
+  //   "sm:max-h-8",
+  //   "sm:max-h-10",
+  //   "sm:max-h-12",
+  //   "sm:max-w-28",
+  //   "sm:max-w-32",
+  //   "sm:max-w-36",
+  //   "md:max-h-10",
+  //   "md:max-h-12",
+  //   "md:max-h-14",
+  //   "md:max-w-36",
+  //   "md:max-w-40",
+  //   "md:max-w-44",
+  //   "lg:max-h-12",
+  //   "lg:max-h-14",
+  //   // Shrink
+  //   "shrink-0",
+  //   "flex-shrink-0",
+  // ],
   theme: {
     extend: {
       fontFamily: {
