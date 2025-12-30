@@ -10,6 +10,7 @@ import {
   selectTotalItems,
   selectSubtotal,
 } from "@/stores/cartStore";
+import { useShopInventories, useShopCategories } from "@/hooks";
 import { CartFloatingBtn } from "@/components/features/cart/cart-floating-btn";
 import { VariantSelectorModal } from "@/components/products/variant-selector-modal";
 import { PremiumCarouselSlider } from "../../components/carousel";
@@ -44,6 +45,17 @@ export function PremiumHomePage() {
   const { shopDetails } = useShopStore();
   const totalProducts = useCartStore(selectTotalItems);
   const totalPrice = useCartStore(selectSubtotal);
+
+  // Fetch products and categories to populate the store
+  useShopInventories(
+    { shopUuid: shopDetails?.shop_uuid ?? "" },
+    { enabled: !!shopDetails?.shop_uuid }
+  );
+
+  useShopCategories(
+    { shopUuid: shopDetails?.shop_uuid ?? "" },
+    { enabled: !!shopDetails?.shop_uuid }
+  );
 
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 

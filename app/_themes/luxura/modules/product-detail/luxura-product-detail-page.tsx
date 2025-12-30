@@ -32,7 +32,8 @@ export function LuxuraProductDetailPage() {
   const router = useRouter();
   const { t } = useTranslation();
 
-  const productHandle = params?.productHandle as string;
+  // Support both 'productHandle' (merchant routes) and 'handle' (main routes)
+  const productHandle = (params?.productHandle || params?.handle) as string;
 
   const { shopDetails } = useShopStore();
   const products = useProductsStore((state) => state.products);
