@@ -11,6 +11,7 @@ import {
   selectSubtotal,
 } from "@/stores/cartStore";
 import { useProductsStore, type Product } from "@/stores/productsStore";
+import { useShopInventories, useShopCategories } from "@/hooks";
 import { GridContainer } from "../../components/core";
 import { LuxuraProductCard } from "../../components/cards";
 import { SectionHeader } from "../home/sections/section-header";
@@ -39,7 +40,19 @@ export function LuxuraAllProducts() {
   // Get products from Zustand store
   const products = useProductsStore((state) => state.products);
   const filters = useProductsStore((state) => state.filters);
-  const isLoading = useProductsStore((state) => state.isLoading);
+  const productsStoreIsLoading = useProductsStore((state) => state.isLoading);
+
+  // Fetch shop inventories to populate products store (if not already fetched by parent)
+  const { isLoading: isInventoriesLoading } = useShopInventories(
+    { shopUuid: shopDetails?.shop_uuid ?? "" },
+    { enabled: !!shopDetails?.shop_uuid }
+  );
+
+  // Fetch categories
+  useShopCategories(
+    { shopUuid: shopDetails?.shop_uuid ?? "" },
+    { enabled: !!shopDetails?.shop_uuid }
+  );
 
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [selectedRange, setSelectedRange] = useState<PriceRange | null>(null);
@@ -50,6 +63,7 @@ export function LuxuraAllProducts() {
   const baseUrl = shopDetails?.baseUrl || "";
   const currency = shopDetails?.country_currency || "BDT";
   const hasItems = totalCartProducts > 0;
+  const isLoading = isInventoriesLoading || productsStoreIsLoading;
 
   // Default price filters
   const priceFilters: PriceRange[] = useMemo(

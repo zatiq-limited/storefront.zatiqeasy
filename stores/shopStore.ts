@@ -82,6 +82,9 @@ export const selectThemeType = (state: ShopState & ShopActions) =>
 export const selectThemeName = (state: ShopState & ShopActions) =>
   state.shopDetails?.shop_theme?.theme_name || "Basic";
 
+export const selectIsLegacyTheme = (state: ShopState & ShopActions) =>
+  state.shopDetails?.legacy_theme ?? true; // Default to true (static themes)
+
 export const selectCurrency = (state: ShopState & ShopActions) =>
   state.shopDetails?.country_currency || "BDT";
 

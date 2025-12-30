@@ -5,7 +5,7 @@
 
 "use client";
 
-import Image from "next/image";
+import { FallbackImage } from "@/components/ui/fallback-image";
 import Link from "next/link";
 
 interface ProductCard14Props {
@@ -45,7 +45,7 @@ export default function ProductCard14({
       <Link href={`/products/${handle}`} className="flex w-full">
         {/* Image Container */}
         <div className="relative shrink-0 w-20 h-20 sm:w-28 sm:h-28 lg:w-1/3 lg:h-[120px]">
-          <Image
+          <FallbackImage
             src={image}
             alt={title}
             fill

@@ -5,7 +5,7 @@
 
 "use client";
 
-import Image from "next/image";
+import { FallbackImage } from "@/components/ui/fallback-image";
 import Link from "next/link";
 
 interface ProductCard12Props {
@@ -43,7 +43,7 @@ export default function ProductCard12({
       <Link href={`/products/${handle}`} className="block">
         {/* Image Container */}
         <div className="relative h-28 sm:h-36 lg:h-40">
-          <Image
+          <FallbackImage
             src={image}
             alt={title}
             fill

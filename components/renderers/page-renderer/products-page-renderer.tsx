@@ -14,6 +14,8 @@ import Link from "next/link";
 import Image from "next/image";
 import type { Section, Pagination as PaginationType } from "@/lib/types";
 import type { Product, ProductFilters } from "@/stores/productsStore";
+import { getInventoryThumbImageUrl } from "@/lib/utils/formatting";
+import { FallbackImage } from "@/components/ui/fallback-image";
 import ProductCard1 from "@/components/renderers/page-renderer/page-components/products/product-cards/product-card-1";
 import ProductCard2 from "@/components/renderers/page-renderer/page-components/products/product-cards/product-card-2";
 import ProductCard3 from "@/components/renderers/page-renderer/page-components/products/product-cards/product-card-3";
@@ -84,6 +86,7 @@ function ProductsLayout({
   const sidebarType = (settings.sidebar_type as string) || "products-sidebar-1";
   const paginationType =
     (settings.pagination_type as string) || "products-pagination-1";
+  const productsPerPage = (settings.products_per_page as number) || 20;
   const filterBarBgColor =
     (settings.filter_bar_bg_color as string) || "#FFFFFF";
   const searchBorderColor =
@@ -111,6 +114,14 @@ function ProductsLayout({
     (settings.sidebar_button_bg_color as string) || "#111827";
   const sidebarButtonTextColor =
     (settings.sidebar_button_text_color as string) || "#FFFFFF";
+
+  // Client-side pagination
+  const currentPage = filters.page || 1;
+  const totalProducts = products.length;
+  const totalPages = Math.ceil(totalProducts / productsPerPage);
+  const startIndex = (currentPage - 1) * productsPerPage;
+  const endIndex = startIndex + productsPerPage;
+  const paginatedProducts = products.slice(startIndex, endIndex);
 
   // Category change handler
   const handleCategoryChange = (categoryId: string, isSelected: boolean) => {
@@ -173,6 +184,10 @@ function ProductsLayout({
   // Get the appropriate product card component based on cardType
   const renderProductCard = (product: Product) => {
     const handle = product.product_code?.toLowerCase() || product.id.toString();
+    // Get image from image_url or images array, using the helper function
+    const productImage = getInventoryThumbImageUrl(
+      product.image_url || product.images?.[0] || ""
+    );
     const commonProps = {
       id: product.id,
       handle,
@@ -180,7 +195,7 @@ function ProductsLayout({
       vendor: product.brand,
       price: product.price,
       comparePrice: product.old_price,
-      image: product.image_url || "",
+      image: productImage,
       buttonBgColor: cardButtonBgColor,
       buttonTextColor: cardButtonTextColor,
     };
@@ -291,17 +306,15 @@ function ProductsLayout({
 
   // Render pagination component
   const renderPagination = () => {
-    if (!pagination || pagination.total_pages <= 1) return null;
+    // Use client-side pagination values
+    if (totalPages <= 1) return null;
 
     const paginationProps = {
-      currentPage: filters.page,
-      totalPages: pagination.total_pages,
-      from: (filters.page - 1) * (pagination.per_page || 20) + 1,
-      to: Math.min(
-        filters.page * (pagination.per_page || 20),
-        pagination.total
-      ),
-      total: pagination.total,
+      currentPage: currentPage,
+      totalPages: totalPages,
+      from: startIndex + 1,
+      to: Math.min(endIndex, totalProducts),
+      total: totalProducts,
       activeColor: paginationActiveColor,
       onPageChange: (page: number) => onFiltersChange({ page }),
     };
@@ -384,7 +397,7 @@ function ProductsLayout({
               {/* Right Controls */}
               <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end min-w-0">
                 {/* Product Count */}
-                {pagination && pagination.total > 0 && (
+                {totalProducts > 0 && (
                   <div
                     className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-md border"
                     style={{ backgroundColor: productCountBgColor }}
@@ -394,7 +407,7 @@ function ProductsLayout({
                       className="text-xs font-medium"
                       style={{ color: productCountTextColor }}
                     >
-                      <span className="font-bold">{pagination.total}</span>
+                      <span className="font-bold">{totalProducts}</span>
                       <span className="ml-1">items</span>
                     </p>
                   </div>
@@ -596,11 +609,11 @@ function ProductsLayout({
                     className={getGridClass()}
                     style={{ gap: `${gap * 4}px` }}
                   >
-                    {products.map((product) => renderProductCard(product))}
+                    {paginatedProducts.map((product) => renderProductCard(product))}
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {products.map((product) => (
+                    {paginatedProducts.map((product) => (
                       <Link
                         key={product.id}
                         href={`/products/${
@@ -610,8 +623,10 @@ function ProductsLayout({
                       >
                         <div className="flex flex-col sm:flex-row gap-4 p-4">
                           <div className="w-full sm:w-48 h-48 shrink-0 overflow-hidden bg-gray-100 rounded-lg relative">
-                            <Image
-                              src={product.image_url || ""}
+                            <FallbackImage
+                              src={getInventoryThumbImageUrl(
+                                product.image_url || product.images?.[0] || ""
+                              )}
                               alt={product.name}
                               fill
                               className="object-cover group-hover:scale-105 transition-transform"

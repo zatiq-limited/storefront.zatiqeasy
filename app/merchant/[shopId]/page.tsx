@@ -1,15 +1,16 @@
 "use client";
 
 import { useEffect } from "react";
-import { useParams, useSearchParams } from "next/navigation";
-import { useShopStore, useProductsStore } from "@/stores";
+import { useParams, useSearchParams, usePathname } from "next/navigation";
+import { useShopStore, useProductsStore, useHomepageStore } from "@/stores";
 import { BasicHomePage } from "@/app/_themes/basic";
 import { AuroraHomePage } from "@/app/_themes/aurora";
 import { LuxuraHomePage } from "@/app/_themes/luxura";
 import { PremiumHomePage } from "@/app/_themes/premium";
 import { SelloraHomePage } from "@/app/_themes/sellora";
-import { useShopProfile, useShopInventories, useShopCategories } from "@/hooks";
+import { useShopProfile, useShopInventories, useShopCategories, useHomepage } from "@/hooks";
 import type { ShopTheme } from "@/types/shop.types";
+import BlockRenderer from "@/components/renderers/block-renderer";
 
 // Loading component
 const LoadingFallback = () => (
@@ -48,8 +49,11 @@ interface ShopPageProps {
 
 function ShopPageContent({ shopId }: ShopPageProps) {
   const searchParams = useSearchParams();
+  const pathname = usePathname();
   const { shopDetails } = useShopStore();
   const { setFilters } = useProductsStore();
+  const { homepage } = useHomepageStore();
+  const { isLoading: isHomepageLoading, error: homepageError } = useHomepage();
 
   // Fetch shop profile using React Query hook (auto-syncs to store)
   const {
@@ -94,7 +98,24 @@ function ShopPageContent({ shopId }: ShopPageProps) {
     isProfileLoading ||
     (shopProfile && (isInventoriesLoading || isCategoriesLoading));
 
-  // Handle loading state
+  // Check if using legacy theme (static themes) or theme builder
+  const isLegacyTheme = shopDetails?.legacy_theme ?? true;
+
+  // Check if current route is a homepage
+  // Homepage routes: "/" or "/merchant/[shopId]"
+  const isHomepageRoute =
+    pathname === "/" ||
+    /^\/merchant\/[^/]+$/.test(pathname);
+
+  console.log("merchant/[shopId]/page.tsx - pathname:", pathname, "isLegacyTheme:", isLegacyTheme, "isHomepageRoute:", isHomepageRoute);
+
+  // Legacy mode + Homepage: ThemeRouter already rendered the static theme, skip this
+  if (isLegacyTheme && isHomepageRoute) {
+    console.log("merchant/[shopId]/page.tsx - Legacy mode homepage, returning null");
+    return null;
+  }
+
+  // Handle loading state (only for theme builder mode)
   if (isLoading) {
     return <LoadingFallback />;
   }
@@ -118,33 +139,48 @@ function ShopPageContent({ shopId }: ShopPageProps) {
     return <SingleProductLandingPage shopId={shopId} />;
   }
 
-  // Get the theme name from shop details
-  const themeName = shopDetails?.shop_theme?.theme_name || "Basic";
+  // Theme Builder mode: Render blocks from homepage data
+  console.log("merchant/[shopId]/page.tsx - Theme Builder mode, rendering BlockRenderer");
 
-  // Render the appropriate theme page
-  const renderThemePage = () => {
-    switch (themeName) {
-      case "Aurora":
-        return <AuroraHomePage />;
-      case "Luxura":
-        return <LuxuraHomePage />;
-      case "Premium":
-        return <PremiumHomePage />;
-      case "Sellora":
-        return <SelloraHomePage />;
-      case "Basic":
-      default:
-        return <BasicHomePage />;
-    }
-  };
+  if (isHomepageLoading) {
+    return (
+      <main className="flex items-center justify-center min-h-[50vh]">
+        <p>Loading homepage...</p>
+      </main>
+    );
+  }
+
+  if (homepageError) {
+    return (
+      <main className="flex items-center justify-center min-h-[50vh]">
+        <p>Error loading homepage data</p>
+      </main>
+    );
+  }
+
+  // Extract sections from homepage data
+  const pageData =
+    (homepage as Record<string, unknown>)?.data || homepage || {};
+  const sections = (pageData as Record<string, unknown>)?.sections || [];
 
   return (
-    <div
-      data-theme={themeName.toLowerCase()}
-      className="min-h-screen bg-gray-50 dark:bg-gray-900"
-    >
-      {renderThemePage()}
-    </div>
+    <main className="zatiq-homepage">
+      {(sections as Array<Record<string, unknown>>).map((section, index) => {
+        // Get the first block from each section
+        const block = (section.blocks as Array<Record<string, unknown>>)?.[0];
+        if (!block || !section.enabled) return null;
+
+        return (
+          <BlockRenderer
+            key={(section.id as string) || `section-${index}`}
+            block={
+              block as import("@/components/renderers/block-renderer").Block
+            }
+            data={(block.data as Record<string, unknown>) || {}}
+          />
+        );
+      })}
+    </main>
   );
 }
 

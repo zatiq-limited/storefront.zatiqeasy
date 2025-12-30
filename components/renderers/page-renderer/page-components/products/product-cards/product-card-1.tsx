@@ -6,8 +6,8 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
+import { FallbackImage } from "@/components/ui/fallback-image";
 
 interface ProductCard1Props {
   id: number | string;
@@ -55,13 +55,13 @@ export default function ProductCard1({
     <div className="w-full h-full">
       <Link
         href={`/products/${handle}`}
-        className="w-full h-full rounded overflow-hidden relative cursor-pointer transition-all duration-300 border hover:shadow-xl flex flex-col block"
+        className="w-full h-full rounded overflow-hidden relative cursor-pointer transition-all duration-300 border hover:shadow-xl flex flex-col"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
         {/* Image Container */}
         <div className="w-full aspect-square relative overflow-hidden">
-          <Image
+          <FallbackImage
             src={isHovered && hoverImage ? hoverImage : image}
             alt={title}
             fill

@@ -9,7 +9,7 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
+import { FallbackImage } from "@/components/ui/fallback-image";
 import Link from "next/link";
 
 interface ProductCard5Props {
@@ -62,7 +62,7 @@ export default function ProductCard5({
       <div className="w-full h-full overflow-hidden relative cursor-pointer transition-all duration-300">
         {/* Image Container - taller aspect ratio */}
         <div className="w-full aspect-[282/450] relative overflow-hidden">
-          <Image
+          <FallbackImage
             src={isHovered && hoverImage ? hoverImage : image}
             alt={title}
             fill

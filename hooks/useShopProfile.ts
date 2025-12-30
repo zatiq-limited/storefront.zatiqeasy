@@ -73,6 +73,12 @@ export function useShopProfile(
   // Sync to Zustand store when data changes
   useEffect(() => {
     if (syncToStore && query.data) {
+      // Determine baseUrl based on how we're accessing the shop
+      const baseUrl =
+        params.domain || params.subdomain
+          ? "" // Custom domain/subdomain: no baseUrl needed
+          : `/merchant/${params.shopId}` // Development: /merchant/[shopId] route
+
       setShopDetails({
         ...query.data,
         id: Number(query.data.id),
@@ -85,11 +91,12 @@ export function useShopProfile(
         hasPixelAccess: query.data.hasPixelAccess ?? false,
         hasGTMAccess: query.data.hasGTMAccess ?? false,
         hasTikTokPixelAccess: query.data.hasTikTokPixelAccess ?? false,
-        baseUrl: `/merchant/${params.shopId}`,
+        legacy_theme: query.data.legacy_theme ?? true, // Default to legacy mode
+        baseUrl,
         shopCurrencySymbol: query.data.currency_code === "BDT" ? "৳" : "$",
       } as ShopProfile);
     }
-  }, [query.data, syncToStore, setShopDetails, params.shopId]);
+  }, [query.data, syncToStore, setShopDetails, params.shopId, params.domain, params.subdomain]);
 
   return {
     data: query.data,
