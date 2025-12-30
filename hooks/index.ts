@@ -7,6 +7,7 @@ export * from "./useCollections";
 export * from "./useCollectionDetails";
 export * from "./useAboutUs";
 export * from "./useContactUs";
+export * from "./usePrivacyPolicy";
 export * from "./useCartFloat";
 export * from "./useAddToCart";
 

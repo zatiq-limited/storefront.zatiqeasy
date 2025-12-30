@@ -65,3 +65,6 @@ export {
   selectProductImages,
   selectMessageOnTop,
 } from "./landingStore";
+
+// Privacy Policy store
+export { usePrivacyPolicyStore } from "./privacyPolicyStore";

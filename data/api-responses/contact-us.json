@@ -7,274 +7,363 @@
         "id": "contact_hero_1_0",
         "type": "contact-hero-1",
         "enabled": true,
-        "settings": {
-          "headline": "Get in Touch",
-          "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=1920&h=600&fit=crop",
-          "overlay_opacity": 0.5,
-          "show_breadcrumb": true
-        }
+        "settings": {},
+        "blocks": [
+          {
+            "wrapper": "section#contact-hero-1-1767010863195",
+            "type": "contact_hero_overlay",
+            "class": "relative w-full overflow-hidden",
+            "style": { "background_color": "#000000" },
+            "data": {
+              "headline": "Get in Touch",
+              "subheadline": "We're Here to Help",
+              "description": "Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.",
+              "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=1920&h=600&fit=crop",
+              "overlay_opacity": 0.6
+            },
+            "blocks": [
+              {
+                "wrapper": "div",
+                "class": "relative w-full min-h-[350px] sm:min-h-[400px] lg:min-h-[450px]",
+                "blocks": [
+                  {
+                    "wrapper": "img",
+                    "class": "absolute inset-0 w-full h-full object-cover",
+                    "src": "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=1920&h=600&fit=crop",
+                    "alt": "Get in Touch"
+                  },
+                  {
+                    "wrapper": "div",
+                    "class": "absolute inset-0 bg-black",
+                    "style": { "opacity": 0.6 }
+                  },
+                  {
+                    "wrapper": "div",
+                    "class": "relative z-10 h-full flex flex-col items-center justify-center py-16 px-4",
+                    "blocks": [
+                      {
+                        "wrapper": "nav",
+                        "class": "flex items-center gap-2 text-sm mb-6",
+                        "style": { "color": "#FFFFFF" },
+                        "blocks": [
+                          {
+                            "wrapper": "a",
+                            "class": "opacity-70 hover:opacity-100 transition-opacity",
+                            "href": "/",
+                            "content": "Home"
+                          },
+                          {
+                            "wrapper": "span",
+                            "class": "opacity-50",
+                            "content": "/"
+                          },
+                          {
+                            "wrapper": "span",
+                            "content": "Contact"
+                          }
+                        ]
+                      },
+                      {
+                        "wrapper": "h1",
+                        "class": "text-4xl sm:text-5xl lg:text-6xl font-bold text-center mb-4",
+                        "style": { "color": "#FFFFFF" },
+                        "content": "Get in Touch"
+                      },
+                      {
+                        "wrapper": "p",
+                        "class": "text-lg sm:text-xl text-center max-w-2xl mx-auto mb-4",
+                        "style": { "color": "#FFFFFF", "opacity": 0.9 },
+                        "content": "We're Here to Help"
+                      },
+                      {
+                        "wrapper": "p",
+                        "class": "text-base sm:text-lg text-center max-w-3xl mx-auto",
+                        "style": { "color": "#FFFFFF", "opacity": 0.8 },
+                        "content": "Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       },
       {
-        "id": "contact_hero_2_1",
-        "type": "contact-hero-2",
-        "enabled": true,
-        "settings": {
-          "headline": "Get in Touch",
-          "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=1920&h=600&fit=crop",
-          "overlay_opacity": 0.5,
-          "overlay_color": "#000000",
-          "show_breadcrumb": true
-        }
-      },
-      {
-        "id": "contact_info_1_2",
+        "id": "contact_info_1_1",
         "type": "contact-info-1",
         "enabled": true,
-        "settings": {
-          "background_color": "#FFFFFF",
-          "text_color": "#111827",
-          "accent_color": "#8B4513",
-          "title": "Quick support",
-          "title_style": "script",
-          "icon_background_color": "#F5F0EB",
-          "info1_icon": "map-pin",
-          "info1_title": "Store Location",
-          "info1_content": "14 Ringe lane, las vegas, nv, 89156 united states",
-          "info2_icon": "phone",
-          "info2_title": "Contact Call",
-          "info2_content": "+00-1234567890",
-          "info2_link": "tel:+001234567890",
-          "info3_icon": "mail",
-          "info3_title": "Contact Mail",
-          "info3_content": "demo@support.com",
-          "info3_link": "mailto:demo@support.com"
-        },
+        "settings": {},
         "blocks": [
           {
-            "id": "info_1",
-            "type": "contact_item",
-            "settings": {
-              "icon": "map-pin",
-              "title": "Store Location",
-              "content": "14 Ringe lane, las vegas, nv, 89156 united states"
-            }
-          },
-          {
-            "id": "info_2",
-            "type": "contact_item",
-            "settings": {
-              "icon": "phone",
-              "title": "Contact Call",
-              "content": "+00-1234567890",
-              "link": "tel:+001234567890"
-            }
-          },
-          {
-            "id": "info_3",
-            "type": "contact_item",
-            "settings": {
-              "icon": "mail",
-              "title": "Contact Mail",
-              "content": "demo@support.com",
-              "link": "mailto:demo@support.com"
-            }
+            "wrapper": "section#contact-info-1-1767010863196",
+            "type": "contact_info_cards",
+            "class": "py-12 md:py-16 lg:py-20",
+            "style": { "background_color": "#FFFFFF" },
+            "data": {
+              "title": "Quick Support",
+              "accent_color": "#2563EB"
+            },
+            "blocks": [
+              {
+                "wrapper": "div",
+                "class": "container mx-auto px-4 sm:px-6 lg:px-8",
+                "blocks": [
+                  {
+                    "wrapper": "div",
+                    "class": "text-center mb-12",
+                    "blocks": [
+                      {
+                        "wrapper": "h2",
+                        "class": "text-3xl sm:text-4xl font-bold",
+                        "style": { "color": "#111827" },
+                        "content": "Quick Support"
+                      }
+                    ]
+                  },
+                  {
+                    "wrapper": "div",
+                    "class": "grid grid-cols-1 md:grid-cols-3 gap-8",
+                    "blocks": [
+                      {
+                        "wrapper": "div",
+                        "class": "text-center p-6 rounded-xl bg-gray-50",
+                        "blocks": [
+                          {
+                            "wrapper": "div",
+                            "class": "w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center",
+                            "style": { "background_color": "#EBF5FF" },
+                            "blocks": [
+                              {
+                                "wrapper": "svg",
+                                "type": "icon",
+                                "icon": "map-pin",
+                                "class": "w-8 h-8",
+                                "style": { "color": "#2563EB" }
+                              }
+                            ]
+                          },
+                          {
+                            "wrapper": "h3",
+                            "class": "text-lg font-semibold mb-2",
+                            "style": { "color": "#111827" },
+                            "content": "Store Location"
+                          },
+                          {
+                            "wrapper": "p",
+                            "class": "text-sm",
+                            "style": { "color": "#6B7280" },
+                            "content": "14 Ringe Lane, Las Vegas, NV 89156, United States"
+                          }
+                        ]
+                      },
+                      {
+                        "wrapper": "div",
+                        "class": "text-center p-6 rounded-xl bg-gray-50",
+                        "blocks": [
+                          {
+                            "wrapper": "div",
+                            "class": "w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center",
+                            "style": { "background_color": "#EBF5FF" },
+                            "blocks": [
+                              {
+                                "wrapper": "svg",
+                                "type": "icon",
+                                "icon": "phone",
+                                "class": "w-8 h-8",
+                                "style": { "color": "#2563EB" }
+                              }
+                            ]
+                          },
+                          {
+                            "wrapper": "h3",
+                            "class": "text-lg font-semibold mb-2",
+                            "style": { "color": "#111827" },
+                            "content": "Contact Call"
+                          },
+                          {
+                            "wrapper": "a",
+                            "href": "tel:+001234567890",
+                            "class": "text-sm hover:underline",
+                            "style": { "color": "#2563EB" },
+                            "content": "+00-1234567890"
+                          }
+                        ]
+                      },
+                      {
+                        "wrapper": "div",
+                        "class": "text-center p-6 rounded-xl bg-gray-50",
+                        "blocks": [
+                          {
+                            "wrapper": "div",
+                            "class": "w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center",
+                            "style": { "background_color": "#EBF5FF" },
+                            "blocks": [
+                              {
+                                "wrapper": "svg",
+                                "type": "icon",
+                                "icon": "mail",
+                                "class": "w-8 h-8",
+                                "style": { "color": "#2563EB" }
+                              }
+                            ]
+                          },
+                          {
+                            "wrapper": "h3",
+                            "class": "text-lg font-semibold mb-2",
+                            "style": { "color": "#111827" },
+                            "content": "Contact Mail"
+                          },
+                          {
+                            "wrapper": "a",
+                            "href": "mailto:demo@support.com",
+                            "class": "text-sm hover:underline",
+                            "style": { "color": "#2563EB" },
+                            "content": "demo@support.com"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
       {
-        "id": "contact_info_2_3",
-        "type": "contact-info-2",
-        "enabled": true,
-        "settings": {
-          "background_color": "#FFFFFF",
-          "text_color": "#111827",
-          "accent_color": "#111827",
-          "title": "Contact us",
-          "subtitle": "We'd love to hear from you",
-          "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop",
-          "show_socials": true,
-          "show_features": true,
-          "info1_icon": "map-pin",
-          "info1_label": "Address",
-          "info1_content": "14 Ringe lane, Las Vegas, NV 89156",
-          "info2_icon": "phone",
-          "info2_label": "Phone",
-          "info2_content": "+00-1234567890",
-          "info2_link": "tel:+001234567890",
-          "info3_icon": "mail",
-          "info3_label": "Email",
-          "info3_content": "demo@support.com",
-          "info3_link": "mailto:demo@support.com",
-          "show_facebook": true,
-          "facebook_url": "#",
-          "show_twitter": true,
-          "twitter_url": "#",
-          "show_linkedin": true,
-          "linkedin_url": "#",
-          "show_instagram": false,
-          "instagram_url": "#",
-          "show_telegram": false,
-          "telegram_url": "#"
-        },
-        "blocks": [
-          {
-            "id": "info_1",
-            "type": "contact_item",
-            "settings": {
-              "icon": "map-pin",
-              "label": "Address",
-              "content": "14 Ringe lane, Las Vegas, NV 89156"
-            }
-          },
-          {
-            "id": "info_2",
-            "type": "contact_item",
-            "settings": {
-              "icon": "phone",
-              "label": "Phone",
-              "content": "+00-1234567890",
-              "link": "tel:+001234567890"
-            }
-          },
-          {
-            "id": "info_3",
-            "type": "contact_item",
-            "settings": {
-              "icon": "mail",
-              "label": "Email",
-              "content": "demo@support.com",
-              "link": "mailto:demo@support.com"
-            }
-          }
-        ]
-      },
-      {
-        "id": "contact_map_1_4",
-        "type": "contact-map-1",
-        "enabled": true,
-        "settings": {
-          "background_color": "#FFFFFF",
-          "map_url": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.1841902907894!2d-73.98570908459418!3d40.74881797932847!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1620000000000!5m2!1sen!2sus",
-          "height": "450px",
-          "grayscale": false
-        }
-      },
-      {
-        "id": "contact_map_2_5",
-        "type": "contact-map-2",
-        "enabled": true,
-        "settings": {
-          "background_color": "#F9FAFB",
-          "map_url": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.1841902907894!2d-73.98570908459418!3d40.74881797932847!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1620000000000!5m2!1sen!2sus",
-          "height": "500px",
-          "rounded": true,
-          "shadow": true,
-          "contained": true
-        }
-      },
-      {
-        "id": "contact_form_1_6",
+        "id": "contact_form_1_2",
         "type": "contact-form-1",
         "enabled": true,
-        "settings": {
-          "background_color": "#FFFFFF",
-          "text_color": "#111827",
-          "title": "Send us a message",
-          "subtitle": "We'd love to hear from you",
-          "submit_button_text": "Send Message",
-          "submit_button_color": "#111827",
-          "success_message": "Thank you! Your message has been sent successfully.",
-          "error_message": "Oops! Something went wrong. Please try again.",
-          "show_terms_checkbox": false,
-          "terms_text": "I accept the terms & conditions"
-        },
+        "settings": {},
         "blocks": [
           {
-            "wrapper": "div#field-name.form-field",
-            "type": "text_field",
-            "id": "field_name",
-            "label": "Name",
-            "placeholder": "Your name",
-            "required": true
-          },
-          {
-            "wrapper": "div#field-email.form-field",
-            "type": "email_field",
-            "id": "field_email",
-            "label": "Email",
-            "placeholder": "your@email.com",
-            "required": true
-          },
-          {
-            "wrapper": "div#field-message.form-field",
-            "type": "textarea_field",
-            "id": "field_message",
-            "label": "Message",
-            "placeholder": "Your message...",
-            "required": true
+            "wrapper": "section#contact-form-1-1767010863197",
+            "type": "contact_form",
+            "class": "py-12 md:py-16 lg:py-20",
+            "style": { "background_color": "#F9FAFB" },
+            "data": {
+              "title": "Send Us a Message",
+              "subtitle": "We'll get back to you within 24 hours",
+              "submit_button_text": "Send Message",
+              "submit_button_color": "#2563EB"
+            },
+            "blocks": [
+              {
+                "wrapper": "div",
+                "class": "container mx-auto px-4 sm:px-6 lg:px-8 max-w-2xl",
+                "blocks": [
+                  {
+                    "wrapper": "div",
+                    "class": "text-center mb-10",
+                    "blocks": [
+                      {
+                        "wrapper": "p",
+                        "class": "text-sm font-medium uppercase tracking-wider mb-2",
+                        "style": { "color": "#2563EB" },
+                        "content": "We'll get back to you within 24 hours"
+                      },
+                      {
+                        "wrapper": "h2",
+                        "class": "text-3xl sm:text-4xl font-bold",
+                        "style": { "color": "#111827" },
+                        "content": "Send Us a Message"
+                      }
+                    ]
+                  },
+                  {
+                    "wrapper": "form",
+                    "class": "space-y-6",
+                    "blocks": [
+                      {
+                        "wrapper": "div",
+                        "class": "grid grid-cols-1 md:grid-cols-2 gap-4",
+                        "blocks": [
+                          {
+                            "wrapper": "input",
+                            "type": "text",
+                            "class": "w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent",
+                            "placeholder": "Your Name",
+                            "name": "name"
+                          },
+                          {
+                            "wrapper": "input",
+                            "type": "email",
+                            "class": "w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent",
+                            "placeholder": "Your Email",
+                            "name": "email"
+                          }
+                        ]
+                      },
+                      {
+                        "wrapper": "input",
+                        "type": "tel",
+                        "class": "w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent",
+                        "placeholder": "Your Phone (Optional)",
+                        "name": "phone"
+                      },
+                      {
+                        "wrapper": "textarea",
+                        "class": "w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent min-h-[150px]",
+                        "placeholder": "Your Message",
+                        "name": "message",
+                        "rows": 6
+                      },
+                      {
+                        "wrapper": "button",
+                        "type": "submit",
+                        "class": "w-full py-4 rounded-lg font-semibold text-white transition-all hover:opacity-90",
+                        "style": { "background_color": "#2563EB" },
+                        "content": "Send Message"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
       {
-        "id": "contact_form_2_7",
-        "type": "contact-form-2",
+        "id": "contact_map_1_3",
+        "type": "contact-map-1",
         "enabled": true,
-        "settings": {
-          "background_color": "#F9FAFB",
-          "text_color": "#111827",
-          "title": "Keep in touch with us",
-          "title_style": "script",
-          "submit_button_text": "SEND MESSAGE",
-          "submit_button_color": "#8B4513",
-          "success_message": "Thank you! Your message has been sent successfully.",
-          "error_message": "Oops! Something went wrong. Please try again.",
-          "show_terms_checkbox": true,
-          "terms_text": "I accept the terms & conditions and I understand that my data will be hold securely in accordance with the privacy policy."
-        },
+        "settings": {},
         "blocks": [
           {
-            "wrapper": "div#field-name.form-field",
-            "type": "text_field",
-            "id": "field_name",
-            "label": "Name",
-            "placeholder": "Your name",
-            "required": true
-          },
-          {
-            "wrapper": "div#field-email.form-field",
-            "type": "email_field",
-            "id": "field_email",
-            "label": "Email",
-            "placeholder": "your@email.com",
-            "required": true
-          },
-          {
-            "wrapper": "div#field-message.form-field",
-            "type": "textarea_field",
-            "id": "field_message",
-            "label": "Message",
-            "placeholder": "Your message...",
-            "required": true
+            "wrapper": "section#contact-map-1-1767010863198",
+            "type": "contact_map",
+            "class": "w-full",
+            "style": { "background_color": "#FFFFFF" },
+            "data": {
+              "map_url": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3224.5!2d-115.1!3d36.1!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzbCsDA2JzAwLjAiTiAxMTXCsDA2JzAwLjAiVw!5e0!3m2!1sen!2sus!4v1234567890",
+              "height": "450px",
+              "grayscale": false
+            },
+            "blocks": [
+              {
+                "wrapper": "div",
+                "class": "w-full overflow-hidden",
+                "style": { "height": "450px" },
+                "blocks": [
+                  {
+                    "wrapper": "iframe",
+                    "src": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3224.5!2d-115.1!3d36.1!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzbCsDA2JzAwLjAiTiAxMTXCsDA2JzAwLjAiVw!5e0!3m2!1sen!2sus!4v1234567890",
+                    "class": "w-full h-full border-0",
+                    "allowFullScreen": true,
+                    "loading": "lazy"
+                  }
+                ]
+              }
+            ]
           }
         ]
       }
     ],
     "seo": {
-      "title": "Contact Us - Custom Theme Store",
+      "title": "Contact Us - Zatiq Easy Store",
       "description": "Get in touch with us. We are here to help.",
-      "canonical": "https://your-store.com/contact",
-      "og": {
-        "title": "Contact Us - Custom Theme Store",
-        "description": "Get in touch with us",
-        "image": "https://your-store.com/contact-og.jpg",
-        "type": "website"
-      },
-      "twitter": {
-        "card": "summary_large_image",
-        "title": "Contact Us - Custom Theme Store",
-        "description": "Get in touch with us",
-        "image": "https://your-store.com/contact-twitter.jpg"
-      }
+      "canonical": "https://your-store.com/contact"
     }
   }
 }

@@ -1,11 +1,9 @@
 "use client";
 
-import { use } from "react";
 import { useEffect } from "react";
 import { useContactUs } from "@/hooks";
 import { useContactUsStore } from "@/stores/contactUsStore";
-import ContactPageRenderer from "@/components/renderers/page-renderer/contact-page-renderer";
-import type { Section } from "@/lib/types";
+import BlockRenderer from "@/components/renderers/block-renderer";
 
 export default function ContactUsPage() {
   const { contactUs } = useContactUsStore();
@@ -71,7 +69,21 @@ export default function ContactUsPage() {
 
   return (
     <main className="zatiq-contact-us-page">
-      <ContactPageRenderer sections={sections as Section[]} />
+      {(sections as Array<Record<string, unknown>>).map((section, index) => {
+        // Get the first block from each section
+        const block = (section.blocks as Array<Record<string, unknown>>)?.[0];
+        if (!block || !section.enabled) return null;
+
+        return (
+          <BlockRenderer
+            key={(section.id as string) || `section-${index}`}
+            block={
+              block as import("@/components/renderers/block-renderer").Block
+            }
+            data={(block.data as Record<string, unknown>) || {}}
+          />
+        );
+      })}
     </main>
   );
 }
