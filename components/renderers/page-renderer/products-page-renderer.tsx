@@ -36,6 +36,7 @@ import ProductsPagination1 from "@/components/renderers/page-renderer/page-compo
 import ProductsPagination2 from "@/components/renderers/page-renderer/page-components/products/products-pagination-2";
 import ProductsHero1 from "@/components/renderers/page-renderer/page-components/products/products-hero-1";
 import ProductsHero2 from "@/components/renderers/page-renderer/page-components/products/products-hero-2";
+import BlockRenderer from "@/components/renderers/block-renderer";
 
 interface ProductsPageRendererProps {
   sections: Section[];
@@ -716,6 +717,23 @@ export default function ProductsPageRenderer({
               pagination={pagination}
               onFiltersChange={onFiltersChange}
               isLoading={isLoading}
+            />
+          </div>
+        );
+
+      case section.type.includes("custom-sections"):
+        // Custom sections use BlockRenderer for V3.0 Schema blocks
+        const block = section.blocks?.[0];
+        if (!block) return null;
+        return (
+          <div
+            key={section.id}
+            data-section-id={section.id}
+            data-section-type={section.type}
+          >
+            <BlockRenderer
+              block={block as import("@/components/renderers/block-renderer").Block}
+              data={(block.data as Record<string, unknown>) || {}}
             />
           </div>
         );
