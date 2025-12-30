@@ -120,10 +120,11 @@ const nextConfig: NextConfig = {
             source: "/categories/:path*",
             destination: "/404",
           },
-          {
-            source: "/products/:path*",
-            destination: "/404",
-          },
+          // NOTE: /products routes are now handled by the app router - removed rewrite to /404
+          // {
+          //   source: "/products/:path*",
+          //   destination: "/404",
+          // },
           {
             source: "/r/:path*",
             destination: "/receipt/:path",
