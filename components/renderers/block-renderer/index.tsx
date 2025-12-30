@@ -78,6 +78,9 @@ export interface Block {
   bind_placeholder?: string;
   bind_class?: string;
   bind_style?: Record<string, unknown>;
+  
+  // HTML content rendering
+  innerHTML?: boolean;
 
   // Direct attributes
   src?: string;
@@ -278,6 +281,12 @@ function BlockRendererInternal({
       context
     );
     content = boundContent !== undefined ? String(boundContent) : block.content;
+  }
+
+  // Handle innerHTML for HTML content rendering
+  if (block.innerHTML && content && typeof content === 'string') {
+    props.dangerouslySetInnerHTML = { __html: content };
+    content = undefined; // Clear content when using dangerouslySetInnerHTML
   }
 
   // src for images - skip rendering if no src
