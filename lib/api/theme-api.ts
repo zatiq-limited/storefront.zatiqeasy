@@ -11,8 +11,8 @@
 
 // API Base URL - same as merchant panel
 const API_BASE_URL =
-  `${process.env.NEXT_PUBLIC_API_URL}/api/v1` ||
-  "https://easybill.zatiq.tech/api/v1";
+  `${process.env.NEXT_PUBLIC_API_URL}/api/v1/live` ||
+  "https://easybill.zatiq.tech/api/v1/live";
 const DEFAULT_SHOP_ID = process.env.NEXT_PUBLIC_DEV_SHOP_ID || "2";
 
 // Valid page names matching backend's PageType enum
