@@ -322,6 +322,16 @@ function BlockRendererInternal({
         )
       : block.href || "#";
     props.href = href;
+    
+    // Handle target attribute for links
+    if (block.target) {
+      props.target = block.target;
+    }
+    
+    // Handle rel attribute for links
+    if (block.rel) {
+      props.rel = block.rel;
+    }
   }
 
   // placeholder for inputs
@@ -335,6 +345,160 @@ function BlockRendererInternal({
       : block.placeholder || "";
     props.placeholder = placeholder;
     props.type = (block.type === "text_input" ? "text" : block.type) || "text";
+    
+    // Handle required attribute
+    if (block.required) {
+      props.required = true;
+    }
+    
+    // Handle name attribute
+    if (block.name) {
+      props.name = block.name;
+    }
+  }
+
+  // Handle textarea elements
+  if (tag === "textarea") {
+    const placeholder = block.bind_placeholder
+      ? String(
+          resolveBinding(block.bind_placeholder, mergedData, context) ||
+            block.placeholder ||
+            ""
+        )
+      : block.placeholder || "";
+    props.placeholder = placeholder;
+    
+    if (block.rows) {
+      props.rows = block.rows;
+    }
+    if (block.required) {
+      props.required = true;
+    }
+    if (block.name) {
+      props.name = block.name;
+    }
+  }
+
+  // Handle button elements
+  if (tag === "button") {
+    // Use htmlType to avoid conflict with block.type
+    if (block.htmlType) {
+      props.type = block.htmlType;
+    } else if (block.buttonType) {
+      props.type = block.buttonType;
+    }
+  }
+
+  // Handle iframe elements
+  if (tag === "iframe") {
+    if (block.src) {
+      props.src = block.src;
+    }
+    if (block.allowfullscreen || block.allowFullScreen) {
+      props.allowFullScreen = true;
+    }
+    if (block.loading) {
+      props.loading = block.loading;
+    }
+    if (block.referrerPolicy) {
+      props.referrerPolicy = block.referrerPolicy;
+    }
+    if (block.title) {
+      props.title = block.title;
+    }
+    if (block.width) {
+      props.width = block.width;
+    }
+    if (block.height) {
+      props.height = block.height;
+    }
+    if (block.frameBorder !== undefined) {
+      props.frameBorder = block.frameBorder;
+    }
+  }
+
+  // Handle SVG elements
+  if (tag === "svg") {
+    if (block.viewBox) {
+      props.viewBox = block.viewBox;
+    }
+    if (block.fill) {
+      props.fill = block.fill;
+    }
+    if (block.stroke) {
+      props.stroke = block.stroke;
+    }
+    if (block.strokeWidth) {
+      props.strokeWidth = block.strokeWidth;
+    }
+    if (block.xmlns) {
+      props.xmlns = block.xmlns;
+    }
+    if (block.preserveAspectRatio) {
+      props.preserveAspectRatio = block.preserveAspectRatio;
+    }
+  }
+
+  // Handle SVG path elements
+  if (tag === "path") {
+    if (block.d) {
+      props.d = block.d;
+    }
+    if (block.fill) {
+      props.fill = block.fill;
+    }
+    if (block.stroke) {
+      props.stroke = block.stroke;
+    }
+    if (block.strokeWidth) {
+      props.strokeWidth = block.strokeWidth;
+    }
+    if (block.strokeLinecap) {
+      props.strokeLinecap = block.strokeLinecap;
+    }
+    if (block.strokeLinejoin) {
+      props.strokeLinejoin = block.strokeLinejoin;
+    }
+  }
+
+  // Handle SVG circle elements
+  if (tag === "circle") {
+    if (block.cx !== undefined) props.cx = block.cx;
+    if (block.cy !== undefined) props.cy = block.cy;
+    if (block.r !== undefined) props.r = block.r;
+    if (block.fill) props.fill = block.fill;
+    if (block.stroke) props.stroke = block.stroke;
+    if (block.strokeWidth) props.strokeWidth = block.strokeWidth;
+  }
+
+  // Handle SVG rect elements
+  if (tag === "rect") {
+    if (block.x !== undefined) props.x = block.x;
+    if (block.y !== undefined) props.y = block.y;
+    if (block.width) props.width = block.width;
+    if (block.height) props.height = block.height;
+    if (block.rx !== undefined) props.rx = block.rx;
+    if (block.ry !== undefined) props.ry = block.ry;
+    if (block.fill) props.fill = block.fill;
+    if (block.stroke) props.stroke = block.stroke;
+  }
+
+  // Handle SVG line elements
+  if (tag === "line") {
+    if (block.x1 !== undefined) props.x1 = block.x1;
+    if (block.y1 !== undefined) props.y1 = block.y1;
+    if (block.x2 !== undefined) props.x2 = block.x2;
+    if (block.y2 !== undefined) props.y2 = block.y2;
+    if (block.stroke) props.stroke = block.stroke;
+    if (block.strokeWidth) props.strokeWidth = block.strokeWidth;
+  }
+
+  // Handle SVG polyline and polygon elements
+  if (tag === "polyline" || tag === "polygon") {
+    if (block.points) props.points = block.points;
+    if (block.fill) props.fill = block.fill;
+    if (block.stroke) props.stroke = block.stroke;
+    if (block.strokeWidth) props.strokeWidth = block.strokeWidth;
   }
 
   // aria-label
