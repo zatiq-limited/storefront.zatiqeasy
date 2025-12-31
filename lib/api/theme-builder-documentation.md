@@ -144,22 +144,22 @@ Cache is automatically invalidated via Observers:
 ### Cache Flow Example
 
 ```
-1. First Request: GET /api/custom-themes
+1. First Request: GET /api/v1/custom-themes
    → Cache MISS
    → Query database
    → Store in cache with tag
    → Return response
 
-2. Second Request: GET /api/custom-themes
+2. Second Request: GET /api/v1/custom-themes
    → Cache HIT
    → Return cached data (no DB query)
 
-3. Update Request: PUT /api/custom-themes
+3. Update Request: PUT /api/v1/custom-themes
    → Update database
    → Observer triggers
    → Flush cache tag (all related caches)
 
-4. Next Request: GET /api/custom-themes
+4. Next Request: GET /api/v1/custom-themes
    → Cache MISS (was invalidated)
    → Query database
    → Store in cache
@@ -223,12 +223,12 @@ When an asset is deleted:
 
 ### Base URL
 
-All authenticated endpoints: `/api/custom-themes`
-Public storefront endpoints: `/api/storefront`
+All authenticated endpoints: `/api/v1/custom-themes`
+Public storefront endpoints: `/api/v1/storefront`
 
 ### Authentication
 
-All `/api/custom-themes/*` routes require authentication via Bearer token.
+All `/api/v1/custom-themes/*` routes require authentication via Bearer token.
 
 ```
 Authorization: Bearer {token}
@@ -243,7 +243,7 @@ Authorization: Bearer {token}
 Retrieves the current theme for the authenticated user's shop.
 
 ```
-GET /api/custom-themes
+GET /api/v1/custom-themes
 ```
 
 **Response (200 - Theme exists):**
@@ -342,7 +342,7 @@ GET /api/custom-themes
 Creates a new theme for the shop. Only one theme per shop is allowed.
 
 ```
-POST /api/custom-themes
+POST /api/v1/custom-themes
 ```
 
 **Request Body:**
@@ -434,7 +434,7 @@ POST /api/custom-themes
 Updates the shop's theme global settings and/or sections.
 
 ```
-PUT /api/custom-themes
+PUT /api/v1/custom-themes
 ```
 
 **Request Body:**
@@ -521,7 +521,7 @@ PUT /api/custom-themes
 Soft deletes the shop's theme.
 
 ```
-DELETE /api/custom-themes
+DELETE /api/v1/custom-themes
 ```
 
 **Response (200):**
@@ -540,7 +540,7 @@ DELETE /api/custom-themes
 **This is the primary endpoint used by the theme builder.** It performs an atomic transaction that saves the theme global settings and all pages in a single request.
 
 ```
-POST /api/custom-themes/bulk-save
+POST /api/v1/custom-themes/bulk-save
 ```
 
 **Request Body:**
@@ -682,7 +682,7 @@ const publishTheme = () => bulkSave({
 Retrieves the theme with all enabled pages included.
 
 ```
-GET /api/custom-themes/full
+GET /api/v1/custom-themes/full
 ```
 
 **Response (200):**
@@ -733,7 +733,7 @@ GET /api/custom-themes/full
 Retrieves the last 10 versions of the theme.
 
 ```
-GET /api/custom-themes/versions
+GET /api/v1/custom-themes/versions
 ```
 
 **Response (200):**
@@ -783,7 +783,7 @@ GET /api/custom-themes/versions
 Restores the theme to a previous version state.
 
 ```
-POST /api/custom-themes/rollback/{versionId}
+POST /api/v1/custom-themes/rollback/{versionId}
 ```
 
 **Response (200):**
@@ -822,7 +822,7 @@ POST /api/custom-themes/rollback/{versionId}
 Retrieves all pages for the theme.
 
 ```
-GET /api/custom-themes/pages
+GET /api/v1/custom-themes/pages
 ```
 
 **Query Parameters:**
@@ -877,7 +877,7 @@ GET /api/custom-themes/pages
 Retrieves a specific page by its type.
 
 ```
-GET /api/custom-themes/pages/{pageType}
+GET /api/v1/custom-themes/pages/{pageType}
 ```
 
 **Valid Page Types:**
@@ -973,7 +973,7 @@ GET /api/custom-themes/pages/{pageType}
 Creates or updates a page. If the page doesn't exist, it will be created.
 
 ```
-PUT /api/custom-themes/pages/{pageType}
+PUT /api/v1/custom-themes/pages/{pageType}
 ```
 
 **Request Body:**
@@ -1059,7 +1059,7 @@ PUT /api/custom-themes/pages/{pageType}
 Updates only the sections array without affecting other page properties.
 
 ```
-PUT /api/custom-themes/pages/{pageType}/sections
+PUT /api/v1/custom-themes/pages/{pageType}/sections
 ```
 
 **Request Body:**
@@ -1104,7 +1104,7 @@ PUT /api/custom-themes/pages/{pageType}/sections
 Deletes a page from the theme.
 
 ```
-DELETE /api/custom-themes/pages/{pageType}
+DELETE /api/v1/custom-themes/pages/{pageType}
 ```
 
 **Response (200):**
@@ -1125,7 +1125,7 @@ Section templates are system-managed and read-only for merchants.
 ### List All Templates
 
 ```
-GET /api/theme-section-templates
+GET /api/v1/theme-section-templates
 ```
 
 **Query Parameters:**
@@ -1199,7 +1199,7 @@ GET /api/theme-section-templates
 ### Get Template by Type
 
 ```
-GET /api/theme-section-templates/{type}
+GET /api/v1/theme-section-templates/{type}
 ```
 
 **Response (200):**
@@ -1225,7 +1225,7 @@ GET /api/theme-section-templates/{type}
 ### List Templates by Category
 
 ```
-GET /api/theme-section-templates/categories/{category}
+GET /api/v1/theme-section-templates/categories/{category}
 ```
 
 **Valid Categories:**
@@ -1271,7 +1271,7 @@ GET /api/theme-section-templates/categories/{category}
 ### List Assets
 
 ```
-GET /api/theme-assets
+GET /api/v1/theme-assets
 ```
 
 **Query Parameters:**
@@ -1319,7 +1319,7 @@ GET /api/theme-assets
 ### Upload Asset
 
 ```
-POST /api/theme-assets
+POST /api/v1/theme-assets
 Content-Type: multipart/form-data
 ```
 
@@ -1386,7 +1386,7 @@ metadata[alt_text]: Summer collection banner (optional)
 ### Get Asset
 
 ```
-GET /api/theme-assets/{id}
+GET /api/v1/theme-assets/{id}
 ```
 
 **Response (200):**
@@ -1411,7 +1411,7 @@ GET /api/theme-assets/{id}
 ### Update Asset
 
 ```
-PUT /api/theme-assets/{id}
+PUT /api/v1/theme-assets/{id}
 ```
 
 **Request Body:**
@@ -1455,7 +1455,7 @@ PUT /api/theme-assets/{id}
 ### Delete Asset
 
 ```
-DELETE /api/theme-assets/{id}
+DELETE /api/v1/theme-assets/{id}
 ```
 
 **Response (200):**
@@ -1478,7 +1478,7 @@ These endpoints are used by the storefront to fetch theme data. They do not requ
 ### Get Theme
 
 ```
-POST /api/storefront/theme
+POST /api/v1/live/theme
 ```
 
 **Request Body (one of):**
@@ -1533,7 +1533,7 @@ POST /api/storefront/theme
 ### Get Full Theme with Pages
 
 ```
-POST /api/storefront/theme/full
+POST /api/v1/live/theme/full
 ```
 
 **Request Body:**
@@ -1579,7 +1579,7 @@ POST /api/storefront/theme/full
 ### Get Specific Page
 
 ```
-POST /api/storefront/theme/page/{pageType}
+POST /api/v1/live/theme/page/{pageType}
 ```
 
 **Request Body:**
@@ -1775,7 +1775,7 @@ When fetching theme data via public endpoints, the API checks the `legacy_theme`
 ### Frontend Handling
 
 ```javascript
-const response = await fetch('/api/storefront/theme', {
+const response = await fetch('/api/v1/live/theme', {
   method: 'POST',
   body: JSON.stringify({ shop_id: shopId })
 });
@@ -1844,16 +1844,3 @@ section.settings.background_image = asset.url;
 ### 4. Caching Awareness
 
 Theme data is cached for 24 hours. After updates, the cache is automatically invalidated. For immediate visibility on the storefront, no action is needed.
-
----
-
-## Changelog
-
-### Version 1.0.0 (2025-12-31)
-- Initial release
-- Single theme per shop architecture
-- 10-version history with rollback
-- 17 pre-built section templates
-- S3 asset storage
-- Tag-based cache invalidation
-- Legacy theme support
