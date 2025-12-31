@@ -243,6 +243,11 @@ export default function ProductDetailsClient({
   const pageSections =
     sections.length > 0 ? (sections as Section[]) : defaultSections;
 
+  // TODO: Fetch these from API
+  // For now, we'll pass empty arrays and let the product reviews come from product.reviews
+  const relatedProducts = []; // TODO: Fetch related products
+  const productReviews = product.reviews || []; // Use product reviews if available
+
   return (
     <main className="zatiq-product-details-page min-h-screen bg-white">
       <ProductDetailsPageRenderer
@@ -255,6 +260,8 @@ export default function ProductDetailsClient({
         onQuantityChange={setQuantity}
         onIncrementQuantity={incrementQuantity}
         onDecrementQuantity={decrementQuantity}
+        relatedProducts={relatedProducts}
+        reviews={productReviews}
       />
     </main>
   );
