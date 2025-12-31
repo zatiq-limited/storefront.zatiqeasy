@@ -1,15 +1,23 @@
 /**
  * Product Details Client Component
- * Handles all client-side interactivity for the product page
+ * Handles both Static Theme and Theme Builder rendering
  */
 
 "use client";
 
 import { useProductDetails } from "@/hooks";
 import { useEffect } from "react";
+import { useShopStore } from "@/stores/shopStore";
 import ProductDetailsPageRenderer from "@/components/renderers/page-renderer/product-details-page-renderer";
 import type { Section } from "@/lib/types";
 import Link from "next/link";
+
+// Static Theme Product Detail Components
+import { BasicProductDetailPage } from "@/app/_themes/basic/modules/product-detail/basic-product-detail-page";
+import { AuroraProductDetailPage } from "@/app/_themes/aurora/modules/product-detail/aurora-product-detail-page";
+import { LuxuraProductDetailPage } from "@/app/_themes/luxura/modules/product-detail/luxura-product-detail-page";
+import { PremiumProductDetailPage } from "@/app/_themes/premium/modules/product-detail/premium-product-detail-page";
+import { SelloraProductDetailPage } from "@/app/_themes/sellora/modules/product-detail/sellora-product-detail-page";
 
 interface ProductDetailsClientProps {
   handle: string;
@@ -18,6 +26,7 @@ interface ProductDetailsClientProps {
 export default function ProductDetailsClient({
   handle,
 }: ProductDetailsClientProps) {
+  const { shopDetails } = useShopStore();
   const {
     product,
     sections,
@@ -33,6 +42,10 @@ export default function ProductDetailsClient({
     incrementQuantity,
     decrementQuantity,
   } = useProductDetails(handle);
+
+  // Determine theme mode
+  const isLegacyTheme = shopDetails?.legacy_theme ?? true;
+  const themeName = shopDetails?.shop_theme?.theme_name || "Basic";
 
   // Scroll to top when component mounts or handle changes
   useEffect(() => {
@@ -137,6 +150,42 @@ export default function ProductDetailsClient({
     );
   }
 
+  // ========================================
+  // STATIC THEME MODE (legacy_theme = true)
+  // ========================================
+  if (isLegacyTheme) {
+    // Render component based on theme's prop requirements
+    // Note: Each theme component has different prop requirements:
+    // - Basic: handle (uses useProductDetails internally)
+    // - Aurora: handle? (optional, uses useProductDetails internally)
+    // - Luxura: no props (uses useParams internally)
+    // - Premium: product (receives pre-fetched product)
+    // - Sellora: handle (uses useProductDetails internally)
+    switch (themeName) {
+      case "Basic":
+        return <BasicProductDetailPage handle={handle} />;
+
+      case "Aurora":
+        return <AuroraProductDetailPage handle={handle} />;
+
+      case "Luxura":
+        // Luxura uses useParams internally and reads from URL
+        return <LuxuraProductDetailPage />;
+
+      case "Premium":
+        return <PremiumProductDetailPage product={product} />;
+
+      case "Sellora":
+        return <SelloraProductDetailPage handle={handle} />;
+
+      default:
+        return <BasicProductDetailPage handle={handle} />;
+    }
+  }
+
+  // ========================================
+  // THEME BUILDER MODE (legacy_theme = false)
+  // ========================================
   // Default sections if none provided
   const defaultSections: Section[] = [
     {
