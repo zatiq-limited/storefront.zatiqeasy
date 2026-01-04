@@ -5,6 +5,7 @@
  *
  * Renders landing page sections dynamically based on JSON configuration
  * Designed for single product landing pages with checkout functionality
+ * Supports both landing-specific components and generic theme components via BlockRenderer
  */
 
 "use client";
@@ -90,16 +91,15 @@ export default function LandingPageRenderer({
     if (section.enabled === false) return null;
 
     const key = section.id || `section-${index}`;
-    const wrapperProps = {
-      key,
-      "data-section-id": section.id,
-      "data-section-type": section.type,
-    };
 
     switch (section.type) {
       case "landing-navbar-1":
         return (
-          <div {...wrapperProps}>
+          <div
+            key={key}
+            data-section-id={section.id}
+            data-section-type={section.type}
+          >
             <LandingNavbar1
               settings={section.settings || {}}
               shopLogo={shop?.logo}
@@ -111,7 +111,11 @@ export default function LandingPageRenderer({
 
       case "landing-top-banner-1":
         return (
-          <div {...wrapperProps}>
+          <div
+            key={key}
+            data-section-id={section.id}
+            data-section-type={section.type}
+          >
             <LandingTopBanner1
               settings={section.settings || {}}
               onScrollToCheckout={scrollToCheckout}
@@ -121,7 +125,11 @@ export default function LandingPageRenderer({
 
       case "landing-featured-1":
         return (
-          <div {...wrapperProps}>
+          <div
+            key={key}
+            data-section-id={section.id}
+            data-section-type={section.type}
+          >
             <LandingFeatured1 settings={section.settings || {}} />
           </div>
         );
@@ -129,14 +137,22 @@ export default function LandingPageRenderer({
       case "landing-featured-2":
         // For now, use landing-featured-1 as fallback
         return (
-          <div {...wrapperProps}>
+          <div
+            key={key}
+            data-section-id={section.id}
+            data-section-type={section.type}
+          >
             <LandingFeatured1 settings={section.settings || {}} />
           </div>
         );
 
       case "landing-video-1":
         return (
-          <div {...wrapperProps}>
+          <div
+            key={key}
+            data-section-id={section.id}
+            data-section-type={section.type}
+          >
             <LandingVideo1
               settings={section.settings || {}}
               onScrollToCheckout={scrollToCheckout}
@@ -146,7 +162,11 @@ export default function LandingPageRenderer({
 
       case "landing-product-showcase-1":
         return (
-          <div {...wrapperProps}>
+          <div
+            key={key}
+            data-section-id={section.id}
+            data-section-type={section.type}
+          >
             <LandingProductShowcase1
               settings={section.settings || {}}
               productImages={product?.images}
@@ -156,7 +176,11 @@ export default function LandingPageRenderer({
 
       case "landing-product-showcase-2":
         return (
-          <div {...wrapperProps}>
+          <div
+            key={key}
+            data-section-id={section.id}
+            data-section-type={section.type}
+          >
             <LandingProductShowcase2
               settings={section.settings || {}}
               product={product}
@@ -167,14 +191,22 @@ export default function LandingPageRenderer({
 
       case "landing-testimonials-1":
         return (
-          <div {...wrapperProps}>
+          <div
+            key={key}
+            data-section-id={section.id}
+            data-section-type={section.type}
+          >
             <LandingTestimonials1 settings={section.settings || {}} />
           </div>
         );
 
       case "landing-standalone-1":
         return (
-          <div {...wrapperProps}>
+          <div
+            key={key}
+            data-section-id={section.id}
+            data-section-type={section.type}
+          >
             <LandingStandalone1
               settings={section.settings || {}}
               onScrollToCheckout={scrollToCheckout}
@@ -184,7 +216,11 @@ export default function LandingPageRenderer({
 
       case "landing-checkout-1":
         return (
-          <div {...wrapperProps}>
+          <div
+            key={key}
+            data-section-id={section.id}
+            data-section-type={section.type}
+          >
             <LandingCheckout1
               ref={checkoutRef}
               settings={section.settings || {}}
@@ -196,7 +232,11 @@ export default function LandingPageRenderer({
 
       case "landing-footer-1":
         return (
-          <div {...wrapperProps}>
+          <div
+            key={key}
+            data-section-id={section.id}
+            data-section-type={section.type}
+          >
             <LandingFooter1
               settings={section.settings || {}}
               shopLogo={shop?.logo}
@@ -207,13 +247,17 @@ export default function LandingPageRenderer({
 
       case "custom-sections":
         // Custom sections use BlockRenderer for V3.0 Schema blocks
-        const block = section.blocks?.[0];
-        if (!block) return null;
+        const customBlock = section.blocks?.[0];
+        if (!customBlock) return null;
         return (
-          <div {...wrapperProps}>
+          <div
+            key={key}
+            data-section-id={section.id}
+            data-section-type={section.type}
+          >
             <BlockRenderer
               block={
-                block as unknown as import("@/components/renderers/block-renderer").Block
+                customBlock as unknown as import("@/components/renderers/block-renderer").Block
               }
               data={{}}
             />
@@ -221,14 +265,39 @@ export default function LandingPageRenderer({
         );
 
       default:
+        // Handle generic theme components via BlockRenderer
+        // This includes: hero-*, static-banner-*, special-offers-slider-*, badges-*, reviews-*, etc.
+        if (section.blocks && section.blocks.length > 0) {
+          const block = section.blocks[0];
+          const blockData = (block as unknown as { data?: Record<string, unknown> }).data || {};
+          return (
+            <div
+              key={key}
+              data-section-id={section.id}
+              data-section-type={section.type}
+            >
+              <BlockRenderer
+                block={block as unknown as import("@/components/renderers/block-renderer").Block}
+                data={blockData}
+              />
+            </div>
+          );
+        }
+
+        // Fallback: render dev warning for truly unknown components
         if (process.env.NEXT_PUBLIC_SYSTEM_ENV === "DEV") {
           return (
             <div
-              {...wrapperProps}
+              key={key}
+              data-section-id={section.id}
+              data-section-type={section.type}
               className="bg-yellow-50 border border-yellow-200 rounded p-4 my-4"
             >
               <p className="text-yellow-800 font-semibold">
                 Landing component not found: {section.type}
+              </p>
+              <p className="text-yellow-600 text-sm mt-1">
+                No blocks available for rendering. Settings: {JSON.stringify(section.settings || {}).slice(0, 100)}...
               </p>
             </div>
           );
