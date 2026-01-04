@@ -1,10 +1,12 @@
 import type { InventoryProduct } from './inventory.types';
+import type { Section } from '@/lib/types';
 
 // Landing page theme names
 export enum SingleProductTheme {
   Arcadia = 'Arcadia',
   Nirvana = 'Nirvana',
   Grip = 'Grip',
+  BlockBased = 'BlockBased', // For block-based landing pages
 }
 
 // Content types for banners
@@ -99,6 +101,16 @@ export interface SingleProductPage {
   theme_data: SingleProductThemeData[];
   inventory: InventoryProduct;
   shop_id: number;
+  // For block-based landing pages
+  sections?: Section[];
+}
+
+// Helper to check if landing page is block-based
+export function isBlockBasedLandingPage(page: SingleProductPage): boolean {
+  return (
+    page.theme_name === SingleProductTheme.BlockBased ||
+    (Array.isArray(page.sections) && page.sections.length > 0)
+  );
 }
 
 // Landing page props

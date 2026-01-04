@@ -9,12 +9,17 @@ import { useShopProfile } from "@/hooks";
 import { GripLandingPage } from "@/app/_themes/landing/themes/grip";
 import { ArcadiaLandingPage } from "@/app/_themes/landing/themes/arcadia";
 import { NirvanaLandingPage } from "@/app/_themes/landing/themes/nirvana";
-import type { SingleProductTheme } from "@/types/landing-page.types";
+import LandingPageRenderer from "@/components/renderers/page-renderer/landing-page-renderer";
+import {
+  type SingleProductTheme,
+  isBlockBasedLandingPage,
+} from "@/types/landing-page.types";
 import type { ShopProfile } from "@/types";
 
 /**
- * Merchant Single Product / Landing Page
- * Matches old project: pages/merchant/[shopId]/single-product/[slug].tsx
+ * Merchant Single Page / Landing Page
+ * Route: /merchant/[shopId]/single-page/[slug]
+ * Example: /merchant/47366/single-page/test
  */
 export default function MerchantLandingPage() {
   const params = useParams();
@@ -45,16 +50,17 @@ export default function MerchantLandingPage() {
   // Get shop_uuid for API call (backend expects UUID, not numeric ID)
   const shopUuid = activeShopData?.shop_uuid;
 
-  // Fetch landing page data using shop_uuid (not shopId)
+  // Fetch landing page data using shop_uuid AND shopId (for block-based pages)
   const { data, isLoading, error } = useLandingPage(
     {
       slug,
       shopUuid: shopUuid,
+      shopId: shopId, // Pass numeric shopId for theme-api-server fallback
       preview: isPreview,
     },
     {
-      // Enable query when we have slug and shop_uuid
-      enabled: !!slug && !!shopUuid,
+      // Enable query when we have slug and (shop_uuid or shopId)
+      enabled: !!slug && !!(shopUuid || shopId),
       syncToStore: true,
     }
   );
@@ -95,6 +101,54 @@ export default function MerchantLandingPage() {
     );
   }
 
+  // Check if this is a block-based landing page
+  if (isBlockBasedLandingPage(data)) {
+    // Extract product data from inventory
+    const inventory = data.inventory;
+    const discountPercent =
+      inventory?.old_price && inventory?.price
+        ? Math.round(
+            ((inventory.old_price - inventory.price) / inventory.old_price) * 100
+          )
+        : 0;
+
+    const productData = {
+      title: inventory?.name || data.page_title,
+      price: inventory?.price || 0,
+      originalPrice: inventory?.old_price || inventory?.price || 0,
+      discount: discountPercent,
+      stock: inventory?.quantity || 0,
+      images: inventory?.images || (inventory?.image_url ? [inventory.image_url] : []),
+      variants: inventory?.variant_types?.flatMap((vt) =>
+        vt.variants.map((v) => ({
+          id: String(v.id || ""),
+          name: vt.title || "",
+          value: v.name || "",
+          price: v.price,
+        }))
+      ) || [],
+      currency: "BDT",
+    };
+
+    const shopData = {
+      name: activeShopData?.shop_name || "",
+      logo: activeShopData?.profile_photo || "",
+    };
+
+    return (
+      <LandingPageRenderer
+        sections={data.sections || []}
+        product={productData}
+        shop={shopData}
+        onOrderSubmit={async (orderData) => {
+          // TODO: Implement order submission logic
+          console.log("Order submitted:", orderData);
+        }}
+      />
+    );
+  }
+
+  // Legacy theme rendering
   const themeName = data.theme_name as SingleProductTheme;
 
   // Render based on theme

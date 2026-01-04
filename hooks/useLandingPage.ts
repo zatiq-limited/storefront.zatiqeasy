@@ -57,8 +57,9 @@ export function useLandingPage(
       const searchParams = new URLSearchParams();
       if (params.shopUuid) {
         searchParams.set("shop_uuid", params.shopUuid);
-      } else if (params.shopId) {
-        searchParams.set("identifier", String(params.shopId));
+      }
+      if (params.shopId) {
+        searchParams.set("shop_id", String(params.shopId));
       }
       if (params.preview) {
         searchParams.set("preview", "true");

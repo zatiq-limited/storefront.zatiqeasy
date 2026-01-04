@@ -5,11 +5,11 @@ import { useShopStore } from "@/stores";
 import { getThemeColors, getThemeColor } from "@/lib/utils";
 
 /**
- * Single Product Landing Page Layout
+ * Single Page Landing Layout
  * This layout does NOT include the main theme's header/footer.
- * Landing pages (Arcadia, Nirvana, Grip) have their own specific navbar and footer.
+ * Landing pages have their own specific navbar and footer.
  */
-export default function SingleProductLayout({
+export default function SinglePageLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -43,6 +43,6 @@ export default function SingleProductLayout({
   }, [shopDetails]);
 
   // Render children without main theme header/footer
-  // The landing page components (Arcadia, Nirvana, Grip) have their own navbar/footer
+  // Landing pages have their own navbar/footer components
   return <>{children}</>;
 }
