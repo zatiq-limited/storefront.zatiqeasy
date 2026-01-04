@@ -61,6 +61,41 @@ export default function HomePage() {
     (homepage as Record<string, unknown>)?.data || homepage || {};
   const sections = (pageData as Record<string, unknown>)?.sections || [];
 
+  // Show placeholder when no sections exist (Theme Builder not configured)
+  if (!sections || (sections as Array<unknown>).length === 0) {
+    return (
+      <main className="zatiq-homepage min-h-[60vh] flex items-center justify-center bg-gray-50">
+        <div className="text-center p-8 max-w-md">
+          <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg
+              className="w-8 h-8 text-blue-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+              />
+            </svg>
+          </div>
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">
+            Theme Builder Mode Active
+          </h2>
+          <p className="text-gray-600 mb-4">
+            No homepage sections configured yet. Use the Theme Builder in your
+            merchant panel to add sections to this page.
+          </p>
+          <p className="text-sm text-gray-500">
+            Shop: {shopDetails?.shop_name || "Unknown"}
+          </p>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="zatiq-homepage">
       {(sections as Array<Record<string, unknown>>).map((section, index) => {

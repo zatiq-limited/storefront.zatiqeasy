@@ -1,21 +1,24 @@
 /**
  * Theme API Service
- * Fetches theme data from Theme Builder API (now public/unauthenticated)
+ * Fetches theme data from Theme Builder API
  *
- * API Structure (Public - No Auth Required):
- *   GET /api/v1/custom-themes/full        - Full theme with global settings + sections + pages
- *   GET /api/v1/custom-themes/pages/{type} - Specific page data
- *
- * Reference: theme-builder-documentation.md
+ * API Endpoints:
+ *   POST /api/v1/live/theme                    - Get theme data (global settings, sections)
+ *   POST /api/v1/live/theme/page/{pageType}    - Get specific page data
  */
 
-// API Base URL - same as merchant panel
-const API_BASE_URL =
-  `${process.env.NEXT_PUBLIC_API_URL}/api/v1/live` ||
-  "https://easybill.zatiq.tech/api/v1/live";
+import { apiClient } from "./client";
+
+// ============================================
+// Constants
+// ============================================
+
 const DEFAULT_SHOP_ID = process.env.NEXT_PUBLIC_DEV_SHOP_ID || "2";
 
-// Valid page names matching backend's PageType enum
+// ============================================
+// Types
+// ============================================
+
 export type ThemePageName =
   | "home"
   | "products"
@@ -27,23 +30,13 @@ export type ThemePageName =
   | "privacyPolicy"
   | "checkout";
 
-/**
- * Raw API response structure from Theme Builder API
- */
-interface ThemeApiResponse<T> {
-  success: boolean;
-  message: string;
-  data?: T;
-  legacy_theme?: boolean;
-}
-
-interface BlockData {
+export interface BlockData {
   id: string;
   type: string;
   settings: Record<string, unknown>;
 }
 
-interface SectionData {
+export interface SectionData {
   id: string;
   type: string;
   enabled: boolean;
@@ -51,20 +44,20 @@ interface SectionData {
   blocks: BlockData[];
 }
 
-interface GlobalSectionItem {
+export interface GlobalSectionItem {
   enabled: boolean;
   type: string;
   settings: Record<string, unknown>;
   blocks?: BlockData[];
 }
 
-interface GlobalSectionsData {
+export interface GlobalSectionsData {
   announcement?: GlobalSectionItem;
   header?: GlobalSectionItem;
   footer?: GlobalSectionItem;
 }
 
-interface GlobalSettingsData {
+export interface GlobalSettingsData {
   colors: {
     primary: string;
     secondary: string;
@@ -87,7 +80,7 @@ interface GlobalSettingsData {
   component_styles?: Record<string, unknown>;
 }
 
-interface PageData {
+export interface PageData {
   page_type: string;
   name: string;
   slug: string | null;
@@ -99,30 +92,10 @@ interface PageData {
   } | null;
 }
 
-interface ThemeData {
-  id: number;
-  shop_id: number;
-  name: string;
-  version: string;
-  global_settings: GlobalSettingsData;
-  global_sections: GlobalSectionsData;
-  templates: Record<string, string>;
-  pages?: PageData[];
-  created_at: string;
-  updated_at: string;
-}
-
-interface FullThemeData extends ThemeData {
-  pages: PageData[];
-}
-
-// ============================================
-// Response Types
-// ============================================
-
-interface CoreData {
-  success?: boolean;
-  data?: ThemeData;
+interface ThemeApiResponse<T> {
+  success: boolean;
+  message: string;
+  data?: T;
   legacy_theme?: boolean;
 }
 
@@ -132,301 +105,204 @@ interface PageDataResponse {
   legacy_theme?: boolean;
 }
 
+interface LiveThemeRequest {
+  shop_id?: number | string;
+  subdomain?: string;
+  domain?: string;
+}
+
+interface LiveThemeResponse {
+  success: boolean;
+  message: string;
+  legacy_theme?: boolean;
+  data?: {
+    global_settings: GlobalSettingsData;
+    global_sections: GlobalSectionsData;
+    templates: Record<string, string>;
+  };
+}
+
 // ============================================
-// Core Theme Data (header, footer, global settings)
+// Helper Functions
+// ============================================
+
+function createEmptyPageResponse(pageName: ThemePageName): PageDataResponse {
+  return {
+    success: true,
+    data: {
+      page_type: pageName,
+      name: pageName,
+      slug: null,
+      is_enabled: false,
+      sections: [],
+      seo: null,
+    },
+  };
+}
+
+// ============================================
+// Theme API
 // ============================================
 
 /**
- * Get theme data (global settings, announcement, header, footer, pages)
- * GET /api/v1/custom-themes/full?shop_id={id}
+ * Get theme data (global settings, sections)
+ * POST /api/v1/live/theme
  */
-export async function getTheme(shopId?: string): Promise<CoreData | null> {
-  const id = shopId || DEFAULT_SHOP_ID;
-  const url = `${API_BASE_URL}/custom-themes/full?shop_id=${id}`;
-
-  console.log(`[ThemeAPI] Fetching theme for shop ${id} from ${url}`);
+export async function getLiveTheme(params: LiveThemeRequest): Promise<{
+  success: boolean;
+  message?: string;
+  legacy_theme?: boolean;
+  data?: LiveThemeResponse["data"];
+}> {
+  const apiEndpoint = "/api/v1/live/theme";
 
   try {
-    const response = await fetch(url, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Device-Type": "Web",
-        "Application-Type": "Storefront",
-      },
-      cache: "no-store",
-    });
+    const { data } = await apiClient.post<LiveThemeResponse>(
+      apiEndpoint,
+      params
+    );
 
-    if (response.status === 404) {
-      console.log(`[ThemeAPI] Shop ${id} not found`);
-      return null;
+    // Custom Theme - success: true with data
+    if (data.success && data.data) {
+      return {
+        success: true,
+        legacy_theme: false,
+        data: data.data,
+      };
     }
 
-    if (!response.ok) {
-      console.error(
-        `[ThemeAPI] HTTP ${response.status}: ${response.statusText}`
-      );
-      return null;
+    // Legacy Theme - success: false with legacy_theme: true
+    if (data.legacy_theme === true) {
+      return {
+        success: false,
+        message: data.message,
+        legacy_theme: true,
+      };
     }
 
-    const result: ThemeApiResponse<ThemeData> = await response.json();
-
-    // Check if shop uses legacy theme
-    if (result.legacy_theme) {
-      console.log(`[ThemeAPI] Shop ${id} uses legacy theme`);
-      return { legacy_theme: true };
-    }
-
-    if (!result.success || !result.data) {
-      console.log("[ThemeAPI] API returned unsuccessful response");
-      return null;
-    }
-
-    console.log(`[ThemeAPI] Successfully fetched theme for shop ${id}`);
-    return result;
+    // Shop not found or other error
+    return {
+      success: false,
+      message: data.message,
+      legacy_theme: false,
+    };
   } catch (error) {
-    console.error("[ThemeAPI] Fetch error:", error);
-    return null;
+    console.error("[ThemeAPI] getLiveTheme error:", error);
+    return {
+      success: false,
+      message: "Failed to fetch theme",
+      legacy_theme: true,
+    };
   }
 }
 
-/**
- * Get global settings from theme data
- */
-export async function getGlobalSettings(
-  shopId?: string
-): Promise<GlobalSettingsData | null> {
-  const theme = await getTheme(shopId);
-  return theme?.data?.global_settings || null;
-}
-
-/**
- * Get global sections (announcement, header, footer)
- */
-export async function getGlobalSections(
-  shopId?: string
-): Promise<GlobalSectionsData | null> {
-  const theme = await getTheme(shopId);
-  return theme?.data?.global_sections || null;
-}
-
 // ============================================
-// Page Data (home, products, about, etc.)
+// Page API
 // ============================================
 
 /**
  * Get a specific page's data
- * GET /api/v1/custom-themes/pages/{pageType}?shop_id={id}
+ * POST /api/v1/live/theme/page/{pageType}
  */
 async function getPageData(
   pageName: ThemePageName,
   shopId?: string
 ): Promise<PageDataResponse | null> {
   const id = shopId || DEFAULT_SHOP_ID;
-  const url = `${API_BASE_URL}/custom-themes/pages/${pageName}?shop_id=${id}`;
-
-  console.log(
-    `[ThemeAPI] Fetching ${pageName} page for shop ${id} from ${url}`
-  );
+  const apiEndpoint = `/api/v1/live/theme/page/${pageName}`;
 
   try {
-    const response = await fetch(url, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Device-Type": "Web",
-        "Application-Type": "Storefront",
-      },
-      cache: "no-store",
-    });
+    const { data } = await apiClient.post<
+      | { data: ThemeApiResponse<PageData> }
+      | ThemeApiResponse<PageData>
+      | PageData
+    >(apiEndpoint, { shop_id: id });
 
-    if (response.status === 404) {
-      console.log(`[ThemeAPI] ${pageName} page not found for shop ${id}`);
-      return {
-        success: true,
-        data: {
-          page_type: pageName,
-          name: pageName,
-          slug: null,
-          is_enabled: false,
-          sections: [],
-          seo: null,
-        },
-      };
+    // Handle different response structures
+    let result: ThemeApiResponse<PageData> | PageData | null = null;
+
+    if (data && typeof data === "object" && "data" in data) {
+      const wrappedData = (data as { data: ThemeApiResponse<PageData> }).data;
+      if (wrappedData && typeof wrappedData === "object") {
+        if ("sections" in wrappedData) {
+          result = wrappedData as unknown as PageData;
+        } else {
+          result = wrappedData as ThemeApiResponse<PageData>;
+        }
+      }
+    } else if (data && typeof data === "object" && "sections" in data) {
+      result = data as PageData;
+    } else {
+      result = data as ThemeApiResponse<PageData>;
     }
-
-    if (!response.ok) {
-      console.error(
-        `[ThemeAPI] HTTP ${response.status}: ${response.statusText}`
-      );
-      return {
-        success: true,
-        data: {
-          page_type: pageName,
-          name: pageName,
-          slug: null,
-          is_enabled: false,
-          sections: [],
-          seo: null,
-        },
-      };
-    }
-
-    const result: ThemeApiResponse<PageData> = await response.json();
 
     // Check if shop uses legacy theme
-    if (result.legacy_theme) {
-      console.log(`[ThemeAPI] Shop ${id} uses legacy theme`);
+    if (result && "legacy_theme" in result && result.legacy_theme) {
       return { legacy_theme: true };
     }
 
-    if (!result.success || !result.data) {
-      console.log(`[ThemeAPI] No data returned for ${pageName}`);
-      return {
-        success: true,
-        data: {
-          page_type: pageName,
-          name: pageName,
-          slug: null,
-          is_enabled: false,
-          sections: [],
-          seo: null,
-        },
-      };
+    // Result is PageData directly
+    if (result && "sections" in result) {
+      return { success: true, data: result as PageData };
     }
 
-    console.log(
-      `[ThemeAPI] Found ${pageName} page with ${
-        result.data.sections?.length || 0
-      } sections`
-    );
+    // Result is ThemeApiResponse with data
+    if (result && "data" in result && result.data) {
+      return { success: true, data: result.data };
+    }
 
-    return {
-      success: true,
-      data: result.data,
-    };
+    return createEmptyPageResponse(pageName);
   } catch (error) {
-    console.error(`[ThemeAPI] Fetch error for ${pageName}:`, error);
-    return {
-      success: true,
-      data: {
-        page_type: pageName,
-        name: pageName,
-        slug: null,
-        is_enabled: false,
-        sections: [],
-        seo: null,
-      },
-    };
+    console.error(`[ThemeAPI] getPageData(${pageName}) error:`, error);
+    return createEmptyPageResponse(pageName);
   }
 }
 
-/**
- * Get home page data
- */
+/** Get home page data */
 export async function getHomePage(
   shopId?: string
 ): Promise<PageDataResponse | null> {
   return getPageData("home", shopId);
 }
 
-/**
- * Get products page data
- */
+/** Get products page data */
 export async function getProductsPage(
   shopId?: string
 ): Promise<PageDataResponse | null> {
   return getPageData("products", shopId);
 }
 
-/**
- * Get product details page data
- */
+/** Get product details page data */
 export async function getProductDetailsPage(
   shopId?: string
 ): Promise<PageDataResponse | null> {
   return getPageData("productDetails", shopId);
 }
 
-/**
- * Get collections page data
- */
+/** Get collections page data */
 export async function getCollectionsPage(
   shopId?: string
 ): Promise<PageDataResponse | null> {
   return getPageData("collections", shopId);
 }
 
-/**
- * Get collection details page data
- */
+/** Get collection details page data */
 export async function getCollectionDetailsPage(
   shopId?: string
 ): Promise<PageDataResponse | null> {
   return getPageData("collectionDetails", shopId);
 }
 
-/**
- * Get about page data
- */
+/** Get about page data */
 export async function getAboutPage(
   shopId?: string
 ): Promise<PageDataResponse | null> {
   return getPageData("about", shopId);
 }
 
-/**
- * Get contact page data
- */
+/** Get contact page data */
 export async function getContactPage(
   shopId?: string
 ): Promise<PageDataResponse | null> {
   return getPageData("contact", shopId);
 }
-
-/**
- * Get privacy policy page data
- */
-export async function getPrivacyPolicyPage(
-  shopId?: string
-): Promise<PageDataResponse | null> {
-  return getPageData("privacyPolicy", shopId);
-}
-
-/**
- * Check if theme exists for a shop
- */
-export async function hasTheme(shopId?: string): Promise<boolean> {
-  const theme = await getTheme(shopId);
-  return theme !== null && !theme.legacy_theme;
-}
-
-// Export default object for convenience
-const themeApi = {
-  getTheme,
-  getGlobalSettings,
-  getGlobalSections,
-  getHomePage,
-  getProductsPage,
-  getProductDetailsPage,
-  getCollectionsPage,
-  getCollectionDetailsPage,
-  getAboutPage,
-  getContactPage,
-  getPrivacyPolicyPage,
-  hasTheme,
-};
-
-export default themeApi;
-
-// Export types for use in other files
-export type {
-  BlockData,
-  SectionData,
-  GlobalSectionItem,
-  GlobalSectionsData,
-  GlobalSettingsData,
-  PageData,
-  ThemeData,
-  FullThemeData,
-};

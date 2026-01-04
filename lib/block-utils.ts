@@ -203,7 +203,16 @@ function evaluateExpression(
 }
 
 /**
- * Convert snake_case style object to camelCase React CSSProperties
+ * Convert kebab-case to camelCase
+ * e.g., "font-family" -> "fontFamily", "background-color" -> "backgroundColor"
+ */
+function kebabToCamelCase(str: string): string {
+  return str.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
+}
+
+/**
+ * Convert style object to React CSSProperties
+ * Handles snake_case (font_family), kebab-case (font-family), and camelCase (fontFamily) properties
  */
 export function convertStyleToCSS(
   style?: BlockStyle,
@@ -213,6 +222,7 @@ export function convertStyleToCSS(
 ): CSSProperties {
   if (!style && !bindStyle) return {};
 
+  // Map for snake_case properties
   const cssMap: Record<string, string> = {
     background_color: "backgroundColor",
     border_color: "borderColor",
@@ -249,7 +259,16 @@ export function convertStyleToCSS(
     Object.entries(style).forEach(([key, value]) => {
       if (value === undefined || value === null) return;
 
-      const cssKey = cssMap[key] || key;
+      // Try snake_case mapping first, then convert kebab-case to camelCase
+      let cssKey = cssMap[key];
+      if (!cssKey) {
+        // Check if it's kebab-case (contains hyphen)
+        if (key.includes("-")) {
+          cssKey = kebabToCamelCase(key);
+        } else {
+          cssKey = key;
+        }
+      }
 
       let resolvedValue = value;
       if (isBindingPath(value) && (data || context)) {
@@ -272,7 +291,15 @@ export function convertStyleToCSS(
     Object.entries(bindStyle).forEach(([key, value]) => {
       if (value === undefined || value === null) return;
 
-      const cssKey = cssMap[key] || key;
+      // Try snake_case mapping first, then convert kebab-case to camelCase
+      let cssKey = cssMap[key];
+      if (!cssKey) {
+        if (key.includes("-")) {
+          cssKey = kebabToCamelCase(key);
+        } else {
+          cssKey = key;
+        }
+      }
 
       if (isUrlConfig(value)) {
         const url = resolveBinding(value.field, data || {}, context || {});

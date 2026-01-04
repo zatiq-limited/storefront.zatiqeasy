@@ -1019,3 +1019,55 @@ Supported payment methods:
 Webhooks:
 - `/api/webhooks/aamarpay/confirm`
 - `/api/webhooks/nagad/confirm`
+
+---
+
+## Theme Builder Integration
+
+The storefront supports two rendering modes controlled by the `legacy_theme` flag in shop profile:
+
+### Mode 1: Static Themes (legacy_theme = true)
+Uses pre-built themes: Sellora, Aurora, Premium, Luxura, Basic
+
+### Mode 2: Theme Builder (legacy_theme = false)
+Uses dynamic rendering from merchant panel theme builder
+
+### Theme Builder API Endpoints (Required)
+
+```
+POST /api/v1/live/theme                           - Returns legacy_theme flag + global settings
+GET  /api/v1/live/custom-themes/full?shop_id={id} - Full theme with all pages
+GET  /api/v1/live/custom-themes/pages/{type}?shop_id={id} - Specific page config
+```
+
+### Data Flow
+
+```
+1. Shop Profile → legacy_theme === false
+2. ThemeRouter → Theme Builder Mode
+3. Fetch global settings (header/footer/announcement)
+4. Page fetches page-specific sections
+5. PageRenderer renders sections based on type
+```
+
+### Section Types Mapping
+
+| Page | Section Types |
+|------|--------------|
+| Home | `hero-1` to `hero-4`, `category-1` to `category-6`, `static-banner-1` to `static-banner-4` |
+| Products | `products-hero-1/2`, `products-layout-1` |
+| Product Details | `product-breadcrumb-1/2`, `product-detail-1/2`, `customer-reviews-1/2` |
+| Collections | `collections-hero-1/2`, `collections-grid-1/2` |
+| Collection Details | `collection-breadcrumb-1/2`, `collection-banner-1/2`, `collection-products-1/2` |
+| Global | `announcement-bar-1/2/3`, `navbar-1/2/3/4`, `footer-1/2` |
+
+### Key Files
+
+- `lib/api/theme-api.ts` - Theme fetching functions
+- `components/theme-router.tsx` - Mode detection and routing
+- `components/renderers/page-renderer/` - Page-specific renderers
+- `app/_layouts/theme/layout.tsx` - Global layout with header/footer
+
+### Related Documentation
+
+See `/docs/THEME_BUILDER_API_INTEGRATION.md` for complete API integration guide
