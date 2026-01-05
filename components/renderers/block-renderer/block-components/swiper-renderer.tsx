@@ -277,7 +277,7 @@ export default function SwiperRenderer({
 
     if (config.autoplay) {
       if (typeof config.autoplay === "boolean") {
-        swiperOptions.autoplay = { delay: 3000 };
+        swiperOptions.autoplay = { delay: 3000, pauseOnMouseEnter: true };
       } else {
         swiperOptions.autoplay = {
           delay: config.autoplay.delay || 3000,
@@ -285,6 +285,10 @@ export default function SwiperRenderer({
             config.autoplay.disableOnInteraction ??
             config.autoplay.disable_on_interaction ??
             false,
+          pauseOnMouseEnter:
+            (config.autoplay as Record<string, unknown>).pauseOnMouseEnter ??
+            (config.autoplay as Record<string, unknown>).pause_on_mouse_enter ??
+            true,
         };
       }
     }
