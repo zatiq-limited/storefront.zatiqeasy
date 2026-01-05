@@ -54,14 +54,12 @@ function ProductsLayout({
   settings = {},
   products,
   filters,
-  pagination,
   onFiltersChange,
   isLoading,
 }: {
   settings?: Record<string, unknown>;
   products: Product[];
   filters: ProductFilters;
-  pagination: PaginationType | null;
   onFiltersChange: (filters: Partial<ProductFilters>) => void;
   isLoading?: boolean;
 }) {
@@ -85,7 +83,7 @@ function ProductsLayout({
   const sidebarType = (settings.sidebar_type as string) || "products-sidebar-1";
   const paginationType =
     (settings.pagination_type as string) || "products-pagination-1";
-  const productsPerPage = (settings.products_per_page as number) || 20;
+  const productsPerPage = Number(settings.products_per_page) || 20;
   const filterBarBgColor =
     (settings.filter_bar_bg_color as string) || "#FFFFFF";
   const searchBorderColor =
@@ -303,6 +301,18 @@ function ProductsLayout({
     return <ProductsSidebar1 {...sidebarProps} />;
   };
 
+  // Handle page change with scroll to top
+  const handlePageChange = useCallback(
+    (page: number) => {
+      onFiltersChange({ page });
+      // Use setTimeout to ensure scroll happens after state update and re-render
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }, 100);
+    },
+    [onFiltersChange]
+  );
+
   // Render pagination component
   const renderPagination = () => {
     // Use client-side pagination values
@@ -315,7 +325,7 @@ function ProductsLayout({
       to: Math.min(endIndex, totalProducts),
       total: totalProducts,
       activeColor: paginationActiveColor,
-      onPageChange: (page: number) => onFiltersChange({ page }),
+      onPageChange: handlePageChange,
     };
 
     if (paginationType === "products-pagination-2") {
@@ -730,7 +740,6 @@ export default function ProductsPageRenderer({
               settings={section.settings}
               products={products}
               filters={filters}
-              pagination={pagination}
               onFiltersChange={onFiltersChange}
               isLoading={isLoading}
             />
