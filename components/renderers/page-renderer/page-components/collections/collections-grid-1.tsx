@@ -154,10 +154,13 @@ export default function CollectionsGrid1({
                     }`}
                   >
                     <Image
-                      src={collection.banner_url || collection.image_url}
+                      src={collection.banner_url || collection.image_url || "/placeholder.jpg"}
                       alt={collection.name}
                       fill
                       className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      unoptimized={
+                        (collection.banner_url || collection.image_url || "").startsWith("http")
+                      }
                     />
 
                     {/* Dark Overlay */}

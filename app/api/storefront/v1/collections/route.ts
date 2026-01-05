@@ -1,93 +1,150 @@
 import { NextRequest, NextResponse } from "next/server";
-import collectionsData from "@/data/api-responses/collections.json";
+import { apiClient } from "@/lib/api/client";
 
-// Revalidate every 60 seconds (ISR - Incremental Static Regeneration)
-export const revalidate = 60;
+// Revalidate every 2 minutes
+export const revalidate = 120;
 
-export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
+// Define collection type based on categories data
+interface Category {
+  id: number;
+  name: string;
+  slug?: string;
+  description?: string;
+  image_url?: string;
+  banner_url?: string;
+  total_inventories?: number;
+  serial?: number;
+  sub_categories?: Category[];
+  created_at?: string;
+}
 
-  // Parse query parameters for filtering/pagination
-  const page = parseInt(searchParams.get("page") || "1", 10);
-  const limit = parseInt(searchParams.get("limit") || "20", 10);
-  const search = searchParams.get("search");
-  const featured = searchParams.get("featured");
-  const sort = searchParams.get("sort") || "sort_order";
+interface Collection {
+  id: number;
+  name: string;
+  slug: string;
+  description: string;
+  image_url: string;
+  banner_url: string;
+  product_count: number;
+  sort_order: number;
+  children: {
+    id: number;
+    name: string;
+    slug: string;
+    image_url: string;
+    product_count: number;
+  }[];
+  created_at: string;
+}
 
-  let collections = [...(collectionsData.data?.collections || [])];
+// Transform categories to collections format (same as merchant theme-builder)
+function transformCategoryToCollection(category: Category): Collection {
+  return {
+    id: category.id,
+    name: category.name,
+    slug: category.slug || category.name.toLowerCase().replace(/\s+/g, "-"),
+    description: category.description || "",
+    image_url: category.image_url || "/placeholder.jpg",
+    banner_url: category.banner_url || category.image_url || "/placeholder.jpg",
+    product_count: category.total_inventories || 0,
+    sort_order: category.serial || 0,
+    children: (category.sub_categories || []).map((child) => ({
+      id: child.id,
+      name: child.name,
+      slug: child.slug || child.name.toLowerCase().replace(/\s+/g, "-"),
+      image_url: child.image_url || "/placeholder.jpg",
+      product_count: child.total_inventories || 0,
+    })),
+    created_at: category.created_at || new Date().toISOString(),
+  };
+}
 
-  // Filter by featured
-  if (featured === "true") {
-    collections = collections.filter((collection) => collection.is_featured);
-  }
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { shop_uuid, ids } = body;
 
-  // Filter by search query
-  if (search) {
-    const searchLower = search.toLowerCase();
-    collections = collections.filter(
-      (collection) =>
-        collection.name.toLowerCase().includes(searchLower) ||
-        collection.description?.toLowerCase().includes(searchLower)
+    if (!shop_uuid) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "shop_uuid is required",
+        },
+        { status: 400 }
+      );
+    }
+
+    // Build endpoint with query params if ids provided (uses same endpoint as categories)
+    const endpoint = `/api/v1/live/filtered_categories${
+      ids && ids.length > 0 ? `?filter[id]=${ids.join(",")}` : ""
+    }`;
+
+    // Call external API using apiClient (handles encryption automatically)
+    const { data } = await apiClient.post(endpoint, {
+      identifier: shop_uuid,
+    });
+
+    // Type assertion for API response
+    const responseData = data as { data?: Category[] } | undefined;
+
+    // Check if categories data exists
+    if (!responseData?.data) {
+      return NextResponse.json(
+        {
+          success: true,
+          data: {
+            collections: [],
+            pagination: {
+              current_page: 1,
+              per_page: 20,
+              total: 0,
+              total_pages: 0,
+            },
+          },
+        },
+        {
+          headers: {
+            "Cache-Control": "public, s-maxage=120, stale-while-revalidate=600",
+          },
+        }
+      );
+    }
+
+    // Transform categories to collections format
+    const collections = responseData.data.map(transformCategoryToCollection);
+
+    return NextResponse.json(
+      {
+        success: true,
+        data: {
+          collections,
+          pagination: {
+            current_page: 1,
+            per_page: collections.length,
+            total: collections.length,
+            total_pages: 1,
+          },
+        },
+      },
+      {
+        headers: {
+          "Cache-Control": "public, s-maxage=120, stale-while-revalidate=600",
+        },
+      }
+    );
+  } catch (error) {
+    console.error("[Collections API] Error fetching collections:", error);
+    return NextResponse.json(
+      {
+        success: false,
+        error: "Failed to fetch collections",
+      },
+      {
+        status: 500,
+        headers: {
+          "Cache-Control": "no-store",
+        },
+      }
     );
   }
-
-  // Sort collections
-  switch (sort) {
-    case "name_asc":
-      collections.sort((a, b) => a.name.localeCompare(b.name));
-      break;
-    case "name_desc":
-      collections.sort((a, b) => b.name.localeCompare(a.name));
-      break;
-    case "newest":
-      collections.sort(
-        (a, b) =>
-          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-      );
-      break;
-    case "oldest":
-      collections.sort(
-        (a, b) =>
-          new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
-      );
-      break;
-    case "product_count":
-      collections.sort((a, b) => b.product_count - a.product_count);
-      break;
-    case "sort_order":
-    default:
-      collections.sort((a, b) => a.sort_order - b.sort_order);
-      break;
-  }
-
-  // Paginate
-  const total = collections.length;
-  const totalPages = Math.ceil(total / limit);
-  const startIndex = (page - 1) * limit;
-  const endIndex = startIndex + limit;
-  const paginatedCollections = collections.slice(startIndex, endIndex);
-
-  const response = {
-    success: true,
-    data: {
-      collections: paginatedCollections,
-      pagination: {
-        current_page: page,
-        per_page: limit,
-        total,
-        total_pages: totalPages,
-        from: startIndex + 1,
-        to: Math.min(endIndex, total),
-      },
-    },
-  };
-
-  return NextResponse.json(response, {
-    headers: {
-      // Cache control for CDN and browser
-      "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300",
-      // Vary header for proper caching with query params
-      Vary: "Accept-Encoding",
-    },
-  });
 }
