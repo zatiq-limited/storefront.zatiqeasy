@@ -39,9 +39,20 @@ import ProductsHero1 from "@/components/renderers/page-renderer/page-components/
 import ProductsHero2 from "@/components/renderers/page-renderer/page-components/products/products-hero-2";
 import BlockRenderer from "@/components/renderers/block-renderer";
 
+interface Category {
+  id: number | string;
+  name: string;
+  description?: string;
+  image_url?: string;
+  parent_id?: number | string | null;
+  sub_categories?: Category[];
+  products_count?: number;
+}
+
 interface ProductsPageRendererProps {
   sections: Section[];
   products: Product[];
+  categories?: Category[];
   pagination: PaginationType | null;
   filters: ProductFilters;
   onFiltersChange: (filters: Partial<ProductFilters>) => void;
@@ -53,12 +64,14 @@ interface ProductsPageRendererProps {
 function ProductsLayout({
   settings = {},
   products,
+  categories = [],
   filters,
   onFiltersChange,
   isLoading,
 }: {
   settings?: Record<string, unknown>;
   products: Product[];
+  categories?: Category[];
   filters: ProductFilters;
   onFiltersChange: (filters: Partial<ProductFilters>) => void;
   isLoading?: boolean;
@@ -112,13 +125,48 @@ function ProductsLayout({
   const sidebarButtonTextColor =
     (settings.sidebar_button_text_color as string) || "#FFFFFF";
 
-  // Client-side pagination
+  // Calculate max price from products for the slider (rounded up to nearest 100)
+  const highestPrice = products.length > 0
+    ? Math.max(...products.map((p) => p.price || 0))
+    : 10000; // Fallback only when no products
+  const maxPriceLimit = Math.ceil(highestPrice / 100) * 100;
+
+  // Filter products by selected categories and price range
+  const filteredProducts = products.filter((product) => {
+    // Category filter
+    if (selectedCategories.length > 0) {
+      if (!product.categories || product.categories.length === 0) {
+        return false;
+      }
+      const hasMatchingCategory = product.categories.some((cat) =>
+        selectedCategories.includes(String(cat.id))
+      );
+      if (!hasMatchingCategory) {
+        return false;
+      }
+    }
+
+    // Price filter
+    if (priceRange.min > 0 || priceRange.max > 0) {
+      const productPrice = product.price || 0;
+      if (priceRange.min > 0 && productPrice < priceRange.min) {
+        return false;
+      }
+      if (priceRange.max > 0 && productPrice > priceRange.max) {
+        return false;
+      }
+    }
+
+    return true;
+  });
+
+  // Client-side pagination (applied to filtered products)
   const currentPage = filters.page || 1;
-  const totalProducts = products.length;
+  const totalProducts = filteredProducts.length;
   const totalPages = Math.ceil(totalProducts / productsPerPage);
   const startIndex = (currentPage - 1) * productsPerPage;
   const endIndex = startIndex + productsPerPage;
-  const paginatedProducts = products.slice(startIndex, endIndex);
+  const paginatedProducts = filteredProducts.slice(startIndex, endIndex);
 
   // Category change handler
   const handleCategoryChange = (categoryId: string, isSelected: boolean) => {
@@ -286,10 +334,12 @@ function ProductsLayout({
   // Render sidebar component
   const renderSidebar = () => {
     const sidebarProps = {
+      categories,
       selectedCategories,
       onCategoryChange: handleCategoryChange,
       onClearFilters: handleClearFilters,
       priceRange,
+      maxPriceLimit,
       onPriceRangeChange: handlePriceRangeChange,
       buttonBgColor: sidebarButtonBgColor,
       buttonTextColor: sidebarButtonTextColor,
@@ -559,7 +609,7 @@ function ProductsLayout({
                         onClick={() => setIsMobileSidebarOpen(false)}
                         className="w-full mt-4 py-3 bg-gray-900 text-white rounded-lg font-semibold"
                       >
-                        Show {products.length} Results
+                        Show {filteredProducts.length} Results
                       </button>
                     </div>
                   </div>
@@ -578,7 +628,7 @@ function ProductsLayout({
             )}
 
             {/* Empty State */}
-            {!isLoading && products.length === 0 && (
+            {!isLoading && filteredProducts.length === 0 && (
               <div className="flex flex-col items-center justify-center py-16 text-center">
                 <svg
                   className="w-16 h-16 text-gray-300 mb-4"
@@ -599,6 +649,8 @@ function ProductsLayout({
                 <p className="text-gray-500 mb-4 max-w-md">
                   {filters.search
                     ? `No products match "${filters.search}"`
+                    : selectedCategories.length > 0
+                    ? "No products found in the selected categories"
                     : "No products match your current filters"}
                 </p>
                 <button
@@ -611,7 +663,7 @@ function ProductsLayout({
             )}
 
             {/* Products Grid */}
-            {!isLoading && products.length > 0 && (
+            {!isLoading && filteredProducts.length > 0 && (
               <>
                 {currentView === "grid" ? (
                   <div
@@ -685,6 +737,7 @@ function ProductsLayout({
 export default function ProductsPageRenderer({
   sections,
   products,
+  categories = [],
   pagination,
   filters,
   onFiltersChange,
@@ -739,6 +792,7 @@ export default function ProductsPageRenderer({
             <ProductsLayout
               settings={section.settings}
               products={products}
+              categories={categories}
               filters={filters}
               onFiltersChange={onFiltersChange}
               isLoading={isLoading}

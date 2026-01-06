@@ -32,6 +32,7 @@ export default function ProductsClient() {
   // Get shop details and products from store
   const { shopDetails } = useShopStore();
   const products = useProductsStore((state) => state.products);
+  const categories = useProductsStore((state) => state.categories);
   const pagination = useProductsStore((state) => state.pagination);
   const filters = useProductsStore((state) => state.filters);
   const productsStoreIsLoading = useProductsStore((state) => state.isLoading);
@@ -87,6 +88,7 @@ export default function ProductsClient() {
       <ProductsPageRenderer
         sections={pageSections}
         products={products}
+        categories={categories}
         pagination={pagination}
         filters={filters}
         onFiltersChange={setFilters}
