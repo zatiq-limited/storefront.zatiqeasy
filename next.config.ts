@@ -128,10 +128,11 @@ const nextConfig: NextConfig = {
     : {
         // Development mode: /merchant/[shopId] routing
         rewrites: async () => [
-          {
-            source: "/categories/:path*",
-            destination: "/404",
-          },
+          // NOTE: /categories routes are now handled by the app router - removed rewrite to /404
+          // {
+          //   source: "/categories/:path*",
+          //   destination: "/404",
+          // },
           // NOTE: /products routes are now handled by the app router - removed rewrite to /404
           // {
           //   source: "/products/:path*",
