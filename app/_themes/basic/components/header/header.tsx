@@ -30,20 +30,12 @@ export function BasicHeader() {
   const totalItems = useCartStore(selectTotalItems);
   const { setCurrentPage } = useProductsStore();
 
-  // State
+  // State - initialize with server-safe defaults to avoid hydration mismatch
   const [scrollY, setScrollY] = useState(0);
-  const [searchQuery, setSearchQuery] = useState(() => {
-    // Initialize search query from URL params
-    if (typeof window !== 'undefined') {
-      const urlParams = new URLSearchParams(window.location.search);
-      return urlParams.get('search') || '';
-    }
-    return '';
-  });
+  const [searchQuery, setSearchQuery] = useState("");
   const [langValue, setLangValue] = useState(
     shopDetails?.default_language_code || "en"
   );
-  const [isLangInitialized, setIsLangInitialized] = useState(false);
 
   // Handle scroll effect
   useEffect(() => {
@@ -55,14 +47,30 @@ export function BasicHeader() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Initialize language from localStorage (only runs once on mount)
-  if (!isLangInitialized && typeof window !== "undefined") {
-    const storedLang = localStorage.getItem("locale");
-    if (storedLang && storedLang !== langValue) {
-      setLangValue(storedLang);
+  // Initialize client-side state after hydration (runs once on mount)
+  useEffect(() => {
+    // Initialize search query from URL params
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchFromUrl = urlParams.get("search") || "";
+    if (searchFromUrl) {
+      setSearchQuery(searchFromUrl);
     }
-    setIsLangInitialized(true);
-  }
+
+    // Initialize language from localStorage
+    const storedLang = localStorage.getItem("locale");
+    const defaultLang = shopDetails?.default_language_code || "en";
+    const currentLang = storedLang || defaultLang;
+
+    if (currentLang !== defaultLang) {
+      setLangValue(currentLang);
+    }
+
+    // Sync i18n with stored language
+    if (storedLang && i18n.language !== storedLang) {
+      i18n.changeLanguage(storedLang);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleLanguageChange = () => {
     const newLang = langValue === "en" ? "bn" : "en";
