@@ -12,7 +12,6 @@ import { convertSettingsKeys } from "@/lib/settings-utils";
 import { useShopStore } from "@/stores";
 import type { CollectionDetails as Collection } from "@/hooks/useCollectionDetails";
 import Link from "next/link";
-import Image from "next/image";
 
 interface Product {
   id: number;
@@ -23,6 +22,7 @@ interface Product {
   short_description?: string;
   brand?: string;
   image?: string;
+  image_url?: string;
   images?: string[];
   quantity?: number;
   categories?: { id: number; name: string }[];
@@ -283,21 +283,23 @@ export default function CollectionProducts1({
                 >
                   {/* Product Image */}
                   <div className="relative aspect-square overflow-hidden bg-gray-100">
-                    {product.image ? (
-                      <Image
-                        src={product.image}
-                        alt={product.name}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-300"
-                        sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <svg className="w-16 h-16 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                      </div>
-                    )}
+                    {(() => {
+                      const productImage = product.images?.[0] || product.image_url || product.image;
+                      return productImage ? (
+                        <img
+                          src={productImage}
+                          alt={product.name}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <svg className="w-16 h-16 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          </svg>
+                        </div>
+                      );
+                    })()}
                     {/* Out of Stock Badge */}
                     {product.quantity !== undefined && product.quantity <= 0 && (
                       <div className="absolute top-2 left-2 bg-red-500 text-white text-xs font-medium px-2 py-1 rounded">
