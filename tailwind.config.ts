@@ -21,6 +21,7 @@ const config = {
     
     // Position - left
     "left-0", "left-4", "left-6", "left-1/2",
+    "sm:left-4", "sm:left-6",
     "md:left-16", "md:left-20",
     "lg:left-28", "lg:left-[112px]",
     
@@ -30,7 +31,7 @@ const config = {
     "lg:right-11", "lg:right-28",
     
     // Position - top
-    "top-0", "top-4", "top-8", "top-1/2",
+    "top-0", "top-2.5", "top-4", "top-8", "top-1/2",
     "md:top-6", "md:top-auto",
     "lg:top-8",
     
@@ -45,7 +46,7 @@ const config = {
     
     // Position types
     "absolute", "relative", "fixed", "sticky",
-    "inset-0",
+    "inset-0", "inset-y-0", "inset-x-0",
     
     // ========================================
     // TRANSFORM CLASSES
@@ -65,14 +66,14 @@ const config = {
     
     // Base widths
     "w-full", "w-auto", "w-screen",
-    "w-1", "w-2", "w-2.5", "w-3", "w-4", "w-5", "w-6", "w-8", "w-10", "w-12", "w-14", "w-16", "w-20", "w-24",
+    "w-0.5", "w-1", "w-2", "w-2.5", "w-3", "w-4", "w-5", "w-6", "w-8", "w-10", "w-12", "w-14", "w-16", "w-20", "w-24",
     "w-1/2", "w-1/3", "w-2/3", "w-1/4", "w-3/4",
     
     // Arbitrary widths
     "w-[50px]", "w-[86px]", "w-[200px]", "w-[320px]", "w-[384px]", "w-[362px]",
     
     // Responsive widths
-    "sm:w-10", "sm:w-[60px]",
+    "sm:w-10", "sm:w-12", "sm:w-[60px]",
     "md:w-12", "md:w-20", "md:w-24", "md:w-[450px]",
     "lg:w-64", "lg:w-72", "lg:w-[750px]",
     "xl:w-72",
@@ -94,7 +95,7 @@ const config = {
     // ========================================
     
     // Base heights
-    "h-auto", "h-full", "h-screen",
+    "h-auto", "h-full", "h-screen", "h-2/3",
     "h-0.5", "h-1", "h-2", "h-2.5", "h-3", "h-4", "h-5", "h-6", "h-8", "h-10", "h-12", "h-14", "h-16", "h-20", "h-24", "h-72",
     
     // Arbitrary heights
@@ -148,11 +149,11 @@ const config = {
     "justify-start", "justify-center", "justify-end", "justify-between", "justify-around",
     
     // Gap
-    "gap-0.5", "gap-1", "gap-1.5", "gap-2", "gap-3", "gap-4", "gap-5", "gap-6", "gap-8", "gap-10", "gap-12",
+    "gap-0.5", "gap-1", "gap-1.5", "gap-2", "gap-3", "gap-4", "gap-5", "gap-6", "gap-8", "gap-10", "gap-12", "gap-16",
     "gap-x-2", "gap-x-4", "gap-x-6", "gap-y-4", "gap-y-6", "gap-y-8",
     "sm:gap-3", "sm:gap-4", "sm:gap-6", "sm:gap-8",
     "md:gap-4", "md:gap-6", "md:gap-8", "md:gap-10", "md:gap-12",
-    "lg:gap-6", "lg:gap-8", "lg:gap-12",
+    "lg:gap-6", "lg:gap-8", "lg:gap-12", "lg:gap-16",
     
     // Grid columns
     "grid-cols-1", "grid-cols-2", "grid-cols-3", "grid-cols-4", "grid-cols-5", "grid-cols-6",
@@ -181,14 +182,14 @@ const config = {
     "my-2", "my-3", "my-4",
     
     // Margin top
-    "mt-0", "mt-1", "mt-2", "mt-3", "mt-4", "mt-6", "mt-8",
+    "mt-0", "mt-1", "mt-2", "mt-3", "mt-4", "mt-5", "mt-6", "mt-8",
     "sm:mt-4", "md:mt-4", "md:mt-6",
     
     // Margin bottom
-    "mb-0", "mb-1", "mb-2", "mb-3", "mb-4", "mb-5", "mb-6", "mb-8", "mb-10", "mb-12", "mb-14",
+    "mb-0", "mb-1", "mb-2", "mb-3", "mb-4", "mb-5", "mb-6", "mb-8", "mb-10", "mb-12", "mb-14", "mb-16", "mb-20",
     "sm:mb-3", "sm:mb-4", "sm:mb-6", "sm:mb-8", "sm:mb-14",
-    "md:mb-3", "md:mb-4", "md:mb-5", "md:mb-6", "md:mb-8", "md:mb-10", "md:mb-12", "md:mb-14",
-    "lg:mb-5", "lg:mb-6", "lg:mb-8", "lg:mb-10", "lg:mb-12",
+    "md:mb-3", "md:mb-4", "md:mb-5", "md:mb-6", "md:mb-8", "md:mb-10", "md:mb-12", "md:mb-14", "md:mb-16",
+    "lg:mb-5", "lg:mb-6", "lg:mb-8", "lg:mb-10", "lg:mb-12", "lg:mb-20",
     
     // Margin left/right
     "ml-0", "ml-2", "ml-4", "mr-0", "mr-2", "mr-4",
@@ -209,19 +210,20 @@ const config = {
     "2xl:px-0",
     
     // Padding Y
-    "py-0", "py-1.5", "py-2", "py-2.5", "py-3", "py-4", "py-6", "py-8", "py-12", "py-16",
+    "py-0", "py-1.5", "py-2", "py-2.5", "py-3", "py-4", "py-6", "py-8", "py-12", "py-16", "py-20", "py-28",
     "sm:py-2", "sm:py-3", "sm:py-4", "sm:py-8", "sm:py-12", "sm:py-16",
-    "md:py-3", "md:py-4", "md:py-6", "md:py-8", "md:py-12", "md:py-16",
-    "lg:py-8", "lg:py-12", "lg:py-16", "lg:py-20",
+    "md:py-3", "md:py-4", "md:py-6", "md:py-8", "md:py-12", "md:py-16", "md:py-20",
+    "lg:py-8", "lg:py-12", "lg:py-16", "lg:py-20", "lg:py-28",
     
     // Padding top/bottom
     "pt-2", "pt-4", "pt-6", "pt-8",
-    "pb-4", "pb-6", "pb-8", "pb-12",
+    "pb-2", "pb-4", "pb-6", "pb-8", "pb-12",
     "sm:pb-14",
     "md:pb-4", "md:pb-6", "md:pb-12",
     
     // Padding left/right
-    "pl-4", "pr-4",
+    "pl-4", "pl-16", "pr-4", "pr-16",
+    "lg:pl-16", "lg:pr-16",
     
     // ========================================
     // TYPOGRAPHY
@@ -261,7 +263,7 @@ const config = {
     "text-left", "text-center", "text-right",
     "sm:text-left", "sm:text-center",
     "md:text-left", "md:text-center",
-    "lg:text-left", "lg:text-center",
+    "lg:text-left", "lg:text-center", "lg:text-right",
     
     // Text decoration
     "underline", "line-through", "no-underline",
@@ -368,7 +370,7 @@ const config = {
     // ========================================
     // ASPECT RATIO
     // ========================================
-    "aspect-square", "aspect-video", "aspect-auto",
+    "aspect-square", "aspect-video", "aspect-auto", "aspect-[4/3]",
     "lg:aspect-square",
     
     // ========================================
@@ -401,7 +403,8 @@ const config = {
     // ========================================
     
     // Space between (for flex children)
-    "space-x-2", "space-x-4", "space-y-2", "space-y-4", "space-y-6",
+    "space-x-2", "space-x-4", "space-y-2", "space-y-4", "space-y-6", "space-y-12", "space-y-20",
+    "lg:space-y-20",
     
     // Self alignment
     "self-start", "self-center", "self-end",
