@@ -80,14 +80,15 @@ const config = {
     // Max widths
     "max-w-24", "max-w-28", "max-w-32", "max-w-36", "max-w-40", "max-w-44", "max-w-48",
     "max-w-md", "max-w-lg", "max-w-xl", "max-w-2xl", "max-w-3xl", "max-w-4xl", "max-w-5xl", "max-w-6xl", "max-w-7xl",
-    "max-w-[280px]", "max-w-[362px]", "max-w-[384px]", "max-w-[400px]", "max-w-[500px]", "max-w-[600px]", "max-w-[1440px]",
-    "sm:max-w-28", "sm:max-w-32", "sm:max-w-36",
-    "md:max-w-36", "md:max-w-40", "md:max-w-44", "md:max-w-[400px]", "md:max-w-[600px]",
-    "lg:max-w-[500px]",
+    "max-w-[90%]", "max-w-[280px]", "max-w-[362px]", "max-w-[384px]", "max-w-[400px]", "max-w-[500px]", "max-w-[550px]", "max-w-[580px]", "max-w-[600px]", "max-w-[640px]", "max-w-[700px]", "max-w-[800px]", "max-w-[900px]", "max-w-[1000px]", "max-w-[1100px]", "max-w-[1440px]",
+    "sm:max-w-28", "sm:max-w-32", "sm:max-w-36", "sm:max-w-[85%]", "sm:max-w-[500px]",
+    "md:max-w-36", "md:max-w-40", "md:max-w-44", "md:max-w-[400px]", "md:max-w-[550px]", "md:max-w-[600px]", "md:max-w-[900px]",
+    "lg:max-w-[500px]", "lg:max-w-[600px]", "lg:max-w-[640px]", "lg:max-w-[1000px]",
+    "xl:max-w-[1100px]",
     
     // Min widths
     "min-w-0", "min-w-40", "min-w-[180px]", "min-w-[200px]",
-    "sm:min-w-48", "sm:min-w-56",
+    "sm:min-w-48", "sm:min-w-56", "sm:min-w-[180px]",
     
     // ========================================
     // HEIGHT CLASSES
@@ -115,9 +116,9 @@ const config = {
     "lg:max-h-12", "lg:max-h-14",
     
     // Min heights
-    "min-h-10", "min-h-12", "min-h-14",
+    "min-h-10", "min-h-12", "min-h-14", "min-h-[52px]",
     "min-h-[350px]", "min-h-[400px]", "min-h-[450px]", "min-h-[494px]", "min-h-[542px]",
-    "sm:min-h-14", "sm:min-h-16", "sm:min-h-[400px]",
+    "sm:min-h-14", "sm:min-h-16", "sm:min-h-[52px]", "sm:min-h-[400px]",
     "lg:min-h-[450px]",
     
     // ========================================
@@ -204,8 +205,9 @@ const config = {
     // Padding X
     "px-2", "px-3", "px-4", "px-5", "px-6", "px-8", "px-9", "px-12",
     "sm:px-4", "sm:px-6", "sm:px-8", "sm:px-12",
-    "md:px-6", "md:px-8", "md:px-9", "md:px-12", "md:px-16",
-    "lg:px-8", "lg:px-9", "lg:px-12", "lg:px-20",
+    "md:px-6", "md:px-8", "md:px-9", "md:px-10", "md:px-12", "md:px-16",
+    "lg:px-8", "lg:px-9", "lg:px-12", "lg:px-16", "lg:px-20",
+    "xl:px-20",
     "2xl:px-0",
     
     // Padding Y
@@ -245,7 +247,7 @@ const config = {
     // Line heights
     "leading-4", "leading-5", "leading-6", "leading-7", "leading-8", "leading-9", "leading-10",
     "leading-none", "leading-tight", "leading-snug", "leading-normal", "leading-relaxed", "leading-loose",
-    "leading-[1.1]", "leading-[21px]", "leading-[30px]", "leading-[42px]",
+    "leading-[1.1]", "leading-[1.3]", "leading-[1.6]", "leading-[21px]", "leading-[30px]", "leading-[42px]",
     "sm:leading-7", "sm:leading-8",
     "md:leading-7", "md:leading-8", "md:leading-tight", "md:leading-[42px]",
     "lg:leading-[1.1]", "lg:leading-[30px]",
@@ -253,6 +255,7 @@ const config = {
     // Letter spacing
     "tracking-tight", "tracking-normal", "tracking-wide", "tracking-wider", "tracking-widest",
     "tracking-[0%]", "tracking-[0.1px]", "tracking-[0.2px]",
+    "tracking-[0.03em]", "tracking-[0.06em]", "tracking-[0.2em]",
     
     // Text transform
     "uppercase", "lowercase", "capitalize", "normal-case",
@@ -312,6 +315,7 @@ const config = {
     
     // Border radius
     "rounded", "rounded-sm", "rounded-md", "rounded-lg", "rounded-xl", "rounded-2xl", "rounded-3xl", "rounded-full",
+    "rounded-[3px]",
     "md:rounded-2xl",
     
     // ========================================
