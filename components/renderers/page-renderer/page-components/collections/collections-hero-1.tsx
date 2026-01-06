@@ -16,8 +16,14 @@ interface CollectionsHero1Settings {
   showBreadcrumb?: boolean;
   showCollectionCount?: boolean;
   showStats?: boolean;
+  // Background settings
+  backgroundType?: "color" | "gradient" | "image";
+  backgroundColor?: string;
   gradientStart?: string;
   gradientEnd?: string;
+  backgroundImage?: string;
+  overlayOpacity?: number;
+  // Color settings
   badgeColor?: string;
   badgeBgColor?: string;
   titleColor?: string;
@@ -40,11 +46,8 @@ interface CollectionsHero1Settings {
   statValueFontSize?: string;
   statLabelFontSize?: string;
   stats?: Array<{ label: string; value: string }>;
-  // Legacy props from merchant panel (without gradient)
-  backgroundColor?: string;
+  // Legacy props
   textColor?: string;
-  backgroundImage?: string;
-  overlayOpacity?: number;
 }
 
 interface CollectionsHero1Props {
@@ -69,10 +72,31 @@ export default function CollectionsHero1({
   const showCollectionCount = s.showCollectionCount !== false;
   const showStats = s.showStats !== false;
 
-  // Colors - support both gradient (new) and backgroundColor (legacy)
+  // Background settings
+  const backgroundType = s.backgroundType || "gradient";
+  const backgroundColor = s.backgroundColor || "#EBF4FF";
   const gradientStart = s.gradientStart || "#EBF4FF";
   const gradientEnd = s.gradientEnd || "#F3E8FF";
-  const backgroundColor = s.backgroundColor || gradientStart; // Fallback
+  const backgroundImage = s.backgroundImage || "";
+  const overlayOpacity = s.overlayOpacity ?? 60;
+
+  // Compute background style based on backgroundType
+  const getBackgroundStyle = (): React.CSSProperties => {
+    switch (backgroundType) {
+      case "color":
+        return { backgroundColor };
+      case "image":
+        // For image, we use a solid color as fallback, image is rendered separately
+        return { backgroundColor: backgroundColor || "#1f2937" };
+      case "gradient":
+      default:
+        return {
+          background: `linear-gradient(135deg, ${gradientStart} 0%, ${gradientEnd} 100%)`,
+        };
+    }
+  };
+
+  // Colors
   const badgeColor = s.badgeColor || "#e28279";
   const badgeBgColor = s.badgeBgColor || `${badgeColor}20`;
   const titleColor = s.titleColor || s.textColor || "#111827";
@@ -102,21 +126,13 @@ export default function CollectionsHero1({
     { label: "Happy Customers", value: "10K+" },
   ];
 
-  // Background image support (from merchant panel)
-  const backgroundImage = s.backgroundImage || "";
-  const overlayOpacity = s.overlayOpacity || 60;
-
   return (
     <section
       className="relative overflow-hidden"
-      style={{
-        background: backgroundImage
-          ? backgroundColor
-          : `linear-gradient(135deg, ${gradientStart} 0%, ${gradientEnd} 100%)`,
-      }}
+      style={getBackgroundStyle()}
     >
-      {/* Background Image */}
-      {backgroundImage && (
+      {/* Background Image (only when backgroundType is "image") */}
+      {backgroundType === "image" && backgroundImage && (
         <div className="absolute inset-0">
           <img
             src={backgroundImage}
@@ -130,8 +146,8 @@ export default function CollectionsHero1({
         </div>
       )}
 
-      {/* Gradient Mesh Background (when no image) */}
-      {!backgroundImage && (
+      {/* Gradient Mesh Background (decorative blurs for gradient type) */}
+      {backgroundType === "gradient" && (
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div
             className="absolute -top-1/2 -left-1/4 w-[600px] h-[600px] rounded-full blur-3xl opacity-20"
