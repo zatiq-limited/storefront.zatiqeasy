@@ -6,9 +6,27 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { convertSettingsKeys } from "@/lib/settings-utils";
+import { useShopStore } from "@/stores";
 import type { CollectionDetails as Collection } from "@/hooks/useCollectionDetails";
+import Link from "next/link";
+import Image from "next/image";
+
+interface Product {
+  id: number;
+  name: string;
+  slug?: string;
+  price: number;
+  regular_price?: number;
+  short_description?: string;
+  brand?: string;
+  image?: string;
+  images?: string[];
+  quantity?: number;
+  categories?: { id: number; name: string }[];
+}
 
 interface CollectionProducts1Props {
   settings?: Record<string, unknown>;
@@ -40,14 +58,86 @@ interface CollectionProducts1Settings {
   showSearch?: boolean;
 }
 
+// Fetch products for collection
+async function fetchCollectionProducts(
+  shopUuid: string,
+  categoryId: number,
+  page: number = 1,
+  limit: number = 12,
+  sort: string = "newest",
+  search?: string
+): Promise<{ products: Product[]; pagination: { total: number; total_pages: number; current_page: number } }> {
+  const response = await fetch("/api/storefront/v1/products", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      shop_uuid: shopUuid,
+      category_id: categoryId,
+      page,
+      limit,
+      sort,
+      search,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch products");
+  }
+
+  const data = await response.json();
+  return {
+    products: data.data?.products || [],
+    pagination: data.data?.pagination || { total: 0, total_pages: 0, current_page: 1 },
+  };
+}
+
 export default function CollectionProducts1({
   settings = {},
   collection,
-  isLoading = false,
+  isLoading: pageLoading = false,
 }: CollectionProducts1Props) {
   const s = convertSettingsKeys<CollectionProducts1Settings>(settings);
   const [viewMode, setViewMode] = useState(s.defaultView || "grid");
-  const [activeFilters, setActiveFilters] = useState<string[]>([]);
+  const [sortBy, setSortBy] = useState("newest");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = parseInt(s.productsPerPage || "12", 10);
+
+  // Get shop_uuid from store
+  const shopDetails = useShopStore((state) => state.shopDetails);
+  const shopUuid = shopDetails?.shop_uuid;
+
+  // Fetch products for this collection
+  const {
+    data: productsData,
+    isLoading: isProductsLoading,
+    error,
+  } = useQuery({
+    queryKey: ["collection-products", collection.id, shopUuid, currentPage, productsPerPage, sortBy, searchQuery],
+    queryFn: () =>
+      fetchCollectionProducts(
+        shopUuid!,
+        collection.id,
+        currentPage,
+        productsPerPage,
+        sortBy,
+        searchQuery || undefined
+      ),
+    enabled: !!shopUuid && !!collection.id,
+    staleTime: 1000 * 60, // 1 minute
+    gcTime: 1000 * 60 * 5, // 5 minutes
+  });
+
+  const products = productsData?.products || [];
+  const pagination = productsData?.pagination || { total: 0, total_pages: 0, current_page: 1 };
+  const isLoading = pageLoading || isProductsLoading;
+
+  // Reset to page 1 when sort or search changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [sortBy, searchQuery]);
 
   // Responsive column classes
   const columnClasses = {
@@ -57,6 +147,10 @@ export default function CollectionProducts1({
     5: "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5",
     6: "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6",
   };
+
+  const gridClass = viewMode === "grid"
+    ? `grid ${columnClasses[Number(s.columns) as keyof typeof columnClasses] || columnClasses[3]} gap-6`
+    : "space-y-4";
 
   return (
     <section
@@ -81,23 +175,24 @@ export default function CollectionProducts1({
               Products
             </h2>
             <p className="text-sm sm:text-base opacity-70" style={{ color: s.textColor || "#6b7280" }}>
-              {collection.product_count} products in {collection.name}
+              {pagination.total || collection.product_count} products in {collection.name}
             </p>
           </div>
 
           {/* Right Controls */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 flex-wrap">
             {/* Search */}
             {s.showSearch && (
               <div className="relative">
                 <input
                   type="text"
                   placeholder="Search products..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-10 pr-4 py-2 rounded-xl border transition-all focus:outline-none focus:ring-2"
                   style={{
                     borderColor: `${s.accentColor || "#7c3aed"}30`,
-                    "--tw-ring-color": s.accentColor || "#7c3aed",
-                  } as React.CSSProperties}
+                  }}
                 />
                 <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4" style={{ color: s.textColor || "#9ca3af" }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
@@ -144,225 +239,147 @@ export default function CollectionProducts1({
 
             {/* Sort Dropdown */}
             {s.showSorting && (
-              <select className="px-4 py-2 rounded-xl border transition-all appearance-none cursor-pointer focus:outline-none focus:ring-2"
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="px-4 py-2 rounded-xl border transition-all appearance-none cursor-pointer focus:outline-none focus:ring-2"
                 style={{
                   borderColor: `${s.accentColor || "#7c3aed"}30`,
-                  "--tw-ring-color": s.accentColor || "#7c3aed",
                   color: s.textColor || "#374151",
-                } as React.CSSProperties}
+                }}
               >
-                <option>Featured</option>
-                <option>Price: Low to High</option>
-                <option>Price: High to Low</option>
-                <option>Newest First</option>
-                <option>Best Selling</option>
-                <option>Top Rated</option>
-                <option>A to Z</option>
-                <option>Z to A</option>
+                <option value="newest">Newest First</option>
+                <option value="oldest">Oldest First</option>
+                <option value="price_asc">Price: Low to High</option>
+                <option value="price_desc">Price: High to Low</option>
+                <option value="name_asc">A to Z</option>
+                <option value="name_desc">Z to A</option>
               </select>
             )}
           </div>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Filters Sidebar */}
-          {s.showFilters && (
-            <aside className={`${s.filterPosition === "floating" ? "lg:sticky lg:top-24" : ""} lg:w-80 xl:w-96 flex-shrink-0`}>
-              <div className="bg-white rounded-2xl shadow-lg p-6 space-y-6">
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-lg font-bold" style={{ color: s.textColor || "#111827" }}>
-                    Filters
-                  </h3>
-                  {activeFilters.length > 0 && (
-                    <button
-                      className="text-sm font-medium"
-                      style={{ color: s.accentColor || "#7c3aed" }}
-                    >
-                      Clear All
-                    </button>
-                  )}
+        {/* Products Grid */}
+        <div className="flex-1">
+          {isLoading ? (
+            <div className={gridClass}>
+              {Array.from({ length: 6 }, (_, i) => (
+                <div key={i} className="bg-white rounded-2xl shadow-lg overflow-hidden animate-pulse">
+                  <div className="aspect-square bg-gray-200"></div>
+                  <div className="p-4 space-y-3">
+                    <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                    <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                  </div>
                 </div>
-
-                {/* Active Filters */}
-                {activeFilters.length > 0 && (
-                  <div className="flex flex-wrap gap-2 pb-4 border-b" style={{ borderColor: `${s.textColor || "#e5e7eb"}20` }}>
-                    {activeFilters.map((filter) => (
-                      <span
-                        key={filter}
-                        className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium"
-                        style={{
-                          backgroundColor: `${s.accentColor || "#7c3aed"}15`,
-                          color: s.accentColor || "#7c3aed",
-                        }}
-                      >
-                        {filter}
-                        <button className="hover:opacity-70">
-                          <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-                          </svg>
-                        </button>
-                      </span>
-                    ))}
-                  </div>
-                )}
-
-                {/* Filter Categories */}
-                <div className="space-y-6">
-                  {/* Categories */}
-                  <div>
-                    <h4 className="font-semibold mb-3" style={{ color: s.textColor || "#374151" }}>
-                      Categories
-                    </h4>
-                    <div className="space-y-2">
-                      {["Electronics", "Clothing", "Accessories", "Home", "Sports"].map((category) => (
-                        <label key={category} className="flex items-center cursor-pointer">
-                          <input type="checkbox" className="w-4 h-4 rounded border-gray-300 text-purple-600 focus:ring-purple-500" />
-                          <span className="ml-2 text-sm" style={{ color: s.textColor || "#6b7280" }}>
-                            {category}
-                          </span>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Price Range */}
-                  <div>
-                    <h4 className="font-semibold mb-3" style={{ color: s.textColor || "#374151" }}>
-                      Price Range
-                    </h4>
-                    <div className="space-y-3">
-                      <input
-                        type="range"
-                        min="0"
-                        max="1000"
-                        className="w-full"
-                        style={{
-                          accentColor: s.accentColor || "#7c3aed",
-                        }}
+              ))}
+            </div>
+          ) : products.length > 0 ? (
+            <div className={gridClass}>
+              {products.map((product) => (
+                <Link
+                  key={product.id}
+                  href={`/products/${product.slug || product.id}`}
+                  className="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300"
+                >
+                  {/* Product Image */}
+                  <div className="relative aspect-square overflow-hidden bg-gray-100">
+                    {product.image ? (
+                      <Image
+                        src={product.image}
+                        alt={product.name}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                        sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                       />
-                      <div className="flex justify-between text-sm" style={{ color: s.textColor || "#6b7280" }}>
-                        <span>$0</span>
-                        <span>$1000</span>
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <svg className="w-16 h-16 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
                       </div>
-                    </div>
+                    )}
+                    {/* Out of Stock Badge */}
+                    {product.quantity !== undefined && product.quantity <= 0 && (
+                      <div className="absolute top-2 left-2 bg-red-500 text-white text-xs font-medium px-2 py-1 rounded">
+                        Out of Stock
+                      </div>
+                    )}
+                    {/* Discount Badge */}
+                    {product.regular_price && product.regular_price > product.price && (
+                      <div className="absolute top-2 right-2 bg-green-500 text-white text-xs font-medium px-2 py-1 rounded">
+                        {Math.round(((product.regular_price - product.price) / product.regular_price) * 100)}% OFF
+                      </div>
+                    )}
                   </div>
 
-                  {/* Brands */}
-                  <div>
-                    <h4 className="font-semibold mb-3" style={{ color: s.textColor || "#374151" }}>
-                      Brands
-                    </h4>
-                    <div className="space-y-2">
-                      {["Brand A", "Brand B", "Brand C", "Brand D"].map((brand) => (
-                        <label key={brand} className="flex items-center cursor-pointer">
-                          <input type="checkbox" className="w-4 h-4 rounded border-gray-300 text-purple-600 focus:ring-purple-500" />
-                          <span className="ml-2 text-sm" style={{ color: s.textColor || "#6b7280" }}>
-                            {brand}
-                          </span>
-                        </label>
-                      ))}
+                  {/* Product Info */}
+                  <div className="p-4">
+                    <h3
+                      className="font-semibold text-sm sm:text-base mb-2 line-clamp-2 group-hover:text-purple-600 transition-colors"
+                      style={{ color: s.textColor || "#111827" }}
+                    >
+                      {product.name}
+                    </h3>
+                    <div className="flex items-center gap-2">
+                      <span
+                        className="text-lg font-bold"
+                        style={{ color: s.accentColor || "#7c3aed" }}
+                      >
+                        ৳{product.price.toLocaleString()}
+                      </span>
+                      {product.regular_price && product.regular_price > product.price && (
+                        <span className="text-sm text-gray-400 line-through">
+                          ৳{product.regular_price.toLocaleString()}
+                        </span>
+                      )}
                     </div>
                   </div>
-
-                  {/* Rating */}
-                  <div>
-                    <h4 className="font-semibold mb-3" style={{ color: s.textColor || "#374151" }}>
-                      Rating
-                    </h4>
-                    <div className="space-y-2">
-                      {[5, 4, 3, 2, 1].map((rating) => (
-                        <label key={rating} className="flex items-center cursor-pointer">
-                          <input type="checkbox" className="w-4 h-4 rounded border-gray-300 text-purple-600 focus:ring-purple-500" />
-                          <div className="flex items-center ml-2">
-                            <div className="flex">
-                              {Array.from({ length: 5 }, (_, i) => (
-                                <svg
-                                  key={i}
-                                  className={`w-4 h-4 ${
-                                    i < rating ? "text-yellow-400" : "text-gray-300"
-                                  }`}
-                                  fill="currentColor"
-                                  viewBox="0 0 20 20"
-                                >
-                                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg>
-                              ))}
-                            </div>
-                            <span className="ml-2 text-sm" style={{ color: s.textColor || "#6b7280" }}>
-                              & Up
-                            </span>
-                          </div>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </aside>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center py-20 text-center">
+              <svg className="w-24 h-24 mx-auto mb-4 opacity-20" style={{ color: s.accentColor || "#7c3aed" }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1.5}
+                  d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+                />
+              </svg>
+              <h3 className="text-xl font-semibold mb-2" style={{ color: s.textColor || "#374151" }}>
+                No products found
+              </h3>
+              <p className="text-sm opacity-70" style={{ color: s.textColor || "#6b7280" }}>
+                {searchQuery ? "Try adjusting your search terms" : "No products in this collection yet"}
+              </p>
+            </div>
           )}
 
-          {/* Products Grid */}
-          <div className="flex-1">
-            {/* Products Container */}
-            <div className={`${viewMode === "grid" ? columnClasses[Number(s.columns) as keyof typeof columnClasses] || columnClasses[3] : "space-y-4"} gap-6`}>
-              {isLoading ? (
-                Array.from({ length: 6 }, (_, i) => (
-                  <div key={i} className="bg-white rounded-2xl shadow-lg overflow-hidden animate-pulse">
-                    <div className="aspect-square bg-gray-200"></div>
-                    <div className="p-6 space-y-3">
-                      <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                      <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <div className={`${viewMode === "grid" ? "col-span-full" : ""} flex flex-col items-center justify-center py-20 text-center`}>
-                  <svg className="w-24 h-24 mx-auto mb-4 opacity-20" style={{ color: s.accentColor || "#7c3aed" }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={1.5}
-                      d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-                    />
-                  </svg>
-                  <h3 className="text-xl font-semibold mb-2" style={{ color: s.textColor || "#374151" }}>
-                    No products found
-                  </h3>
-                  <p className="text-sm opacity-70" style={{ color: s.textColor || "#6b7280" }}>
-                    Try adjusting your filters or search terms
-                  </p>
-                </div>
-              )}
+          {/* Pagination / Load More */}
+          {s.showPagination && pagination.total_pages > 1 && (
+            <div className="mt-12 flex justify-center items-center gap-2">
+              <button
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className="px-4 py-2 rounded-lg border disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+                style={{ borderColor: `${s.accentColor || "#7c3aed"}30` }}
+              >
+                Previous
+              </button>
+              <span className="px-4 py-2" style={{ color: s.textColor || "#374151" }}>
+                Page {currentPage} of {pagination.total_pages}
+              </span>
+              <button
+                onClick={() => setCurrentPage((p) => Math.min(pagination.total_pages, p + 1))}
+                disabled={currentPage === pagination.total_pages}
+                className="px-4 py-2 rounded-lg border disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+                style={{ borderColor: `${s.accentColor || "#7c3aed"}30` }}
+              >
+                Next
+              </button>
             </div>
-
-            {/* Load More Button */}
-            {s.showPagination && (
-              <div className="mt-12 text-center">
-                <button
-                  className="group relative inline-flex items-center px-8 py-4 rounded-2xl font-semibold text-lg transition-all hover:scale-105 hover:shadow-2xl overflow-hidden"
-                  style={{
-                    background: `linear-gradient(135deg, ${
-                      s.loadMoreGradientFrom || "#4f46e5"
-                    } 0%, ${s.loadMoreGradientTo || "#9333ea"} 100%)`,
-                    color: s.loadMoreTextColor || "#ffffff",
-                  }}
-                >
-                  <span className="relative z-10 flex items-center">
-                    {s.loadMoreButtonText || "Load More Products"}
-                    <svg className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M13 7l5 5m0 0l-5 5m5-5H6"
-                      />
-                    </svg>
-                  </span>
-                  <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
-                </button>
-              </div>
-            )}
-          </div>
+          )}
         </div>
       </div>
     </section>

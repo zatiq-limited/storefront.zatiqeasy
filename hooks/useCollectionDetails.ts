@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import type { Section } from "@/lib/types";
+import { useShopStore } from "@/stores";
 
 // Collection type from collections.json
 export interface CollectionDetails {
@@ -33,8 +33,16 @@ interface CollectionDetailsPageConfigResponse {
 }
 
 // Fetch single collection by slug
-async function fetchCollection(slug: string): Promise<CollectionResponse> {
-  const res = await fetch(`/api/storefront/v1/collections/${slug}`);
+async function fetchCollection(slug: string, shopUuid: string): Promise<CollectionResponse> {
+  const res = await fetch(`/api/storefront/v1/collections/${slug}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      shop_uuid: shopUuid,
+    }),
+  });
   if (!res.ok) {
     if (res.status === 404) {
       throw new Error("Collection not found");
@@ -55,11 +63,20 @@ export function useCollectionDetails(slug: string) {
   const [error, setError] = useState<string | null>(null);
   const [notFound, setNotFound] = useState(false);
 
+  // Get shop_uuid from store
+  const shopDetails = useShopStore((state) => state.shopDetails);
+  const shopUuid = shopDetails?.shop_uuid;
+
   // Collection query
   const collectionQuery = useQuery({
-    queryKey: ["collection", slug],
-    queryFn: () => fetchCollection(slug),
-    enabled: !!slug,
+    queryKey: ["collection", slug, shopUuid],
+    queryFn: () => {
+      if (!shopUuid) {
+        throw new Error("Shop UUID not available");
+      }
+      return fetchCollection(slug, shopUuid);
+    },
+    enabled: !!slug && !!shopUuid,
     staleTime: 1000 * 60, // 1 minute
     gcTime: 1000 * 60 * 5, // 5 minutes
     refetchOnWindowFocus: false,
@@ -92,9 +109,10 @@ export function useCollectionDetails(slug: string) {
   return {
     collection: collectionQuery.data?.data?.collection,
     sections: pageConfigQuery.data?.sections || [],
-    isLoading: collectionQuery.isLoading,
+    isLoading: shopUuid ? collectionQuery.isLoading : false,
     isPageConfigLoading: pageConfigQuery.isLoading,
     error,
     notFound,
+    hasShopUuid: !!shopUuid,
   };
 }
