@@ -34,6 +34,7 @@ export interface BlockEvent {
   action: string;
   target: string;
   value?: unknown;
+  index?: string | number; // For slider_goto: the slide index to navigate to
 }
 
 export interface BlockStyle {
@@ -569,15 +570,22 @@ export function createEventHandler(
 
     case "slider_goto":
       return () => {
-        const index = Number(resolvedTarget);
+        // For slider_goto: target = swiper ID, index = slide index to go to
+        const slideIndex = event.index !== undefined 
+          ? (typeof event.index === 'string' && (event.index.startsWith('indicator.') || event.index.startsWith('item.') || event.index.startsWith('slide.'))
+            ? Number(resolveBinding(event.index, data, context) || 0)
+            : Number(event.index))
+          : Number(resolvedTarget);
+        
         if (handlers.sliderGoto) {
-          handlers.sliderGoto(index);
+          handlers.sliderGoto(slideIndex);
         } else {
           const swiperRegistry = (window as unknown as Record<string, unknown>)
             .__swiperRegistry as
             | { goto: (index: number, target: string) => void }
             | undefined;
-          swiperRegistry?.goto(index, resolvedTarget);
+          // Pass the swiper target ID for proper targeting
+          swiperRegistry?.goto(slideIndex, resolvedTarget);
         }
       };
 
@@ -629,6 +637,7 @@ export function getBlockType(block: Record<string, unknown>): string {
   if (type === "icon_button") return "icon_button";
   if (type === "nav_button") return "nav_button";
   if (type === "text_input") return "text_input";
+  if (type === "progress_bar") return "progress_bar";
 
   return "element";
 }

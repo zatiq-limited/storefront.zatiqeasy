@@ -3,6 +3,9 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* Load Tailwind config with safelist */
+@config "../tailwind.config.ts";
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -240,16 +243,11 @@
   padding-right: var(--gap);
 }
 
-/* Hero Carousel Swiper Progressbar Pagination */
-/* Hide ALL default Swiper pagination for hero sections (we use custom dot indicators) */
-[class*="hero"] .swiper-pagination,
-section[id^="hero-"] .swiper-pagination,
-[class*="hero"] .swiper-pagination-progressbar,
-section[id^="hero-"] .swiper-pagination-progressbar,
-[type="hero_fullwidth"] .swiper-pagination,
-[type="hero_fullwidth"] .swiper-pagination-progressbar,
+/* Hero Carousel Swiper Pagination */
+/* Hide default Swiper bullet pagination for hero sections (some use custom indicators) */
 [class*="hero"] .swiper-pagination-bullets,
 section[id^="hero-"] .swiper-pagination-bullets,
+[type="hero_fullwidth"] .swiper-pagination-bullets,
 [class*="hero"] .swiper-pagination-bullet,
 section[id^="hero-"] .swiper-pagination-bullet {
   display: none !important;
@@ -258,14 +256,8 @@ section[id^="hero-"] .swiper-pagination-bullet {
   pointer-events: none !important;
 }
 
-/* Hide Swiper pagination inside any section that starts with hero- id */
-section[id^="hero-"] .swiper .swiper-pagination,
-section[id^="hero-"] .swiper-pagination {
-  display: none !important;
-}
-
-/* Swiper progressbar pagination styling (for non-hero sections that explicitly use it) */
-.swiper-pagination-progressbar {
+/* Hero1 Progressbar Styling - positioned at bottom with custom styling */
+section[id^="hero-1"] .swiper-pagination-progressbar {
   position: absolute !important;
   left: 1.5rem !important;
   right: 1.5rem !important;
@@ -273,13 +265,13 @@ section[id^="hero-"] .swiper-pagination {
   top: auto !important;
   width: auto !important;
   height: 2px !important;
-  background: rgba(255, 255, 255, 0.2) !important;
+  background: rgba(255, 255, 255, 0.3) !important;
   border-radius: 9999px !important;
   z-index: 20 !important;
 }
 
 @media (min-width: 768px) {
-  .swiper-pagination-progressbar {
+  section[id^="hero-1"] .swiper-pagination-progressbar {
     left: 4rem !important;
     right: 4rem !important;
     bottom: 3rem !important;
@@ -287,7 +279,7 @@ section[id^="hero-"] .swiper-pagination {
 }
 
 @media (min-width: 1024px) {
-  .swiper-pagination-progressbar {
+  section[id^="hero-1"] .swiper-pagination-progressbar {
     left: 7rem !important;
     right: 7rem !important;
     bottom: 3.5rem !important;
@@ -295,9 +287,10 @@ section[id^="hero-"] .swiper-pagination {
   }
 }
 
-.swiper-pagination-progressbar .swiper-pagination-progressbar-fill {
+section[id^="hero-1"] .swiper-pagination-progressbar .swiper-pagination-progressbar-fill {
   background: rgba(255, 255, 255, 0.6) !important;
   border-radius: 9999px !important;
+  transition: width 0.7s ease-out !important;
 }
 
 /* ============================================

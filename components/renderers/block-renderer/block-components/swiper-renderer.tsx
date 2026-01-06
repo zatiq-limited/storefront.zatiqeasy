@@ -37,7 +37,7 @@ import type { Block, BlockRendererProps } from "..";
 // Lazy import BlockRenderer to avoid circular dependency
 const BlockRenderer = React.lazy(() => import(".."));
 
-// Global Swiper Registry
+// Global Swiper Registry - uses Map for ordered iteration
 const swiperRegistry: Map<string, SwiperType> = new Map();
 
 export function registerSwiper(id: string, swiper: SwiperType) {
@@ -52,69 +52,51 @@ export function getSwiperInstance(id: string): SwiperType | undefined {
   return swiperRegistry.get(id);
 }
 
+/**
+ * Find swiper by target ID - improved matching logic
+ * Priority: exact match > partial match > first registered
+ */
+function findSwiperByTarget(target: string): SwiperType | undefined {
+  // 1. Exact match
+  if (swiperRegistry.has(target)) {
+    return swiperRegistry.get(target);
+  }
+
+  // 2. Find swiper whose ID contains the target or vice versa
+  for (const [key, value] of swiperRegistry.entries()) {
+    // Match hero-1-swiper-xxx with target "hero-1-swiper-xxx" or partial
+    if (key.includes(target) || target.includes(key)) {
+      return value;
+    }
+    // Match section ID pattern (hero-1-xxx targets hero-1-swiper-xxx)
+    const keyPrefix = key.split('-swiper-')[0];
+    const targetPrefix = target.split('-swiper-')[0];
+    if (keyPrefix && targetPrefix && keyPrefix === targetPrefix) {
+      return value;
+    }
+  }
+
+  // 3. Fallback to most recently registered (last in map)
+  const entries = Array.from(swiperRegistry.entries());
+  if (entries.length > 0) {
+    return entries[entries.length - 1][1];
+  }
+
+  return undefined;
+}
+
 export function globalSliderPrev(target: string = "swiper") {
-  let swiper = swiperRegistry.get(target);
-
-  if (!swiper) {
-    for (const [key, value] of swiperRegistry.entries()) {
-      if (key.includes(target) || target.includes(key.split("-")[0])) {
-        swiper = value;
-        break;
-      }
-    }
-  }
-
-  if (!swiper) {
-    const entries = Array.from(swiperRegistry.entries());
-    if (entries.length > 0) {
-      swiper = entries[entries.length - 1][1];
-    }
-  }
-
+  const swiper = findSwiperByTarget(target);
   swiper?.slidePrev();
 }
 
 export function globalSliderNext(target: string = "swiper") {
-  let swiper = swiperRegistry.get(target);
-
-  if (!swiper) {
-    for (const [key, value] of swiperRegistry.entries()) {
-      if (key.includes(target) || target.includes(key.split("-")[0])) {
-        swiper = value;
-        break;
-      }
-    }
-  }
-
-  if (!swiper) {
-    const entries = Array.from(swiperRegistry.entries());
-    if (entries.length > 0) {
-      swiper = entries[entries.length - 1][1];
-    }
-  }
-
+  const swiper = findSwiperByTarget(target);
   swiper?.slideNext();
 }
 
 export function globalSliderGoto(index: number, target: string = "swiper") {
-  let swiper = swiperRegistry.get(target);
-
-  if (!swiper) {
-    for (const [key, value] of swiperRegistry.entries()) {
-      if (key.includes(target) || target.includes(key.split("-")[0])) {
-        swiper = value;
-        break;
-      }
-    }
-  }
-
-  if (!swiper) {
-    const entries = Array.from(swiperRegistry.entries());
-    if (entries.length > 0) {
-      swiper = entries[entries.length - 1][1];
-    }
-  }
-
+  const swiper = findSwiperByTarget(target);
   swiper?.slideTo(index);
 }
 
@@ -324,6 +306,7 @@ export default function SwiperRenderer({
         swiperOptions.pagination = {
           clickable: config.pagination.clickable ?? true,
           type: config.pagination.type || "bullets",
+          el: config.pagination.type === "progressbar" ? ".swiper-pagination" : undefined,
         };
       }
     } else {

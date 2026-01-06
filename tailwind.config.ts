@@ -414,6 +414,48 @@ const config = {
     // ========================================
     "nav-button",
     "disabled:opacity-50", "disabled:cursor-not-allowed",
+    
+    // ========================================
+    // HERO COMPONENT SPECIFIC CLASSES
+    // ========================================
+    
+    // Hero1 specific - rounded container, progress bar
+    "w-[18px]", "h-[18px]",
+    "left-6", "right-6",
+    "md:left-16", "md:right-16",
+    "lg:left-28", "lg:right-28",
+    "lg:bottom-14",
+    "bg-white/30",
+    "lg:opacity-0", "lg:group-hover:opacity-100",
+    
+    // Hero3 specific - rounded-[30px] arrows, blue pagination
+    "w-[60px]", "h-[60px]",
+    "rounded-[30px]",
+    "w-3.5", "h-3.5",
+    "border-[#EEEEEE]", "hover:border-[#3465F0]",
+    "bg-[#3465F0]", "hover:bg-[#3465F0]",
+    "text-[#3465F0]",
+    
+    // Hero4 specific - rectangular indicators, white SVG arrows
+    "w-[62px]", "h-2.5",
+    "bg-white/50", "hover:bg-white/70",
+    "lg:left-10", "lg:right-10",
+    "lg:w-8", "lg:h-12",
+    "drop-shadow-lg",
+    
+    // Responsive min heights/widths for buttons
+    "sm:min-w-48", "sm:min-h-14", "sm:min-w-56", "sm:min-h-16",
+    "sm:text-xl", "lg:text-2xl",
+    "sm:px-6", "sm:leading-8",
+    "sm:font-bold",
+    
+    // Group hover for hero arrows
+    "group-hover:opacity-100",
+    "lg:group-hover:opacity-100",
+    
+    // Additional hover states
+    "hover:text-white",
+    "hover:w-2.5", "hover:h-2.5",
   ],
   theme: {
     // Container configuration to match merchant panel
