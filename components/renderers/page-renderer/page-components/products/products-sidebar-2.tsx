@@ -13,6 +13,11 @@ import { useState } from "react";
 interface Category {
   id: string | number;
   name: string;
+  parent_id?: number | string | null;
+  products_count?: number;
+  product_count?: number;
+  total_inventories?: number;
+  count?: number;
 }
 
 interface ProductsSidebar2Props {
@@ -63,9 +68,19 @@ export default function ProductsSidebar2({
     { id: "sale", name: "On Sale" },
   ];
 
-  const displayCategories =
+  // Filter for root-level categories only (no parent_id)
+  const rootCategories =
     categories && categories.length > 0
-      ? categories.slice(0, 4).map((cat) => ({ id: cat.id, name: cat.name }))
+      ? categories.filter((cat) => !cat.parent_id)
+      : [];
+
+  const displayCategories =
+    rootCategories.length > 0
+      ? rootCategories.slice(0, 4).map((cat) => ({
+          id: cat.id,
+          name: cat.name,
+          count: cat.total_inventories || cat.products_count || cat.product_count || cat.count || 0,
+        }))
       : mockCategories;
 
   return (
@@ -91,7 +106,10 @@ export default function ProductsSidebar2({
                     }
                     className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                   />
-                  <span className="text-sm text-gray-700">{cat.name}</span>
+                  <span className="text-sm text-gray-700 flex-1">{cat.name}</span>
+                  {cat.count !== undefined && (
+                    <span className="text-xs text-gray-400">({cat.count})</span>
+                  )}
                 </label>
               );
             })}

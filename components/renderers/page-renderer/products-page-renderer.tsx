@@ -39,9 +39,20 @@ import ProductsHero1 from "@/components/renderers/page-renderer/page-components/
 import ProductsHero2 from "@/components/renderers/page-renderer/page-components/products/products-hero-2";
 import BlockRenderer from "@/components/renderers/block-renderer";
 
+interface Category {
+  id: number | string;
+  name: string;
+  description?: string;
+  image_url?: string;
+  parent_id?: number | string | null;
+  sub_categories?: Category[];
+  products_count?: number;
+}
+
 interface ProductsPageRendererProps {
   sections: Section[];
   products: Product[];
+  categories?: Category[];
   pagination: PaginationType | null;
   filters: ProductFilters;
   onFiltersChange: (filters: Partial<ProductFilters>) => void;
@@ -53,12 +64,14 @@ interface ProductsPageRendererProps {
 function ProductsLayout({
   settings = {},
   products,
+  categories = [],
   filters,
   onFiltersChange,
   isLoading,
 }: {
   settings?: Record<string, unknown>;
   products: Product[];
+  categories?: Category[];
   filters: ProductFilters;
   onFiltersChange: (filters: Partial<ProductFilters>) => void;
   isLoading?: boolean;
@@ -286,6 +299,7 @@ function ProductsLayout({
   // Render sidebar component
   const renderSidebar = () => {
     const sidebarProps = {
+      categories,
       selectedCategories,
       onCategoryChange: handleCategoryChange,
       onClearFilters: handleClearFilters,
@@ -685,6 +699,7 @@ function ProductsLayout({
 export default function ProductsPageRenderer({
   sections,
   products,
+  categories = [],
   pagination,
   filters,
   onFiltersChange,
@@ -739,6 +754,7 @@ export default function ProductsPageRenderer({
             <ProductsLayout
               settings={section.settings}
               products={products}
+              categories={categories}
               filters={filters}
               onFiltersChange={onFiltersChange}
               isLoading={isLoading}

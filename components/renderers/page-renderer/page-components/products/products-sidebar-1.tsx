@@ -4,7 +4,7 @@
  * ========================================
  *
  * Full-featured sidebar with collapsible sections for
- * Categories, Price Range, Brands, Colors, and Sizes
+ * Categories, Price Range, Colors, and Sizes
  */
 
 "use client";
@@ -15,7 +15,10 @@ interface Category {
   id: string | number;
   name: string;
   products_count?: number;
+  product_count?: number;
+  total_inventories?: number;
   count?: number;
+  parent_id?: number | string | null;
   sub_categories?: Category[];
 }
 
@@ -141,7 +144,6 @@ export default function ProductsSidebar1({
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
     category: true,
     price: true,
-    brand: true,
     color: true,
     size: true,
   });
@@ -192,16 +194,54 @@ export default function ProductsSidebar1({
     { id: "5", name: "Shoes", count: 28 },
   ];
 
-  const transformCategory = (category: Category): Category => ({
-    id: category.id?.toString() || String(category.id),
-    name: category.name,
-    count: category.products_count || category.count || 0,
-    sub_categories: category.sub_categories || [],
-  });
+  // Build category tree from flat list
+  const buildCategoryTree = (flatCategories: Category[]): Category[] => {
+    // Create a map for quick lookup
+    const categoryMap = new Map<string, Category>();
+
+    // First pass: create all categories with empty sub_categories
+    flatCategories.forEach((cat) => {
+      const id = String(cat.id);
+      categoryMap.set(id, {
+        id,
+        name: cat.name,
+        count: cat.total_inventories || cat.products_count || cat.product_count || cat.count || 0,
+        parent_id: cat.parent_id,
+        sub_categories: [],
+      });
+    });
+
+    // Second pass: build the tree by adding children to their parents
+    const rootCategories: Category[] = [];
+
+    flatCategories.forEach((cat) => {
+      const id = String(cat.id);
+      const category = categoryMap.get(id);
+
+      if (!category) return;
+
+      if (cat.parent_id) {
+        // Has a parent, add to parent's sub_categories
+        const parentId = String(cat.parent_id);
+        const parent = categoryMap.get(parentId);
+        if (parent && parent.sub_categories) {
+          parent.sub_categories.push(category);
+        } else {
+          // Parent not found, treat as root
+          rootCategories.push(category);
+        }
+      } else {
+        // No parent, this is a root category
+        rootCategories.push(category);
+      }
+    });
+
+    return rootCategories;
+  };
 
   const displayCategories =
     categories && categories.length > 0
-      ? categories.map(transformCategory)
+      ? buildCategoryTree(categories)
       : mockCategories;
 
   const renderCategoryItem = (category: Category, level = 0) => {
@@ -212,8 +252,16 @@ export default function ProductsSidebar1({
       selectedCategories.includes(category.id?.toString() || "");
 
     const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const isChecked = e.target.checked;
       if (onCategoryChange) {
-        onCategoryChange(String(category.id), e.target.checked);
+        onCategoryChange(String(category.id), isChecked);
+      }
+      // Auto-expand if selecting a category with subcategories
+      if (isChecked && hasSubcategories) {
+        setExpandedCategories((prev) => ({
+          ...prev,
+          [String(category.id)]: true,
+        }));
       }
     };
 
@@ -252,7 +300,19 @@ export default function ProductsSidebar1({
           <span
             className={`${textFontSize} flex-1`}
             style={getTextFontStyle()}
-            onClick={() => onCategoryChange && onCategoryChange(String(category.id), !isSelected)}
+            onClick={() => {
+              const newSelected = !isSelected;
+              if (onCategoryChange) {
+                onCategoryChange(String(category.id), newSelected);
+              }
+              // Auto-expand if selecting a category with subcategories
+              if (newSelected && hasSubcategories) {
+                setExpandedCategories((prev) => ({
+                  ...prev,
+                  [String(category.id)]: true,
+                }));
+              }
+            }}
           >
             {category.name}
           </span>
@@ -262,22 +322,14 @@ export default function ProductsSidebar1({
 
         {hasSubcategories && isExpanded && (
           <div className="mt-1">
-            {category.sub_categories!.map((subCategory) => {
-              const transformedSubCategory = transformCategory(subCategory);
-              return renderCategoryItem(transformedSubCategory, level + 1);
-            })}
+            {category.sub_categories!.map((subCategory) =>
+              renderCategoryItem(subCategory, level + 1)
+            )}
           </div>
         )}
       </div>
     );
   };
-
-  const brands = [
-    { id: "1", name: "ZatiqStyle", count: 25 },
-    { id: "2", name: "ZatiqDenim", count: 18 },
-    { id: "3", name: "ZatiqBasics", count: 32 },
-    { id: "4", name: "ZatiqLux", count: 12 },
-  ];
 
   const colors = [
     { id: "1", name: "Black", hex: "#000000", count: 45 },
@@ -385,29 +437,6 @@ export default function ProductsSidebar1({
             >
               Apply
             </button>
-          </div>
-        </FilterSection>
-
-        {/* Brands */}
-        <FilterSection
-          id="brand"
-          title="Brands"
-          isExpanded={expandedSections.brand}
-          {...filterSectionProps}
-        >
-          <div className="space-y-3">
-            {brands.map((item) => (
-              <label key={item.id} className="flex items-center gap-3 cursor-pointer group">
-                <input
-                  type="checkbox"
-                  className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                />
-                <span className={`${textFontSize} flex-1`} style={getTextFontStyle()}>
-                  {item.name}
-                </span>
-                <span className="text-xs text-gray-400">({item.count})</span>
-              </label>
-            ))}
           </div>
         </FilterSection>
 
