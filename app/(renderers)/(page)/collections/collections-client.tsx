@@ -10,11 +10,11 @@ import CollectionsPageRenderer from "@/components/renderers/page-renderer/collec
 import type { Section } from "@/lib/types";
 
 export default function CollectionsClient() {
-  const { collections, sections, isLoading, isPageConfigLoading, error } =
+  const { collections, sections, isLoading, isPageConfigLoading, error, hasShopUuid } =
     useCollections();
 
-  // Show loading state while page config is loading
-  if (isPageConfigLoading) {
+  // Show loading state while shop data or page config is loading
+  if (isPageConfigLoading || (!hasShopUuid && !error)) {
     return (
       <main className="flex items-center justify-center min-h-[50vh]">
         <div className="flex flex-col items-center gap-4">
