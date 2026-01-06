@@ -125,13 +125,26 @@ function ProductsLayout({
   const sidebarButtonTextColor =
     (settings.sidebar_button_text_color as string) || "#FFFFFF";
 
-  // Client-side pagination
+  // Filter products by selected categories
+  const filteredProducts = selectedCategories.length > 0
+    ? products.filter((product) => {
+        // Check if product has any of the selected categories
+        if (!product.categories || product.categories.length === 0) {
+          return false;
+        }
+        return product.categories.some((cat) =>
+          selectedCategories.includes(String(cat.id))
+        );
+      })
+    : products;
+
+  // Client-side pagination (applied to filtered products)
   const currentPage = filters.page || 1;
-  const totalProducts = products.length;
+  const totalProducts = filteredProducts.length;
   const totalPages = Math.ceil(totalProducts / productsPerPage);
   const startIndex = (currentPage - 1) * productsPerPage;
   const endIndex = startIndex + productsPerPage;
-  const paginatedProducts = products.slice(startIndex, endIndex);
+  const paginatedProducts = filteredProducts.slice(startIndex, endIndex);
 
   // Category change handler
   const handleCategoryChange = (categoryId: string, isSelected: boolean) => {
@@ -573,7 +586,7 @@ function ProductsLayout({
                         onClick={() => setIsMobileSidebarOpen(false)}
                         className="w-full mt-4 py-3 bg-gray-900 text-white rounded-lg font-semibold"
                       >
-                        Show {products.length} Results
+                        Show {filteredProducts.length} Results
                       </button>
                     </div>
                   </div>
@@ -592,7 +605,7 @@ function ProductsLayout({
             )}
 
             {/* Empty State */}
-            {!isLoading && products.length === 0 && (
+            {!isLoading && filteredProducts.length === 0 && (
               <div className="flex flex-col items-center justify-center py-16 text-center">
                 <svg
                   className="w-16 h-16 text-gray-300 mb-4"
@@ -613,6 +626,8 @@ function ProductsLayout({
                 <p className="text-gray-500 mb-4 max-w-md">
                   {filters.search
                     ? `No products match "${filters.search}"`
+                    : selectedCategories.length > 0
+                    ? "No products found in the selected categories"
                     : "No products match your current filters"}
                 </p>
                 <button
@@ -625,7 +640,7 @@ function ProductsLayout({
             )}
 
             {/* Products Grid */}
-            {!isLoading && products.length > 0 && (
+            {!isLoading && filteredProducts.length > 0 && (
               <>
                 {currentView === "grid" ? (
                   <div
