@@ -125,18 +125,40 @@ function ProductsLayout({
   const sidebarButtonTextColor =
     (settings.sidebar_button_text_color as string) || "#FFFFFF";
 
-  // Filter products by selected categories
-  const filteredProducts = selectedCategories.length > 0
-    ? products.filter((product) => {
-        // Check if product has any of the selected categories
-        if (!product.categories || product.categories.length === 0) {
-          return false;
-        }
-        return product.categories.some((cat) =>
-          selectedCategories.includes(String(cat.id))
-        );
-      })
-    : products;
+  // Calculate max price from products for the slider (rounded up to nearest 100)
+  const highestPrice = products.length > 0
+    ? Math.max(...products.map((p) => p.price || 0))
+    : 10000; // Fallback only when no products
+  const maxPriceLimit = Math.ceil(highestPrice / 100) * 100;
+
+  // Filter products by selected categories and price range
+  const filteredProducts = products.filter((product) => {
+    // Category filter
+    if (selectedCategories.length > 0) {
+      if (!product.categories || product.categories.length === 0) {
+        return false;
+      }
+      const hasMatchingCategory = product.categories.some((cat) =>
+        selectedCategories.includes(String(cat.id))
+      );
+      if (!hasMatchingCategory) {
+        return false;
+      }
+    }
+
+    // Price filter
+    if (priceRange.min > 0 || priceRange.max > 0) {
+      const productPrice = product.price || 0;
+      if (priceRange.min > 0 && productPrice < priceRange.min) {
+        return false;
+      }
+      if (priceRange.max > 0 && productPrice > priceRange.max) {
+        return false;
+      }
+    }
+
+    return true;
+  });
 
   // Client-side pagination (applied to filtered products)
   const currentPage = filters.page || 1;
@@ -317,6 +339,7 @@ function ProductsLayout({
       onCategoryChange: handleCategoryChange,
       onClearFilters: handleClearFilters,
       priceRange,
+      maxPriceLimit,
       onPriceRangeChange: handlePriceRangeChange,
       buttonBgColor: sidebarButtonBgColor,
       buttonTextColor: sidebarButtonTextColor,

@@ -4,12 +4,13 @@
  * ========================================
  *
  * Full-featured sidebar with collapsible sections for
- * Categories, Price Range, Colors, and Sizes
+ * Categories and Price Range
  */
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Slider } from "@/components/ui/slider";
 
 interface Category {
   id: string | number;
@@ -52,6 +53,7 @@ interface ProductsSidebar1Props {
   onCategoryChange?: (categoryId: string, isSelected: boolean) => void;
   onClearFilters?: () => void;
   priceRange?: { min: number; max: number };
+  maxPriceLimit?: number;
   onPriceRangeChange?: (range: { min: number; max: number }) => void;
 }
 
@@ -139,24 +141,37 @@ export default function ProductsSidebar1({
   onCategoryChange,
   onClearFilters,
   priceRange = { min: 0, max: 0 },
+  maxPriceLimit = 10000,
   onPriceRangeChange,
 }: ProductsSidebar1Props) {
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
     category: true,
     price: true,
-    color: true,
-    size: true,
   });
 
   const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({});
-  const [localPriceMin, setLocalPriceMin] = useState(priceRange.min || "");
-  const [localPriceMax, setLocalPriceMax] = useState(priceRange.max || "");
+  const [localPriceRange, setLocalPriceRange] = useState<[number, number]>([
+    priceRange.min || 0,
+    priceRange.max || maxPriceLimit,
+  ]);
 
-  const handleApplyPriceFilter = () => {
+  // Update local price range when props change
+  useEffect(() => {
+    setLocalPriceRange([
+      priceRange.min || 0,
+      priceRange.max || maxPriceLimit,
+    ]);
+  }, [priceRange.min, priceRange.max, maxPriceLimit]);
+
+  const handlePriceSliderChange = (values: number[]) => {
+    setLocalPriceRange([values[0], values[1]]);
+  };
+
+  const handlePriceSliderCommit = (values: number[]) => {
     if (onPriceRangeChange) {
       onPriceRangeChange({
-        min: Number(localPriceMin) || 0,
-        max: Number(localPriceMax) || 0,
+        min: values[0],
+        max: values[1],
       });
     }
   };
@@ -331,23 +346,6 @@ export default function ProductsSidebar1({
     );
   };
 
-  const colors = [
-    { id: "1", name: "Black", hex: "#000000", count: 45 },
-    { id: "2", name: "White", hex: "#FFFFFF", count: 38 },
-    { id: "3", name: "Blue", hex: "#3B82F6", count: 22 },
-    { id: "4", name: "Red", hex: "#EF4444", count: 15 },
-    { id: "5", name: "Brown", hex: "#92400E", count: 18 },
-  ];
-
-  const sizes = [
-    { id: "1", name: "XS", count: 12 },
-    { id: "2", name: "S", count: 28 },
-    { id: "3", name: "M", count: 45 },
-    { id: "4", name: "L", count: 38 },
-    { id: "5", name: "XL", count: 22 },
-    { id: "6", name: "XXL", count: 10 },
-  ];
-
   const filterSectionProps = {
     borderColor,
     collapsible,
@@ -400,85 +398,32 @@ export default function ProductsSidebar1({
           {...filterSectionProps}
         >
           <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <input
-                type="number"
-                value={localPriceMin}
-                onChange={(e) => setLocalPriceMin(e.target.value)}
-                placeholder="Min"
-                className={`w-full px-3 py-2 rounded-md ${textFontSize}`}
-                style={{
-                  borderWidth: "1px",
-                  borderColor: borderColor,
-                  ...getTextFontStyle(),
-                }}
-              />
-              <span className="text-gray-500">-</span>
-              <input
-                type="number"
-                value={localPriceMax}
-                onChange={(e) => setLocalPriceMax(e.target.value)}
-                placeholder="Max"
-                className={`w-full px-3 py-2 rounded-md ${textFontSize}`}
-                style={{
-                  borderWidth: "1px",
-                  borderColor: borderColor,
-                  ...getTextFontStyle(),
-                }}
-              />
+            {/* Price Labels */}
+            <div className="flex items-center justify-between">
+              <span className={`${textFontSize} font-medium`} style={getTextFontStyle()}>
+                ৳{localPriceRange[0].toLocaleString()}
+              </span>
+              <span className={`${textFontSize} font-medium`} style={getTextFontStyle()}>
+                ৳{localPriceRange[1].toLocaleString()}
+              </span>
             </div>
-            <button
-              onClick={handleApplyPriceFilter}
-              className={`w-full py-2 rounded-md ${textFontSize} font-medium transition-colors`}
-              style={{
-                backgroundColor: buttonBgColor,
-                color: buttonTextColor,
-              }}
-            >
-              Apply
-            </button>
-          </div>
-        </FilterSection>
 
-        {/* Colors */}
-        <FilterSection
-          id="color"
-          title="Colors"
-          isExpanded={expandedSections.color}
-          {...filterSectionProps}
-        >
-          <div className="flex flex-wrap gap-2">
-            {colors.map((item) => (
-              <button
-                key={item.id}
-                className="w-8 h-8 rounded-full border-2 border-gray-300 hover:border-blue-500 transition-colors"
-                style={{ backgroundColor: item.hex }}
-                title={item.name}
-              />
-            ))}
-          </div>
-        </FilterSection>
+            {/* Dual Range Slider */}
+            <Slider
+              value={localPriceRange}
+              min={0}
+              max={maxPriceLimit}
+              step={100}
+              onValueChange={handlePriceSliderChange}
+              onValueCommit={handlePriceSliderCommit}
+              className="w-full"
+            />
 
-        {/* Sizes */}
-        <FilterSection
-          id="size"
-          title="Sizes"
-          isExpanded={expandedSections.size}
-          {...filterSectionProps}
-        >
-          <div className="flex flex-wrap gap-2">
-            {sizes.map((item) => (
-              <button
-                key={item.id}
-                className={`px-4 py-2 rounded-md border transition-all ${textFontSize}`}
-                style={{
-                  borderColor: borderColor,
-                  ...getTextFontStyle(),
-                }}
-              >
-                {item.name}
-              </button>
-            ))}
+            {/* Min/Max Labels */}
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-gray-400">৳0</span>
+              <span className="text-xs text-gray-400">৳{maxPriceLimit.toLocaleString()}</span>
+            </div>
           </div>
         </FilterSection>
       </div>
