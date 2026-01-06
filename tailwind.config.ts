@@ -69,18 +69,19 @@ const config = {
     "w-1/2", "w-1/3", "w-2/3", "w-1/4", "w-3/4",
     
     // Arbitrary widths
-    "w-[50px]", "w-[86px]", "w-[200px]", "w-[320px]", "w-[384px]", "w-[362px]",
+    "w-[50px]", "w-[86px]", "w-[100px]", "w-[120px]", "w-[140px]", "w-[180px]", "w-[200px]", "w-[320px]", "w-[384px]", "w-[362px]", "w-[45%]",
     
     // Responsive widths
-    "sm:w-10", "sm:w-[60px]",
-    "md:w-12", "md:w-20", "md:w-24", "md:w-[450px]",
+    "w-40", "sm:w-10", "sm:w-40", "sm:w-[60px]", "sm:w-[120px]",
+    "md:w-10", "md:w-12", "md:w-20", "md:w-24", "md:w-[140px]", "md:w-[450px]",
+    "lg:w-[180px]",
     "lg:w-64", "lg:w-72", "lg:w-[750px]",
     "xl:w-72",
     
     // Max widths
     "max-w-24", "max-w-28", "max-w-32", "max-w-36", "max-w-40", "max-w-44", "max-w-48",
     "max-w-md", "max-w-lg", "max-w-xl", "max-w-2xl", "max-w-3xl", "max-w-4xl", "max-w-5xl", "max-w-6xl", "max-w-7xl",
-    "max-w-[90%]", "max-w-[280px]", "max-w-[362px]", "max-w-[384px]", "max-w-[400px]", "max-w-[500px]", "max-w-[550px]", "max-w-[580px]", "max-w-[600px]", "max-w-[640px]", "max-w-[700px]", "max-w-[800px]", "max-w-[900px]", "max-w-[1000px]", "max-w-[1100px]", "max-w-[1440px]",
+    "max-w-[55%]", "max-w-[90%]", "max-w-[280px]", "max-w-[362px]", "max-w-[384px]", "max-w-[400px]", "max-w-[500px]", "max-w-[550px]", "max-w-[580px]", "max-w-[600px]", "max-w-[640px]", "max-w-[700px]", "max-w-[800px]", "max-w-[900px]", "max-w-[1000px]", "max-w-[1100px]", "max-w-[1440px]",
     "sm:max-w-28", "sm:max-w-32", "sm:max-w-36", "sm:max-w-[85%]", "sm:max-w-[500px]",
     "md:max-w-36", "md:max-w-40", "md:max-w-44", "md:max-w-[400px]", "md:max-w-[550px]", "md:max-w-[600px]", "md:max-w-[900px]",
     "lg:max-w-[500px]", "lg:max-w-[600px]", "lg:max-w-[640px]", "lg:max-w-[1000px]",
@@ -100,12 +101,13 @@ const config = {
     
     // Arbitrary heights
     "h-[50px]", "h-[80%]", "h-[95%]",
-    "h-[86px]", "h-[280px]", "h-[300px]", "h-[320px]", "h-[350px]", "h-[400px]", "h-[424px]", "h-[450px]", 
+    "h-[86px]", "h-[100px]", "h-[120px]", "h-[140px]", "h-[180px]", "h-[280px]", "h-[300px]", "h-[320px]", "h-[350px]", "h-[400px]", "h-[424px]", "h-[450px]", 
     "h-[480px]", "h-[494px]", "h-[500px]", "h-[520px]", "h-[524px]", "h-[542px]", "h-[550px]", "h-[600px]", "h-[624px]", "h-[650px]",
     
     // Responsive heights
-    "sm:h-[60px]", "sm:h-[400px]", "sm:h-[450px]", "sm:h-[500px]", "sm:h-[550px]", "sm:h-[600px]",
-    "md:h-0.5", "md:h-12", "md:h-20", "md:h-24", "md:h-[95%]", "md:h-[400px]", "md:h-[520px]", "md:h-[560px]", "md:h-[620px]", "md:h-[700px]",
+    "h-40", "sm:h-40", "sm:h-[60px]", "sm:h-[120px]", "sm:h-[400px]", "sm:h-[450px]", "sm:h-[500px]", "sm:h-[550px]", "sm:h-[600px]",
+    "md:h-10", "md:h-0.5", "md:h-12", "md:h-20", "md:h-24", "md:h-[95%]", "md:h-[140px]", "md:h-[400px]", "md:h-[520px]", "md:h-[560px]", "md:h-[620px]", "md:h-[700px]",
+    "lg:h-[180px]",
     "lg:h-1", "lg:h-full", "lg:h-[86px]", "lg:h-[300px]", "lg:h-[400px]", "lg:h-[424px]", "lg:h-[500px]", "lg:h-[524px]", "lg:h-[600px]", "lg:h-[624px]", "lg:h-[650px]",
     "xl:h-[424px]", "xl:h-[524px]", "xl:h-[624px]", "xl:h-[650px]",
     
@@ -116,10 +118,10 @@ const config = {
     "lg:max-h-12", "lg:max-h-14",
     
     // Min heights
-    "min-h-10", "min-h-12", "min-h-14", "min-h-[52px]",
+    "min-h-10", "min-h-12", "min-h-14", "min-h-60", "min-h-[52px]", "min-h-[200px]", "min-h-[220px]",
     "min-h-[350px]", "min-h-[400px]", "min-h-[450px]", "min-h-[494px]", "min-h-[542px]",
-    "sm:min-h-14", "sm:min-h-16", "sm:min-h-[52px]", "sm:min-h-[400px]",
-    "lg:min-h-[450px]",
+    "sm:min-h-14", "sm:min-h-16", "sm:min-h-[52px]", "sm:min-h-[220px]", "sm:min-h-[400px]",
+    "lg:min-h-60", "lg:min-h-[450px]",
     
     // ========================================
     // FLEXBOX & GRID CLASSES
@@ -147,11 +149,13 @@ const config = {
     
     // Justify content
     "justify-start", "justify-center", "justify-end", "justify-between", "justify-around",
+    "md:justify-start", "md:justify-center", "md:justify-end",
     
     // Gap
     "gap-0.5", "gap-1", "gap-1.5", "gap-2", "gap-3", "gap-4", "gap-5", "gap-6", "gap-8", "gap-10", "gap-12",
+    "gap-[5px]", "gap-[10px]",
     "gap-x-2", "gap-x-4", "gap-x-6", "gap-y-4", "gap-y-6", "gap-y-8",
-    "sm:gap-3", "sm:gap-4", "sm:gap-6", "sm:gap-8",
+    "sm:gap-3", "sm:gap-4", "sm:gap-6", "sm:gap-8", "sm:gap-[10px]",
     "md:gap-4", "md:gap-6", "md:gap-8", "md:gap-10", "md:gap-12",
     "lg:gap-6", "lg:gap-8", "lg:gap-12",
     
@@ -211,8 +215,8 @@ const config = {
     "2xl:px-0",
     
     // Padding Y
-    "py-0", "py-1.5", "py-2", "py-2.5", "py-3", "py-4", "py-6", "py-8", "py-12", "py-16",
-    "sm:py-2", "sm:py-3", "sm:py-4", "sm:py-8", "sm:py-12", "sm:py-16",
+    "py-0", "py-1.5", "py-2", "py-2.5", "py-3", "py-4", "py-6", "py-8", "py-12", "py-14", "py-16", "py-20",
+    "sm:py-2", "sm:py-3", "sm:py-4", "sm:py-8", "sm:py-12", "sm:py-14", "sm:py-16", "sm:py-20",
     "md:py-3", "md:py-4", "md:py-6", "md:py-8", "md:py-12", "md:py-16",
     "lg:py-8", "lg:py-12", "lg:py-16", "lg:py-20",
     
@@ -262,9 +266,9 @@ const config = {
     
     // Text alignment
     "text-left", "text-center", "text-right",
-    "sm:text-left", "sm:text-center",
-    "md:text-left", "md:text-center",
-    "lg:text-left", "lg:text-center",
+    "sm:text-left", "sm:text-center", "sm:text-right",
+    "md:text-left", "md:text-center", "md:text-right",
+    "lg:text-left", "lg:text-center", "lg:text-right",
     
     // Text decoration
     "underline", "line-through", "no-underline",
@@ -351,7 +355,7 @@ const config = {
     // OBJECT FIT & POSITION
     // ========================================
     "object-contain", "object-cover", "object-fill", "object-none",
-    "object-center", "object-top", "object-bottom",
+    "object-center", "object-top", "object-bottom", "object-right-bottom",
     "bg-cover", "bg-center", "bg-no-repeat",
     
     // ========================================
