@@ -43,6 +43,21 @@ export interface Block {
   id: string;
   type: string;
   settings: Record<string, unknown>;
+  // Allow additional properties for compatibility with block-renderer
+  wrapper?: string;
+  class?: string;
+  style?: Record<string, unknown>;
+  data?: Record<string, unknown>;
+  blocks?: Block[];
+  content?: string;
+  bind_content?: string;
+  bind_src?: string;
+  bind_alt?: string;
+  bind_href?: string;
+  src?: string;
+  alt?: string;
+  href?: string;
+  [key: string]: unknown;
 }
 
 export interface DesignSystem {
