@@ -277,21 +277,47 @@ export default function SwiperRenderer({
 
     if (config.breakpoints) {
       const breakpoints: Record<number, Record<string, unknown>> = {};
-      Object.entries(config.breakpoints).forEach(([key, value]) => {
-        const breakpointConfig: Record<string, unknown> = {};
+      
+      // Handle both array format (from backend) and object format (correct format)
+      if (Array.isArray(config.breakpoints)) {
+        // Backend sends array: [{ slidesPerView: 2 }, { slidesPerView: 4 }, { slidesPerView: 5 }]
+        // Map to standard breakpoint widths: 640 (mobile), 768 (tablet), 1024 (desktop)
+        const standardBreakpoints = [640, 768, 1024];
+        config.breakpoints.forEach((value, index) => {
+          const breakpointConfig: Record<string, unknown> = {};
+          
+          const slidesPerView = value.slidesPerView ?? value.slides_per_view;
+          const spaceBetween = value.spaceBetween ?? value.space_between;
 
-        const slidesPerView = value.slidesPerView ?? value.slides_per_view;
-        const spaceBetween = value.spaceBetween ?? value.space_between;
+          if (slidesPerView !== undefined) {
+            breakpointConfig.slidesPerView = slidesPerView;
+          }
+          if (spaceBetween !== undefined) {
+            breakpointConfig.spaceBetween = spaceBetween;
+          }
 
-        if (slidesPerView !== undefined) {
-          breakpointConfig.slidesPerView = slidesPerView;
-        }
-        if (spaceBetween !== undefined) {
-          breakpointConfig.spaceBetween = spaceBetween;
-        }
+          if (index < standardBreakpoints.length) {
+            breakpoints[standardBreakpoints[index]] = breakpointConfig;
+          }
+        });
+      } else {
+        // Object format: { '480': { slidesPerView: 2 }, ... }
+        Object.entries(config.breakpoints).forEach(([key, value]) => {
+          const breakpointConfig: Record<string, unknown> = {};
 
-        breakpoints[Number(key)] = breakpointConfig;
-      });
+          const slidesPerView = value.slidesPerView ?? value.slides_per_view;
+          const spaceBetween = value.spaceBetween ?? value.space_between;
+
+          if (slidesPerView !== undefined) {
+            breakpointConfig.slidesPerView = slidesPerView;
+          }
+          if (spaceBetween !== undefined) {
+            breakpointConfig.spaceBetween = spaceBetween;
+          }
+
+          breakpoints[Number(key)] = breakpointConfig;
+        });
+      }
       swiperOptions.breakpoints = breakpoints;
     }
 
