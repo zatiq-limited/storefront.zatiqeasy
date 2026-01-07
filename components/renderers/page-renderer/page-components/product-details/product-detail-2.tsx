@@ -81,6 +81,7 @@ export default function ProductDetail2({
   const showAddToCart = s.showAddToCart !== false;
   const showBuyNow = s.showBuyNow !== false;
   const showWhatsApp = s.showWhatsAppBuy !== false;
+  const showWishlist = s.showWishlist !== false;
   const thumbnailPosition = s.thumbnailPosition || "left";
 
   // Colors
@@ -303,125 +304,6 @@ export default function ProductDetail2({
               </p>
             )}
 
-            {/* Tabs */}
-            {(showDescription || showSpecifications || showShipping) && (
-              <div className="space-y-6">
-                <div className="flex gap-1 bg-gray-100 p-1 rounded-lg">
-                  {showDescription && (
-                    <button
-                      onClick={() => setActiveTab("description")}
-                      className="flex-1 py-2 px-4 text-sm font-medium rounded-md transition-colors"
-                      style={{
-                        backgroundColor:
-                          activeTab === "description"
-                            ? accentColor
-                            : "transparent",
-                        color:
-                          activeTab === "description" ? "#FFFFFF" : "#6B7280",
-                      }}
-                    >
-                      Description
-                    </button>
-                  )}
-                  {showSpecifications && (
-                    <button
-                      onClick={() => setActiveTab("specifications")}
-                      className="flex-1 py-2 px-4 text-sm font-medium rounded-md transition-colors"
-                      style={{
-                        backgroundColor:
-                          activeTab === "specifications"
-                            ? accentColor
-                            : "transparent",
-                        color:
-                          activeTab === "specifications"
-                            ? "#FFFFFF"
-                            : "#6B7280",
-                      }}
-                    >
-                      Specifications
-                    </button>
-                  )}
-                  {showShipping && (
-                    <button
-                      onClick={() => setActiveTab("shipping")}
-                      className="flex-1 py-2 px-4 text-sm font-medium rounded-md transition-colors"
-                      style={{
-                        backgroundColor:
-                          activeTab === "shipping" ? accentColor : "transparent",
-                        color:
-                          activeTab === "shipping" ? "#FFFFFF" : "#6B7280",
-                      }}
-                    >
-                      Shipping
-                    </button>
-                  )}
-                </div>
-
-                <div className="space-y-4">
-                  {activeTab === "description" && product.description && (
-                    <div
-                      className="prose max-w-none text-gray-600"
-                      dangerouslySetInnerHTML={{ __html: product.description }}
-                    />
-                  )}
-
-                  {activeTab === "specifications" &&
-                    product.custom_fields &&
-                    Object.keys(product.custom_fields).length > 0 && (
-                      <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        {Object.entries(product.custom_fields).map(
-                          ([key, value]) => (
-                            <div key={key} className="bg-gray-50 p-4 rounded-lg">
-                              <dt className="text-sm text-gray-600 mb-1">
-                                {key}
-                              </dt>
-                              <dd
-                                className="font-semibold"
-                                style={{ color: accentColor }}
-                              >
-                                {value}
-                              </dd>
-                            </div>
-                          )
-                        )}
-                      </dl>
-                    )}
-
-                  {activeTab === "shipping" && (
-                    <div className="bg-linear-to-r from-purple-50 to-pink-50 p-6 rounded-xl">
-                      <h3
-                        className="text-lg font-semibold mb-4"
-                        style={{ color: accentColor }}
-                      >
-                        Shipping & Returns
-                      </h3>
-                      <ul className="space-y-3">
-                        <li className="flex items-start gap-2">
-                          <svg
-                            className="w-5 h-5 mt-0.5 shrink-0"
-                            fill="none"
-                            stroke="currentColor"
-                            style={{ color: accentColor }}
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M5 13l4 4L19 7"
-                            />
-                          </svg>
-                          <span className="text-gray-700">
-                            {product.warranty || "30 days return policy"}
-                          </span>
-                        </li>
-                      </ul>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-
             {/* Variants */}
             {showVariants &&
               product.variant_types &&
@@ -543,8 +425,9 @@ export default function ProductDetail2({
             </div>
 
             {/* Action Buttons */}
-            <div className="space-y-4">
-              <div className="flex gap-3">
+            <div className="space-y-3 sm:space-y-4 pt-3 sm:pt-4">
+              {/* Primary Actions Row: Add to Cart + WhatsApp + Wishlist */}
+              <div className="flex gap-2 sm:gap-3">
                 {showAddToCart && (
                   <button
                     onClick={() => {
@@ -553,50 +436,210 @@ export default function ProductDetail2({
                       setTimeout(() => setIsAdding(false), 500);
                     }}
                     disabled={product.quantity === 0 || isAdding}
-                    className="flex-1 py-4 text-sm sm:text-base font-semibold rounded-xl transition-all shadow-md hover:shadow-lg disabled:bg-gray-300 disabled:cursor-not-allowed disabled:shadow-none"
-                    style={{
-                      backgroundColor: accentColor,
-                      color: "#FFFFFF",
-                    }}
+                    className="flex-1 py-3 sm:py-4 text-sm sm:text-base text-white font-semibold rounded-xl sm:rounded-2xl transition-all shadow-lg hover:shadow-xl disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed disabled:shadow-none"
+                    style={{ background: `linear-gradient(to right, ${accentColor}, #4F46E5)` }}
                   >
                     {isAdding ? "Adding..." : "Add to Cart"}
                   </button>
                 )}
-                {showBuyNow && (
+                {showWhatsApp && (
                   <button
                     disabled={product.quantity === 0}
-                    className="flex-1 py-4 text-sm sm:text-base font-semibold rounded-xl transition-all shadow-md hover:shadow-lg disabled:bg-gray-300 disabled:cursor-not-allowed disabled:shadow-none"
+                    className="flex-1 py-3 sm:py-4 text-sm sm:text-base font-semibold rounded-xl sm:rounded-2xl transition-all shadow-lg hover:shadow-xl disabled:bg-gray-300 disabled:cursor-not-allowed disabled:shadow-none flex items-center justify-center gap-2"
                     style={{
-                      background: `linear-gradient(to right, ${buyNowGradientStart}, ${buyNowGradientEnd})`,
-                      color: buyNowTextColor,
+                      backgroundColor: whatsappBgColor,
+                      color: whatsappTextColor,
                     }}
                   >
-                    Buy Now
+                    <svg
+                      className="w-4 h-4 sm:w-5 sm:h-5"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                    </svg>
+                    <span className="hidden sm:inline">WhatsApp</span>
+                  </button>
+                )}
+                {showWishlist && (
+                  <button className="p-3 sm:p-4 rounded-xl sm:rounded-2xl border-2 border-gray-200 hover:border-pink-500 hover:bg-pink-50 transition-all group">
+                    <svg
+                      className="w-5 h-5 sm:w-6 sm:h-6 text-gray-400 group-hover:text-pink-500 transition-colors"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                      />
+                    </svg>
                   </button>
                 )}
               </div>
-              {showWhatsApp && (
+
+              {/* Buy Now Button - Full Width */}
+              {showBuyNow && (
                 <button
                   disabled={product.quantity === 0}
-                  className="w-full py-4 text-sm sm:text-base font-semibold rounded-xl transition-all shadow-md hover:shadow-lg disabled:bg-gray-300 disabled:cursor-not-allowed disabled:shadow-none flex items-center justify-center gap-2"
+                  className="w-full py-3 sm:py-4 text-sm sm:text-base font-semibold rounded-xl sm:rounded-2xl transition-all shadow-lg hover:shadow-xl disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed disabled:shadow-none"
                   style={{
-                    backgroundColor: whatsappBgColor,
-                    color: whatsappTextColor,
+                    background: `linear-gradient(to right, ${buyNowGradientStart}, ${buyNowGradientEnd})`,
+                    color: buyNowTextColor,
                   }}
                 >
-                  <svg
-                    className="w-5 h-5"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-                  </svg>
-                  <span>Order via WhatsApp</span>
+                  Buy Now
                 </button>
               )}
             </div>
           </div>
         </div>
+
+        {/* Tabs Section - Full Width Below Grid */}
+        {(showDescription || showSpecifications || showShipping) && (
+          <div className="border-t mt-8 md:mt-12">
+            {/* Tab Headers */}
+            <div className="flex border-b overflow-x-auto">
+              {showDescription && product.description && (
+                <button
+                  onClick={() => setActiveTab("description")}
+                  className={`px-4 py-3 text-xs sm:px-6 sm:py-4 sm:text-sm font-semibold transition-colors relative whitespace-nowrap ${
+                    activeTab === "description"
+                      ? ""
+                      : "text-gray-500 hover:text-gray-700"
+                  }`}
+                  style={activeTab === "description" ? { color: accentColor } : {}}
+                >
+                  Description
+                  {activeTab === "description" && (
+                    <div
+                      className="absolute bottom-0 left-0 right-0 h-0.5"
+                      style={{ backgroundColor: accentColor }}
+                    />
+                  )}
+                </button>
+              )}
+              {showSpecifications &&
+                product.custom_fields &&
+                Object.keys(product.custom_fields).length > 0 && (
+                  <button
+                    onClick={() => setActiveTab("specifications")}
+                    className={`px-4 py-3 text-xs sm:px-6 sm:py-4 sm:text-sm font-semibold transition-colors relative whitespace-nowrap ${
+                      activeTab === "specifications"
+                        ? ""
+                        : "text-gray-500 hover:text-gray-700"
+                    }`}
+                    style={
+                      activeTab === "specifications" ? { color: accentColor } : {}
+                    }
+                  >
+                    Specifications
+                    {activeTab === "specifications" && (
+                      <div
+                        className="absolute bottom-0 left-0 right-0 h-0.5"
+                        style={{ backgroundColor: accentColor }}
+                      />
+                    )}
+                  </button>
+                )}
+              {showShipping && (
+                <button
+                  onClick={() => setActiveTab("shipping")}
+                  className={`px-4 py-3 text-xs sm:px-6 sm:py-4 sm:text-sm font-semibold transition-colors relative whitespace-nowrap ${
+                    activeTab === "shipping"
+                      ? ""
+                      : "text-gray-500 hover:text-gray-700"
+                  }`}
+                  style={activeTab === "shipping" ? { color: accentColor } : {}}
+                >
+                  Shipping & Returns
+                  {activeTab === "shipping" && (
+                    <div
+                      className="absolute bottom-0 left-0 right-0 h-0.5"
+                      style={{ backgroundColor: accentColor }}
+                    />
+                  )}
+                </button>
+              )}
+            </div>
+
+            {/* Tab Content */}
+            <div className="py-4 sm:py-6">
+              {activeTab === "description" && product.description && (
+                <div
+                  className="prose prose-sm sm:prose max-w-none text-gray-600"
+                  dangerouslySetInnerHTML={{ __html: product.description }}
+                />
+              )}
+
+              {activeTab === "specifications" &&
+                product.custom_fields &&
+                Object.keys(product.custom_fields).length > 0 && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4">
+                    {Object.entries(product.custom_fields).map(([key, value]) => (
+                      <div
+                        key={key}
+                        className="flex justify-between py-2 px-3 sm:py-3 sm:px-4 bg-gray-50 rounded-lg"
+                      >
+                        <span className="text-xs sm:text-sm text-gray-600">
+                          {key}
+                        </span>
+                        <span className="text-xs sm:text-sm font-medium text-gray-900">
+                          {value}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+              {activeTab === "shipping" && (
+                <div className="space-y-3 sm:space-y-4">
+                  <div className="flex items-start gap-2 sm:gap-3 p-3 sm:p-4 bg-blue-50 rounded-lg sm:rounded-xl">
+                    <svg
+                      className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600 shrink-0 mt-0.5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                    <p className="text-sm sm:text-base text-blue-800">
+                      {product.warranty || "30 days return policy"}
+                    </p>
+                  </div>
+                  {!product.isApplyDefaultDeliveryCharge &&
+                    product.specific_delivery_charges && (
+                      <div className="grid grid-cols-2 gap-2 sm:gap-4">
+                        <div className="p-3 sm:p-4 rounded-lg sm:rounded-xl bg-gray-50">
+                          <p className="text-xs sm:text-sm mb-0.5 sm:mb-1 text-gray-500">
+                            Dhaka
+                          </p>
+                          <p className="text-base sm:text-lg font-bold text-gray-900">
+                            ৳{product.specific_delivery_charges.Dhaka}
+                          </p>
+                        </div>
+                        <div className="p-3 sm:p-4 rounded-lg sm:rounded-xl bg-gray-50">
+                          <p className="text-xs sm:text-sm mb-0.5 sm:mb-1 text-gray-500">
+                            Outside Dhaka
+                          </p>
+                          <p className="text-base sm:text-lg font-bold text-gray-900">
+                            ৳{product.specific_delivery_charges.Others}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );
