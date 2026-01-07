@@ -316,6 +316,34 @@ section[id^="hero-1"] .swiper-pagination-progressbar .swiper-pagination-progress
 }
 
 /* ============================================
+   Hero Section Fix for Block Renderer
+   Ensures hero sections maintain their design
+   ============================================ */
+
+/* Ensure hero wrapper doesn't clip rounded corners */
+.hero-wrapper {
+  overflow: visible !important;
+}
+
+/* Reset container padding for hero sections to prevent global container conflicts */
+.hero-wrapper .hero-container {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  max-width: 1320px;
+}
+
+/* Ensure hero container has proper positioning context */
+.hero-container {
+  position: relative !important;
+}
+
+/* Ensure navigation arrow container maintains proper padding and positioning */
+.hero-container > div.absolute.inset-0.flex.items-center.justify-between {
+  position: absolute !important;
+  inset: 0 !important;
+}
+
+/* ============================================
    Navbar Dropdown Fix for Block Renderer
    Ensures dropdowns work with Tailwind group-hover
    ============================================ */

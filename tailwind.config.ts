@@ -381,6 +381,11 @@ const config = {
     "group", "group-hover:opacity-100",
     
     // ========================================
+    // HERO COMPONENT WRAPPER CLASSES
+    // ========================================
+    "hero-wrapper", "hero-container",
+    
+    // ========================================
     // ASPECT RATIO
     // ========================================
     "aspect-square", "aspect-video", "aspect-auto", "aspect-[4/3]",
