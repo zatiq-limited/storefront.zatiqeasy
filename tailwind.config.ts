@@ -24,17 +24,22 @@ const config = {
     "sm:left-4", "sm:left-6",
     "md:left-16", "md:left-20",
     "lg:left-28", "lg:left-[112px]",
-    
+    "-left-0.5", "-left-1", "-left-2", "-left-4",
+
     // Position - right
     "right-0", "right-4", "right-6",
     "md:right-8",
     "lg:right-11", "lg:right-28",
-    
+    "-right-0.5", "-right-1", "-right-2", "-right-4",
+    "sm:-right-1", "md:-right-1",
+
     // Position - top
+    "-top-0.5", "-top-1", "-top-2", "-top-4",
+    "sm:-top-1", "md:-top-1",
     "top-0", "top-2.5", "top-4", "top-8", "top-1/2",
     "md:top-6", "md:top-auto",
     "lg:top-8",
-    
+
     // Position - bottom
     "bottom-0", "bottom-4", "bottom-8", "bottom-10", "bottom-20", "bottom-24",
     "md:bottom-12", "md:bottom-32",
@@ -241,7 +246,7 @@ const config = {
     
     // Font sizes
     "text-xs", "text-sm", "text-base", "text-lg", "text-xl", "text-2xl", "text-3xl", "text-4xl", "text-5xl", "text-6xl",
-    "text-[12px]", "text-[14px]", "text-[20px]", "text-[28px]", "text-[32px]",
+    "text-[9px]", "text-[10px]", "text-[12px]", "text-[14px]", "text-[20px]", "text-[28px]", "text-[32px]",
     "sm:text-sm", "sm:text-base", "sm:text-lg", "sm:text-xl", "sm:text-2xl", "sm:text-3xl", "sm:text-4xl", "sm:text-5xl",
     "md:text-sm", "md:text-base", "md:text-lg", "md:text-xl", "md:text-2xl", "md:text-3xl", "md:text-4xl", "md:text-5xl",
     "lg:text-lg", "lg:text-xl", "lg:text-2xl", "lg:text-3xl", "lg:text-4xl", "lg:text-5xl", "lg:text-6xl",
@@ -253,7 +258,7 @@ const config = {
     // Line heights
     "leading-4", "leading-5", "leading-6", "leading-7", "leading-8", "leading-9", "leading-10",
     "leading-none", "leading-tight", "leading-snug", "leading-normal", "leading-relaxed", "leading-loose",
-    "leading-[1.1]", "leading-[1.3]", "leading-[1.6]", "leading-[21px]", "leading-[30px]", "leading-[42px]",
+    "leading-[1.1]", "leading-[1.3]", "leading-[1.6]", "leading-[14px]", "leading-[18px]", "leading-[21px]", "leading-[30px]", "leading-[42px]",
     "sm:leading-7", "sm:leading-8",
     "md:leading-7", "md:leading-8", "md:leading-tight", "md:leading-[42px]",
     "lg:leading-[1.1]", "lg:leading-[30px]",
