@@ -5,6 +5,7 @@
  *
  * Root-level single product page for standalone/subdomain mode
  * Uses shop details from store (populated by DEV_SHOP_ID or domain detection)
+ * Supports both legacy landing pages (Grip, Arcadia, Nirvana) and Theme Builder landing pages
  */
 
 "use client";
@@ -17,10 +18,48 @@ import { useShopStore } from "@/stores/shopStore";
 import { GripLandingPage } from "@/app/_themes/landing/themes/grip";
 import { ArcadiaLandingPage } from "@/app/_themes/landing/themes/arcadia";
 import { NirvanaLandingPage } from "@/app/_themes/landing/themes/nirvana";
-import type { SingleProductTheme } from "@/types/landing-page.types";
+import BlockRenderer, { type Block } from "@/components/renderers/block-renderer";
+import type { SingleProductTheme, ThemeBuilderSection } from "@/types/landing-page.types";
 
 interface SingleProductPageProps {
   params: Promise<{ slug: string }>;
+}
+
+/**
+ * Renders Theme Builder landing page sections
+ */
+function ThemeBuilderLandingPageRenderer({
+  sections,
+}: {
+  sections: ThemeBuilderSection[];
+}) {
+  return (
+    <div className="zatiq-theme-builder-landing-page">
+      {sections
+        .filter((section) => section.enabled !== false)
+        .map((section) => {
+          // Each section may have blocks array - render each block
+          if (section.blocks && section.blocks.length > 0) {
+            return (
+              <div
+                key={section.id}
+                data-section-id={section.id}
+                data-section-type={section.type}
+              >
+                {section.blocks.map((block, index) => (
+                  <BlockRenderer
+                    key={block.id || `${section.id}-block-${index}`}
+                    block={block as unknown as Block}
+                    data={(block.data as Record<string, unknown>) || {}}
+                  />
+                ))}
+              </div>
+            );
+          }
+          return null;
+        })}
+    </div>
+  );
 }
 
 /**
@@ -38,7 +77,15 @@ export default function SingleProductPage({ params }: SingleProductPageProps) {
   const shopUuid = shopDetails?.shop_uuid;
 
   // Fetch landing page data using shop_uuid
-  const { data, isLoading, error } = useLandingPage(
+  const {
+    isLoading,
+    error,
+    isThemeBuilder,
+    isLegacy,
+    legacyData,
+    themeBuilderData,
+    response,
+  } = useLandingPage(
     {
       slug,
       shopUuid: shopUuid,
@@ -81,7 +128,7 @@ export default function SingleProductPage({ params }: SingleProductPageProps) {
   }
 
   // Error state
-  if (error || !data) {
+  if (error || !response) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -96,21 +143,44 @@ export default function SingleProductPage({ params }: SingleProductPageProps) {
     );
   }
 
-  const themeName = data.theme_name as SingleProductTheme;
-
-  // Render based on theme
-  switch (themeName) {
-    case "Grip":
-      return <GripLandingPage landingData={data} />;
-
-    case "Arcadia":
-      return <ArcadiaLandingPage landingData={data} />;
-
-    case "Nirvana":
-      return <NirvanaLandingPage landingData={data} />;
-
-    default:
-      // Fallback to Grip theme for unsupported themes
-      return <GripLandingPage landingData={data} />;
+  // Render Theme Builder landing page
+  if (isThemeBuilder && themeBuilderData) {
+    return (
+      <ThemeBuilderLandingPageRenderer sections={themeBuilderData.sections} />
+    );
   }
+
+  // Render legacy landing page
+  if (isLegacy && legacyData) {
+    const themeName = legacyData.theme_name as SingleProductTheme;
+
+    switch (themeName) {
+      case "Grip":
+        return <GripLandingPage landingData={legacyData} />;
+
+      case "Arcadia":
+        return <ArcadiaLandingPage landingData={legacyData} />;
+
+      case "Nirvana":
+        return <NirvanaLandingPage landingData={legacyData} />;
+
+      default:
+        // Fallback to Grip theme for unsupported themes
+        return <GripLandingPage landingData={legacyData} />;
+    }
+  }
+
+  // Fallback - should not reach here
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="text-center">
+        <h1 className="text-2xl font-bold text-foreground mb-2">
+          Page Not Found
+        </h1>
+        <p className="text-muted-foreground">
+          The landing page you&apos;re looking for doesn&apos;t exist.
+        </p>
+      </div>
+    </div>
+  );
 }

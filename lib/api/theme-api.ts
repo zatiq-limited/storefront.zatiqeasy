@@ -306,3 +306,128 @@ export async function getContactPage(
 ): Promise<PageDataResponse | null> {
   return getPageData("contact", shopId);
 }
+
+// ============================================
+// Landing Page API
+// ============================================
+
+export interface LandingPageData {
+  id: number;
+  custom_theme_id: number;
+  slug: string;
+  product_id: number;
+  name: string;
+  is_enabled: boolean;
+  sections: SectionData[];
+  seo?: {
+    title?: string;
+    description?: string;
+    og?: {
+      title?: string;
+      description?: string;
+      image?: string;
+    };
+    twitter?: {
+      title?: string;
+      description?: string;
+      image?: string;
+    };
+  };
+  created_at?: string;
+  updated_at?: string;
+}
+
+interface LandingPageApiResponse {
+  success: boolean;
+  message?: string;
+  data?: LandingPageData;
+}
+
+// Legacy landing page types (Grip, Arcadia, Nirvana themes)
+export interface LegacyLandingPageData {
+  id: number;
+  page_title: string;
+  page_description: string;
+  slug: string;
+  theme_name: string;
+  theme_data: unknown[];
+  inventory: unknown;
+  shop_id: number;
+}
+
+interface LegacyLandingPageApiResponse {
+  data: LegacyLandingPageData;
+}
+
+export type GetLandingPageResult =
+  | { success: true; type: "theme-builder"; data: LandingPageData }
+  | { success: true; type: "legacy"; data: LegacyLandingPageData }
+  | { success: false; type: "not-found"; message: string };
+
+/**
+ * Get landing page data - tries Theme Builder endpoint first, falls back to legacy
+ * Theme Builder: POST /api/v1/live/theme/landing/{slug}
+ * Legacy: POST /api/v1/live/single_product_theme
+ */
+export async function getLandingPage(
+  slug: string,
+  identifier: string,
+  preview?: boolean
+): Promise<GetLandingPageResult> {
+  // First, try the new Theme Builder landing page endpoint
+  const themeBuilderEndpoint = preview
+    ? `/api/v1/live/theme/landing/${slug}?preview=true`
+    : `/api/v1/live/theme/landing/${slug}`;
+
+  try {
+    const { data } = await apiClient.post<LandingPageApiResponse>(themeBuilderEndpoint, {
+      identifier,
+    });
+
+    // Check if we got valid Theme Builder data
+    if (data?.data?.id && data?.data?.sections) {
+      return {
+        success: true,
+        type: "theme-builder",
+        data: data.data,
+      };
+    }
+  } catch (error) {
+    // Theme Builder endpoint failed, will try legacy
+    console.log("[ThemeAPI] Theme Builder landing page not found, trying legacy...", error);
+  }
+
+  // Fall back to legacy single_product_theme endpoint
+  const legacyEndpoint = preview
+    ? `/api/v1/live/single_product_theme?preview=true`
+    : `/api/v1/live/single_product_theme`;
+
+  try {
+    const { data } = await apiClient.post<LegacyLandingPageApiResponse>(legacyEndpoint, {
+      identifier,
+      slug,
+    });
+
+    // Check if we got valid legacy data
+    if (data?.data?.id) {
+      return {
+        success: true,
+        type: "legacy",
+        data: data.data,
+      };
+    }
+
+    return {
+      success: false,
+      type: "not-found",
+      message: "Landing page not found",
+    };
+  } catch (error) {
+    console.error("[ThemeAPI] getLandingPage legacy endpoint error:", error);
+    return {
+      success: false,
+      type: "not-found",
+      message: "Failed to fetch landing page",
+    };
+  }
+}

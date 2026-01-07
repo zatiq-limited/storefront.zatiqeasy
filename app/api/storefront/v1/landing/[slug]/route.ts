@@ -1,16 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { apiClient } from "@/lib/api/client";
-import type { SingleProductPage } from "@/types/landing-page.types";
+import { getLandingPage, type LandingPageData, type LegacyLandingPageData } from "@/lib/api/theme-api";
 
 // Revalidate every 2 minutes
 export const revalidate = 120;
 
 interface RouteParams {
   params: Promise<{ slug: string }>;
-}
-
-interface LandingPageResponse {
-  data: SingleProductPage;
 }
 
 export async function GET(request: NextRequest, { params }: RouteParams) {
@@ -37,22 +32,14 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
   }
 
   try {
-    // Call backend API to fetch landing page data
-    const endpoint = preview
-      ? `/api/v1/live/single_product_theme?preview=true`
-      : `/api/v1/live/single_product_theme`;
+    // Use theme-api service to fetch landing page
+    const result = await getLandingPage(slug, shopUuid, preview);
 
-    const { data } = await apiClient.post<LandingPageResponse>(endpoint, {
-      identifier: shopUuid,
-      slug,
-    });
-
-    // Check if landing page data exists
-    if (!data?.data?.id) {
+    if (!result.success) {
       return NextResponse.json(
         {
           success: false,
-          error: "Landing page not found",
+          error: result.message || "Landing page not found",
         },
         {
           status: 404,
@@ -66,7 +53,8 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     return NextResponse.json(
       {
         success: true,
-        data: data.data,
+        type: result.type,
+        data: result.data,
       },
       {
         headers: {
@@ -116,21 +104,14 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       );
     }
 
-    // Call backend API
-    const endpoint = preview
-      ? `/api/v1/live/single_product_theme?preview=true`
-      : `/api/v1/live/single_product_theme`;
+    // Use theme-api service to fetch landing page
+    const result = await getLandingPage(slug, shopIdentifier, preview);
 
-    const { data } = await apiClient.post<LandingPageResponse>(endpoint, {
-      identifier: shopIdentifier,
-      slug,
-    });
-
-    if (!data?.data?.id) {
+    if (!result.success) {
       return NextResponse.json(
         {
           success: false,
-          error: "Landing page not found",
+          error: result.message || "Landing page not found",
         },
         {
           status: 404,
@@ -140,7 +121,8 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
 
     return NextResponse.json({
       success: true,
-      data: data.data,
+      type: result.type,
+      data: result.data,
     });
   } catch (error) {
     console.error("[Landing Page API] Error fetching landing page:", error);
@@ -155,3 +137,6 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     );
   }
 }
+
+// Export types for use in other files
+export type { LandingPageData, LegacyLandingPageData };
