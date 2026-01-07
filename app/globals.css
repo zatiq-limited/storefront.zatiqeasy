@@ -327,3 +327,76 @@ section[id^="hero-1"] .swiper-pagination-progressbar .swiper-pagination-progress
 .scrollbar-hide::-webkit-scrollbar {
   display: none; /* Chrome, Safari and Opera */
 }
+
+/* ============================================
+   Hero Section Fix for Block Renderer
+   Ensures hero sections maintain their design
+   ============================================ */
+
+/* Ensure hero wrapper doesn't clip rounded corners */
+.hero-wrapper {
+  overflow: visible !important;
+}
+
+/* Reset container padding for hero sections to prevent global container conflicts */
+.hero-wrapper .hero-container {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  max-width: 1320px;
+}
+
+/* Ensure hero container has proper positioning context */
+.hero-container {
+  position: relative !important;
+}
+
+/* Ensure navigation arrow container maintains proper padding and positioning */
+.hero-container > div.absolute.inset-0.flex.items-center.justify-between {
+  position: absolute !important;
+  inset: 0 !important;
+}
+
+/* ============================================
+   Navbar Dropdown Fix for Block Renderer
+   Ensures dropdowns work with Tailwind group-hover
+   ============================================ */
+
+/* Ensure dropdown menus are positioned correctly and have proper z-index */
+nav .group {
+  position: relative;
+}
+
+/* Target dropdown menus that use opacity transitions */
+nav .group .absolute.top-full {
+  z-index: 9999 !important;
+  pointer-events: auto !important;
+}
+
+/* Ensure group-hover works even if JS is not available */
+nav .group:hover .opacity-0.invisible {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Allow dropdowns to stay open when hovering over them */
+nav .group .absolute.top-full:hover {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Ensure dropdown links are clickable */
+nav .group .absolute.top-full a {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+}
+
+/* Fix for any stacking context issues */
+nav.sticky,
+nav.fixed {
+  z-index: 1000 !important;
+}
+
+nav.sticky .group .absolute.top-full,
+nav.fixed .group .absolute.top-full {
+  z-index: 9999 !important;
+}

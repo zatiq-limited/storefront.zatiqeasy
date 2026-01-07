@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import type { Section } from "@/lib/types";
 import {
   PrivacyHero1,
