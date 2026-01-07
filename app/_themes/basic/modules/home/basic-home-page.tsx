@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useShopStore } from "@/stores";
-import { useCartTotals } from "@/hooks";
+import { useCartTotals, useShopInventories, useShopCategories } from "@/hooks";
 import { CartFloatingBtn } from "@/features/cart/cart-floating-btn";
 
 // Dynamic imports for better performance
@@ -34,6 +34,17 @@ export function BasicHomePage() {
   const router = useRouter();
   const { shopDetails } = useShopStore();
   const { totalPrice, totalProducts, hasItems } = useCartTotals();
+
+  // Fetch products and categories to populate the store
+  useShopInventories(
+    { shopUuid: shopDetails?.shop_uuid ?? "" },
+    { enabled: !!shopDetails?.shop_uuid }
+  );
+
+  useShopCategories(
+    { shopUuid: shopDetails?.shop_uuid ?? "" },
+    { enabled: !!shopDetails?.shop_uuid }
+  );
 
   const baseUrl = shopDetails?.baseUrl || "";
 

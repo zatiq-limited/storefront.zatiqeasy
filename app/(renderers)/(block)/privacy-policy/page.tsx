@@ -1,12 +1,11 @@
-import React from "react";
-import type { Metadata } from "next";
-import PrivacyPageRenderer from "@/components/renderers/page-renderer/privacy-page-renderer";
-import type { Section } from "@/lib/types";
+"use client";
 
-export const metadata: Metadata = {
-  title: "Privacy Policy",
-  description: "Learn about our commitment to protecting your privacy and personal information.",
-};
+import { useShopStore } from "@/stores/shopStore";
+import { useShopCustomPages } from "@/hooks/useShopCustomPages";
+import PrivacyPageRenderer from "@/components/renderers/page-renderer/privacy-page-renderer";
+import { PageLoading } from "@/components/shared/page-loading";
+import type { Section } from "@/lib/types";
+import "react-quill/dist/quill.snow.css";
 
 // Default privacy policy sections
 const sections: Section[] = [
@@ -17,7 +16,8 @@ const sections: Section[] = [
     settings: {
       headline: "Privacy Policy",
       subheadline: "Your Privacy Matters",
-      description: "We are committed to protecting your personal information and your right to privacy.",
+      description:
+        "We are committed to protecting your personal information and your right to privacy.",
       lastUpdated: "December 21, 2024",
       showBreadcrumb: true,
     },
@@ -97,6 +97,55 @@ const sections: Section[] = [
 ];
 
 export default function PrivacyPolicyPage() {
+  const { shopDetails } = useShopStore();
+
+  // Determine theme mode
+  const isLegacyTheme = shopDetails?.legacy_theme ?? true;
+  const shopId = shopDetails?.id?.toString();
+
+  // Fetch custom pages for legacy themes
+  const { data: customPages, isLoading } = useShopCustomPages(shopId || "", {
+    enabled: !!shopId && isLegacyTheme,
+  });
+
+  // ========================================
+  // STATIC THEME MODE (legacy_theme = true)
+  // ========================================
+  if (isLegacyTheme) {
+    // Loading state
+    if (!shopDetails || isLoading) {
+      return <PageLoading />;
+    }
+
+    const privacyPolicyContent = customPages?.privacy_policy;
+
+    if (!privacyPolicyContent) {
+      return (
+        <div className="container pt-16 pb-10">
+          <div className="rounded-xl max-w-7xl mx-auto p-4">
+            <p className="text-gray-600 dark:text-gray-400">
+              No privacy policy available.
+            </p>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="container pt-16 pb-10">
+        <div className="rounded-xl max-w-7xl mx-auto p-4">
+          <div
+            className="ql-editor dark:text-gray-200 text-black-2 ql-snow"
+            dangerouslySetInnerHTML={{ __html: privacyPolicyContent }}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  // ========================================
+  // THEME BUILDER MODE (legacy_theme = false)
+  // ========================================
   return (
     <main className="zatiq-privacy-policy-page">
       <PrivacyPageRenderer sections={sections} />

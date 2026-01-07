@@ -37,7 +37,7 @@ export function MobilePriceFilter({
     <>
       {/* Backdrop */}
       <div
-        className={`lg:hidden w-full bg-black/50 fixed top-0 right-0 h-full z-[1000] ${
+        className={`lg:hidden w-full bg-black/50 fixed top-0 right-0 h-full z-1000 ${
           showMobileFilter ? "flex" : "hidden"
         }`}
         onClick={() => setShowMobileFilter(false)}
@@ -45,8 +45,8 @@ export function MobilePriceFilter({
 
       {/* Filter Panel */}
       <div
-        className={`fixed top-0 right-0 z-[1001] w-[300px] bg-white dark:bg-black-27 h-full p-6 transition-transform duration-300 ${
-          showMobileFilter ? "translate-x-0 lg:hidden" : "translate-x-full"
+        className={`fixed top-0 right-0 z-1001 w-75 bg-white dark:bg-black-27 h-full p-6 transition-transform duration-300 lg:hidden ${
+          showMobileFilter ? "translate-x-0" : "translate-x-full"
         }`}
       >
         <div className="pb-4 border-b border-b-gray-600 flex items-center justify-between">

@@ -39,11 +39,20 @@ async function fetchCustomPages(shopId: string | number): Promise<CustomPages> {
   }
 }
 
-export function useShopCustomPages(shopId: string | number | undefined) {
+interface UseShopCustomPagesOptions {
+  enabled?: boolean;
+}
+
+export function useShopCustomPages(
+  shopId: string | number | undefined,
+  options?: UseShopCustomPagesOptions
+) {
+  const { enabled = true } = options || {};
+
   return useQuery({
     queryKey: ["shopCustomPages", shopId],
     queryFn: () => fetchCustomPages(shopId!),
-    enabled: !!shopId,
+    enabled: !!shopId && enabled,
     ...CACHE_TIMES.STATIC,
     ...DEFAULT_QUERY_OPTIONS,
   });

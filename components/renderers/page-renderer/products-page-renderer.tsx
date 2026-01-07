@@ -11,7 +11,6 @@
 
 import { useState, useCallback } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import type { Section, Pagination as PaginationType } from "@/lib/types";
 import type { Product, ProductFilters } from "@/stores/productsStore";
 import { getInventoryThumbImageUrl } from "@/lib/utils/formatting";
@@ -38,10 +37,22 @@ import ProductsPagination1 from "@/components/renderers/page-renderer/page-compo
 import ProductsPagination2 from "@/components/renderers/page-renderer/page-components/products/products-pagination-2";
 import ProductsHero1 from "@/components/renderers/page-renderer/page-components/products/products-hero-1";
 import ProductsHero2 from "@/components/renderers/page-renderer/page-components/products/products-hero-2";
+import BlockRenderer from "@/components/renderers/block-renderer";
+
+interface Category {
+  id: number | string;
+  name: string;
+  description?: string;
+  image_url?: string;
+  parent_id?: number | string | null;
+  sub_categories?: Category[];
+  products_count?: number;
+}
 
 interface ProductsPageRendererProps {
   sections: Section[];
   products: Product[];
+  categories?: Category[];
   pagination: PaginationType | null;
   filters: ProductFilters;
   onFiltersChange: (filters: Partial<ProductFilters>) => void;
@@ -53,15 +64,15 @@ interface ProductsPageRendererProps {
 function ProductsLayout({
   settings = {},
   products,
+  categories = [],
   filters,
-  pagination,
   onFiltersChange,
   isLoading,
 }: {
   settings?: Record<string, unknown>;
   products: Product[];
+  categories?: Category[];
   filters: ProductFilters;
-  pagination: PaginationType | null;
   onFiltersChange: (filters: Partial<ProductFilters>) => void;
   isLoading?: boolean;
 }) {
@@ -85,7 +96,7 @@ function ProductsLayout({
   const sidebarType = (settings.sidebar_type as string) || "products-sidebar-1";
   const paginationType =
     (settings.pagination_type as string) || "products-pagination-1";
-  const productsPerPage = (settings.products_per_page as number) || 20;
+  const productsPerPage = Number(settings.products_per_page) || 20;
   const filterBarBgColor =
     (settings.filter_bar_bg_color as string) || "#FFFFFF";
   const searchBorderColor =
@@ -114,13 +125,48 @@ function ProductsLayout({
   const sidebarButtonTextColor =
     (settings.sidebar_button_text_color as string) || "#FFFFFF";
 
-  // Client-side pagination
+  // Calculate max price from products for the slider (rounded up to nearest 100)
+  const highestPrice = products.length > 0
+    ? Math.max(...products.map((p) => p.price || 0))
+    : 10000; // Fallback only when no products
+  const maxPriceLimit = Math.ceil(highestPrice / 100) * 100;
+
+  // Filter products by selected categories and price range
+  const filteredProducts = products.filter((product) => {
+    // Category filter
+    if (selectedCategories.length > 0) {
+      if (!product.categories || product.categories.length === 0) {
+        return false;
+      }
+      const hasMatchingCategory = product.categories.some((cat) =>
+        selectedCategories.includes(String(cat.id))
+      );
+      if (!hasMatchingCategory) {
+        return false;
+      }
+    }
+
+    // Price filter
+    if (priceRange.min > 0 || priceRange.max > 0) {
+      const productPrice = product.price || 0;
+      if (priceRange.min > 0 && productPrice < priceRange.min) {
+        return false;
+      }
+      if (priceRange.max > 0 && productPrice > priceRange.max) {
+        return false;
+      }
+    }
+
+    return true;
+  });
+
+  // Client-side pagination (applied to filtered products)
   const currentPage = filters.page || 1;
-  const totalProducts = products.length;
+  const totalProducts = filteredProducts.length;
   const totalPages = Math.ceil(totalProducts / productsPerPage);
   const startIndex = (currentPage - 1) * productsPerPage;
   const endIndex = startIndex + productsPerPage;
-  const paginatedProducts = products.slice(startIndex, endIndex);
+  const paginatedProducts = filteredProducts.slice(startIndex, endIndex);
 
   // Category change handler
   const handleCategoryChange = (categoryId: string, isSelected: boolean) => {
@@ -288,10 +334,12 @@ function ProductsLayout({
   // Render sidebar component
   const renderSidebar = () => {
     const sidebarProps = {
+      categories,
       selectedCategories,
       onCategoryChange: handleCategoryChange,
       onClearFilters: handleClearFilters,
       priceRange,
+      maxPriceLimit,
       onPriceRangeChange: handlePriceRangeChange,
       buttonBgColor: sidebarButtonBgColor,
       buttonTextColor: sidebarButtonTextColor,
@@ -302,6 +350,18 @@ function ProductsLayout({
     }
     return <ProductsSidebar1 {...sidebarProps} />;
   };
+
+  // Handle page change with scroll to top
+  const handlePageChange = useCallback(
+    (page: number) => {
+      onFiltersChange({ page });
+      // Use setTimeout to ensure scroll happens after state update and re-render
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }, 100);
+    },
+    [onFiltersChange]
+  );
 
   // Render pagination component
   const renderPagination = () => {
@@ -315,7 +375,7 @@ function ProductsLayout({
       to: Math.min(endIndex, totalProducts),
       total: totalProducts,
       activeColor: paginationActiveColor,
-      onPageChange: (page: number) => onFiltersChange({ page }),
+      onPageChange: handlePageChange,
     };
 
     if (paginationType === "products-pagination-2") {
@@ -334,7 +394,7 @@ function ProductsLayout({
           className={`border-b ${sticky ? "sticky top-0 z-40 shadow-sm" : ""}`}
           style={{ backgroundColor: filterBarBgColor }}
         >
-          <div className="container mx-auto px-4 2xl:px-0 py-3">
+          <div className="container py-3">
             <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
               {/* Filter Button and Search */}
               <div className="flex items-center gap-2 flex-1 w-full md:w-auto min-w-0">
@@ -500,7 +560,7 @@ function ProductsLayout({
         </div>
       )}
 
-      <div className="container mx-auto px-4 2xl:px-0 pt-4">
+      <div className="container pt-4">
         {/* Main Content with Optional Sidebar */}
         <div
           className={`flex ${showSidebar ? "gap-8" : ""} ${
@@ -549,7 +609,7 @@ function ProductsLayout({
                         onClick={() => setIsMobileSidebarOpen(false)}
                         className="w-full mt-4 py-3 bg-gray-900 text-white rounded-lg font-semibold"
                       >
-                        Show {products.length} Results
+                        Show {filteredProducts.length} Results
                       </button>
                     </div>
                   </div>
@@ -568,7 +628,7 @@ function ProductsLayout({
             )}
 
             {/* Empty State */}
-            {!isLoading && products.length === 0 && (
+            {!isLoading && filteredProducts.length === 0 && (
               <div className="flex flex-col items-center justify-center py-16 text-center">
                 <svg
                   className="w-16 h-16 text-gray-300 mb-4"
@@ -589,6 +649,8 @@ function ProductsLayout({
                 <p className="text-gray-500 mb-4 max-w-md">
                   {filters.search
                     ? `No products match "${filters.search}"`
+                    : selectedCategories.length > 0
+                    ? "No products found in the selected categories"
                     : "No products match your current filters"}
                 </p>
                 <button
@@ -601,14 +663,16 @@ function ProductsLayout({
             )}
 
             {/* Products Grid */}
-            {!isLoading && products.length > 0 && (
+            {!isLoading && filteredProducts.length > 0 && (
               <>
                 {currentView === "grid" ? (
                   <div
                     className={getGridClass()}
                     style={{ gap: `${gap * 4}px` }}
                   >
-                    {paginatedProducts.map((product) => renderProductCard(product))}
+                    {paginatedProducts.map((product) =>
+                      renderProductCard(product)
+                    )}
                   </div>
                 ) : (
                   <div className="space-y-4">
@@ -673,6 +737,7 @@ function ProductsLayout({
 export default function ProductsPageRenderer({
   sections,
   products,
+  categories = [],
   pagination,
   filters,
   onFiltersChange,
@@ -727,10 +792,29 @@ export default function ProductsPageRenderer({
             <ProductsLayout
               settings={section.settings}
               products={products}
+              categories={categories}
               filters={filters}
-              pagination={pagination}
               onFiltersChange={onFiltersChange}
               isLoading={isLoading}
+            />
+          </div>
+        );
+
+      case section.type.includes("custom-sections"):
+        // Custom sections use BlockRenderer for V3.0 Schema blocks
+        const block = section.blocks?.[0];
+        if (!block) return null;
+        return (
+          <div
+            key={section.id}
+            data-section-id={section.id}
+            data-section-type={section.type}
+          >
+            <BlockRenderer
+              block={
+                block as import("@/components/renderers/block-renderer").Block
+              }
+              data={(block.data as Record<string, unknown>) || {}}
             />
           </div>
         );

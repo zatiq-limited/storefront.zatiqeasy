@@ -45,7 +45,6 @@ export default async function RootLayout({
   ) {
     try {
       shopProfile = await shopService.getProfile(shopIdentifier);
-      console.log("RootLayout - shopProfile loaded:", shopProfile?.shop_name);
     } catch (error) {
       console.error("Failed to load shop profile:", error);
     }

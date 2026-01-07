@@ -103,7 +103,9 @@ export function SelloraAllProducts() {
     if (selectedPriceRange) {
       filtered = filtered.filter((p) => {
         const price = p.price || 0;
-        return price >= selectedPriceRange.min && price <= selectedPriceRange.max;
+        return (
+          price >= selectedPriceRange.min && price <= selectedPriceRange.max
+        );
       });
     }
 
@@ -138,6 +140,18 @@ export function SelloraAllProducts() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
+  // Show loading state while fetching products
+  if (isLoading && products.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[50vh]">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 dark:border-gray-100 mb-4" />
+        <p className="text-sm text-muted-foreground">
+          {t("loading_products") || "Loading products..."}
+        </p>
+      </div>
+    );
+  }
+
   return (
     <>
       {/* Variant Selector Modal */}
@@ -160,7 +174,7 @@ export function SelloraAllProducts() {
       />
 
       {/* Hero Banner */}
-      <div className="relative h-50 sm:h-70 md:h-90 lg:h-100 w-screen overflow-hidden -ml-[50vw] left-[50%]">
+      <div className="relative h-50 sm:h-70 md:h-90 lg:h-100 max-w-screen w-full overflow-hidden">
         <div className="absolute inset-0">
           {heroCarousel?.image_url ? (
             <FallbackImage
@@ -205,10 +219,7 @@ export function SelloraAllProducts() {
               onClick={() => setShowMobileFilter(!showMobileFilter)}
               className="lg:hidden flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-xs sm:text-sm font-medium text-foreground hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
             >
-              <SlidersHorizontal
-                size={16}
-                className="sm:w-4.5 sm:h-4.5"
-              />
+              <SlidersHorizontal size={16} className="sm:w-4.5 sm:h-4.5" />
               <span className="inline text-base">{t("filter")}</span>
             </button>
           </div>

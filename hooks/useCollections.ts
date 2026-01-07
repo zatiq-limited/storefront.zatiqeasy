@@ -1,6 +1,15 @@
-import { useQuery } from "@tanstack/react-query";
+/**
+ * useCollections - React Query hook for fetching collections (categories)
+ * Collections = Categories in the merchant system
+ */
 
-// Types
+"use client";
+
+import { useQuery } from "@tanstack/react-query";
+import { useShopStore } from "@/stores";
+import { CACHE_TIMES, DEFAULT_QUERY_OPTIONS } from "@/lib/constants";
+
+// Types matching the transformed collection format
 export interface Collection {
   id: number;
   name: string;
@@ -9,13 +18,26 @@ export interface Collection {
   image_url: string;
   banner_url?: string;
   product_count: number;
-  children?: Collection[];
+  sort_order?: number;
+  children?: {
+    id: number;
+    name: string;
+    slug: string;
+    image_url: string;
+    product_count: number;
+  }[];
 }
 
 interface CollectionsResponse {
   success: boolean;
   data: {
     collections: Collection[];
+    pagination?: {
+      current_page: number;
+      per_page: number;
+      total: number;
+      total_pages: number;
+    };
   };
 }
 
@@ -33,13 +55,6 @@ interface CollectionsPageConfigResponse {
   };
 }
 
-// Fetch collections list
-async function fetchCollections(): Promise<CollectionsResponse> {
-  const res = await fetch("/api/storefront/v1/collections");
-  if (!res.ok) throw new Error("Failed to fetch collections");
-  return res.json();
-}
-
 // Fetch collections page configuration
 async function fetchCollectionsPageConfig(): Promise<CollectionsPageConfigResponse> {
   const res = await fetch("/api/storefront/v1/page/collections");
@@ -48,12 +63,37 @@ async function fetchCollectionsPageConfig(): Promise<CollectionsPageConfigRespon
 }
 
 export function useCollections() {
-  // Collections query
+  // Get shop_uuid from store
+  const shopDetails = useShopStore((state) => state.shopDetails);
+  const shopUuid = shopDetails?.shop_uuid;
+
+  // Collections query - uses categories API under the hood
   const collectionsQuery = useQuery({
-    queryKey: ["collections"],
-    queryFn: fetchCollections,
-    staleTime: 1000 * 60, // 1 minute
-    gcTime: 1000 * 60 * 5, // 5 minutes
+    queryKey: ["collections", shopUuid],
+    queryFn: async (): Promise<CollectionsResponse> => {
+      if (!shopUuid) {
+        return { success: true, data: { collections: [] } };
+      }
+
+      const response = await fetch("/api/storefront/v1/collections", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          shop_uuid: shopUuid,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch collections");
+      }
+
+      return response.json();
+    },
+    enabled: !!shopUuid,
+    staleTime: 1000 * 60 * 2, // 2 minutes
+    gcTime: 1000 * 60 * 10, // 10 minutes
     refetchOnWindowFocus: false,
   });
 
@@ -76,11 +116,14 @@ export function useCollections() {
     sections: pageConfigQuery.data?.data?.sections || [],
     seo: pageConfigQuery.data?.data?.seo || {},
 
-    // State
-    isLoading: collectionsQuery.isLoading || pageConfigQuery.isLoading,
-    isCollectionsLoading: collectionsQuery.isLoading,
+    // State - don't show loading if we don't have shop_uuid yet
+    isLoading: shopUuid ? collectionsQuery.isLoading : false,
+    isCollectionsLoading: shopUuid ? collectionsQuery.isLoading : false,
     isPageConfigLoading: pageConfigQuery.isLoading,
     error: collectionsQuery.error || pageConfigQuery.error,
+
+    // Shop state
+    hasShopUuid: !!shopUuid,
 
     // Actions
     refetch: () => {

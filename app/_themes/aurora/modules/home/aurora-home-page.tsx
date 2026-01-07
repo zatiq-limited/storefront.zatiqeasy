@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { useShopStore } from "@/stores/shopStore";
 import { useCartStore, selectTotalItems, selectSubtotal } from "@/stores/cartStore";
+import { useShopInventories, useShopCategories } from "@/hooks";
 import { CartFloatingBtn } from "@/components/features/cart/cart-floating-btn";
 import type { Product } from "@/stores/productsStore";
 
@@ -44,6 +45,17 @@ export function AuroraHomePage() {
   const { shopDetails } = useShopStore();
   const totalProducts = useCartStore(selectTotalItems);
   const totalPrice = useCartStore(selectSubtotal);
+
+  // Fetch products and categories to populate the store
+  useShopInventories(
+    { shopUuid: shopDetails?.shop_uuid ?? "" },
+    { enabled: !!shopDetails?.shop_uuid }
+  );
+
+  useShopCategories(
+    { shopUuid: shopDetails?.shop_uuid ?? "" },
+    { enabled: !!shopDetails?.shop_uuid }
+  );
 
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 

@@ -150,10 +150,13 @@ export default function CollectionsGrid2({
                 {/* Collection Image */}
                 <div className="relative aspect-[4/3] overflow-hidden">
                   <Image
-                    src={collection.banner_url || collection.image_url}
+                    src={collection.banner_url || collection.image_url || "/placeholder.jpg"}
                     alt={collection.name}
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    unoptimized={
+                      (collection.banner_url || collection.image_url || "").startsWith("http")
+                    }
                   />
 
                   {/* Gradient Overlay */}

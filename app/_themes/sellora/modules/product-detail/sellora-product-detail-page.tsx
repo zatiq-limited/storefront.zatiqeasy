@@ -69,11 +69,20 @@ export function SelloraProductDetailPage({
   const old_price = useMemo(() => product?.old_price, [product?.old_price]);
   const images = useMemo(() => product?.images ?? [], [product?.images]);
   const image_url = useMemo(() => product?.image_url, [product?.image_url]);
-  const variant_types = useMemo(() => product?.variant_types ?? [], [product?.variant_types]);
+  const variant_types = useMemo(
+    () => product?.variant_types ?? [],
+    [product?.variant_types]
+  );
   const video_link = useMemo(() => product?.video_link, [product?.video_link]);
   const reviews = useMemo(() => product?.reviews, [product?.reviews]);
-  const categories = useMemo(() => product?.categories ?? [], [product?.categories]);
-  const image_variant_type_id = useMemo(() => product?.image_variant_type_id, [product?.image_variant_type_id]);
+  const categories = useMemo(
+    () => product?.categories ?? [],
+    [product?.categories]
+  );
+  const image_variant_type_id = useMemo(
+    () => product?.image_variant_type_id,
+    [product?.image_variant_type_id]
+  );
 
   const baseUrl = shopDetails?.baseUrl || "";
   const hasItems = totalCartItems > 0;
@@ -192,25 +201,27 @@ export function SelloraProductDetailPage({
     }
 
     // Restore each variant from the cart
-    Object.entries(firstCartItem.selectedVariants).forEach(([variantTypeId, variantState]) => {
-      const typeId = Number(variantTypeId);
-      const variantId = variantState.variant_id;
+    Object.entries(firstCartItem.selectedVariants).forEach(
+      ([variantTypeId, variantState]) => {
+        const typeId = Number(variantTypeId);
+        const variantId = variantState.variant_id;
 
-      // Find the variant in the product's variant types
-      const variantType = variant_types.find((vt) => vt.id === typeId);
-      if (variantType?.variants) {
-        const variant = variantType.variants.find((v) => v.id === variantId);
-        if (variant) {
-          handleVariantSelect(typeId, {
-            variant_type_id: variantState.variant_type_id,
-            variant_id: variantId,
-            price: variantState.price || 0,
-            variant_name: variantState.variant_name || variant.name || "",
-            image_url: variant.image_url || undefined,
-          });
+        // Find the variant in the product's variant types
+        const variantType = variant_types.find((vt) => vt.id === typeId);
+        if (variantType?.variants) {
+          const variant = variantType.variants.find((v) => v.id === variantId);
+          if (variant) {
+            handleVariantSelect(typeId, {
+              variant_type_id: variantState.variant_type_id,
+              variant_id: variantId,
+              price: variantState.price || 0,
+              variant_name: variantState.variant_name || variant.name || "",
+              image_url: variant.image_url || undefined,
+            });
+          }
         }
       }
-    });
+    );
   }, [product, cartProducts, variant_types, handleVariantSelect]);
 
   // Handle quantity change

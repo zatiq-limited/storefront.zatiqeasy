@@ -33,6 +33,7 @@ import IconRenderer from "./block-components/icon-renderer";
 import RepeaterRenderer from "./block-components/repeater-renderer";
 import MarqueeRenderer from "./block-components/marquee-renderer";
 import SwiperRenderer from "./block-components/swiper-renderer";
+import ProgressBarRenderer from "./block-components/progress-bar-renderer";
 
 // Context for managing drawer/toggle visibility states across blocks
 interface DrawerContextType {
@@ -217,6 +218,17 @@ function BlockRendererInternal({
     case "marquee":
       return (
         <MarqueeRenderer
+          block={block}
+          data={mergedData}
+          context={context}
+          eventHandlers={extendedHandlers}
+          className={className}
+        />
+      );
+
+    case "progress_bar":
+      return (
+        <ProgressBarRenderer
           block={block}
           data={mergedData}
           context={context}

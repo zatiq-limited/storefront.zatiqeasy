@@ -74,6 +74,7 @@ import {
   BadgeCheck,
   ShieldCheck,
   Headphones,
+  Quote,
   type LucideIcon,
 } from "lucide-react";
 
@@ -208,6 +209,11 @@ const ICON_MAP: Record<string, LucideIcon> = {
   protection: ShieldCheck,
   headphones: Headphones,
   customer_service: Headphones,
+
+  // Quote
+  quote: Quote,
+  blockquote: Quote,
+  testimonial: Quote,
 };
 
 export interface IconRendererProps {

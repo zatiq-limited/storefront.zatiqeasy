@@ -1,6 +1,7 @@
 /**
  * useLandingPage - React Query hook for fetching single product landing page data
  * Used for landing pages at /single-product/[slug]
+ * Supports both legacy landing pages (Grip, Arcadia, Nirvana) and Theme Builder landing pages
  */
 
 "use client";
@@ -9,7 +10,11 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useLandingStore } from "@/stores";
 import { DEFAULT_QUERY_OPTIONS } from "@/lib/constants";
-import type { SingleProductPage } from "@/types/landing-page.types";
+import type {
+  SingleProductPage,
+  ThemeBuilderLandingPage,
+  LandingPageResponse,
+} from "@/types/landing-page.types";
 
 // Landing page cache times
 const LANDING_PAGE_CACHE = {
@@ -31,7 +36,8 @@ interface UseLandingPageOptions {
 
 interface LandingPageApiResponse {
   success: boolean;
-  data?: SingleProductPage;
+  type?: "legacy" | "theme-builder";
+  data?: SingleProductPage | ThemeBuilderLandingPage;
   error?: string;
 }
 
@@ -52,7 +58,7 @@ export function useLandingPage(
 
   const query = useQuery({
     queryKey,
-    queryFn: async () => {
+    queryFn: async (): Promise<LandingPageResponse> => {
       // Build URL with query params for GET request
       const searchParams = new URLSearchParams();
       if (params.shopUuid) {
@@ -81,20 +87,33 @@ export function useLandingPage(
         throw new Error(result.error || "Landing page not found");
       }
 
-      return result.data;
+      // Return with type information
+      if (result.type === "theme-builder") {
+        return {
+          type: "theme-builder",
+          data: result.data as ThemeBuilderLandingPage,
+        };
+      }
+
+      // Default to legacy type
+      return {
+        type: "legacy",
+        data: result.data as SingleProductPage,
+      };
     },
     enabled: enabled && !!params.slug && !!(params.shopUuid || params.shopId),
     ...LANDING_PAGE_CACHE,
     ...DEFAULT_QUERY_OPTIONS,
   });
 
-  // Sync to Zustand store when data changes
+  // Sync to Zustand store when data changes (only for legacy pages)
   useEffect(() => {
-    if (syncToStore && query.data) {
-      setPageData(query.data);
+    if (syncToStore && query.data?.type === "legacy") {
+      const legacyData = query.data.data as SingleProductPage;
+      setPageData(legacyData);
 
       // Also update colors if available
-      const themeData = query.data.theme_data?.[0];
+      const themeData = legacyData.theme_data?.[0];
       if (themeData?.color?.primary_color) {
         setPrimaryColor(themeData.color.primary_color);
       }
@@ -104,20 +123,39 @@ export function useLandingPage(
     }
   }, [query.data, syncToStore, setPageData, setPrimaryColor, setSecondaryColor]);
 
+  // Determine page type
+  const isThemeBuilder = query.data?.type === "theme-builder";
+  const isLegacy = query.data?.type === "legacy";
+
+  // Get typed data based on page type
+  const legacyData = isLegacy ? (query.data?.data as SingleProductPage) : null;
+  const themeBuilderData = isThemeBuilder
+    ? (query.data?.data as ThemeBuilderLandingPage)
+    : null;
+
   return {
-    data: query.data,
+    // Raw response with type information
+    response: query.data,
+    // Page type flags
+    isThemeBuilder,
+    isLegacy,
+    // Typed data getters
+    legacyData,
+    themeBuilderData,
+    // Query state
     isLoading: query.isLoading,
     isError: query.isError,
     error: query.error,
     refetch: query.refetch,
     isFetching: query.isFetching,
-    // Convenience getters
-    inventory: query.data?.inventory,
-    themeData: query.data?.theme_data?.[0],
-    themeName: query.data?.theme_name,
-    pageTitle: query.data?.page_title,
-    pageDescription: query.data?.page_description,
+    // Legacy convenience getters (for backward compatibility)
+    data: legacyData,
+    inventory: legacyData?.inventory,
+    themeData: legacyData?.theme_data?.[0],
+    themeName: legacyData?.theme_name,
+    pageTitle: legacyData?.page_title,
+    pageDescription: legacyData?.page_description,
   };
 }
 
-export type { SingleProductPage };
+export type { SingleProductPage, ThemeBuilderLandingPage, LandingPageResponse };

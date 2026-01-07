@@ -28,7 +28,7 @@ export default function CollectionPage({ params }: CollectionPageProps) {
     window.scrollTo({
       top: 0,
       left: 0,
-      behavior: 'smooth'
+      behavior: "smooth",
     });
   }, [slug]);
 
@@ -39,10 +39,11 @@ export default function CollectionPage({ params }: CollectionPageProps) {
     isPageConfigLoading,
     error,
     notFound,
+    hasShopUuid,
   } = useCollectionDetails(slug);
 
-  // Show loading state
-  if (isLoading || isPageConfigLoading) {
+  // Show loading state - also wait for shop UUID to be available
+  if (!hasShopUuid || isLoading || isPageConfigLoading) {
     return (
       <main className="flex items-center justify-center min-h-[50vh]">
         <div className="flex flex-col items-center gap-4">
@@ -53,7 +54,7 @@ export default function CollectionPage({ params }: CollectionPageProps) {
     );
   }
 
-  // Show 404 state
+  // Show 404 state - only after we have shop UUID and finished loading
   if (notFound || !collection) {
     return (
       <main className="flex items-center justify-center min-h-[50vh]">
@@ -75,8 +76,8 @@ export default function CollectionPage({ params }: CollectionPageProps) {
             Collection Not Found
           </h1>
           <p className="text-gray-600 mb-6">
-            The collection you&apos;re looking for doesn&apos;t exist or has been
-            removed.
+            The collection you&apos;re looking for doesn&apos;t exist or has
+            been removed.
           </p>
           <Link
             href="/collections"

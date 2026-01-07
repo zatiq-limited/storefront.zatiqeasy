@@ -165,3 +165,68 @@ export interface LandingPageActions {
   setSecondaryColor: (color: string) => void;
   reset: () => void;
 }
+
+// ============================================
+// Theme Builder Landing Page Types
+// ============================================
+
+export interface ThemeBuilderBlock {
+  wrapper?: string;
+  type?: string;
+  class?: string;
+  id?: string;
+  style?: Record<string, unknown>;
+  data?: Record<string, unknown>;
+  blocks?: ThemeBuilderBlock[];
+  bind_content?: string;
+  bind_src?: string;
+  bind_href?: string;
+  bind_style?: Record<string, unknown>;
+  condition?: {
+    field: string;
+    op: string;
+    value?: unknown;
+  };
+  events?: Record<string, unknown>;
+  config?: Record<string, unknown>;
+  [key: string]: unknown;
+}
+
+export interface ThemeBuilderSection {
+  id: string;
+  type: string;
+  enabled: boolean;
+  settings: Record<string, unknown>;
+  blocks: ThemeBuilderBlock[];
+}
+
+export interface ThemeBuilderLandingPage {
+  id: number;
+  custom_theme_id: number;
+  slug: string;
+  product_id: number;
+  name: string;
+  is_enabled: boolean;
+  sections: ThemeBuilderSection[];
+  seo?: {
+    title?: string;
+    description?: string;
+    og?: {
+      title?: string;
+      description?: string;
+      image?: string;
+    };
+    twitter?: {
+      title?: string;
+      description?: string;
+      image?: string;
+    };
+  };
+  created_at?: string;
+  updated_at?: string;
+}
+
+// Union type for landing page responses
+export type LandingPageResponse =
+  | { type: 'legacy'; data: SingleProductPage }
+  | { type: 'theme-builder'; data: ThemeBuilderLandingPage };
