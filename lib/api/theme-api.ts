@@ -376,8 +376,8 @@ export async function getLandingPage(
 ): Promise<GetLandingPageResult> {
   // First, try the new Theme Builder landing page endpoint
   const themeBuilderEndpoint = preview
-    ? `/api/v1/live/theme/landing/${slug}?preview=true`
-    : `/api/v1/live/theme/landing/${slug}`;
+    ? `/api/v1/live/landing/${slug}?preview=true`
+    : `/api/v1/live/landing/${slug}`;
 
   try {
     const { data } = await apiClient.post<LandingPageApiResponse>(themeBuilderEndpoint, {
