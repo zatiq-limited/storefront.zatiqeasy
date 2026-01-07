@@ -638,6 +638,9 @@ export function getBlockType(block: Record<string, unknown>): string {
   if (type === "nav_button") return "nav_button";
   if (type === "text_input") return "text_input";
   if (type === "progress_bar") return "progress_bar";
+  
+  // About page component types
+  if (type === "about_team_scroll") return "about_team_scroll";
 
   return "element";
 }

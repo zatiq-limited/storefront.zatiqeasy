@@ -1,25 +1,35 @@
 /**
  * Related Products 1
- * Professional carousel layout with Swiper
+ * Professional carousel layout with custom scroll
+ * Matches merchant panel design - buttons in header
  * Fetches from store if API products not available (like static themes)
  * Limited to 10 products maximum
+ * Supports 16 different card designs via cardDesign setting
  */
 
 "use client";
 
-import { useRef, useMemo, useCallback } from "react";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Autoplay, Pagination } from "swiper/modules";
-import type { Swiper as SwiperType } from "swiper";
+import { useRef, useMemo, useCallback, useState, useEffect } from "react";
 import { convertSettingsKeys } from "@/lib/settings-utils";
 import { useProductsStore, type Product } from "@/stores/productsStore";
 
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
+// Import all 16 product card components
+import ProductCard1 from "../products/product-cards/product-card-1";
+import ProductCard2 from "../products/product-cards/product-card-2";
+import ProductCard3 from "../products/product-cards/product-card-3";
+import ProductCard4 from "../products/product-cards/product-card-4";
+import ProductCard5 from "../products/product-cards/product-card-5";
+import ProductCard6 from "../products/product-cards/product-card-6";
+import ProductCard7 from "../products/product-cards/product-card-7";
+import ProductCard8 from "../products/product-cards/product-card-8";
+import ProductCard9 from "../products/product-cards/product-card-9";
+import ProductCard10 from "../products/product-cards/product-card-10";
+import ProductCard11 from "../products/product-cards/product-card-11";
+import ProductCard12 from "../products/product-cards/product-card-12";
+import ProductCard13 from "../products/product-cards/product-card-13";
+import ProductCard14 from "../products/product-cards/product-card-14";
+import ProductCard15 from "../products/product-cards/product-card-15";
+import ProductCard16 from "../products/product-cards/product-card-16";
 
 // ============================================
 // TYPES & INTERFACES
@@ -33,18 +43,16 @@ interface RelatedProducts1Props {
 
 interface RelatedProducts1Settings {
   title?: string;
-  showPrice?: boolean;
-  showRating?: boolean;
+  cardDesign?: string;
   showNavigation?: boolean;
   autoPlay?: boolean;
   autoPlayDelay?: number;
   titleColor?: string;
   priceColor?: string;
   oldPriceColor?: string;
-  cardBgColor?: string;
-  cardBorderColor?: string;
-  starColor?: string;
   badgeColor?: string;
+  buttonBgColor?: string;
+  buttonTextColor?: string;
 }
 
 // ============================================
@@ -63,30 +71,33 @@ export default function RelatedProducts1({
   product,
   apiProducts = [],
 }: RelatedProducts1Props) {
-  const router = useRouter();
   const s = convertSettingsKeys<RelatedProducts1Settings>(settings);
-  const swiperRef = useRef<SwiperType | null>(null);
+  const carouselRef = useRef<HTMLDivElement>(null);
   const allProducts = useProductsStore((state) => state.products);
+  
+  // Carousel state
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const autoPlayIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   // ============================================
   // SETTINGS WITH DEFAULTS
   // ============================================
 
   const title = s.title || "Related Products";
-  const showPrice = s.showPrice !== false;
-  const showRating = s.showRating !== false;
+  const cardDesign = s.cardDesign || "card-1";
   const showNavigation = s.showNavigation !== false;
   const autoPlay = s.autoPlay !== false;
-  const autoPlayDelay = s.autoPlayDelay || DEFAULT_AUTOPLAY_DELAY;
 
   // Colors
   const titleColor = s.titleColor || "#111827";
   const priceColor = s.priceColor || "#7C3AED";
   const oldPriceColor = s.oldPriceColor || "#9CA3AF";
-  const cardBgColor = s.cardBgColor || "#FFFFFF";
-  const cardBorderColor = s.cardBorderColor || "#E5E7EB";
-  const starColor = s.starColor || "#FBBF24";
   const badgeColor = s.badgeColor || "#DC2626";
+  const buttonBgColor = s.buttonBgColor || "#111827";
+  const buttonTextColor = s.buttonTextColor || "#FFFFFF";
 
   // ============================================
   // GET RELATED PRODUCTS (PROFESSIONAL LOGIC)
@@ -142,34 +153,111 @@ export default function RelatedProducts1({
   }, [product, allProducts, apiProducts]);
 
   // ============================================
-  // HANDLERS
+  // SCROLL HANDLING
   // ============================================
 
-  const handleProductClick = useCallback(
-    (productId: number | string) => {
-      router.push(`/products/${productId}`);
-    },
-    [router]
-  );
+  const checkScroll = useCallback(() => {
+    if (carouselRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current;
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
+      
+      // Calculate current index
+      const index = Math.round(scrollLeft / (clientWidth * 0.85));
+      setCurrentIndex(index);
+    }
+  }, []);
+
+  useEffect(() => {
+    checkScroll();
+    const carousel = carouselRef.current;
+    if (carousel) {
+      carousel.addEventListener("scroll", checkScroll);
+      window.addEventListener("resize", checkScroll);
+      return () => {
+        carousel.removeEventListener("scroll", checkScroll);
+        window.removeEventListener("resize", checkScroll);
+      };
+    }
+  }, [checkScroll, relatedProducts]);
+
+  const scrollTo = useCallback((direction: "left" | "right") => {
+    if (carouselRef.current) {
+      const scrollAmount = carouselRef.current.clientWidth * 0.85;
+      carouselRef.current.scrollBy({
+        left: direction === "left" ? -scrollAmount : scrollAmount,
+        behavior: "smooth",
+      });
+    }
+  }, []);
+
+  // ============================================
+  // AUTOPLAY HANDLING
+  // ============================================
+
+  const startAutoPlay = useCallback(() => {
+    if (autoPlayIntervalRef.current) {
+      clearInterval(autoPlayIntervalRef.current);
+    }
+
+    autoPlayIntervalRef.current = setInterval(() => {
+      if (carouselRef.current) {
+        const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current;
+        const isAtEnd = scrollLeft >= scrollWidth - clientWidth - 10;
+
+        if (isAtEnd) {
+          carouselRef.current.scrollTo({ left: 0, behavior: "smooth" });
+        } else {
+          const scrollAmount = clientWidth * 0.85;
+          carouselRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
+        }
+      }
+    }, DEFAULT_AUTOPLAY_DELAY);
+  }, []);
+
+  const stopAutoPlay = useCallback(() => {
+    if (autoPlayIntervalRef.current) {
+      clearInterval(autoPlayIntervalRef.current);
+      autoPlayIntervalRef.current = null;
+    }
+  }, []);
+
+  const toggleAutoPlay = useCallback(() => {
+    if (isAutoPlaying) {
+      stopAutoPlay();
+      setIsAutoPlaying(false);
+    } else {
+      startAutoPlay();
+      setIsAutoPlaying(true);
+    }
+  }, [isAutoPlaying, startAutoPlay, stopAutoPlay]);
+
+  // Start autoplay on mount
+  useEffect(() => {
+    if (autoPlay && isAutoPlaying) {
+      startAutoPlay();
+    }
+    return () => {
+      stopAutoPlay();
+    };
+  }, [autoPlay, isAutoPlaying, startAutoPlay, stopAutoPlay]);
+
+  // Pause autoplay on hover
+  const handleMouseEnter = () => {
+    if (isAutoPlaying) {
+      stopAutoPlay();
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (isAutoPlaying) {
+      startAutoPlay();
+    }
+  };
 
   // ============================================
   // RENDER HELPERS
   // ============================================
-
-  const renderStars = (rating: number) => (
-    <div className="flex items-center gap-0.5">
-      {Array.from({ length: 5 }).map((_, i) => (
-        <svg
-          key={i}
-          className={`w-3.5 h-3.5 ${i < rating ? "" : "opacity-30"}`}
-          fill={starColor}
-          viewBox="0 0 20 20"
-        >
-          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-        </svg>
-      ))}
-    </div>
-  );
 
   const renderProductCard = (relatedProduct: Product) => {
     const discount =
@@ -181,90 +269,70 @@ export default function RelatedProducts1({
           )
         : null;
 
-    return (
-      <div
-        onClick={() => handleProductClick(relatedProduct.id)}
-        className="group cursor-pointer rounded-xl overflow-hidden shadow-md transition-all hover:shadow-xl border"
-        style={{
-          backgroundColor: cardBgColor,
-          borderColor: cardBorderColor,
-        }}
-      >
-        {/* Product Image */}
-        <div className="relative aspect-square bg-gray-100 overflow-hidden">
-          <Image
-            src={relatedProduct.image_url || ""}
-            alt={relatedProduct.name}
-            fill
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
-          />
+    // Use image_url or images array, with proper fallback
+    const productImage = relatedProduct.image_url || 
+      (relatedProduct.images && relatedProduct.images.length > 0 ? relatedProduct.images[0] : "") || 
+      "/placeholder.jpg";
 
-          {/* Discount Badge */}
-          {discount && (
-            <div
-              className="absolute top-2 left-2 px-2 py-1 text-xs font-bold text-white rounded-md"
-              style={{ backgroundColor: badgeColor }}
-            >
-              -{discount}%
-            </div>
-          )}
+    const cardProps = {
+      id: relatedProduct.id,
+      handle: String(relatedProduct.id),
+      title: relatedProduct.name,
+      subtitle: relatedProduct.categories?.[0]?.name,
+      vendor: relatedProduct.categories?.[0]?.name,
+      price: relatedProduct.price,
+      comparePrice: relatedProduct.old_price,
+      currency: "BDT",
+      image: productImage,
+      badge: discount ? `-${discount}%` : null,
+      rating: relatedProduct.review_summary?.average_rating || 0,
+      reviewCount: relatedProduct.review_summary?.total_reviews || 0,
+      buttonBgColor,
+      buttonTextColor,
+      priceColor,
+      oldPriceColor,
+      badgeColor,
+    };
 
-          {/* Out of Stock Overlay */}
-          {relatedProduct.quantity === 0 && (
-            <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-              <span className="text-white font-semibold text-sm">
-                Out of Stock
-              </span>
-            </div>
-          )}
-        </div>
-
-        {/* Product Info */}
-        <div className="p-3 sm:p-4">
-          <h3
-            className="font-medium text-sm sm:text-base line-clamp-2 mb-2 transition-colors"
-            style={{ color: titleColor }}
-          >
-            {relatedProduct.name}
-          </h3>
-
-          {/* Rating */}
-          {showRating && relatedProduct.review_summary && (
-            <div className="flex items-center gap-2 mb-2">
-              {renderStars(
-                Math.round(relatedProduct.review_summary.average_rating)
-              )}
-              <span className="text-xs text-gray-500">
-                ({relatedProduct.review_summary.total_reviews})
-              </span>
-            </div>
-          )}
-
-          {/* Price */}
-          {showPrice && (
-            <div className="flex items-center gap-2 flex-wrap">
-              <span
-                className="font-bold text-base sm:text-lg"
-                style={{ color: priceColor }}
-              >
-                ৳{relatedProduct.price.toLocaleString()}
-              </span>
-              {relatedProduct.old_price &&
-                relatedProduct.old_price > relatedProduct.price && (
-                  <span
-                    className="text-sm line-through"
-                    style={{ color: oldPriceColor }}
-                  >
-                    ৳{relatedProduct.old_price.toLocaleString()}
-                  </span>
-                )}
-            </div>
-          )}
-
-        </div>
-      </div>
-    );
+    switch (cardDesign) {
+      case "card-1":
+      default:
+        return <ProductCard1 {...cardProps} />;
+      case "card-2":
+        return <ProductCard2 {...cardProps} />;
+      case "card-3":
+        return <ProductCard3 {...cardProps} />;
+      case "card-4":
+        return <ProductCard4 {...cardProps} />;
+      case "card-5":
+        return <ProductCard5 {...cardProps} />;
+      case "card-6":
+        return <ProductCard6 {...cardProps} />;
+      case "card-7":
+        return <ProductCard7 {...cardProps} />;
+      case "card-8":
+        return <ProductCard8 {...cardProps} />;
+      case "card-9":
+        return <ProductCard9 {...cardProps} />;
+      case "card-10":
+        return <ProductCard10 {...cardProps} />;
+      case "card-11":
+        return <ProductCard11 {...cardProps} />;
+      case "card-12":
+        return <ProductCard12 {...cardProps} />;
+      case "card-13":
+        return <ProductCard13 {...cardProps} />;
+      case "card-14":
+        return <ProductCard14 {...cardProps} />;
+      case "card-15":
+        return <ProductCard15 {...cardProps} />;
+      case "card-16":
+        return <ProductCard16 {...cardProps} />;
+    }
   };
+
+  // Calculate total slides
+  const totalSlides = Math.ceil(relatedProducts.length / 4);
 
   // ============================================
   // EARLY RETURN IF NO PRODUCTS
@@ -279,78 +347,120 @@ export default function RelatedProducts1({
   // ============================================
 
   return (
-    <section className="py-12 md:py-16">
+    <section className="py-8 sm:py-10 md:py-12">
       <div className="container mx-auto px-4 2xl:px-0">
-        {/* Section Header */}
-        <div className="flex items-center justify-between mb-6 md:mb-8">
+        {/* Section Header with Navigation in header (like merchant panel) */}
+        <div className="flex items-center justify-between mb-4 sm:mb-6 md:mb-8">
           <h2
-            className="text-2xl md:text-3xl font-bold"
+            className="text-xl sm:text-2xl md:text-3xl font-bold"
             style={{ color: titleColor }}
           >
             {title}
           </h2>
 
-          {/* Navigation Buttons */}
+          {/* Navigation Buttons - in header like merchant panel */}
           {showNavigation && relatedProducts.length > 4 && (
-            <div className="hidden md:flex items-center gap-2">
+            <div className="hidden md:flex items-center gap-3">
+              {/* Pause/Play Button */}
+              {autoPlay && (
+                <button
+                  onClick={toggleAutoPlay}
+                  className="w-10 h-10 flex items-center justify-center border-2 border-gray-200 rounded-full text-gray-600 hover:border-gray-900 hover:text-gray-900 transition-all"
+                  aria-label={isAutoPlaying ? "Pause autoplay" : "Start autoplay"}
+                >
+                  {isAutoPlaying ? (
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
+                    </svg>
+                  ) : (
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  )}
+                </button>
+              )}
+              {/* Previous Button */}
               <button
-                onClick={() => swiperRef.current?.slidePrev()}
-                className="w-10 h-10 flex items-center justify-center border-2 border-gray-200 rounded-full hover:border-gray-900 hover:bg-gray-900 hover:text-white transition-all"
-                aria-label="Previous slide"
+                onClick={() => scrollTo("left")}
+                disabled={!canScrollLeft}
+                className={`w-10 h-10 flex items-center justify-center border-2 rounded-full transition-all ${
+                  canScrollLeft
+                    ? "border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white"
+                    : "border-gray-200 text-gray-300 cursor-not-allowed"
+                }`}
+                aria-label="Previous products"
               >
-                <ChevronLeft className="w-5 h-5" />
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
               </button>
+              {/* Next Button */}
               <button
-                onClick={() => swiperRef.current?.slideNext()}
-                className="w-10 h-10 flex items-center justify-center border-2 border-gray-200 rounded-full hover:border-gray-900 hover:bg-gray-900 hover:text-white transition-all"
-                aria-label="Next slide"
+                onClick={() => scrollTo("right")}
+                disabled={!canScrollRight}
+                className={`w-10 h-10 flex items-center justify-center border-2 rounded-full transition-all ${
+                  canScrollRight
+                    ? "border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white"
+                    : "border-gray-200 text-gray-300 cursor-not-allowed"
+                }`}
+                aria-label="Next products"
               >
-                <ChevronRight className="w-5 h-5" />
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
               </button>
             </div>
           )}
         </div>
 
         {/* Products Carousel */}
-        <div className="relative">
-          <Swiper
-            onSwiper={(swiper) => {
-              swiperRef.current = swiper;
-            }}
-            spaceBetween={12}
-            slidesPerView={2}
-            breakpoints={{
-              480: { slidesPerView: 2, spaceBetween: 16 },
-              768: { slidesPerView: 3, spaceBetween: 20 },
-              1024: { slidesPerView: 4, spaceBetween: 24 },
-              1280: { slidesPerView: 5, spaceBetween: 24 },
-            }}
-            pagination={{
-              clickable: true,
-              dynamicBullets: true,
-              dynamicMainBullets: 3,
-            }}
-            autoplay={
-              autoPlay
-                ? {
-                    delay: autoPlayDelay,
-                    disableOnInteraction: false,
-                    pauseOnMouseEnter: true,
-                  }
-                : false
-            }
-            modules={[Navigation, Autoplay, Pagination]}
-            loop={relatedProducts.length > 4}
-            className="pb-12!"
-          >
-            {relatedProducts.map((relatedProduct) => (
-              <SwiperSlide key={relatedProduct.id}>
-                {renderProductCard(relatedProduct)}
-              </SwiperSlide>
-            ))}
-          </Swiper>
+        <div
+          ref={carouselRef}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          className="flex overflow-x-auto gap-4 sm:gap-5 md:gap-6 snap-x snap-mandatory pb-2 cursor-grab active:cursor-grabbing select-none scrollbar-hide"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        >
+          {relatedProducts.map((relatedProduct) => (
+            <div
+              key={relatedProduct.id}
+              className="shrink-0 w-[calc(50%-8px)] sm:w-[calc(33.333%-11px)] md:w-[calc(25%-12px)] lg:w-[calc(20%-13px)] min-w-[140px] sm:min-w-[180px] md:min-w-[200px] snap-start"
+            >
+              {renderProductCard(relatedProduct)}
+            </div>
+          ))}
         </div>
+
+        {/* Progress Dots */}
+        {totalSlides > 1 && (
+          <div className="flex justify-center gap-1.5 sm:gap-2 mt-4 sm:mt-5 md:mt-6">
+            {Array.from({ length: totalSlides }).map((_, index) => (
+              <button
+                key={index}
+                onClick={() => {
+                  if (carouselRef.current) {
+                    const scrollAmount = carouselRef.current.clientWidth * 0.85 * index;
+                    carouselRef.current.scrollTo({
+                      left: scrollAmount,
+                      behavior: "smooth",
+                    });
+                  }
+                }}
+                className={`h-1.5 rounded-full transition-all ${
+                  currentIndex === index ? "w-6 bg-gray-900" : "w-1.5 bg-gray-300 hover:bg-gray-400"
+                }`}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
+          </div>
+        )}
       </div>
+
+      <style jsx>{`
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
     </section>
   );
 }

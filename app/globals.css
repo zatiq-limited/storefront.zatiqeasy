@@ -316,6 +316,19 @@ section[id^="hero-1"] .swiper-pagination-progressbar .swiper-pagination-progress
 }
 
 /* ============================================
+   Scrollbar Hide Utility
+   Used for horizontal scroll sections like team cards
+   ============================================ */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
+
+/* ============================================
    Hero Section Fix for Block Renderer
    Ensures hero sections maintain their design
    ============================================ */
