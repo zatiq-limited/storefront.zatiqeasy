@@ -26,9 +26,10 @@ const config = {
     "lg:left-28", "lg:left-[112px]",
     
     // Position - right
-    "right-0", "right-4", "right-6",
+    "right-0", "right-3", "right-4", "right-5", "right-6",
     "md:right-8",
     "lg:right-11", "lg:right-28",
+    "sm:right-3", "sm:right-5",
     
     // Position - top
     "top-0", "top-2.5", "top-4", "top-8", "top-1/2",
@@ -48,6 +49,10 @@ const config = {
     "absolute", "relative", "fixed", "sticky",
     "inset-0", "inset-y-0", "inset-x-0",
     
+    // Position - top additional
+    "top-3", "top-5", "top-24",
+    "sm:top-5",
+    
     // ========================================
     // TRANSFORM CLASSES
     // ========================================
@@ -66,11 +71,14 @@ const config = {
     
     // Base widths
     "w-full", "w-auto", "w-screen",
-    "w-0.5", "w-1", "w-2", "w-2.5", "w-3", "w-4", "w-5", "w-6", "w-8", "w-10", "w-12", "w-14", "w-16", "w-20", "w-24",
+    "w-0.5", "w-1", "w-2", "w-2.5", "w-3", "w-3.5", "w-4", "w-5", "w-6", "w-7", "w-8", "w-10", "w-12", "w-14", "w-16", "w-20", "w-24",
     "w-1/2", "w-1/3", "w-2/3", "w-1/4", "w-3/4",
+    "sm:w-7", "sm:w-8",
     
     // Arbitrary widths
-    "w-[50px]", "w-[86px]", "w-[100px]", "w-[120px]", "w-[140px]", "w-[180px]", "w-[200px]", "w-[320px]", "w-[384px]", "w-[362px]", "w-[45%]",
+    "w-[50px]", "w-[86px]", "w-[100px]", "w-[120px]", "w-[140px]", "w-[180px]", "w-[200px]", "w-[220px]", "w-[260px]", "w-[300px]", "w-[320px]", "w-[384px]", "w-[362px]", "w-[45%]",
+    "sm:w-[220px]", "sm:w-[260px]",
+    "lg:w-[300px]",
     
     // Responsive widths
     "w-40", "sm:w-10", "sm:w-12", "sm:w-40", "sm:w-[60px]", "sm:w-[120px]",
@@ -97,8 +105,9 @@ const config = {
     // ========================================
     
     // Base heights
-    "h-auto", "h-full", "h-screen", "h-2/3",
-    "h-0.5", "h-1", "h-2", "h-2.5", "h-3", "h-4", "h-5", "h-6", "h-8", "h-10", "h-12", "h-14", "h-16", "h-20", "h-24", "h-72",
+    "h-auto", "h-full", "h-screen", "h-1/2", "h-1/3", "h-2/3",
+    "h-0.5", "h-1", "h-2", "h-2.5", "h-3", "h-3.5", "h-4", "h-5", "h-6", "h-7", "h-8", "h-10", "h-12", "h-14", "h-16", "h-20", "h-24", "h-72",
+    "sm:h-7", "sm:h-8",
     
     // Arbitrary heights
     "h-[50px]", "h-[80%]", "h-[95%]",
@@ -156,12 +165,12 @@ const config = {
     "gap-0.5", "gap-1", "gap-1.5", "gap-2", "gap-3", "gap-4", "gap-5", "gap-6", "gap-8", "gap-10", "gap-12", "gap-16",
     "gap-[5px]", "gap-[10px]",
     "gap-x-2", "gap-x-4", "gap-x-6", "gap-y-4", "gap-y-6", "gap-y-8",
-    "sm:gap-3", "sm:gap-4", "sm:gap-6", "sm:gap-8", "sm:gap-[10px]",
+    "sm:gap-2", "sm:gap-3", "sm:gap-4", "sm:gap-5", "sm:gap-6", "sm:gap-8", "sm:gap-10", "sm:gap-[10px]",
     "md:gap-4", "md:gap-6", "md:gap-8", "md:gap-10", "md:gap-12",
-    "lg:gap-6", "lg:gap-8", "lg:gap-12", "lg:gap-16",
+    "lg:gap-4", "lg:gap-6", "lg:gap-8", "lg:gap-12", "lg:gap-16",
     
     // Grid columns
-    "grid-cols-1", "grid-cols-2", "grid-cols-3", "grid-cols-4", "grid-cols-5", "grid-cols-6",
+    "grid-cols-1", "grid-cols-2", "grid-cols-3", "grid-cols-4", "grid-cols-5", "grid-cols-6", "grid-cols-12",
     "sm:grid-cols-2", "sm:grid-cols-3",
     "md:grid-cols-2", "md:grid-cols-3", "md:grid-cols-4",
     "lg:grid-cols-2", "lg:grid-cols-3", "lg:grid-cols-4", "lg:grid-cols-5",
@@ -169,7 +178,8 @@ const config = {
     
     // Grid rows
     "row-span-2", "row-span-3", "row-span-4",
-    "col-span-2", "col-span-3", "col-span-full",
+    "col-span-2", "col-span-3", "col-span-4", "col-span-8", "col-span-12", "col-span-full",
+    "lg:col-span-4", "lg:col-span-8",
     
     // Order
     "order-first", "order-last", "order-1", "order-2",
@@ -205,6 +215,7 @@ const config = {
     
     // Padding all
     "p-2", "p-3", "p-4", "p-5", "p-6", "p-8",
+    "sm:p-3", "sm:p-4", "sm:p-5", "sm:p-6",
     "md:p-4", "md:p-5", "md:p-6", "lg:p-6",
     
     // Padding X
@@ -223,9 +234,10 @@ const config = {
     
     // Padding top/bottom
     "pt-2", "pt-4", "pt-6", "pt-8",
-    "pb-2", "pb-4", "pb-6", "pb-8", "pb-12",
-    "sm:pb-14",
+    "pb-2", "pb-4", "pb-6", "pb-8", "pb-10", "pb-12", "pb-16", "pb-20", "pb-24",
+    "sm:pb-4", "sm:pb-14", "sm:pb-16",
     "md:pb-4", "md:pb-6", "md:pb-12",
+    "lg:pb-20", "lg:pb-24",
     
     // Padding left/right
     "pl-4", "pl-16", "pr-4", "pr-16",
@@ -299,8 +311,9 @@ const config = {
     "bg-red-500", "bg-red-600",
     "bg-blue-500", "bg-blue-600",
     "bg-green-500", "bg-green-600",
-    "bg-white/10", "bg-white/20", "bg-white/60", "bg-white/70", "bg-white/80",
-    "bg-black/10", "bg-black/20", "bg-black/30", "bg-black/40", "bg-black/50",
+    "bg-white/10", "bg-white/20", "bg-white/40", "bg-white/60", "bg-white/70", "bg-white/80", "bg-white/90",
+    "bg-black/10", "bg-black/20", "bg-black/30", "bg-black/40", "bg-black/50", "bg-black/60", "bg-black/70", "bg-black/80",
+    "hover:bg-white/40",
     "bg-[#DCEEE7]", "bg-[#F7F7F7]", "bg-[#F9FAFB]", "bg-[#EBF4FF]", "bg-[#F3E8FF]",
     "hover:bg-white", "hover:bg-gray-50", "hover:bg-gray-100", "hover:bg-white/10",
     "hover:bg-[#3465F0]",
@@ -335,8 +348,13 @@ const config = {
     // ========================================
     
     // Opacity
-    "opacity-0", "opacity-50", "opacity-70", "opacity-80", "opacity-90", "opacity-100",
+    "opacity-0", "opacity-50", "opacity-60", "opacity-70", "opacity-80", "opacity-90", "opacity-100",
     "hover:opacity-80", "hover:opacity-90", "hover:opacity-100",
+    "sm:opacity-0", "sm:opacity-100",
+    "group-hover:opacity-100",
+    
+    // Text/Background opacity variations
+    "text-white/70", "text-white/80",
     
     // Backdrop
     "backdrop-blur-sm", "backdrop-blur",
@@ -344,6 +362,17 @@ const config = {
     // Grayscale
     "grayscale", "grayscale-0",
     "hover:grayscale-0",
+    
+    // ========================================
+    // GRADIENTS (for About Team and similar) - Tailwind v4 uses bg-linear-to-*
+    // ========================================
+    "bg-linear-to-t", "bg-linear-to-b", "bg-linear-to-l", "bg-linear-to-r",
+    "bg-linear-to-tr", "bg-linear-to-tl", "bg-linear-to-br", "bg-linear-to-bl",
+    "from-black/80", "from-black/70", "from-black/60", "from-black/50", "from-black/40", "from-black/20",
+    "via-black/50", "via-black/40", "via-black/30", "via-transparent",
+    "to-transparent",
+    "from-white/80", "from-white/50",
+    "to-white/0",
     
     // ========================================
     // TRANSITIONS & ANIMATIONS
@@ -371,9 +400,9 @@ const config = {
     // ========================================
     // CURSOR & INTERACTION
     // ========================================
-    "cursor-pointer", "cursor-default", "cursor-not-allowed",
+    "cursor-pointer", "cursor-default", "cursor-not-allowed", "cursor-grab", "active:cursor-grabbing",
     "select-none", "select-text",
-    "group", "group-hover:opacity-100",
+    "group", "group-hover:opacity-100", "group-hover:scale-105",
     
     // ========================================
     // ASPECT RATIO

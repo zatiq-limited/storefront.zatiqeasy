@@ -314,3 +314,16 @@ section[id^="hero-1"] .swiper-pagination-progressbar .swiper-pagination-progress
 .swiper-coverflow .swiper-slide:not(.swiper-slide-active) > div {
   filter: blur(0.5px);
 }
+
+/* ============================================
+   Scrollbar Hide Utility
+   Used for horizontal scroll sections like team cards
+   ============================================ */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
