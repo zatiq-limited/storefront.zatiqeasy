@@ -22,6 +22,7 @@ import {
   ChevronRight,
   ArrowRight,
   ArrowLeft,
+  ArrowUpRight,
   Phone,
   Mail,
   MapPin,
@@ -91,6 +92,7 @@ const ICON_MAP: Record<string, LucideIcon> = {
   chevron_right: ChevronRight,
   arrow_right: ArrowRight,
   arrow_left: ArrowLeft,
+  arrow_up_right: ArrowUpRight,
   home: Home,
 
   // E-commerce
