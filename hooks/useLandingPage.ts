@@ -61,10 +61,10 @@ export function useLandingPage(
     queryFn: async (): Promise<LandingPageResponse> => {
       // Build URL with query params for GET request
       const searchParams = new URLSearchParams();
-      if (params.shopUuid) {
-        searchParams.set("shop_uuid", params.shopUuid);
-      } else if (params.shopId) {
-        searchParams.set("identifier", String(params.shopId));
+      if (params.shopId) {
+        searchParams.set("shop_id", String(params.shopId));
+      } else if (params.shopUuid) {
+        searchParams.set("shop_id", params.shopUuid);
       }
       if (params.preview) {
         searchParams.set("preview", "true");

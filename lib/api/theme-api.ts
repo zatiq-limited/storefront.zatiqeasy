@@ -311,6 +311,33 @@ export async function getContactPage(
 // Landing Page API
 // ============================================
 
+export interface LandingPageProduct {
+  id: number;
+  name: string;
+  price: number;
+  old_price?: number;
+  quantity?: number | null;
+  unit_name?: string | null;
+  shop_id: number;
+  warranty?: string | null;
+  is_active: boolean;
+  serial?: number;
+  has_variant: boolean;
+  weight_kg?: number | null;
+  dimensions_l_cm?: number | null;
+  dimensions_w_cm?: number | null;
+  dimensions_h_cm?: number | null;
+  variant_types?: unknown[];
+  images?: string[];
+  isApplyDefaultDeliveryCharge?: boolean;
+  specific_delivery_charges?: unknown;
+  others_delivery_charge?: unknown;
+  image_variant_type_id?: number | null;
+  is_stock_manage_by_variant?: boolean;
+  stocks?: unknown[];
+  categories?: unknown[];
+}
+
 export interface LandingPageData {
   id: number;
   custom_theme_id: number;
@@ -335,12 +362,21 @@ export interface LandingPageData {
   };
   created_at?: string;
   updated_at?: string;
+  // Additional data from API response
+  product?: LandingPageProduct;
+  global_settings?: GlobalSettingsData;
+  global_sections?: GlobalSectionsData;
 }
 
 interface LandingPageApiResponse {
   success: boolean;
   message?: string;
-  data?: LandingPageData;
+  data?: {
+    landing_page: Omit<LandingPageData, 'product' | 'global_settings' | 'global_sections'>;
+    product: LandingPageProduct;
+    global_settings: GlobalSettingsData;
+    global_sections: GlobalSectionsData;
+  };
 }
 
 // Legacy landing page types (Grip, Arcadia, Nirvana themes)
@@ -366,47 +402,64 @@ export type GetLandingPageResult =
 
 /**
  * Get landing page data - tries Theme Builder endpoint first, falls back to legacy
- * Theme Builder: POST /api/v1/live/theme/landing/{slug}
- * Legacy: POST /api/v1/live/single_product_theme
+ * Theme Builder: POST /api/v1/live/theme/landing/{slug} - uses shop_id
+ * Legacy: POST /api/v1/live/single_product_theme - uses shop_uuid (identifier)
  */
 export async function getLandingPage(
   slug: string,
-  identifier: string,
+  shopId: string,
+  shopUuid: string,
   preview?: boolean
 ): Promise<GetLandingPageResult> {
-  // First, try the new Theme Builder landing page endpoint
-  const themeBuilderEndpoint = preview
-    ? `/api/v1/live/theme/landing/${slug}?preview=true`
-    : `/api/v1/live/theme/landing/${slug}`;
+  // First, try the new Theme Builder landing page endpoint (uses shop_id)
+  const themeBuilderEndpoint = `/api/v1/live/theme/landing/${slug}`;
 
   try {
-    const { data } = await apiClient.post<LandingPageApiResponse>(themeBuilderEndpoint, {
-      identifier,
-    });
+    const { data } = await apiClient.post<LandingPageApiResponse>(
+      themeBuilderEndpoint,
+      {
+        shop_id: String(shopId),
+      }
+    );
 
     // Check if we got valid Theme Builder data
-    if (data?.data?.id && data?.data?.sections) {
+    // Response structure: { success: true, data: { landing_page: {...}, product: {...}, global_settings: {...}, global_sections: {...} } }
+    const responseData = data?.data;
+    const landingPage = responseData?.landing_page;
+    if (landingPage?.id && landingPage?.sections && responseData) {
       return {
         success: true,
         type: "theme-builder",
-        data: data.data,
+        data: {
+          ...landingPage,
+          product: responseData.product,
+          global_settings: responseData.global_settings,
+          global_sections: responseData.global_sections,
+        },
       };
     }
+
   } catch (error) {
     // Theme Builder endpoint failed, will try legacy
-    console.log("[ThemeAPI] Theme Builder landing page not found, trying legacy...", error);
+    console.log(
+      `[ThemeAPI] Theme Builder landing page error with endpoint: ${themeBuilderEndpoint}`,
+      error
+    );
   }
 
-  // Fall back to legacy single_product_theme endpoint
+  // Fall back to legacy single_product_theme endpoint (uses shop_uuid as identifier)
   const legacyEndpoint = preview
     ? `/api/v1/live/single_product_theme?preview=true`
     : `/api/v1/live/single_product_theme`;
 
   try {
-    const { data } = await apiClient.post<LegacyLandingPageApiResponse>(legacyEndpoint, {
-      identifier,
-      slug,
-    });
+    const { data } = await apiClient.post<LegacyLandingPageApiResponse>(
+      legacyEndpoint,
+      {
+        identifier: shopUuid,
+        slug,
+      }
+    );
 
     // Check if we got valid legacy data
     if (data?.data?.id) {

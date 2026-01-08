@@ -73,10 +73,10 @@ export default function SingleProductPage({ params }: SingleProductPageProps) {
 
   const { shopDetails } = useShopStore();
 
-  // Get shop_uuid for API call (backend expects UUID, not numeric ID)
-  const shopUuid = shopDetails?.shop_uuid;
+  // Get shop_id for API call
+  const shopId = shopDetails?.id;
 
-  // Fetch landing page data using shop_uuid
+  // Fetch landing page data using shop_id
   const {
     isLoading,
     error,
@@ -88,12 +88,12 @@ export default function SingleProductPage({ params }: SingleProductPageProps) {
   } = useLandingPage(
     {
       slug,
-      shopUuid: shopUuid,
+      shopId: shopId,
       preview: isPreview,
     },
     {
-      // Enable query when we have slug and shop_uuid
-      enabled: !!slug && !!shopUuid,
+      // Enable query when we have slug and shop_id
+      enabled: !!slug && !!shopId,
       syncToStore: true,
     }
   );

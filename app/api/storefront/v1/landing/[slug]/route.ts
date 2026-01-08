@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getLandingPage, type LandingPageData, type LegacyLandingPageData } from "@/lib/api/theme-api";
+import {
+  getLandingPage,
+  type LandingPageData,
+  type LegacyLandingPageData,
+} from "@/lib/api/theme-api";
 
 // Revalidate every 2 minutes
 export const revalidate = 120;
@@ -12,15 +16,18 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
   const { slug } = await params;
   const { searchParams } = new URL(request.url);
 
-  // Get query parameters
-  const shopUuid = searchParams.get("shop_uuid") || searchParams.get("identifier");
+  // Get query parameters - support shop_id, shop_uuid, or identifier for flexibility
+  const shopId =
+    searchParams.get("shop_id") ||
+    searchParams.get("shop_uuid") ||
+    searchParams.get("identifier");
   const preview = searchParams.get("preview") === "true";
 
-  if (!shopUuid) {
+  if (!shopId) {
     return NextResponse.json(
       {
         success: false,
-        error: "Shop identifier is required",
+        error: "Shop ID is required",
       },
       {
         status: 400,
@@ -33,7 +40,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
   try {
     // Use theme-api service to fetch landing page
-    const result = await getLandingPage(slug, shopUuid, preview);
+    const result = await getLandingPage(slug, shopId, preview);
 
     if (!result.success) {
       return NextResponse.json(
@@ -88,15 +95,16 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
 
   try {
     const body = await request.json();
-    const { identifier, shop_uuid, preview = false } = body;
 
-    const shopIdentifier = identifier || shop_uuid;
+    const { shop_id, identifier, shop_uuid, preview = false } = body;
 
-    if (!shopIdentifier) {
+    const shopId = shop_id || identifier || shop_uuid;
+
+    if (!shopId) {
       return NextResponse.json(
         {
           success: false,
-          error: "Shop identifier is required",
+          error: "Shop ID is required",
         },
         {
           status: 400,
@@ -105,7 +113,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     }
 
     // Use theme-api service to fetch landing page
-    const result = await getLandingPage(slug, shopIdentifier, preview);
+    const result = await getLandingPage(slug, shopId, preview);
 
     if (!result.success) {
       return NextResponse.json(
