@@ -17,7 +17,7 @@
 
 import { useTheme } from "@/hooks";
 import { useThemeStore } from "@/stores/themeStore";
-import { useShopStore } from "@/stores";
+import { useShopStore, useLandingStore } from "@/stores";
 import BlockRenderer, {
   type Block,
 } from "@/components/renderers/block-renderer";
@@ -54,20 +54,21 @@ export default function ThemeLayout({ children }: ThemeLayoutProps) {
   const { theme } = useThemeStore();
   const { isLoading, error } = useTheme();
   const { shopDetails } = useShopStore();
+  const { isLegacyLandingPage } = useLandingStore();
 
   // Check if using legacy theme (static themes)
   const isLegacyTheme = shopDetails?.legacy_theme ?? true;
 
   // Don't render theme builder header/footer if:
   // 1. Using legacy theme (static themes handle their own header/footer)
-  // 2. On a static theme route
-  const shouldRenderThemeBuilderHeader = !isLegacyTheme;
+  // 2. On a legacy landing page (single-product/[slug] with type: "legacy")
+  const shouldRenderThemeBuilderHeader = !isLegacyTheme && !isLegacyLandingPage;
 
   // Extract theme data with proper typing
   const themeRaw = theme as ThemeData | null;
   const themeData = themeRaw?.data || themeRaw || {};
 
-  console.log("ThemeLayout - isLegacyTheme:", isLegacyTheme);
+  console.log("ThemeLayout - isLegacyTheme:", isLegacyTheme, "isLegacyLandingPage:", isLegacyLandingPage);
 
   // Get global sections from theme (support both camelCase and snake_case)
   const globalSections: GlobalSections =

@@ -15,6 +15,7 @@ import { useSearchParams } from "next/navigation";
 import { useLandingPage } from "@/hooks/useLandingPage";
 import { useLandingStore } from "@/stores/landingStore";
 import { useShopStore } from "@/stores/shopStore";
+import { getShopIdentifierClient } from "@/lib/utils/shop-identifier-client";
 import { GripLandingPage } from "@/app/_themes/landing/themes/grip";
 import { ArcadiaLandingPage } from "@/app/_themes/landing/themes/arcadia";
 import { NirvanaLandingPage } from "@/app/_themes/landing/themes/nirvana";
@@ -73,10 +74,15 @@ export default function SingleProductPage({ params }: SingleProductPageProps) {
 
   const { shopDetails } = useShopStore();
 
-  // Get shop_uuid for API call (backend expects UUID, not numeric ID)
+  // Get shop identifier from URL (subdomain/domain detection)
+  const shopIdentifier = getShopIdentifierClient();
+
+  // Get identifiers for API call
+  // Priority: shopId > subdomain > domain > shopUuid
+  const shopId = shopDetails?.id;
   const shopUuid = shopDetails?.shop_uuid;
 
-  // Fetch landing page data using shop_uuid
+  // Fetch landing page data using identifier with priority
   const {
     isLoading,
     error,
@@ -88,23 +94,33 @@ export default function SingleProductPage({ params }: SingleProductPageProps) {
   } = useLandingPage(
     {
       slug,
+      shopId: shopId,
+      subdomain: shopIdentifier.subdomain,
+      domain: shopIdentifier.domain,
       shopUuid: shopUuid,
       preview: isPreview,
     },
     {
-      // Enable query when we have slug and shop_uuid
-      enabled: !!slug && !!shopUuid,
+      // Enable query when we have slug and at least one identifier
+      enabled: !!slug && !!(shopId || shopIdentifier.subdomain || shopIdentifier.domain || shopUuid),
       syncToStore: true,
     }
   );
 
   // Get store actions
-  const { clearOrderState } = useLandingStore();
+  const { clearOrderState, setIsLegacyLandingPage } = useLandingStore();
 
   // Clear order state when slug changes (new landing page)
   useEffect(() => {
     clearOrderState();
   }, [slug, clearOrderState]);
+
+  // Clean up legacy landing page flag when leaving the page
+  useEffect(() => {
+    return () => {
+      setIsLegacyLandingPage(false);
+    };
+  }, [setIsLegacyLandingPage]);
 
   // Scroll to top when component mounts or slug changes
   useEffect(() => {
