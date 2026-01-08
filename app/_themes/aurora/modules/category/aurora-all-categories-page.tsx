@@ -1,8 +1,10 @@
 "use client";
 
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useShopStore } from "@/stores/shopStore";
-import { useProductsStore } from "@/stores/productsStore";
+import { useProductsStore, Category } from "@/stores/productsStore";
+import { useShopCategories } from "@/hooks";
 import { GridContainer } from "../../components/core";
 import { CategoryCard } from "../../components/cards";
 import ProductSkeleton from "@/components/shared/skeletons/product-skeleton";
@@ -10,8 +12,29 @@ import PageHeader from "@/components/shared/page-header";
 
 export function AuroraAllCategoriesPage() {
   const { shopDetails } = useShopStore();
-  const { categories, isLoading } = useProductsStore();
+  const storeCategories = useProductsStore((state) => state.categories);
+  const storeIsLoading = useProductsStore((state) => state.isLoading);
   const { t } = useTranslation();
+
+  // Fetch categories if store is empty (handles page reload scenario)
+  const { data: fetchedCategories, isLoading: isFetchingCategories } =
+    useShopCategories(
+      { shopUuid: shopDetails?.shop_uuid || "" },
+      { enabled: storeCategories.length === 0 && !!shopDetails?.shop_uuid }
+    );
+
+  // Use store categories if available, otherwise use fetched categories
+  const categories = useMemo(
+    () =>
+      storeCategories.length > 0
+        ? storeCategories
+        : (fetchedCategories as Category[]) || [],
+    [storeCategories, fetchedCategories]
+  );
+
+  // Show loading if either store is loading or fetching categories
+  const isLoading =
+    storeIsLoading || (isFetchingCategories && storeCategories.length === 0);
 
   // Filter categories - only show parent categories (no parent_id) with products
   const parentCategories =
@@ -47,25 +70,8 @@ export function AuroraAllCategoriesPage() {
             />
           ))
         ) : (
-          // Empty State
-          <div className="col-span-full flex flex-col items-center justify-center py-12">
-            <svg
-              className="w-20 h-20 text-gray-300 mb-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
-              />
-            </svg>
-            <h3 className="text-lg text-gray-600 font-medium">
-              {t("no_categories_found")}
-            </h3>
-          </div>
+          // Show skeleton while waiting for data
+          [...Array(10)].map((_, index) => <ProductSkeleton key={index} />)
         )}
       </GridContainer>
     </div>

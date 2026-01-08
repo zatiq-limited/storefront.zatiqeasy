@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useMemo, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import type { Product } from "@/stores/productsStore";
 import { useProductsStore } from "@/stores/productsStore";
 import { useShopStore } from "@/stores/shopStore";
@@ -23,6 +23,7 @@ const MAX_PRODUCTS_PER_PAGE = 12;
 export function InventoryProducts() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   // Get inventory state using direct selectors (avoiding getter issues)
   const products = useProductsStore((state) => state.products);
@@ -30,6 +31,19 @@ export function InventoryProducts() {
   const isLoading = useProductsStore((state) => state.isLoading);
   const setFilters = useProductsStore((state) => state.setFilters);
   const categories = useProductsStore((state) => state.categories);
+
+  // Sync URL params with store filters
+  const selectedCategory = searchParams.get("selected_category");
+
+  useEffect(() => {
+    // Update store filter when URL param changes
+    if (selectedCategory && selectedCategory !== filters.category) {
+      setFilters({ category: selectedCategory, page: 1 });
+    } else if (!selectedCategory && filters.category) {
+      // Clear category filter when URL param is removed
+      setFilters({ category: undefined, page: 1 });
+    }
+  }, [selectedCategory, filters.category, setFilters]);
 
   // Get current category name from filters
   const currentCategoryName = useMemo(() => {

@@ -3,8 +3,9 @@
 import { useMemo, useCallback } from "react";
 import Image from "next/image";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
-import { useProductsStore } from "@/stores/productsStore";
+import { useProductsStore, Category } from "@/stores/productsStore";
 import { useShopStore } from "@/stores";
+import { useShopCategories } from "@/hooks";
 import { ArrowLeftCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { FallbackImage } from "@/components/ui/fallback-image";
@@ -21,6 +22,18 @@ interface CategoryHorizontalListProps {
  * - category_id: tracks which parent's subcategories we're viewing (navigation)
  * - selected_category: tracks the selected category for filtering products
  */
+// Loading Skeleton
+const HorizontalCategorySkeleton = () => (
+  <div className="flex gap-1.5 overflow-x-auto pb-2 md:pb-0 animate-pulse">
+    {[...Array(6)].map((_, index) => (
+      <div
+        key={index}
+        className="w-25 min-w-25 md:w-37.5 md:min-w-37.5 aspect-square bg-gray-200 dark:bg-gray-700 rounded-lg m-1 md:m-2"
+      />
+    ))}
+  </div>
+);
+
 export function CategoryHorizontalList({
   className,
   fromCategory,
@@ -28,8 +41,23 @@ export function CategoryHorizontalList({
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const { categories } = useProductsStore();
+  const storeCategories = useProductsStore((state) => state.categories);
   const { shopDetails } = useShopStore();
+
+  // Fetch categories if store is empty (handles page reload scenario)
+  const { data: fetchedCategories, isLoading } = useShopCategories(
+    { shopUuid: shopDetails?.shop_uuid || "" },
+    { enabled: storeCategories.length === 0 && !!shopDetails?.shop_uuid }
+  );
+
+  // Use store categories if available, otherwise use fetched categories
+  const categories = useMemo(
+    () =>
+      storeCategories.length > 0
+        ? storeCategories
+        : (fetchedCategories as Category[]) || [],
+    [storeCategories, fetchedCategories]
+  );
 
   const baseUrl = shopDetails?.baseUrl || "";
 
@@ -210,6 +238,15 @@ export function CategoryHorizontalList({
     },
     [fromCategory, baseUrl, categories, currentRootCategory, router, buildUrl]
   );
+
+  // Show skeleton while loading
+  if (isLoading && storeCategories.length === 0) {
+    return (
+      <div className={cn("w-full", className)}>
+        <HorizontalCategorySkeleton />
+      </div>
+    );
+  }
 
   if (!categories.length) {
     return null;

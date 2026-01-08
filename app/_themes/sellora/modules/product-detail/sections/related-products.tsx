@@ -102,7 +102,7 @@ export function RelatedProducts({
   }
 
   return (
-    <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] bg-[#ede9e6] dark:bg-[#dad1ca] pt-10 sm:pt-24">
+    <div className="max-w-screen relative bg-[#ede9e6] dark:bg-[#dad1ca] pt-10 sm:pt-24">
       {/* Variant Selector Modal */}
       <VariantSelectorModal
         product={selectedProduct}

@@ -11,6 +11,7 @@ import {
   selectSubtotal,
 } from "@/stores/cartStore";
 import { useProductsStore } from "@/stores/productsStore";
+import { useShopInventories } from "@/hooks";
 import { FallbackImage } from "@/components/ui/fallback-image";
 import { CartFloatingBtn } from "@/components/features/cart/cart-floating-btn";
 import { VariantSelectorModal } from "@/components/products/variant-selector-modal";
@@ -46,8 +47,23 @@ export function PremiumProductDetailPage({
   const { shopDetails } = useShopStore();
   const { addProduct, getProductsByInventoryId, removeProduct } =
     useCartStore();
-  const allProducts = useProductsStore((state) => state.products);
+  const storeProducts = useProductsStore((state) => state.products);
   const totalCartItems = useCartStore(selectTotalItems);
+
+  // Fetch products if store is empty (handles page reload scenario)
+  const { data: fetchedProducts } = useShopInventories(
+    { shopUuid: shopDetails?.shop_uuid || "" },
+    { enabled: storeProducts.length === 0 && !!shopDetails?.shop_uuid }
+  );
+
+  // Use store products if available, otherwise use fetched products
+  const allProducts = useMemo(
+    () =>
+      storeProducts.length > 0
+        ? storeProducts
+        : (fetchedProducts as Product[]) || [],
+    [storeProducts, fetchedProducts]
+  );
   const totalPrice = useCartStore(selectSubtotal);
 
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);

@@ -1,8 +1,10 @@
 "use client";
 
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useProductsStore } from "@/stores/productsStore";
+import { useShopStore } from "@/stores/shopStore";
+import { useShopInventories } from "@/hooks";
 import { AuroraProductCard } from "@/app/_themes/aurora/components/cards/aurora-product-card";
 import type { Product } from "@/stores/productsStore";
 
@@ -41,10 +43,26 @@ const AuroraRelatedProducts = ({
   onSelectProduct,
 }: AuroraRelatedProductsProps) => {
   const { t } = useTranslation();
-  const { products } = useProductsStore();
+  const { shopDetails } = useShopStore();
+  const storeProducts = useProductsStore((state) => state.products);
+
+  // Fetch products if store is empty (handles page reload scenario)
+  const { data: fetchedProducts, isLoading } = useShopInventories(
+    { shopUuid: shopDetails?.shop_uuid || "" },
+    { enabled: storeProducts.length === 0 && !!shopDetails?.shop_uuid }
+  );
+
+  // Use store products if available, otherwise use fetched products
+  const products = useMemo(
+    () =>
+      storeProducts.length > 0
+        ? storeProducts
+        : (fetchedProducts as Product[]) || [],
+    [storeProducts, fetchedProducts]
+  );
 
   const relatedProducts = useMemo(() => {
-    if (!currentProduct || !currentProduct.categories?.length || !products) {
+    if (!currentProduct || !currentProduct.categories?.length || !products.length) {
       // If no current product or categories, return other products
       return products
         ?.filter((p) => p.id?.toString() !== ignoreProductId?.toString())
@@ -102,7 +120,8 @@ const AuroraRelatedProducts = ({
     return uniqueRelated.slice(0, 8);
   }, [products, currentProduct, ignoreProductId]);
 
-  if (!relatedProducts || relatedProducts.length === 0) {
+  // Don't render if loading or no related products
+  if (isLoading || !relatedProducts || relatedProducts.length === 0) {
     return null;
   }
 
