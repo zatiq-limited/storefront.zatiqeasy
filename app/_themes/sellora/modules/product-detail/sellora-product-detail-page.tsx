@@ -585,9 +585,7 @@ export function SelloraProductDetailPage({
       )}
 
       {/* Related Products */}
-      <div className="px-4 sm:px-6 lg:px-8">
-        <RelatedProducts currentProductId={id!} categoryIds={categoryIds} />
-      </div>
+      <RelatedProducts currentProductId={id!} categoryIds={categoryIds} />
 
       {/* Floating Cart Button */}
       <CartFloatingBtn

@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useProductsStore } from "@/stores/productsStore";
 import { CategoryGrid } from "../../components/category-grid";
 import { GridContainer } from "../../components/core";
+import ProductSkeleton from "@/components/shared/skeletons/product-skeleton";
 
 /**
  * Sellora All Categories Page
@@ -55,11 +56,8 @@ export function SelloraAllCategoriesPage() {
             />
           ))
         ) : (
-          <div className="col-span-full flex items-center justify-center py-12">
-            <p className="text-gray-500 dark:text-gray-400">
-              {t("no_categories_found") || "No categories found"}
-            </p>
-          </div>
+          // Show skeleton while waiting for data
+          [...Array(10)].map((_, index) => <ProductSkeleton key={index} />)
         )}
       </GridContainer>
     </div>

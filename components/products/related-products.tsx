@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { useProductsStore } from "@/stores";
+import { useProductsStore, useShopStore } from "@/stores";
+import { useShopInventories } from "@/hooks";
 import { BasicProductCard } from "@/components/products/basic-product-card";
 import { VariantSelectorModal } from "@/components/products/variant-selector-modal";
 import { getAllCombinations } from "@/lib/category-utils";
@@ -16,8 +17,24 @@ export function RelatedProducts({
   currentProduct,
   baseUrl,
 }: RelatedProductsProps) {
-  const allProducts = useProductsStore((state) => state.products);
+  const { shopDetails } = useShopStore();
+  const storeProducts = useProductsStore((state) => state.products);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+
+  // Fetch products if store is empty (handles page reload scenario)
+  const { data: fetchedProducts, isLoading } = useShopInventories(
+    { shopUuid: shopDetails?.shop_uuid || "" },
+    { enabled: storeProducts.length === 0 && !!shopDetails?.shop_uuid }
+  );
+
+  // Use store products if available, otherwise use fetched products
+  const allProducts = useMemo(
+    () =>
+      storeProducts.length > 0
+        ? storeProducts
+        : (fetchedProducts as Product[]) || [],
+    [storeProducts, fetchedProducts]
+  );
 
   const relatedProducts = useMemo(() => {
     if (
@@ -85,7 +102,8 @@ export function RelatedProducts({
     return uniqueRelated.slice(0, 20);
   }, [allProducts, currentProduct]);
 
-  if (relatedProducts.length === 0) {
+  // Don't render if loading or no related products
+  if (isLoading || relatedProducts.length === 0) {
     return null;
   }
 

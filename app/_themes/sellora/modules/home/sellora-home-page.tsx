@@ -88,27 +88,25 @@ export function SelloraHomePage() {
       <OurCollectionSection />
 
       {/* Featured Products */}
-      <div className="container flex flex-col">
-        <FeaturedProductsSection
+      <FeaturedProductsSection
+        setSelectedProduct={setSelectedProduct}
+        navigateProductDetails={navigateProductDetails}
+      />
+
+      {/* Secondary Carousel */}
+      {hasSecondaryCarousel ? (
+        <div className="px-0">
+          <HeroCarousel tag="secondary" />
+        </div>
+      ) : null}
+
+      {/* On Sale Section */}
+      {hasOnSale ? (
+        <OnSaleSection
           setSelectedProduct={setSelectedProduct}
           navigateProductDetails={navigateProductDetails}
         />
-
-        {/* Secondary Carousel */}
-        {hasSecondaryCarousel && (
-          <div className="px-0">
-            <HeroCarousel tag="secondary" />
-          </div>
-        )}
-
-        {/* On Sale Section */}
-        {hasOnSale && (
-          <OnSaleSection
-            setSelectedProduct={setSelectedProduct}
-            navigateProductDetails={navigateProductDetails}
-          />
-        )}
-      </div>
+      ) : null}
 
       {/* Floating Cart Button */}
       <CartFloatingBtn
