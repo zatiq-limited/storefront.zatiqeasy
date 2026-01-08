@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useMemo, useCallback } from "react";
+import { useMemo, useCallback } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { useProductsStore, Category } from "@/stores/productsStore";
 import { useShopStore } from "@/stores";
+import { useShopCategories } from "@/hooks";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface SidebarCategoryProps {
@@ -23,8 +24,23 @@ export function SidebarCategory({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const { categories } = useProductsStore();
+  const storeCategories = useProductsStore((state) => state.categories);
   const { shopDetails } = useShopStore();
+
+  // Fetch categories if store is empty (handles page reload scenario)
+  const { data: fetchedCategories, isLoading } = useShopCategories(
+    { shopUuid: shopDetails?.shop_uuid || "" },
+    { enabled: storeCategories.length === 0 && !!shopDetails?.shop_uuid }
+  );
+
+  // Use store categories if available, otherwise use fetched categories
+  const categories = useMemo(
+    () =>
+      storeCategories.length > 0
+        ? storeCategories
+        : (fetchedCategories as Category[]) || [],
+    [storeCategories, fetchedCategories]
+  );
 
   const baseUrl = shopDetails?.baseUrl || "";
 
@@ -83,18 +99,25 @@ export function SidebarCategory({
       );
 
       if (hasSubcategories) {
+        // Drill down to show subcategories
         router.push(
           `${baseUrl}/categories/${category.id}?selected_category=${category.id}&category_id=${category.id}`
         );
       } else {
-        router.push(
-          `${baseUrl}?category_id=${currentRootCategory?.id}&selected_category=${category.id}`
-        );
+        // Leaf category - just select it and filter products, stay on current page
+        const params = new URLSearchParams(searchParams.toString());
+        params.set("selected_category", String(category.id));
+        if (currentRootCategory?.id) {
+          params.set("category_id", String(currentRootCategory.id));
+        } else if (category.parent_id) {
+          params.set("category_id", String(category.parent_id));
+        }
+        router.replace(`${pathname}?${params.toString()}`);
       }
 
       setShowMobileNav?.(false);
     },
-    [categories, currentRootCategory, baseUrl, router, setShowMobileNav]
+    [categories, currentRootCategory, baseUrl, router, setShowMobileNav, searchParams, pathname]
   );
 
   // Handle back button
@@ -142,6 +165,37 @@ export function SidebarCategory({
     setShowMobileNav?.(false);
     router.push(`${baseUrl}/products`);
   }, [baseUrl, router, setShowMobileNav]);
+
+  // Show skeleton while loading
+  if (isLoading && storeCategories.length === 0) {
+    return (
+      <div className="animate-pulse">
+        {/* Header skeleton */}
+        <div className="px-5 py-4 bg-gray-100 dark:bg-gray-800">
+          <div className="h-5 bg-gray-300 dark:bg-gray-600 rounded w-32" />
+        </div>
+        {/* All products skeleton */}
+        <div className="pl-7 py-4 pr-5 border-t">
+          <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-24" />
+        </div>
+        {/* Category items skeleton */}
+        {[80, 65, 90, 70, 85, 60].map((width, index) => (
+          <div
+            key={index}
+            className="pl-7 py-4 pr-5 border-t flex justify-between items-center"
+          >
+            <div
+              className="h-4 bg-gray-200 dark:bg-gray-700 rounded"
+              style={{ width: `${width}%` }}
+            />
+            {index % 3 === 0 && (
+              <div className="h-7 w-7 bg-gray-200 dark:bg-gray-700 rounded-full" />
+            )}
+          </div>
+        ))}
+      </div>
+    );
+  }
 
   if (!categories.length) {
     return null;

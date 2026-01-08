@@ -1,6 +1,12 @@
 "use client";
 
-import React, { useState, useMemo, useCallback, useRef, useEffect } from "react";
+import React, {
+  useState,
+  useMemo,
+  useCallback,
+  useRef,
+  useEffect,
+} from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, X } from "lucide-react";
@@ -15,7 +21,10 @@ interface PremiumSearchModalProps {
   onClose: () => void;
 }
 
-export function PremiumSearchModal({ isOpen, onClose }: PremiumSearchModalProps) {
+export function PremiumSearchModal({
+  isOpen,
+  onClose,
+}: PremiumSearchModalProps) {
   const router = useRouter();
   const { t } = useTranslation();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -41,18 +50,19 @@ export function PremiumSearchModal({ isOpen, onClose }: PremiumSearchModalProps)
 
     const query = searchQuery.toLowerCase().trim();
     return products
-      .filter((product) =>
-        product.name.toLowerCase().includes(query)
-      )
+      .filter((product) => product.name.toLowerCase().includes(query))
       .slice(0, 20);
   }, [products, searchQuery]);
 
   // Handle product click
-  const handleProductClick = useCallback((product: Product) => {
-    onClose();
-    setSearchQuery("");
-    router.push(`${baseUrl}/products/${product.id}`);
-  }, [router, baseUrl, onClose]);
+  const handleProductClick = useCallback(
+    (product: Product) => {
+      onClose();
+      setSearchQuery("");
+      router.push(`${baseUrl}/products/${product.id}`);
+    },
+    [router, baseUrl, onClose]
+  );
 
   // Handle close
   const handleClose = useCallback(() => {
@@ -79,7 +89,7 @@ export function PremiumSearchModal({ isOpen, onClose }: PremiumSearchModalProps)
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="fixed top-4 left-1/2 -translate-x-1/2 w-[94%] md:w-[85%] max-w-[1300px] max-h-[80vh] bg-white dark:bg-black-18 rounded-xl shadow-2xl z-50 overflow-hidden"
+            className="fixed top-24 left-1/2 -translate-x-1/2 w-94% md:w-[85%] max-w-325 max-h-[80vh] bg-white dark:bg-black-18 rounded-xl shadow-2xl z-50 overflow-hidden"
           >
             {/* Search Header */}
             <div className="flex items-center gap-3 p-4 border-b dark:border-gray-700">
@@ -118,7 +128,7 @@ export function PremiumSearchModal({ isOpen, onClose }: PremiumSearchModalProps)
                         onClick={() => handleProductClick(product)}
                         className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-left"
                       >
-                        <div className="relative w-16 h-16 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-700 flex-shrink-0">
+                        <div className="relative w-16 h-16 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-700 shrink-0">
                           <FallbackImage
                             src={product.images?.[0] || product.image_url || ""}
                             alt={product.name}

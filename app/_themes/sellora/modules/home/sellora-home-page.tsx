@@ -94,19 +94,19 @@ export function SelloraHomePage() {
       />
 
       {/* Secondary Carousel */}
-      {hasSecondaryCarousel && (
+      {hasSecondaryCarousel ? (
         <div className="px-0">
           <HeroCarousel tag="secondary" />
         </div>
-      )}
+      ) : null}
 
       {/* On Sale Section */}
-      {hasOnSale && (
+      {hasOnSale ? (
         <OnSaleSection
           setSelectedProduct={setSelectedProduct}
           navigateProductDetails={navigateProductDetails}
         />
-      )}
+      ) : null}
 
       {/* Floating Cart Button */}
       <CartFloatingBtn

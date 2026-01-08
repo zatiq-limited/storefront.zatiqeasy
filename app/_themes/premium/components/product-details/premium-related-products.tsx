@@ -5,13 +5,15 @@ import { useTranslation } from "react-i18next";
 import { useProductsStore } from "@/stores/productsStore";
 import { useShopStore } from "@/stores/shopStore";
 import { useShopInventories } from "@/hooks";
-import { AuroraProductCard } from "@/app/_themes/aurora/components/cards/aurora-product-card";
+import { GridContainer } from "../../components/core";
+import { PremiumProductCard } from "../../components/cards";
 import type { Product } from "@/stores/productsStore";
 
-interface AuroraRelatedProductsProps {
+interface PremiumRelatedProductsProps {
   ignoreProductId: number | string;
   currentProduct?: Product;
   onSelectProduct?: (product: Product) => void;
+  onNavigate?: (productId: number | string) => void;
 }
 
 // Helper function to get all category combinations
@@ -37,11 +39,12 @@ const getAllCombinations = (
   return result.sort((a, b) => b.length - a.length);
 };
 
-const AuroraRelatedProducts = ({
+const PremiumRelatedProducts = ({
   ignoreProductId,
   currentProduct,
   onSelectProduct,
-}: AuroraRelatedProductsProps) => {
+  onNavigate,
+}: PremiumRelatedProductsProps) => {
   const { t } = useTranslation();
   const { shopDetails } = useShopStore();
   const storeProducts = useProductsStore((state) => state.products);
@@ -62,11 +65,15 @@ const AuroraRelatedProducts = ({
   );
 
   const relatedProducts = useMemo(() => {
-    if (!currentProduct || !currentProduct.categories?.length || !products.length) {
+    if (
+      !currentProduct ||
+      !currentProduct.categories?.length ||
+      !products.length
+    ) {
       // If no current product or categories, return other products
       return products
         ?.filter((p) => p.id?.toString() !== ignoreProductId?.toString())
-        .slice(0, 8);
+        .slice(0, 10);
     }
 
     const combinations = getAllCombinations(currentProduct.categories);
@@ -105,7 +112,7 @@ const AuroraRelatedProducts = ({
     );
 
     // If we need more products, add other products
-    if (uniqueRelated.length < 8) {
+    if (uniqueRelated.length < 10) {
       const remainingProducts = products.filter(
         (product) =>
           product.id?.toString() !== ignoreProductId?.toString() &&
@@ -114,33 +121,53 @@ const AuroraRelatedProducts = ({
           )
       );
 
-      return [...uniqueRelated, ...remainingProducts].slice(0, 8);
+      return [...uniqueRelated, ...remainingProducts].slice(0, 10);
     }
 
-    return uniqueRelated.slice(0, 8);
+    return uniqueRelated.slice(0, 10);
   }, [products, currentProduct, ignoreProductId]);
 
-  // Don't render if loading or no related products
-  if (isLoading || !relatedProducts || relatedProducts.length === 0) {
+  // Show skeleton while loading
+  if (isLoading && storeProducts.length === 0) {
+    return (
+      <div className="mt-12 md:mt-16">
+        <h2 className="text-lg md:text-xl lg:text-2xl font-bold text-gray-900 dark:text-white mb-6">
+          {t("related_products")}
+        </h2>
+        <GridContainer columns={{ mobile: 2, tablet: 3, desktop: 5 }}>
+          {[...Array(5)].map((_, index) => (
+            <div
+              key={index}
+              className="animate-pulse bg-gray-200 dark:bg-gray-700 rounded-lg aspect-3/4"
+            />
+          ))}
+        </GridContainer>
+      </div>
+    );
+  }
+
+  // Don't render if no related products
+  if (!relatedProducts || relatedProducts.length === 0) {
     return null;
   }
 
   return (
-    <div className="w-full mb-20 xl:mb-32">
-      <h4 className="font-semibold mb-10 mt-12 text-xl md:text-2xl dark:text-gray-200">
-        {t("related_products")}:
-      </h4>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-        {relatedProducts.map((product) => (
-          <AuroraProductCard
-            key={product.id}
-            product={product}
-            onSelectProduct={() => onSelectProduct?.(product)}
+    <div className="mt-12 md:mt-16">
+      <h2 className="text-lg md:text-xl lg:text-2xl font-bold text-gray-900 dark:text-white mb-6">
+        {t("related_products")}
+      </h2>
+      <GridContainer columns={{ mobile: 2, tablet: 3, desktop: 5 }}>
+        {relatedProducts.map((relatedProduct) => (
+          <PremiumProductCard
+            key={relatedProduct.id}
+            product={relatedProduct}
+            onSelectProduct={() => onSelectProduct?.(relatedProduct)}
+            onNavigate={() => onNavigate?.(relatedProduct.id)}
           />
         ))}
-      </div>
+      </GridContainer>
     </div>
   );
 };
 
-export default AuroraRelatedProducts;
+export default PremiumRelatedProducts;

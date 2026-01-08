@@ -46,7 +46,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
-          className="fixed inset-0 z-[10000] overflow-y-auto"
+          className="fixed inset-0 z-10000 overflow-y-auto"
         >
           {/* Overlay */}
           <div
@@ -62,7 +62,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: -20, opacity: 0 }}
               transition={{ duration: 0.3, ease: "easeOut" }}
-              className="relative bg-white dark:bg-black-27 rounded-md shadow-lg top-1 w-[94%] md:w-[85%] max-w-[1300px]"
+              className="relative bg-white dark:bg-black-27 rounded-md shadow-lg top-1 w-[94%] md:w-[85%] max-w-325"
             >
               <SearchDropdown onClose={onClose} />
             </motion.div>

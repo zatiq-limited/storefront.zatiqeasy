@@ -59,11 +59,8 @@ export function PremiumAllCategoriesPage() {
               </a>
             ))
           ) : (
-            <div className="col-span-full flex flex-col items-center justify-center py-12">
-              <h3 className="text-lg text-gray-600 font-medium">
-                {t("no_categories_found")}
-              </h3>
-            </div>
+            // Show skeleton while waiting for data
+            [...Array(10)].map((_, index) => <ProductSkeleton key={index} />)
           )}
         </div>
       </div>

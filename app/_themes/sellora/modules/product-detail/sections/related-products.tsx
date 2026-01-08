@@ -9,6 +9,7 @@ import { Navigation, Autoplay, Pagination } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
 import { useShopStore } from "@/stores/shopStore";
 import { useProductsStore, type Product } from "@/stores/productsStore";
+import { useShopInventories } from "@/hooks";
 import { VariantSelectorModal } from "@/components/products/variant-selector-modal";
 import { SelloraProductCard } from "../../../components/cards";
 
@@ -28,11 +29,26 @@ export function RelatedProducts({
   const router = useRouter();
   const { t } = useTranslation();
   const { shopDetails } = useShopStore();
-  const allProducts = useProductsStore((state) => state.products);
+  const storeProducts = useProductsStore((state) => state.products);
   const swiperRef = useRef<SwiperType | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   const baseUrl = shopDetails?.baseUrl || "";
+
+  // Fetch products if store is empty (handles page reload scenario)
+  const { data: fetchedProducts, isLoading } = useShopInventories(
+    { shopUuid: shopDetails?.shop_uuid || "" },
+    { enabled: storeProducts.length === 0 && !!shopDetails?.shop_uuid }
+  );
+
+  // Use store products if available, otherwise use fetched products
+  const allProducts = useMemo(
+    () =>
+      storeProducts.length > 0
+        ? storeProducts
+        : (fetchedProducts as Product[]) || [],
+    [storeProducts, fetchedProducts]
+  );
 
   // Get related products
   const relatedProducts = useMemo(() => {
@@ -80,12 +96,13 @@ export function RelatedProducts({
     [router, baseUrl]
   );
 
-  if (relatedProducts.length === 0) {
+  // Don't render if loading or no related products
+  if (isLoading || relatedProducts.length === 0) {
     return null;
   }
 
   return (
-    <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] bg-[#ede9e6] dark:bg-[#dad1ca] pt-10 sm:pt-24">
+    <div className="max-w-screen relative bg-[#ede9e6] dark:bg-[#dad1ca] pt-10 sm:pt-24">
       {/* Variant Selector Modal */}
       <VariantSelectorModal
         product={selectedProduct}
