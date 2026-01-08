@@ -15,7 +15,10 @@ interface SelloraSearchModalProps {
   onClose: () => void;
 }
 
-export function SelloraSearchModal({ isOpen, onClose }: SelloraSearchModalProps) {
+export function SelloraSearchModal({
+  isOpen,
+  onClose,
+}: SelloraSearchModalProps) {
   const router = useRouter();
   const { t } = useTranslation();
   const { shopDetails } = useShopStore();
@@ -82,7 +85,7 @@ export function SelloraSearchModal({ isOpen, onClose }: SelloraSearchModalProps)
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -50 }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="fixed top-0 left-0 right-0 z-50 pt-20 px-4"
+            className="fixed top-[12%] left-0 right-0 z-50 px-4"
           >
             <div className="max-w-2xl mx-auto bg-white dark:bg-black-18 rounded-xl shadow-2xl overflow-hidden">
               {/* Search Input */}
@@ -115,9 +118,13 @@ export function SelloraSearchModal({ isOpen, onClose }: SelloraSearchModalProps)
                           onClick={() => handleProductClick(product.id)}
                           className="w-full flex items-center gap-3 p-3 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors text-left"
                         >
-                          <div className="w-14 h-14 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800 flex-shrink-0">
+                          <div className="w-14 h-14 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800 shrink-0">
                             <FallbackImage
-                              src={getInventoryThumbImageUrl(product.image_url || "")}
+                              src={getInventoryThumbImageUrl(
+                                (product.images && product.images.length > 0
+                                  ? product.images[0]
+                                  : product.image_url) || ""
+                              )}
                               alt={product.name}
                               width={56}
                               height={56}
