@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useCallback, useMemo } from "react";
-import { useRouter, useParams } from "next/navigation";
+import { useState, useCallback, useMemo, useRef } from "react";
+import { useRouter, useParams, useSearchParams } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { useShopStore } from "@/stores/shopStore";
 import { useProductsStore, type Product } from "@/stores/productsStore";
@@ -21,6 +21,7 @@ const PRODUCTS_PER_PAGE = 20;
 export function PremiumCategoryPage() {
   const router = useRouter();
   const params = useParams();
+  const searchParams = useSearchParams();
   const { t } = useTranslation();
 
   const { shopDetails } = useShopStore();
@@ -35,27 +36,42 @@ export function PremiumCategoryPage() {
   const baseUrl = shopDetails?.baseUrl || "";
   const hasItems = totalCartItems > 0;
 
-  // Get category ID from params
-  const categoryId = params?.category as string;
+  // Get category ID from route params
+  const routeCategoryId = params?.category as string;
 
-  // Find the current category
+  // Get selected_category from URL search params (for leaf category filtering)
+  const selectedCategoryParam = searchParams.get("selected_category");
+
+  // Use selected_category param if available, otherwise use route category ID
+  const activeCategoryId = selectedCategoryParam || routeCategoryId;
+
+  // Track previous category to reset page when category changes
+  const prevCategoryRef = useRef(activeCategoryId);
+  if (prevCategoryRef.current !== activeCategoryId) {
+    prevCategoryRef.current = activeCategoryId;
+    if (currentPage !== 1) {
+      setCurrentPage(1);
+    }
+  }
+
+  // Find the current category (for title - use route category)
   const currentCategory = useMemo(() => {
-    if (!categoryId || !categories) return null;
-    return categories.find((cat) => String(cat.id) === categoryId) || null;
-  }, [categoryId, categories]);
+    if (!routeCategoryId || !categories) return null;
+    return categories.find((cat) => String(cat.id) === routeCategoryId) || null;
+  }, [routeCategoryId, categories]);
 
-  // Filter products by category
+  // Filter products by active category (selected_category or route category)
   const categoryProducts = useMemo(() => {
-    if (!categoryId || !products) return [];
+    if (!activeCategoryId || !products) return [];
 
     return products.filter((product: Product) => {
       if (!product.categories) return false;
       return product.categories.some(
         (cat: { id: number | string; name: string }) =>
-          String(cat.id) === categoryId
+          String(cat.id) === activeCategoryId
       );
     });
-  }, [categoryId, products]);
+  }, [activeCategoryId, products]);
 
   // Check loading state
   const isLoading = !products || products.length === 0;

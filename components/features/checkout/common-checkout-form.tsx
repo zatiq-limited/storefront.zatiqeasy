@@ -86,8 +86,18 @@ export function CommonCheckoutForm({
   const { products, totalPrice } = useCartTotals();
   const cartProducts = Object.values(products);
 
-  // Checkout state from store (only used for selectedDivision/selectedDistrict)
-  const { selectedDivision, selectedDistrict } = useCheckoutStore();
+  // Checkout state from store (only used for initial values)
+  const checkoutStore = useCheckoutStore();
+
+  // Watch division, district, and upazila from form for real-time updates
+  const watchedDivision = watch("division");
+  const watchedDistrict = watch("district");
+  const watchedUpazila = watch("upazila");
+
+  // Use watched form values (these update when user selects from dropdown)
+  const selectedDivision = watchedDivision || checkoutStore.selectedDivision;
+  const selectedDistrict = watchedDistrict || checkoutStore.selectedDistrict;
+  const selectedUpazila = watchedUpazila || checkoutStore.selectedUpazila;
 
   // Local state
   const [isLoading, setIsLoading] = useState(false);
@@ -126,19 +136,78 @@ export function CommonCheckoutForm({
   const delivery_option = shopDetails?.delivery_option || "inside_city";
   const shopLanguage = "en";
 
-  // Delivery charge calculation
-  const calculateDeliveryCharge = () => {
-    const charges: Record<string, number> = {
-      inside_city: 50,
-      outside_city: 100,
-      sub_city: 80,
-    };
-    return charges[delivery_option] || 100;
+  // Get delivery zone based on selected location (matching old project's getDeliveryZone helper)
+  const getDeliveryZone = (): string => {
+    const specificDeliveryCharges = shopDetails?.specific_delivery_charges;
+
+    // If district is selected, check upazila first, then district
+    if (selectedDistrict && selectedDistrict.trim() !== "") {
+      // Check if upazila has specific delivery charge
+      if (
+        selectedUpazila &&
+        selectedUpazila.trim() !== "" &&
+        specificDeliveryCharges &&
+        specificDeliveryCharges[selectedUpazila] !== null &&
+        specificDeliveryCharges[selectedUpazila] !== undefined
+      ) {
+        return selectedUpazila;
+      }
+
+      // Check if district has specific delivery charge
+      if (
+        specificDeliveryCharges &&
+        specificDeliveryCharges[selectedDistrict] !== null &&
+        specificDeliveryCharges[selectedDistrict] !== undefined
+      ) {
+        return selectedDistrict;
+      }
+
+      // No specific charge for district/upazila
+      return "Others";
+    }
+
+    // No district selected, use the specific delivery zone (for zone-based delivery)
+    // Return empty string if no zone selected (so delivery charge will be 0)
+    return selectedSpecificDeliveryZone || "";
+  };
+
+  // Calculate delivery charge based on delivery zone (matching old project's calculateDeliveryCharge helper)
+  const calculateDeliveryCharge = (): number => {
+    const specificDeliveryCharges = shopDetails?.specific_delivery_charges;
+    const othersDeliveryCharge = shopDetails?.others_delivery_charge || 0;
+    const deliveryZone = getDeliveryZone();
+
+    // If zone-based delivery and no zone selected yet, return 0
+    if (delivery_option === "zones" && !deliveryZone) {
+      return 0;
+    }
+
+    // If zone is "Others", use the others_delivery_charge
+    if (deliveryZone === "Others") {
+      return othersDeliveryCharge;
+    }
+
+    // Check if there's a specific charge for this zone/district/upazila
+    if (
+      specificDeliveryCharges &&
+      deliveryZone &&
+      specificDeliveryCharges[deliveryZone] !== null &&
+      specificDeliveryCharges[deliveryZone] !== undefined
+    ) {
+      return specificDeliveryCharges[deliveryZone];
+    }
+
+    // Fallback to others_delivery_charge
+    return othersDeliveryCharge;
   };
 
   const deliveryCharge = calculateDeliveryCharge();
-  const taxAmount = 0; // Can be implemented later
+
+  // Calculate VAT tax based on shop's vat_tax percentage
+  const vatTaxPercentage = shopDetails?.vat_tax || 0;
+  const taxAmount = Math.round(totalPrice * (vatTaxPercentage / 100));
   const totaltax = taxAmount; // Alias to match old project
+
   const grandTotal = totalPrice + deliveryCharge + taxAmount - discountAmount;
 
   // State for full online payment toggle (used by Advanced Payment Options)
@@ -290,6 +359,25 @@ export function CommonCheckoutForm({
     }
   }, [selectedPaymentMethod, isAceeptTermsAndCondition]);
 
+  // Auto-select the first available payment method on page load
+  useEffect(() => {
+    const paymentMethods = shopDetails?.payment_methods || [];
+    if (paymentMethods.length > 0) {
+      // Set the first payment method as default
+      setSelectedPaymentMethod(paymentMethods[0]);
+    }
+  }, [shopDetails?.payment_methods]);
+
+  // Delivery zone validation error state
+  const [showDeliveryZoneError, setShowDeliveryZoneError] = useState(false);
+
+  // Clear delivery zone error when a zone is selected
+  useEffect(() => {
+    if (selectedSpecificDeliveryZone) {
+      setShowDeliveryZoneError(false);
+    }
+  }, [selectedSpecificDeliveryZone]);
+
   // Watch customer_phone and auto-validate to set fullPhoneNumber
   const customerPhone = watch("customer_phone");
   useEffect(() => {
@@ -355,6 +443,17 @@ export function CommonCheckoutForm({
       return;
     }
 
+    // Check if delivery zone is required and not selected (for zone-based delivery)
+    if (
+      delivery_option === "zones" &&
+      shopDetails?.specific_delivery_charges &&
+      Object.keys(shopDetails.specific_delivery_charges).length > 0 &&
+      !selectedSpecificDeliveryZone
+    ) {
+      setShowDeliveryZoneError(true);
+      return;
+    }
+
     setIsLoading(true);
 
     try {
@@ -415,7 +514,7 @@ export function CommonCheckoutForm({
         customer_phone: fullPhoneNumber || data.customer_phone,
         customer_address: data.customer_address,
         delivery_charge: deliveryCharge,
-        delivery_zone: selectedSpecificDeliveryZone || "Others",
+        delivery_zone: getDeliveryZone(),
         tax_amount: taxAmount,
         tax_percentage: shopDetails?.vat_tax || 0,
         total_amount: grandTotal,
@@ -574,6 +673,7 @@ export function CommonCheckoutForm({
           selectedSpecificDeliveryZone={selectedSpecificDeliveryZone}
           setSelectedSpecificDeliveryZone={setSelectedSpecificDeliveryZone}
           isDisabled={order_verification_enabled && !isPhoneVerified}
+          showError={showDeliveryZoneError}
         />
 
         <PaymentOptionsSection

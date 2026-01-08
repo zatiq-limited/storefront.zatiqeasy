@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useCallback, useMemo } from "react";
-import { useRouter } from "next/navigation";
+import React, { useState, useCallback, useMemo, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { SlidersHorizontal, X, Square, SquareCheckBig } from "lucide-react";
 import { useShopStore } from "@/stores/shopStore";
@@ -38,6 +38,7 @@ const DEFAULT_PRICE_FILTERS: PriceRange[] = [
 
 export function PremiumAllProducts() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { t } = useTranslation();
   const { shopDetails } = useShopStore();
   const products = useProductsStore((state) => state.products);
@@ -45,10 +46,8 @@ export function PremiumAllProducts() {
   const setFilters = useProductsStore((state) => state.setFilters);
   const totalCartItems = useCartStore(selectTotalItems);
   const totalPrice = useCartStore(selectSubtotal);
-  const productsStoreIsLoading = useProductsStore((state) => state.isLoading);
-
   // Fetch shop inventories to populate products store (if not already fetched by parent)
-  const { isLoading: isInventoriesLoading } = useShopInventories(
+  useShopInventories(
     { shopUuid: shopDetails?.shop_uuid ?? "" },
     { enabled: !!shopDetails?.shop_uuid }
   );
@@ -59,6 +58,19 @@ export function PremiumAllProducts() {
     { enabled: !!shopDetails?.shop_uuid }
   );
 
+  // Sync URL params with store filters
+  const selectedCategory = searchParams.get("selected_category");
+
+  useEffect(() => {
+    // Update store filter when URL param changes
+    if (selectedCategory && selectedCategory !== filters.category) {
+      setFilters({ category: selectedCategory, page: 1 });
+    } else if (!selectedCategory && filters.category) {
+      // Clear category filter when URL param is removed
+      setFilters({ category: undefined, page: 1 });
+    }
+  }, [selectedCategory, filters.category, setFilters]);
+
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [showMobileFilter, setShowMobileFilter] = useState(false);
   const [selectedRange, setSelectedRange] = useState<PriceRange | null>(null);
@@ -67,7 +79,6 @@ export function PremiumAllProducts() {
   const baseUrl = shopDetails?.baseUrl || "";
   const countryCurrency = shopDetails?.country_currency || "৳";
   const hasItems = totalCartItems > 0;
-  const isLoading = isInventoriesLoading || productsStoreIsLoading;
 
   // Handle price range selection
   const handleRangeSelect = (range: PriceRange | null) => () => {

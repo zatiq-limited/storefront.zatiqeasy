@@ -20,6 +20,8 @@ const SectionHeader = ({
   const { shopDetails } = useShopStore();
   const { t } = useTranslation();
 
+  console.log("shopDetails in SectionHeader:", shopDetails);
+
   // Get theme data for fontFamily
   const themeData = getThemeData(shopDetails?.shop_theme?.theme_name);
 
@@ -38,7 +40,7 @@ const SectionHeader = ({
         {link && (
           <div className="flex items-center justify-end">
             <Link
-              href={`${shopDetails?.baseUrl}${link}`}
+              href={`${link}`}
               className="flex items-center justify-center gap-4 text-4 md:text-5 text-[#4B5563]/50 dark:text-blue-zatiq font-bold hover:text-blue-zatiq transition"
             >
               <span>{t(viewMoreTextKey)}</span>
