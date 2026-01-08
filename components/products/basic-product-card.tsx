@@ -59,9 +59,9 @@ export function BasicProductCard({
 
   // Currency
   const currency =
-    shopDetails?.currency_code === "BDT"
+    shopDetails?.country_currency === "BDT"
       ? "Tk"
-      : shopDetails?.currency_code || "$";
+      : shopDetails?.country_currency || "Tk";
 
   // Calculate discount
   const validOldPrice = old_price ?? undefined;

@@ -3,27 +3,43 @@
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useShopStore } from "@/stores";
-import { useCartTotals } from "@/hooks";
+import { useCartTotals, useShopInventories, useShopCategories } from "@/hooks";
 import { CartFloatingBtn } from "@/features/cart/cart-floating-btn";
+import {
+  SidebarCategorySkeleton,
+  HorizontalCategorySkeleton,
+  ProductsGridSkeleton,
+  SearchSkeleton,
+} from "../../components/skeletons";
 
 // Dynamic imports for better performance
 const CategoryHorizontalList = dynamic(
   () => import("@/features/category/category-horizontal-list"),
-  { ssr: false }
+  {
+    ssr: false,
+    loading: () => <HorizontalCategorySkeleton />,
+  }
 );
 
 const SidebarCategory = dynamic(
   () => import("@/features/category/sidebar-category"),
-  { ssr: false }
+  {
+    ssr: false,
+    loading: () => <SidebarCategorySkeleton />,
+  }
 );
 
 const InventorySearch = dynamic(() => import("./sections/inventory-search"), {
   ssr: false,
+  loading: () => <SearchSkeleton />,
 });
 
 const InventoryProducts = dynamic(
   () => import("./sections/inventory-products"),
-  { ssr: false }
+  {
+    ssr: false,
+    loading: () => <ProductsGridSkeleton />,
+  }
 );
 
 /**
@@ -34,6 +50,17 @@ export function BasicCategoryPage() {
   const router = useRouter();
   const { shopDetails } = useShopStore();
   const { totalPrice, totalProducts, hasItems } = useCartTotals();
+
+  // Fetch products and categories to populate the store
+  useShopInventories(
+    { shopUuid: shopDetails?.shop_uuid ?? "" },
+    { enabled: !!shopDetails?.shop_uuid }
+  );
+
+  useShopCategories(
+    { shopUuid: shopDetails?.shop_uuid ?? "" },
+    { enabled: !!shopDetails?.shop_uuid }
+  );
 
   const baseUrl = shopDetails?.baseUrl || "";
 

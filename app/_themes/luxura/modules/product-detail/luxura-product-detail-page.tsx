@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, useCallback, useEffect } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
@@ -24,8 +24,9 @@ import { LuxuraProductCard } from "../../components/cards";
 import { SectionHeader } from "../home/sections/section-header";
 import { formatPrice } from "@/lib/utils/formatting";
 import { cn } from "@/lib/utils";
-import type { VariantsState, VariantState } from "@/types/cart.types";
-import { useProductDetails } from "@/hooks";
+import type { VariantsState } from "@/types/cart.types";
+import { useProductDetails, useShopInventories } from "@/hooks";
+import type { Product } from "@/stores/productsStore";
 
 export function LuxuraProductDetailPage() {
   const params = useParams();
@@ -36,8 +37,23 @@ export function LuxuraProductDetailPage() {
   const productHandle = (params?.productHandle || params?.handle) as string;
 
   const { shopDetails } = useShopStore();
-  const products = useProductsStore((state) => state.products);
+  const storeProducts = useProductsStore((state) => state.products);
   const totalCartProducts = useCartStore(selectTotalItems);
+
+  // Fetch products if store is empty (handles page reload scenario)
+  const { data: fetchedProducts } = useShopInventories(
+    { shopUuid: shopDetails?.shop_uuid || "" },
+    { enabled: storeProducts.length === 0 && !!shopDetails?.shop_uuid }
+  );
+
+  // Use store products if available, otherwise use fetched products
+  const products = useMemo(
+    () =>
+      storeProducts.length > 0
+        ? storeProducts
+        : (fetchedProducts as Product[]) || [],
+    [storeProducts, fetchedProducts]
+  );
   const totalPrice = useCartStore(selectSubtotal);
   const { addProduct, removeProduct } = useCartStore();
 
@@ -57,7 +73,6 @@ export function LuxuraProductDetailPage() {
     incrementQuantity,
     decrementQuantity,
     isInStock,
-    stockQuantity,
   } = useProductDetails(productHandle);
 
   // Get related products (same category, excluding current)
@@ -94,7 +109,7 @@ export function LuxuraProductDetailPage() {
             (p) => p.id === Number(product.id)
           )
         : [],
-    [product?.id, allCartProducts]
+    [product, allCartProducts]
   );
   const isInCartDirect = cartProducts.length > 0;
   const cartQty = cartProducts.reduce((acc, p) => acc + (p.qty || 0), 0);

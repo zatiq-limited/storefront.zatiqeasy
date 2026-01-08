@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { ShoppingCart, Mail, Phone, Globe, Search, X } from "lucide-react";
+import { ShoppingCart, Mail, Phone, Globe, Search } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import {
   useCartStore,
@@ -15,6 +15,7 @@ import {
 } from "@/stores";
 import { cn } from "@/lib/utils";
 import TopbarMessage from "@/components/ui/topbar-message";
+import { BasicSearchModal } from "../search";
 
 /**
  * Basic Header Component
@@ -22,17 +23,16 @@ import TopbarMessage from "@/components/ui/topbar-message";
  */
 export function BasicHeader() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const { i18n, t } = useTranslation();
+  const { i18n } = useTranslation();
 
   // Get stores
   const shopDetails = useShopStore(selectShopDetails);
   const totalItems = useCartStore(selectTotalItems);
   const { setCurrentPage } = useProductsStore();
 
-  // State - initialize with server-safe defaults to avoid hydration mismatch
+  // State
   const [scrollY, setScrollY] = useState(0);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [langValue, setLangValue] = useState(
     shopDetails?.default_language_code || "en"
   );
@@ -47,16 +47,8 @@ export function BasicHeader() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Initialize client-side state after hydration (runs once on mount)
+  // Initialize language from localStorage
   useEffect(() => {
-    // Initialize search query from URL params
-    const urlParams = new URLSearchParams(window.location.search);
-    const searchFromUrl = urlParams.get("search") || "";
-    if (searchFromUrl) {
-      setSearchQuery(searchFromUrl);
-    }
-
-    // Initialize language from localStorage
     const storedLang = localStorage.getItem("locale");
     const defaultLang = shopDetails?.default_language_code || "en";
     const currentLang = storedLang || defaultLang;
@@ -76,7 +68,6 @@ export function BasicHeader() {
     const newLang = langValue === "en" ? "bn" : "en";
     localStorage.setItem("locale", newLang);
     setLangValue(newLang);
-    // Change language using i18n
     i18n.changeLanguage(newLang);
   };
 
@@ -84,39 +75,6 @@ export function BasicHeader() {
   const handleLogoClick = () => {
     setCurrentPage(1);
     router.push(shopDetails?.baseUrl || "/");
-  };
-
-  // Handle search
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      // Get current URL path (e.g., /merchant/47366/categories/139924)
-      const currentPath = window.location.pathname;
-      // Create new params preserving existing ones and adding search
-      const params = new URLSearchParams(searchParams);
-      params.set("search", searchQuery.trim());
-
-      // Build full URL with path and parameters
-      const newUrl = `${currentPath}?${params.toString()}`;
-      router.push(newUrl);
-    }
-  };
-
-  // Handle clear search
-  const handleClearSearch = () => {
-    setSearchQuery("");
-
-    // Get current URL path (e.g., /merchant/47366/categories/139924)
-    const currentPath = window.location.pathname;
-    // Update URL to remove search parameter
-    const params = new URLSearchParams(searchParams);
-    params.delete("search");
-
-    // Build full URL with path and remaining parameters
-    const newUrl = params.toString()
-      ? `${currentPath}?${params.toString()}`
-      : currentPath;
-    router.push(newUrl);
   };
 
   return (
@@ -164,42 +122,28 @@ export function BasicHeader() {
             </h1>
           </div>
 
-          {/* Inventory Search (centered, only on md+) */}
+          {/* Search Button (centered, only on md+) */}
           <div className="hidden md:flex flex-1 justify-center w-full max-w-2xl px-4">
-            <div className="w-full">
-              <form onSubmit={handleSearch} className="relative w-full">
-                <input
-                  type="text"
-                  placeholder={t("search_items")}
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className={cn(
-                    "w-full pl-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-zatiq focus:border-blue-zatiq dark:bg-gray-800 dark:border-gray-600 dark:text-white text-sm transition-all",
-                    searchQuery ? "pr-20" : "pr-10"
-                  )}
-                />
-                {searchQuery && (
-                  <button
-                    type="button"
-                    onClick={handleClearSearch}
-                    className="absolute right-10 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-                    aria-label="Clear search"
-                  >
-                    <X size={16} />
-                  </button>
-                )}
-                <button
-                  type="submit"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-gray-400 hover:text-blue-zatiq transition-colors"
-                >
-                  <Search size={18} />
-                </button>
-              </form>
-            </div>
+            <button
+              onClick={() => setIsSearchOpen(true)}
+              className="w-full flex items-center gap-2 px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-400 hover:border-blue-zatiq hover:text-blue-zatiq transition-colors cursor-pointer bg-white dark:bg-gray-800"
+            >
+              <Search size={18} />
+              <span className="text-sm">Search products...</span>
+            </button>
           </div>
 
           {/* Language Switch + Cart */}
           <div className="flex items-center gap-3 md:gap-4 shrink-0">
+            {/* Mobile Search Icon */}
+            <button
+              onClick={() => setIsSearchOpen(true)}
+              className="md:hidden p-2 text-gray-600 dark:text-gray-300 hover:text-blue-zatiq transition-colors"
+              aria-label="Search"
+            >
+              <Search size={20} />
+            </button>
+
             {/* Email and Phone (mobile only) */}
             <ul className="md:hidden flex items-center gap-2 md:gap-3">
               {shopDetails?.shop_email && (
@@ -256,37 +200,11 @@ export function BasicHeader() {
         </div>
       </div>
 
-      {/* Mobile Search Bar (hidden to match old design - uncomment if needed) */}
-      {/* <div className="md:hidden w-full bg-white dark:bg-gray-900 px-4 pb-3">
-        <form onSubmit={handleSearch} className="relative">
-          <input
-            type="text"
-            placeholder="Search products..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className={cn(
-              "w-full pl-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:text-white transition-all",
-              searchQuery ? "pr-20" : "pr-10"
-            )}
-          />
-          {searchQuery && (
-            <button
-              type="button"
-              onClick={handleClearSearch}
-              className="absolute right-10 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600 transition-colors"
-              aria-label="Clear search"
-            >
-              <X size={16} />
-            </button>
-          )}
-          <button
-            type="submit"
-            className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-gray-400 hover:text-blue-600"
-          >
-            <Search size={18} />
-          </button>
-        </form>
-      </div> */}
+      {/* Search Modal */}
+      <BasicSearchModal
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+      />
     </header>
   );
 }
