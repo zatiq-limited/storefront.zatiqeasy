@@ -45,9 +45,8 @@ export const DeliveryZoneSection = ({
             isDisabled={isDisabled}
             onClick={() => {
               if (isDisabled) return;
-              if (selectedSpecificDeliveryZone === zone) {
-                setSelectedSpecificDeliveryZone("Others");
-              } else {
+              // Don't allow deselection - at least one zone must be selected
+              if (selectedSpecificDeliveryZone !== zone) {
                 setSelectedSpecificDeliveryZone(zone);
               }
             }}

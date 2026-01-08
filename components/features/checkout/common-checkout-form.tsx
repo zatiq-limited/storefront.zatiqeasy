@@ -126,19 +126,32 @@ export function CommonCheckoutForm({
   const delivery_option = shopDetails?.delivery_option || "inside_city";
   const shopLanguage = "en";
 
-  // Delivery charge calculation
-  const calculateDeliveryCharge = () => {
+  // Delivery charge calculation based on selected zone or default options
+  const calculateDeliveryCharge = (): number => {
+    // Check if delivery option is "zones" and a specific zone is selected
+    if (delivery_option === "zones" && selectedSpecificDeliveryZone) {
+      const specificDeliveryCharges = shopDetails?.specific_delivery_charges;
+      if (specificDeliveryCharges && specificDeliveryCharges[selectedSpecificDeliveryZone] !== undefined) {
+        return specificDeliveryCharges[selectedSpecificDeliveryZone];
+      }
+    }
+
+    // Fallback to default charges based on delivery option
     const charges: Record<string, number> = {
       inside_city: 50,
       outside_city: 100,
       sub_city: 80,
     };
-    return charges[delivery_option] || 100;
+    return charges[delivery_option] || 0;
   };
 
   const deliveryCharge = calculateDeliveryCharge();
-  const taxAmount = 0; // Can be implemented later
+
+  // Calculate VAT tax based on shop's vat_tax percentage
+  const vatTaxPercentage = shopDetails?.vat_tax || 0;
+  const taxAmount = Math.round(totalPrice * (vatTaxPercentage / 100));
   const totaltax = taxAmount; // Alias to match old project
+
   const grandTotal = totalPrice + deliveryCharge + taxAmount - discountAmount;
 
   // State for full online payment toggle (used by Advanced Payment Options)
