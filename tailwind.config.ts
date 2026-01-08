@@ -182,11 +182,11 @@ const config = {
     // Grid rows
     "row-span-2", "row-span-3", "row-span-4",
     "col-span-2", "col-span-3", "col-span-4", "col-span-8", "col-span-12", "col-span-full",
-    "lg:col-span-4", "lg:col-span-8",
+    "lg:col-span-1", "lg:col-span-2", "lg:col-span-4", "lg:col-span-8",
     
     // Order
-    "order-first", "order-last", "order-1", "order-2",
-    "lg:order-first", "lg:order-last", "lg:order-1", "lg:order-2",
+    "order-first", "order-last", "order-1", "order-2", "order-3", "order-4", "order-5",
+    "lg:order-first", "lg:order-last", "lg:order-1", "lg:order-2", "lg:order-3", "lg:order-4", "lg:order-5",
     
     // ========================================
     // SPACING - MARGIN
@@ -369,6 +369,9 @@ const config = {
     
     // Isolation & Overflow
     "isolate", "overflow-hidden", "overflow-visible", "overflow-auto",
+    
+    // Text Breaking
+    "break-words", "break-all",
     
     // ========================================
     // GRADIENTS (for About Team and similar) - Tailwind v4 uses bg-linear-to-*
