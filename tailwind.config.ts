@@ -20,14 +20,14 @@ const config = {
     // ========================================
     
     // Position - left
-    "left-0", "left-4", "left-6", "left-1/2",
+    "left-0", "left-4", "left-6", "left-1/2", "left-[5%]", "left-[20%]",
     "sm:left-4", "sm:left-6",
     "md:left-16", "md:left-20",
     "lg:left-28", "lg:left-[112px]",
     "-left-0.5", "-left-1", "-left-2", "-left-4",
 
     // Position - right
-    "right-0", "-right-0.5", "-right-1", "-right-2", "-right-3", "-right-4", "right-3", "right-4", "right-5", "right-6",
+    "right-0", "-right-0.5", "-right-1", "-right-2", "-right-3", "-right-4", "right-3", "right-4", "right-5", "right-6", "right-[8%]", "right-[25%]",
     "sm:-right-1", "sm:right-3", "sm:right-5",
     "md:-right-1", "md:right-8",
     "lg:right-11", "lg:right-28",
@@ -35,12 +35,12 @@ const config = {
     // Position - top
     "-top-0.5", "-top-1", "-top-2", "-top-4",
     "sm:-top-1", "md:-top-1",
-    "top-0", "top-2.5", "top-4", "top-8", "top-1/2",
+    "top-0", "top-2.5", "top-4", "top-8", "top-1/2", "top-1/3", "top-[60px]",
     "md:top-6", "md:top-auto",
     "lg:top-8",
 
     // Position - bottom
-    "bottom-0", "bottom-4", "bottom-8", "bottom-10", "bottom-20", "bottom-24",
+    "bottom-0", "bottom-4", "bottom-8", "bottom-10", "bottom-20", "bottom-24", "bottom-28",
     "md:bottom-12", "md:bottom-32",
     "lg:bottom-14", "lg:bottom-40",
     "sm:bottom-6",
@@ -79,7 +79,7 @@ const config = {
     "sm:w-7", "sm:w-8",
     
     // Arbitrary widths
-    "w-[50px]", "w-[86px]", "w-[100px]", "w-[120px]", "w-[140px]", "w-[180px]", "w-[200px]", "w-[220px]", "w-[260px]", "w-[300px]", "w-[320px]", "w-[384px]", "w-[362px]", "w-[45%]",
+    "w-[50px]", "w-[86px]", "w-[100px]", "w-[120px]", "w-[140px]", "w-[180px]", "w-[196px]", "w-[200px]", "w-[220px]", "w-[260px]", "w-[300px]", "w-[320px]", "w-[384px]", "w-[362px]", "w-[45%]",
     "sm:w-[220px]", "sm:w-[260px]",
     "lg:w-[300px]",
     
@@ -114,8 +114,8 @@ const config = {
     
     // Arbitrary heights
     "h-[50px]", "h-[80%]", "h-[95%]",
-    "h-[86px]", "h-[100px]", "h-[120px]", "h-[140px]", "h-[180px]", "h-[280px]", "h-[300px]", "h-[320px]", "h-[350px]", "h-[400px]", "h-[424px]", "h-[450px]", 
-    "h-[480px]", "h-[494px]", "h-[500px]", "h-[520px]", "h-[524px]", "h-[542px]", "h-[550px]", "h-[600px]", "h-[624px]", "h-[650px]",
+    "h-[86px]", "h-[100px]", "h-[120px]", "h-[140px]", "h-[180px]", "h-[196px]", "h-[280px]", "h-[300px]", "h-[320px]", "h-[350px]", "h-[400px]", "h-[424px]", "h-[450px]", 
+    "h-[480px]", "h-[494px]", "h-[500px]", "h-[520px]", "h-[524px]", "h-[542px]", "h-[550px]", "h-[580px]", "h-[600px]", "h-[624px]", "h-[650px]",
     
     // Responsive heights
     "h-40", "sm:h-40", "sm:h-[60px]", "sm:h-[120px]", "sm:h-[400px]", "sm:h-[450px]", "sm:h-[500px]", "sm:h-[550px]", "sm:h-[600px]",
@@ -182,11 +182,11 @@ const config = {
     // Grid rows
     "row-span-2", "row-span-3", "row-span-4",
     "col-span-2", "col-span-3", "col-span-4", "col-span-8", "col-span-12", "col-span-full",
-    "lg:col-span-4", "lg:col-span-8",
+    "lg:col-span-1", "lg:col-span-2", "lg:col-span-4", "lg:col-span-8",
     
     // Order
-    "order-first", "order-last", "order-1", "order-2",
-    "lg:order-first", "lg:order-last", "lg:order-1", "lg:order-2",
+    "order-first", "order-last", "order-1", "order-2", "order-3", "order-4", "order-5",
+    "lg:order-first", "lg:order-last", "lg:order-1", "lg:order-2", "lg:order-3", "lg:order-4", "lg:order-5",
     
     // ========================================
     // SPACING - MARGIN
@@ -260,6 +260,7 @@ const config = {
     "sm:text-sm", "sm:text-base", "sm:text-lg", "sm:text-xl", "sm:text-2xl", "sm:text-3xl", "sm:text-4xl", "sm:text-5xl",
     "md:text-sm", "md:text-base", "md:text-lg", "md:text-xl", "md:text-2xl", "md:text-3xl", "md:text-4xl", "md:text-5xl",
     "lg:text-lg", "lg:text-xl", "lg:text-2xl", "lg:text-3xl", "lg:text-4xl", "lg:text-5xl", "lg:text-6xl",
+    "xl:text-6xl",
     
     // Font weights
     "font-normal", "font-medium", "font-semibold", "font-bold",
@@ -365,6 +366,12 @@ const config = {
     // Grayscale
     "grayscale", "grayscale-0",
     "hover:grayscale-0",
+    
+    // Isolation & Overflow
+    "isolate", "overflow-hidden", "overflow-visible", "overflow-auto",
+    
+    // Text Breaking
+    "break-words", "break-all",
     
     // ========================================
     // GRADIENTS (for About Team and similar) - Tailwind v4 uses bg-linear-to-*
