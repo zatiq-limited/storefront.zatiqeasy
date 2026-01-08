@@ -60,12 +60,19 @@ export default function MerchantLandingPage() {
   );
 
   // Get store actions
-  const { clearOrderState } = useLandingStore();
+  const { clearOrderState, setIsLegacyLandingPage } = useLandingStore();
 
   // Clear order state when slug changes (new landing page)
   useEffect(() => {
     clearOrderState();
   }, [slug, clearOrderState]);
+
+  // Clean up legacy landing page flag when leaving the page
+  useEffect(() => {
+    return () => {
+      setIsLegacyLandingPage(false);
+    };
+  }, [setIsLegacyLandingPage]);
 
   // Loading state
   if (isLoading || isProfileLoading || !activeShopData) {

@@ -108,12 +108,19 @@ export default function SingleProductPage({ params }: SingleProductPageProps) {
   );
 
   // Get store actions
-  const { clearOrderState } = useLandingStore();
+  const { clearOrderState, setIsLegacyLandingPage } = useLandingStore();
 
   // Clear order state when slug changes (new landing page)
   useEffect(() => {
     clearOrderState();
   }, [slug, clearOrderState]);
+
+  // Clean up legacy landing page flag when leaving the page
+  useEffect(() => {
+    return () => {
+      setIsLegacyLandingPage(false);
+    };
+  }, [setIsLegacyLandingPage]);
 
   // Scroll to top when component mounts or slug changes
   useEffect(() => {

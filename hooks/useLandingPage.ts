@@ -49,7 +49,7 @@ export function useLandingPage(
   options: UseLandingPageOptions = {}
 ) {
   const { enabled = true, syncToStore = true } = options;
-  const { setPageData, setPrimaryColor, setSecondaryColor } = useLandingStore();
+  const { setPageData, setPrimaryColor, setSecondaryColor, setIsLegacyLandingPage } = useLandingStore();
 
   // Get identifiers - Theme Builder uses shop_id, Legacy uses shop_uuid
   const shopId = params.shopId ? String(params.shopId) : "";
@@ -123,6 +123,8 @@ export function useLandingPage(
     if (syncToStore && query.data?.type === "legacy") {
       const legacyData = query.data.data as SingleProductPage;
       setPageData(legacyData);
+      // Set legacy landing page flag to hide theme builder header/footer
+      setIsLegacyLandingPage(true);
 
       // Also update colors if available
       const themeData = legacyData.theme_data?.[0];
@@ -132,8 +134,11 @@ export function useLandingPage(
       if (themeData?.color?.secondary_color) {
         setSecondaryColor(themeData.color.secondary_color);
       }
+    } else if (syncToStore) {
+      // Clear the flag if not on a legacy landing page
+      setIsLegacyLandingPage(false);
     }
-  }, [query.data, syncToStore, setPageData, setPrimaryColor, setSecondaryColor]);
+  }, [query.data, syncToStore, setPageData, setPrimaryColor, setSecondaryColor, setIsLegacyLandingPage]);
 
   // Determine page type
   const isThemeBuilder = query.data?.type === "theme-builder";
