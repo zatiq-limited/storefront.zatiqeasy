@@ -1,6 +1,6 @@
 /**
  * Customer Reviews 1
- * Grid layout with review cards
+ * Grid layout with review cards - matches merchant panel design
  */
 
 "use client";
@@ -15,7 +15,6 @@ type Review = StoreReview;
 interface ReviewSummary {
   average_rating: number;
   total_reviews: number;
-  rating_distribution?: Record<number, number>;
 }
 
 interface CustomerReviews1Props {
@@ -26,18 +25,15 @@ interface CustomerReviews1Props {
 
 interface CustomerReviews1Settings {
   title?: string;
-  showRatingDistribution?: boolean;
+  showRatingSummary?: boolean;
   showReviewImages?: boolean;
-  showReviewDate?: boolean;
-  showAvatar?: boolean;
-  gridColumns?: number;
+  columns?: number;
+  limit?: number;
   titleColor?: string;
   starColor?: string;
   cardBgColor?: string;
-  cardBorderColor?: string;
   textColor?: string;
-  ratingBarColor?: string;
-  ratingBarBgColor?: string;
+  verifiedBadgeColor?: string;
 }
 
 export default function CustomerReviews1({
@@ -49,24 +45,23 @@ export default function CustomerReviews1({
 
   // Settings with defaults
   const title = s.title || "Customer Reviews";
-  const showRatingDistribution = s.showRatingDistribution !== false;
+  const showRatingSummary = s.showRatingSummary !== false;
   const showReviewImages = s.showReviewImages !== false;
-  const showReviewDate = s.showReviewDate !== false;
-  const showAvatar = s.showAvatar !== false;
-  const gridColumns = s.gridColumns || 2;
+  const columns = s.columns || 3;
+  const limit = s.limit || 6;
 
   // Colors
   const titleColor = s.titleColor || "#111827";
   const starColor = s.starColor || "#FBBF24";
   const cardBgColor = s.cardBgColor || "#FFFFFF";
-  const cardBorderColor = s.cardBorderColor || "#E5E7EB";
   const textColor = s.textColor || "#4B5563";
-  const ratingBarColor = s.ratingBarColor || "#FBBF24";
-  const ratingBarBgColor = s.ratingBarBgColor || "#E5E7EB";
+  const verifiedBadgeColor = s.verifiedBadgeColor || "#059669";
 
   if (!reviews || reviews.length === 0) {
     return null;
   }
+
+  const displayedReviews = reviews.slice(0, limit);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -82,9 +77,10 @@ export default function CustomerReviews1({
       {Array.from({ length: 5 }).map((_, i) => (
         <svg
           key={i}
-          className={`${size} ${i < rating ? "" : "opacity-30"}`}
-          fill={starColor}
+          className={size}
+          fill="currentColor"
           viewBox="0 0 20 20"
+          style={{ color: i < rating ? starColor : "#D1D5DB" }}
         >
           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
         </svg>
@@ -92,28 +88,36 @@ export default function CustomerReviews1({
     </div>
   );
 
-  const gridClass =
-    gridColumns === 1
-      ? "grid-cols-1"
-      : gridColumns === 3
-      ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
-      : "grid-cols-1 md:grid-cols-2";
+  // Responsive grid classes based on columns setting
+  const getGridClass = () => {
+    const colsMap: Record<number, string> = {
+      1: "grid-cols-1",
+      2: "grid-cols-1 md:grid-cols-2",
+      3: "grid-cols-1 md:grid-cols-2 lg:grid-cols-3",
+      4: "grid-cols-1 md:grid-cols-2 lg:grid-cols-4",
+    };
+    return colsMap[columns] || "grid-cols-1 md:grid-cols-2 lg:grid-cols-3";
+  };
 
   return (
-    <section className="py-12 md:py-16 bg-gray-50">
-      <div className="container mx-auto px-4 2xl:px-0">
+    <section className="py-8 md:py-10 lg:py-12">
+      <div className="container mx-auto px-4 md:px-6 2xl:px-0">
         {/* Header */}
-        <div className="text-center mb-10">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
           <h2
-            className="text-2xl md:text-3xl font-bold mb-2"
+            className="text-2xl md:text-3xl font-bold"
             style={{ color: titleColor }}
           >
             {title}
           </h2>
-          {reviewSummary && (
-            <div className="flex items-center justify-center gap-3">
-              {renderStars(Math.round(reviewSummary.average_rating), "w-5 h-5")}
-              <span className="text-lg font-semibold" style={{ color: titleColor }}>
+
+          {showRatingSummary && reviewSummary && (
+            <div className="flex items-center gap-4">
+              {renderStars(Math.round(reviewSummary.average_rating), "w-6 h-6")}
+              <span
+                className="text-lg font-semibold"
+                style={{ color: titleColor }}
+              >
                 {reviewSummary.average_rating.toFixed(1)}
               </span>
               <span style={{ color: textColor }}>
@@ -123,100 +127,53 @@ export default function CustomerReviews1({
           )}
         </div>
 
-        {/* Rating Distribution */}
-        {showRatingDistribution &&
-          reviewSummary?.rating_distribution &&
-          reviewSummary.total_reviews > 0 && (
-            <div className="max-w-md mx-auto mb-10 bg-white p-6 rounded-xl shadow-sm">
-              {[5, 4, 3, 2, 1].map((star) => {
-                const count =
-                  reviewSummary.rating_distribution?.[star] || 0;
-                const percentage =
-                  reviewSummary.total_reviews > 0
-                    ? (count / reviewSummary.total_reviews) * 100
-                    : 0;
-
-                return (
-                  <div key={star} className="flex items-center gap-3 mb-2">
-                    <span
-                      className="w-3 text-sm font-medium"
-                      style={{ color: textColor }}
-                    >
-                      {star}
-                    </span>
-                    <svg
-                      className="w-4 h-4"
-                      fill={starColor}
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                    <div
-                      className="flex-1 h-2 rounded-full overflow-hidden"
-                      style={{ backgroundColor: ratingBarBgColor }}
-                    >
-                      <div
-                        className="h-full rounded-full transition-all"
-                        style={{
-                          width: `${percentage}%`,
-                          backgroundColor: ratingBarColor,
-                        }}
-                      />
-                    </div>
-                    <span
-                      className="w-8 text-sm text-right"
-                      style={{ color: textColor }}
-                    >
-                      {count}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-
         {/* Reviews Grid */}
-        <div className={`grid ${gridClass} gap-6`}>
-          {reviews.map((review) => (
+        <div className={`grid ${getGridClass()} gap-6`}>
+          {displayedReviews.map((review) => (
             <div
               key={review.id}
-              className="p-6 rounded-xl shadow-sm"
-              style={{
-                backgroundColor: cardBgColor,
-                border: `1px solid ${cardBorderColor}`,
-              }}
+              className="rounded-xl p-6 shadow-sm"
+              style={{ backgroundColor: cardBgColor }}
             >
-              {/* Review Header */}
-              <div className="flex items-start gap-4 mb-4">
-                {showAvatar && (
-                  <div className="w-12 h-12 rounded-full bg-gray-200 overflow-hidden shrink-0">
-                    <div className="w-full h-full flex items-center justify-center bg-linear-to-br from-purple-500 to-pink-500 text-white font-semibold text-lg">
-                      {review.name.charAt(0).toUpperCase()}
-                    </div>
-                  </div>
-                )}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between gap-2 flex-wrap">
-                    <h4
-                      className="font-semibold truncate"
-                      style={{ color: titleColor }}
-                    >
-                      {review.name}
-                    </h4>
-                    {showReviewDate && review.created_at && (
-                      <span className="text-sm" style={{ color: textColor }}>
-                        {formatDate(review.created_at)}
-                      </span>
-                    )}
-                  </div>
-                  <div className="mt-1">{renderStars(review.rating)}</div>
-                </div>
+              {/* Rating */}
+              <div className="flex items-center gap-1 mb-3">
+                {renderStars(review.rating)}
               </div>
 
-              {/* Review Comment */}
-              <p className="leading-relaxed" style={{ color: textColor }}>
+              {/* Review Text */}
+              <p
+                className="text-sm mb-4 line-clamp-3"
+                style={{ color: textColor }}
+              >
                 {review.description}
               </p>
+
+              {/* Reviewer */}
+              <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
+                <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center shrink-0">
+                  <span className="text-gray-600 font-medium text-sm">
+                    {review.name?.charAt(0)?.toUpperCase() || "U"}
+                  </span>
+                </div>
+                <div className="min-w-0">
+                  <p
+                    className="font-medium text-sm truncate"
+                    style={{ color: titleColor }}
+                  >
+                    {review.name}
+                  </p>
+                  {review.reviewer_type === "verified_buyer" && (
+                    <p className="text-xs" style={{ color: verifiedBadgeColor }}>
+                      ✓ Verified Purchase
+                    </p>
+                  )}
+                  {review.created_at && (
+                    <p className="text-xs" style={{ color: textColor }}>
+                      {formatDate(review.created_at)}
+                    </p>
+                  )}
+                </div>
+              </div>
 
               {/* Review Images */}
               {showReviewImages && review.images && review.images.length > 0 && (
@@ -231,7 +188,7 @@ export default function CustomerReviews1({
                         alt={`Review image ${index + 1}`}
                         width={64}
                         height={64}
-                        className="object-cover w-full h-full"
+                        className="object-cover w-full h-full hover:opacity-75 transition-opacity"
                       />
                     </div>
                   ))}
@@ -240,6 +197,15 @@ export default function CustomerReviews1({
             </div>
           ))}
         </div>
+
+        {/* View All Button */}
+        {reviews.length > limit && (
+          <div className="text-center mt-8">
+            <button className="px-8 py-3 border-2 border-gray-300 rounded-lg font-semibold text-gray-700 hover:border-gray-400 hover:bg-gray-50 transition-colors">
+              View All {reviews.length} Reviews
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );

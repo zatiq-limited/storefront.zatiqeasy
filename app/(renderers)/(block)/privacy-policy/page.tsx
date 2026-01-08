@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { useShopStore } from "@/stores/shopStore";
 import { useShopCustomPages } from "@/hooks/useShopCustomPages";
 import PrivacyPageRenderer from "@/components/renderers/page-renderer/privacy-page-renderer";
