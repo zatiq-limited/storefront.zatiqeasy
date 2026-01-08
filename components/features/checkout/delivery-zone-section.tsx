@@ -8,6 +8,7 @@ type DeliveryZoneSectionProps = {
   selectedSpecificDeliveryZone: string;
   setSelectedSpecificDeliveryZone: (zone: string) => void;
   isDisabled?: boolean;
+  showError?: boolean;
 };
 
 export const DeliveryZoneSection = ({
@@ -17,6 +18,7 @@ export const DeliveryZoneSection = ({
   selectedSpecificDeliveryZone,
   setSelectedSpecificDeliveryZone,
   isDisabled = false,
+  showError = false,
 }: DeliveryZoneSectionProps) => {
   const { t } = useTranslation();
 
@@ -35,6 +37,7 @@ export const DeliveryZoneSection = ({
     >
       <h4 className="text-base font-medium text-gray-700 dark:text-gray-300">
         {t("delivery_zone")}
+        <span className="text-red-500">*</span>
       </h4>
       <div className="flex flex-wrap gap-3">
         {Object.keys(specificDeliveryCharges).map((zone) => (
@@ -45,14 +48,16 @@ export const DeliveryZoneSection = ({
             isDisabled={isDisabled}
             onClick={() => {
               if (isDisabled) return;
-              // Don't allow deselection - at least one zone must be selected
-              if (selectedSpecificDeliveryZone !== zone) {
-                setSelectedSpecificDeliveryZone(zone);
-              }
+              setSelectedSpecificDeliveryZone(zone);
             }}
           />
         ))}
       </div>
+      {showError && !selectedSpecificDeliveryZone && (
+        <p className="text-sm text-red-500 mt-2">
+          {t("delivery_zone_required") || "Please select a delivery zone"}
+        </p>
+      )}
     </div>
   );
 };
