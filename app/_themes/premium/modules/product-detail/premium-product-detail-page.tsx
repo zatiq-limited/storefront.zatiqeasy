@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, useCallback, useEffect } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { Minus, Plus, Play, Download, ChevronLeft } from "lucide-react";
@@ -10,8 +10,6 @@ import {
   selectTotalItems,
   selectSubtotal,
 } from "@/stores/cartStore";
-import { useProductsStore } from "@/stores/productsStore";
-import { useShopInventories } from "@/hooks";
 import { FallbackImage } from "@/components/ui/fallback-image";
 import { CartFloatingBtn } from "@/components/features/cart/cart-floating-btn";
 import { VariantSelectorModal } from "@/components/products/variant-selector-modal";
@@ -20,9 +18,8 @@ import {
   getInventoryThumbImageUrl,
   getDetailPageImageUrl,
 } from "@/lib/utils";
-import { GridContainer } from "../../components/core";
-import { PremiumProductCard } from "../../components/cards";
 import { ProductPricing, ProductVariants } from "./sections";
+import PremiumRelatedProducts from "../../components/product-details/premium-related-products";
 import type { Product } from "@/stores/productsStore";
 import type { VariantsState, VariantState } from "@/types/cart.types";
 
@@ -47,23 +44,7 @@ export function PremiumProductDetailPage({
   const { shopDetails } = useShopStore();
   const { addProduct, getProductsByInventoryId, removeProduct } =
     useCartStore();
-  const storeProducts = useProductsStore((state) => state.products);
   const totalCartItems = useCartStore(selectTotalItems);
-
-  // Fetch products if store is empty (handles page reload scenario)
-  const { data: fetchedProducts } = useShopInventories(
-    { shopUuid: shopDetails?.shop_uuid || "" },
-    { enabled: storeProducts.length === 0 && !!shopDetails?.shop_uuid }
-  );
-
-  // Use store products if available, otherwise use fetched products
-  const allProducts = useMemo(
-    () =>
-      storeProducts.length > 0
-        ? storeProducts
-        : (fetchedProducts as Product[]) || [],
-    [storeProducts, fetchedProducts]
-  );
   const totalPrice = useCartStore(selectSubtotal);
 
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
@@ -225,19 +206,6 @@ export function PremiumProductDetailPage({
   const hasSavePrice = (old_price ?? 0) > (price ?? 0);
   const savePrice = hasSavePrice ? old_price! - price! : 0;
 
-  // Related products (same category, excluding current product)
-  const relatedProducts = useMemo(() => {
-    if (!product.categories || product.categories.length === 0) return [];
-    const categoryIds = product.categories.map((c) => c.id);
-    return allProducts
-      .filter(
-        (p) =>
-          p.id !== product.id &&
-          p.categories?.some((c) => categoryIds.includes(c.id))
-      )
-      .slice(0, 10);
-  }, [allProducts, product]);
-
   // Handle variant selection
   const handleVariantSelect = useCallback(
     (variantTypeId: number | string, variantState: VariantState) => {
@@ -344,7 +312,7 @@ export function PremiumProductDetailPage({
   const actionButtonLabel = isInCart ? t("update_cart") : t("add_to_cart");
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="bg-gray-50 dark:bg-gray-900">
       {/* Variant Selector Modal for Related Products */}
       <VariantSelectorModal
         product={selectedRelatedProduct}
@@ -749,25 +717,12 @@ export function PremiumProductDetailPage({
         </div>
 
         {/* Related Products */}
-        {relatedProducts.length > 0 && (
-          <div className="mt-12 md:mt-16">
-            <h2 className="text-lg md:text-xl lg:text-2xl font-bold text-gray-900 dark:text-white mb-6">
-              {t("related_products")}
-            </h2>
-            <GridContainer columns={{ mobile: 2, tablet: 3, desktop: 5 }}>
-              {relatedProducts.map((relatedProduct) => (
-                <PremiumProductCard
-                  key={relatedProduct.id}
-                  product={relatedProduct}
-                  onSelectProduct={() =>
-                    setSelectedRelatedProduct(relatedProduct)
-                  }
-                  onNavigate={() => navigateProductDetails(relatedProduct.id)}
-                />
-              ))}
-            </GridContainer>
-          </div>
-        )}
+        <PremiumRelatedProducts
+          ignoreProductId={id}
+          currentProduct={product}
+          onSelectProduct={setSelectedRelatedProduct}
+          onNavigate={navigateProductDetails}
+        />
       </div>
 
       {/* Floating Cart Button */}
