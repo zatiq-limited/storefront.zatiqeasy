@@ -25,6 +25,8 @@ interface LandingStoreState extends LandingPageState {
   orderPlaced: boolean;
   orderId: string | null;
   trackLink: string | null;
+  // Legacy landing page flag (used to hide theme builder header/footer)
+  isLegacyLandingPage: boolean;
 }
 
 interface LandingStoreActions extends LandingPageActions {
@@ -32,6 +34,7 @@ interface LandingStoreActions extends LandingPageActions {
   clearCheckoutFormData: () => void;
   setOrderPlaced: (orderId: string, trackLink?: string) => void;
   clearOrderState: () => void;
+  setIsLegacyLandingPage: (isLegacy: boolean) => void;
 }
 
 const initialState: LandingStoreState = {
@@ -42,6 +45,7 @@ const initialState: LandingStoreState = {
   orderPlaced: false,
   orderId: null,
   trackLink: null,
+  isLegacyLandingPage: false,
 };
 
 export const useLandingStore = create<LandingStoreState & LandingStoreActions>()(
@@ -102,6 +106,11 @@ export const useLandingStore = create<LandingStoreState & LandingStoreActions>()
           });
         },
 
+        // Set legacy landing page flag
+        setIsLegacyLandingPage: (isLegacy: boolean) => {
+          set({ isLegacyLandingPage: isLegacy });
+        },
+
         // Reset entire store
         reset: () => {
           set(initialState);
@@ -131,6 +140,7 @@ export const selectCheckoutFormData = (state: LandingStoreState) => state.checko
 export const selectOrderPlaced = (state: LandingStoreState) => state.orderPlaced;
 export const selectOrderId = (state: LandingStoreState) => state.orderId;
 export const selectTrackLink = (state: LandingStoreState) => state.trackLink;
+export const selectIsLegacyLandingPage = (state: LandingStoreState) => state.isLegacyLandingPage;
 
 // Derived selectors
 export const selectInventory = (state: LandingStoreState) => state.pageData?.inventory;
