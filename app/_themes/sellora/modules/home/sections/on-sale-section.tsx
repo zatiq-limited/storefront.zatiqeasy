@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import { useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -8,6 +8,7 @@ import { Navigation, Autoplay } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
 import { useShopStore } from "@/stores/shopStore";
 import { SelloraProductCard } from "../../../components/cards";
+import { FlashSaleCountdown } from "../../../components/flash-sale-countdown";
 import type { Product } from "@/stores/productsStore";
 
 import "swiper/css";
@@ -34,15 +35,18 @@ export function OnSaleSection({
   if (onSaleProducts.length === 0) return null;
 
   return (
-    <div className="py-10 sm:py-14">
+    <div className="container py-10 sm:py-14">
       {/* Header */}
       <div className="text-center mb-4 sm:mb-6 md:mb-8">
         <h2
           className="text-2xl md:text-3xl font-semibold text-foreground mb-6 sm:mb-8"
           style={{ letterSpacing: "4%" }}
         >
-          {t("special_offer") || "Special Offer"}
+          {t("special_offer")}
         </h2>
+
+        {/* Flash Sale Countdown */}
+        <FlashSaleCountdown />
       </div>
 
       {/* Swiper Slider */}
