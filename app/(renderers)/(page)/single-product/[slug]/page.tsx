@@ -15,6 +15,7 @@ import { useSearchParams } from "next/navigation";
 import { useLandingPage } from "@/hooks/useLandingPage";
 import { useLandingStore } from "@/stores/landingStore";
 import { useShopStore } from "@/stores/shopStore";
+import { getShopIdentifierClient } from "@/lib/utils/shop-identifier-client";
 import { GripLandingPage } from "@/app/_themes/landing/themes/grip";
 import { ArcadiaLandingPage } from "@/app/_themes/landing/themes/arcadia";
 import { NirvanaLandingPage } from "@/app/_themes/landing/themes/nirvana";
@@ -73,10 +74,15 @@ export default function SingleProductPage({ params }: SingleProductPageProps) {
 
   const { shopDetails } = useShopStore();
 
-  // Get shop_id for API call
-  const shopId = shopDetails?.id;
+  // Get shop identifier from URL (subdomain/domain detection)
+  const shopIdentifier = getShopIdentifierClient();
 
-  // Fetch landing page data using shop_id
+  // Get identifiers for API call
+  // Priority: shopId > subdomain > domain > shopUuid
+  const shopId = shopDetails?.id;
+  const shopUuid = shopDetails?.shop_uuid;
+
+  // Fetch landing page data using identifier with priority
   const {
     isLoading,
     error,
@@ -89,11 +95,14 @@ export default function SingleProductPage({ params }: SingleProductPageProps) {
     {
       slug,
       shopId: shopId,
+      subdomain: shopIdentifier.subdomain,
+      domain: shopIdentifier.domain,
+      shopUuid: shopUuid,
       preview: isPreview,
     },
     {
-      // Enable query when we have slug and shop_id
-      enabled: !!slug && !!shopId,
+      // Enable query when we have slug and at least one identifier
+      enabled: !!slug && !!(shopId || shopIdentifier.subdomain || shopIdentifier.domain || shopUuid),
       syncToStore: true,
     }
   );

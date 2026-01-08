@@ -24,8 +24,11 @@ const LANDING_PAGE_CACHE = {
 
 interface UseLandingPageParams {
   slug: string;
-  shopUuid?: string;
+  // Priority: shopId > subdomain > domain > shopUuid
   shopId?: string | number;
+  subdomain?: string;
+  domain?: string;
+  shopUuid?: string;
   preview?: boolean;
 }
 
@@ -48,11 +51,18 @@ export function useLandingPage(
   const { enabled = true, syncToStore = true } = options;
   const { setPageData, setPrimaryColor, setSecondaryColor } = useLandingStore();
 
-  // Build query key
+  // Get identifiers - Theme Builder uses shop_id, Legacy uses shop_uuid
+  const shopId = params.shopId ? String(params.shopId) : "";
+  const shopUuid = params.shopUuid || "";
+
+  // Build query key with all relevant identifiers
   const queryKey = [
     "landing-page",
     params.slug,
-    params.shopUuid || params.shopId,
+    shopId,
+    params.subdomain,
+    params.domain,
+    shopUuid,
     params.preview,
   ];
 
@@ -60,11 +70,13 @@ export function useLandingPage(
     queryKey,
     queryFn: async (): Promise<LandingPageResponse> => {
       // Build URL with query params for GET request
+      // Theme Builder uses shop_id, Legacy uses shop_uuid
       const searchParams = new URLSearchParams();
-      if (params.shopId) {
-        searchParams.set("shop_id", String(params.shopId));
-      } else if (params.shopUuid) {
-        searchParams.set("shop_id", params.shopUuid);
+      if (shopId) {
+        searchParams.set("shop_id", shopId);
+      }
+      if (shopUuid) {
+        searchParams.set("shop_uuid", shopUuid);
       }
       if (params.preview) {
         searchParams.set("preview", "true");
@@ -101,7 +113,7 @@ export function useLandingPage(
         data: result.data as SingleProductPage,
       };
     },
-    enabled: enabled && !!params.slug && !!(params.shopUuid || params.shopId),
+    enabled: enabled && !!params.slug && !!(shopId || params.subdomain || params.domain || shopUuid),
     ...LANDING_PAGE_CACHE,
     ...DEFAULT_QUERY_OPTIONS,
   });

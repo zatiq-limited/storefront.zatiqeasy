@@ -16,18 +16,18 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
   const { slug } = await params;
   const { searchParams } = new URL(request.url);
 
-  // Get query parameters - support shop_id, shop_uuid, or identifier for flexibility
-  const shopId =
-    searchParams.get("shop_id") ||
-    searchParams.get("shop_uuid") ||
-    searchParams.get("identifier");
+  // Get query parameters
+  // shop_id: for Theme Builder
+  // shop_uuid: for Legacy theme
+  const shopId = searchParams.get("shop_id") || "";
+  const shopUuid = searchParams.get("shop_uuid") || searchParams.get("identifier") || "";
   const preview = searchParams.get("preview") === "true";
 
-  if (!shopId) {
+  if (!shopId && !shopUuid) {
     return NextResponse.json(
       {
         success: false,
-        error: "Shop ID is required",
+        error: "Shop ID or Shop UUID is required",
       },
       {
         status: 400,
@@ -40,7 +40,8 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
   try {
     // Use theme-api service to fetch landing page
-    const result = await getLandingPage(slug, shopId, preview);
+    // Theme Builder uses shop_id, Legacy uses shop_uuid
+    const result = await getLandingPage(slug, shopId, shopUuid, preview);
 
     if (!result.success) {
       return NextResponse.json(
@@ -98,13 +99,15 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
 
     const { shop_id, identifier, shop_uuid, preview = false } = body;
 
-    const shopId = shop_id || identifier || shop_uuid;
+    // Theme Builder uses shop_id, Legacy uses shop_uuid (identifier)
+    const shopId = shop_id || "";
+    const shopUuid = shop_uuid || identifier || "";
 
-    if (!shopId) {
+    if (!shopId && !shopUuid) {
       return NextResponse.json(
         {
           success: false,
-          error: "Shop ID is required",
+          error: "Shop ID or Shop UUID is required",
         },
         {
           status: 400,
@@ -113,7 +116,8 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     }
 
     // Use theme-api service to fetch landing page
-    const result = await getLandingPage(slug, shopId, preview);
+    // Theme Builder uses shop_id, Legacy uses shop_uuid
+    const result = await getLandingPage(slug, shopId, shopUuid, preview);
 
     if (!result.success) {
       return NextResponse.json(
