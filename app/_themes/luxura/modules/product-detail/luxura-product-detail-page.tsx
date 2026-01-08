@@ -369,7 +369,7 @@ export function LuxuraProductDetailPage() {
 
   return (
     <>
-      <div className="pb-20 w-[95%] md:w-[90%] lg:w-[78%] mx-auto py-8">
+      <div className="container pb-20 py-8">
         {/* Product Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
           {/* Image Gallery */}

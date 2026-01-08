@@ -148,7 +148,7 @@ export function InventoryProducts() {
                 <select
                   onChange={handleSort}
                   value={sortOption}
-                  className="border border-gray-300 rounded-lg px-2 py-2 text-sm w-30.5 bg-transparent dark:bg-gray-700 dark:border-gray-600"
+                  className="border border-gray-300 rounded-lg px-2 py-2 text-sm w-32 bg-transparent dark:bg-gray-700 dark:border-gray-600"
                 >
                   <option value="">Default</option>
                   <option value="price-asc">Price (Low &gt; High)</option>

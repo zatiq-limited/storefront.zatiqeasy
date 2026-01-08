@@ -290,6 +290,29 @@ export function CommonCheckoutForm({
     }
   }, [selectedPaymentMethod, isAceeptTermsAndCondition]);
 
+  // Auto-select the first available payment method on page load
+  useEffect(() => {
+    const paymentMethods = shopDetails?.payment_methods || [];
+    if (paymentMethods.length > 0) {
+      // Set the first payment method as default
+      setSelectedPaymentMethod(paymentMethods[0]);
+    }
+  }, [shopDetails?.payment_methods]);
+
+  // Auto-select the first delivery zone on page load (when zones delivery is enabled)
+  useEffect(() => {
+    const specificDeliveryCharges = shopDetails?.specific_delivery_charges;
+    const deliveryOpt = shopDetails?.delivery_option;
+
+    if (deliveryOpt === "zones" && specificDeliveryCharges) {
+      const zones = Object.keys(specificDeliveryCharges);
+      if (zones.length > 0 && !selectedSpecificDeliveryZone) {
+        // Set the first delivery zone as default
+        setSelectedSpecificDeliveryZone(zones[0]);
+      }
+    }
+  }, [shopDetails?.specific_delivery_charges, shopDetails?.delivery_option, selectedSpecificDeliveryZone]);
+
   // Watch customer_phone and auto-validate to set fullPhoneNumber
   const customerPhone = watch("customer_phone");
   useEffect(() => {

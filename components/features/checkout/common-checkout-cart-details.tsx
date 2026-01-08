@@ -297,7 +297,7 @@ const SingleCartItem: React.FC<SingleCartItemProps> = ({
       key={cartProduct?.cartId}
       className="overflow-hidden flex bg-white dark:bg-transparent py-3 mx-3 border-b dark:border-none gap-2 sm:gap-4"
     >
-      <div className="w-30 min-w-30 md:w-36 md:min-w-36 aspect-140/180 relative object-cover">
+      <div className="w-28 min-w-28 md:w-36 md:min-w-36 aspect-140/180 relative object-cover">
         <FallbackImage
           src={getInventoryThumbImageUrl(cartProduct?.image_url)}
           alt={cartProduct?.name}
