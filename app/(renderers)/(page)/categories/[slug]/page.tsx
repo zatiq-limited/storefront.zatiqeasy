@@ -62,7 +62,7 @@ export default function CategoryPage({ params }: CategoryPageProps) {
     { enabled: !!shopUuid && isLegacyTheme }
   );
 
-  // Fetch collection details for Theme Builder mode
+  // Fetch collection details for Theme Builder mode only (not for legacy themes)
   const {
     collection,
     sections,
@@ -71,7 +71,7 @@ export default function CategoryPage({ params }: CategoryPageProps) {
     error,
     notFound,
     hasShopUuid,
-  } = useCollectionDetails(slug);
+  } = useCollectionDetails(slug, { enabled: !isLegacyTheme });
 
   // Scroll to top when component mounts or slug changes
   useEffect(() => {

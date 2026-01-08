@@ -17,11 +17,12 @@ interface CategoryHorizontalListProps {
 
 /**
  * CategoryHorizontalList Component
- * Matches old project's implementation from category-horizontal-list.tsx
+ * Matches sidebar-category.tsx functionality with horizontal card design
  * Uses URL params as single source of truth:
  * - category_id: tracks which parent's subcategories we're viewing (navigation)
  * - selected_category: tracks the selected category for filtering products
  */
+
 // Loading Skeleton
 const HorizontalCategorySkeleton = () => (
   <div className="flex gap-1.5 overflow-x-auto pb-2 md:pb-0 animate-pulse">
@@ -61,12 +62,12 @@ export function CategoryHorizontalList({
 
   const baseUrl = shopDetails?.baseUrl || "";
 
-  // URL params - matching old project
-  const categoryIdParam = searchParams.get("category_id"); // Parent category for navigation
+  // URL params - matching sidebar-category
+  const categoryIdParam = searchParams.get("category_id");
   const selectedCategory =
-    searchParams.get("selected_category") || searchParams.get("category"); // For filtering
+    searchParams.get("selected_category") || searchParams.get("category");
 
-  // For fromCategory mode, extract category ID from pathname (e.g., /merchant/123/categories/456 -> 456)
+  // For fromCategory mode, extract category ID from pathname
   const categoryIdFromPath = useMemo(() => {
     if (!fromCategory) return null;
     const pathParts = pathname.split("/");
@@ -79,7 +80,6 @@ export function CategoryHorizontalList({
 
   // Get current root category from URL (derived from category_id param or path)
   const currentRootCategory = useMemo(() => {
-    // For fromCategory mode, use path-based category ID
     const categoryId = fromCategory ? categoryIdFromPath : categoryIdParam;
     if (!categoryId) return null;
     return categories.find((cat) => String(cat.id) === categoryId) || null;
@@ -88,156 +88,141 @@ export function CategoryHorizontalList({
   // Get the visible category list based on current root
   const categoryList = useMemo(() => {
     if (currentRootCategory?.id) {
-      // Show subcategories of current root
       return categories.filter(
         (cat) => String(cat.parent_id) === String(currentRootCategory.id)
       );
     }
-    // Show only root categories (parent_id is null or undefined)
     return categories.filter((cat) => !cat.parent_id);
   }, [currentRootCategory, categories]);
 
-  // Build URL with params - preserve current pathname (e.g., /products, /categories)
-  const buildUrl = useCallback(
-    (params: {
-      category_id?: string | null;
-      selected_category?: string | null;
-    }) => {
-      // Use current pathname instead of baseUrl to preserve route
-      // e.g., /merchant/5286/products stays as /merchant/5286/products
-      const basePath = pathname || baseUrl || "/";
-      const url = new URL(basePath, window.location.origin);
+  // Get the selected category object (for showing the name when a subcategory is selected)
+  const selectedCategoryObject = useMemo(() => {
+    if (!selectedCategory) return null;
+    return categories.find((cat) => String(cat.id) === selectedCategory) || null;
+  }, [selectedCategory, categories]);
 
-      // Clear existing search params first
-      url.searchParams.delete("category_id");
-      url.searchParams.delete("selected_category");
+  // Determine which category name to display (selected subcategory takes priority)
+  const displayCategory = useMemo(() => {
+    // If a subcategory is selected (different from the route category), show its name
+    if (fromCategory && selectedCategoryObject && categoryIdFromPath !== selectedCategory) {
+      return selectedCategoryObject;
+    }
+    // Otherwise show the root category from the path
+    return currentRootCategory;
+  }, [fromCategory, selectedCategoryObject, categoryIdFromPath, selectedCategory, currentRootCategory]);
 
-      if (params.category_id) {
-        url.searchParams.set("category_id", params.category_id);
-      }
-      if (params.selected_category) {
-        url.searchParams.set("selected_category", params.selected_category);
-      }
+  // Handle category click - matching sidebar-category's handleCategoryClick
+  const handleCategoryClick = useCallback(
+    (category: Category) => {
+      // Check if this category has subcategories
+      const hasSubcategories = categories.some(
+        (cat) => String(cat.parent_id) === String(category.id)
+      );
 
-      return url.pathname + url.search;
-    },
-    [pathname, baseUrl]
-  );
-
-  // Handle category selection - matching old project's handleSelectCategory
-  const handleSelectCategory = useCallback(
-    (categoryId: string | number | null) => {
-      // Special case: fromCategory mode uses route-based navigation
+      // Special case: fromCategory mode
       if (fromCategory) {
         const categoriesPath = `${baseUrl}/categories`;
 
-        // Go back to parent (id === -1)
-        if (categoryId === -1) {
-          if (currentRootCategory?.parent_id) {
-            // Go to parent's parent
-            router.push(`${categoriesPath}/${currentRootCategory.parent_id}`);
-          } else {
-            // Go back to all categories
-            router.push(categoriesPath);
-          }
-          return;
-        }
-
-        // Show all categories (id === null)
-        if (categoryId === null) {
-          router.push(categoriesPath);
-          return;
-        }
-
-        // Navigate to specific category route
-        const categoryIdStr = String(categoryId);
-        router.push(`${categoriesPath}/${categoryIdStr}`);
-        return;
-      }
-
-      // Regular mode (products page): use URL params
-      // Go back to parent (id === -1)
-      if (categoryId === -1) {
-        if (currentRootCategory?.parent_id) {
-          // Go to parent's parent
-          const parentCategory = categories.find(
-            (cat) => String(cat.id) === String(currentRootCategory.parent_id)
-          );
-          if (parentCategory) {
-            router.push(
-              buildUrl({
-                category_id: String(parentCategory.id),
-                selected_category: String(parentCategory.id),
-              })
-            );
-          } else {
-            router.push(baseUrl || "/");
-          }
-        } else {
-          // Go back to root (no params)
-          router.push(baseUrl || "/");
-        }
-        return;
-      }
-
-      // Show all products (id === null)
-      if (categoryId === null) {
-        router.push(baseUrl || "/");
-        return;
-      }
-
-      // Find the category
-      const categoryIdStr = String(categoryId);
-      const foundCategory = categories.find(
-        (cat) => String(cat.id) === categoryIdStr
-      );
-
-      if (foundCategory) {
-        /** Old logic to check for subcategories before deciding params
-         * 
-         * 
-         * 
-        // Check if this category has subcategories
-        const hasSubcategories = categories.some(
-          (cat) => String(cat.parent_id) === String(foundCategory.id)
-        );
-
         if (hasSubcategories) {
-          // Has subcategories - drill down to show them
-          // ONLY set category_id for navigation, DON'T set selected_category (no product filtering yet)
-          router.push(
-            buildUrl({
-              category_id: categoryIdStr,
-              selected_category: null, // Don't filter products when drilling down
-            })
-          );
+          // Category with subcategories: navigate to category route
+          router.push(`${categoriesPath}/${category.id}`);
         } else {
-          // No subcategories (leaf) - filter products, keep current navigation
-          router.push(
-            buildUrl({
-              category_id: categoryIdParam, // Keep current parent
-              selected_category: categoryIdStr, // Filter products by this category
-            })
-          );
+          // Leaf category: stay on current route, add selected_category param
+          const params = new URLSearchParams(searchParams.toString());
+          params.set("selected_category", String(category.id));
+          router.replace(`${pathname}?${params.toString()}`);
         }
-         * 
-         * 
-         * 
-         */
+        return;
+      }
 
-        // Set both category_id and selected_category when selecting any category
-        router.push(
-          buildUrl({
-            category_id: categoryIdStr,
-            selected_category: categoryIdStr,
-          })
-        );
+      // Regular mode: stay on current page and update URL params
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("selected_category", String(category.id));
+
+      // Include category_id if:
+      // 1. Category has subcategories, OR
+      // 2. Category has a parent (it's a subcategory itself)
+      if (hasSubcategories || category.parent_id) {
+        params.set("category_id", String(category.id));
       } else {
-        router.push(buildUrl({ selected_category: categoryIdStr }));
+        // Root level leaf category: only selected_category
+        params.delete("category_id");
+      }
+
+      router.replace(`${pathname}?${params.toString()}`);
+    },
+    [fromCategory, baseUrl, categories, router, searchParams, pathname]
+  );
+
+  // Handle back button - matching sidebar-category's handleBackBtn
+  const handleBackBtn = useCallback(() => {
+    // Special case: fromCategory mode
+    if (fromCategory) {
+      const categoriesPath = `${baseUrl}/categories`;
+      if (currentRootCategory?.parent_id) {
+        router.push(`${categoriesPath}/${currentRootCategory.parent_id}`);
+      } else {
+        router.push(categoriesPath);
+      }
+      return;
+    }
+
+    // Regular mode: stay on current page and update URL params
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (currentRootCategory?.parent_id) {
+      // Go to parent category
+      params.set("category_id", String(currentRootCategory.parent_id));
+      params.set("selected_category", String(currentRootCategory.parent_id));
+      router.replace(`${pathname}?${params.toString()}`);
+    } else {
+      // Go back to root - clear category params
+      params.delete("category_id");
+      params.delete("selected_category");
+      const queryString = params.toString();
+      router.replace(queryString ? `${pathname}?${queryString}` : pathname);
+    }
+  }, [fromCategory, baseUrl, currentRootCategory, router, searchParams, pathname]);
+
+  // Handle "All [Category]" click - matching sidebar-category's handleAllCategoryClick
+  const handleAllCategoryClick = useCallback(
+    (category: Category | null) => {
+      if (fromCategory) {
+        const categoriesPath = `${baseUrl}/categories`;
+        if (category) {
+          router.push(`${categoriesPath}/${category.id}`);
+        } else {
+          router.push(categoriesPath);
+        }
+        return;
+      }
+
+      // Regular mode: stay on current page and update URL params
+      const params = new URLSearchParams(searchParams.toString());
+
+      if (category) {
+        params.set("category_id", String(category.id));
+        params.set("selected_category", String(category.id));
+        router.replace(`${pathname}?${params.toString()}`);
+      } else {
+        // Clear category params
+        params.delete("category_id");
+        params.delete("selected_category");
+        const queryString = params.toString();
+        router.replace(queryString ? `${pathname}?${queryString}` : pathname);
       }
     },
-    [fromCategory, baseUrl, categories, currentRootCategory, router, buildUrl]
+    [fromCategory, baseUrl, router, searchParams, pathname]
   );
+
+  // Handle "All products" click - clear category filters, stay on current page
+  const handleAllProductsClick = useCallback(() => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("category_id");
+    params.delete("selected_category");
+    const queryString = params.toString();
+    router.replace(queryString ? `${pathname}?${queryString}` : pathname);
+  }, [router, searchParams, pathname]);
 
   // Show skeleton while loading
   if (isLoading && storeCategories.length === 0) {
@@ -254,6 +239,30 @@ export function CategoryHorizontalList({
 
   return (
     <div className={cn("w-full", className)}>
+      {/* Show category name when in fromCategory mode (shows selected subcategory name if one is selected) */}
+      {fromCategory && displayCategory && (
+        <div className="flex items-center gap-2 mb-3">
+          {/* Back button - shown when a subcategory is selected */}
+          {selectedCategoryObject && categoryIdFromPath !== selectedCategory && (
+            <button
+              onClick={() => {
+                // Clear selected_category param to go back to parent category view
+                const params = new URLSearchParams(searchParams.toString());
+                params.delete("selected_category");
+                const queryString = params.toString();
+                router.replace(queryString ? `${pathname}?${queryString}` : pathname);
+              }}
+              className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              aria-label="Back to parent category"
+            >
+              <ArrowLeftCircle className="w-6 h-6 md:w-7 md:h-7 text-gray-700 dark:text-gray-300" />
+            </button>
+          )}
+          <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-gray-900 dark:text-white">
+            {displayCategory.name}
+          </h2>
+        </div>
+      )}
       <div className="flex overflow-y-hidden overflow-x-auto pb-2 gap-1.5 md:pb-0 scroll-mb-1 category-x-scrollbar">
         {/* Show "All [Parent Category]" card with back button when viewing subcategories */}
         {currentRootCategory?.id && !fromCategory ? (
@@ -271,13 +280,8 @@ export function CategoryHorizontalList({
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              // Click on "All [Category]" filters by this category
-              router.push(
-                buildUrl({
-                  category_id: String(currentRootCategory.id),
-                  selected_category: String(currentRootCategory.id),
-                })
-              );
+              // Click on "All [Category]" - matching sidebar behavior
+              handleAllCategoryClick(currentRootCategory);
             }}
           >
             <FallbackImage
@@ -298,7 +302,7 @@ export function CategoryHorizontalList({
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                handleSelectCategory(-1);
+                handleBackBtn();
               }}
             >
               <ArrowLeftCircle className="w-5 md:w-6" />
@@ -318,7 +322,11 @@ export function CategoryHorizontalList({
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              handleSelectCategory(null);
+              if (fromCategory) {
+                handleAllCategoryClick(null);
+              } else {
+                handleAllProductsClick();
+              }
             }}
           >
             {shopDetails?.image_url ? (
@@ -355,7 +363,7 @@ export function CategoryHorizontalList({
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              handleSelectCategory(category.id);
+              handleCategoryClick(category);
             }}
           >
             <FallbackImage

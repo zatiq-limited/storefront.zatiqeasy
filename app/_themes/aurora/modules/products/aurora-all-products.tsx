@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useMemo, useCallback } from "react";
-import { useRouter } from "next/navigation";
+import React, { useState, useMemo, useCallback, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { X, SlidersHorizontal, Square, SquareCheckBig } from "lucide-react";
 import { useShopStore } from "@/stores/shopStore";
@@ -58,6 +58,7 @@ const MAX_PRODUCTS_PER_PAGE = 12;
 
 export function AuroraAllProducts() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { t } = useTranslation();
 
   const { shopDetails } = useShopStore();
@@ -67,6 +68,7 @@ export function AuroraAllProducts() {
   // Get products from Zustand store
   const products = useProductsStore((state) => state.products);
   const filters = useProductsStore((state) => state.filters);
+  const setFilters = useProductsStore((state) => state.setFilters);
   const productsStoreIsLoading = useProductsStore((state) => state.isLoading);
 
   // Fetch shop inventories to populate products store (if not already fetched by parent)
@@ -86,6 +88,20 @@ export function AuroraAllProducts() {
   const [showMobileFilter, setShowMobileFilter] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortOption, setSortOption] = useState("");
+
+  // Sync URL params with store filters
+  const selectedCategory = searchParams.get("selected_category");
+
+  useEffect(() => {
+    // Update store filter when URL param changes
+    if (selectedCategory && selectedCategory !== filters.category) {
+      setFilters({ category: selectedCategory, page: 1 });
+    } else if (!selectedCategory && filters.category) {
+      // Clear category filter when URL param is removed
+      setFilters({ category: undefined, page: 1 });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedCategory]);
 
   const baseUrl = shopDetails?.baseUrl || "";
   const countryCurrency = shopDetails?.country_currency || "BDT";

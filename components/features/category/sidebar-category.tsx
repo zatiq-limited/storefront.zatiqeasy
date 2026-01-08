@@ -104,20 +104,28 @@ export function SidebarCategory({
           `${baseUrl}/categories/${category.id}?selected_category=${category.id}&category_id=${category.id}`
         );
       } else {
-        // Leaf category - just select it and filter products, stay on current page
-        const params = new URLSearchParams(searchParams.toString());
-        params.set("selected_category", String(category.id));
-        if (currentRootCategory?.id) {
-          params.set("category_id", String(currentRootCategory.id));
-        } else if (category.parent_id) {
-          params.set("category_id", String(category.parent_id));
+        // Leaf category handling
+        if (isBasic) {
+          // Basic theme: stay on current page and update params
+          const params = new URLSearchParams(searchParams.toString());
+          params.set("selected_category", String(category.id));
+          if (currentRootCategory?.id) {
+            params.set("category_id", String(currentRootCategory.id));
+          } else if (category.parent_id) {
+            params.set("category_id", String(category.parent_id));
+          }
+          router.replace(`${pathname}?${params.toString()}`);
+        } else {
+          // Luxura/other themes: navigate to category page with full params
+          router.push(
+            `${baseUrl}/categories/${category.id}?selected_category=${category.id}&category_id=${category.id}`
+          );
         }
-        router.replace(`${pathname}?${params.toString()}`);
       }
 
       setShowMobileNav?.(false);
     },
-    [categories, currentRootCategory, baseUrl, router, setShowMobileNav, searchParams, pathname]
+    [categories, currentRootCategory, baseUrl, router, setShowMobileNav, searchParams, pathname, isBasic]
   );
 
   // Handle back button

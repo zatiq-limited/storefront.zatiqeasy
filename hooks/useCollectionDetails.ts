@@ -59,7 +59,12 @@ async function fetchCollectionDetailsPageConfig(): Promise<CollectionDetailsPage
   return res.json();
 }
 
-export function useCollectionDetails(slug: string) {
+interface UseCollectionDetailsOptions {
+  enabled?: boolean;
+}
+
+export function useCollectionDetails(slug: string, options: UseCollectionDetailsOptions = {}) {
+  const { enabled = true } = options;
   const [error, setError] = useState<string | null>(null);
   const [notFound, setNotFound] = useState(false);
 
@@ -67,7 +72,7 @@ export function useCollectionDetails(slug: string) {
   const shopDetails = useShopStore((state) => state.shopDetails);
   const shopUuid = shopDetails?.shop_uuid;
 
-  // Collection query
+  // Collection query - only enabled when not in legacy theme mode
   const collectionQuery = useQuery({
     queryKey: ["collection", slug, shopUuid],
     queryFn: () => {
@@ -76,16 +81,17 @@ export function useCollectionDetails(slug: string) {
       }
       return fetchCollection(slug, shopUuid);
     },
-    enabled: !!slug && !!shopUuid,
+    enabled: enabled && !!slug && !!shopUuid,
     staleTime: 1000 * 60, // 1 minute
     gcTime: 1000 * 60 * 5, // 5 minutes
     refetchOnWindowFocus: false,
   });
 
-  // Collection details page config query
+  // Collection details page config query - only enabled when not in legacy theme mode
   const pageConfigQuery = useQuery({
     queryKey: ["collection-details-page-config"],
     queryFn: fetchCollectionDetailsPageConfig,
+    enabled: enabled,
     staleTime: 1000 * 60 * 5, // 5 minutes
     gcTime: 1000 * 60 * 30, // 30 minutes
     refetchOnWindowFocus: false,
