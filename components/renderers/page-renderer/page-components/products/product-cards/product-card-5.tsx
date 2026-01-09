@@ -11,26 +11,9 @@
 import { useState } from "react";
 import { FallbackImage } from "@/components/ui/fallback-image";
 import Link from "next/link";
-
-interface ProductCard5Props {
-  id: number | string;
-  handle: string;
-  title: string;
-  price: number;
-  comparePrice?: number | null;
-  currency?: string;
-  image: string;
-  hoverImage?: string;
-  priceColor?: string;
-  oldPriceColor?: string;
-  quickAddEnabled?: boolean;
-  buyNowEnabled?: boolean;
-  onAddToCart?: () => void;
-  onBuyNow?: () => void;
-}
+import type { ProductCardProps } from "./index";
 
 export default function ProductCard5({
-  id,
   handle,
   title,
   price,
@@ -44,7 +27,8 @@ export default function ProductCard5({
   buyNowEnabled = true,
   onAddToCart,
   onBuyNow,
-}: ProductCard5Props) {
+  isOutOfStock = false,
+}: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   const discountPercent =
@@ -70,13 +54,21 @@ export default function ProductCard5({
             style={{ transform: isHovered ? "scale(1.05)" : "scale(1)" }}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           />
-          {/* Discount Badge */}
-          {discountPercent && (
-            <div className="absolute top-2 right-2 sm:top-3 sm:right-3 w-9 h-9 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center bg-red-500">
-              <span className="text-white text-[10px] sm:text-xs lg:text-base font-normal leading-tight">
-                {discountPercent}
+          {/* Badge - Show Out of Stock badge if product is out of stock, otherwise show discount badge */}
+          {isOutOfStock ? (
+            <div className="absolute top-2 right-2 sm:top-3 sm:right-3 w-9 h-9 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center bg-gray-600">
+              <span className="text-white text-[8px] sm:text-[10px] lg:text-xs font-normal leading-tight text-center">
+                Out of Stock
               </span>
             </div>
+          ) : (
+            discountPercent && (
+              <div className="absolute top-2 right-2 sm:top-3 sm:right-3 w-9 h-9 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center bg-red-500">
+                <span className="text-white text-[10px] sm:text-xs lg:text-base font-normal leading-tight">
+                  {discountPercent}
+                </span>
+              </div>
+            )
           )}
 
           {/* Hover Overlay with Buttons - Desktop */}
@@ -87,16 +79,27 @@ export default function ProductCard5({
           >
             {quickAddEnabled && (
               <button
-                className="w-full h-11 lg:h-12 rounded bg-white flex items-center justify-center cursor-pointer text-sm font-medium text-gray-900 transition-all duration-300 leading-5 hover:bg-gray-100"
+                className={`w-full h-11 lg:h-12 rounded flex items-center justify-center text-sm font-medium transition-all duration-300 leading-5 ${
+                  isOutOfStock
+                    ? "cursor-not-allowed opacity-60"
+                    : "cursor-pointer hover:bg-gray-100"
+                }`}
+                style={{
+                  backgroundColor: isOutOfStock ? "#E5E7EB" : "#FFFFFF",
+                  color: isOutOfStock ? "#6B7280" : "#111827",
+                }}
+                disabled={isOutOfStock}
                 onClick={(e) => {
                   e.preventDefault();
-                  onAddToCart?.();
+                  if (!isOutOfStock) {
+                    onAddToCart?.();
+                  }
                 }}
               >
-                Add to Cart
+                {isOutOfStock ? "Out of Stock" : "Add to Cart"}
               </button>
             )}
-            {buyNowEnabled && (
+            {buyNowEnabled && !isOutOfStock && (
               <button
                 className="w-full h-11 lg:h-12 rounded bg-red-500 flex items-center justify-center cursor-pointer text-sm font-medium text-white transition-all duration-300 leading-5 hover:bg-red-600"
                 onClick={(e) => {
@@ -140,10 +143,21 @@ export default function ProductCard5({
             <div className="flex gap-1.5 sm:hidden">
               {quickAddEnabled && (
                 <button
-                  className="w-8 h-8 rounded-lg bg-gray-200 flex items-center justify-center cursor-pointer transition-all duration-200 active:scale-95"
+                  className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 ${
+                    isOutOfStock
+                      ? "cursor-not-allowed opacity-60"
+                      : "cursor-pointer active:scale-95"
+                  }`}
+                  style={{
+                    backgroundColor: isOutOfStock ? "#E5E7EB" : "#E5E7EB",
+                    color: isOutOfStock ? "#6B7280" : "#111827",
+                  }}
+                  disabled={isOutOfStock}
                   onClick={(e) => {
                     e.preventDefault();
-                    onAddToCart?.();
+                    if (!isOutOfStock) {
+                      onAddToCart?.();
+                    }
                   }}
                 >
                   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
@@ -157,7 +171,7 @@ export default function ProductCard5({
                   </svg>
                 </button>
               )}
-              {buyNowEnabled && (
+              {buyNowEnabled && !isOutOfStock && (
                 <button
                   className="w-8 h-8 rounded-lg bg-red-500/90 flex items-center justify-center cursor-pointer transition-all duration-200 active:scale-95"
                   onClick={(e) => {

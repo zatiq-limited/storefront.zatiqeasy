@@ -7,26 +7,7 @@
 
 import { FallbackImage } from "@/components/ui/fallback-image";
 import Link from "next/link";
-
-interface ProductCard9Props {
-  id: number | string;
-  handle: string;
-  title: string;
-  vendor?: string;
-  price: number;
-  comparePrice?: number | null;
-  currency?: string;
-  image: string;
-  badge?: string | null;
-  quickAddEnabled?: boolean;
-  buyNowEnabled?: boolean;
-  buttonBgColor?: string;
-  buttonTextColor?: string;
-  priceColor?: string;
-  oldPriceColor?: string;
-  onAddToCart?: () => void;
-  onBuyNow?: () => void;
-}
+import type { ProductCardProps } from "./index";
 
 export default function ProductCard9({
   handle,
@@ -45,7 +26,8 @@ export default function ProductCard9({
   oldPriceColor = "#9CA3AF",
   onAddToCart,
   onBuyNow,
-}: ProductCard9Props) {
+  isOutOfStock = false,
+}: ProductCardProps) {
   return (
     <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer">
       <Link href={`/products/${handle}`} className="block">
@@ -58,21 +40,37 @@ export default function ProductCard9({
             className="object-cover"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           />
-          {/* Badge */}
-          {badge && (
-            <div className="absolute top-2 left-2 sm:top-3 sm:left-3 px-1.5 py-0.5 sm:px-2 sm:py-1 text-[10px] sm:text-xs bg-[#F55157] text-white rounded font-medium">
-              {badge}
+          {/* Badge - Show Out of Stock badge if product is out of stock, otherwise show regular badge */}
+          {isOutOfStock ? (
+            <div className="absolute top-2 left-2 sm:top-3 sm:left-3 px-1.5 py-0.5 sm:px-2 sm:py-1 text-[10px] sm:text-xs bg-gray-600 text-white rounded font-medium">
+              Out of Stock
             </div>
+          ) : (
+            badge && (
+              <div className="absolute top-2 left-2 sm:top-3 sm:left-3 px-1.5 py-0.5 sm:px-2 sm:py-1 text-[10px] sm:text-xs bg-[#F55157] text-white rounded font-medium">
+                {badge}
+              </div>
+            )
           )}
           {/* Mobile Icon Buttons */}
           <div className="absolute bottom-2 right-2 flex gap-1.5 sm:hidden">
             {quickAddEnabled && (
               <button
-                className="w-7 h-7 rounded-full flex items-center justify-center shadow-md hover:opacity-90 transition-opacity"
-                style={{ backgroundColor: buttonBgColor, color: buttonTextColor }}
+                className={`w-7 h-7 rounded-full flex items-center justify-center shadow-md transition-opacity ${
+                  isOutOfStock
+                    ? "cursor-not-allowed opacity-60"
+                    : "hover:opacity-90"
+                }`}
+                style={{
+                  backgroundColor: isOutOfStock ? "#E5E7EB" : buttonBgColor,
+                  color: isOutOfStock ? "#6B7280" : buttonTextColor,
+                }}
+                disabled={isOutOfStock}
                 onClick={(e) => {
                   e.preventDefault();
-                  onAddToCart?.();
+                  if (!isOutOfStock) {
+                    onAddToCart?.();
+                  }
                 }}
               >
                 <svg className="w-3.5 h-3.5" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -83,7 +81,7 @@ export default function ProductCard9({
                 </svg>
               </button>
             )}
-            {buyNowEnabled && (
+            {buyNowEnabled && !isOutOfStock && (
               <button
                 className="w-7 h-7 rounded-full flex items-center justify-center shadow-md hover:opacity-90 transition-opacity"
                 style={{ backgroundColor: buttonBgColor, color: buttonTextColor }}
@@ -144,17 +142,27 @@ export default function ProductCard9({
           <div className="hidden sm:flex gap-2">
             {quickAddEnabled && (
               <button
-                className="flex-1 h-9 lg:h-10 text-xs lg:text-sm rounded font-medium transition-opacity hover:opacity-90"
-                style={{ backgroundColor: buttonBgColor, color: buttonTextColor }}
+                className={`flex-1 h-9 lg:h-10 text-xs lg:text-sm rounded font-medium transition-opacity ${
+                  isOutOfStock
+                    ? "cursor-not-allowed opacity-60"
+                    : "hover:opacity-90"
+                }`}
+                style={{
+                  backgroundColor: isOutOfStock ? "#E5E7EB" : buttonBgColor,
+                  color: isOutOfStock ? "#6B7280" : buttonTextColor,
+                }}
+                disabled={isOutOfStock}
                 onClick={(e) => {
                   e.preventDefault();
-                  onAddToCart?.();
+                  if (!isOutOfStock) {
+                    onAddToCart?.();
+                  }
                 }}
               >
-                Add to Cart
+                {isOutOfStock ? "Out of Stock" : "Add to Cart"}
               </button>
             )}
-            {buyNowEnabled && (
+            {buyNowEnabled && !isOutOfStock && (
               <button
                 className="flex-1 h-9 lg:h-10 text-xs lg:text-sm rounded font-medium border-2 transition-all hover:opacity-80"
                 style={{ borderColor: buttonBgColor, color: buttonBgColor }}

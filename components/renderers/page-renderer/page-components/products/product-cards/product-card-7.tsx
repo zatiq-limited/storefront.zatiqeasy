@@ -8,25 +8,7 @@
 import { useState } from "react";
 import { FallbackImage } from "@/components/ui/fallback-image";
 import Link from "next/link";
-
-interface ProductCard7Props {
-  id: number | string;
-  handle: string;
-  title: string;
-  price: number;
-  comparePrice?: number | null;
-  currency?: string;
-  image: string;
-  hoverImage?: string;
-  colors?: string[];
-  quickAddEnabled?: boolean;
-  buttonBgColor?: string;
-  buttonTextColor?: string;
-  priceColor?: string;
-  oldPriceColor?: string;
-  onAddToCart?: () => void;
-  onColorSelect?: (colorIndex: number) => void;
-}
+import type { ProductCardProps } from "./index";
 
 export default function ProductCard7({
   handle,
@@ -44,7 +26,8 @@ export default function ProductCard7({
   oldPriceColor = "#9CA3AF",
   onAddToCart,
   onColorSelect,
-}: ProductCard7Props) {
+  isOutOfStock = false,
+}: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [selectedColor, setSelectedColor] = useState(0);
 
@@ -75,11 +58,17 @@ export default function ProductCard7({
             style={{ transform: isHovered ? "scale(1.05)" : "scale(1)" }}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           />
-          {/* Discount Badge */}
-          {discountPercent && (
-            <div className="absolute top-2 left-2 sm:top-3 sm:left-3 lg:top-4 lg:left-4 text-white px-1.5 py-0.5 sm:px-2 sm:py-0.5 lg:px-2.5 lg:py-1 rounded text-[10px] sm:text-xs lg:text-xs font-medium leading-3 sm:leading-4 lg:leading-4 bg-red-500">
-              {discountPercent}
+          {/* Badge - Show Out of Stock badge if product is out of stock, otherwise show discount badge */}
+          {isOutOfStock ? (
+            <div className="absolute top-2 left-2 sm:top-3 sm:left-3 lg:top-4 lg:left-4 text-white px-1.5 py-0.5 sm:px-2 sm:py-0.5 lg:px-2.5 lg:py-1 rounded text-[10px] sm:text-xs lg:text-xs font-medium leading-3 sm:leading-4 lg:leading-4 bg-gray-600">
+              Out of Stock
             </div>
+          ) : (
+            discountPercent && (
+              <div className="absolute top-2 left-2 sm:top-3 sm:left-3 lg:top-4 lg:left-4 text-white px-1.5 py-0.5 sm:px-2 sm:py-0.5 lg:px-2.5 lg:py-1 rounded text-[10px] sm:text-xs lg:text-xs font-medium leading-3 sm:leading-4 lg:leading-4 bg-red-500">
+                {discountPercent}
+              </div>
+            )
           )}
         </div>
 
@@ -139,14 +128,24 @@ export default function ProductCard7({
           {/* Add to Cart Button */}
           {quickAddEnabled && (
             <button
-              className="w-full h-9 sm:h-10 lg:h-11 border-none rounded-3xl text-xs sm:text-sm lg:text-sm font-medium cursor-pointer transition-all duration-300 hover:opacity-90"
-              style={{ backgroundColor: buttonBgColor, color: buttonTextColor }}
+              className={`w-full h-9 sm:h-10 lg:h-11 border-none rounded-3xl text-xs sm:text-sm lg:text-sm font-medium transition-all duration-300 ${
+                isOutOfStock
+                  ? "cursor-not-allowed opacity-60"
+                  : "cursor-pointer hover:opacity-90"
+              }`}
+              style={{
+                backgroundColor: isOutOfStock ? "#E5E7EB" : buttonBgColor,
+                color: isOutOfStock ? "#6B7280" : buttonTextColor,
+              }}
+              disabled={isOutOfStock}
               onClick={(e) => {
                 e.preventDefault();
-                onAddToCart?.();
+                if (!isOutOfStock) {
+                  onAddToCart?.();
+                }
               }}
             >
-              Add to cart
+              {isOutOfStock ? "Out of Stock" : "Add to cart"}
             </button>
           )}
         </div>

@@ -7,22 +7,7 @@
 
 import { FallbackImage } from "@/components/ui/fallback-image";
 import Link from "next/link";
-
-interface ProductCard12Props {
-  id: number | string;
-  handle: string;
-  title: string;
-  price: number;
-  currency?: string;
-  image: string;
-  quickAddEnabled?: boolean;
-  buyNowEnabled?: boolean;
-  buttonBgColor?: string;
-  buttonTextColor?: string;
-  priceColor?: string;
-  onAddToCart?: () => void;
-  onBuyNow?: () => void;
-}
+import type { ProductCardProps } from "./index";
 
 export default function ProductCard12({
   handle,
@@ -37,7 +22,8 @@ export default function ProductCard12({
   priceColor = "#111827",
   onAddToCart,
   onBuyNow,
-}: ProductCard12Props) {
+  isOutOfStock = false,
+}: ProductCardProps) {
   return (
     <div className="bg-white border border-gray-100 rounded-lg overflow-hidden hover:border-gray-300 transition-all duration-300 cursor-pointer">
       <Link href={`/products/${handle}`} className="block">
@@ -50,15 +36,31 @@ export default function ProductCard12({
             className="object-cover"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           />
+          {/* Out of Stock Badge */}
+          {isOutOfStock && (
+            <div className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 px-1 py-0.5 sm:px-1.5 sm:py-0.5 text-[8px] sm:text-[10px] bg-gray-600 text-white rounded font-medium">
+              Out of Stock
+            </div>
+          )}
           {/* Mobile Icon Buttons */}
           <div className="absolute bottom-1.5 right-1.5 flex gap-1 sm:hidden">
             {quickAddEnabled && (
               <button
-                className="w-6 h-6 rounded-full flex items-center justify-center shadow-md hover:opacity-90 transition-opacity"
-                style={{ backgroundColor: buttonBgColor, color: buttonTextColor }}
+                className={`w-6 h-6 rounded-full flex items-center justify-center shadow-md transition-opacity ${
+                  isOutOfStock
+                    ? "cursor-not-allowed opacity-60"
+                    : "hover:opacity-90"
+                }`}
+                style={{
+                  backgroundColor: isOutOfStock ? "#E5E7EB" : buttonBgColor,
+                  color: isOutOfStock ? "#6B7280" : buttonTextColor,
+                }}
+                disabled={isOutOfStock}
                 onClick={(e) => {
                   e.preventDefault();
-                  onAddToCart?.();
+                  if (!isOutOfStock) {
+                    onAddToCart?.();
+                  }
                 }}
               >
                 <svg className="w-3 h-3" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -69,7 +71,7 @@ export default function ProductCard12({
                 </svg>
               </button>
             )}
-            {buyNowEnabled && (
+            {buyNowEnabled && !isOutOfStock && (
               <button
                 className="w-6 h-6 rounded-full flex items-center justify-center shadow-md hover:opacity-90 transition-opacity"
                 style={{ backgroundColor: buttonBgColor, color: buttonTextColor }}
@@ -113,17 +115,27 @@ export default function ProductCard12({
           <div className="hidden sm:flex gap-1.5">
             {quickAddEnabled && (
               <button
-                className="flex-1 h-7 lg:h-8 text-[10px] lg:text-xs rounded font-medium transition-opacity hover:opacity-90"
-                style={{ backgroundColor: buttonBgColor, color: buttonTextColor }}
+                className={`flex-1 h-7 lg:h-8 text-[10px] lg:text-xs rounded font-medium transition-opacity ${
+                  isOutOfStock
+                    ? "cursor-not-allowed opacity-60"
+                    : "hover:opacity-90"
+                }`}
+                style={{
+                  backgroundColor: isOutOfStock ? "#E5E7EB" : buttonBgColor,
+                  color: isOutOfStock ? "#6B7280" : buttonTextColor,
+                }}
+                disabled={isOutOfStock}
                 onClick={(e) => {
                   e.preventDefault();
-                  onAddToCart?.();
+                  if (!isOutOfStock) {
+                    onAddToCart?.();
+                  }
                 }}
               >
-                Add
+                {isOutOfStock ? "N/A" : "Add"}
               </button>
             )}
-            {buyNowEnabled && (
+            {buyNowEnabled && !isOutOfStock && (
               <button
                 className="flex-1 h-7 lg:h-8 text-[10px] lg:text-xs rounded font-medium border-2 transition-all hover:opacity-80"
                 style={{ borderColor: buttonBgColor, color: buttonBgColor }}

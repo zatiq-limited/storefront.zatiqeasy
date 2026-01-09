@@ -21,31 +21,54 @@ import ProductCard14 from "./product-card-14";
 import ProductCard15 from "./product-card-15";
 import ProductCard16 from "./product-card-16";
 
-// Base props all product cards share
-export interface ProductCardBaseProps {
+// Unified props interface for all product cards
+export interface ProductCardProps {
+  // Core required props
   id: number | string;
   handle: string;
   title: string;
-  vendor?: string;
   price: number;
-  comparePrice?: number;
   image: string;
-  buttonBgColor?: string;
-  buttonTextColor?: string;
-  onAddToCart?: () => void;
-}
 
-// Extended props for cards that need additional data
-export interface ProductCardExtendedProps extends ProductCardBaseProps {
+  // Optional content props
   subtitle?: string;
+  vendor?: string;
+  comparePrice?: number | null;
+  currency?: string;
+  hoverImage?: string;
+
+  // Badge props
+  badge?: string | null;
+  badgeColor?: string;
+
+  // Rating props
   rating?: number;
   reviewCount?: number;
-  badge?: string;
+
+  // Color options (for variant swatches)
   colors?: string[];
+
+  // Button configuration
+  quickAddEnabled?: boolean;
+  buyNowEnabled?: boolean;
+  buttonBgColor?: string;
+  buttonTextColor?: string;
+
+  // Price styling
+  priceColor?: string;
+  oldPriceColor?: string;
+
+  // Event handlers
+  onAddToCart?: () => void;
+  onBuyNow?: () => void;
+  onColorSelect?: (colorIndex: number) => void;
+
+  // Stock status
+  isOutOfStock?: boolean;
 }
 
-// Card component type that accepts extended props
-type ProductCardComponent = ComponentType<ProductCardExtendedProps>;
+// Card component type that accepts unified props
+type ProductCardComponent = ComponentType<ProductCardProps>;
 
 // Registry mapping card types to components
 export const PRODUCT_CARD_REGISTRY: Record<string, ProductCardComponent> = {

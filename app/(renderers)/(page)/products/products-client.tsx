@@ -44,7 +44,7 @@ export default function ProductsClient() {
   // Fetch shop inventories for real product data (both legacy and theme builder modes)
   const { isLoading: isInventoriesLoading } = useShopInventories(
     { shopUuid: shopDetails?.shop_uuid ?? "" },
-    { enabled: !!shopDetails?.shop_uuid }
+    { enabled: !!shopDetails?.shop_uuid, sortByStock: false }
   );
 
   // Fetch categories

@@ -11,31 +11,9 @@
 import { useState } from "react";
 import { FallbackImage } from "@/components/ui/fallback-image";
 import Link from "next/link";
-
-interface ProductCard3Props {
-  id: number | string;
-  handle: string;
-  title: string;
-  vendor?: string;
-  price: number;
-  comparePrice?: number | null;
-  currency?: string;
-  image: string;
-  hoverImage?: string;
-  badge?: string | null;
-  badgeColor?: string;
-  quickAddEnabled?: boolean;
-  buyNowEnabled?: boolean;
-  buttonBgColor?: string;
-  buttonTextColor?: string;
-  priceColor?: string;
-  oldPriceColor?: string;
-  onAddToCart?: () => void;
-  onBuyNow?: () => void;
-}
+import type { ProductCardProps } from "./index";
 
 export default function ProductCard3({
-  id,
   handle,
   title,
   vendor,
@@ -54,7 +32,8 @@ export default function ProductCard3({
   oldPriceColor = "#9CA3AF",
   onAddToCart,
   onBuyNow,
-}: ProductCard3Props) {
+  isOutOfStock = false,
+}: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   const discount =
@@ -82,14 +61,20 @@ export default function ProductCard3({
             style={{ transform: isHovered ? "scale(1.05)" : "scale(1)" }}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           />
-          {/* Badge */}
-          {displayBadge && (
-            <div
-              className="absolute top-2 left-2 sm:top-3 sm:left-3 lg:top-4 lg:left-4 text-white px-2 py-0.5 sm:px-2.5 sm:py-1 lg:px-3 rounded text-[10px] sm:text-xs lg:text-sm font-normal"
-              style={{ backgroundColor: badgeColor }}
-            >
-              {displayBadge}
+          {/* Badge - Show Out of Stock badge if product is out of stock, otherwise show regular badge */}
+          {isOutOfStock ? (
+            <div className="absolute top-2 left-2 sm:top-3 sm:left-3 lg:top-4 lg:left-4 bg-gray-600 text-white px-2 py-0.5 sm:px-2.5 sm:py-1 lg:px-3 rounded text-[10px] sm:text-xs lg:text-sm font-normal">
+              Out of Stock
             </div>
+          ) : (
+            displayBadge && (
+              <div
+                className="absolute top-2 left-2 sm:top-3 sm:left-3 lg:top-4 lg:left-4 text-white px-2 py-0.5 sm:px-2.5 sm:py-1 lg:px-3 rounded text-[10px] sm:text-xs lg:text-sm font-normal"
+                style={{ backgroundColor: badgeColor }}
+              >
+                {displayBadge}
+              </div>
+            )
           )}
         </div>
 
@@ -128,38 +113,50 @@ export default function ProductCard3({
           {/* Add to Cart Button */}
           {quickAddEnabled && (
             <button
-              className="w-full h-10 sm:h-12 lg:h-14 border border-blue-600 rounded flex items-center justify-center cursor-pointer text-xs sm:text-sm lg:text-base font-medium gap-2 transition-all duration-300 leading-6 hover:opacity-90 mb-2 mt-auto"
-              style={{ backgroundColor: buttonBgColor, color: buttonTextColor }}
+              className={`w-full h-10 sm:h-12 lg:h-14 border border-blue-600 rounded flex items-center justify-center text-xs sm:text-sm lg:text-base font-medium gap-2 transition-all duration-300 leading-6 mb-2 mt-auto ${
+                isOutOfStock
+                  ? "cursor-not-allowed opacity-60 !border-gray-300"
+                  : "cursor-pointer hover:opacity-90"
+              }`}
+              style={{
+                backgroundColor: isOutOfStock ? "#E5E7EB" : buttonBgColor,
+                color: isOutOfStock ? "#6B7280" : buttonTextColor,
+              }}
+              disabled={isOutOfStock}
               onClick={(e) => {
                 e.preventDefault();
-                onAddToCart?.();
+                if (!isOutOfStock) {
+                  onAddToCart?.();
+                }
               }}
             >
-              Add to Cart
-              <svg
-                className="w-3.5 h-3.5 sm:w-4 sm:h-4"
-                viewBox="0 0 16 16"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d="M3.54229 4.56394C3.53235 4.45393 3.54543 4.34304 3.58071 4.23836C3.61599 4.13368 3.67269 4.0375 3.74719 3.95594C3.82169 3.87438 3.91237 3.80924 4.01344 3.76466C4.11451 3.72008 4.22376 3.69705 4.33422 3.69702H13.976C14.0951 3.69707 14.2127 3.72386 14.32 3.77542C14.4274 3.82698 14.5218 3.90198 14.5962 3.99489C14.6707 4.08781 14.7234 4.19627 14.7504 4.31226C14.7773 4.42825 14.7779 4.54882 14.7521 4.66506L13.9374 8.33727C13.7972 8.96833 13.446 9.53272 12.9418 9.9372C12.4375 10.3417 11.8104 10.5621 11.1639 10.5619H6.67934C5.97022 10.562 5.28673 10.2968 4.76321 9.81848C4.2397 9.34016 3.91402 8.68333 3.8502 7.97709L3.54229 4.56394Z"
-                  fill="currentColor"
-                />
-                <path
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d="M1.19336 1.79015C1.19336 1.63948 1.25321 1.49498 1.35975 1.38844C1.46629 1.2819 1.61079 1.22205 1.76146 1.22205H3.75436C3.89332 1.22219 4.02741 1.27326 4.13126 1.36559C4.23511 1.45792 4.30151 1.58512 4.31791 1.72311L4.77466 5.58733C4.79229 5.7371 4.74971 5.88773 4.65627 6.0061C4.56283 6.12446 4.42621 6.20086 4.27644 6.21849C4.12668 6.23612 3.97604 6.19353 3.85768 6.1001C3.73931 6.00666 3.66291 5.87003 3.64528 5.72027L3.24875 2.35711H1.76146C1.61079 2.35711 1.46629 2.29726 1.35975 2.19072C1.25321 2.08418 1.19336 1.94082 1.19336 1.79015Z"
-                  fill="currentColor"
-                />
-              </svg>
+              {isOutOfStock ? "Out of Stock" : "Add to Cart"}
+              {!isOutOfStock && (
+                <svg
+                  className="w-3.5 h-3.5 sm:w-4 sm:h-4"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M3.54229 4.56394C3.53235 4.45393 3.54543 4.34304 3.58071 4.23836C3.61599 4.13368 3.67269 4.0375 3.74719 3.95594C3.82169 3.87438 3.91237 3.80924 4.01344 3.76466C4.11451 3.72008 4.22376 3.69705 4.33422 3.69702H13.976C14.0951 3.69707 14.2127 3.72386 14.32 3.77542C14.4274 3.82698 14.5218 3.90198 14.5962 3.99489C14.6707 4.08781 14.7234 4.19627 14.7504 4.31226C14.7773 4.42825 14.7779 4.54882 14.7521 4.66506L13.9374 8.33727C13.7972 8.96833 13.446 9.53272 12.9418 9.9372C12.4375 10.3417 11.8104 10.5621 11.1639 10.5619H6.67934C5.97022 10.562 5.28673 10.2968 4.76321 9.81848C4.2397 9.34016 3.91402 8.68333 3.8502 7.97709L3.54229 4.56394Z"
+                    fill="currentColor"
+                  />
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M1.19336 1.79015C1.19336 1.63948 1.25321 1.49498 1.35975 1.38844C1.46629 1.2819 1.61079 1.22205 1.76146 1.22205H3.75436C3.89332 1.22219 4.02741 1.27326 4.13126 1.36559C4.23511 1.45792 4.30151 1.58512 4.31791 1.72311L4.77466 5.58733C4.79229 5.7371 4.74971 5.88773 4.65627 6.0061C4.56283 6.12446 4.42621 6.20086 4.27644 6.21849C4.12668 6.23612 3.97604 6.19353 3.85768 6.1001C3.73931 6.00666 3.66291 5.87003 3.64528 5.72027L3.24875 2.35711H1.76146C1.61079 2.35711 1.46629 2.29726 1.35975 2.19072C1.25321 2.08418 1.19336 1.94082 1.19336 1.79015Z"
+                    fill="currentColor"
+                  />
+                </svg>
+              )}
             </button>
           )}
 
           {/* Buy Now Button */}
-          {buyNowEnabled && (
+          {buyNowEnabled && !isOutOfStock && (
             <button
               className="w-full h-10 sm:h-12 lg:h-14 border border-blue-600 rounded bg-white flex items-center justify-center cursor-pointer text-xs sm:text-sm lg:text-base font-medium text-blue-600 gap-1.5 sm:gap-2 transition-all duration-300 leading-6 hover:bg-gray-50"
               onClick={(e) => {

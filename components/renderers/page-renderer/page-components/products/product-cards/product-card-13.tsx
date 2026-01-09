@@ -7,22 +7,7 @@
 
 import { FallbackImage } from "@/components/ui/fallback-image";
 import Link from "next/link";
-
-interface ProductCard13Props {
-  id: number | string;
-  handle: string;
-  title: string;
-  price: number;
-  currency?: string;
-  image: string;
-  quickAddEnabled?: boolean;
-  buyNowEnabled?: boolean;
-  buttonBgColor?: string;
-  buttonTextColor?: string;
-  priceColor?: string;
-  onAddToCart?: () => void;
-  onBuyNow?: () => void;
-}
+import type { ProductCardProps } from "./index";
 
 export default function ProductCard13({
   handle,
@@ -37,7 +22,8 @@ export default function ProductCard13({
   priceColor = "#FFFFFF",
   onAddToCart,
   onBuyNow,
-}: ProductCard13Props) {
+  isOutOfStock = false,
+}: ProductCardProps) {
   return (
     <div className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer">
       <Link href={`/products/${handle}`} className="block">
@@ -50,6 +36,12 @@ export default function ProductCard13({
             className="object-cover"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           />
+          {/* Out of Stock Badge */}
+          {isOutOfStock && (
+            <div className="absolute top-2 left-2 sm:top-3 sm:left-3 px-1.5 py-0.5 sm:px-2 sm:py-1 text-[10px] sm:text-xs bg-gray-600 text-white rounded font-medium">
+              Out of Stock
+            </div>
+          )}
           {/* Gradient Overlay with Content */}
           <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/70 to-transparent p-2 sm:p-4">
             {/* Title */}
@@ -69,20 +61,27 @@ export default function ProductCard13({
             <div className="flex gap-2">
               {quickAddEnabled && (
                 <button
-                  className="flex-1 h-7 sm:h-8 lg:h-9 text-[10px] sm:text-xs lg:text-sm rounded font-medium transition-opacity hover:opacity-90"
+                  className={`flex-1 h-7 sm:h-8 lg:h-9 text-[10px] sm:text-xs lg:text-sm rounded font-medium transition-opacity ${
+                    isOutOfStock
+                      ? "cursor-not-allowed opacity-60"
+                      : "hover:opacity-90"
+                  }`}
                   style={{
-                    backgroundColor: buttonBgColor,
-                    color: buttonTextColor,
+                    backgroundColor: isOutOfStock ? "#E5E7EB" : buttonBgColor,
+                    color: isOutOfStock ? "#6B7280" : buttonTextColor,
                   }}
+                  disabled={isOutOfStock}
                   onClick={(e) => {
                     e.preventDefault();
-                    onAddToCart?.();
+                    if (!isOutOfStock) {
+                      onAddToCart?.();
+                    }
                   }}
                 >
-                  Add to Cart
+                  {isOutOfStock ? "Out of Stock" : "Add to Cart"}
                 </button>
               )}
-              {buyNowEnabled && (
+              {buyNowEnabled && !isOutOfStock && (
                 <button
                   className="flex-1 h-7 sm:h-8 lg:h-9 text-[10px] sm:text-xs lg:text-sm rounded font-medium bg-white/20 border border-white/50 text-white backdrop-blur-sm transition-all hover:bg-white/30"
                   onClick={(e) => {
