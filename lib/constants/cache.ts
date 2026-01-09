@@ -36,10 +36,12 @@ export const CACHE_TIMES = {
     gcTime: 30 * MINUTE, // 30 minutes
   },
 
-  /** Static content (homepage, about, theme) - only refresh on page reload */
+  /** Static content (homepage, about, theme) - only refresh on hard page reload */
   STATIC: {
     staleTime: Infinity,
     gcTime: Infinity,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
   },
 
   /** Shop profile - relatively stable data */
@@ -63,9 +65,11 @@ export const CACHE_TIMES = {
 
 /**
  * Default query options for React Query
+ * These prevent unnecessary refetching on navigation
  */
 export const DEFAULT_QUERY_OPTIONS = {
   refetchOnWindowFocus: false,
+  refetchOnReconnect: false,
   retry: 2,
   retryDelay: (attemptIndex: number) =>
     Math.min(1000 * 2 ** attemptIndex, 30000),
