@@ -44,12 +44,9 @@ export async function getShopIdentifier(
     // For development: use default shop ID from env if available
     // This allows testing on localhost without /merchant/[shopId] route
     const devShopId = process.env.NEXT_PUBLIC_DEV_SHOP_ID;
-    console.log("getShopIdentifier - localhost detected, NEXT_PUBLIC_DEV_SHOP_ID:", devShopId);
     if (devShopId) {
-      console.log("getShopIdentifier - returning shop_id:", devShopId);
       return { shop_id: devShopId };
     }
-    console.log("getShopIdentifier - no DEV_SHOP_ID set, returning empty");
     return {};
   }
 

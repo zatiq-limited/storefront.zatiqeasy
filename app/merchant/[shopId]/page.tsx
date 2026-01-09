@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useSearchParams, usePathname } from "next/navigation";
 import { useShopStore, useProductsStore, useHomepageStore } from "@/stores";
 import { BasicHomePage } from "@/app/_themes/basic";
@@ -107,11 +107,8 @@ function ShopPageContent({ shopId }: ShopPageProps) {
     pathname === "/" ||
     /^\/merchant\/[^/]+$/.test(pathname);
 
-  console.log("merchant/[shopId]/page.tsx - pathname:", pathname, "isLegacyTheme:", isLegacyTheme, "isHomepageRoute:", isHomepageRoute);
-
   // Legacy mode + Homepage: ThemeRouter already rendered the static theme, skip this
   if (isLegacyTheme && isHomepageRoute) {
-    console.log("merchant/[shopId]/page.tsx - Legacy mode homepage, returning null");
     return null;
   }
 
@@ -140,8 +137,6 @@ function ShopPageContent({ shopId }: ShopPageProps) {
   }
 
   // Theme Builder mode: Render blocks from homepage data
-  console.log("merchant/[shopId]/page.tsx - Theme Builder mode, rendering BlockRenderer");
-
   if (isHomepageLoading) {
     return (
       <main className="flex items-center justify-center min-h-[50vh]">
@@ -185,19 +180,125 @@ function ShopPageContent({ shopId }: ShopPageProps) {
 }
 
 // Single Product Landing Page Component
-function SingleProductLandingPage({ shopId: _shopId }: { shopId: string }) {
-  console.log("Rendering Single Product Landing Page for shop:", _shopId);
+// Renders landing page for shops with singleProductTheme enabled
+function SingleProductLandingPage({ shopId }: { shopId: string }) {
+  const { shopDetails } = useShopStore();
+  const shopUuid = shopDetails?.shop_uuid ?? "";
 
-  return (
-    <div className="min-h-screen">
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-4">Single Product Landing Page</h1>
-        <p className="text-gray-600">
-          This shop has a single product landing page theme enabled.
-        </p>
+  // State for landing page data
+  const [landingData, setLandingData] = useState<import("@/types/landing-page.types").SingleProductPage | null>(null);
+  const [isLandingLoading, setIsLandingLoading] = useState(true);
+  const [landingError, setLandingError] = useState<string | null>(null);
+
+  // Fetch the shop's default landing page
+  useEffect(() => {
+    async function fetchDefaultLandingPage() {
+      if (!shopUuid && !shopId) {
+        setLandingError("Shop information not available");
+        setIsLandingLoading(false);
+        return;
+      }
+
+      try {
+        setIsLandingLoading(true);
+        // First try to get the shop's default/primary landing page
+        // The API uses "home" or "default" as the default slug for single product shops
+        const response = await fetch(
+          `/api/storefront/v1/landing/default?shop_id=${shopId}&shop_uuid=${shopUuid}`
+        );
+
+        if (!response.ok) {
+          // Try "home" slug as fallback
+          const homeResponse = await fetch(
+            `/api/storefront/v1/landing/home?shop_id=${shopId}&shop_uuid=${shopUuid}`
+          );
+
+          if (!homeResponse.ok) {
+            throw new Error("No default landing page found for this shop");
+          }
+
+          const homeResult = await homeResponse.json();
+          if (homeResult.success && homeResult.data) {
+            setLandingData(homeResult.data as import("@/types/landing-page.types").SingleProductPage);
+          } else {
+            throw new Error("Landing page data not available");
+          }
+        } else {
+          const result = await response.json();
+          if (result.success && result.data) {
+            setLandingData(result.data as import("@/types/landing-page.types").SingleProductPage);
+          } else {
+            throw new Error("Landing page data not available");
+          }
+        }
+      } catch (err) {
+        setLandingError(err instanceof Error ? err.message : "Failed to load landing page");
+      } finally {
+        setIsLandingLoading(false);
+      }
+    }
+
+    fetchDefaultLandingPage();
+  }, [shopId, shopUuid]);
+
+  // Loading state
+  if (isLandingLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-gray-200 border-t-blue-600 rounded-full animate-spin" />
+          <p className="text-gray-500">Loading landing page...</p>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
+
+  // Error state - show a user-friendly message
+  if (landingError || !landingData) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center max-w-md mx-auto px-4">
+          <div className="w-16 h-16 mx-auto mb-4 bg-gray-200 rounded-full flex items-center justify-center">
+            <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+          </div>
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">
+            Landing Page Not Available
+          </h2>
+          <p className="text-gray-600 mb-4">
+            {landingError || "This shop's landing page is currently being set up."}
+          </p>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Import landing themes dynamically to avoid circular deps
+  const { GripLandingPage } = require("@/app/_themes/landing/themes/grip");
+  const { ArcadiaLandingPage } = require("@/app/_themes/landing/themes/arcadia");
+  const { NirvanaLandingPage } = require("@/app/_themes/landing/themes/nirvana");
+
+  const themeName = landingData.theme_name;
+
+  // Render based on theme
+  switch (themeName) {
+    case "Grip":
+      return <GripLandingPage landingData={landingData} />;
+    case "Arcadia":
+      return <ArcadiaLandingPage landingData={landingData} />;
+    case "Nirvana":
+      return <NirvanaLandingPage landingData={landingData} />;
+    default:
+      // Fallback to Grip theme for unsupported themes
+      return <GripLandingPage landingData={landingData} />;
+  }
 }
 
 // Main Shop Page Component

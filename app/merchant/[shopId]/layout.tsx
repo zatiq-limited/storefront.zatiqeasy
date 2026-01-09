@@ -67,7 +67,6 @@ export default async function MerchantLayout({
 
   const isLegacyTheme = shopProfile?.legacy_theme ?? true;
 
-  console.log("MerchantLayout - isLegacyTheme:", isLegacyTheme);
 
   return (
     <ShopProvider initialShopData={shopProfile}>

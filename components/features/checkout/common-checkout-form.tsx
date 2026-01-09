@@ -263,8 +263,7 @@ export function CommonCheckoutForm({
     try {
       // API call for promo code validation can be added here
       setPromoCodeMessage("Promo code applied successfully!");
-    } catch (err) {
-      console.error("Promo code error:", err);
+    } catch {
       setPromoCodeMessage("Invalid promo code");
     } finally {
       setIsPromoLoading(false);
@@ -392,8 +391,8 @@ export function CommonCheckoutForm({
         if (parsedNumber && parsedNumber.isValid()) {
           setFullPhoneNumber(parsedNumber.number);
         }
-      } catch (error) {
-        console.log("Phone parsing error:", error);
+      } catch {
+        // Phone parsing failed - ignore
       }
     }
   }, [customerPhone, selectedCountryCode]);

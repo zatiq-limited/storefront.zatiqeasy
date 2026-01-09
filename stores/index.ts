@@ -42,7 +42,21 @@ export { useThemeStore } from "./themeStore";
 
 export { useHomepageStore } from "./homepageStore";
 
-export { useProductsStore } from "./productsStore";
+export {
+  useProductsStore,
+  selectProducts,
+  selectCategories,
+  selectPagination,
+  selectFilters,
+  selectIsLoading,
+  selectError,
+  selectProductsPageConfig,
+  selectSearchQuery,
+  selectSortOption,
+  selectCurrentPage,
+  selectFilteredProducts,
+  selectTotalPages,
+} from "./productsStore";
 
 export { useProductDetailsStore } from "./productDetailsStore";
 

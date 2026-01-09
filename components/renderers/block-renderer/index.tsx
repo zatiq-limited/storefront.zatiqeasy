@@ -38,6 +38,18 @@ import SwiperRenderer from "./block-components/swiper-renderer";
 import ProgressBarRenderer from "./block-components/progress-bar-renderer";
 import { AboutTeam1Renderer } from "./block-components/about";
 
+/**
+ * Check if a URL is internal (should use Next.js Link for client-side navigation)
+ */
+function isInternalUrl(href: string): boolean {
+  if (!href || href === "#") return false;
+  // Internal URLs start with / but not // (protocol-relative)
+  if (href.startsWith("/") && !href.startsWith("//")) return true;
+  // Relative URLs without protocol
+  if (!href.includes("://") && !href.startsWith("//")) return true;
+  return false;
+}
+
 // Context for managing drawer/toggle visibility states across blocks
 interface DrawerContextType {
   drawerStates: Record<string, boolean>;
@@ -139,17 +151,6 @@ function collectDrawerStates(block: Block): Record<string, boolean> {
   collectFromBlock(block);
   return states;
 }
-
-/**
- * Helper to check if a URL is internal (should use Next.js Link)
- */
-function isInternalUrl(url: string): boolean {
-  if (!url) return false;
-  // Internal URLs start with / but not //
-  // Also exclude hash-only links and external protocols
-  return url.startsWith("/") && !url.startsWith("//") && !url.startsWith("/#");
-}
-
 /**
  * Internal Block Renderer Component (without context provider)
  */
@@ -188,18 +189,17 @@ function BlockRendererInternal({
       navigate: (url: string) => {
         if (eventHandlers.navigate) {
           eventHandlers.navigate(url);
+        } else if (url === "#") {
+          // Empty hash - do nothing
+          return;
+        } else if (url.startsWith("#")) {
+          // Hash link - smooth scroll to element
+          const element = document.querySelector(url);
+          element?.scrollIntoView({ behavior: "smooth" });
         } else if (isInternalUrl(url)) {
-          // Use Next.js router for internal navigation (client-side)
           router.push(url);
-        } else if (url.startsWith("http") || url.startsWith("//")) {
-          // External URL - open in new tab or navigate
-          window.open(url, "_blank", "noopener,noreferrer");
-        } else if (url === "#" || url.startsWith("#")) {
-          // Hash link - do nothing or scroll to element
-          if (url !== "#") {
-            const element = document.querySelector(url);
-            element?.scrollIntoView({ behavior: "smooth" });
-          }
+        } else {
+          window.location.href = url;
         }
       },
       toggleDrawer: (target: string) => {
@@ -363,15 +363,53 @@ function BlockRendererInternal({
     props.alt = alt;
   }
 
-  // href for links
+  // href for links - check href, bind_href, url, bind_url, and navigate event target
   if (tag === "a") {
-    const href = block.bind_href
-      ? String(
-          resolveBinding(block.bind_href, mergedData, context) ||
-            block.href ||
-            "#"
-        )
-      : block.href || "#";
+    // Check all possible URL sources: bind_href, bind_url, href, url, navigate event target
+    let href = "#";
+
+    // Try bind_href first
+    if (block.bind_href && typeof block.bind_href === "string") {
+      const resolved = resolveBinding(block.bind_href, mergedData, context);
+      if (resolved && typeof resolved === "string") {
+        href = resolved;
+      }
+    }
+
+    // Try bind_url if href still default
+    if (href === "#" && block.bind_url && typeof block.bind_url === "string") {
+      const resolved = resolveBinding(block.bind_url, mergedData, context);
+      if (resolved && typeof resolved === "string") {
+        href = resolved;
+      }
+    }
+
+    // Try direct href/url properties
+    if (href === "#" && block.href) {
+      href = String(block.href);
+    }
+    if (href === "#" && block.url) {
+      href = String(block.url);
+    }
+
+    // Try navigate event target as fallback (e.g., "item.url" binding)
+    if (href === "#") {
+      const navigateEvent = block.events?.on_click || block.events?.click;
+      if (navigateEvent?.action === "navigate" && navigateEvent.target) {
+        const target = navigateEvent.target;
+        // Check if target is a binding path (contains ".")
+        if (typeof target === "string" && target.includes(".")) {
+          const resolved = resolveBinding(target, mergedData, context);
+          if (resolved && typeof resolved === "string") {
+            href = resolved;
+          }
+        } else if (typeof target === "string") {
+          // Direct URL in target
+          href = target;
+        }
+      }
+    }
+
     props.href = href;
   }
 
@@ -470,30 +508,60 @@ function BlockRendererInternal({
     );
   }
 
-  // Handle anchor tags with Next.js Link for internal URLs (client-side navigation)
-  if (tag === "a") {
-    const href = (props.href as string) || "#";
+  // Use Next.js Link for internal anchor tags to enable client-side navigation
+  if (tag === "a" && props.href && isInternalUrl(String(props.href))) {
+    // Remove onClick since Link handles navigation - prevents double navigation
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { href, onClick, ...restProps } = props as Record<string, unknown>;
+    return (
+      <Link href={String(href)} {...restProps}>
+        {children}
+      </Link>
+    );
+  }
 
-    // Use Next.js Link for internal URLs to enable client-side navigation
-    if (isInternalUrl(href)) {
-      // Remove href from props as Link handles it
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { href: _href, ...linkProps } = props;
+  // For non-anchor elements with navigate events, wrap in Link if URL is internal
+  const navigateEvent = block.events?.on_click || block.events?.click;
+  const hasNavigateEvent = navigateEvent?.action === "navigate";
 
-      return (
-        <Link
-          href={href}
-          {...(linkProps as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
-        >
-          {children}
-        </Link>
-      );
+  if (tag !== "a" && hasNavigateEvent && navigateEvent?.target) {
+    // Get URL from navigate event target
+    let elementUrl = "";
+    const target = navigateEvent.target;
+
+    if (typeof target === "string") {
+      // Check if target is a binding path (contains ".")
+      if (target.includes(".")) {
+        const resolved = resolveBinding(target, mergedData, context);
+        if (resolved && typeof resolved === "string") {
+          elementUrl = resolved;
+        }
+      } else {
+        // Direct URL in target
+        elementUrl = target;
+      }
     }
 
-    // For external URLs, add target="_blank" and rel for security
-    if (href.startsWith("http") || href.startsWith("//")) {
-      props.target = "_blank";
-      props.rel = "noopener noreferrer";
+    // Also check block.url and block.bind_url
+    if (!elementUrl && block.bind_url && typeof block.bind_url === "string") {
+      const resolved = resolveBinding(block.bind_url, mergedData, context);
+      if (resolved && typeof resolved === "string") {
+        elementUrl = resolved;
+      }
+    }
+    if (!elementUrl && block.url) {
+      elementUrl = String(block.url);
+    }
+
+    if (elementUrl && isInternalUrl(elementUrl)) {
+      // Remove onClick since Link handles navigation
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { onClick, ...restProps } = props as Record<string, unknown>;
+      return (
+        <Link href={elementUrl} {...restProps}>
+          {createElement(tag, { className: props.className, style: props.style }, children)}
+        </Link>
+      );
     }
   }
 
