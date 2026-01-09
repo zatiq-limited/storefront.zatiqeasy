@@ -15,16 +15,18 @@
 
 "use client";
 
-import { useTheme } from "@/hooks";
-import { useThemeStore } from "@/stores/themeStore";
-import { useShopStore, useLandingStore } from "@/stores";
 import BlockRenderer, {
   type Block,
 } from "@/components/renderers/block-renderer";
 import {
-  HeaderSkeleton,
   FooterSkeleton,
+  HeaderSkeleton,
 } from "@/components/shared/skeletons/page-skeletons";
+import { useTheme } from "@/hooks";
+import { useCartStore, useLandingStore, useShopStore } from "@/stores";
+import { selectTotalItems } from "@/stores/cartStore";
+import { useThemeStore } from "@/stores/themeStore";
+import { useCallback, useState } from "react";
 
 interface ThemeLayoutProps {
   children: React.ReactNode;
@@ -60,6 +62,10 @@ export default function ThemeLayout({ children }: ThemeLayoutProps) {
   const { shopDetails } = useShopStore();
   const { isLegacyLandingPage } = useLandingStore();
 
+  // Cart state
+  const cartCount = useCartStore(selectTotalItems);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
   // Check if using legacy theme (static themes)
   const isLegacyTheme = shopDetails?.legacy_theme ?? true;
 
@@ -71,6 +77,13 @@ export default function ThemeLayout({ children }: ThemeLayoutProps) {
   // Extract theme data with proper typing
   const themeRaw = theme as ThemeData | null;
   const themeData = themeRaw?.data || themeRaw || {};
+
+  // Event handlers for BlockRenderer
+  const handleToggleDrawer = useCallback((target: string) => {
+    if (target === "cart_drawer") {
+      setIsCartOpen((prev) => !prev);
+    }
+  }, []);
 
   // Get global sections from theme (support both camelCase and snake_case)
   const globalSections: GlobalSections =
@@ -132,7 +145,8 @@ export default function ThemeLayout({ children }: ThemeLayoutProps) {
           {header?.enabled && headerBlock && (
             <BlockRenderer
               block={headerBlock}
-              data={(headerBlock.data as Record<string, unknown>) || {}}
+              data={headerData}
+              eventHandlers={eventHandlers}
             />
           )}
 
@@ -165,6 +179,11 @@ export default function ThemeLayout({ children }: ThemeLayoutProps) {
             />
           )}
         </>
+      )}
+
+      {/* Cart Sidebar - rendered for theme builder mode */}
+      {shouldRenderThemeBuilderHeader && (
+        <CartSidebar isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
       )}
     </>
   );
