@@ -191,8 +191,6 @@ export default async function RootLayout({
   // Get shop identifier from hostname (including localhost with DEV_SHOP_ID)
   const shopIdentifier = await getShopIdentifier();
 
-  console.log("RootLayout - shopIdentifier:", shopIdentifier);
-
   // Fetch shop profile if shop_id, domain, or subdomain is detected
   let shopProfile = null;
   if (
