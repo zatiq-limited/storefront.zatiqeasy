@@ -15,12 +15,15 @@
 
 "use client";
 
+import { useMemo, useState, useCallback } from "react";
 import { useTheme } from "@/hooks";
 import { useThemeStore } from "@/stores/themeStore";
-import { useShopStore, useLandingStore } from "@/stores";
+import { useShopStore, useLandingStore, useCartStore } from "@/stores";
+import { selectTotalItems } from "@/stores/cartStore";
 import BlockRenderer, {
   type Block,
 } from "@/components/renderers/block-renderer";
+import { CartSidebar } from "@/components/features/cart/shared/cart-sidebar";
 
 interface ThemeLayoutProps {
   children: React.ReactNode;
@@ -56,6 +59,10 @@ export default function ThemeLayout({ children }: ThemeLayoutProps) {
   const { shopDetails } = useShopStore();
   const { isLegacyLandingPage } = useLandingStore();
 
+  // Cart state
+  const cartCount = useCartStore(selectTotalItems);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
   // Check if using legacy theme (static themes)
   const isLegacyTheme = shopDetails?.legacy_theme ?? true;
 
@@ -67,6 +74,13 @@ export default function ThemeLayout({ children }: ThemeLayoutProps) {
   // Extract theme data with proper typing
   const themeRaw = theme as ThemeData | null;
   const themeData = themeRaw?.data || themeRaw || {};
+
+  // Event handlers for BlockRenderer
+  const handleToggleDrawer = useCallback((target: string) => {
+    if (target === "cart_drawer") {
+      setIsCartOpen((prev) => !prev);
+    }
+  }, []);
 
   // Get global sections from theme (support both camelCase and snake_case)
   const globalSections: GlobalSections =
@@ -84,6 +98,23 @@ export default function ThemeLayout({ children }: ThemeLayoutProps) {
   const headerBlock = header?.blocks?.[0];
   const announcementAfterHeaderBlock = announcementAfterHeader?.blocks?.[0];
   const footerBlock = footer?.blocks?.[0];
+
+  // Merge cart count into header data for dynamic display
+  const headerData = useMemo(() => {
+    const baseData = (headerBlock?.data as Record<string, unknown>) || {};
+    return {
+      ...baseData,
+      cart_count: cartCount,
+    };
+  }, [headerBlock?.data, cartCount]);
+
+  // Event handlers for BlockRenderer
+  const eventHandlers = useMemo(
+    () => ({
+      toggleDrawer: handleToggleDrawer,
+    }),
+    [handleToggleDrawer]
+  );
 
   // Show loading state
   if (isLoading) {
@@ -121,7 +152,8 @@ export default function ThemeLayout({ children }: ThemeLayoutProps) {
           {header?.enabled && headerBlock && (
             <BlockRenderer
               block={headerBlock}
-              data={(headerBlock.data as Record<string, unknown>) || {}}
+              data={headerData}
+              eventHandlers={eventHandlers}
             />
           )}
 
@@ -154,6 +186,11 @@ export default function ThemeLayout({ children }: ThemeLayoutProps) {
             />
           )}
         </>
+      )}
+
+      {/* Cart Sidebar - rendered for theme builder mode */}
+      {shouldRenderThemeBuilderHeader && (
+        <CartSidebar isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
       )}
     </>
   );
