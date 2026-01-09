@@ -32,6 +32,7 @@ export interface ProductCardBaseProps {
   image: string;
   buttonBgColor?: string;
   buttonTextColor?: string;
+  onAddToCart?: () => void;
 }
 
 // Extended props for cards that need additional data

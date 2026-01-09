@@ -170,9 +170,15 @@ function BlockRendererInternal({
       : block.state?.visible ?? true;
 
   // Merge block data with parent data
+  // Preserve special keys like cart_count from parent (don't let block data overwrite)
   const mergedData = useMemo(() => {
     const blockData = block.data || {};
-    return { ...data, ...blockData };
+    const merged = { ...data, ...blockData };
+    // Always preserve cart_count from parent data if it exists
+    if (data.cart_count !== undefined) {
+      merged.cart_count = data.cart_count;
+    }
+    return merged;
   }, [data, block.data]);
 
   // Extended event handlers with local state management
@@ -489,6 +495,48 @@ function BlockRendererInternal({
       props.target = "_blank";
       props.rel = "noopener noreferrer";
     }
+  }
+
+  // Special handling for cart icon buttons - add badge with cart count
+  // Check both "click" and "on_click" event names, and be flexible with detection
+  const clickEvent = block.events?.on_click || block.events?.click;
+
+  const isCartToggle =
+    clickEvent?.action === "toggle_drawer" &&
+    (clickEvent?.target === "cart_drawer" ||
+      clickEvent?.target === "cart" ||
+      String(clickEvent?.target || "").toLowerCase().includes("cart"));
+
+  // Also check if this is a cart-related icon button by ID or class
+  const hasCartIdentifier =
+    block.id?.toLowerCase().includes("cart") ||
+    block.class?.toLowerCase().includes("cart") ||
+    blockId?.toLowerCase().includes("cart");
+
+  // Check if block contains a cart-related icon (shopping-cart, shopping-bag, etc.)
+  const hasCartIcon =
+    block.icon?.toLowerCase().includes("cart") ||
+    block.icon?.toLowerCase().includes("shopping") ||
+    block.icon?.toLowerCase().includes("bag") ||
+    block.icon?.toLowerCase().includes("basket");
+
+  const isCartButton = isCartToggle || (hasCartIdentifier && clickEvent) || (hasCartIcon && clickEvent);
+
+  if (isCartButton) {
+    const cartCount = mergedData.cart_count as number | undefined;
+
+    return createElement(
+      tag,
+      { ...props, className: `${finalClassName} relative overflow-visible`, style: { ...((props.style as React.CSSProperties) || {}), overflow: 'visible' } },
+      <>
+        {children}
+        {cartCount !== undefined && cartCount > 0 && (
+          <span className="absolute -top-1 -right-1 min-w-4.5 h-4.5 px-1 flex items-center justify-center bg-red-500 text-white text-[10px] font-bold rounded-full z-50">
+            {cartCount > 99 ? "99+" : cartCount}
+          </span>
+        )}
+      </>
+    );
   }
 
   return createElement(tag, props, children);
