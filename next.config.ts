@@ -2,7 +2,6 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    cacheComponents: true, // 
     unoptimized: true,
     minimumCacheTTL: 604800, // Cache images for one week (in seconds)
 
