@@ -17,6 +17,8 @@ import React, {
   createContext,
   useContext,
 } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   parseWrapper,
   convertStyleToCSS,
@@ -139,6 +141,16 @@ function collectDrawerStates(block: Block): Record<string, boolean> {
 }
 
 /**
+ * Helper to check if a URL is internal (should use Next.js Link)
+ */
+function isInternalUrl(url: string): boolean {
+  if (!url) return false;
+  // Internal URLs start with / but not //
+  // Also exclude hash-only links and external protocols
+  return url.startsWith("/") && !url.startsWith("//") && !url.startsWith("/#");
+}
+
+/**
  * Internal Block Renderer Component (without context provider)
  */
 function BlockRendererInternal({
@@ -149,6 +161,7 @@ function BlockRendererInternal({
   className = "",
 }: BlockRendererProps) {
   const drawerContext = useDrawerContext();
+  const router = useRouter();
 
   const blockId = block.id || block.wrapper?.match(/#([^.#\s]+)/)?.[1];
   const isVisible =
@@ -166,6 +179,23 @@ function BlockRendererInternal({
   const extendedHandlers = useMemo(
     () => ({
       ...eventHandlers,
+      navigate: (url: string) => {
+        if (eventHandlers.navigate) {
+          eventHandlers.navigate(url);
+        } else if (isInternalUrl(url)) {
+          // Use Next.js router for internal navigation (client-side)
+          router.push(url);
+        } else if (url.startsWith("http") || url.startsWith("//")) {
+          // External URL - open in new tab or navigate
+          window.open(url, "_blank", "noopener,noreferrer");
+        } else if (url === "#" || url.startsWith("#")) {
+          // Hash link - do nothing or scroll to element
+          if (url !== "#") {
+            const element = document.querySelector(url);
+            element?.scrollIntoView({ behavior: "smooth" });
+          }
+        }
+      },
       toggleDrawer: (target: string) => {
         if (drawerContext) {
           drawerContext.toggleDrawer(target);
@@ -177,7 +207,7 @@ function BlockRendererInternal({
         eventHandlers.toggleAccordion?.(target);
       },
     }),
-    [eventHandlers, drawerContext]
+    [eventHandlers, drawerContext, router]
   );
 
   // Check condition
@@ -432,6 +462,33 @@ function BlockRendererInternal({
     return (
       <IconRenderer icon={iconName} className={finalClassName} style={style} />
     );
+  }
+
+  // Handle anchor tags with Next.js Link for internal URLs (client-side navigation)
+  if (tag === "a") {
+    const href = (props.href as string) || "#";
+
+    // Use Next.js Link for internal URLs to enable client-side navigation
+    if (isInternalUrl(href)) {
+      // Remove href from props as Link handles it
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { href: _href, ...linkProps } = props;
+
+      return (
+        <Link
+          href={href}
+          {...(linkProps as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
+        >
+          {children}
+        </Link>
+      );
+    }
+
+    // For external URLs, add target="_blank" and rel for security
+    if (href.startsWith("http") || href.startsWith("//")) {
+      props.target = "_blank";
+      props.rel = "noopener noreferrer";
+    }
   }
 
   return createElement(tag, props, children);
