@@ -1,15 +1,15 @@
 "use client";
 
+import { CartFloatingBtn } from "@/features/cart/cart-floating-btn";
+import { useCartTotals, useShopCategories, useShopInventories } from "@/hooks";
+import { useShopStore } from "@/stores";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { useShopStore } from "@/stores";
-import { useCartTotals, useShopInventories, useShopCategories } from "@/hooks";
-import { CartFloatingBtn } from "@/features/cart/cart-floating-btn";
 import {
-  SidebarCategorySkeleton,
   HorizontalCategorySkeleton,
   ProductsGridSkeleton,
   SearchSkeleton,
+  SidebarCategorySkeleton,
 } from "../../components/skeletons";
 
 // Dynamic imports for better performance

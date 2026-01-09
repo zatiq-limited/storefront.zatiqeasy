@@ -11,6 +11,7 @@ import { ArcadiaLandingPage } from "@/app/_themes/landing/themes/arcadia";
 import { NirvanaLandingPage } from "@/app/_themes/landing/themes/nirvana";
 import type { SingleProductTheme } from "@/types/landing-page.types";
 import type { ShopProfile } from "@/types";
+import { FullPageLoader } from "@/components/shared/skeletons/page-skeletons";
 
 /**
  * Merchant Single Product / Landing Page
@@ -74,16 +75,9 @@ export default function MerchantLandingPage() {
     };
   }, [setIsLegacyLandingPage]);
 
-  // Loading state
+  // Show minimal loader while loading
   if (isLoading || isProfileLoading || !activeShopData) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-4 border-gray-200 border-t-primary rounded-full animate-spin" />
-          <p className="text-muted-foreground">Loading...</p>
-        </div>
-      </div>
-    );
+    return <FullPageLoader />;
   }
 
   // Error state

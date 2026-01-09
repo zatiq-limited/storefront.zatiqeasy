@@ -8,21 +8,15 @@
 import { useCollections } from "@/hooks";
 import CollectionsPageRenderer from "@/components/renderers/page-renderer/collections-page-renderer";
 import type { Section } from "@/lib/types";
+import { PageLoader } from "@/components/shared/skeletons/page-skeletons";
 
 export default function CollectionsClient() {
   const { collections, sections, isLoading, isPageConfigLoading, error, hasShopUuid } =
     useCollections();
 
-  // Show loading state while shop data or page config is loading
+  // Show minimal loader while loading
   if (isPageConfigLoading || (!hasShopUuid && !error)) {
-    return (
-      <main className="flex items-center justify-center min-h-[50vh]">
-        <div className="flex flex-col items-center gap-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-          <p className="text-gray-600">Loading...</p>
-        </div>
-      </main>
-    );
+    return <PageLoader />;
   }
 
   // Show error state

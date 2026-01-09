@@ -21,6 +21,10 @@ import { useShopStore, useLandingStore } from "@/stores";
 import BlockRenderer, {
   type Block,
 } from "@/components/renderers/block-renderer";
+import {
+  HeaderSkeleton,
+  FooterSkeleton,
+} from "@/components/shared/skeletons/page-skeletons";
 
 interface ThemeLayoutProps {
   children: React.ReactNode;
@@ -85,13 +89,20 @@ export default function ThemeLayout({ children }: ThemeLayoutProps) {
   const announcementAfterHeaderBlock = announcementAfterHeader?.blocks?.[0];
   const footerBlock = footer?.blocks?.[0];
 
-  // Show loading state
-  if (isLoading) {
+  // Show skeleton loading state for theme builder mode
+  if (isLoading && shouldRenderThemeBuilderHeader) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p>Loading...</p>
-      </div>
+      <>
+        <HeaderSkeleton />
+        <div className="main-content">{children}</div>
+        <FooterSkeleton />
+      </>
     );
+  }
+
+  // For legacy theme or while determining mode, don't block children
+  if (isLoading) {
+    return <div className="main-content">{children}</div>;
   }
 
   // Show error state
