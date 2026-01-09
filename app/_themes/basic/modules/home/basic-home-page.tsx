@@ -1,6 +1,6 @@
 "use client";
 
-import { CartFloatingBtn } from "@/features/cart/cart-floating-btn";
+import { CartFloatingBtn } from "@/components/features/cart/cart-floating-btn";
 import { useCartTotals, useShopCategories, useShopInventories } from "@/hooks";
 import { useShopStore } from "@/stores";
 import dynamic from "next/dynamic";
@@ -14,7 +14,7 @@ import {
 
 // Dynamic imports for better performance
 const CategoryHorizontalList = dynamic(
-  () => import("@/features/category/category-horizontal-list"),
+  () => import("@/components/features/category/category-horizontal-list"),
   {
     ssr: false,
     loading: () => <HorizontalCategorySkeleton />,
@@ -22,7 +22,7 @@ const CategoryHorizontalList = dynamic(
 );
 
 const SidebarCategory = dynamic(
-  () => import("@/features/category/sidebar-category"),
+  () => import("@/components/features/category/sidebar-category"),
   {
     ssr: false,
     loading: () => <SidebarCategorySkeleton />,

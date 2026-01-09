@@ -103,7 +103,7 @@ export function BasicHeader() {
       <div className="w-full bg-white dark:bg-gray-900 py-2 md:py-3">
         <div className="container flex items-center justify-between gap-4 md:gap-6">
           {/* Logo */}
-          {shopDetails?.shop_name && (
+          {shopDetails?.shop_name && shopDetails?.image_url && (
             <div
               onClick={handleLogoClick}
               className="cursor-pointer flex items-center gap-0 sm:gap-4 shrink-0"
@@ -117,10 +117,6 @@ export function BasicHeader() {
                   className="max-h-10 md:max-h-12.5 w-auto object-left object-contain transition-all duration-300 hover:opacity-80 hover:scale-105 cursor-pointer"
                 />
               )}
-
-              <h1 className="text-lg md:text-xl lg:text-2xl font-bold text-black dark:text-white">
-                {shopDetails?.shop_name}
-              </h1>
             </div>
           )}
 
