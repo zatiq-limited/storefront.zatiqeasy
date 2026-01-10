@@ -27,7 +27,10 @@ export default function ProductsGrid({
   buttonTextColor,
 }: ProductsGridProps) {
   const addProduct = useCartStore((state) => state.addProduct);
-  const getProductsByInventoryId = useCartStore((state) => state.getProductsByInventoryId);
+  const cartProducts = useCartStore((state) => state.products);
+  const getProductsByInventoryId = useCartStore(
+    (state) => state.getProductsByInventoryId
+  );
   const incrementQty = useCartStore((state) => state.incrementQty);
   const decrementQty = useCartStore((state) => state.decrementQty);
   const updateQuantity = useCartStore((state) => state.updateQuantity);
@@ -48,93 +51,128 @@ export default function ProductsGrid({
   }, []);
 
   // Check if product is out of stock
-  const isProductOutOfStock = useCallback((product: Product): boolean => {
-    // If stock is managed by variant, check stocks array
-    if (product.is_stock_manage_by_variant || hasVariants(product)) {
-      // Out of stock if stocks array is empty or all variants have 0 quantity
-      if (!product.stocks || product.stocks.length === 0) {
+  const isProductOutOfStock = useCallback(
+    (product: Product): boolean => {
+      // If stock is managed by variant, check stocks array
+      if (product.is_stock_manage_by_variant || hasVariants(product)) {
+        // Out of stock if stocks array is empty or all variants have 0 quantity
+        if (!product.stocks || product.stocks.length === 0) {
+          return true;
+        }
+        return product.stocks.every((stock) => (stock.quantity ?? 0) <= 0);
+      }
+
+      // For non-variant products, check the quantity field
+      // Out of stock if quantity is null, undefined, or <= 0
+      if (product.quantity === null || product.quantity === undefined) {
         return true;
       }
-      return product.stocks.every((stock) => (stock.quantity ?? 0) <= 0);
-    }
+      return product.quantity <= 0;
+    },
+    [hasVariants]
+  );
 
-    // For non-variant products, check the quantity field
-    // Out of stock if quantity is null, undefined, or <= 0
-    if (product.quantity === null || product.quantity === undefined) {
-      return true;
-    }
-    return product.quantity <= 0;
-  }, [hasVariants]);
+  // Memoized cart data - recalculates when cartProducts changes
+  const cartData = useMemo(() => {
+    const quantities: Record<number, number> = {};
+    const nonVariantItems: Record<number, (typeof cartProducts)[string] | undefined> = {};
+
+    Object.values(cartProducts).forEach((item) => {
+      const id = item.id;
+      quantities[id] = (quantities[id] || 0) + (item.qty || 0);
+      if (!item.selectedVariants || Object.keys(item.selectedVariants).length === 0) {
+        nonVariantItems[id] = item;
+      }
+    });
+
+    return { quantities, nonVariantItems };
+  }, [cartProducts]);
 
   // Get total cart quantity for a product (sum across all variants)
-  const getCartQuantity = useCallback((productId: number | string): number => {
-    const numericId = typeof productId === "string" ? parseInt(productId, 10) : productId;
-    const cartProducts = getProductsByInventoryId(numericId);
-    return cartProducts.reduce((sum, p) => sum + (p.qty || 0), 0);
-  }, [getProductsByInventoryId]);
+  const getCartQuantity = useCallback(
+    (productId: number | string): number => {
+      const numericId =
+        typeof productId === "string" ? parseInt(productId, 10) : productId;
+      return cartData.quantities[numericId] || 0;
+    },
+    [cartData]
+  );
 
   // Get cart item for non-variant product
-  const getCartItemForNonVariant = useCallback((productId: number | string) => {
-    const numericId = typeof productId === "string" ? parseInt(productId, 10) : productId;
-    const cartProducts = getProductsByInventoryId(numericId);
-    return cartProducts.find(
-      (p) => !p.selectedVariants || Object.keys(p.selectedVariants).length === 0
-    );
-  }, [getProductsByInventoryId]);
+  const getCartItemForNonVariant = useCallback(
+    (productId: number | string) => {
+      const numericId =
+        typeof productId === "string" ? parseInt(productId, 10) : productId;
+      return cartData.nonVariantItems[numericId];
+    },
+    [cartData]
+  );
 
   // Handle increment for non-variant products
-  const handleIncrement = useCallback((product: Product) => {
-    if (hasVariants(product)) {
-      // For variant products, open modal
-      setSelectedProduct(product);
-      return;
-    }
-
-    const cartItem = getCartItemForNonVariant(product.id);
-    if (cartItem) {
-      // Check stock limit
-      const maxStock = product.quantity ?? Infinity;
-      if (cartItem.qty < maxStock) {
-        incrementQty(cartItem.cartId);
-      } else {
-        toast.error("Maximum stock reached!", { duration: 2000, position: "bottom-right" });
+  const handleIncrement = useCallback(
+    (product: Product) => {
+      if (hasVariants(product)) {
+        // For variant products, open modal
+        setSelectedProduct(product);
+        return;
       }
-    }
-  }, [hasVariants, getCartItemForNonVariant, incrementQty]);
+
+      const cartItem = getCartItemForNonVariant(product.id);
+      if (cartItem) {
+        // Check stock limit
+        const maxStock = product.quantity ?? Infinity;
+        if (cartItem.qty < maxStock) {
+          incrementQty(cartItem.cartId);
+        } else {
+          toast.error("Maximum stock reached!", {
+            duration: 2000,
+            position: "bottom-right",
+          });
+        }
+      }
+    },
+    [hasVariants, getCartItemForNonVariant, incrementQty]
+  );
 
   // Handle decrement for non-variant products
-  const handleDecrement = useCallback((product: Product) => {
-    if (hasVariants(product)) {
-      // For variant products, open modal
-      setSelectedProduct(product);
-      return;
-    }
+  const handleDecrement = useCallback(
+    (product: Product) => {
+      if (hasVariants(product)) {
+        // For variant products, open modal
+        setSelectedProduct(product);
+        return;
+      }
 
-    const cartItem = getCartItemForNonVariant(product.id);
-    if (cartItem) {
-      decrementQty(cartItem.cartId);
-    }
-  }, [hasVariants, getCartItemForNonVariant, decrementQty]);
+      const cartItem = getCartItemForNonVariant(product.id);
+      if (cartItem) {
+        decrementQty(cartItem.cartId);
+      }
+    },
+    [hasVariants, getCartItemForNonVariant, decrementQty]
+  );
 
   // Handle direct quantity change for non-variant products
-  const handleQuantityChange = useCallback((product: Product, newQty: number) => {
-    if (hasVariants(product)) {
-      // For variant products, open modal
-      setSelectedProduct(product);
-      return;
-    }
-
-    const cartItem = getCartItemForNonVariant(product.id);
-    if (cartItem) {
-      const maxStock = product.quantity ?? Infinity;
-      const validQty = Math.max(0, Math.min(newQty, maxStock));
-      if (validQty === 0) {
-        decrementQty(cartItem.cartId); // This will remove if qty becomes 0
-      } else {
-        updateQuantity(cartItem.cartId, validQty);
+  const handleQuantityChange = useCallback(
+    (product: Product, newQty: number) => {
+      if (hasVariants(product)) {
+        // For variant products, open modal
+        setSelectedProduct(product);
+        return;
       }
-    }
-  }, [hasVariants, getCartItemForNonVariant, updateQuantity, decrementQty]);
+
+      const cartItem = getCartItemForNonVariant(product.id);
+      if (cartItem) {
+        const maxStock = product.quantity ?? Infinity;
+        const validQty = Math.max(0, Math.min(newQty, maxStock));
+        if (validQty === 0) {
+          decrementQty(cartItem.cartId); // This will remove if qty becomes 0
+        } else {
+          updateQuantity(cartItem.cartId, validQty);
+        }
+      }
+    },
+    [hasVariants, getCartItemForNonVariant, updateQuantity, decrementQty]
+  );
 
   // Handle add to cart
   const handleAddToCart = useCallback(
@@ -152,7 +190,8 @@ export default function ProductsGrid({
       // Check if product already exists in cart (without variants)
       const existingProducts = getProductsByInventoryId(productId);
       const existingProductWithoutVariants = existingProducts.find(
-        (p) => !p.selectedVariants || Object.keys(p.selectedVariants).length === 0
+        (p) =>
+          !p.selectedVariants || Object.keys(p.selectedVariants).length === 0
       );
 
       if (existingProductWithoutVariants) {
@@ -182,7 +221,8 @@ export default function ProductsGrid({
           categories: (product.categories ?? []) as never[],
           variant_types: (product.variant_types ?? []) as never[],
           stocks: (product.stocks ?? []) as never[],
-          is_stock_manage_by_variant: product.is_stock_manage_by_variant ?? false,
+          is_stock_manage_by_variant:
+            product.is_stock_manage_by_variant ?? false,
           reviews: [],
           total_inventory_sold: 0,
           qty: 1,
