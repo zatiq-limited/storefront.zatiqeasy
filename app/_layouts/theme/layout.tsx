@@ -15,6 +15,7 @@
 
 "use client";
 
+import { CartSidebar } from "@/components/features/cart";
 import BlockRenderer, {
   type Block,
 } from "@/components/renderers/block-renderer";
@@ -26,7 +27,7 @@ import { useTheme } from "@/hooks";
 import { useCartStore, useLandingStore, useShopStore } from "@/stores";
 import { selectTotalItems } from "@/stores/cartStore";
 import { useThemeStore } from "@/stores/themeStore";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 interface ThemeLayoutProps {
   children: React.ReactNode;
@@ -101,6 +102,23 @@ export default function ThemeLayout({ children }: ThemeLayoutProps) {
   const headerBlock = header?.blocks?.[0];
   const announcementAfterHeaderBlock = announcementAfterHeader?.blocks?.[0];
   const footerBlock = footer?.blocks?.[0];
+
+  // Merge cart count into header data for dynamic display
+  const headerData = useMemo(() => {
+    const baseData = (headerBlock?.data as Record<string, unknown>) || {};
+    return {
+      ...baseData,
+      cart_count: cartCount,
+    };
+  }, [headerBlock?.data, cartCount]);
+
+  // Event handlers for BlockRenderer
+  const eventHandlers = useMemo(
+    () => ({
+      toggleDrawer: handleToggleDrawer,
+    }),
+    [handleToggleDrawer]
+  );
 
   // Show skeleton loading state for theme builder mode
   if (isLoading && shouldRenderThemeBuilderHeader) {

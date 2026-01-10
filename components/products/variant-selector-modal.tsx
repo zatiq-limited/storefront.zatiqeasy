@@ -279,7 +279,7 @@ export function VariantSelectorModal({
       shop_id: product.shop_id || 0,
       name: product.name,
       handle: product.slug,
-      image_url: variantImage || product.image_url || "",
+      image_url: variantImage || product.image_url || product.images?.[0] || "",
       images: product.images,
       price: totalPrice,
       quantity: product.quantity,

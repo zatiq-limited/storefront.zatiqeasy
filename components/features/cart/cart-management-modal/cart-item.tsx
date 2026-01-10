@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { useCartStore } from "@/stores";
 import type { CartProduct } from "@/types";
-import { Minus, Plus, Trash2, Image as ImageIcon } from "lucide-react";
+import { Minus, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -83,27 +83,20 @@ export function CartItem({
     >
       {showImage && (
         <div className="shrink-0">
-          {product.image_url ? (
+          <div
+            className={cn(
+              "relative overflow-hidden rounded border bg-muted",
+              compact ? "h-12 w-12" : "h-16 w-16"
+            )}
+          >
             <Image
-              src={product.image_url}
+              src={product.image_url || product.images?.[0] || "/placeholder.jpg"}
               alt={product.name}
-              width={compact ? 48 : 64}
-              height={compact ? 48 : 64}
-              className={cn(
-                "rounded object-cover border",
-                compact ? "h-12 w-12" : "h-16 w-16"
-              )}
+              fill
+              className="object-cover"
+              sizes={compact ? "48px" : "64px"}
             />
-          ) : (
-            <div
-              className={cn(
-                "flex items-center justify-center bg-muted border rounded",
-                compact ? "h-12 w-12" : "h-16 w-16"
-              )}
-            >
-              <ImageIcon className="h-4 w-4 text-muted-foreground" />
-            </div>
-          )}
+          </div>
         </div>
       )}
 

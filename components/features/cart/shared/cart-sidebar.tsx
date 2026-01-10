@@ -3,7 +3,7 @@
 import { useCartTotals } from "@/hooks";
 import { Button } from "@/components/ui/button";
 import { X, ShoppingCart } from "lucide-react";
-import { CartItem, CartSummary } from "@/features/cart";
+import { CartItem, CartSummary } from "../cart-management-modal";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
