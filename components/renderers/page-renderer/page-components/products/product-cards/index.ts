@@ -65,6 +65,13 @@ export interface ProductCardProps {
 
   // Stock status
   isOutOfStock?: boolean;
+
+  // Cart state (for showing quantity controls when product is in cart)
+  cartQuantity?: number;
+  hasVariants?: boolean;
+  onIncrement?: () => void;
+  onDecrement?: () => void;
+  onQuantityChange?: (qty: number) => void;
 }
 
 // Card component type that accepts unified props

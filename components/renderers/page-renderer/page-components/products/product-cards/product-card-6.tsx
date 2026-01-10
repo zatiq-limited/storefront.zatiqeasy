@@ -5,7 +5,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FallbackImage } from "@/components/ui/fallback-image";
 import Link from "next/link";
 import type { ProductCardProps } from "./index";
@@ -29,8 +29,40 @@ export default function ProductCard6({
   onAddToCart,
   onBuyNow,
   isOutOfStock = false,
+  cartQuantity = 0,
+  hasVariants = false,
+  onIncrement,
+  onDecrement,
+  onQuantityChange,
 }: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const [inputValue, setInputValue] = useState(cartQuantity.toString());
+
+  useEffect(() => {
+    setInputValue(cartQuantity.toString());
+  }, [cartQuantity]);
+
+  const isInCart = cartQuantity > 0;
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleInputBlur = () => {
+    const newQty = parseInt(inputValue, 10);
+    if (!isNaN(newQty) && newQty !== cartQuantity) {
+      if (hasVariants) {
+        onIncrement?.();
+      } else {
+        onQuantityChange?.(newQty);
+      }
+    }
+    setInputValue(cartQuantity.toString());
+  };
+
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") e.currentTarget.blur();
+  };
 
   return (
     <div className="font-poppins w-full h-full">
@@ -111,28 +143,61 @@ export default function ProductCard6({
           {(quickAddEnabled || buyNowEnabled) && (
             <div className="flex gap-2 mt-2 sm:hidden">
               {quickAddEnabled && (
-                <button
-                  className={`flex-1 h-9 rounded flex items-center justify-center text-xs font-medium transition-all duration-300 ${
-                    isOutOfStock
-                      ? "cursor-not-allowed opacity-60"
-                      : "cursor-pointer active:scale-95"
-                  }`}
-                  style={{
-                    backgroundColor: isOutOfStock ? "#E5E7EB" : buttonBgColor,
-                    color: isOutOfStock ? "#6B7280" : buttonTextColor,
-                  }}
-                  disabled={isOutOfStock}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    if (!isOutOfStock) {
-                      onAddToCart?.();
-                    }
-                  }}
-                >
-                  {isOutOfStock ? "Out of Stock" : "Add to Cart"}
-                </button>
+                <>
+                  {isOutOfStock ? (
+                    <button
+                      className="flex-1 h-9 rounded flex items-center justify-center text-xs font-medium transition-all duration-300 cursor-not-allowed opacity-60"
+                      style={{ backgroundColor: "#E5E7EB", color: "#6B7280" }}
+                      disabled
+                    >
+                      Out of Stock
+                    </button>
+                  ) : isInCart ? (
+                    <div
+                      className="flex-1 h-9 border rounded flex items-center justify-between overflow-hidden"
+                      style={{ borderColor: buttonBgColor }}
+                    >
+                      <button
+                        className="h-full px-2 flex items-center justify-center hover:bg-gray-100 transition-colors"
+                        style={{ color: buttonBgColor }}
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); onDecrement?.(); }}
+                      >
+                        <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14" /></svg>
+                      </button>
+                      <input
+                        type="text"
+                        inputMode="numeric"
+                        value={inputValue}
+                        onChange={handleInputChange}
+                        onBlur={handleInputBlur}
+                        onKeyDown={handleInputKeyDown}
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); if (hasVariants) onIncrement?.(); }}
+                        className="w-8 text-center text-xs font-medium bg-transparent focus:outline-none text-gray-900"
+                        readOnly={hasVariants}
+                      />
+                      <button
+                        className="h-full px-2 flex items-center justify-center hover:bg-gray-100 transition-colors"
+                        style={{ color: buttonBgColor }}
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); onIncrement?.(); }}
+                      >
+                        <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 5v14M5 12h14" /></svg>
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      className="flex-1 h-9 rounded flex items-center justify-center text-xs font-medium transition-all duration-300 cursor-pointer active:scale-95"
+                      style={{ backgroundColor: buttonBgColor, color: buttonTextColor }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        onAddToCart?.();
+                      }}
+                    >
+                      Add to Cart
+                    </button>
+                  )}
+                </>
               )}
-              {buyNowEnabled && !isOutOfStock && (
+              {buyNowEnabled && !isOutOfStock && !isInCart && (
                 <button
                   className="flex-1 h-9 rounded border border-[#3B82F6] bg-white flex items-center justify-center cursor-pointer text-xs font-medium text-[#3B82F6] transition-all duration-300 active:scale-95"
                   onClick={(e) => {
@@ -153,32 +218,65 @@ export default function ProductCard6({
             isHovered ? "opacity-100" : "opacity-0 pointer-events-none"
           }`}
         >
-          {/* Add to Cart Button */}
+          {/* Add to Cart Button or Quantity Controls */}
           {quickAddEnabled && (
-            <button
-              className={`w-full h-11 lg:h-14 rounded flex items-center justify-center text-sm font-medium transition-all duration-300 leading-5 ${
-                isOutOfStock
-                  ? "cursor-not-allowed opacity-60"
-                  : "cursor-pointer hover:opacity-90"
-              }`}
-              style={{
-                backgroundColor: isOutOfStock ? "#E5E7EB" : buttonBgColor,
-                color: isOutOfStock ? "#6B7280" : buttonTextColor,
-              }}
-              disabled={isOutOfStock}
-              onClick={(e) => {
-                e.preventDefault();
-                if (!isOutOfStock) {
-                  onAddToCart?.();
-                }
-              }}
-            >
-              {isOutOfStock ? "Out of Stock" : "Add to Cart"}
-            </button>
+            <>
+              {isOutOfStock ? (
+                <button
+                  className="w-full h-11 lg:h-14 rounded flex items-center justify-center text-sm font-medium transition-all duration-300 leading-5 cursor-not-allowed opacity-60"
+                  style={{ backgroundColor: "#E5E7EB", color: "#6B7280" }}
+                  disabled
+                >
+                  Out of Stock
+                </button>
+              ) : isInCart ? (
+                <div
+                  className="w-full h-11 lg:h-14 border rounded flex items-center justify-between overflow-hidden bg-white"
+                  style={{ borderColor: buttonBgColor }}
+                >
+                  <button
+                    className="h-full px-3 sm:px-4 flex items-center justify-center hover:bg-gray-100 transition-colors"
+                    style={{ color: buttonBgColor }}
+                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); onDecrement?.(); }}
+                  >
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14" /></svg>
+                  </button>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    value={inputValue}
+                    onChange={handleInputChange}
+                    onBlur={handleInputBlur}
+                    onKeyDown={handleInputKeyDown}
+                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); if (hasVariants) onIncrement?.(); }}
+                    className="w-12 sm:w-16 text-center text-sm sm:text-base font-medium bg-transparent focus:outline-none text-gray-900"
+                    readOnly={hasVariants}
+                  />
+                  <button
+                    className="h-full px-3 sm:px-4 flex items-center justify-center hover:bg-gray-100 transition-colors"
+                    style={{ color: buttonBgColor }}
+                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); onIncrement?.(); }}
+                  >
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 5v14M5 12h14" /></svg>
+                  </button>
+                </div>
+              ) : (
+                <button
+                  className="w-full h-11 lg:h-14 rounded flex items-center justify-center text-sm font-medium transition-all duration-300 leading-5 cursor-pointer hover:opacity-90"
+                  style={{ backgroundColor: buttonBgColor, color: buttonTextColor }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onAddToCart?.();
+                  }}
+                >
+                  Add to Cart
+                </button>
+              )}
+            </>
           )}
 
           {/* Buy Now Button */}
-          {buyNowEnabled && !isOutOfStock && (
+          {buyNowEnabled && !isOutOfStock && !isInCart && (
             <button
               className="w-full h-11 lg:h-14 rounded bg-white flex items-center justify-center cursor-pointer text-sm font-medium text-[#3B82F6] transition-all duration-300 leading-5 hover:bg-gray-50"
               onClick={(e) => {

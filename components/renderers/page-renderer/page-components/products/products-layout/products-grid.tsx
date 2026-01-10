@@ -29,6 +29,8 @@ export default function ProductsGrid({
   const addProduct = useCartStore((state) => state.addProduct);
   const getProductsByInventoryId = useCartStore((state) => state.getProductsByInventoryId);
   const incrementQty = useCartStore((state) => state.incrementQty);
+  const decrementQty = useCartStore((state) => state.decrementQty);
+  const updateQuantity = useCartStore((state) => state.updateQuantity);
 
   // State for variant selector modal
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -63,6 +65,76 @@ export default function ProductsGrid({
     }
     return product.quantity <= 0;
   }, [hasVariants]);
+
+  // Get total cart quantity for a product (sum across all variants)
+  const getCartQuantity = useCallback((productId: number | string): number => {
+    const numericId = typeof productId === "string" ? parseInt(productId, 10) : productId;
+    const cartProducts = getProductsByInventoryId(numericId);
+    return cartProducts.reduce((sum, p) => sum + (p.qty || 0), 0);
+  }, [getProductsByInventoryId]);
+
+  // Get cart item for non-variant product
+  const getCartItemForNonVariant = useCallback((productId: number | string) => {
+    const numericId = typeof productId === "string" ? parseInt(productId, 10) : productId;
+    const cartProducts = getProductsByInventoryId(numericId);
+    return cartProducts.find(
+      (p) => !p.selectedVariants || Object.keys(p.selectedVariants).length === 0
+    );
+  }, [getProductsByInventoryId]);
+
+  // Handle increment for non-variant products
+  const handleIncrement = useCallback((product: Product) => {
+    if (hasVariants(product)) {
+      // For variant products, open modal
+      setSelectedProduct(product);
+      return;
+    }
+
+    const cartItem = getCartItemForNonVariant(product.id);
+    if (cartItem) {
+      // Check stock limit
+      const maxStock = product.quantity ?? Infinity;
+      if (cartItem.qty < maxStock) {
+        incrementQty(cartItem.cartId);
+      } else {
+        toast.error("Maximum stock reached!", { duration: 2000, position: "bottom-right" });
+      }
+    }
+  }, [hasVariants, getCartItemForNonVariant, incrementQty]);
+
+  // Handle decrement for non-variant products
+  const handleDecrement = useCallback((product: Product) => {
+    if (hasVariants(product)) {
+      // For variant products, open modal
+      setSelectedProduct(product);
+      return;
+    }
+
+    const cartItem = getCartItemForNonVariant(product.id);
+    if (cartItem) {
+      decrementQty(cartItem.cartId);
+    }
+  }, [hasVariants, getCartItemForNonVariant, decrementQty]);
+
+  // Handle direct quantity change for non-variant products
+  const handleQuantityChange = useCallback((product: Product, newQty: number) => {
+    if (hasVariants(product)) {
+      // For variant products, open modal
+      setSelectedProduct(product);
+      return;
+    }
+
+    const cartItem = getCartItemForNonVariant(product.id);
+    if (cartItem) {
+      const maxStock = product.quantity ?? Infinity;
+      const validQty = Math.max(0, Math.min(newQty, maxStock));
+      if (validQty === 0) {
+        decrementQty(cartItem.cartId); // This will remove if qty becomes 0
+      } else {
+        updateQuantity(cartItem.cartId, validQty);
+      }
+    }
+  }, [hasVariants, getCartItemForNonVariant, updateQuantity, decrementQty]);
 
   // Handle add to cart
   const handleAddToCart = useCallback(
@@ -147,6 +219,8 @@ export default function ProductsGrid({
           );
 
           const outOfStock = isProductOutOfStock(product);
+          const cartQty = getCartQuantity(product.id);
+          const productHasVariants = hasVariants(product);
 
           return (
             <ProductCard
@@ -167,6 +241,11 @@ export default function ProductsGrid({
               buttonTextColor={buttonTextColor}
               onAddToCart={() => handleAddToCart(product)}
               isOutOfStock={outOfStock}
+              cartQuantity={cartQty}
+              hasVariants={productHasVariants}
+              onIncrement={() => handleIncrement(product)}
+              onDecrement={() => handleDecrement(product)}
+              onQuantityChange={(qty) => handleQuantityChange(product, qty)}
             />
           );
         })}
