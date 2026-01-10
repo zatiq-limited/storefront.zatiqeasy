@@ -15,15 +15,18 @@
 
 "use client";
 
-import { useMemo, useState, useCallback } from "react";
-import { useTheme } from "@/hooks";
-import { useThemeStore } from "@/stores/themeStore";
-import { useShopStore, useLandingStore, useCartStore } from "@/stores";
-import { selectTotalItems } from "@/stores/cartStore";
 import BlockRenderer, {
   type Block,
 } from "@/components/renderers/block-renderer";
-import { CartSidebar } from "@/components/features/cart/shared/cart-sidebar";
+import {
+  FooterSkeleton,
+  HeaderSkeleton,
+} from "@/components/shared/skeletons/page-skeletons";
+import { useTheme } from "@/hooks";
+import { useCartStore, useLandingStore, useShopStore } from "@/stores";
+import { selectTotalItems } from "@/stores/cartStore";
+import { useThemeStore } from "@/stores/themeStore";
+import { useCallback, useState } from "react";
 
 interface ThemeLayoutProps {
   children: React.ReactNode;
@@ -99,30 +102,20 @@ export default function ThemeLayout({ children }: ThemeLayoutProps) {
   const announcementAfterHeaderBlock = announcementAfterHeader?.blocks?.[0];
   const footerBlock = footer?.blocks?.[0];
 
-  // Merge cart count into header data for dynamic display
-  const headerData = useMemo(() => {
-    const baseData = (headerBlock?.data as Record<string, unknown>) || {};
-    return {
-      ...baseData,
-      cart_count: cartCount,
-    };
-  }, [headerBlock?.data, cartCount]);
-
-  // Event handlers for BlockRenderer
-  const eventHandlers = useMemo(
-    () => ({
-      toggleDrawer: handleToggleDrawer,
-    }),
-    [handleToggleDrawer]
-  );
-
-  // Show loading state
-  if (isLoading) {
+  // Show skeleton loading state for theme builder mode
+  if (isLoading && shouldRenderThemeBuilderHeader) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p>Loading...</p>
-      </div>
+      <>
+        <HeaderSkeleton />
+        <div className="main-content">{children}</div>
+        <FooterSkeleton />
+      </>
     );
+  }
+
+  // For legacy theme or while determining mode, don't block children
+  if (isLoading) {
+    return <div className="main-content">{children}</div>;
   }
 
   // Show error state
