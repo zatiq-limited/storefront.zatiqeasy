@@ -5,28 +5,10 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FallbackImage } from "@/components/ui/fallback-image";
 import Link from "next/link";
-
-interface ProductCard7Props {
-  id: number | string;
-  handle: string;
-  title: string;
-  price: number;
-  comparePrice?: number | null;
-  currency?: string;
-  image: string;
-  hoverImage?: string;
-  colors?: string[];
-  quickAddEnabled?: boolean;
-  buttonBgColor?: string;
-  buttonTextColor?: string;
-  priceColor?: string;
-  oldPriceColor?: string;
-  onAddToCart?: () => void;
-  onColorSelect?: (colorIndex: number) => void;
-}
+import type { ProductCardProps } from "./index";
 
 export default function ProductCard7({
   handle,
@@ -44,9 +26,42 @@ export default function ProductCard7({
   oldPriceColor = "#9CA3AF",
   onAddToCart,
   onColorSelect,
-}: ProductCard7Props) {
+  isOutOfStock = false,
+  cartQuantity = 0,
+  hasVariants = false,
+  onIncrement,
+  onDecrement,
+  onQuantityChange,
+}: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [selectedColor, setSelectedColor] = useState(0);
+  const [inputValue, setInputValue] = useState(cartQuantity.toString());
+
+  useEffect(() => {
+    setInputValue(cartQuantity.toString());
+  }, [cartQuantity]);
+
+  const isInCart = cartQuantity > 0;
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleInputBlur = () => {
+    const newQty = parseInt(inputValue, 10);
+    if (!isNaN(newQty) && newQty !== cartQuantity) {
+      if (hasVariants) {
+        onIncrement?.();
+      } else {
+        onQuantityChange?.(newQty);
+      }
+    }
+    setInputValue(cartQuantity.toString());
+  };
+
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") e.currentTarget.blur();
+  };
 
   // Calculate discount percentage
   const discountPercent =
@@ -75,11 +90,17 @@ export default function ProductCard7({
             style={{ transform: isHovered ? "scale(1.05)" : "scale(1)" }}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           />
-          {/* Discount Badge */}
-          {discountPercent && (
-            <div className="absolute top-2 left-2 sm:top-3 sm:left-3 lg:top-4 lg:left-4 text-white px-1.5 py-0.5 sm:px-2 sm:py-0.5 lg:px-2.5 lg:py-1 rounded text-[10px] sm:text-xs lg:text-xs font-medium leading-3 sm:leading-4 lg:leading-4 bg-red-500">
-              {discountPercent}
+          {/* Badge - Show Out of Stock badge if product is out of stock, otherwise show discount badge */}
+          {isOutOfStock ? (
+            <div className="absolute top-2 left-2 sm:top-3 sm:left-3 lg:top-4 lg:left-4 text-white px-1.5 py-0.5 sm:px-2 sm:py-0.5 lg:px-2.5 lg:py-1 rounded text-[10px] sm:text-xs lg:text-xs font-medium leading-3 sm:leading-4 lg:leading-4 bg-gray-600">
+              Out of Stock
             </div>
+          ) : (
+            discountPercent && (
+              <div className="absolute top-2 left-2 sm:top-3 sm:left-3 lg:top-4 lg:left-4 text-white px-1.5 py-0.5 sm:px-2 sm:py-0.5 lg:px-2.5 lg:py-1 rounded text-[10px] sm:text-xs lg:text-xs font-medium leading-3 sm:leading-4 lg:leading-4 bg-red-500">
+                {discountPercent}
+              </div>
+            )
           )}
         </div>
 
@@ -136,18 +157,61 @@ export default function ProductCard7({
             )}
           </div>
 
-          {/* Add to Cart Button */}
+          {/* Add to Cart Button or Quantity Controls */}
           {quickAddEnabled && (
-            <button
-              className="w-full h-9 sm:h-10 lg:h-11 border-none rounded-3xl text-xs sm:text-sm lg:text-sm font-medium cursor-pointer transition-all duration-300 hover:opacity-90"
-              style={{ backgroundColor: buttonBgColor, color: buttonTextColor }}
-              onClick={(e) => {
-                e.preventDefault();
-                onAddToCart?.();
-              }}
-            >
-              Add to cart
-            </button>
+            <>
+              {isOutOfStock ? (
+                <button
+                  className="w-full h-9 sm:h-10 lg:h-11 border-none rounded-3xl text-xs sm:text-sm lg:text-sm font-medium transition-all duration-300 cursor-not-allowed opacity-60"
+                  style={{ backgroundColor: "#E5E7EB", color: "#6B7280" }}
+                  disabled
+                >
+                  Out of Stock
+                </button>
+              ) : isInCart ? (
+                <div
+                  className="w-full h-9 sm:h-10 lg:h-11 border rounded-3xl flex items-center justify-between overflow-hidden"
+                  style={{ borderColor: buttonBgColor }}
+                >
+                  <button
+                    className="h-full px-3 sm:px-4 flex items-center justify-center hover:bg-gray-100 transition-colors rounded-l-3xl"
+                    style={{ color: buttonBgColor }}
+                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); onDecrement?.(); }}
+                  >
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14" /></svg>
+                  </button>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    value={inputValue}
+                    onChange={handleInputChange}
+                    onBlur={handleInputBlur}
+                    onKeyDown={handleInputKeyDown}
+                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); if (hasVariants) onIncrement?.(); }}
+                    className="w-12 sm:w-16 text-center text-sm sm:text-base font-medium bg-transparent focus:outline-none text-gray-900"
+                    readOnly={hasVariants}
+                  />
+                  <button
+                    className="h-full px-3 sm:px-4 flex items-center justify-center hover:bg-gray-100 transition-colors rounded-r-3xl"
+                    style={{ color: buttonBgColor }}
+                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); onIncrement?.(); }}
+                  >
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 5v14M5 12h14" /></svg>
+                  </button>
+                </div>
+              ) : (
+                <button
+                  className="w-full h-9 sm:h-10 lg:h-11 border-none rounded-3xl text-xs sm:text-sm lg:text-sm font-medium transition-all duration-300 cursor-pointer hover:opacity-90"
+                  style={{ backgroundColor: buttonBgColor, color: buttonTextColor }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onAddToCart?.();
+                  }}
+                >
+                  Add to cart
+                </button>
+              )}
+            </>
           )}
         </div>
       </Link>

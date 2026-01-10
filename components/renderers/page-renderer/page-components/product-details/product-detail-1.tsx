@@ -6,11 +6,13 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
 import Image from "next/image";
+import toast from "react-hot-toast";
 import { convertSettingsKeys } from "@/lib/settings-utils";
 import type { Product, Variant } from "@/stores/productsStore";
 import { useAddToCart } from "@/hooks/useAddToCart";
+import { useCartStore } from "@/stores/cartStore";
 
 interface ProductDetail1Props {
   settings?: Record<string, unknown>;
@@ -69,6 +71,118 @@ export default function ProductDetail1({
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const { addToCart } = useAddToCart();
   const [isAdding, setIsAdding] = useState(false);
+
+  // Cart state subscription for instant updates
+  const cartProducts = useCartStore((state) => state.products);
+  const incrementQty = useCartStore((state) => state.incrementQty);
+  const decrementQty = useCartStore((state) => state.decrementQty);
+  const updateQuantity = useCartStore((state) => state.updateQuantity);
+
+  // Find matching cart item based on product and selected variants
+  const cartItem = useMemo(() => {
+    const productId = typeof product.id === "string" ? parseInt(product.id, 10) : product.id;
+    const selectedVariantIds = Object.values(selectedVariants)
+      .map((v) => v.id)
+      .sort((a, b) => a - b);
+
+    return Object.values(cartProducts).find((item) => {
+      if (item.id !== productId) return false;
+
+      const cartVariantIds = Object.values(item.selectedVariants || {})
+        .map((v) => v.variant_id)
+        .sort((a, b) => a - b);
+
+      // Match if same product and same variant selection
+      return JSON.stringify(selectedVariantIds) === JSON.stringify(cartVariantIds);
+    });
+  }, [cartProducts, product.id, selectedVariants]);
+
+  // Use cart quantity if product is in cart, otherwise use local quantity
+  const displayQuantity = cartItem ? cartItem.qty : quantity;
+  const isInCart = !!cartItem;
+
+  // Calculate available stock based on variant selection
+  const availableStock = useMemo(() => {
+    // For variant products with stock managed by variant
+    if (product.is_stock_manage_by_variant && product.stocks?.length) {
+      const selectedVariantIds = Object.values(selectedVariants)
+        .map((v) => v.id)
+        .sort((a, b) => a - b);
+
+      if (selectedVariantIds.length === 0) {
+        return product.quantity ?? 0;
+      }
+
+      // Find matching stock for this variant combination
+      const stock = product.stocks.find((s) => {
+        try {
+          const combination = JSON.parse(s.combination);
+          const sortedCombination = [...combination].sort((a: number, b: number) => a - b);
+          return JSON.stringify(sortedCombination) === JSON.stringify(selectedVariantIds);
+        } catch {
+          return false;
+        }
+      });
+
+      return stock?.quantity ?? 0;
+    }
+
+    // For non-variant products or products without variant stock management
+    return product.quantity ?? 0;
+  }, [product, selectedVariants]);
+
+  // Handle quantity changes - update cart directly if in cart
+  const handleIncrement = useCallback(() => {
+    if (isInCart && cartItem) {
+      if (cartItem.qty >= availableStock) {
+        toast.error("Maximum stock reached!", {
+          duration: 2000,
+          position: "bottom-right",
+        });
+        return;
+      }
+      incrementQty(cartItem.cartId);
+    } else {
+      if (quantity >= availableStock) {
+        toast.error("Maximum stock reached!", {
+          duration: 2000,
+          position: "bottom-right",
+        });
+        return;
+      }
+      onIncrementQuantity();
+    }
+  }, [isInCart, cartItem, availableStock, quantity, incrementQty, onIncrementQuantity]);
+
+  const handleDecrement = useCallback(() => {
+    if (isInCart && cartItem) {
+      decrementQty(cartItem.cartId);
+    } else {
+      onDecrementQuantity();
+    }
+  }, [isInCart, cartItem, decrementQty, onDecrementQuantity]);
+
+  const handleQuantityChange = useCallback((newQty: number) => {
+    if (isInCart && cartItem) {
+      const validQty = Math.max(1, Math.min(newQty, availableStock));
+      if (newQty > availableStock) {
+        toast.error(`Only ${availableStock} items available!`, {
+          duration: 2000,
+          position: "bottom-right",
+        });
+      }
+      updateQuantity(cartItem.cartId, validQty);
+    } else {
+      const validQty = Math.max(1, Math.min(newQty, availableStock));
+      if (newQty > availableStock) {
+        toast.error(`Only ${availableStock} items available!`, {
+          duration: 2000,
+          position: "bottom-right",
+        });
+      }
+      onQuantityChange(validQty);
+    }
+  }, [isInCart, cartItem, availableStock, updateQuantity, onQuantityChange]);
 
   // Settings with defaults
   const showBrand = s.showBrand !== false;
@@ -409,7 +523,7 @@ export default function ProductDetail1({
               </label>
               <div className="flex items-center gap-2">
                 <button
-                  onClick={onDecrementQuantity}
+                  onClick={handleDecrement}
                   className="w-10 h-10 rounded-lg border-2 border-gray-300 flex items-center justify-center hover:border-gray-400 hover:bg-gray-50 transition-all"
                 >
                   <svg
@@ -429,14 +543,14 @@ export default function ProductDetail1({
                 <input
                   type="number"
                   min="1"
-                  value={quantity}
+                  value={displayQuantity}
                   onChange={(e) =>
-                    onQuantityChange(parseInt(e.target.value) || 1)
+                    handleQuantityChange(parseInt(e.target.value) || 1)
                   }
                   className="w-16 h-10 text-center border-2 border-gray-300 rounded-lg font-semibold"
                 />
                 <button
-                  onClick={onIncrementQuantity}
+                  onClick={handleIncrement}
                   className="w-10 h-10 rounded-lg border-2 border-gray-300 flex items-center justify-center hover:border-gray-400 hover:bg-gray-50 transition-all"
                 >
                   <svg
@@ -462,18 +576,22 @@ export default function ProductDetail1({
                 {showAddToCart && (
                   <button
                     onClick={() => {
+                      if (isInCart && cartItem) {
+                        // Already in cart - quantity is managed by the quantity controls
+                        return;
+                      }
                       setIsAdding(true);
-                      addToCart(product as unknown as import("@/types").InventoryProduct, quantity, selectedVariants as unknown as import("@/types").VariantsState);
+                      addToCart(product as unknown as import("@/types").InventoryProduct, displayQuantity, selectedVariants as unknown as import("@/types").VariantsState);
                       setTimeout(() => setIsAdding(false), 500);
                     }}
                     disabled={product.quantity === 0 || isAdding}
                     className="flex-1 py-3 sm:py-4 text-sm sm:text-base font-semibold rounded-xl transition-colors shadow-md hover:shadow-lg disabled:bg-gray-300 disabled:cursor-not-allowed disabled:shadow-none"
                     style={{
-                      backgroundColor: addToCartBgColor,
+                      backgroundColor: isInCart ? "#22c55e" : addToCartBgColor,
                       color: addToCartTextColor,
                     }}
                   >
-                    {isAdding ? "Adding..." : "Add to Cart"}
+                    {isAdding ? "Adding..." : isInCart ? "✓ In Cart" : "Add to Cart"}
                   </button>
                 )}
                 {showWhatsApp && (

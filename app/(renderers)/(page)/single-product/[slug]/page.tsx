@@ -20,6 +20,7 @@ import { GripLandingPage } from "@/app/_themes/landing/themes/grip";
 import { ArcadiaLandingPage } from "@/app/_themes/landing/themes/arcadia";
 import { NirvanaLandingPage } from "@/app/_themes/landing/themes/nirvana";
 import BlockRenderer, { type Block } from "@/components/renderers/block-renderer";
+import { FullPageLoader } from "@/components/shared/skeletons/page-skeletons";
 import type { SingleProductTheme, ThemeBuilderSection } from "@/types/landing-page.types";
 
 interface SingleProductPageProps {
@@ -131,16 +132,9 @@ export default function SingleProductPage({ params }: SingleProductPageProps) {
     });
   }, [slug]);
 
-  // Loading state - wait for shop details and landing page data
+  // Show minimal loader while loading
   if (!shopDetails || isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-4 border-gray-200 border-t-primary rounded-full animate-spin" />
-          <p className="text-muted-foreground">Loading...</p>
-        </div>
-      </div>
-    );
+    return <FullPageLoader />;
   }
 
   // Error state

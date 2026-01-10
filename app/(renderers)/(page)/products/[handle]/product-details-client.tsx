@@ -11,6 +11,7 @@ import { useShopStore } from "@/stores/shopStore";
 import ProductDetailsPageRenderer from "@/components/renderers/page-renderer/product-details-page-renderer";
 import type { Section } from "@/lib/types";
 import Link from "next/link";
+import { PageLoader } from "@/components/shared/skeletons/page-skeletons";
 
 // Static Theme Product Detail Components
 import { BasicProductDetailPage } from "@/app/_themes/basic/modules/product-detail/basic-product-detail-page";
@@ -56,16 +57,9 @@ export default function ProductDetailsClient({
     });
   }, [handle]);
 
-  // Show loading state
+  // Show minimal loader while loading
   if (isLoading || isPageConfigLoading) {
-    return (
-      <main className="flex items-center justify-center min-h-[50vh]">
-        <div className="flex flex-col items-center gap-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-          <p className="text-gray-600">Loading product...</p>
-        </div>
-      </main>
-    );
+    return <PageLoader />;
   }
 
   // Show 404 state

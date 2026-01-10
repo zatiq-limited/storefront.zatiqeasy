@@ -22,7 +22,6 @@ export function useContactUs() {
   // Sync to Zustand when data changes
   useEffect(() => {
     if (query.data) {
-      console.log("Contact Us API Response:", query.data);
       setContactUs(query.data);
     }
   }, [query.data, setContactUs]);

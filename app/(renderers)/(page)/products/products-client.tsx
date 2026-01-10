@@ -18,6 +18,7 @@ import { LuxuraAllProducts } from "@/app/_themes/luxura/modules/products/luxura-
 import { PremiumAllProducts } from "@/app/_themes/premium/modules/products/premium-all-products";
 import { SelloraAllProducts } from "@/app/_themes/sellora/modules/products/sellora-all-products";
 import type { ComponentType } from "react";
+import { PageLoader } from "@/components/shared/skeletons/page-skeletons";
 
 // Map theme names to their products page components
 const STATIC_THEME_PRODUCTS_COMPONENTS: Record<string, ComponentType> = {
@@ -44,7 +45,7 @@ export default function ProductsClient() {
   // Fetch shop inventories for real product data (both legacy and theme builder modes)
   const { isLoading: isInventoriesLoading } = useShopInventories(
     { shopUuid: shopDetails?.shop_uuid ?? "" },
-    { enabled: !!shopDetails?.shop_uuid }
+    { enabled: !!shopDetails?.shop_uuid, sortByStock: false }
   );
 
   // Fetch categories
@@ -70,16 +71,9 @@ export default function ProductsClient() {
     return <StaticProductsComponent />;
   }
 
-  // Show loading state (Theme Builder mode)
+  // Show minimal loader while loading (Theme Builder mode)
   if ((isLoading || isPageConfigLoading) && products.length === 0) {
-    return (
-      <main className="flex items-center justify-center min-h-[50vh]">
-        <div className="flex flex-col items-center gap-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-          <p className="text-gray-600">Loading...</p>
-        </div>
-      </main>
-    );
+    return <PageLoader />;
   }
 
   // Theme Builder mode: Render with ProductsPageRenderer using real shop data and API page config

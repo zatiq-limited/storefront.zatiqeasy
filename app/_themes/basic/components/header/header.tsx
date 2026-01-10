@@ -1,20 +1,20 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import TopbarMessage from "@/components/ui/topbar-message";
+import { cn } from "@/lib/utils";
+import {
+  selectShopDetails,
+  selectTotalItems,
+  useCartStore,
+  useProductsStore,
+  useShopStore,
+} from "@/stores";
+import { Globe, Mail, Phone, Search, ShoppingCart } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
-import { ShoppingCart, Mail, Phone, Globe, Search } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  useCartStore,
-  useShopStore,
-  useProductsStore,
-  selectTotalItems,
-  selectShopDetails,
-} from "@/stores";
-import { cn } from "@/lib/utils";
-import TopbarMessage from "@/components/ui/topbar-message";
 import { BasicSearchModal } from "../search";
 
 /**
@@ -103,24 +103,22 @@ export function BasicHeader() {
       <div className="w-full bg-white dark:bg-gray-900 py-2 md:py-3">
         <div className="container flex items-center justify-between gap-4 md:gap-6">
           {/* Logo */}
-          <div
-            onClick={handleLogoClick}
-            className="cursor-pointer flex items-center gap-0 sm:gap-4 shrink-0"
-          >
-            {shopDetails?.image_url && (
-              <Image
-                height={60}
-                width={60}
-                alt={shopDetails.shop_name || "Shop Logo"}
-                src={shopDetails.image_url}
-                className="max-h-10 md:max-h-12.5 w-auto object-left object-contain transition-all duration-300 hover:opacity-80 hover:scale-105 cursor-pointer"
-              />
-            )}
-
-            <h1 className="text-lg md:text-xl lg:text-2xl font-bold text-black dark:text-white">
-              {shopDetails?.shop_name || "Shop"}
-            </h1>
-          </div>
+          {shopDetails?.shop_name && shopDetails?.image_url && (
+            <div
+              onClick={handleLogoClick}
+              className="cursor-pointer flex items-center gap-0 sm:gap-4 shrink-0"
+            >
+              {shopDetails?.image_url && (
+                <Image
+                  height={60}
+                  width={60}
+                  alt={shopDetails.shop_name}
+                  src={shopDetails.image_url}
+                  className="max-h-10 md:max-h-12.5 w-auto object-left object-contain transition-all duration-300 hover:opacity-80 hover:scale-105 cursor-pointer"
+                />
+              )}
+            </div>
+          )}
 
           {/* Search Button (centered, only on md+) */}
           <div className="hidden md:flex flex-1 justify-center w-full max-w-2xl px-4">

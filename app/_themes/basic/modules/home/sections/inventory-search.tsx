@@ -2,7 +2,11 @@
 
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useProductsStore } from "@/stores/productsStore";
+import {
+  useProductsStore,
+  selectSearchQuery,
+  selectFilteredProducts,
+} from "@/stores/productsStore";
 import { Search, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -18,9 +22,11 @@ export function InventorySearch({ className }: InventorySearchProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // Get inventory state from Zustand store
-  const { searchQuery, setSearchQuery, setCurrentPage, filteredProducts } =
-    useProductsStore();
+  // Get inventory state from Zustand store using selectors
+  const searchQuery = useProductsStore(selectSearchQuery);
+  const filteredProducts = useProductsStore(selectFilteredProducts);
+  const setSearchQuery = useProductsStore((state) => state.setSearchQuery);
+  const setCurrentPage = useProductsStore((state) => state.setCurrentPage);
 
   const [isSearchInputFocused, setIsSearchInputFocused] = useState(false);
 

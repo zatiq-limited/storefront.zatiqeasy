@@ -71,11 +71,8 @@ export function ThemeRouter({
     pathname === "/" ||
     /^\/merchant\/[^/]+$/.test(pathname);
 
-  console.log("ThemeRouter - pathname:", pathname, "isLegacyTheme:", isLegacyTheme, "themeName:", themeName, "isHomepageRoute:", isHomepageRoute);
-
   // Legacy mode + Homepage: Render static theme component
   if (isLegacyTheme && isHomepageRoute) {
-    console.log("ThemeRouter - Rendering static theme:", themeName);
     const StaticThemeComponent =
       STATIC_THEME_COMPONENTS[themeName] || BasicHomePage;
     return (
@@ -87,7 +84,6 @@ export function ThemeRouter({
 
   // Legacy mode + Non-Homepage: Wrap with ConditionalThemeHandler for theme context
   if (isLegacyTheme) {
-    console.log("ThemeRouter - Legacy mode non-homepage, wrapping with ConditionalThemeHandler");
     return (
       <ConditionalThemeHandler>
         {children}
@@ -96,6 +92,5 @@ export function ThemeRouter({
   }
 
   // Theme Builder mode: Render children
-  console.log("ThemeRouter - Theme Builder mode, rendering children");
   return <>{children}</>;
 }

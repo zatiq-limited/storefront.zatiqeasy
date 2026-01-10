@@ -5,6 +5,7 @@ import { useHomepageStore } from "@/stores/homepageStore";
 import { useShopStore } from "@/stores";
 import BlockRenderer from "@/components/renderers/block-renderer";
 import { usePathname } from "next/navigation";
+import { PageLoader } from "@/components/shared/skeletons/page-skeletons";
 
 /**
  * HomePage Component
@@ -30,22 +31,14 @@ export default function HomePage() {
     pathname === "/" ||
     /^\/merchant\/[^/]+$/.test(pathname);
 
-  console.log("page.tsx - pathname:", pathname, "isLegacyTheme:", isLegacyTheme, "isHomepageRoute:", isHomepageRoute);
-
   // Legacy mode + Homepage: ThemeRouter already rendered the static theme, skip this
   if (isLegacyTheme && isHomepageRoute) {
-    console.log("page.tsx - Legacy mode homepage, returning null");
     return null;
   }
 
-  // Theme Builder mode: Render blocks from homepage data
-  console.log("page.tsx - Theme Builder mode or non-homepage, rendering BlockRenderer");
+  // Show minimal loader while loading
   if (isLoading) {
-    return (
-      <main className="flex items-center justify-center min-h-[50vh]">
-        <p>Loading...</p>
-      </main>
-    );
+    return <PageLoader />;
   }
 
   if (error) {
@@ -61,39 +54,9 @@ export default function HomePage() {
     (homepage as Record<string, unknown>)?.data || homepage || {};
   const sections = (pageData as Record<string, unknown>)?.sections || [];
 
-  // Show placeholder when no sections exist (Theme Builder not configured)
+  // Don't render anything when no sections exist
   if (!sections || (sections as Array<unknown>).length === 0) {
-    return (
-      <main className="zatiq-homepage min-h-[60vh] flex items-center justify-center bg-gray-50">
-        <div className="text-center p-8 max-w-md">
-          <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg
-              className="w-8 h-8 text-blue-600"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-              />
-            </svg>
-          </div>
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">
-            Theme Builder Mode Active
-          </h2>
-          <p className="text-gray-600 mb-4">
-            No homepage sections configured yet. Use the Theme Builder in your
-            merchant panel to add sections to this page.
-          </p>
-          <p className="text-sm text-gray-500">
-            Shop: {shopDetails?.shop_name || "Unknown"}
-          </p>
-        </div>
-      </main>
-    );
+    return null;
   }
 
   return (

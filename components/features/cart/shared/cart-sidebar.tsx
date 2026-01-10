@@ -1,10 +1,9 @@
 "use client";
 
-import { useCartStore } from "@/stores";
 import { useCartTotals } from "@/hooks";
 import { Button } from "@/components/ui/button";
 import { X, ShoppingCart } from "lucide-react";
-import { CartItem, CartSummary } from "@/features/cart";
+import { CartItem, CartSummary } from "../cart-management-modal";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
@@ -30,16 +29,13 @@ export function CartSidebar({
   return (
     <div
       className={cn(
-        "fixed inset-0 z-50 overflow-hidden",
+        "fixed inset-0 z-100 overflow-hidden",
         isOpen ? "pointer-events-auto" : "pointer-events-none"
       )}
     >
       {/* Backdrop */}
       {isOpen && (
-        <div
-          className="absolute inset-0 bg-black/50"
-          onClick={onClose}
-        />
+        <div className="absolute inset-0 bg-black/50" onClick={onClose} />
       )}
 
       {/* Sidebar */}
@@ -47,9 +43,11 @@ export function CartSidebar({
         className={cn(
           "absolute top-0 h-full w-full max-w-md bg-background shadow-xl transition-transform duration-300 ease-in-out",
           position === "right" ? "right-0" : "left-0",
-          isOpen ? "translate-x-0" : (
-            position === "right" ? "translate-x-full" : "-translate-x-full"
-          )
+          isOpen
+            ? "translate-x-0"
+            : position === "right"
+            ? "translate-x-full"
+            : "-translate-x-full"
         )}
       >
         <div className="flex flex-col h-full">

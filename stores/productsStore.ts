@@ -142,13 +142,6 @@ interface ProductsState {
   // Products page config
   productsPageConfig: Record<string, unknown> | null;
 
-  // Computed values
-  filteredProducts: Product[];
-  currentPage: number;
-  totalPages: number;
-  searchQuery: string;
-  sortOption: string;
-
   // Actions
   setProducts: (products: Product[]) => void;
   setCategories: (categories: Category[]) => void;
@@ -183,68 +176,6 @@ export const useProductsStore = create<ProductsState>()(
       isLoading: false,
       error: null,
       productsPageConfig: null,
-
-      // Computed values
-      get filteredProducts() {
-        const { products, filters, searchQuery, sortOption } = get();
-        let filtered = products;
-
-        // Apply search filter
-        if (searchQuery) {
-          filtered = filtered.filter((product) =>
-            product.name.toLowerCase().includes(searchQuery.toLowerCase())
-          );
-        }
-
-        // Apply category filter
-        if (filters.category) {
-          filtered = filtered.filter(
-            (product) => product.category_id === filters.category?.toString()
-          );
-        }
-
-        // Apply sorting
-        switch (sortOption) {
-          case "price-asc":
-            filtered = [...filtered].sort((a, b) => a.price - b.price);
-            break;
-          case "price-desc":
-            filtered = [...filtered].sort((a, b) => b.price - a.price);
-            break;
-          case "name-asc":
-            filtered = [...filtered].sort((a, b) =>
-              a.name.localeCompare(b.name)
-            );
-            break;
-          case "name-desc":
-            filtered = [...filtered].sort((a, b) =>
-              b.name.localeCompare(a.name)
-            );
-            break;
-          default:
-            // Keep original order for 'newest'
-            break;
-        }
-
-        return filtered;
-      },
-
-      get currentPage() {
-        return get().filters.page;
-      },
-
-      get totalPages() {
-        const { filteredProducts, filters } = get();
-        return Math.ceil(filteredProducts.length / filters.limit);
-      },
-
-      get searchQuery() {
-        return get().filters.search || "";
-      },
-
-      get sortOption() {
-        return get().filters.sort;
-      },
 
       // Actions
       setProducts: (products) => set({ products }),
@@ -312,3 +243,61 @@ export const selectIsLoading = (state: ProductsStoreState) => state.isLoading;
 export const selectError = (state: ProductsStoreState) => state.error;
 export const selectProductsPageConfig = (state: ProductsStoreState) =>
   state.productsPageConfig;
+
+// Computed selectors
+export const selectSearchQuery = (state: ProductsStoreState) =>
+  state.filters.search || "";
+
+export const selectSortOption = (state: ProductsStoreState) =>
+  state.filters.sort;
+
+export const selectCurrentPage = (state: ProductsStoreState) =>
+  state.filters.page;
+
+export const selectFilteredProducts = (state: ProductsStoreState) => {
+  const { products, filters } = state;
+  const searchQuery = filters.search || "";
+  const sortOption = filters.sort;
+
+  let filtered = products;
+
+  // Apply search filter
+  if (searchQuery) {
+    filtered = filtered.filter((product) =>
+      product.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }
+
+  // Apply category filter
+  if (filters.category) {
+    filtered = filtered.filter(
+      (product) => product.category_id === filters.category?.toString()
+    );
+  }
+
+  // Apply sorting
+  switch (sortOption) {
+    case "price-asc":
+      filtered = [...filtered].sort((a, b) => a.price - b.price);
+      break;
+    case "price-desc":
+      filtered = [...filtered].sort((a, b) => b.price - a.price);
+      break;
+    case "name-asc":
+      filtered = [...filtered].sort((a, b) => a.name.localeCompare(b.name));
+      break;
+    case "name-desc":
+      filtered = [...filtered].sort((a, b) => b.name.localeCompare(a.name));
+      break;
+    default:
+      // Keep original order for 'newest'
+      break;
+  }
+
+  return filtered;
+};
+
+export const selectTotalPages = (state: ProductsStoreState) => {
+  const filteredProducts = selectFilteredProducts(state);
+  return Math.ceil(filteredProducts.length / state.filters.limit);
+};

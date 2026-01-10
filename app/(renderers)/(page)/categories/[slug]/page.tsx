@@ -53,7 +53,7 @@ export default function CategoryPage({ params }: CategoryPageProps) {
     refetch: refetchInventories,
   } = useShopInventories(
     { shopUuid: shopUuid ?? "" },
-    { enabled: !!shopUuid && isLegacyTheme }
+    { enabled: !!shopUuid && isLegacyTheme, sortByStock: false }
   );
 
   // Fetch categories when shop UUID is available (for legacy themes)

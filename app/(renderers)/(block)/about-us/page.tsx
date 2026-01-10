@@ -7,6 +7,7 @@ import { useShopCustomPages } from "@/hooks/useShopCustomPages";
 import BlockRenderer from "@/components/renderers/block-renderer";
 import { FallbackImage } from "@/components/ui/fallback-image";
 import { PageLoading } from "@/components/shared/page-loading";
+import { PageLoader } from "@/components/shared/skeletons/page-skeletons";
 import "react-quill/dist/quill.snow.css";
 
 export default function AboutUsPage() {
@@ -112,12 +113,9 @@ export default function AboutUsPage() {
   // THEME BUILDER MODE (legacy_theme = false)
   // ========================================
 
+  // Show minimal loader while loading
   if (isLoading) {
-    return (
-      <main className="flex items-center justify-center min-h-[50vh]">
-        <p>Loading...</p>
-      </main>
-    );
+    return <PageLoader />;
   }
 
   if (error) {

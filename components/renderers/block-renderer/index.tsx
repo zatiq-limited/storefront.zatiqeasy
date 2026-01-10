@@ -17,6 +17,8 @@ import React, {
   createContext,
   useContext,
 } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   parseWrapper,
   convertStyleToCSS,
@@ -35,6 +37,18 @@ import MarqueeRenderer from "./block-components/marquee-renderer";
 import SwiperRenderer from "./block-components/swiper-renderer";
 import ProgressBarRenderer from "./block-components/progress-bar-renderer";
 import { AboutTeam1Renderer } from "./block-components/about";
+
+/**
+ * Check if a URL is internal (should use Next.js Link for client-side navigation)
+ */
+function isInternalUrl(href: string): boolean {
+  if (!href || href === "#") return false;
+  // Internal URLs start with / but not // (protocol-relative)
+  if (href.startsWith("/") && !href.startsWith("//")) return true;
+  // Relative URLs without protocol
+  if (!href.includes("://") && !href.startsWith("//")) return true;
+  return false;
+}
 
 // Context for managing drawer/toggle visibility states across blocks
 interface DrawerContextType {
@@ -137,7 +151,6 @@ function collectDrawerStates(block: Block): Record<string, boolean> {
   collectFromBlock(block);
   return states;
 }
-
 /**
  * Internal Block Renderer Component (without context provider)
  */
@@ -149,6 +162,7 @@ function BlockRendererInternal({
   className = "",
 }: BlockRendererProps) {
   const drawerContext = useDrawerContext();
+  const router = useRouter();
 
   const blockId = block.id || block.wrapper?.match(/#([^.#\s]+)/)?.[1];
   const isVisible =
@@ -157,15 +171,37 @@ function BlockRendererInternal({
       : block.state?.visible ?? true;
 
   // Merge block data with parent data
+  // Preserve special keys like cart_count from parent (don't let block data overwrite)
   const mergedData = useMemo(() => {
     const blockData = block.data || {};
-    return { ...data, ...blockData };
+    const merged = { ...data, ...blockData };
+    // Always preserve cart_count from parent data if it exists
+    if (data.cart_count !== undefined) {
+      merged.cart_count = data.cart_count;
+    }
+    return merged;
   }, [data, block.data]);
 
   // Extended event handlers with local state management
   const extendedHandlers = useMemo(
     () => ({
       ...eventHandlers,
+      navigate: (url: string) => {
+        if (eventHandlers.navigate) {
+          eventHandlers.navigate(url);
+        } else if (url === "#") {
+          // Empty hash - do nothing
+          return;
+        } else if (url.startsWith("#")) {
+          // Hash link - smooth scroll to element
+          const element = document.querySelector(url);
+          element?.scrollIntoView({ behavior: "smooth" });
+        } else if (isInternalUrl(url)) {
+          router.push(url);
+        } else {
+          window.location.href = url;
+        }
+      },
       toggleDrawer: (target: string) => {
         if (drawerContext) {
           drawerContext.toggleDrawer(target);
@@ -177,7 +213,7 @@ function BlockRendererInternal({
         eventHandlers.toggleAccordion?.(target);
       },
     }),
-    [eventHandlers, drawerContext]
+    [eventHandlers, drawerContext, router]
   );
 
   // Check condition
@@ -327,15 +363,53 @@ function BlockRendererInternal({
     props.alt = alt;
   }
 
-  // href for links
+  // href for links - check href, bind_href, url, bind_url, and navigate event target
   if (tag === "a") {
-    const href = block.bind_href
-      ? String(
-          resolveBinding(block.bind_href, mergedData, context) ||
-            block.href ||
-            "#"
-        )
-      : block.href || "#";
+    // Check all possible URL sources: bind_href, bind_url, href, url, navigate event target
+    let href = "#";
+
+    // Try bind_href first
+    if (block.bind_href && typeof block.bind_href === "string") {
+      const resolved = resolveBinding(block.bind_href, mergedData, context);
+      if (resolved && typeof resolved === "string") {
+        href = resolved;
+      }
+    }
+
+    // Try bind_url if href still default
+    if (href === "#" && block.bind_url && typeof block.bind_url === "string") {
+      const resolved = resolveBinding(block.bind_url, mergedData, context);
+      if (resolved && typeof resolved === "string") {
+        href = resolved;
+      }
+    }
+
+    // Try direct href/url properties
+    if (href === "#" && block.href) {
+      href = String(block.href);
+    }
+    if (href === "#" && block.url) {
+      href = String(block.url);
+    }
+
+    // Try navigate event target as fallback (e.g., "item.url" binding)
+    if (href === "#") {
+      const navigateEvent = block.events?.on_click || block.events?.click;
+      if (navigateEvent?.action === "navigate" && navigateEvent.target) {
+        const target = navigateEvent.target;
+        // Check if target is a binding path (contains ".")
+        if (typeof target === "string" && target.includes(".")) {
+          const resolved = resolveBinding(target, mergedData, context);
+          if (resolved && typeof resolved === "string") {
+            href = resolved;
+          }
+        } else if (typeof target === "string") {
+          // Direct URL in target
+          href = target;
+        }
+      }
+    }
+
     props.href = href;
   }
 
@@ -431,6 +505,105 @@ function BlockRendererInternal({
 
     return (
       <IconRenderer icon={iconName} className={finalClassName} style={style} />
+    );
+  }
+
+  // Use Next.js Link for internal anchor tags to enable client-side navigation
+  if (tag === "a" && props.href && isInternalUrl(String(props.href))) {
+    // Remove onClick since Link handles navigation - prevents double navigation
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { href, onClick, ...restProps } = props as Record<string, unknown>;
+    return (
+      <Link href={String(href)} {...restProps}>
+        {children}
+      </Link>
+    );
+  }
+
+  // For non-anchor elements with navigate events, wrap in Link if URL is internal
+  const navigateEvent = block.events?.on_click || block.events?.click;
+  const hasNavigateEvent = navigateEvent?.action === "navigate";
+
+  if (tag !== "a" && hasNavigateEvent && navigateEvent?.target) {
+    // Get URL from navigate event target
+    let elementUrl = "";
+    const target = navigateEvent.target;
+
+    if (typeof target === "string") {
+      // Check if target is a binding path (contains ".")
+      if (target.includes(".")) {
+        const resolved = resolveBinding(target, mergedData, context);
+        if (resolved && typeof resolved === "string") {
+          elementUrl = resolved;
+        }
+      } else {
+        // Direct URL in target
+        elementUrl = target;
+      }
+    }
+
+    // Also check block.url and block.bind_url
+    if (!elementUrl && block.bind_url && typeof block.bind_url === "string") {
+      const resolved = resolveBinding(block.bind_url, mergedData, context);
+      if (resolved && typeof resolved === "string") {
+        elementUrl = resolved;
+      }
+    }
+    if (!elementUrl && block.url) {
+      elementUrl = String(block.url);
+    }
+
+    if (elementUrl && isInternalUrl(elementUrl)) {
+      // Remove onClick since Link handles navigation
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { onClick, ...restProps } = props as Record<string, unknown>;
+      return (
+        <Link href={elementUrl} {...restProps}>
+          {createElement(tag, { className: props.className, style: props.style }, children)}
+        </Link>
+      );
+    }
+  }
+
+  // Special handling for cart icon buttons - add badge with cart count
+  // Check both "click" and "on_click" event names, and be flexible with detection
+  const clickEvent = block.events?.on_click || block.events?.click;
+
+  const isCartToggle =
+    clickEvent?.action === "toggle_drawer" &&
+    (clickEvent?.target === "cart_drawer" ||
+      clickEvent?.target === "cart" ||
+      String(clickEvent?.target || "").toLowerCase().includes("cart"));
+
+  // Also check if this is a cart-related icon button by ID or class
+  const hasCartIdentifier =
+    block.id?.toLowerCase().includes("cart") ||
+    block.class?.toLowerCase().includes("cart") ||
+    blockId?.toLowerCase().includes("cart");
+
+  // Check if block contains a cart-related icon (shopping-cart, shopping-bag, etc.)
+  const hasCartIcon =
+    block.icon?.toLowerCase().includes("cart") ||
+    block.icon?.toLowerCase().includes("shopping") ||
+    block.icon?.toLowerCase().includes("bag") ||
+    block.icon?.toLowerCase().includes("basket");
+
+  const isCartButton = isCartToggle || (hasCartIdentifier && clickEvent) || (hasCartIcon && clickEvent);
+
+  if (isCartButton) {
+    const cartCount = mergedData.cart_count as number | undefined;
+
+    return createElement(
+      tag,
+      { ...props, className: `${finalClassName} relative overflow-visible`, style: { ...((props.style as React.CSSProperties) || {}), overflow: 'visible' } },
+      <>
+        {children}
+        {cartCount !== undefined && cartCount > 0 && (
+          <span className="absolute -top-1 -right-1 min-w-4.5 h-4.5 px-1 flex items-center justify-center bg-red-500 text-white text-[10px] font-bold rounded-full z-50">
+            {cartCount > 99 ? "99+" : cartCount}
+          </span>
+        )}
+      </>
     );
   }
 

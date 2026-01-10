@@ -8,29 +8,12 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FallbackImage } from "@/components/ui/fallback-image";
 import Link from "next/link";
-
-interface ProductCard5Props {
-  id: number | string;
-  handle: string;
-  title: string;
-  price: number;
-  comparePrice?: number | null;
-  currency?: string;
-  image: string;
-  hoverImage?: string;
-  priceColor?: string;
-  oldPriceColor?: string;
-  quickAddEnabled?: boolean;
-  buyNowEnabled?: boolean;
-  onAddToCart?: () => void;
-  onBuyNow?: () => void;
-}
+import type { ProductCardProps } from "./index";
 
 export default function ProductCard5({
-  id,
   handle,
   title,
   price,
@@ -44,8 +27,41 @@ export default function ProductCard5({
   buyNowEnabled = true,
   onAddToCart,
   onBuyNow,
-}: ProductCard5Props) {
+  isOutOfStock = false,
+  cartQuantity = 0,
+  hasVariants = false,
+  onIncrement,
+  onDecrement,
+  onQuantityChange,
+}: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const [inputValue, setInputValue] = useState(cartQuantity.toString());
+
+  useEffect(() => {
+    setInputValue(cartQuantity.toString());
+  }, [cartQuantity]);
+
+  const isInCart = cartQuantity > 0;
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleInputBlur = () => {
+    const newQty = parseInt(inputValue, 10);
+    if (!isNaN(newQty) && newQty !== cartQuantity) {
+      if (hasVariants) {
+        onIncrement?.();
+      } else {
+        onQuantityChange?.(newQty);
+      }
+    }
+    setInputValue(cartQuantity.toString());
+  };
+
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") e.currentTarget.blur();
+  };
 
   const discountPercent =
     comparePrice && price
@@ -70,13 +86,21 @@ export default function ProductCard5({
             style={{ transform: isHovered ? "scale(1.05)" : "scale(1)" }}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           />
-          {/* Discount Badge */}
-          {discountPercent && (
-            <div className="absolute top-2 right-2 sm:top-3 sm:right-3 w-9 h-9 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center bg-red-500">
-              <span className="text-white text-[10px] sm:text-xs lg:text-base font-normal leading-tight">
-                {discountPercent}
+          {/* Badge - Show Out of Stock badge if product is out of stock, otherwise show discount badge */}
+          {isOutOfStock ? (
+            <div className="absolute top-2 right-2 sm:top-3 sm:right-3 w-9 h-9 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center bg-gray-600">
+              <span className="text-white text-[8px] sm:text-[10px] lg:text-xs font-normal leading-tight text-center">
+                Out of Stock
               </span>
             </div>
+          ) : (
+            discountPercent && (
+              <div className="absolute top-2 right-2 sm:top-3 sm:right-3 w-9 h-9 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center bg-red-500">
+                <span className="text-white text-[10px] sm:text-xs lg:text-base font-normal leading-tight">
+                  {discountPercent}
+                </span>
+              </div>
+            )
           )}
 
           {/* Hover Overlay with Buttons - Desktop */}
@@ -86,17 +110,61 @@ export default function ProductCard5({
             }`}
           >
             {quickAddEnabled && (
-              <button
-                className="w-full h-11 lg:h-12 rounded bg-white flex items-center justify-center cursor-pointer text-sm font-medium text-gray-900 transition-all duration-300 leading-5 hover:bg-gray-100"
-                onClick={(e) => {
-                  e.preventDefault();
-                  onAddToCart?.();
-                }}
-              >
-                Add to Cart
-              </button>
+              <>
+                {isOutOfStock ? (
+                  <button
+                    className="w-full h-11 lg:h-12 rounded flex items-center justify-center text-sm font-medium transition-all duration-300 leading-5 cursor-not-allowed opacity-60"
+                    style={{ backgroundColor: "#E5E7EB", color: "#6B7280" }}
+                    disabled
+                  >
+                    Out of Stock
+                  </button>
+                ) : isInCart ? (
+                  <div
+                    className="w-full h-11 lg:h-12 border rounded flex items-center justify-between overflow-hidden bg-white"
+                    style={{ borderColor: "#111827" }}
+                  >
+                    <button
+                      className="h-full px-3 sm:px-4 flex items-center justify-center hover:bg-gray-100 transition-colors"
+                      style={{ color: "#111827" }}
+                      onClick={(e) => { e.preventDefault(); e.stopPropagation(); onDecrement?.(); }}
+                    >
+                      <svg className="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14" /></svg>
+                    </button>
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      value={inputValue}
+                      onChange={handleInputChange}
+                      onBlur={handleInputBlur}
+                      onKeyDown={handleInputKeyDown}
+                      onClick={(e) => { e.preventDefault(); e.stopPropagation(); if (hasVariants) onIncrement?.(); }}
+                      className="w-12 sm:w-16 text-center text-sm sm:text-base font-medium bg-transparent focus:outline-none text-gray-900"
+                      readOnly={hasVariants}
+                    />
+                    <button
+                      className="h-full px-3 sm:px-4 flex items-center justify-center hover:bg-gray-100 transition-colors"
+                      style={{ color: "#111827" }}
+                      onClick={(e) => { e.preventDefault(); e.stopPropagation(); onIncrement?.(); }}
+                    >
+                      <svg className="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 5v14M5 12h14" /></svg>
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    className="w-full h-11 lg:h-12 rounded flex items-center justify-center text-sm font-medium transition-all duration-300 leading-5 cursor-pointer hover:bg-gray-100"
+                    style={{ backgroundColor: "#FFFFFF", color: "#111827" }}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      onAddToCart?.();
+                    }}
+                  >
+                    Add to Cart
+                  </button>
+                )}
+              </>
             )}
-            {buyNowEnabled && (
+            {buyNowEnabled && !isOutOfStock && !isInCart && (
               <button
                 className="w-full h-11 lg:h-12 rounded bg-red-500 flex items-center justify-center cursor-pointer text-sm font-medium text-white transition-all duration-300 leading-5 hover:bg-red-600"
                 onClick={(e) => {
@@ -139,25 +207,66 @@ export default function ProductCard5({
             {/* Mobile Icon Buttons */}
             <div className="flex gap-1.5 sm:hidden">
               {quickAddEnabled && (
-                <button
-                  className="w-8 h-8 rounded-lg bg-gray-200 flex items-center justify-center cursor-pointer transition-all duration-200 active:scale-95"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    onAddToCart?.();
-                  }}
-                >
-                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
-                    <path
-                      d="M12 5V19M5 12H19"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </button>
+                <>
+                  {isOutOfStock ? (
+                    <button
+                      className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 cursor-not-allowed opacity-60"
+                      style={{ backgroundColor: "#E5E7EB", color: "#6B7280" }}
+                      disabled
+                    >
+                      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
+                        <path
+                          d="M12 5V19M5 12H19"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </button>
+                  ) : isInCart ? (
+                    <div className="flex gap-1">
+                      <button
+                        className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 cursor-pointer active:scale-95"
+                        style={{ backgroundColor: "#E5E7EB", color: "#111827" }}
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); onDecrement?.(); }}
+                      >
+                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14" /></svg>
+                      </button>
+                      <span className="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-xs font-medium text-gray-900">
+                        {cartQuantity}
+                      </span>
+                      <button
+                        className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 cursor-pointer active:scale-95"
+                        style={{ backgroundColor: "#E5E7EB", color: "#111827" }}
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); onIncrement?.(); }}
+                      >
+                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 5v14M5 12h14" /></svg>
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 cursor-pointer active:scale-95"
+                      style={{ backgroundColor: "#E5E7EB", color: "#111827" }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        onAddToCart?.();
+                      }}
+                    >
+                      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
+                        <path
+                          d="M12 5V19M5 12H19"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </button>
+                  )}
+                </>
               )}
-              {buyNowEnabled && (
+              {buyNowEnabled && !isOutOfStock && !isInCart && (
                 <button
                   className="w-8 h-8 rounded-lg bg-red-500/90 flex items-center justify-center cursor-pointer transition-all duration-200 active:scale-95"
                   onClick={(e) => {
