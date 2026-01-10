@@ -1,8 +1,9 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useRef } from "react";
 import { useProductDetailsStore } from "@/stores/productDetailsStore";
+import { useCartStore } from "@/stores/cartStore";
 import type { Product } from "@/stores/productsStore";
 
 interface ProductResponse {
@@ -61,6 +62,12 @@ export function useProductDetails(handle: string) {
     computedPrice,
   } = useProductDetailsStore();
 
+  // Cart store for auto-selecting variants
+  const cartProducts = useCartStore((state) => state.products);
+
+  // Track if we've already synced variants from cart (to avoid infinite loops)
+  const hasInitializedFromCart = useRef(false);
+
   // Product query
   const productQuery = useQuery({
     queryKey: ["product", handle],
@@ -111,10 +118,55 @@ export function useProductDetails(handle: string) {
     }
   }, [pageConfigQuery.data, setProductDetailsPageConfig]);
 
+  // Auto-select variants from cart if product is already in cart
+  useEffect(() => {
+    const product = productQuery.data?.data?.product;
+    if (!product || hasInitializedFromCart.current) return;
+
+    const productId = typeof product.id === "string" ? parseInt(product.id, 10) : product.id;
+
+    // Find this product in cart
+    const cartItem = Object.values(cartProducts).find((item) => item.id === productId);
+
+    if (cartItem && cartItem.selectedVariants && Object.keys(cartItem.selectedVariants).length > 0) {
+      hasInitializedFromCart.current = true;
+
+      // Auto-select each variant from cart
+      Object.entries(cartItem.selectedVariants).forEach(([variantTypeId, cartVariant]) => {
+        // Find the variant in the product's variant_types
+        const variantType = product.variant_types?.find(
+          (vt) => vt.id === Number(variantTypeId)
+        );
+        if (variantType) {
+          const variant = variantType.variants.find(
+            (v) => v.id === cartVariant.variant_id
+          );
+          if (variant) {
+            selectVariant(Number(variantTypeId), variant);
+          }
+        }
+      });
+
+      // Also set the quantity from cart
+      if (cartItem.qty) {
+        setQuantity(cartItem.qty);
+      }
+    } else {
+      // Product not in cart, mark as initialized anyway to avoid re-running
+      hasInitializedFromCart.current = true;
+    }
+  }, [productQuery.data, cartProducts, selectVariant, setQuantity]);
+
+  // Reset the initialization flag when handle changes (new product)
+  useEffect(() => {
+    hasInitializedFromCart.current = false;
+  }, [handle]);
+
   // Cleanup on unmount
   useEffect(() => {
     return () => {
       resetVariants();
+      hasInitializedFromCart.current = false;
     };
   }, [resetVariants]);
 
