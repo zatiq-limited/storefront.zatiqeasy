@@ -46,7 +46,7 @@ export function LuxuraCategoryCard({
         <h3 className="text-white text-sm sm:text-base lg:text-lg font-medium">
           {isOnSale ? (
             <>
-              {t("on_sale")} <br />
+               On Sale <br />
               <span className="line-clamp-1">{name}</span>
             </>
           ) : (

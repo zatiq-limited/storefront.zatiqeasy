@@ -60,7 +60,7 @@ export function SelloraFooter() {
             {/* About Section - includes logo and contact info */}
             <div className="space-y-3 sm:space-y-5">
               <h4 className="font-bold text-base text-black">
-                {t("about")} {shopName}
+                About {shopName}
               </h4>
               {shopLogo && (
                 <FallbackImage
@@ -104,26 +104,26 @@ export function SelloraFooter() {
 
             {/* Quick Links */}
             <div className="space-y-3 sm:space-y-5">
-              <h4 className="font-bold text-base text-black">{t("shop")}</h4>
+              <h4 className="font-bold text-base text-black">Shop</h4>
               <div className="flex flex-col gap-1 text-base font-normal text-black">
                 <Link
                   href={`${baseUrl}/products`}
                   className="hover:text-blue-zatiq transition-colors"
                 >
-                  {t("products")}
+                  Products
                 </Link>
                 <Link
                   href={`${baseUrl}/categories`}
                   className="hover:text-blue-zatiq transition-colors"
                 >
-                  {t("categories")}
+                  Categories
                 </Link>
               </div>
             </div>
 
             {/* Help Links */}
             <div className="space-y-3 sm:space-y-5">
-              <h4 className="font-bold text-base text-black">{t("help")}</h4>
+              <h4 className="font-bold text-base text-black">Help</h4>
               <div className="flex flex-col gap-1 text-base font-normal text-black">
                 {policyLinks.map((slug) => (
                   <Link
