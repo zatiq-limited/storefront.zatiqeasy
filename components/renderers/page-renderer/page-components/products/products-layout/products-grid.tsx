@@ -53,8 +53,8 @@ export default function ProductsGrid({
   // Check if product is out of stock
   const isProductOutOfStock = useCallback(
     (product: Product): boolean => {
-      // If stock is managed by variant, check stocks array
-      if (product.is_stock_manage_by_variant || hasVariants(product)) {
+      // Only check stocks array if is_stock_manage_by_variant is explicitly true
+      if (product.is_stock_manage_by_variant === true) {
         // Out of stock if stocks array is empty or all variants have 0 quantity
         if (!product.stocks || product.stocks.length === 0) {
           return true;
@@ -62,14 +62,14 @@ export default function ProductsGrid({
         return product.stocks.every((stock) => (stock.quantity ?? 0) <= 0);
       }
 
-      // For non-variant products, check the quantity field
-      // Out of stock if quantity is null, undefined, or <= 0
+      // For all other products (including variants with is_stock_manage_by_variant=false),
+      // check the main quantity field
       if (product.quantity === null || product.quantity === undefined) {
         return true;
       }
       return product.quantity <= 0;
     },
-    [hasVariants]
+    []
   );
 
   // Memoized cart data - recalculates when cartProducts changes

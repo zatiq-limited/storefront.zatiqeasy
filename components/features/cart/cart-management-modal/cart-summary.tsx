@@ -84,10 +84,6 @@ export function CartSummary({
           {checkoutButtonLabel}
         </Button>
       )}
-
-      <div className="text-xs text-muted-foreground text-center">
-        Prices include all applicable taxes
-      </div>
     </div>
   );
 }
