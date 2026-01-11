@@ -30,17 +30,17 @@ export function SelloraAllCategoriesPage() {
   return (
     <div className="container pt-16 pb-8">
       {/* Page Header */}
-      {totalCategories > 0 && (
+      {/* {totalCategories > 0 && (
         <h1 className="text-[38px] md:text-[64px] font-normal text-blue-zatiq mb-6 md:mb-9">
           {t("all_categories")}
           <span className="text-[18px] md:text-[30px] text-[#9CA3AF] ml-2">
             ({totalCategories})
           </span>
         </h1>
-      )}
+      )} */}
 
       {/* Categories Grid */}
-      <GridContainer columns={{ mobile: 2, tablet: 2, desktop: 4 }}>
+      <GridContainer columns={{ mobile: 2, tablet: 2, desktop: 4 }} className="pt-1 sm:pt-14">
         {topLevelCategories.length > 0 ? (
           topLevelCategories.map((category) => (
             <CategoryGrid
