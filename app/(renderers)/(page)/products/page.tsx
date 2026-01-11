@@ -11,12 +11,13 @@ import type { Metadata } from "next";
 import ProductsClient from "./products-client";
 
 // Static metadata for products listing page
+// Note: Shop name is added via template in root layout
 export const metadata: Metadata = {
-  title: "All Products | ZatiqEasy",
+  title: "All Products",
   description:
     "Browse our complete collection of products. Find the best deals on high-quality items with fast delivery.",
   openGraph: {
-    title: "All Products | ZatiqEasy",
+    title: "All Products",
     description:
       "Browse our complete collection of products. Find the best deals on high-quality items with fast delivery.",
     type: "website",

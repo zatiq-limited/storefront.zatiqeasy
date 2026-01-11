@@ -4,6 +4,7 @@ import { ShopProvider } from "@/app/providers/shop-provider";
 import { BreadcrumbWrapper } from "@/app/_themes/_components/breadcrumb-wrapper";
 import { ThemeRouter } from "@/components/theme-router";
 import ThemeLayout from "@/app/_layouts/theme/layout";
+import { getShopFaviconUrl, getShopOgImageUrl } from "@/lib/utils/shop-helpers";
 
 interface MerchantLayoutProps {
   children: React.ReactNode;
@@ -23,30 +24,43 @@ export async function generateMetadata({
   });
 
   const shopName = shopProfile?.shop_name || `Shop ${shopId}`;
+  const faviconUrl = getShopFaviconUrl(
+    shopProfile?.favicon_url,
+    shopProfile?.image_url
+  );
+  const ogImageUrl = getShopOgImageUrl(shopProfile?.image_url);
 
   return {
-    title: `${shopName} | Zatiq Store`,
+    title: {
+      default: shopName,
+      template: `%s | ${shopName}`,
+    },
     description: `Visit ${shopName} online store for amazing products`,
     keywords: ["online shop", "ecommerce", shopName, "zatiq"],
+    icons: {
+      icon: faviconUrl,
+      shortcut: faviconUrl,
+      apple: faviconUrl,
+    },
     openGraph: {
-      title: `${shopName} | Zatiq Store`,
+      title: shopName,
       description: `Visit ${shopName} online store for amazing products`,
       type: "website",
       url: `${process.env.NEXT_PUBLIC_APP_URL}/merchant/${shopId}`,
       images: [
         {
-          url: "/og-image.jpg",
+          url: ogImageUrl,
           width: 1200,
           height: 630,
-          alt: `${shopName} - Zatiq Store`,
+          alt: shopName,
         },
       ],
     },
     twitter: {
       card: "summary_large_image",
-      title: `${shopName} | Zatiq Store`,
+      title: shopName,
       description: `Visit ${shopName} online store for amazing products`,
-      images: ["/og-image.jpg"],
+      images: [ogImageUrl],
     },
     alternates: {
       canonical: `${process.env.NEXT_PUBLIC_APP_URL}/merchant/${shopId}`,

@@ -127,7 +127,7 @@ export default function MerchantAboutUsPage() {
           </div>
         ) : aboutUsContent ? (
           <div
-            className="ql-editor dark:text-gray-200 text-black-2 ql-snow"
+            className="ql-editor dark:text-gray-200 text-black-2 ql-snow px-0!"
             dangerouslySetInnerHTML={{ __html: aboutUsContent }}
           />
         ) : activeShopData?.details ? (

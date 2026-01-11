@@ -38,7 +38,7 @@ export default function AboutUsPage() {
 
     return (
       <div className="container pt-16 pb-10">
-        <div className="flex flex-col gap-3 rounded-xl max-w-7xl mx-auto dark:text-gray-200 p-4">
+        <div className="flex flex-col gap-3 rounded-xl dark:text-gray-200 py-4">
           {/* Shop Info Card */}
           <div className="flex flex-col md:flex-row gap-3 p-3 pb-6 shadow-md bg-blue-zatiq/10 rounded-2xl md:items-center">
             {/* Shop Logo */}
@@ -96,7 +96,7 @@ export default function AboutUsPage() {
           {/* About Us Content */}
           {aboutUsContent ? (
             <div
-              className="ql-editor dark:text-gray-200 text-black-2 ql-snow"
+              className="ql-editor dark:text-gray-200 text-black-2 ql-snow px-0!"
               dangerouslySetInnerHTML={{ __html: aboutUsContent }}
             />
           ) : shopDetails?.details ? (

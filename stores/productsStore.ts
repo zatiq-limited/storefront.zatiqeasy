@@ -254,8 +254,10 @@ export const selectSortOption = (state: ProductsStoreState) =>
 export const selectCurrentPage = (state: ProductsStoreState) =>
   state.filters.page;
 
-export const selectFilteredProducts = (state: ProductsStoreState) => {
-  const { products, filters } = state;
+// IMPORTANT: Do NOT use this selector directly with useProductsStore()
+// It creates a new array on every call, causing infinite re-renders.
+// Instead, use the getFilteredProducts helper function with useMemo in your component.
+export const getFilteredProducts = (products: Product[], filters: ProductFilters): Product[] => {
   const searchQuery = filters.search || "";
   const sortOption = filters.sort;
 
@@ -297,7 +299,8 @@ export const selectFilteredProducts = (state: ProductsStoreState) => {
   return filtered;
 };
 
-export const selectTotalPages = (state: ProductsStoreState) => {
-  const filteredProducts = selectFilteredProducts(state);
-  return Math.ceil(filteredProducts.length / state.filters.limit);
+// Helper to calculate total pages - use with useMemo in component
+export const getTotalPages = (products: Product[], filters: ProductFilters): number => {
+  const filteredProducts = getFilteredProducts(products, filters);
+  return Math.ceil(filteredProducts.length / filters.limit);
 };

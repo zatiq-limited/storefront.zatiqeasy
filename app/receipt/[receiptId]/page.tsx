@@ -7,7 +7,11 @@ import { Loader2 } from "lucide-react";
 import { paymentService } from "@/lib/api";
 import type { OrderItem } from "@/lib/payments/types";
 import getSymbolFromCurrency from "currency-symbol-map";
-import { getInventoryThumbImageUrl } from "@/lib/utils/formatting";
+import {
+  getInventoryThumbImageUrl,
+  getThemeColor,
+  applyOpacityToHexColor,
+} from "@/lib/utils/formatting";
 
 // Receipt data structure from API (matching old project)
 // Extended from ReceiptDetails with additional API response fields
@@ -79,6 +83,13 @@ export default function ReceiptPage() {
     fetchReceiptDetails();
   }, [receiptId, fetchReceiptDetails]);
 
+  // Update document title when order details are loaded
+  useEffect(() => {
+    if (orderDetails?.shop_name?.shop_name) {
+      document.title = `Receipt | ${orderDetails.shop_name.shop_name}`;
+    }
+  }, [orderDetails]);
+
   if (loading) {
     return (
       <div className="flex items-center justify-center w-full h-screen">
@@ -95,18 +106,12 @@ export default function ReceiptPage() {
     );
   }
 
-  const primaryColor =
-    orderDetails.shop_name?.theme_color?.primary_color || "#000000";
+  const primaryColor = getThemeColor(
+    orderDetails.shop_name?.theme_color?.primary_color
+  );
   const currencySymbol =
     getSymbolFromCurrency(orderDetails.shop_name?.country_currency || "BDT") ||
     "৳";
-
-  const applyOpacityToHexColor = (hex: string, opacity: number) => {
-    const r = parseInt(hex.slice(1, 3), 16);
-    const g = parseInt(hex.slice(3, 5), 16);
-    const b = parseInt(hex.slice(5, 7), 16);
-    return `rgba(${r}, ${g}, ${b}, ${opacity})`;
-  };
 
   const getReceiptItemUrl = (item: OrderItem) => {
     return item.image_url || "";
@@ -115,8 +120,8 @@ export default function ReceiptPage() {
   return (
     <>
       <div className="">
-        <div className="w-full py-3 px-3 flex flex-col justify-center items-center">
-          <div className="rounded-4xl w-full lg:max-w-4xl">
+        <div className="container py-3 flex flex-col justify-center items-center">
+          <div className="rounded-4xl w-full">
             <div className="flex flex-col gap-3">
               {/* Shop Information */}
               <div

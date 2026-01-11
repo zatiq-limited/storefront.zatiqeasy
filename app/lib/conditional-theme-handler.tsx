@@ -14,6 +14,7 @@ import { PremiumFooter } from "@/app/_themes/premium/components/footer";
 import { SelloraHeader } from "@/app/_themes/sellora/components/header";
 import { SelloraFooter } from "@/app/_themes/sellora/components/footer";
 import { getThemeColors, getThemeColor } from "@/lib/utils";
+import { getThemeConfig } from "@/lib/constants";
 
 /**
  * Conditional Theme Handler
@@ -28,7 +29,10 @@ export function ConditionalThemeHandler({ children }: { children: React.ReactNod
   // Check if we're on a landing page (single-product)
   const isLandingPage = pathname?.includes("/single-product");
 
-  // Apply theme colors to CSS variables
+  // Get theme configuration for bg color and fonts
+  const themeConfig = getThemeConfig(shopTheme);
+
+  // Apply theme colors and background to CSS variables
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -52,7 +56,18 @@ export function ConditionalThemeHandler({ children }: { children: React.ReactNod
     for (const color in themeColors) {
       document.documentElement.style.setProperty(color, themeColors[color]);
     }
-  }, [shopDetails]);
+
+    // Apply theme background color
+    document.documentElement.style.setProperty("--theme-bg-color", themeConfig.bgColor);
+    document.documentElement.style.setProperty("--theme-dark-bg-color", themeConfig.darkBgColor);
+    document.body.style.backgroundColor = themeConfig.bgColor;
+
+    // Apply theme font family
+    document.documentElement.style.setProperty("--theme-font-family", themeConfig.fontFamily);
+    if (themeConfig.secondaryFont) {
+      document.documentElement.style.setProperty("--theme-secondary-font", themeConfig.secondaryFont);
+    }
+  }, [shopDetails, themeConfig]);
 
   // For landing pages, don't render main theme header/footer
   // The landing page components have their own navbar and footer

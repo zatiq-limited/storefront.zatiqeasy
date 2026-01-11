@@ -69,13 +69,11 @@ export function LuxuraHeader() {
       {/* Top marquee section */}
       {shopDetails?.message_on_top && (
         <div className="bg-blue-zatiq">
-          <div className="container">
-            <TopbarMessage
-              message={shopDetails.message_on_top}
-              marqueeStyle="py-2 md:py-2.75 md:pt-3.25 text-white"
-              textStyle="font-inter text-sm md:text-base font-semibold"
-            />
-          </div>
+          <TopbarMessage
+            message={shopDetails.message_on_top}
+            marqueeStyle="py-2 md:py-2.75 md:pt-3.25 text-white"
+            textStyle="font-inter text-sm md:text-base font-semibold"
+          />
         </div>
       )}
 
