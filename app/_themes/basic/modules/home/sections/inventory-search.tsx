@@ -11,6 +11,7 @@ import {
 } from "@/stores/productsStore";
 import { Search, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 interface InventorySearchProps {
   className?: string;
@@ -23,6 +24,7 @@ interface InventorySearchProps {
 export function InventorySearch({ className }: InventorySearchProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { t } = useTranslation();
 
   // Get inventory state from Zustand store using selectors
   const searchQuery = useProductsStore(selectSearchQuery);
@@ -95,7 +97,7 @@ export function InventorySearch({ className }: InventorySearchProps) {
           <input
             type="text"
             value={searchQuery}
-            placeholder="Search items..."
+            placeholder={t("search_items_placeholder")}
             onFocus={() => setIsSearchInputFocused(true)}
             onBlur={() => setIsSearchInputFocused(false)}
             onChange={(e) => setSearch(e.target.value)}
@@ -105,7 +107,7 @@ export function InventorySearch({ className }: InventorySearchProps) {
               "dark:text-gray-100 dark:placeholder-gray-400",
               "transition-all duration-300"
             )}
-            aria-label="Search items"
+            aria-label={t("search_items_label")}
           />
 
           {/* Search Controls */}
@@ -118,7 +120,7 @@ export function InventorySearch({ className }: InventorySearchProps) {
                   "p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700",
                   "transition-colors duration-200"
                 )}
-                aria-label="Clear search"
+                aria-label={t("clear_search_label")}
               >
                 <X className="w-5 h-5 text-gray-500 dark:text-gray-400" />
               </button>
@@ -140,8 +142,7 @@ export function InventorySearch({ className }: InventorySearchProps) {
         {/* Search Results Count */}
         {searchQuery && (
           <div className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-            {filteredProducts.length}{" "}
-            {filteredProducts.length === 1 ? "item" : "items"} found
+            {t("items_found", { count: filteredProducts.length })}
           </div>
         )}
       </div>

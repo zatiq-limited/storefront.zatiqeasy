@@ -11,6 +11,7 @@ import {
   ProductsGridSkeleton,
   SearchSkeleton,
 } from "../../components/skeletons";
+import { useTranslation } from "react-i18next";
 
 // Dynamic imports for better performance
 const CategoryHorizontalList = dynamic(
@@ -52,6 +53,7 @@ const InventoryProducts = dynamic(
 export function BasicAllProducts() {
   const router = useRouter();
   const { shopDetails } = useShopStore();
+  const { t } = useTranslation();
   const { totalPrice, totalProducts, hasItems } = useCartTotals();
 
   // Fetch products and categories to populate the store
@@ -80,7 +82,7 @@ export function BasicAllProducts() {
         <div className="overflow-hidden -mr-5 xl:overflow-auto xl:mr-0 xl:bg-white dark:xl:bg-black-27 xl:rounded-xl xl:border xl:border-black-4 dark:xl:border-none xl:h-[calc(100vh-120px)] xl:sticky xl:top-25 xl:left-0 xl:self-start col-span-full xl:col-span-1">
           {/* Categories Label - Desktop only */}
           <li className="mx-4 mt-4 mb-4 hidden font-medium text-black-2 dark:text-gray-300 xl:block">
-            Categories
+            {t("categories_label")}
           </li>
 
           {/* Desktop Sidebar */}

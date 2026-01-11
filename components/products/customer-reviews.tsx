@@ -6,6 +6,7 @@ import type { Review } from "@/stores/productsStore";
 import { Swiper, SwiperSlide, useSwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
+import { useTranslation } from "react-i18next";
 
 interface CustomerReviewsProps {
   reviews: Review[];
@@ -15,6 +16,7 @@ interface CustomerReviewsProps {
 export function CustomerReviews({ reviews, showGradientOverlays = true }: CustomerReviewsProps) {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalImage, setModalImage] = useState("");
+  const { t } = useTranslation();
 
   const profileColors = [
     "bg-red-500",
@@ -77,7 +79,7 @@ export function CustomerReviews({ reviews, showGradientOverlays = true }: Custom
       )}
 
       <h2 className="text-center text-gray-700 dark:text-gray-200 font-bold text-xl sm:text-2xl lg:text-3xl xl:text-4xl mt-2.5 relative w-50 sm:w-full mx-auto mb-8">
-        Customer Reviews
+        {t("customer_reviews")}
       </h2>
 
       <div className="w-full overflow-hidden">

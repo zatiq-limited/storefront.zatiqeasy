@@ -12,6 +12,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { CartQtyControl } from "@/features/cart/shared/cart-qty-control";
 import { LazyAnimation } from "@/components/shared/animations/lazy-animation";
 import { ROUTES } from "@/lib/constants";
+import { useTranslation } from "react-i18next";
 
 interface BasicProductCardProps {
   id: string | number;
@@ -41,6 +42,7 @@ export function BasicProductCard({
   onSelectProduct,
 }: BasicProductCardProps) {
   const router = useRouter();
+  const { t } = useTranslation();
   const {
     addProduct,
     updateQuantity,
@@ -244,7 +246,7 @@ export function BasicProductCard({
           {!isStockOut && discount > 0 && (
             <div className="absolute bottom-3 right-2 md:top-3 md:right-3">
               <span className="bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded-md">
-                Save {Number(discount.toFixed(2)).toLocaleString()} {currency}
+                {t("save_amount")} {Number(discount.toFixed(2)).toLocaleString()} {currency}
               </span>
             </div>
           )}
@@ -253,7 +255,7 @@ export function BasicProductCard({
           {isStockOut && (
             <div className="absolute inset-2 bg-gray-600/50 flex items-center justify-center rounded-md">
               <span className="bg-red-500 text-white px-4 py-2 rounded-lg font-medium">
-                Out of Stock
+                {t("out_of_stock")}
               </span>
             </div>
           )}
@@ -315,7 +317,7 @@ export function BasicProductCard({
                       onClick={handleBuyNow}
                     >
                       <Zap size={16} />
-                      {isStockOut ? "Out of Stock" : "Buy Now"}
+                      {isStockOut ? t("out_of_stock") : t("buy_now")}
                     </button>
                   )}
                 </div>
@@ -328,7 +330,7 @@ export function BasicProductCard({
                     onClick={handleAddToCart}
                   >
                     <ShoppingCart size={16} />
-                    {isStockOut ? "Out of Stock" : "Add to Cart"}
+                    {isStockOut ? t("out_of_stock") : t("add_to_cart")}
                   </button>
 
                   {/* Buy Now Button */}
@@ -339,7 +341,7 @@ export function BasicProductCard({
                       onClick={handleBuyNow}
                     >
                       <Zap size={16} />
-                      {isStockOut ? "Out of Stock" : "Buy Now"}
+                      {isStockOut ? t("out_of_stock") : t("buy_now")}
                     </button>
                   )}
                 </div>
