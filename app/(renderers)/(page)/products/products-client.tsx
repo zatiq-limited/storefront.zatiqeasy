@@ -10,7 +10,11 @@
 "use client";
 
 import { useShopStore, useProductsStore } from "@/stores";
-import { useShopInventories, useShopCategories, useProductsPage } from "@/hooks";
+import {
+  useShopInventories,
+  useShopCategories,
+  useProductsPage,
+} from "@/hooks";
 import ProductsPageRenderer from "@/components/renderers/page-renderer/products-page-renderer";
 import { BasicAllProducts } from "@/app/_themes/basic/modules/products/basic-all-products";
 import { AuroraAllProducts } from "@/app/_themes/aurora/modules/products/aurora-all-products";
@@ -55,14 +59,20 @@ export default function ProductsClient() {
   );
 
   // Fetch products page configuration (Theme Builder mode only)
-  const { data: productsPageData, isLoading: isPageConfigLoading } = useProductsPage({
-    enabled: !isLegacyTheme && !!shopDetails?.shop_uuid,
-  });
+  const { data: productsPageData, isLoading: isPageConfigLoading } =
+    useProductsPage({
+      enabled: !isLegacyTheme && !!shopDetails?.shop_uuid,
+    });
 
   const isLoading = isInventoriesLoading || productsStoreIsLoading;
   const pageSections = productsPageData?.sections || [];
 
-  console.log("products-client.tsx - isLegacyTheme:", isLegacyTheme, "themeName:", themeName);
+  console.log(
+    "products-client.tsx - isLegacyTheme:",
+    isLegacyTheme,
+    "themeName:",
+    themeName
+  );
 
   // Legacy mode: Render static theme products page
   if (isLegacyTheme) {

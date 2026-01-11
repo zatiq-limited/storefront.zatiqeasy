@@ -25,6 +25,9 @@ export interface ShopProfile {
   theme_color?: ThemeColor;
   legacy_theme?: boolean; // true = use static themes, false = use theme builder
 
+  // Stock Management
+  isStockMaintain?: boolean; // Whether to show out of stock products
+
   // Analytics
   hasPixelAccess?: boolean;
   pixel_id?: string;
