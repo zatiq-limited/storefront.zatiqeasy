@@ -5,6 +5,7 @@ import { useShopStore } from "@/stores/shopStore";
 import { GridContainer } from "../../../components/core";
 import { LuxuraProductCard } from "../../../components/cards";
 import { SectionHeader } from "./section-header";
+import { FlashSaleCountdown } from "@/components/shared/flash-sale-countdown";
 import type { Product } from "@/stores/productsStore";
 
 interface LuxuraFeaturedProductsSectionProps {
@@ -32,6 +33,9 @@ export function LuxuraFeaturedProductsSection({
     return null;
   }
 
+  // Check if this is flash sale section
+  const isFlashSale = title === "flash_sale";
+
   return (
     <div className="px-4 md:px-0">
       <SectionHeader
@@ -39,6 +43,13 @@ export function LuxuraFeaturedProductsSection({
         link="/products"
         viewMoreTextKey="view_all"
       />
+
+      {/* Show countdown for flash sale */}
+      {isFlashSale && (
+        <div className="mb-4 md:mb-8">
+          <FlashSaleCountdown />
+        </div>
+      )}
 
       <GridContainer>
         {featuredProducts.map((product) => (

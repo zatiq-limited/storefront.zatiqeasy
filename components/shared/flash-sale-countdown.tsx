@@ -133,3 +133,5 @@ export const FlashSaleCountdown: React.FC<FlashSaleCountdownProps> = ({
     </div>
   );
 };
+
+export default FlashSaleCountdown;
