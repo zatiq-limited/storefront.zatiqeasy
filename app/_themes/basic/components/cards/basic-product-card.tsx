@@ -8,6 +8,7 @@ import { FallbackImage } from "@/components/ui/fallback-image";
 import { getInventoryThumbImageUrl } from "@/lib/utils";
 import type { Product } from "@/stores/productsStore";
 import type { VariantState } from "@/types/cart.types";
+import { useTranslation } from "react-i18next";
 
 interface BasicProductCardProps {
   product: Product;
@@ -21,6 +22,7 @@ export function BasicProductCard({
   onSelectProduct,
 }: BasicProductCardProps) {
   const router = useRouter();
+  const { t } = useTranslation();
 
   const {
     id,
@@ -176,7 +178,7 @@ export function BasicProductCard({
           {isStockOut && (
             <div className="absolute inset-0 flex items-center justify-center bg-black/50">
               <span className="px-4 py-2 bg-white text-gray-800 rounded font-medium">
-                Out of Stock
+                {t("out_of_stock")}
               </span>
             </div>
           )}
@@ -185,7 +187,7 @@ export function BasicProductCard({
           {hasDiscount && (
             <div className="absolute top-2 left-2">
               <span className="px-2 py-1 bg-red-500 text-white text-xs rounded">
-                Save {discountAmount.toLocaleString()}
+                {t("save_amount")} {discountAmount.toLocaleString()}
               </span>
             </div>
           )}
@@ -236,7 +238,7 @@ export function BasicProductCard({
             disabled={isStockOut}
             className="w-full py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
           >
-            {isStockOut ? "Out of Stock" : "Add to Cart"}
+            {isStockOut ? t("out_of_stock") : t("add_to_cart")}
           </button>
         )}
       </div>

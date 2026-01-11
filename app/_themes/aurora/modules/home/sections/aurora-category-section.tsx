@@ -22,7 +22,7 @@ export function AuroraCategorySection() {
 
   return (
     <>
-      <SectionHeader text={t("category")} />
+      <SectionHeader text={t("shop_by_category")} />
 
       <GridContainer>
         {selectedCategories.map((category, index) => (
