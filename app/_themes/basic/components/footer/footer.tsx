@@ -56,7 +56,8 @@ export function BasicFooter() {
                   width={200}
                   alt={shopDetails?.shop_name || "Shop"}
                   src={shopDetails.image_url}
-                  className="h-10 w-auto max-w-45 object-contain transition-all duration-300 hover:opacity-80 hover:scale-110 hover:rotate-1 cursor-pointer"
+                  className="h-10 max-w-45 object-contain transition-all duration-300 hover:opacity-80 hover:scale-110 hover:rotate-1 cursor-pointer"
+                  style={{ width: "auto", height: "auto" }}
                 />
               </Link>
             )}

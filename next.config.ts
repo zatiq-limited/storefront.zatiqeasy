@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
     minimumCacheTTL: 604800, // Cache images for one week (in seconds)
+    qualities: [100, 75], // Configured quality values for next/image
 
     // Remote image patterns (Next.js 16 style)
     remotePatterns: [

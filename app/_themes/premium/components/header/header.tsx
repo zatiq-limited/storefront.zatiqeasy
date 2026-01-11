@@ -92,7 +92,8 @@ export function PremiumHeader() {
                       width={200}
                       alt={shopName}
                       src={shopLogo}
-                      className="max-h-[54px] md:max-h-[60px] w-auto max-w-[170px] object-contain"
+                      className="max-h-[54px] md:max-h-[60px] max-w-[170px] object-contain"
+                      style={{ width: "auto", height: "auto" }}
                     />
                   </Link>
                 ) : (

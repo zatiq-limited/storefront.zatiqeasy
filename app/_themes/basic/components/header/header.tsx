@@ -112,7 +112,8 @@ export function BasicHeader() {
                   width={60}
                   alt={shopDetails.shop_name}
                   src={shopDetails.image_url}
-                  className="max-h-10 md:max-h-12.5 w-auto object-left object-contain transition-all duration-300 hover:opacity-80 hover:scale-105 cursor-pointer"
+                  className="max-h-10 md:max-h-12.5 object-left object-contain transition-all duration-300 hover:opacity-80 hover:scale-105 cursor-pointer"
+                  style={{ width: "auto", height: "auto" }}
                 />
               )}
             </div>

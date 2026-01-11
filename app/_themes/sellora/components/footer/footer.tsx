@@ -68,7 +68,8 @@ export function SelloraFooter() {
                   width={200}
                   alt={shopName}
                   src={shopLogo}
-                  className="h-12 sm:h-16 w-auto object-contain"
+                  className="h-12 sm:h-16 object-contain"
+                  style={{ width: "auto", height: "auto" }}
                 />
               )}
               {/* Contact Info moved here */}
