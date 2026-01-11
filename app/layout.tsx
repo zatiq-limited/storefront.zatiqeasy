@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import {
   Geist,
   Geist_Mono,
@@ -31,6 +31,12 @@ import { getShopIdentifier } from "@/lib/utils/shop-identifier";
 import { shopService } from "@/lib/api/services/shop.service";
 import { ShopProvider } from "@/app/providers/shop-provider";
 import { AppWrapper } from "@/components/app-wrapper";
+import {
+  getShopFaviconUrl,
+  getShopTitle,
+  getShopDescription,
+  getShopOgImageUrl,
+} from "@/lib/utils/shop-helpers";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -178,10 +184,75 @@ const lora = Lora({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: "Zatiq Store",
-  description: "Shop the latest fashion trends",
+// Viewport configuration - prevents zoom on mobile inputs
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
+
+// Generate dynamic metadata based on shop profile
+export async function generateMetadata(): Promise<Metadata> {
+  // Get shop identifier
+  const shopIdentifier = await getShopIdentifier();
+
+  // Try to fetch shop profile for metadata
+  let shopProfile = null;
+  if (
+    shopIdentifier.shop_id ||
+    shopIdentifier.domain ||
+    shopIdentifier.subdomain
+  ) {
+    try {
+      shopProfile = await shopService.getProfile(shopIdentifier);
+    } catch {
+      // Fallback to default metadata
+    }
+  }
+
+  // Generate metadata based on shop profile
+  const shopName = shopProfile?.shop_name;
+  const title = getShopTitle(shopName);
+  const description = getShopDescription(shopName);
+  const faviconUrl = getShopFaviconUrl(
+    shopProfile?.favicon_url,
+    shopProfile?.image_url
+  );
+  const ogImageUrl = getShopOgImageUrl(shopProfile?.image_url);
+
+  return {
+    title: {
+      default: title,
+      template: `%s | ${shopName || "Zatiq Store"}`,
+    },
+    description,
+    icons: {
+      icon: faviconUrl,
+      shortcut: faviconUrl,
+      apple: faviconUrl,
+    },
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: shopName || "Zatiq Store",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [ogImageUrl],
+    },
+  };
+}
 
 export default async function RootLayout({
   children,

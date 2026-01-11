@@ -2,13 +2,17 @@
 
 import { useMemo, useCallback } from "react";
 import Image from "next/image";
-import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useProductsStore, Category } from "@/stores/productsStore";
 import { useShopStore } from "@/stores";
 import { useShopCategories } from "@/hooks";
 import { ArrowLeftCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { FallbackImage } from "@/components/ui/fallback-image";
+import {
+  useShallowSearchParams,
+  shallowReplace,
+} from "@/lib/utils/shallow-routing";
 
 interface CategoryHorizontalListProps {
   className?: string;
@@ -40,7 +44,7 @@ export function CategoryHorizontalList({
   fromCategory,
 }: CategoryHorizontalListProps) {
   const router = useRouter();
-  const searchParams = useSearchParams();
+  const searchParams = useShallowSearchParams(); // Use custom hook for instant updates
   const pathname = usePathname();
   const storeCategories = useProductsStore((state) => state.categories);
   const { shopDetails } = useShopStore();
@@ -98,18 +102,30 @@ export function CategoryHorizontalList({
   // Get the selected category object (for showing the name when a subcategory is selected)
   const selectedCategoryObject = useMemo(() => {
     if (!selectedCategory) return null;
-    return categories.find((cat) => String(cat.id) === selectedCategory) || null;
+    return (
+      categories.find((cat) => String(cat.id) === selectedCategory) || null
+    );
   }, [selectedCategory, categories]);
 
   // Determine which category name to display (selected subcategory takes priority)
   const displayCategory = useMemo(() => {
     // If a subcategory is selected (different from the route category), show its name
-    if (fromCategory && selectedCategoryObject && categoryIdFromPath !== selectedCategory) {
+    if (
+      fromCategory &&
+      selectedCategoryObject &&
+      categoryIdFromPath !== selectedCategory
+    ) {
       return selectedCategoryObject;
     }
     // Otherwise show the root category from the path
     return currentRootCategory;
-  }, [fromCategory, selectedCategoryObject, categoryIdFromPath, selectedCategory, currentRootCategory]);
+  }, [
+    fromCategory,
+    selectedCategoryObject,
+    categoryIdFromPath,
+    selectedCategory,
+    currentRootCategory,
+  ]);
 
   // Handle category click - matching sidebar-category's handleCategoryClick
   const handleCategoryClick = useCallback(
@@ -124,18 +140,22 @@ export function CategoryHorizontalList({
         const categoriesPath = `${baseUrl}/categories`;
 
         if (hasSubcategories) {
-          // Category with subcategories: navigate to category route
+          // Category with subcategories: navigate to category route (full navigation needed)
           router.push(`${categoriesPath}/${category.id}`);
         } else {
-          // Leaf category: stay on current route, add selected_category param
+          // Leaf category (subcategory): stay on current route, set only selected_category
+          // Remove category_id since this is a leaf - only selected_category should be in URL
+          // Use shallow update to avoid RSC refetch
           const params = new URLSearchParams(searchParams.toString());
+          params.delete("category_id"); // Remove parent's category_id
           params.set("selected_category", String(category.id));
-          router.replace(`${pathname}?${params.toString()}`);
+          shallowReplace(`${pathname}?${params.toString()}`);
         }
         return;
       }
 
       // Regular mode: stay on current page and update URL params
+      // Use shallow update for instant category switching
       const params = new URLSearchParams(searchParams.toString());
       params.set("selected_category", String(category.id));
 
@@ -149,7 +169,7 @@ export function CategoryHorizontalList({
         params.delete("category_id");
       }
 
-      router.replace(`${pathname}?${params.toString()}`);
+      shallowReplace(`${pathname}?${params.toString()}`);
     },
     [fromCategory, baseUrl, categories, router, searchParams, pathname]
   );
@@ -168,21 +188,29 @@ export function CategoryHorizontalList({
     }
 
     // Regular mode: stay on current page and update URL params
+    // Use shallow update to avoid RSC refetch
     const params = new URLSearchParams(searchParams.toString());
 
     if (currentRootCategory?.parent_id) {
       // Go to parent category
       params.set("category_id", String(currentRootCategory.parent_id));
       params.set("selected_category", String(currentRootCategory.parent_id));
-      router.replace(`${pathname}?${params.toString()}`);
+      shallowReplace(`${pathname}?${params.toString()}`);
     } else {
       // Go back to root - clear category params
       params.delete("category_id");
       params.delete("selected_category");
       const queryString = params.toString();
-      router.replace(queryString ? `${pathname}?${queryString}` : pathname);
+      shallowReplace(queryString ? `${pathname}?${queryString}` : pathname);
     }
-  }, [fromCategory, baseUrl, currentRootCategory, router, searchParams, pathname]);
+  }, [
+    fromCategory,
+    baseUrl,
+    currentRootCategory,
+    router,
+    searchParams,
+    pathname,
+  ]);
 
   // Handle "All [Category]" click - matching sidebar-category's handleAllCategoryClick
   const handleAllCategoryClick = useCallback(
@@ -198,18 +226,19 @@ export function CategoryHorizontalList({
       }
 
       // Regular mode: stay on current page and update URL params
+      // Use shallow update to avoid RSC refetch
       const params = new URLSearchParams(searchParams.toString());
 
       if (category) {
         params.set("category_id", String(category.id));
         params.set("selected_category", String(category.id));
-        router.replace(`${pathname}?${params.toString()}`);
+        shallowReplace(`${pathname}?${params.toString()}`);
       } else {
         // Clear category params
         params.delete("category_id");
         params.delete("selected_category");
         const queryString = params.toString();
-        router.replace(queryString ? `${pathname}?${queryString}` : pathname);
+        shallowReplace(queryString ? `${pathname}?${queryString}` : pathname);
       }
     },
     [fromCategory, baseUrl, router, searchParams, pathname]
@@ -217,12 +246,13 @@ export function CategoryHorizontalList({
 
   // Handle "All products" click - clear category filters, stay on current page
   const handleAllProductsClick = useCallback(() => {
+    // Use shallow update to avoid RSC refetch
     const params = new URLSearchParams(searchParams.toString());
     params.delete("category_id");
     params.delete("selected_category");
     const queryString = params.toString();
-    router.replace(queryString ? `${pathname}?${queryString}` : pathname);
-  }, [router, searchParams, pathname]);
+    shallowReplace(queryString ? `${pathname}?${queryString}` : pathname);
+  }, [searchParams, pathname]);
 
   // Show skeleton while loading
   if (isLoading && storeCategories.length === 0) {
@@ -243,21 +273,25 @@ export function CategoryHorizontalList({
       {fromCategory && displayCategory && (
         <div className="flex items-center gap-2 mb-3">
           {/* Back button - shown when a subcategory is selected */}
-          {selectedCategoryObject && categoryIdFromPath !== selectedCategory && (
-            <button
-              onClick={() => {
-                // Clear selected_category param to go back to parent category view
-                const params = new URLSearchParams(searchParams.toString());
-                params.delete("selected_category");
-                const queryString = params.toString();
-                router.replace(queryString ? `${pathname}?${queryString}` : pathname);
-              }}
-              className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-              aria-label="Back to parent category"
-            >
-              <ArrowLeftCircle className="w-6 h-6 md:w-7 md:h-7 text-gray-700 dark:text-gray-300" />
-            </button>
-          )}
+          {selectedCategoryObject &&
+            categoryIdFromPath !== selectedCategory && (
+              <button
+                onClick={() => {
+                  // Clear selected_category param to go back to parent category view
+                  // Use shallow update to avoid RSC refetch
+                  const params = new URLSearchParams(searchParams.toString());
+                  params.delete("selected_category");
+                  const queryString = params.toString();
+                  shallowReplace(
+                    queryString ? `${pathname}?${queryString}` : pathname
+                  );
+                }}
+                className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                aria-label="Back to parent category"
+              >
+                <ArrowLeftCircle className="w-6 h-6 md:w-7 md:h-7 text-gray-700 dark:text-gray-300" />
+              </button>
+            )}
           <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-gray-900 dark:text-white">
             {displayCategory.name}
           </h2>

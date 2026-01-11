@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useParams, useSearchParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useShopStore, useProductsStore } from "@/stores";
 import { BasicCategoryPage } from "@/app/_themes/basic/modules/home/basic-category-page";
 import { AuroraCategoryPage } from "@/app/_themes/aurora/modules/category/aurora-category-page";
@@ -9,6 +9,10 @@ import { LuxuraCategoryPage } from "@/app/_themes/luxura/modules/category/luxura
 import { PremiumCategoryPage } from "@/app/_themes/premium/modules/category/premium-category-page";
 import { SelloraCategoryPage } from "@/app/_themes/sellora/modules/category/sellora-category-page";
 import { useShopProfile, useShopInventories, useShopCategories } from "@/hooks";
+import {
+  useShallowSearchParams,
+  shallowReplace,
+} from "@/lib/utils/shallow-routing";
 
 // Loading component
 const LoadingFallback = () => (
@@ -47,8 +51,7 @@ interface CategoryPageContentProps {
 }
 
 function CategoryPageContent({ shopId, categoryId }: CategoryPageContentProps) {
-  const searchParams = useSearchParams();
-  const router = useRouter();
+  const searchParams = useShallowSearchParams(); // Use shallow search params for instant updates
   const { shopDetails } = useShopStore();
   const { setFilters } = useProductsStore();
 
@@ -75,14 +78,15 @@ function CategoryPageContent({ shopId, categoryId }: CategoryPageContentProps) {
   );
 
   // Add URL params if not present (like old project)
+  // Use shallow replace to avoid triggering RSC refetch
   useEffect(() => {
     const selectedCategory = searchParams.get("selected_category");
 
     if (categoryId && !selectedCategory) {
       const newUrl = `/merchant/${shopId}/categories/${categoryId}?selected_category=${categoryId}&category_id=${categoryId}`;
-      router.replace(newUrl);
+      shallowReplace(newUrl);
     }
-  }, [categoryId, searchParams, shopId, router]);
+  }, [categoryId, searchParams, shopId]);
 
   // Update filters when URL params change (without reloading data)
   useEffect(() => {

@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { useShopStore } from "@/stores/shopStore";
 import { useProductsStore } from "@/stores/productsStore";
@@ -37,9 +38,9 @@ export function PremiumAllCategoriesPage() {
             [...Array(10)].map((_, index) => <ProductSkeleton key={index} />)
           ) : parentCategories.length > 0 ? (
             parentCategories.map((category, index) => (
-              <a
+              <Link
                 key={category.id}
-                href={`${baseUrl}/categories/${category.id}`}
+                href={`${baseUrl}/categories/${category.id}?selected_category=${category.id}&category_id=${category.id}`}
                 className="flex flex-col items-center justify-center relative aspect-square"
               >
                 <FallbackImage
@@ -56,7 +57,7 @@ export function PremiumAllCategoriesPage() {
                     {category.name}
                   </h3>
                 </div>
-              </a>
+              </Link>
             ))
           ) : (
             // Show skeleton while waiting for data

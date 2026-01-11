@@ -122,7 +122,7 @@ export default function PrivacyPolicyPage() {
     if (!privacyPolicyContent) {
       return (
         <div className="container pt-16 pb-10">
-          <div className="rounded-xl max-w-7xl mx-auto p-4">
+          <div className="rounded-xl py-4">
             <p className="text-gray-600 dark:text-gray-400">
               No privacy policy available.
             </p>
@@ -133,9 +133,9 @@ export default function PrivacyPolicyPage() {
 
     return (
       <div className="container pt-16 pb-10">
-        <div className="rounded-xl max-w-7xl mx-auto p-4">
+        <div className="rounded-xl py-4">
           <div
-            className="ql-editor dark:text-gray-200 text-black-2 ql-snow"
+            className="ql-editor dark:text-gray-200 text-black-2 ql-snow px-0!"
             dangerouslySetInnerHTML={{ __html: privacyPolicyContent }}
           />
         </div>

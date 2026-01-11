@@ -43,11 +43,9 @@ export function BasicFooter() {
     "return-policy",
   ];
 
-  const baseUrl = shopDetails?.baseUrl || "/";
-
   return (
     <footer className="border-t border-gray-200 dark:border-gray-800 mt-16 pt-12 pb-6 bg-white dark:bg-black-27">
-      <div className="max-w-(--breakpoint-xl) mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           {/* Company Info */}
           <div className="space-y-4">
@@ -58,7 +56,8 @@ export function BasicFooter() {
                   width={200}
                   alt={shopDetails?.shop_name || "Shop"}
                   src={shopDetails.image_url}
-                  className="h-10 w-auto max-w-45 object-contain transition-all duration-300 hover:opacity-80 hover:scale-110 hover:rotate-1 cursor-pointer"
+                  className="h-10 max-w-45 object-contain transition-all duration-300 hover:opacity-80 hover:scale-110 hover:rotate-1 cursor-pointer"
+                  style={{ width: "auto", height: "auto" }}
                 />
               </Link>
             )}
@@ -73,7 +72,7 @@ export function BasicFooter() {
               {policyLinks.map((slug) => (
                 <Link
                   key={slug}
-                  href={`${baseUrl}/${slug}`}
+                  href={`/${slug}`}
                   className="flex items-center text-gray-600 dark:text-gray-300 hover:text-blue-zatiq dark:hover:text-blue-400 transition-colors duration-200 group"
                 >
                   <ChevronRight className="w-4 h-4 mr-2 opacity-0 -ml-6 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" />

@@ -8,11 +8,11 @@ import { Navigation, Autoplay } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
 import { useShopStore } from "@/stores/shopStore";
 import { SelloraProductCard } from "../../../components/cards";
-import { FlashSaleCountdown } from "../../../components/flash-sale-countdown";
 import type { Product } from "@/stores/productsStore";
 
 import "swiper/css";
 import "swiper/css/navigation";
+import FlashSaleCountdown from "@/components/shared/flash-sale-countdown";
 
 interface OnSaleSectionProps {
   setSelectedProduct: (product: Product | null) => void;

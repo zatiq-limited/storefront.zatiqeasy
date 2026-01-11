@@ -89,13 +89,11 @@ export function BasicHeader() {
       {/* Top marquee section */}
       {shopDetails?.message_on_top && (
         <div className="bg-blue-zatiq sticky top-0 z-999">
-          <div className="container">
-            <TopbarMessage
-              message={shopDetails.message_on_top}
-              marqueeStyle="py-2 md:py-[11px] md:pt-[13px] text-white"
-              textStyle="font-inter text-sm md:text-base font-semibold"
-            />
-          </div>
+          <TopbarMessage
+            message={shopDetails.message_on_top}
+            marqueeStyle="py-2 md:py-[11px] md:pt-[13px] text-white"
+            textStyle="font-inter text-sm md:text-base font-semibold"
+          />
         </div>
       )}
 
@@ -114,7 +112,9 @@ export function BasicHeader() {
                   width={60}
                   alt={shopDetails.shop_name}
                   src={shopDetails.image_url}
-                  className="max-h-10 md:max-h-12.5 w-auto object-left object-contain transition-all duration-300 hover:opacity-80 hover:scale-105 cursor-pointer"
+                  priority={true}
+                  className="max-h-10 md:max-h-12.5 object-left object-contain transition-all duration-300 hover:opacity-80 hover:scale-105 cursor-pointer"
+                  style={{ width: "auto", height: "auto" }}
                 />
               )}
             </div>

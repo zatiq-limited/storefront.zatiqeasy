@@ -7,9 +7,12 @@
 
 "use client";
 
+import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { ThemeRouter } from "@/components/theme-router";
 import ThemeLayout from "@/app/_layouts/theme/layout";
+import { useShopStore } from "@/stores";
+import { getShopFaviconUrl } from "@/lib/utils/shop-helpers";
 
 interface AppWrapperProps {
   children: React.ReactNode;
@@ -17,6 +20,28 @@ interface AppWrapperProps {
 
 export function AppWrapper({ children }: AppWrapperProps) {
   const pathname = usePathname();
+  const { shopDetails } = useShopStore();
+
+  // Dynamic favicon - update when shop details change
+  useEffect(() => {
+    if (!shopDetails) return;
+
+    const faviconUrl = getShopFaviconUrl(
+      shopDetails.favicon_url,
+      shopDetails.image_url
+    );
+
+    // Update favicon
+    let iconLink = document.querySelector("link[rel='icon']") as HTMLLinkElement | null;
+    if (iconLink) {
+      iconLink.href = faviconUrl;
+    } else {
+      iconLink = document.createElement("link");
+      iconLink.rel = "icon";
+      iconLink.href = faviconUrl;
+      document.head.appendChild(iconLink);
+    }
+  }, [shopDetails]);
 
   // Don't wrap with ThemeRouter and ThemeLayout for merchant routes
   // The merchant layout handles its own wrapping

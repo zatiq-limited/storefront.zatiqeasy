@@ -247,7 +247,7 @@ export function LuxuraProductCard({
                     variants={productCartAnimateVariants}
                     className={cn(
                       "flex items-center justify-center h-full rounded-lg md:rounded-xl px-4 bg-white text-gray-800 font-bold group",
-                      isOutOfStock && "bg-gray-600 border-none text-gray-500"
+                      isOutOfStock && "border-none text-gray-500"
                     )}
                   >
                     {totalInCart > 0 ? (

@@ -12,6 +12,7 @@ import { VariantSelectorModal } from "@/components/products/variant-selector-mod
 import { AlertCircle } from "lucide-react";
 import { AnimatePresence } from "framer-motion";
 import { ROUTES } from "@/lib/constants";
+import { useTranslation } from "react-i18next";
 
 // Constants
 const MAX_PRODUCTS_PER_PAGE = 12;
@@ -24,6 +25,7 @@ export function InventoryProducts() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { t } = useTranslation();
 
   // Get inventory state using direct selectors (avoiding getter issues)
   const products = useProductsStore((state) => state.products);
@@ -141,10 +143,10 @@ export function InventoryProducts() {
             {/* Header with category name and sort */}
             <div className="px-4 h-13.75 bg-white dark:bg-gray-800 rounded-xl mb-3 border border-gray-200 dark:border-gray-600 flex items-center justify-between">
               <h2 className="font-medium text-gray-900 dark:text-gray-300 truncate w-[45%]">
-                {currentCategoryName || "All Products"}
+                {currentCategoryName || t("basic_all_products")}
               </h2>
               <div className="text-gray-700 dark:text-gray-300 text-sm flex items-center gap-2">
-                <span className="min-w-fit">Sort by:</span>
+                <span className="min-w-fit">{t("sort_by_label")}</span>
                 <select
                   onChange={handleSort}
                   value={sortOption}
@@ -202,8 +204,7 @@ export function InventoryProducts() {
               <div className="flex flex-col items-center gap-3 mt-30 text-sm text-gray-600 dark:text-gray-400 max-w-46 mx-auto">
                 <AlertCircle className="w-12 h-12 text-gray-400" />
                 <p className="text-center tracking-[-0.56px]">
-                  No item is currently available in this category. Hope we can
-                  add it soon.
+                  {t("no_items_available")}
                 </p>
               </div>
             )}

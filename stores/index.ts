@@ -54,8 +54,8 @@ export {
   selectSearchQuery,
   selectSortOption,
   selectCurrentPage,
-  selectFilteredProducts,
-  selectTotalPages,
+  getFilteredProducts,
+  getTotalPages,
 } from "./productsStore";
 
 export { useProductDetailsStore } from "./productDetailsStore";

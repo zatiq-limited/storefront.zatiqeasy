@@ -77,13 +77,11 @@ export function AuroraHeader() {
       {/* Top marquee section */}
       {shopDetails?.message_on_top && (
         <div className="bg-blue-zatiq">
-          <div className="container">
-            <TopbarMessage
-              message={shopDetails.message_on_top}
-              marqueeStyle="py-2 md:py-[11px] md:pt-[13px] text-white"
-              textStyle="font-inter text-sm md:text-base font-semibold"
-            />
-          </div>
+          <TopbarMessage
+            message={shopDetails.message_on_top}
+            marqueeStyle="py-2 md:py-[11px] md:pt-[13px] text-white"
+            textStyle="font-inter text-sm md:text-base font-semibold"
+          />
         </div>
       )}
 
@@ -123,7 +121,9 @@ export function AuroraHeader() {
                       width={200}
                       alt={shopDetails.shop_name || "Shop Logo"}
                       src={shopDetails.image_url}
-                      className="max-h-13.5 md:max-h-15 w-auto max-w-42.5 object-contain"
+                      priority={true}
+                      className="max-h-13.5 md:max-h-15 max-w-42.5 object-contain"
+                      style={{ width: "auto", height: "auto" }}
                     />
                   </Link>
                 ) : (
