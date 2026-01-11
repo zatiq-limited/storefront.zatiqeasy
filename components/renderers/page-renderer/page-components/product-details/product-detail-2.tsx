@@ -8,6 +8,7 @@
 
 import { useState, useMemo, useCallback } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { convertSettingsKeys } from "@/lib/settings-utils";
 import type { Product, Variant } from "@/stores/productsStore";
@@ -65,6 +66,7 @@ export default function ProductDetail2({
   onDecrementQuantity,
 }: ProductDetail2Props) {
   const s = convertSettingsKeys<ProductDetail2Settings>(settings);
+  const router = useRouter();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [activeTab, setActiveTab] = useState<
     "description" | "specifications" | "shipping"
@@ -74,32 +76,43 @@ export default function ProductDetail2({
 
   // Cart state subscription for instant updates
   const cartProducts = useCartStore((state) => state.products);
+  const getProductsByInventoryId = useCartStore((state) => state.getProductsByInventoryId);
   const incrementQty = useCartStore((state) => state.incrementQty);
   const decrementQty = useCartStore((state) => state.decrementQty);
   const updateQuantity = useCartStore((state) => state.updateQuantity);
 
+  // Get all cart items for this product (across all variants)
+  // Note: cartProducts in deps triggers recalculation when cart changes
+  const allCartItemsForProduct = useMemo(() => {
+    const productId = typeof product.id === "string" ? parseInt(product.id, 10) : product.id;
+    return getProductsByInventoryId(productId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product.id, cartProducts]);
+
   // Find matching cart item based on product and selected variants
   const cartItem = useMemo(() => {
-    const productId = typeof product.id === "string" ? parseInt(product.id, 10) : product.id;
     const selectedVariantIds = Object.values(selectedVariants)
       .map((v) => v.id)
       .sort((a, b) => a - b);
 
-    return Object.values(cartProducts).find((item) => {
-      if (item.id !== productId) return false;
-
+    return allCartItemsForProduct.find((item) => {
       const cartVariantIds = Object.values(item.selectedVariants || {})
         .map((v) => v.variant_id)
         .sort((a, b) => a - b);
 
-      // Match if same product and same variant selection
+      // Match if same variant selection
       return JSON.stringify(selectedVariantIds) === JSON.stringify(cartVariantIds);
     });
-  }, [cartProducts, product.id, selectedVariants]);
+  }, [allCartItemsForProduct, selectedVariants]);
 
   // Use cart quantity if product is in cart, otherwise use local quantity
-  const displayQuantity = cartItem ? cartItem.qty : quantity;
   const isInCart = !!cartItem;
+  const existingQty = cartItem?.qty || 0;
+
+  // Calculate total quantity in cart for this product (across ALL variants)
+  const totalQtyInCartForProduct = useMemo(() => {
+    return allCartItemsForProduct.reduce((sum, item) => sum + (item.qty || 0), 0);
+  }, [allCartItemsForProduct]);
 
   // Calculate available stock based on variant selection
   const availableStock = useMemo(() => {
@@ -131,10 +144,68 @@ export default function ProductDetail2({
     return product.quantity ?? 0;
   }, [product, selectedVariants]);
 
+  // Calculate remaining stock based on stock management mode
+  const remainingStock = useMemo(() => {
+    if (product.is_stock_manage_by_variant) {
+      // Variant-based stock: remaining = variant stock - existing variant quantity
+      return Math.max(availableStock - existingQty, 0);
+    } else {
+      // Global stock: remaining = total product quantity - total quantity in cart (all variants)
+      return Math.max((product.quantity || 0) - totalQtyInCartForProduct, 0);
+    }
+  }, [product, availableStock, existingQty, totalQtyInCartForProduct]);
+
+  // Maximum quantity allowed for current selection
+  const maxQtyForCurrentSelection = useMemo(() => {
+    if (product.is_stock_manage_by_variant) {
+      // Variant-based: max is the variant's available stock
+      return availableStock;
+    } else {
+      // Global stock: for existing items, max = remaining + existingQty
+      // For new items, max = remaining
+      return isInCart ? remainingStock + existingQty : remainingStock;
+    }
+  }, [product, availableStock, remainingStock, existingQty, isInCart]);
+
+  // Display quantity - clamped to maxQtyForCurrentSelection
+  // For cart items, use cart qty; for new items, clamp quantity to max available
+  const displayQuantity = useMemo(() => {
+    if (isInCart && cartItem) {
+      return cartItem.qty;
+    }
+    // Show 0 when out of stock, otherwise clamp to available range
+    if (maxQtyForCurrentSelection === 0) {
+      return 0;
+    }
+    return Math.min(Math.max(1, quantity), maxQtyForCurrentSelection);
+  }, [isInCart, cartItem, quantity, maxQtyForCurrentSelection]);
+
+  // Convert selectedVariants to cart-compatible VariantsState format
+  const cartVariantsState = useMemo(() => {
+    const result: import("@/types").VariantsState = {};
+
+    Object.entries(selectedVariants).forEach(([variantTypeId, variant]) => {
+      const variantType = product.variant_types?.find(
+        (vt) => vt.id === Number(variantTypeId)
+      );
+
+      result[variantTypeId] = {
+        variant_type_id: Number(variantTypeId),
+        variant_id: variant.id,
+        price: variant.price,
+        variant_name: variant.name,
+        variant_type_name: variantType?.title || "",
+        image_url: variant.image_url || undefined,
+      };
+    });
+
+    return result;
+  }, [selectedVariants, product.variant_types]);
+
   // Handle quantity changes - update cart directly if in cart
   const handleIncrement = useCallback(() => {
     if (isInCart && cartItem) {
-      if (cartItem.qty >= availableStock) {
+      if (cartItem.qty >= maxQtyForCurrentSelection) {
         toast.error("Maximum stock reached!", {
           duration: 2000,
           position: "bottom-right",
@@ -143,7 +214,7 @@ export default function ProductDetail2({
       }
       incrementQty(cartItem.cartId);
     } else {
-      if (quantity >= availableStock) {
+      if (quantity >= maxQtyForCurrentSelection) {
         toast.error("Maximum stock reached!", {
           duration: 2000,
           position: "bottom-right",
@@ -152,7 +223,7 @@ export default function ProductDetail2({
       }
       onIncrementQuantity();
     }
-  }, [isInCart, cartItem, availableStock, quantity, incrementQty, onIncrementQuantity]);
+  }, [isInCart, cartItem, maxQtyForCurrentSelection, quantity, incrementQty, onIncrementQuantity]);
 
   const handleDecrement = useCallback(() => {
     if (isInCart && cartItem) {
@@ -164,25 +235,44 @@ export default function ProductDetail2({
 
   const handleQuantityChange = useCallback((newQty: number) => {
     if (isInCart && cartItem) {
-      const validQty = Math.max(1, Math.min(newQty, availableStock));
-      if (newQty > availableStock) {
-        toast.error(`Only ${availableStock} items available!`, {
+      const validQty = Math.max(1, Math.min(newQty, maxQtyForCurrentSelection));
+      if (newQty > maxQtyForCurrentSelection) {
+        toast.error(`Only ${maxQtyForCurrentSelection} items available!`, {
           duration: 2000,
           position: "bottom-right",
         });
       }
       updateQuantity(cartItem.cartId, validQty);
     } else {
-      const validQty = Math.max(1, Math.min(newQty, availableStock));
-      if (newQty > availableStock) {
-        toast.error(`Only ${availableStock} items available!`, {
+      const validQty = Math.max(1, Math.min(newQty, maxQtyForCurrentSelection));
+      if (newQty > maxQtyForCurrentSelection) {
+        toast.error(`Only ${maxQtyForCurrentSelection} items available!`, {
           duration: 2000,
           position: "bottom-right",
         });
       }
       onQuantityChange(validQty);
     }
-  }, [isInCart, cartItem, availableStock, updateQuantity, onQuantityChange]);
+  }, [isInCart, cartItem, maxQtyForCurrentSelection, updateQuantity, onQuantityChange]);
+
+  // Handle Buy Now - add to cart if not already there, then redirect to checkout
+  const handleBuyNow = useCallback(() => {
+    if (maxQtyForCurrentSelection === 0) {
+      toast.error("Out of stock!", {
+        duration: 2000,
+        position: "bottom-right",
+      });
+      return;
+    }
+
+    // Add to cart if not already in cart
+    if (!isInCart) {
+      addToCart(product as unknown as import("@/types").InventoryProduct, displayQuantity, cartVariantsState);
+    }
+
+    // Navigate to checkout
+    router.push("/checkout");
+  }, [maxQtyForCurrentSelection, isInCart, addToCart, product, displayQuantity, cartVariantsState, router]);
 
   // Settings with defaults
   const showBrand = s.showBrand !== false;
@@ -549,20 +639,27 @@ export default function ProductDetail2({
                         // Already in cart - quantity is managed by the quantity controls
                         return;
                       }
+                      if (maxQtyForCurrentSelection === 0) {
+                        toast.error("Out of stock!", {
+                          duration: 2000,
+                          position: "bottom-right",
+                        });
+                        return;
+                      }
                       setIsAdding(true);
-                      addToCart(product as unknown as import("@/types").InventoryProduct, displayQuantity, selectedVariants as unknown as import("@/types").VariantsState);
+                      addToCart(product as unknown as import("@/types").InventoryProduct, displayQuantity, cartVariantsState);
                       setTimeout(() => setIsAdding(false), 500);
                     }}
-                    disabled={product.quantity === 0 || isAdding}
+                    disabled={maxQtyForCurrentSelection === 0 || isAdding}
                     className="flex-1 py-3 sm:py-4 text-sm sm:text-base text-white font-semibold rounded-xl sm:rounded-2xl transition-all shadow-lg hover:shadow-xl disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed disabled:shadow-none"
                     style={{ background: isInCart ? "#22c55e" : `linear-gradient(to right, ${accentColor}, #4F46E5)` }}
                   >
-                    {isAdding ? "Adding..." : isInCart ? "✓ In Cart" : "Add to Cart"}
+                    {isAdding ? "Adding..." : isInCart ? `✓ In Cart (${existingQty})` : "Add to Cart"}
                   </button>
                 )}
                 {showWhatsApp && (
                   <button
-                    disabled={product.quantity === 0}
+                    disabled={maxQtyForCurrentSelection === 0}
                     className="flex-1 py-3 sm:py-4 text-sm sm:text-base font-semibold rounded-xl sm:rounded-2xl transition-all shadow-lg hover:shadow-xl disabled:bg-gray-300 disabled:cursor-not-allowed disabled:shadow-none flex items-center justify-center gap-2"
                     style={{
                       backgroundColor: whatsappBgColor,
@@ -601,7 +698,8 @@ export default function ProductDetail2({
               {/* Buy Now Button - Full Width */}
               {showBuyNow && (
                 <button
-                  disabled={product.quantity === 0}
+                  onClick={handleBuyNow}
+                  disabled={maxQtyForCurrentSelection === 0}
                   className="w-full py-3 sm:py-4 text-sm sm:text-base font-semibold rounded-xl sm:rounded-2xl transition-all shadow-lg hover:shadow-xl disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed disabled:shadow-none"
                   style={{
                     background: `linear-gradient(to right, ${buyNowGradientStart}, ${buyNowGradientEnd})`,
