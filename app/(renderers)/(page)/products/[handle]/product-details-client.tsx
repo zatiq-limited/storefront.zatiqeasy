@@ -5,7 +5,7 @@
 
 "use client";
 
-import { useProductDetails } from "@/hooks";
+import { useProductDetails, useShopInventories } from "@/hooks";
 import { useEffect } from "react";
 import { useShopStore } from "@/stores/shopStore";
 import ProductDetailsPageRenderer from "@/components/renderers/page-renderer/product-details-page-renderer";
@@ -43,6 +43,13 @@ export default function ProductDetailsClient({
     incrementQuantity,
     decrementQuantity,
   } = useProductDetails(handle);
+
+  // Fetch all products to populate the store for related products
+  // This ensures related products show even on page reload
+  useShopInventories(
+    { shopUuid: shopDetails?.shop_uuid ?? "" },
+    { enabled: !!shopDetails?.shop_uuid, sortByStock: false }
+  );
 
   // Determine theme mode
   const isLegacyTheme = shopDetails?.legacy_theme ?? true;
