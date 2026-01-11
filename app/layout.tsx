@@ -199,7 +199,15 @@ export default async function RootLayout({
     shopIdentifier.subdomain
   ) {
     try {
-      shopProfile = await shopService.getProfile(shopIdentifier);
+      const profile = await shopService.getProfile(shopIdentifier);
+      if (profile) {
+        // Set baseUrl: empty for domain/subdomain access (production)
+        // This ensures links like /products work correctly
+        shopProfile = {
+          ...profile,
+          baseUrl: "",
+        };
+      }
     } catch (error) {
       console.error("Failed to load shop profile:", error);
     }
