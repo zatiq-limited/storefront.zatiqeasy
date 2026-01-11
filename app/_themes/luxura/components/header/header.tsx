@@ -121,6 +121,7 @@ export function LuxuraHeader() {
                           width={200}
                           alt={shopDetails.shop_name || "Shop Logo"}
                           src={shopDetails.image_url}
+                          priority={true}
                           className="max-h-13.5 md:max-h-15 max-w-42.5 object-contain"
                           style={{ width: "auto", height: "auto" }}
                         />

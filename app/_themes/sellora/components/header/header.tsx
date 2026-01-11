@@ -123,6 +123,7 @@ export function SelloraHeader() {
                       width={200}
                       alt={shopName}
                       src={shopLogo}
+                      priority={true}
                       className="max-h-11 md:max-h-14 object-contain p-1"
                       style={{ width: "auto", height: "auto" }}
                     />

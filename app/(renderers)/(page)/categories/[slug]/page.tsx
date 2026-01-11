@@ -10,7 +10,7 @@
 "use client";
 
 import { use, useEffect } from "react";
-import { useSearchParams, useRouter, notFound } from "next/navigation";
+import { notFound } from "next/navigation";
 import { useShopStore, useProductsStore } from "@/stores";
 import {
   useShopInventories,
@@ -20,6 +20,10 @@ import {
 import CollectionDetailsPageRenderer from "@/components/renderers/page-renderer/collection-details-page-renderer";
 import type { Section } from "@/lib/types";
 import Link from "next/link";
+import {
+  useShallowSearchParams,
+  shallowReplace,
+} from "@/lib/utils/shallow-routing";
 
 // Static Theme Category Components
 import { BasicCategoryPage } from "@/app/_themes/basic/modules/home/basic-category-page";
@@ -34,8 +38,7 @@ interface CategoryPageProps {
 
 export default function CategoryPage({ params }: CategoryPageProps) {
   const { slug } = use(params);
-  const searchParams = useSearchParams();
-  const router = useRouter();
+  const searchParams = useShallowSearchParams(); // Use shallow search params for instant updates
 
   // Get shop details from store
   const { shopDetails } = useShopStore();
@@ -83,6 +86,7 @@ export default function CategoryPage({ params }: CategoryPageProps) {
   }, [slug]);
 
   // Add URL params if not present (like old project) - only for legacy themes
+  // Use shallow replace to avoid triggering RSC refetch
   useEffect(() => {
     if (!isLegacyTheme) return;
 
@@ -90,9 +94,9 @@ export default function CategoryPage({ params }: CategoryPageProps) {
 
     if (slug && !selectedCategory) {
       const newUrl = `/categories/${slug}?selected_category=${slug}&category_id=${slug}`;
-      router.replace(newUrl);
+      shallowReplace(newUrl);
     }
-  }, [slug, searchParams, router, isLegacyTheme]);
+  }, [slug, searchParams, isLegacyTheme]);
 
   // Update filters when URL params change - only for legacy themes
   useEffect(() => {
