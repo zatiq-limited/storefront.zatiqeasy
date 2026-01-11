@@ -5,8 +5,27 @@ import { Shield, Truck, RefreshCw } from "lucide-react";
 import { CommonCheckoutForm } from "@/components/features/checkout";
 import { useTranslation } from "react-i18next";
 
-export default function CheckoutPage() {  
+export default function CheckoutPage() {
   const { t } = useTranslation();
+
+  const trustBadges = [
+    {
+      icon: Shield,
+      titleKey: "secure_payment",
+      descriptionKey: "secure_payment_desc",
+    },
+    {
+      icon: Truck,
+      titleKey: "fast_delivery",
+      descriptionKey: "fast_delivery_desc",
+    },
+    {
+      icon: RefreshCw,
+      titleKey: "easy_returns",
+      descriptionKey: "easy_returns_desc",
+    },
+  ];
+
   return (
     <div className="container">
       {/* Header */}
@@ -19,33 +38,23 @@ export default function CheckoutPage() {
 
       {/* Trust Badges */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        <div className="flex items-center gap-3 p-4 bg-muted/50 rounded-lg">
-          <Shield className="h-5 w-5 text-primary" />
-          <div>
-            <div className="font-medium text-sm">{t("secure_payment")}</div>
-            <div className="text-xs text-muted-foreground">
-              {t("secure_payment_desc")}
+        {trustBadges.map((badge, index) => {
+          const Icon = badge.icon;
+          return (
+            <div
+              key={index}
+              className={`flex items-center gap-3 p-4 bg-muted/50 rounded-lg border-blue-zatiq/50 border`}
+            >
+              <Icon className="h-5 w-5 text-primary" />
+              <div>
+                <div className="font-medium text-sm">{t(badge.titleKey)}</div>
+                <div className="text-xs text-muted-foreground">
+                  {t(badge.descriptionKey)}
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        <div className="flex items-center gap-3 p-4 bg-muted/50 rounded-lg">
-          <Truck className="h-5 w-5 text-primary" />
-          <div>
-            <div className="font-medium text-sm">{t("fast_delivery")}</div>
-            <div className="text-xs text-muted-foreground">
-              {t("fast_delivery_desc")}
-            </div>
-          </div>
-        </div>
-        <div className="flex items-center gap-3 p-4 bg-muted/50 rounded-lg">
-          <RefreshCw className="h-5 w-5 text-primary" />
-          <div>
-            <div className="font-medium text-sm">{t("easy_returns")}</div>
-            <div className="text-xs text-muted-foreground">
-              {t("easy_returns_desc")}
-            </div>
-          </div>
-        </div>
+          );
+        })}
       </div>
 
       {/* Checkout Form */}
