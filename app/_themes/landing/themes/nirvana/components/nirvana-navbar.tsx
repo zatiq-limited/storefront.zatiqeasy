@@ -7,6 +7,7 @@ import { ShoppingCart, Menu, X, ShoppingBag } from "lucide-react";
 import { useShopStore } from "@/stores/shopStore";
 import { useCartStore } from "@/stores/cartStore";
 import { useLandingStore } from "@/stores/landingStore";
+import TopbarMessage from "@/components/ui/topbar-message";
 
 export function NirvanaNavbar() {
   const { shopDetails } = useShopStore();
@@ -24,9 +25,11 @@ export function NirvanaNavbar() {
     <>
       {/* Message on Top */}
       {messageOnTop && (
-        <div className="bg-gradient-to-r from-landing-primary to-landing-secondary text-white text-center py-2.5 px-4 text-sm font-medium">
-          {messageOnTop}
-        </div>
+        <TopbarMessage
+          message={messageOnTop}
+          marqueeStyle="py-2"
+          textStyle="text-sm font-medium"
+        />
       )}
 
       {/* Navbar */}

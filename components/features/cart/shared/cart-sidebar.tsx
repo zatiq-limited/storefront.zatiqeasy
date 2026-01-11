@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useCartTotals } from "@/hooks";
 import { Button } from "@/components/ui/button";
 import { X, ShoppingCart } from "lucide-react";
@@ -20,8 +21,19 @@ export function CartSidebar({
   onCheckout,
   position = "right",
 }: CartSidebarProps) {
+  const router = useRouter();
+
   // Get cart totals using the custom hook (prevents infinite loop)
   const { products } = useCartTotals();
+
+  const handleCheckout = () => {
+    if (onCheckout) {
+      onCheckout();
+    } else {
+      router.push("/checkout");
+    }
+    onClose();
+  };
 
   // Convert to array for rendering
   const cartProducts = Object.values(products);
@@ -93,13 +105,8 @@ export function CartSidebar({
               <Separator />
               <div className="p-4 space-y-4">
                 <CartSummary
-                  showCheckoutButton={!!onCheckout}
-                  onCheckout={() => {
-                    if (onCheckout) {
-                      onCheckout();
-                    }
-                    onClose();
-                  }}
+                  showCheckoutButton={true}
+                  onCheckout={handleCheckout}
                   showDeliveryCharge={false}
                 />
               </div>

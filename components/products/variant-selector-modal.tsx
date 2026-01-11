@@ -50,6 +50,7 @@ export function VariantSelectorModal({
   const { addProduct, getProductsByInventoryId, updateQuantity } =
     useCartStore();
   const shopDetails = useShopStore((state) => state.shopDetails);
+  const isStockMaintain = shopDetails?.isStockMaintain !== false; // Default to true if undefined
 
   const [selectedVariants, setSelectedVariants] = useState<VariantsState>({});
   const [qty, setQty] = useState(1);
@@ -153,6 +154,11 @@ export function VariantSelectorModal({
   const availableStock = useMemo(() => {
     if (!product) return 0;
 
+    // If stock maintenance is disabled, return Infinity (no limit)
+    if (!isStockMaintain) {
+      return Infinity;
+    }
+
     if (product.is_stock_manage_by_variant && product.stocks?.length) {
       // Get the variant IDs from selected mandatory variants
       const variantIds = Object.values(selectedVariants)
@@ -164,7 +170,7 @@ export function VariantSelectorModal({
     }
 
     return product.quantity;
-  }, [product, selectedVariants]);
+  }, [product, selectedVariants, isStockMaintain]);
 
   // Check if all mandatory variants are selected
   const isMandatoryVariantsSelected = useMemo(() => {
@@ -191,6 +197,11 @@ export function VariantSelectorModal({
   const remainingStock = useMemo(() => {
     if (!product) return 0;
 
+    // If stock maintenance is disabled, return Infinity (no limit)
+    if (!isStockMaintain) {
+      return Infinity;
+    }
+
     if (product.is_stock_manage_by_variant) {
       // Variant-based stock: remaining = variant stock - existing variant quantity
       return Math.max(availableStock - existingQty, 0);
@@ -198,7 +209,7 @@ export function VariantSelectorModal({
       // Global stock: remaining = total product quantity - total quantity in cart (all variants)
       return Math.max((product.quantity || 0) - totalQtyInCartForProduct, 0);
     }
-  }, [product, availableStock, existingQty, totalQtyInCartForProduct]);
+  }, [product, availableStock, existingQty, totalQtyInCartForProduct, isStockMaintain]);
 
   const isStockAvailable = remainingStock > 0;
 
@@ -474,14 +485,14 @@ export function VariantSelectorModal({
             ))}
           </div>
 
-          {/* Stock Warning - Only show when trying to add more than available */}
-          {!isStockAvailable && !existingCartProduct && (
+          {/* Stock Warning - Only show when stock maintenance is enabled and trying to add more than available */}
+          {isStockMaintain && !isStockAvailable && !existingCartProduct && (
             <div className="text-sm font-medium text-red-500 bg-red-50 dark:bg-red-900/20 p-3 rounded-md">
               No more items remaining!
             </div>
           )}
           {/* Show warning when at max stock for existing cart item */}
-          {existingCartProduct && qty >= availableStock && (
+          {isStockMaintain && existingCartProduct && qty >= availableStock && (
             <div className="text-sm font-medium text-amber-600 bg-amber-50 dark:bg-amber-900/20 p-3 rounded-md">
               Maximum stock reached for this variant!
             </div>

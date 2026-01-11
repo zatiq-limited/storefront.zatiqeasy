@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { getInventoryThumbImageUrl } from "@/lib/utils/formatting";
 import { getProductCardComponent } from "../product-cards";
 import { useCartStore } from "@/stores/cartStore";
+import { useShopStore } from "@/stores/shopStore";
 import { VariantSelectorModal } from "@/components/products/variant-selector-modal";
 import type { ProductsGridProps } from "./types";
 import type { Product } from "@/stores/productsStore";
@@ -35,6 +36,10 @@ export default function ProductsGrid({
   const decrementQty = useCartStore((state) => state.decrementQty);
   const updateQuantity = useCartStore((state) => state.updateQuantity);
 
+  // Get shop settings for stock maintenance
+  const shopDetails = useShopStore((state) => state.shopDetails);
+  const isStockMaintain = shopDetails?.isStockMaintain !== false; // Default to true if undefined
+
   // State for variant selector modal
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
@@ -53,8 +58,13 @@ export default function ProductsGrid({
   // Check if product is out of stock
   const isProductOutOfStock = useCallback(
     (product: Product): boolean => {
-      // If stock is managed by variant, check stocks array
-      if (product.is_stock_manage_by_variant || hasVariants(product)) {
+      // If stock maintenance is disabled, never show out of stock
+      if (!isStockMaintain) {
+        return false;
+      }
+
+      // Only check stocks array if is_stock_manage_by_variant is explicitly true
+      if (product.is_stock_manage_by_variant === true) {
         // Out of stock if stocks array is empty or all variants have 0 quantity
         if (!product.stocks || product.stocks.length === 0) {
           return true;
@@ -62,14 +72,14 @@ export default function ProductsGrid({
         return product.stocks.every((stock) => (stock.quantity ?? 0) <= 0);
       }
 
-      // For non-variant products, check the quantity field
-      // Out of stock if quantity is null, undefined, or <= 0
+      // For all other products (including variants with is_stock_manage_by_variant=false),
+      // check the main quantity field
       if (product.quantity === null || product.quantity === undefined) {
         return true;
       }
       return product.quantity <= 0;
     },
-    [hasVariants]
+    [isStockMaintain]
   );
 
   // Memoized cart data - recalculates when cartProducts changes
@@ -119,6 +129,12 @@ export default function ProductsGrid({
 
       const cartItem = getCartItemForNonVariant(product.id);
       if (cartItem) {
+        // Skip stock check if stock maintenance is disabled
+        if (!isStockMaintain) {
+          incrementQty(cartItem.cartId);
+          return;
+        }
+
         // Check stock limit
         const maxStock = product.quantity ?? Infinity;
         if (cartItem.qty < maxStock) {
@@ -131,7 +147,7 @@ export default function ProductsGrid({
         }
       }
     },
-    [hasVariants, getCartItemForNonVariant, incrementQty]
+    [hasVariants, getCartItemForNonVariant, incrementQty, isStockMaintain]
   );
 
   // Handle decrement for non-variant products
@@ -162,7 +178,8 @@ export default function ProductsGrid({
 
       const cartItem = getCartItemForNonVariant(product.id);
       if (cartItem) {
-        const maxStock = product.quantity ?? Infinity;
+        // Skip stock check if stock maintenance is disabled
+        const maxStock = isStockMaintain ? (product.quantity ?? Infinity) : Infinity;
         const validQty = Math.max(0, Math.min(newQty, maxStock));
         if (validQty === 0) {
           decrementQty(cartItem.cartId); // This will remove if qty becomes 0
@@ -171,7 +188,7 @@ export default function ProductsGrid({
         }
       }
     },
-    [hasVariants, getCartItemForNonVariant, updateQuantity, decrementQty]
+    [hasVariants, getCartItemForNonVariant, updateQuantity, decrementQty, isStockMaintain]
   );
 
   // Handle add to cart

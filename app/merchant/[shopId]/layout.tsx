@@ -67,9 +67,16 @@ export default async function MerchantLayout({
 
   const isLegacyTheme = shopProfile?.legacy_theme ?? true;
 
+  // Add baseUrl for merchant routes
+  const shopProfileWithBaseUrl = shopProfile
+    ? {
+        ...shopProfile,
+        baseUrl: `/merchant/${shopId}`,
+      }
+    : null;
 
   return (
-    <ShopProvider initialShopData={shopProfile}>
+    <ShopProvider initialShopData={shopProfileWithBaseUrl}>
       {isLegacyTheme ? (
         // Legacy mode: ThemeRouter handles ConditionalThemeHandler wrapping
         // BreadcrumbWrapper is rendered separately (shown for non-homepage pages)
