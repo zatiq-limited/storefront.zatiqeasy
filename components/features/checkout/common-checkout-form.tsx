@@ -71,13 +71,28 @@ export function CommonCheckoutForm({
   preventRedirect,
   showVariantSelector = false,
 }: CommonCheckoutFormProps) {
+  // Get checkout store for persisted values
+  const checkoutStore = useCheckoutStore();
+
   const {
     register,
     handleSubmit,
     watch,
     setValue,
     formState: { errors },
-  } = useForm<CheckoutFormData>();
+  } = useForm<CheckoutFormData>({
+    defaultValues: {
+      customer_name: checkoutStore.customerName || "",
+      customer_phone: checkoutStore.fullPhoneNumber
+        ? checkoutStore.fullPhoneNumber.replace(checkoutStore.countryCallingCode, "")
+        : "",
+      customer_address: checkoutStore.fullAddress || "",
+      customer_email: checkoutStore.customerEmail || "",
+      division: checkoutStore.selectedDivision || "",
+      district: checkoutStore.selectedDistrict || "",
+      upazila: checkoutStore.selectedUpazila || "",
+    },
+  });
 
   // Get shop details
   const shopDetails = useShopStore((state) => state.shopDetails);
@@ -85,9 +100,6 @@ export function CommonCheckoutForm({
   // Get cart data
   const { products, totalPrice } = useCartTotals();
   const cartProducts = Object.values(products);
-
-  // Checkout state from store (only used for initial values)
-  const checkoutStore = useCheckoutStore();
 
   // Watch division, district, and upazila from form for real-time updates
   const watchedDivision = watch("division");
@@ -110,10 +122,14 @@ export function CommonCheckoutForm({
   const [promoCodeSearch, setPromoCodeSearch] = useState("");
   const [promoCodeMessage, setPromoCodeMessage] = useState("");
   const [isPromoLoading, setIsPromoLoading] = useState(false);
-  const [fullPhoneNumber, setFullPhoneNumber] = useState("");
-  const [selectedCountryCode, setSelectedCountryCode] = useState("+880");
+  const [fullPhoneNumber, setFullPhoneNumber] = useState(
+    checkoutStore.fullPhoneNumber || ""
+  );
+  const [selectedCountryCode, setSelectedCountryCode] = useState(
+    checkoutStore.countryCallingCode || "+880"
+  );
   const [selectedSpecificDeliveryZone, setSelectedSpecificDeliveryZone] =
-    useState<string>("");
+    useState<string>(checkoutStore.selectedDeliveryZone || "");
   const [selectedPaymentMethod, setSelectedPaymentMethod] =
     useState<string>("cod");
   const [discountAmount] = useState(0);
@@ -541,6 +557,31 @@ export function CommonCheckoutForm({
       if (response.success && response.data) {
         // Clear cart
         useCartStore.getState().clearCart();
+
+        // Save checkout form data to store for next order (like old project)
+        // Extract phone number without country code for storage
+        let phoneWithoutCountryCode = data.customer_phone;
+        if (data.customer_phone && selectedCountryCode) {
+          phoneWithoutCountryCode = data.customer_phone.replace(
+            selectedCountryCode.replace("+", ""),
+            ""
+          );
+          // Also remove leading zero if present
+          if (phoneWithoutCountryCode.startsWith("0")) {
+            phoneWithoutCountryCode = phoneWithoutCountryCode.substring(1);
+          }
+        }
+
+        // Update checkout store with form data
+        checkoutStore.setCustomerName(data.customer_name);
+        checkoutStore.setCustomerEmail(data.customer_email || "");
+        checkoutStore.setFullPhoneNumber(fullPhoneNumber || data.customer_phone);
+        checkoutStore.setCountryCallingCode(selectedCountryCode);
+        checkoutStore.setFullAddress(data.customer_address);
+        checkoutStore.setSelectedDivision(selectedDivision || "");
+        checkoutStore.setSelectedDistrict(selectedDistrict || "");
+        checkoutStore.setSelectedUpazila(selectedUpazila || "");
+        checkoutStore.setSelectedDeliveryZone(selectedSpecificDeliveryZone || "");
 
         // Call onSubmit callback if provided
         if (onSubmit) {
