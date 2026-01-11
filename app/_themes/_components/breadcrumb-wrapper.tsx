@@ -12,25 +12,26 @@ import { useShopStore } from "@/stores/shopStore";
 export function BreadcrumbWrapper() {
   const pathname = usePathname();
   const { shopDetails } = useShopStore();
-  const theme = shopDetails?.shop_theme?.theme_name;
   const baseUrl = shopDetails?.baseUrl || "";
+  const isLegacyTheme = shopDetails?.legacy_theme ?? true;
+
+  // Don't show breadcrumb for legacy themes
+  // Legacy themes handle their own breadcrumbs internally
+  if (isLegacyTheme) {
+    return null;
+  }
 
   // Don't show breadcrumb on home page
   const isHomePage =
     pathname === baseUrl || pathname === "/" || pathname === baseUrl + "/";
 
-  // Don't show for Basic and Sellora themes (as per old project)
-  if (theme === "Basic" || theme === "Sellora") {
-    return null;
-  }
-
-  // Don't show on home page
   if (isHomePage) {
     return null;
   }
 
-  // Don't show on Aurora products page (as per old project line 173)
-  if (theme === "Aurora" && pathname.includes("/products")) {
+  // Don't show on landing pages (single-product routes)
+  // Landing pages (Grip, Arcadia, Nirvana) have their own navbar and layout
+  if (pathname.includes("/single-product/")) {
     return null;
   }
 

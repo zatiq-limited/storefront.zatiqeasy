@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo, useCallback } from "react";
+import { useEffect, useState, useMemo, useCallback, useRef } from "react";
 import { useLandingStore } from "@/stores/landingStore";
 import { useCartStore } from "@/stores/cartStore";
 import { LandingProductProvider, useLandingProduct } from "../../context/landing-product-context";
@@ -35,7 +35,8 @@ function GripLandingContent({ landingData }: GripLandingPageProps) {
 
   // Variant modal state
   const [isVariantModalOpen, setIsVariantModalOpen] = useState(false);
-  const [hasAutoAdded, setHasAutoAdded] = useState(false);
+  // Use ref instead of state to prevent double-add in React 18 StrictMode
+  const hasAutoAddedRef = useRef(false);
 
   // Get theme data
   const themeData = landingData.theme_data?.[0];
@@ -68,16 +69,13 @@ function GripLandingContent({ landingData }: GripLandingPageProps) {
   // Get cart products for this inventory
   const cartProductsList = Object.values(cartProducts);
 
-  // Check if product should auto-add to cart
-  const shouldAutoAdd = useMemo(() => {
-    // Already added
+  // Check if product can auto-add to cart (doesn't include ref check - that's done in effect)
+  const canAutoAdd = useMemo(() => {
+    // Already added to cart
     if (cartProductsList.length > 0) return false;
 
     // Don't auto-add if no product
     if (!product) return false;
-
-    // Don't auto-add if already done
-    if (hasAutoAdded) return false;
 
     // Check variant complexity
     const variantTypes = product.variant_types || [];
@@ -100,11 +98,17 @@ function GripLandingContent({ landingData }: GripLandingPageProps) {
     }
 
     return false;
-  }, [product, cartProductsList.length, hasAutoAdded]);
+  }, [product, cartProductsList.length]);
 
   // Auto-add product to cart on mount (Grip theme feature)
   useEffect(() => {
-    if (shouldAutoAdd && product && !orderPlaced) {
+    // Check ref first to prevent double-add in React 18 StrictMode
+    if (hasAutoAddedRef.current) return;
+
+    if (canAutoAdd && product && !orderPlaced) {
+      // Mark as added immediately (before async operations)
+      hasAutoAddedRef.current = true;
+
       // Add product with default variants
       addProduct({
         ...product,
@@ -119,11 +123,8 @@ function GripLandingContent({ landingData }: GripLandingPageProps) {
         stocks: product.stocks ?? [],
         reviews: [],
       } as Parameters<typeof addProduct>[0]);
-
-      // Mark as added after adding
-      setHasAutoAdded(true);
     }
-  }, [shouldAutoAdd, product, addProduct, defaultVariants, orderPlaced]);
+  }, [canAutoAdd, product, addProduct, defaultVariants, orderPlaced]);
 
   // Handle Buy Now click
   const handleBuyNow = useCallback(
@@ -138,7 +139,8 @@ function GripLandingContent({ landingData }: GripLandingPageProps) {
           setIsVariantModalOpen(true);
         } else {
           // Add to cart and scroll to checkout
-          if (cartProductsList.length === 0) {
+          // Check both cart length and ref to prevent double-add
+          if (cartProductsList.length === 0 && !hasAutoAddedRef.current) {
             productActionController.handleProductCartAction();
           }
           scrollToCheckout();
