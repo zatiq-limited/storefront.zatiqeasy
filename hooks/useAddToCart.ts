@@ -25,8 +25,17 @@ export const useAddToCart = (options?: UseAddToCartOptions) => {
         finalPrice = variantPrices.reduce((total, variant) => total + variant.price, product.price);
       }
 
+      // Get variant image if available (check if any selected variant has an image)
+      const variantImage = variants
+        ? Object.values(variants).find((v) => v.image_url)?.image_url
+        : undefined;
+
+      // Properly set image_url with fallbacks: variant image > product image_url > first image from images array
+      const imageUrl = variantImage || product.image_url || product.images?.[0] || "";
+
       const cartId = addProduct({
         ...product,
+        image_url: imageUrl,
         qty: quantity,
         selectedVariants: variants || {},
         price: finalPrice,
