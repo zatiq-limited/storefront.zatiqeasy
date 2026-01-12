@@ -54,6 +54,7 @@ export function LuxuraSelectedProductsByCategorySection({
                   alt={category.name}
                   height={380}
                   width={1300}
+                  priority={true}
                   className="w-full aspect-335/150 md:aspect-1300/380 object-cover rounded-lg md:rounded-none"
                 />
               </div>

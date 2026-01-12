@@ -71,7 +71,7 @@ export function AuroraSelectedProductsSection({
 
             {/* Products Grid */}
             <div>
-              <SectionHeader text={category.name} />
+              <SectionHeader text={category.name} className="mb-12 md:mb-16 xl:mb-21"/>
 
               <GridContainer>
                 {filteredProducts.slice(0, 4).map((product) => (

@@ -255,7 +255,7 @@ export const translations = {
       all_products: "সকল পণ্য",
       all_categories: "সকল বিভাগ",
       category: "ক্যাটাগরি",
-      on_sale: "বিক্রয়ে",
+      on_sale: "বিশেষ ছাড় পণ্য",
       verify: "যাচাই করুন",
       verified: "যাচাইকৃত",
       otp_sent_message: "আপনার ফোন নম্বরে OTP পাঠানো হয়েছে",

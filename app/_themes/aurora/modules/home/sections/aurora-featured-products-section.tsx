@@ -34,7 +34,7 @@ export function AuroraFeaturedProductsSection({
 
   return (
     <div className="px-4 md:px-0">
-      <SectionHeader text={t("featured_products")} />
+      <SectionHeader text={t("featured_products")}  className="mb-12 md:mb-16 xl:mb-21"/>
 
       <GridContainer>
         {featuredProducts.map((product) => (
