@@ -109,13 +109,24 @@ export function SidebarCategory({
           // Luxura/other themes: navigate to category page with filtering
           const parentId = currentRootCategory?.id || category.parent_id;
           router.push(
-            `${baseUrl}/categories/${category.id}?selected_category=${category.id}${parentId ? `&category_id=${parentId}` : ""}`
+            `${baseUrl}/categories/${category.id}?selected_category=${
+              category.id
+            }${parentId ? `&category_id=${parentId}` : ""}`
           );
         }
         setShowMobileNav?.(false);
       }
     },
-    [categories, currentRootCategory, baseUrl, router, setShowMobileNav, searchParams, pathname, isBasic]
+    [
+      categories,
+      currentRootCategory,
+      baseUrl,
+      router,
+      setShowMobileNav,
+      searchParams,
+      pathname,
+      isBasic,
+    ]
   );
 
   // Handle back button - go up one level using URL params
@@ -219,20 +230,39 @@ export function SidebarCategory({
     <div>
       {/* Header when no root category selected */}
       {!currentRootCategory?.id && (
-        <div
-          className={`hover:bg-gray-200 ${isProductsPage ? "bg-gray-200" : ""}`}
-        >
+        <div>
           <div className="px-5 py-4 bg-gray-100 dark:bg-white flex items-center">
             <span className="w-full font-bold text-lg">{`Category List`}</span>
           </div>
           <div
             onClick={handleAllProductsClick}
-            className="pl-7 py-4 pr-5 border-t last:border-b flex justify-between items-center cursor-pointer"
+            className={`pl-7 py-4 pr-5 border-t flex justify-between items-center cursor-pointer hover:bg-gray-200 ${
+              isProductsPage ? "bg-gray-200" : ""
+            }`}
           >
             <p className="text-sm font-semibold text-foreground">
               All products
             </p>
           </div>
+          {/* All Category - only shown for non-Basic themes (Luxura etc.) */}
+          {!isBasic && (
+            <div
+              onClick={() => {
+                router.push(`${baseUrl}/categories`);
+                setShowMobileNav?.(false);
+              }}
+              className={`pl-7 py-4 pr-5 border-t flex justify-between items-center cursor-pointer hover:bg-gray-200 ${
+                pathname.includes("/categories") &&
+                !pathname.match(/\/categories\/\d+/)
+                  ? "bg-gray-200"
+                  : ""
+              }`}
+            >
+              <p className="text-sm font-semibold text-foreground">
+                All Category
+              </p>
+            </div>
+          )}
         </div>
       )}
 
@@ -255,7 +285,9 @@ export function SidebarCategory({
       {currentRootCategory?.id && categoryList.length > 0 && (
         <div
           className={`pl-7 py-4 pr-5 border-t last:border-b flex justify-between items-center cursor-pointer hover:bg-gray-200 ${
-            selectedCategory === String(currentRootCategory.id) ? "bg-gray-200" : ""
+            selectedCategory === String(currentRootCategory.id)
+              ? "bg-gray-200"
+              : ""
           }`}
           onClick={() => handleAllCategoryClick(currentRootCategory)}
         >

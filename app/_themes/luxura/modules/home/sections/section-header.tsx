@@ -20,8 +20,6 @@ const SectionHeader = ({
   const { shopDetails } = useShopStore();
   const { t } = useTranslation();
 
-  console.log("shopDetails in SectionHeader:", shopDetails);
-
   // Get theme data for fontFamily
   const themeData = getThemeData(shopDetails?.shop_theme?.theme_name);
 
@@ -32,7 +30,9 @@ const SectionHeader = ({
         <div className={`${link ? "lg:col-span-4" : "lg:col-span-5"}`}>
           <h2
             className="lg:text-center text-[28px] md:text-[32px] lg:text-[48px] leading-snug text-[#4B5563] dark:text-blue-zatiq line-clamp-1"
-            style={{ fontFamily: themeData.secondaryFont || themeData.fontFamily }}
+            style={{
+              fontFamily: themeData.secondaryFont || themeData.fontFamily,
+            }}
           >
             {text}
           </h2>
