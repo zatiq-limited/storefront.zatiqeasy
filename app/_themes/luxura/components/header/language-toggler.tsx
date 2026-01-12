@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { setUserLanguagePreference } from "@/lib/utils/language-utils";
 
 interface Props {
   langValue: string;
@@ -9,10 +10,16 @@ interface Props {
   className?: string;
 }
 
-const LanguageToggler = ({ langValue, setLangValue, i18n, className }: Props) => {
+const LanguageToggler = ({
+  langValue,
+  setLangValue,
+  i18n,
+  className,
+}: Props) => {
   const toggleLanguage = () => {
     const newLangValue = langValue === "en" ? "bn" : "en";
-    localStorage.setItem("locale", newLangValue);
+    // Mark as user's manual preference (overrides shop default)
+    setUserLanguagePreference(newLangValue);
     setLangValue(newLangValue);
     i18n.changeLanguage(newLangValue);
   };
