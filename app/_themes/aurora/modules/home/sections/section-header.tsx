@@ -23,7 +23,7 @@ export function SectionHeader({ text, className }: SectionHeaderProps) {
         "text-[#4B5563] dark:text-blue-zatiq font-normal",
         className
       )}
-      style={{ fontFamily: themeData.secondaryFont || themeData.fontFamily }}
+      style={{ fontFamily: themeData.secondaryFontCss || themeData.primaryFontCss }}
     >
       {text}
     </h2>
