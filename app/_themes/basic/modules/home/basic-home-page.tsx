@@ -54,9 +54,10 @@ export function BasicHomePage() {
   const { totalPrice, totalProducts, hasItems } = useCartTotals();
 
   // Fetch products and categories to populate the store
+  // sortByStock: false to preserve original API order
   useShopInventories(
     { shopUuid: shopDetails?.shop_uuid ?? "" },
-    { enabled: !!shopDetails?.shop_uuid }
+    { enabled: !!shopDetails?.shop_uuid, sortByStock: false }
   );
 
   useShopCategories(

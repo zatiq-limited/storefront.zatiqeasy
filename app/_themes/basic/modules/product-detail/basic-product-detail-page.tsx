@@ -126,11 +126,13 @@ export const BasicProductDetailPage = ({
     };
   }, [product, selectedVariants]);
 
-  // Stock status
+  // Check if stock maintenance is enabled (default to true if undefined)
+  const isStockMaintain = shopDetails?.isStockMaintain !== false;
+  // Stock status - only check if stock maintenance is enabled
   // stockQuantity is already from hook
   // isInStock is already from hook
-  const isStockOut = !isInStock;
-  const isStockNotAvailable = !isInStock || quantity >= stockQuantity;
+  const isStockOut = isStockMaintain && !isInStock;
+  const isStockNotAvailable = isStockMaintain && (!isInStock || quantity >= stockQuantity);
 
   // Helper to check if two variant selections match (same as premium theme)
   const isSameVariantsCombination = useCallback(

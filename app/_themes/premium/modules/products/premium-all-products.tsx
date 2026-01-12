@@ -47,9 +47,10 @@ export function PremiumAllProducts() {
   const totalCartItems = useCartStore(selectTotalItems);
   const totalPrice = useCartStore(selectSubtotal);
   // Fetch shop inventories to populate products store (if not already fetched by parent)
+  // sortByStock: false to preserve original API order
   useShopInventories(
     { shopUuid: shopDetails?.shop_uuid ?? "" },
-    { enabled: !!shopDetails?.shop_uuid }
+    { enabled: !!shopDetails?.shop_uuid, sortByStock: false }
   );
 
   // Fetch categories
