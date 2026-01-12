@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useMemo, useRef } from "react";
-import { useRouter, useParams, useSearchParams } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { useShopStore } from "@/stores/shopStore";
 import { useCartStore, selectTotalItems, selectSubtotal } from "@/stores/cartStore";
 import { useProductsStore, type Product } from "@/stores/productsStore";
@@ -12,13 +12,14 @@ import CategoryHorizontalList from "@/components/features/category/category-hori
 import Pagination from "@/components/pagination";
 import ProductSkeleton from "@/components/shared/skeletons/product-skeleton";
 import { VariantSelectorModal } from "@/components/products/variant-selector-modal";
+import { useShallowSearchParams } from "@/lib/utils/shallow-routing";
 
 const PRODUCTS_PER_PAGE = 12;
 
 export function LuxuraCategoryPage() {
   const router = useRouter();
   const params = useParams();
-  const searchParams = useSearchParams();
+  const searchParams = useShallowSearchParams(); // Use shallow params for instant updates
   const { shopDetails } = useShopStore();
   const totalCartItems = useCartStore(selectTotalItems);
   const totalPrice = useCartStore(selectSubtotal);

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useMemo, useRef } from "react";
-import { useRouter, useParams, useSearchParams } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { useShopStore } from "@/stores/shopStore";
 import { useProductsStore, type Product } from "@/stores/productsStore";
@@ -15,13 +15,14 @@ import { VariantSelectorModal } from "@/components/products/variant-selector-mod
 import { PremiumProductCard } from "../../components/cards";
 import { CategoryHorizontalList } from "@/components/features/category/category-horizontal-list";
 import { cn } from "@/lib/utils";
+import { useShallowSearchParams } from "@/lib/utils/shallow-routing";
 
 const PRODUCTS_PER_PAGE = 20;
 
 export function PremiumCategoryPage() {
   const router = useRouter();
   const params = useParams();
-  const searchParams = useSearchParams();
+  const searchParams = useShallowSearchParams(); // Use shallow params for instant updates
   const { t } = useTranslation();
 
   const { shopDetails } = useShopStore();

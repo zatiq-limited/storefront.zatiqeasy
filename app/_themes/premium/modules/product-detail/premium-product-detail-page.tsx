@@ -196,9 +196,11 @@ export function PremiumProductDetailPage({
     }
   }, [matchingCartQty]);
 
-  // Check stock status
-  const isStockOut = product.quantity === 0;
-  const isStockNotAvailable = isStockOut || quantity >= (product.quantity || 0);
+  // Check if stock maintenance is enabled (default to true if undefined)
+  const isStockMaintain = shopDetails?.isStockMaintain !== false;
+  // Check stock status - only if stock maintenance is enabled
+  const isStockOut = isStockMaintain && product.quantity === 0;
+  const isStockNotAvailable = isStockMaintain && (isStockOut || quantity >= (product.quantity || 0));
 
   // Calculate pricing
   const currentPrice = price || 0;

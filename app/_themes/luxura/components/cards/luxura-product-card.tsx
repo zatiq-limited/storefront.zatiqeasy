@@ -45,8 +45,10 @@ export function LuxuraProductCard({
   const cartProducts = getProductsByInventoryId(Number(product.id));
   const totalInCart = cartProducts.reduce((acc, p) => acc + (p.qty || 0), 0);
 
-  // Check stock status
-  const isOutOfStock = (product.quantity ?? 0) <= 0;
+  // Check if stock maintenance is enabled (default to true if undefined)
+  const isStockMaintain = shopDetails?.isStockMaintain !== false;
+  // Check stock status - only if stock maintenance is enabled
+  const isOutOfStock = isStockMaintain && (product.quantity ?? 0) <= 0;
 
   // Calculate max stock for cart
   const getMaxStock = () => {
@@ -74,8 +76,9 @@ export function LuxuraProductCard({
   };
 
   const maxStock = getMaxStock();
+  // Only check stock limits if stock maintenance is enabled
   const isCartIncrementDisabled =
-    typeof maxStock === "number" && totalInCart >= maxStock;
+    isStockMaintain && typeof maxStock === "number" && totalInCart >= maxStock;
 
   // Get product image
   const imageUrl = product.images?.[0] || product.image_url || "";

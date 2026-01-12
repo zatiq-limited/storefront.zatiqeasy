@@ -20,8 +20,6 @@ const SectionHeader = ({
   const { shopDetails } = useShopStore();
   const { t } = useTranslation();
 
-  console.log("shopDetails in SectionHeader:", shopDetails);
-
   // Get theme data for fontFamily
   const themeData = getThemeData(shopDetails?.shop_theme?.theme_name);
 

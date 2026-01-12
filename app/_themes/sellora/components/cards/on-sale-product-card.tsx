@@ -18,19 +18,17 @@ const productCartAnimateVariants = {
   exit: { y: "-100%" },
 };
 
-interface SelloraProductCardProps {
+interface OnSaleProductCardProps {
   product: Product;
   onNavigate?: () => void;
   onSelectProduct?: () => void;
-  isSale?: boolean;
 }
 
-export function SelloraProductCard({
+export function OnSaleProductCard({
   product,
   onNavigate,
   onSelectProduct,
-  isSale = false,
-}: SelloraProductCardProps) {
+}: OnSaleProductCardProps) {
   const router = useRouter();
   const { t } = useTranslation();
   const { shopDetails } = useShopStore();
@@ -55,9 +53,6 @@ export function SelloraProductCard({
   // Check if out of stock - only if stock maintenance is enabled
   const isStockOut = isStockMaintain && (product.quantity ?? 0) <= 0;
   const hasVariants = variant_types && variant_types.length > 0;
-  const discountPercent = old_price && old_price > price
-    ? Math.round(((old_price - price) / old_price) * 100)
-    : 0;
 
   // Check cart
   const cartProducts = getProductsByInventoryId(Number(id));
@@ -154,13 +149,13 @@ export function SelloraProductCard({
   return (
     <div className="group">
       <div role="button" onClick={handleNavigate} className="cursor-pointer">
-        {/* Image Container */}
-        <div className="relative w-full aspect-10/16 overflow-hidden">
+        {/* Image Container - Square-ish aspect ratio with rounded corners */}
+        <div className="relative w-full aspect-[1/1.1] overflow-hidden rounded-xl">
           <FallbackImage
             src={getInventoryThumbImageUrl(displayImage || "")}
             fill
             alt={name}
-            className="w-full aspect-10/16 object-cover object-top rounded-none transition-transform duration-300 group-hover:scale-105"
+            className="w-full h-full object-cover object-top transition-transform duration-300 group-hover:scale-105"
           />
 
           {/* Out of Stock Overlay */}
@@ -170,22 +165,12 @@ export function SelloraProductCard({
             </div>
           )}
 
-          {/* Discount Badge */}
-          {isSale ? (
-            <div className="absolute top-3 right-3 z-10">
-              <div className="w-8 h-8 sm:w-11 sm:h-11 flex flex-col items-center justify-center bg-[#E97171] rounded-full text-white">
-                <span className="text-[10px] md:text-sm font-normal">Sale</span>
-              </div>
+          {/* Sale Badge */}
+          <div className="absolute top-1.5 sm:top-3 right-1.5 sm:right-3 z-10">
+            <div className="w-9 h-9 sm:w-11 sm:h-11 flex flex-col items-center justify-center bg-[#E97171] rounded-full text-white">
+              <span className="text-xs font-normal">Sale</span>
             </div>
-          ) : (
-            discountPercent > 0 && (
-              <div className="absolute top-1.5 sm:top-3 right-1.5 sm:right-3 z-10">
-                <div className="w-9 h-9 sm:w-11 sm:h-11 flex flex-col items-center justify-center bg-[#E97171] rounded-full text-white p-1 text-nowrap">
-                  <span className="text-xs font-normal">-{discountPercent}%</span>
-                </div>
-              </div>
-            )
-          )}
+          </div>
 
           {/* Hover Buttons Overlay */}
           <div className="absolute inset-x-0 bottom-0 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 p-2 sm:p-4 flex flex-col gap-2">
@@ -199,32 +184,35 @@ export function SelloraProductCard({
                   exit="exit"
                   transition={{ duration: 0.2 }}
                   variants={productCartAnimateVariants}
-                  className="flex items-center justify-center rounded-md h-full bg-white dark:bg-black shadow-lg"
+                  className={cn(
+                    "flex items-center justify-center rounded-md h-full bg-white shadow-lg",
+                    isStockOut && "bg-gray-200 text-gray-500"
+                  )}
                 >
                   {totalInCart > 0 ? (
                     // Quantity Controls
-                    <div className="flex items-center justify-center gap-3 w-full px-1">
+                    <div className="flex items-center justify-center gap-4 w-full px-1">
                       <button
                         onClick={handleDecrement}
-                        className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition-colors"
+                        className="p-1 hover:bg-gray-100 rounded transition-colors"
                         aria-label="Decrease quantity"
                       >
-                        <Minus size={16} />
+                        <Minus size={16} className="text-black" />
                       </button>
 
-                      <span className="text-sm font-medium min-w-5 text-center">
+                      <span className="text-sm font-medium min-w-5 text-center text-black">
                         {totalInCart}
                       </span>
 
                       <button
                         onClick={handleIncrement}
                         className={cn(
-                          "p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition-colors",
+                          "p-1 hover:bg-gray-100 rounded transition-colors",
                           isStockOut && "opacity-50 cursor-not-allowed"
                         )}
                         aria-label="Increase quantity"
                       >
-                        <Plus size={16} />
+                        <Plus size={16} className="text-black" />
                       </button>
                     </div>
                   ) : (
@@ -232,7 +220,7 @@ export function SelloraProductCard({
                     <button
                       disabled={isStockOut}
                       onClick={handleAddToCart}
-                      className="w-full h-full text-sm font-medium disabled:cursor-not-allowed cursor-pointer flex items-center justify-center text-black dark:text-white gap-2"
+                      className="w-full h-full text-sm font-medium disabled:cursor-not-allowed cursor-pointer flex items-center justify-center text-black gap-2"
                     >
                       <ShoppingCart className="w-5 h-5" />
                       {isStockOut ? t("out_of_stock") : t("add_to_cart")}
@@ -246,9 +234,10 @@ export function SelloraProductCard({
             {enableBuyNow && (
               <div className="w-full h-8 sm:h-11">
                 <div
-                  className={`flex items-center justify-center h-full rounded-md bg-blue-zatiq text-white shadow-lg ${
+                  className={cn(
+                    "flex items-center justify-center h-full rounded-md bg-blue-zatiq text-white shadow-lg",
                     isStockOut && "bg-gray-900 text-gray-500"
-                  }`}
+                  )}
                 >
                   <button
                     disabled={isStockOut}
@@ -264,19 +253,19 @@ export function SelloraProductCard({
           </div>
         </div>
 
-        {/* Product Info */}
-        <div className="text-left mt-3 mb-2 text-foreground text-sm font-normal">
-          <p className="text-base font-normal line-clamp-2">{name}</p>
+        {/* Product Info - Centered */}
+        <div className="text-center mt-3 sm:mt-6 mb-2 text-foreground text-sm font-normal leading-tight px-2">
+          <p className="text-xl font-normal line-clamp-1">{name}</p>
         </div>
 
-        {/* Price */}
-        <div className="flex items-center justify-start gap-2">
-          <p className="text-foreground font-bold text-sm">
+        {/* Price - Centered */}
+        <div className="flex items-center justify-center mb-6 gap-2 px-2">
+          <p className="text-foreground text-sm font-semibold">
             {currency} {price}
           </p>
           {old_price && old_price > price && (
-            <p className="text-muted-foreground font-normal text-sm line-through">
-              {old_price} {currency}
+            <p className="text-muted-foreground text-xs line-through">
+              {currency} {old_price}
             </p>
           )}
         </div>
@@ -285,4 +274,4 @@ export function SelloraProductCard({
   );
 }
 
-export default SelloraProductCard;
+export default OnSaleProductCard;
