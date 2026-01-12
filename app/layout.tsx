@@ -22,6 +22,10 @@ import {
   Manrope,
   Space_Grotesk,
   Lora,
+  Prata,
+  Outfit,
+  Unbounded,
+  Special_Gothic,
 } from "next/font/google";
 import "./globals.css";
 import { QueryProvider } from "@/providers/QueryProvider";
@@ -157,10 +161,11 @@ const quicksand = Quicksand({
 });
 
 const dmSans = DM_Sans({
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   subsets: ["latin"],
   variable: "--font-dm-sans",
   display: "swap",
+  style: "normal",
 });
 
 const manrope = Manrope({
@@ -181,6 +186,36 @@ const lora = Lora({
   weight: ["400", "500", "600", "700"],
   subsets: ["latin"],
   variable: "--font-lora",
+  display: "swap",
+});
+
+// Theme-specific fonts
+const prata = Prata({
+  weight: ["400"],
+  subsets: ["latin"],
+  variable: "--font-prata",
+  display: "swap",
+});
+
+const outfit = Outfit({
+  weight: ["300", "400", "500", "600", "700"],
+  subsets: ["latin"],
+  variable: "--font-outfit",
+  display: "swap",
+});
+
+const unbounded = Unbounded({
+  weight: ["300", "400", "500", "600", "700"],
+  subsets: ["latin"],
+  variable: "--font-unbounded",
+  display: "swap",
+});
+
+// Special Gothic for Sellora theme
+const specialGothic = Special_Gothic({
+  weight: ["400", "500", "600", "700"],
+  subsets: ["latin"],
+  variable: "--font-special-gothic",
   display: "swap",
 });
 
@@ -285,7 +320,7 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang="en" className={`${inter.variable} ${roboto.variable} ${openSans.variable} ${lato.variable} ${poppins.variable} ${montserrat.variable} ${sourceSans.variable} ${nunito.variable} ${raleway.variable} ${workSans.variable} ${playfairDisplay.variable} ${merriweather.variable} ${oswald.variable} ${ptSans.variable} ${ubuntu.variable} ${quicksand.variable} ${dmSans.variable} ${manrope.variable} ${spaceGrotesk.variable} ${lora.variable}`}>
+    <html lang="en" className={`${inter.variable} ${roboto.variable} ${openSans.variable} ${lato.variable} ${poppins.variable} ${montserrat.variable} ${sourceSans.variable} ${nunito.variable} ${raleway.variable} ${workSans.variable} ${playfairDisplay.variable} ${merriweather.variable} ${oswald.variable} ${ptSans.variable} ${ubuntu.variable} ${quicksand.variable} ${dmSans.variable} ${manrope.variable} ${spaceGrotesk.variable} ${lora.variable} ${prata.variable} ${outfit.variable} ${unbounded.variable} ${specialGothic.variable}`}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

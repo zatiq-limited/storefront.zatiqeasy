@@ -90,3 +90,7 @@ export const selectCurrency = (state: ShopState & ShopActions) =>
 
 export const selectCountryCode = (state: ShopState & ShopActions) =>
   state.shopDetails?.country_code || "BD";
+
+export const selectThemeMode = (state: ShopState & ShopActions) =>
+  (state.shopDetails?.shop_theme as { theme_mode?: string } | undefined)
+    ?.theme_mode || "light";

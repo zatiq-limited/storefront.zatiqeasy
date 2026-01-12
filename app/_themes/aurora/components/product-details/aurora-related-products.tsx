@@ -47,9 +47,10 @@ const AuroraRelatedProducts = ({
   const storeProducts = useProductsStore((state) => state.products);
 
   // Fetch products if store is empty (handles page reload scenario)
+  // sortByStock: false to preserve original API order
   const { data: fetchedProducts, isLoading } = useShopInventories(
     { shopUuid: shopDetails?.shop_uuid || "" },
-    { enabled: storeProducts.length === 0 && !!shopDetails?.shop_uuid }
+    { enabled: storeProducts.length === 0 && !!shopDetails?.shop_uuid, sortByStock: false }
   );
 
   // Use store products if available, otherwise use fetched products

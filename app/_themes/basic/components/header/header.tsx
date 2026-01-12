@@ -10,6 +10,7 @@ import {
   useShopStore,
 } from "@/stores";
 import { Globe, Mail, Phone, Search, ShoppingCart } from "lucide-react";
+import { setUserLanguagePreference } from "@/lib/utils/language-utils";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -66,7 +67,8 @@ export function BasicHeader() {
 
   const handleLanguageChange = () => {
     const newLang = langValue === "en" ? "bn" : "en";
-    localStorage.setItem("locale", newLang);
+    // Mark as user's manual preference (overrides shop default)
+    setUserLanguagePreference(newLang);
     setLangValue(newLang);
     i18n.changeLanguage(newLang);
   };

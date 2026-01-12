@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useLayoutEffect, useRef } from "react";
 import { useShopStore } from "@/stores";
 import type { ShopProfile } from "@/types/shop.types";
 
@@ -9,19 +9,24 @@ interface ShopProviderProps {
   initialShopData: ShopProfile | null;
 }
 
+// Use useLayoutEffect on client, useEffect on server (to avoid SSR warnings)
+const useIsomorphicLayoutEffect =
+  typeof window !== "undefined" ? useLayoutEffect : useEffect;
+
 export function ShopProvider({ children, initialShopData }: ShopProviderProps) {
   const setShopDetails = useShopStore((state) => state.setShopDetails);
   const hasInitialized = useRef(false);
 
-  // Set shop details SYNCHRONOUSLY on first render to avoid race conditions
-  // This ensures ThemeRouter sees the correct legacy_theme value immediately
-  if (initialShopData && !hasInitialized.current) {
-    hasInitialized.current = true;
-    // Synchronously update the store before children render
-    useShopStore.setState({ shopDetails: initialShopData });
-  }
+  // Set shop details synchronously using useLayoutEffect
+  // This runs before browser paint, ensuring ThemeRouter sees the correct value
+  useIsomorphicLayoutEffect(() => {
+    if (initialShopData && !hasInitialized.current) {
+      hasInitialized.current = true;
+      useShopStore.setState({ shopDetails: initialShopData });
+    }
+  }, [initialShopData]);
 
-  // Also handle updates after initial render (e.g., navigation between shops)
+  // Handle updates after initial render (e.g., navigation between shops)
   useEffect(() => {
     if (initialShopData) {
       const currentShopDetails = useShopStore.getState().shopDetails;

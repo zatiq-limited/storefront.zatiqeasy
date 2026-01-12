@@ -2,6 +2,7 @@
 
 import React from "react";
 import { cn } from "@/lib/utils";
+import { setUserLanguagePreference } from "@/lib/utils/language-utils";
 
 interface LanguageTogglerProps {
   langValue: string;
@@ -20,7 +21,8 @@ export function LanguageToggler({
 }: LanguageTogglerProps) {
   const toggleLanguage = () => {
     const newLangValue = langValue === "en" ? "bn" : "en";
-    localStorage.setItem("locale", newLangValue);
+    // Mark as user's manual preference (overrides shop default)
+    setUserLanguagePreference(newLangValue);
     setLangValue(newLangValue);
     i18n.changeLanguage(newLangValue);
   };

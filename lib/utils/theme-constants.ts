@@ -3,6 +3,8 @@
  * Matches old project's constants.util.ts
  */
 
+import { getFontFamily } from "./font-mapping";
+
 export type ShopThemeProps = {
   name: string;
   value: string;
@@ -11,6 +13,9 @@ export type ShopThemeProps = {
   fontFamily: string;
   secondaryFont?: string;
   layoutStyle: string;
+  // Computed font family strings for direct use
+  primaryFontCss?: string;
+  secondaryFontCss?: string;
 };
 
 export const shopThemes: ShopThemeProps[] = [
@@ -66,11 +71,27 @@ export const shopThemes: ShopThemeProps[] = [
  */
 export function getThemeData(themeName?: string): ShopThemeProps {
   if (!themeName) {
-    return shopThemes[0];
+    const theme = shopThemes[0];
+    return {
+      ...theme,
+      primaryFontCss: getFontFamily(theme.fontFamily),
+      secondaryFontCss: theme.secondaryFont
+        ? getFontFamily(theme.secondaryFont)
+        : getFontFamily(theme.fontFamily),
+    };
   }
 
   const found = shopThemes.find((theme) => theme.value === themeName);
-  return found || shopThemes[0];
+  const theme = found || shopThemes[0];
+
+  // Return theme with computed CSS font family strings
+  return {
+    ...theme,
+    primaryFontCss: getFontFamily(theme.fontFamily),
+    secondaryFontCss: theme.secondaryFont
+      ? getFontFamily(theme.secondaryFont)
+      : getFontFamily(theme.fontFamily),
+  };
 }
 
 export const singleProductThemes = ["Arcadia", "Nirvana", "Grip"];

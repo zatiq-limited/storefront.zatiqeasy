@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback, useEffect } from "react";
+import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { Minus, Plus, ZoomIn, Download } from "lucide-react";
@@ -15,6 +15,7 @@ import { CartFloatingBtn } from "@/components/features/cart/cart-floating-btn";
 import { ImageLightbox } from "@/components/products/image-lightbox";
 import { cn, titleCase, getDetailPageImageUrl } from "@/lib/utils";
 import { useProductDetails } from "@/hooks";
+import { SelloraThemeWrapper } from "../../components/sellora-theme-wrapper";
 import {
   ProductPricing,
   ProductVariants,
@@ -60,6 +61,9 @@ export function SelloraProductDetailPage({
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [quantity, setQuantity] = useState(1);
+
+  // Track if we've already initialized variants (to avoid re-running)
+  const hasInitializedVariants = useRef(false);
   const [selectedVariants, setSelectedVariants] = useState<VariantsState>({});
 
   // Extract product properties with defaults - wrap in useMemo for performance
@@ -162,10 +166,12 @@ export function SelloraProductDetailPage({
     }
   }, [matchingCartQty]);
 
-  // Check stock status
-  const isStockOut = product?.quantity === 0;
+  // Check if stock maintenance is enabled (default to true if undefined)
+  const isStockMaintain = shopDetails?.isStockMaintain !== false;
+  // Check stock status - only if stock maintenance is enabled
+  const isStockOut = isStockMaintain && product?.quantity === 0;
   const isStockNotAvailable =
-    isStockOut || quantity >= (product?.quantity || 0);
+    isStockMaintain && (isStockOut || quantity >= (product?.quantity || 0));
 
   // Calculate pricing
   const currentPrice = price || 0;
@@ -187,42 +193,62 @@ export function SelloraProductDetailPage({
     []
   );
 
-  // Restore selected variants from cart (when product page loads)
-  // This ensures the variants that were added to cart are pre-selected
+  // Auto-select variants when product loads
+  // Priority: 1. From cart (if product is in cart), 2. First variant of each mandatory type
   useEffect(() => {
-    if (!product || !variant_types || variant_types.length === 0) {
+    if (!product || !variant_types || variant_types.length === 0 || hasInitializedVariants.current) {
       return;
     }
 
     // Find the first cart item for this product
     const firstCartItem = cartProducts[0];
-    if (!firstCartItem?.selectedVariants) {
-      return;
-    }
 
-    // Restore each variant from the cart
-    Object.entries(firstCartItem.selectedVariants).forEach(
-      ([variantTypeId, variantState]) => {
-        const typeId = Number(variantTypeId);
-        const variantId = variantState.variant_id;
+    if (firstCartItem?.selectedVariants && Object.keys(firstCartItem.selectedVariants).length > 0) {
+      // Restore variants from cart
+      hasInitializedVariants.current = true;
+      Object.entries(firstCartItem.selectedVariants).forEach(
+        ([variantTypeId, variantState]) => {
+          const typeId = Number(variantTypeId);
+          const variantId = variantState.variant_id;
 
-        // Find the variant in the product's variant types
-        const variantType = variant_types.find((vt) => vt.id === typeId);
-        if (variantType?.variants) {
-          const variant = variantType.variants.find((v) => v.id === variantId);
-          if (variant) {
-            handleVariantSelect(typeId, {
-              variant_type_id: variantState.variant_type_id,
-              variant_id: variantId,
-              price: variantState.price || 0,
-              variant_name: variantState.variant_name || variant.name || "",
-              image_url: variant.image_url || undefined,
-            });
+          // Find the variant in the product's variant types
+          const variantType = variant_types.find((vt) => vt.id === typeId);
+          if (variantType?.variants) {
+            const variant = variantType.variants.find((v) => v.id === variantId);
+            if (variant) {
+              handleVariantSelect(typeId, {
+                variant_type_id: variantState.variant_type_id,
+                variant_id: variantId,
+                price: variantState.price || 0,
+                variant_name: variantState.variant_name || variant.name || "",
+                image_url: variant.image_url || undefined,
+              });
+            }
           }
         }
-      }
-    );
+      );
+    } else {
+      // Auto-select first variant of each mandatory type (like Basic theme)
+      hasInitializedVariants.current = true;
+      variant_types.forEach((variantType) => {
+        if (variantType.is_mandatory && variantType.variants?.length > 0) {
+          const firstVariant = variantType.variants[0];
+          handleVariantSelect(variantType.id, {
+            variant_type_id: variantType.id,
+            variant_id: firstVariant.id,
+            price: firstVariant.price || 0,
+            variant_name: firstVariant.name || "",
+            image_url: firstVariant.image_url || undefined,
+          });
+        }
+      });
+    }
   }, [product, cartProducts, variant_types, handleVariantSelect]);
+
+  // Reset initialization flag when handle/product changes
+  useEffect(() => {
+    hasInitializedVariants.current = false;
+  }, [handle]);
 
   // Handle quantity change
   const handleQuantityChange = useCallback(
@@ -334,7 +360,7 @@ export function SelloraProductDetailPage({
   }
 
   return (
-    <>
+    <SelloraThemeWrapper>
       {/* Image Lightbox */}
       <ImageLightbox
         product={{
@@ -422,7 +448,7 @@ export function SelloraProductDetailPage({
         </div>
 
         {/* Right Side - Product Info (Sticky) */}
-        <div className="lg:col-span-2 px-0 lg:px-12 xl:px-20 flex flex-col lg:sticky lg:top-20 lg:self-start">
+        <div className="lg:col-span-2 px-0 lg:px-12 2xl:px-16 flex flex-col lg:sticky lg:top-20 lg:self-start">
           {/* Category Name */}
           <div className="mb-3 sm:mb-4">
             {categories[0]?.name && (
@@ -595,7 +621,7 @@ export function SelloraProductDetailPage({
         onClick={() => router.push(`${baseUrl}/checkout`)}
         theme="Sellora"
       />
-    </>
+    </SelloraThemeWrapper>
   );
 }
 

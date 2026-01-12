@@ -297,7 +297,7 @@ export function CategoryHorizontalList({
           </h2>
         </div>
       )}
-      <div className="flex overflow-y-hidden overflow-x-auto pb-2 gap-1.5 md:pb-0 scroll-mb-1 category-x-scrollbar">
+      <div className="flex overflow-y-hidden overflow-x-auto pb-2 gap-1.5 scroll-mb-1 category-x-scrollbar">
         {/* Show "All [Parent Category]" card with back button when viewing subcategories */}
         {currentRootCategory?.id && !fromCategory ? (
           <div

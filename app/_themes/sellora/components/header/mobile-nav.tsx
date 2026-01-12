@@ -40,7 +40,7 @@ export function SelloraMobileNav({ isOpen, onClose }: SelloraMobileNavProps) {
             animate={{ x: 0 }}
             exit={{ x: "-100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="fixed top-0 left-0 bottom-0 w-[280px] bg-white dark:bg-black-18 z-50 lg:hidden overflow-y-auto"
+            className="fixed top-0 left-0 bottom-0 w-[280px] bg-white dark:bg-black-18 z-100 lg:hidden overflow-y-auto"
           >
             {/* Header */}
             <div className="flex items-center justify-between p-4 border-b dark:border-gray-700">

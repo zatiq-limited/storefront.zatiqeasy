@@ -18,6 +18,7 @@ import { FallbackImage } from "@/components/ui/fallback-image";
 import { SelloraProductCard } from "../../components/cards";
 import { GridContainer, Pagination } from "../../components/core";
 import { FeaturedCollections } from "../../components/featured-collections";
+import { SelloraThemeWrapper } from "../../components/sellora-theme-wrapper";
 import {
   PriceFilterSection,
   SortBySection,
@@ -45,9 +46,10 @@ export function SelloraAllProducts() {
   const productsStoreIsLoading = useProductsStore((state) => state.isLoading);
 
   // Fetch shop inventories to populate products store (if not already fetched by parent)
+  // sortByStock: false to preserve original API order
   const { isLoading: isInventoriesLoading } = useShopInventories(
     { shopUuid: shopDetails?.shop_uuid ?? "" },
-    { enabled: !!shopDetails?.shop_uuid }
+    { enabled: !!shopDetails?.shop_uuid, sortByStock: false }
   );
 
   // Fetch categories
@@ -153,7 +155,7 @@ export function SelloraAllProducts() {
   }
 
   return (
-    <>
+    <SelloraThemeWrapper>
       {/* Variant Selector Modal */}
       <VariantSelectorModal
         product={selectedProduct}
@@ -300,7 +302,7 @@ export function SelloraAllProducts() {
         onClick={() => router.push(`${baseUrl}/checkout`)}
         theme="Sellora"
       />
-    </>
+    </SelloraThemeWrapper>
   );
 }
 

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useCallback, useMemo, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { SlidersHorizontal, X, Square, SquareCheckBig } from "lucide-react";
 import { useShopStore } from "@/stores/shopStore";
@@ -17,6 +17,7 @@ import { VariantSelectorModal } from "@/components/products/variant-selector-mod
 import { PremiumProductCard } from "../../components/cards";
 import { CategoryHorizontalList } from "@/components/features/category/category-horizontal-list";
 import { cn } from "@/lib/utils";
+import { useShallowSearchParams } from "@/lib/utils/shallow-routing";
 
 const PRODUCTS_PER_PAGE = 20;
 
@@ -38,7 +39,7 @@ const DEFAULT_PRICE_FILTERS: PriceRange[] = [
 
 export function PremiumAllProducts() {
   const router = useRouter();
-  const searchParams = useSearchParams();
+  const searchParams = useShallowSearchParams(); // Use shallow params for instant updates
   const { t } = useTranslation();
   const { shopDetails } = useShopStore();
   const products = useProductsStore((state) => state.products);
@@ -47,9 +48,10 @@ export function PremiumAllProducts() {
   const totalCartItems = useCartStore(selectTotalItems);
   const totalPrice = useCartStore(selectSubtotal);
   // Fetch shop inventories to populate products store (if not already fetched by parent)
+  // sortByStock: false to preserve original API order
   useShopInventories(
     { shopUuid: shopDetails?.shop_uuid ?? "" },
-    { enabled: !!shopDetails?.shop_uuid }
+    { enabled: !!shopDetails?.shop_uuid, sortByStock: false }
   );
 
   // Fetch categories

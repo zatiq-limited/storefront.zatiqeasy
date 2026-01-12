@@ -1,11 +1,15 @@
 "use client";
 
 import { useMemo, useCallback, useState } from "react";
-import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useProductsStore, Category } from "@/stores/productsStore";
 import { useShopStore } from "@/stores";
 import { useShopCategories } from "@/hooks";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  useShallowSearchParams,
+  shallowReplace,
+} from "@/lib/utils/shallow-routing";
 
 interface SidebarCategoryProps {
   setShowMobileNav?: (value: boolean) => void;
@@ -14,9 +18,11 @@ interface SidebarCategoryProps {
 
 /**
  * SidebarCategory Component
- * Matches old project's implementation from sidebar-category.tsx
- * Uses local state for drilling down into subcategories (no URL change)
- * Only navigates when selecting a category to filter products
+ * Uses URL params as single source of truth (matching category-horizontal-list.tsx):
+ * - category_id: tracks which parent's subcategories we're viewing (navigation)
+ * - selected_category: tracks the selected category for filtering products
+ *
+ * Also maintains local state for mobile nav drill-down to ensure back button works
  */
 export function SidebarCategory({
   setShowMobileNav,
@@ -24,12 +30,13 @@ export function SidebarCategory({
 }: SidebarCategoryProps) {
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const searchParams = useShallowSearchParams(); // Use custom hook for instant updates
   const storeCategories = useProductsStore((state) => state.categories);
   const { shopDetails } = useShopStore();
 
-  // Local state for drilling down into subcategories (no URL change)
-  const [drillDownCategoryId, setDrillDownCategoryId] = useState<string | null>(null);
+  // Local state to track drill-down within mobile nav (for reliable back button)
+  // Always starts at root level - user drills down by clicking categories
+  const [localCategoryId, setLocalCategoryId] = useState<string | null>(null);
 
   // Fetch categories if store is empty (handles page reload scenario)
   const { data: fetchedCategories, isLoading } = useShopCategories(
@@ -48,18 +55,21 @@ export function SidebarCategory({
 
   const baseUrl = shopDetails?.baseUrl || "";
 
-  // URL params for selected category (filtering)
+  // URL params - matching category-horizontal-list.tsx
   const selectedCategory =
     searchParams.get("selected_category") || searchParams.get("category");
 
   // Page detection
   const isProductsPage = pathname.endsWith("products");
 
-  // Get current drill-down category from local state
+  // Get current root category from local state (for mobile nav drill-down)
+  // localCategoryId is the single source of truth for sidebar navigation
   const currentRootCategory = useMemo(() => {
-    if (!drillDownCategoryId) return null;
-    return categories.find((cat) => String(cat.id) === drillDownCategoryId) || null;
-  }, [drillDownCategoryId, categories]);
+    if (!localCategoryId) return null;
+    return (
+      categories.find((cat) => String(cat.id) === localCategoryId) || null
+    );
+  }, [localCategoryId, categories]);
 
   // Get the visible category list based on current drill-down
   const categoryList = useMemo(() => {
@@ -73,7 +83,7 @@ export function SidebarCategory({
     return categories.filter((cat) => !cat.parent_id);
   }, [currentRootCategory, categories]);
 
-  // Handle category click
+  // Handle category click - matching category-horizontal-list.tsx logic
   const handleCategoryClick = useCallback(
     (category: Category) => {
       const hasSubcategories = categories.some(
@@ -81,43 +91,77 @@ export function SidebarCategory({
       );
 
       if (hasSubcategories) {
-        // Drill down to show subcategories (local state only, no navigation)
-        setDrillDownCategoryId(String(category.id));
+        // Category has subcategories - drill down
+        // Update local state for immediate UI response (mobile nav back button)
+        setLocalCategoryId(String(category.id));
+
+        // Also update URL params for page-level state
+        const params = new URLSearchParams(searchParams.toString());
+        params.set("category_id", String(category.id));
+        params.set("selected_category", String(category.id));
+        shallowReplace(`${pathname}?${params.toString()}`);
       } else {
-        // Leaf category - apply filter and navigate
+        // Leaf category - apply filter
         if (isBasic) {
           // Basic theme: stay on current page and update params
           const params = new URLSearchParams(searchParams.toString());
           params.set("selected_category", String(category.id));
+          // Keep category_id if we're inside a parent category
           if (currentRootCategory?.id) {
             params.set("category_id", String(currentRootCategory.id));
           } else if (category.parent_id) {
             params.set("category_id", String(category.parent_id));
+          } else {
+            // Root level leaf category: only selected_category
+            params.delete("category_id");
           }
-          router.replace(`${pathname}?${params.toString()}`);
+          shallowReplace(`${pathname}?${params.toString()}`);
         } else {
           // Luxura/other themes: navigate to category page with filtering
           const parentId = currentRootCategory?.id || category.parent_id;
           router.push(
-            `${baseUrl}/categories/${category.id}?selected_category=${category.id}${parentId ? `&category_id=${parentId}` : ""}`
+            `${baseUrl}/categories/${category.id}?selected_category=${
+              category.id
+            }${parentId ? `&category_id=${parentId}` : ""}`
           );
         }
+        // Don't reset localCategoryId - keep the drill-down state
+        // so user stays in subcategory view. Only close the mobile nav.
         setShowMobileNav?.(false);
       }
     },
-    [categories, currentRootCategory, baseUrl, router, setShowMobileNav, searchParams, pathname, isBasic]
+    [
+      categories,
+      currentRootCategory,
+      baseUrl,
+      router,
+      setShowMobileNav,
+      searchParams,
+      pathname,
+      isBasic,
+    ]
   );
 
-  // Handle back button - go up one level in local state
+  // Handle back button - go up one level
   const handleBackBtn = useCallback(() => {
+    const params = new URLSearchParams(searchParams.toString());
+
     if (currentRootCategory?.parent_id) {
       // Go to parent category
-      setDrillDownCategoryId(String(currentRootCategory.parent_id));
+      const parentId = String(currentRootCategory.parent_id);
+      setLocalCategoryId(parentId);
+      params.set("category_id", parentId);
+      params.set("selected_category", parentId);
+      shallowReplace(`${pathname}?${params.toString()}`);
     } else {
-      // Go back to root
-      setDrillDownCategoryId(null);
+      // Go back to root - clear local state and URL params
+      setLocalCategoryId(null);
+      params.delete("category_id");
+      params.delete("selected_category");
+      const queryString = params.toString();
+      shallowReplace(queryString ? `${pathname}?${queryString}` : pathname);
     }
-  }, [currentRootCategory]);
+  }, [currentRootCategory, searchParams, pathname]);
 
   // Handle "All [Category]" click - filter by parent category
   const handleAllCategoryClick = useCallback(
@@ -125,30 +169,45 @@ export function SidebarCategory({
       if (category) {
         if (isBasic) {
           // Basic theme: stay on current page and update params
+          // Use shallow update to avoid RSC refetch
           const params = new URLSearchParams(searchParams.toString());
           params.set("selected_category", String(category.id));
           params.set("category_id", String(category.id));
-          router.replace(`${pathname}?${params.toString()}`);
+          shallowReplace(`${pathname}?${params.toString()}`);
         } else {
           // Other themes: navigate to category page with filtering
           router.push(
             `${baseUrl}/categories/${category.id}?selected_category=${category.id}&category_id=${category.id}`
           );
         }
+        setLocalCategoryId(null);
         setShowMobileNav?.(false);
       } else {
         router.push(`${baseUrl}/categories`);
+        setLocalCategoryId(null);
         setShowMobileNav?.(false);
       }
     },
     [baseUrl, router, setShowMobileNav, isBasic, searchParams, pathname]
   );
 
-  // Handle "All products" click
+  // Handle "All products" click - clear category filters
   const handleAllProductsClick = useCallback(() => {
+    if (isBasic) {
+      // Basic theme: stay on current page and clear category params
+      // Use shallow update to avoid RSC refetch
+      const params = new URLSearchParams(searchParams.toString());
+      params.delete("category_id");
+      params.delete("selected_category");
+      const queryString = params.toString();
+      shallowReplace(queryString ? `${pathname}?${queryString}` : pathname);
+    } else {
+      // Other themes: navigate to products page
+      router.push(`${baseUrl}/products`);
+    }
+    setLocalCategoryId(null);
     setShowMobileNav?.(false);
-    router.push(`${baseUrl}/products`);
-  }, [baseUrl, router, setShowMobileNav]);
+  }, [baseUrl, router, setShowMobileNav, isBasic, searchParams, pathname]);
 
   // Show skeleton while loading
   if (isLoading && storeCategories.length === 0) {
@@ -189,51 +248,79 @@ export function SidebarCategory({
     <div>
       {/* Header when no root category selected */}
       {!currentRootCategory?.id && (
-        <div
-          className={`hover:bg-gray-200 ${isProductsPage ? "bg-gray-200" : ""}`}
-        >
+        <div>
           <div className="px-5 py-4 bg-gray-100 dark:bg-white flex items-center">
-            <span className="w-full font-bold text-lg">{`Category List`}</span>
+            <span className="w-full font-bold text-lg text-black">{`Category List`}</span>
           </div>
           <div
             onClick={handleAllProductsClick}
-            className="pl-7 py-4 pr-5 border-t last:border-b flex justify-between items-center cursor-pointer"
+            className={`pl-7 py-4 pr-5 border-t dark:border-gray-600 flex justify-between items-center cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-200 [&:hover_p]:text-black ${
+              isProductsPage ? "bg-gray-200 dark:bg-gray-200" : ""
+            }`}
           >
-            <p className="text-sm font-semibold text-foreground">
+            <p className={`text-sm font-semibold ${
+              isProductsPage ? "text-black" : "text-foreground"
+            }`}>
               All products
             </p>
           </div>
+          {/* All Category - only shown for non-Basic themes (Luxura etc.) */}
+          {!isBasic && (() => {
+            const isAllCategoryPage = pathname.includes("/categories") && !pathname.match(/\/categories\/\d+/);
+            return (
+              <div
+                onClick={() => {
+                  router.push(`${baseUrl}/categories`);
+                  setShowMobileNav?.(false);
+                }}
+                className={`pl-7 py-4 pr-5 border-t dark:border-gray-600 flex justify-between items-center cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-200 [&:hover_p]:text-black ${
+                  isAllCategoryPage ? "bg-gray-200 dark:bg-gray-200" : ""
+                }`}
+              >
+                <p className={`text-sm font-semibold ${
+                  isAllCategoryPage ? "text-black" : "text-foreground"
+                }`}>
+                  All Category
+                </p>
+              </div>
+            );
+          })()}
         </div>
       )}
 
       {/* Back button and current category header */}
       {currentRootCategory && (
-        <div className="px-3 py-4 bg-gray-100 flex items-center">
+        <div className="px-3 py-4 bg-gray-100 dark:bg-white flex items-center">
           <button
             className="h-7 w-7 min-w-7 flex justify-center items-center bg-gray-200 cursor-pointer rounded-full"
             onClick={handleBackBtn}
           >
             <ChevronLeft className="text-black h-5" />
           </button>
-          <span className="w-full font-bold text-lg ml-3">
+          <span className="w-full font-bold text-lg ml-3 text-black">
             {currentRootCategory.name}
           </span>
         </div>
       )}
 
       {/* All [Category] link - shown when inside a category with subcategories */}
-      {currentRootCategory?.id && categoryList.length > 0 && (
-        <div
-          className={`pl-7 py-4 pr-5 border-t last:border-b flex justify-between items-center cursor-pointer hover:bg-gray-200 ${
-            selectedCategory === String(currentRootCategory.id) ? "bg-gray-200" : ""
-          }`}
-          onClick={() => handleAllCategoryClick(currentRootCategory)}
-        >
-          <p className="text-sm font-semibold text-foreground">
-            All {currentRootCategory.name}
-          </p>
-        </div>
-      )}
+      {currentRootCategory?.id && categoryList.length > 0 && (() => {
+        const isAllSelected = selectedCategory === String(currentRootCategory.id);
+        return (
+          <div
+            className={`pl-7 py-4 pr-5 border-t dark:border-gray-600 last:border-b flex justify-between items-center cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-200 [&:hover_p]:text-black ${
+              isAllSelected ? "bg-gray-200 dark:bg-gray-200" : ""
+            }`}
+            onClick={() => handleAllCategoryClick(currentRootCategory)}
+          >
+            <p className={`text-sm font-semibold ${
+              isAllSelected ? "text-black" : "text-foreground"
+            }`}>
+              All {currentRootCategory.name}
+            </p>
+          </div>
+        );
+      })()}
 
       {/* Category list */}
       {categoryList.map((item: Category, index: number) => {
@@ -241,18 +328,19 @@ export function SidebarCategory({
         const hasSubcategories = categories.some(
           (cat) => String(cat.parent_id) === String(item.id)
         );
+        const isSelected = selectedCategory === String(item.id);
 
         return (
           <div
             key={item.id || index}
-            className={`pl-7 py-4 pr-5 border-t last:border-b flex justify-between items-center cursor-pointer hover:bg-gray-200 ${
-              selectedCategory === String(item.id) ? "bg-gray-200" : ""
+            className={`pl-7 py-4 pr-5 border-t dark:border-gray-600 last:border-b flex justify-between items-center cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-200 [&:hover_p]:text-black ${
+              isSelected ? "bg-gray-200 dark:bg-gray-200" : ""
             }`}
             onClick={() => handleCategoryClick(item)}
           >
             <p
               className={`text-sm font-semibold ${
-                hasSubcategories ? "dark:text-white" : "text-foreground"
+                isSelected ? "text-black" : "text-foreground"
               }`}
             >
               {item.name}

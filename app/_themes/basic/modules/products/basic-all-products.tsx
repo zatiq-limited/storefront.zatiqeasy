@@ -57,9 +57,10 @@ export function BasicAllProducts() {
   const { totalPrice, totalProducts, hasItems } = useCartTotals();
 
   // Fetch products and categories to populate the store
-  useShopInventories(
+  // sortByStock: false to preserve original API order
+  const { isLoading: isInventoriesLoading } = useShopInventories(
     { shopUuid: shopDetails?.shop_uuid ?? "" },
-    { enabled: !!shopDetails?.shop_uuid }
+    { enabled: !!shopDetails?.shop_uuid, sortByStock: false }
   );
 
   useShopCategories(
@@ -98,7 +99,7 @@ export function BasicAllProducts() {
 
         {/* Main Content - Products */}
         <div className="xl:col-span-4">
-          <InventoryProducts />
+          <InventoryProducts isInventoriesLoading={isInventoriesLoading} />
         </div>
       </div>
 

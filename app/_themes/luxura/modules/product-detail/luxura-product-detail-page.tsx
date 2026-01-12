@@ -41,9 +41,10 @@ export function LuxuraProductDetailPage() {
   const totalCartProducts = useCartStore(selectTotalItems);
 
   // Fetch products if store is empty (handles page reload scenario)
+  // sortByStock: false to preserve original API order
   const { data: fetchedProducts } = useShopInventories(
     { shopUuid: shopDetails?.shop_uuid || "" },
-    { enabled: storeProducts.length === 0 && !!shopDetails?.shop_uuid }
+    { enabled: storeProducts.length === 0 && !!shopDetails?.shop_uuid, sortByStock: false }
   );
 
   // Use store products if available, otherwise use fetched products
@@ -214,8 +215,10 @@ export function LuxuraProductDetailPage() {
     );
   }, [product, cartProducts, selectVariant]);
 
-  // Check stock (use hook's isInStock)
-  const isOutOfStock = !isInStock;
+  // Check if stock maintenance is enabled (default to true if undefined)
+  const isStockMaintain = shopDetails?.isStockMaintain !== false;
+  // Check stock (use hook's isInStock) - only if stock maintenance is enabled
+  const isOutOfStock = isStockMaintain && !isInStock;
 
   // Calculate price with variants (same as Basic theme)
   const currentPrice = useMemo(() => {

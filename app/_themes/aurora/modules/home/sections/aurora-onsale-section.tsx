@@ -32,7 +32,7 @@ export function AuroraOnSaleSection({
 
   return (
     <div className="px-4 md:px-0">
-      <SectionHeader text={t("on_sale")} />
+      <SectionHeader text={t("on_sale")} className="mb-12 md:mb-16 xl:mb-21"/>
 
       <GridContainer>
         {onSaleProducts.map((product) => (

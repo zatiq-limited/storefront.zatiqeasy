@@ -59,9 +59,10 @@ export function LuxuraHomePage() {
   const totalPrice = useCartStore(selectSubtotal);
 
   // Fetch products and categories to populate the store
+  // sortByStock: false to preserve original API order
   useShopInventories(
     { shopUuid: shopDetails?.shop_uuid ?? "" },
-    { enabled: !!shopDetails?.shop_uuid }
+    { enabled: !!shopDetails?.shop_uuid, sortByStock: false }
   );
 
   useShopCategories(

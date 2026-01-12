@@ -85,7 +85,7 @@ export function SelloraSearchModal({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -50 }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="fixed top-[12%] left-0 right-0 z-50 px-4"
+            className="fixed top-[16%] left-0 right-0 z-50 px-4"
           >
             <div className="max-w-2xl mx-auto bg-white dark:bg-black-18 rounded-xl shadow-2xl overflow-hidden">
               {/* Search Input */}

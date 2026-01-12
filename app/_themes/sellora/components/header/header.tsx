@@ -63,11 +63,11 @@ export function SelloraHeader() {
 
       {/* Top marquee section */}
       {shopDetails?.message_on_top && (
-        <div className="bg-blue-zatiq">
+        <div className="bg-blue-zatiq font-special-gothic">
           <TopbarMessage
             message={shopDetails.message_on_top}
             marqueeStyle="py-2 md:py-[11px] md:pt-[13px] text-white"
-            textStyle="font-inter text-sm md:text-base font-semibold"
+            textStyle="text-sm md:text-base font-semibold"
           />
         </div>
       )}
@@ -85,7 +85,7 @@ export function SelloraHeader() {
             pathname.includes("/checkout")
               ? "sticky"
               : "fixed"
-          }  top-8.5 sm:top-12 left-0 z-50 flex items-center justify-center transition-all duration-300`,
+          }  top-8.5 sm:top-12 left-0 z-50 flex items-center justify-center transition-all duration-300 font-special-gothic`,
           {
             "bg-white top-0! shadow-sm": scrollY > 20,
             "bg-white/5 dark:bg-black-18/40 backdrop-blur-sm": scrollY <= 20,

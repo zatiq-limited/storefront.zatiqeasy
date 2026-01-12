@@ -21,10 +21,9 @@ export function SectionHeader({ text, className }: SectionHeaderProps) {
       className={cn(
         "text-center text-[38px] md:text-[64px] leading-snug",
         "text-[#4B5563] dark:text-blue-zatiq font-normal",
-        "mb-12 md:mb-16 xl:mb-21",
         className
       )}
-      style={{ fontFamily: themeData.secondaryFont || themeData.fontFamily }}
+      style={{ fontFamily: themeData.secondaryFontCss || themeData.primaryFontCss }}
     >
       {text}
     </h2>

@@ -76,8 +76,8 @@ export function AuroraFooter({ bgStyle }: AuroraFooterProps) {
                   width={200}
                   alt={shop_name || "Shop Logo"}
                   src={image_url}
-                  className="h-8 md:h-10 max-w-50 object-contain"
-                  style={{ width: "auto", height: "auto" }}
+                  className="h-8 md:h-10 max-w-50 object-left object-contain"
+                  style={{ width: "100%", height: "40px" }}
                 />
               )}
             </div>

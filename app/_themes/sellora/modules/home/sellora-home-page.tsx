@@ -17,6 +17,7 @@ import {
   FeaturedProductsSection,
   OnSaleSection,
 } from "./sections";
+import { SelloraThemeWrapper } from "../../components/sellora-theme-wrapper";
 import type { Product } from "@/stores/productsStore";
 
 interface Carousel {
@@ -73,7 +74,7 @@ export function SelloraHomePage() {
   }, []);
 
   return (
-    <div>
+    <SelloraThemeWrapper>
       {/* Variant Selector Modal */}
       <VariantSelectorModal
         product={selectedProduct}
@@ -116,7 +117,7 @@ export function SelloraHomePage() {
         onClick={() => router.push(`${baseUrl}/checkout`)}
         theme="Sellora"
       />
-    </div>
+    </SelloraThemeWrapper>
   );
 }
 

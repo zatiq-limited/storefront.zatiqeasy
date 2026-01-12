@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo, useCallback, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { X, SlidersHorizontal, Square, SquareCheckBig } from "lucide-react";
 import { useShopStore } from "@/stores/shopStore";
@@ -19,6 +19,7 @@ import Pagination from "@/components/pagination";
 import ProductSkeleton from "@/components/shared/skeletons/product-skeleton";
 import { VariantSelectorModal } from "@/components/products/variant-selector-modal";
 import { cn } from "@/lib/utils";
+import { useShallowSearchParams } from "@/lib/utils/shallow-routing";
 
 interface PriceRange {
   id: string;
@@ -58,7 +59,7 @@ const MAX_PRODUCTS_PER_PAGE = 12;
 
 export function AuroraAllProducts() {
   const router = useRouter();
-  const searchParams = useSearchParams();
+  const searchParams = useShallowSearchParams(); // Use shallow params for instant updates
   const { t } = useTranslation();
 
   const { shopDetails } = useShopStore();
@@ -72,9 +73,10 @@ export function AuroraAllProducts() {
   const productsStoreIsLoading = useProductsStore((state) => state.isLoading);
 
   // Fetch shop inventories to populate products store (if not already fetched by parent)
+  // sortByStock: false to preserve original API order
   const { isLoading: isInventoriesLoading } = useShopInventories(
     { shopUuid: shopDetails?.shop_uuid ?? "" },
-    { enabled: !!shopDetails?.shop_uuid }
+    { enabled: !!shopDetails?.shop_uuid, sortByStock: false }
   );
 
   // Fetch categories
