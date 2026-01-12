@@ -32,6 +32,10 @@ export function ConditionalThemeHandler({ children }: { children: React.ReactNod
   // Get theme configuration for bg color and fonts
   const themeConfig = getThemeConfig(shopTheme);
 
+  // Get theme mode (dark/light)
+  const themeMode = (shopDetails?.shop_theme as { theme_mode?: string } | undefined)?.theme_mode || "light";
+  const isDarkMode = themeMode === "dark";
+
   // Apply theme colors and background to CSS variables
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -57,17 +61,17 @@ export function ConditionalThemeHandler({ children }: { children: React.ReactNod
       document.documentElement.style.setProperty(color, themeColors[color]);
     }
 
-    // Apply theme background color
+    // Apply theme background color based on theme mode (dark/light)
     document.documentElement.style.setProperty("--theme-bg-color", themeConfig.bgColor);
     document.documentElement.style.setProperty("--theme-dark-bg-color", themeConfig.darkBgColor);
-    document.body.style.backgroundColor = themeConfig.bgColor;
+    // Note: Background color is now handled by ThemeModeHandler based on theme_mode
 
     // Apply theme font family
     document.documentElement.style.setProperty("--theme-font-family", themeConfig.fontFamily);
     if (themeConfig.secondaryFont) {
       document.documentElement.style.setProperty("--theme-secondary-font", themeConfig.secondaryFont);
     }
-  }, [shopDetails, themeConfig]);
+  }, [shopDetails, themeConfig, isDarkMode]);
 
   // For landing pages, don't render main theme header/footer
   // The landing page components have their own navbar and footer

@@ -56,13 +56,13 @@ export function BasicFooter() {
                   width={200}
                   alt={shopDetails?.shop_name || "Shop"}
                   src={shopDetails.image_url}
-                  className="h-10 max-w-45 object-contain transition-all duration-300 hover:opacity-80 hover:scale-110 hover:rotate-1 cursor-pointer"
-                  style={{ width: "auto", height: "auto" }}
+                  className="h-10 max-w-45 object-left object-contain transition-all duration-300 hover:opacity-80 hover:scale-110 hover:rotate-1 cursor-pointer"
+                  style={{ width: "100%", height: "40px" }}
                 />
               </Link>
             )}
 
-            <div className="flex space-x-4">{socialLinks}</div>
+            <div className="flex flex-wrap gap-4">{socialLinks}</div>
           </div>
 
           {/* Policies */}

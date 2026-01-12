@@ -4,8 +4,8 @@ import { useState } from "react";
 import { X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useShopStore } from "@/stores/shopStore";
-import { SidebarCategory } from "./sidebar-category";
 import LanguageToggler from "./language-toggler";
+import { SidebarCategory } from "@/components/features/category";
 
 interface MobileNavProps {
   isOpen: boolean;
