@@ -7,7 +7,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
 import { useShopStore } from "@/stores/shopStore";
-import { SelloraProductCard } from "../../../components/cards";
+import { OnSaleProductCard } from "../../../components/cards";
 import type { Product } from "@/stores/productsStore";
 
 import "swiper/css";
@@ -74,11 +74,10 @@ export function OnSaleSection({
         >
           {onSaleProducts.map((product) => (
             <SwiperSlide key={product.id}>
-              <SelloraProductCard
+              <OnSaleProductCard
                 product={product}
                 onNavigate={() => navigateProductDetails(product.id)}
                 onSelectProduct={() => setSelectedProduct(product)}
-                isSale={true}
               />
             </SwiperSlide>
           ))}
