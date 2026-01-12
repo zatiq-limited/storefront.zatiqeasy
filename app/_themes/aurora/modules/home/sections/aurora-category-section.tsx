@@ -35,7 +35,7 @@ export function AuroraCategorySection() {
         ))}
       </GridContainer>
 
-      <ViewAllButton link={`${baseUrl}/categories`} text={t("view_more")} />
+      <ViewAllButton link={`${baseUrl}/categories`} text={t("view_more")} className="mt-0"/>
     </>
   );
 }

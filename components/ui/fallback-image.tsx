@@ -71,7 +71,7 @@ export const FallbackImage = ({
       onContextMenu={(e) => e.preventDefault()}
       style={{
         userSelect: "none",
-        ...(!fill && { width: "auto" }),
+        ...(!fill && { width: "100%" }),
         ...(state.isLoading && {
           backgroundColor: "#f3f4f6", // Light gray placeholder background
         }),
