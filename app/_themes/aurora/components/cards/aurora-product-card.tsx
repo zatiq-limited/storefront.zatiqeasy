@@ -68,8 +68,10 @@ export function AuroraProductCard({
   const cartProducts = getProductsByInventoryId(Number(id));
   const totalInCart = cartProducts.reduce((sum, p) => sum + p.qty, 0);
 
-  // Check if stock is out (quantity is 0 or less)
-  const isStockOut = (quantity ?? 0) <= 0;
+  // Check if stock maintenance is enabled (default to true if undefined)
+  const isStockMaintain = shopDetails?.isStockMaintain !== false;
+  // Check if stock is out - only if stock maintenance is enabled
+  const isStockOut = isStockMaintain && (quantity ?? 0) <= 0;
 
   // Calculate discount
   const hasDiscount = (old_price ?? 0) > (price ?? 0);
@@ -103,8 +105,9 @@ export function AuroraProductCard({
   };
 
   const maxStock = getMaxStock();
+  // Only check stock limits if stock maintenance is enabled
   const isCartIncrementDisabled =
-    isStockOut || (typeof maxStock === "number" && totalInCart >= maxStock);
+    isStockOut || (isStockMaintain && typeof maxStock === "number" && totalInCart >= maxStock);
 
   // Navigate to product detail
   const handleNavigate = () => {

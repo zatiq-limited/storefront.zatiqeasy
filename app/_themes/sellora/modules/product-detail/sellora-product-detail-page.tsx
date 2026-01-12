@@ -422,7 +422,7 @@ export function SelloraProductDetailPage({
         </div>
 
         {/* Right Side - Product Info (Sticky) */}
-        <div className="lg:col-span-2 px-0 lg:px-12 xl:px-20 flex flex-col lg:sticky lg:top-20 lg:self-start">
+        <div className="lg:col-span-2 px-0 lg:px-12 2xl:px-16 flex flex-col lg:sticky lg:top-20 lg:self-start">
           {/* Category Name */}
           <div className="mb-3 sm:mb-4">
             {categories[0]?.name && (

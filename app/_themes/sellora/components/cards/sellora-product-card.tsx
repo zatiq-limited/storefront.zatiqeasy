@@ -50,8 +50,10 @@ export function SelloraProductCard({
     variant_types = [],
   } = product;
 
-  // Check if out of stock - matches Basic theme: product.quantity <= 0
-  const isStockOut = (product.quantity ?? 0) <= 0;
+  // Check if stock maintenance is enabled (default to true if undefined)
+  const isStockMaintain = shopDetails?.isStockMaintain !== false;
+  // Check if out of stock - only if stock maintenance is enabled
+  const isStockOut = isStockMaintain && (product.quantity ?? 0) <= 0;
   const hasVariants = variant_types && variant_types.length > 0;
   const discountPercent = old_price && old_price > price
     ? Math.round(((old_price - price) / old_price) * 100)

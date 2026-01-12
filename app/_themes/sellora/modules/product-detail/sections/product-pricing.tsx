@@ -24,7 +24,7 @@ export function ProductPricing({
 
   return (
     <div className="flex items-start flex-col">
-      <div className="flex items-center gap-1 leading-normal">
+      <div className="flex flex-wrap items-start gap-1 leading-normal">
         <span className="text-sm text-foreground lg:text-2xl font-normal min-w-fit">
           {currency} {currentPrice.toLocaleString() || "0.00"}
         </span>
@@ -39,7 +39,7 @@ export function ProductPricing({
               </span>
             )}
             {showOldPrice && regularPrice && savePrice > 0 && (
-              <span className="ml-3 px-3 py-1 bg-red-500/70 rounded-full text-white text-center text-xs">
+              <span className="px-3 py-1 bg-red-500/70 rounded-full text-white text-center text-xs">
                 Save {savePrice.toLocaleString()} {currency} (
                 {((savePrice / regularPrice) * 100).toFixed(0)}%)
               </span>

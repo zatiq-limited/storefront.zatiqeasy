@@ -54,7 +54,11 @@ export function BasicProductCard({
   // Get quantity in cart for this product
   const cartProducts = getProductsByInventoryId(Number(id));
   const quantityInCart = cartProducts.reduce((sum, p) => sum + p.qty, 0);
-  const isStockOut = quantity <= 0;
+
+  // Check if stock maintenance is enabled (default to true if undefined)
+  const isStockMaintain = shopDetails?.isStockMaintain !== false;
+  // Only show out of stock if stock maintenance is enabled
+  const isStockOut = isStockMaintain && quantity <= 0;
 
   // Product image URL
   const productImage = images?.[0] || image_url || "/placeholder-product.svg";
@@ -98,8 +102,9 @@ export function BasicProductCard({
   };
 
   const maxStock = getMaxStock();
+  // Only check stock limits if stock maintenance is enabled
   const isCartIncrementDisabled =
-    isStockOut || (typeof maxStock === "number" && quantityInCart >= maxStock);
+    isStockOut || (isStockMaintain && typeof maxStock === "number" && quantityInCart >= maxStock);
 
   // Add to cart handler
   const handleAddToCart = (e: React.MouseEvent) => {

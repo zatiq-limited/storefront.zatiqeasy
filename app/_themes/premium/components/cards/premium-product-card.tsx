@@ -51,8 +51,10 @@ export function PremiumProductCard({
   const isInCart = cartProducts.length > 0;
   const cartQuantity = cartProducts.reduce((acc, p) => acc + (p.qty || 0), 0);
 
-  // Check stock status
-  const isOutOfStock = product.quantity === 0;
+  // Check if stock maintenance is enabled (default to true if undefined)
+  const isStockMaintain = shopDetails?.isStockMaintain !== false;
+  // Check stock status - only if stock maintenance is enabled
+  const isOutOfStock = isStockMaintain && product.quantity === 0;
   const hasVariant =
     product.has_variant && (product.variant_types?.length ?? 0) > 0;
 
@@ -152,9 +154,9 @@ export function PremiumProductCard({
     }
   };
 
-  // Check if increment should be disabled (stock limit)
+  // Check if increment should be disabled (stock limit) - only if stock maintenance is enabled
   const isIncrementDisabled =
-    isOutOfStock || (!hasVariant && cartQuantity >= (product.quantity ?? 999));
+    isOutOfStock || (isStockMaintain && !hasVariant && cartQuantity >= (product.quantity ?? 999));
 
   return (
     <div className="flex flex-col gap-4 mb-4">
