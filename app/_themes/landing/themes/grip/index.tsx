@@ -3,7 +3,10 @@
 import { useEffect, useState, useMemo, useCallback, useRef } from "react";
 import { useLandingStore } from "@/stores/landingStore";
 import { useCartStore } from "@/stores/cartStore";
-import { LandingProductProvider, useLandingProduct } from "../../context/landing-product-context";
+import {
+  LandingProductProvider,
+  useLandingProduct,
+} from "../../context/landing-product-context";
 import { VariantSelectorModal } from "@/components/products/variant-selector-modal";
 import { getThemeColors } from "@/lib/utils";
 import type { SingleProductPage } from "@/types/landing-page.types";
@@ -29,7 +32,12 @@ interface GripLandingPageProps {
 
 // Inner component that uses the landing product context
 function GripLandingContent({ landingData }: GripLandingPageProps) {
-  const { product, defaultVariants, productActionController, scrollToCheckout } = useLandingProduct();
+  const {
+    product,
+    defaultVariants,
+    productActionController,
+    scrollToCheckout,
+  } = useLandingProduct();
   const { products: cartProducts, addProduct } = useCartStore();
   const { primaryColor, orderPlaced } = useLandingStore();
 
@@ -117,7 +125,9 @@ function GripLandingContent({ landingData }: GripLandingPageProps) {
         qty: 1,
         selectedVariants: defaultVariants,
         price: product.price,
-        total_inventory_sold: (product as unknown as { total_inventory_sold?: number }).total_inventory_sold ?? 0,
+        total_inventory_sold:
+          (product as unknown as { total_inventory_sold?: number })
+            .total_inventory_sold ?? 0,
         categories: product.categories ?? [],
         variant_types: product.variant_types ?? [],
         stocks: product.stocks ?? [],
@@ -134,7 +144,11 @@ function GripLandingContent({ landingData }: GripLandingPageProps) {
         const variantTypes = product?.variant_types || [];
         const mandatoryTypes = variantTypes.filter((t) => t.is_mandatory);
 
-        if (mandatoryTypes.length > 1 || (mandatoryTypes.length === 1 && (mandatoryTypes[0].variants?.length || 0) > 1)) {
+        if (
+          mandatoryTypes.length > 1 ||
+          (mandatoryTypes.length === 1 &&
+            (mandatoryTypes[0].variants?.length || 0) > 1)
+        ) {
           // Open variant modal for selection
           setIsVariantModalOpen(true);
         } else {
@@ -150,7 +164,12 @@ function GripLandingContent({ landingData }: GripLandingPageProps) {
         window.open(link, "_blank", "noopener,noreferrer");
       }
     },
-    [product?.variant_types, productActionController, scrollToCheckout, cartProductsList.length]
+    [
+      product?.variant_types,
+      productActionController,
+      scrollToCheckout,
+      cartProductsList.length,
+    ]
   );
 
   // Handle variant selection complete
@@ -188,8 +207,10 @@ function GripLandingContent({ landingData }: GripLandingPageProps) {
         <GripTopCarousel content={topBanners} onBuyNow={handleBuyNow} />
 
         {/* Image Banners (before featured) */}
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          {imageBanners.length > 0 && <GripImageBanner content={imageBanners} />}
+        <div className="container">
+          {imageBanners.length > 0 && (
+            <GripImageBanner content={imageBanners} />
+          )}
 
           {/* Featured Sections */}
           {featuredBanners.length > 0 && (
@@ -204,7 +225,7 @@ function GripLandingContent({ landingData }: GripLandingPageProps) {
 
         {/* Showcase/Buy Now Section */}
         {showcaseBanners.length > 0 && (
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="container">
             <GripBuyNow content={showcaseBanners} onBuyNow={handleBuyNow} />
           </div>
         )}
@@ -234,7 +255,11 @@ function GripLandingContent({ landingData }: GripLandingPageProps) {
         <VariantSelectorModal
           isOpen={isVariantModalOpen}
           onClose={() => setIsVariantModalOpen(false)}
-          product={product as unknown as Parameters<typeof VariantSelectorModal>[0]["product"]}
+          product={
+            product as unknown as Parameters<
+              typeof VariantSelectorModal
+            >[0]["product"]
+          }
           onAddToCart={handleVariantSelect}
         />
       )}

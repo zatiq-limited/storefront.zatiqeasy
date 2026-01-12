@@ -51,7 +51,7 @@ export function NirvanaFooter() {
   return (
     <footer>
       <div className="w-full bg-white mt-8 pt-8 pb-8 md:px-4 sm:px-6 lg:px-8">
-        <div className="container mx-auto px-4 flex flex-col gap-6">
+        <div className="container flex flex-col gap-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 md:gap-4">
             {/* Logo */}
             <div className="py-4 space-y-3">
@@ -61,7 +61,7 @@ export function NirvanaFooter() {
                   width={200}
                   alt={shopName}
                   src={logoUrl}
-                  className="h-8.5 md:h-10 w-auto max-w-50 object-contain"
+                  className="h-8.5 md:h-10 w-auto max-w-50 object-left object-contain"
                 />
               )}
             </div>

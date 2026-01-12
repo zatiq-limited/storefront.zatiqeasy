@@ -52,7 +52,11 @@ export function GripTopCarousel({ content, onBuyNow }: GripTopCarouselProps) {
   const handleButtonAction = (link: string | undefined | null) => {
     if (link === "buy-now") {
       // Handle products with variants
-      if (product?.has_variant && product?.variant_types && product.variant_types.length > 1) {
+      if (
+        product?.has_variant &&
+        product?.variant_types &&
+        product.variant_types.length > 1
+      ) {
         setIsVariantModalOpen(true);
         return;
       }
@@ -81,7 +85,11 @@ export function GripTopCarousel({ content, onBuyNow }: GripTopCarouselProps) {
         <VariantSelectorModal
           isOpen={isVariantModalOpen}
           onClose={() => setIsVariantModalOpen(false)}
-          product={product as unknown as Parameters<typeof VariantSelectorModal>[0]["product"]}
+          product={
+            product as unknown as Parameters<
+              typeof VariantSelectorModal
+            >[0]["product"]
+          }
           onAddToCart={handleVariantSelect}
         />
       )}
@@ -109,7 +117,7 @@ export function GripTopCarousel({ content, onBuyNow }: GripTopCarouselProps) {
 
         {/* Content Overlay */}
         <div className="absolute inset-0 flex items-center z-10">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 w-full">
+          <div className="container w-full">
             <div className="max-w-lg xl:max-w-xl 2xl:max-w-2xl">
               {/* Title */}
               {currentSlide?.title && (

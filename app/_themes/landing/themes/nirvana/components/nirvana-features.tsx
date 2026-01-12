@@ -27,7 +27,7 @@ export function NirvanaFeatures({ content }: NirvanaFeaturesProps) {
       )}
 
       {/* Features Grid */}
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 lg:gap-12 px-4 cursor-pointer">
           {content.content.map((item, index) => (
             <div

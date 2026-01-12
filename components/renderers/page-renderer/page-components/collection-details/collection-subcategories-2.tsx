@@ -69,7 +69,9 @@ export default function CollectionSubcategories2({
     light: "linear-gradient(to top, rgba(0,0,0,0.3) 0%, transparent 100%)",
     medium: "linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 100%)",
     heavy: "linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%)",
-    accent: `linear-gradient(135deg, ${s.accentColor || "#7c3aed"}dd 0%, ${s.accentColor || "#7c3aed"}99 50%, rgba(0,0,0,0.3) 100%)`,
+    accent: `linear-gradient(135deg, ${s.accentColor || "#7c3aed"}dd 0%, ${
+      s.accentColor || "#7c3aed"
+    }99 50%, rgba(0,0,0,0.3) 100%)`,
   };
 
   return (
@@ -86,7 +88,7 @@ export default function CollectionSubcategories2({
         }}
       />
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="container relative z-10">
         {/* Header */}
         <div className="text-center mb-12">
           {s.showTitle && s.title && (
@@ -97,11 +99,19 @@ export default function CollectionSubcategories2({
               {s.title}
             </h2>
           )}
-          <div className="w-20 h-1 mx-auto rounded-full" style={{ backgroundColor: s.accentColor || "#7c3aed" }}></div>
+          <div
+            className="w-20 h-1 mx-auto rounded-full"
+            style={{ backgroundColor: s.accentColor || "#7c3aed" }}
+          ></div>
         </div>
 
         {/* Subcategories Grid */}
-        <div className={`grid gap-6 ${columnClasses[Number(s.columns) as keyof typeof columnClasses] || columnClasses[3]}`}>
+        <div
+          className={`grid gap-6 ${
+            columnClasses[Number(s.columns) as keyof typeof columnClasses] ||
+            columnClasses[3]
+          }`}
+        >
           {subcategories.map((subcategory, index) => (
             <Link
               key={subcategory.id}
@@ -109,7 +119,10 @@ export default function CollectionSubcategories2({
               className="group relative rounded-2xl overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-2xl"
               style={{
                 animation: `fadeInUp 0.6s ease-out ${index * 0.1}s both`,
-                height: heightClasses[s.cardHeight as keyof typeof heightClasses]?.split(' ')[0] || heightClasses.medium,
+                height:
+                  heightClasses[
+                    s.cardHeight as keyof typeof heightClasses
+                  ]?.split(" ")[0] || heightClasses.medium,
               }}
             >
               {/* Background Image */}
@@ -120,14 +133,24 @@ export default function CollectionSubcategories2({
                     alt={subcategory.name}
                     fill
                     className={`object-cover transition-transform duration-700 ${
-                      s.imageEffect === "zoom" ? "group-hover:scale-110" :
-                      s.imageEffect === "rotate" ? "group-hover:scale-110 group-hover:rotate-3" :
-                      "group-hover:scale-105"
+                      s.imageEffect === "zoom"
+                        ? "group-hover:scale-110"
+                        : s.imageEffect === "rotate"
+                        ? "group-hover:scale-110 group-hover:rotate-3"
+                        : "group-hover:scale-105"
                     }`}
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center" style={{ backgroundColor: s.accentColor || "#7c3aed" }}>
-                    <svg className="w-1/3 h-1/3 text-white opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div
+                    className="w-full h-full flex items-center justify-center"
+                    style={{ backgroundColor: s.accentColor || "#7c3aed" }}
+                  >
+                    <svg
+                      className="w-1/3 h-1/3 text-white opacity-50"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -143,7 +166,10 @@ export default function CollectionSubcategories2({
               <div
                 className="absolute inset-0 opacity-70 group-hover:opacity-90 transition-opacity duration-500"
                 style={{
-                  background: overlayStyles[s.overlayIntensity as keyof typeof overlayStyles] || overlayStyles.medium,
+                  background:
+                    overlayStyles[
+                      s.overlayIntensity as keyof typeof overlayStyles
+                    ] || overlayStyles.medium,
                 }}
               />
 
@@ -161,7 +187,12 @@ export default function CollectionSubcategories2({
                     Explore
                   </div>
                   <div className="opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-4 group-hover:translate-x-0">
-                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg
+                      className="w-6 h-6 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -174,9 +205,7 @@ export default function CollectionSubcategories2({
 
                 {/* Bottom Content */}
                 <div>
-                  <h3
-                    className="text-xl sm:text-2xl font-bold mb-2 text-white transform transition-transform duration-300 group-hover:translate-y-1"
-                  >
+                  <h3 className="text-xl sm:text-2xl font-bold mb-2 text-white transform transition-transform duration-300 group-hover:translate-y-1">
                     {subcategory.name}
                   </h3>
 
@@ -188,7 +217,12 @@ export default function CollectionSubcategories2({
 
                   {s.showProductCount && subcategory.product_count && (
                     <div className="flex items-center space-x-2">
-                      <svg className="w-4 h-4 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg
+                        className="w-4 h-4 text-white/70"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -223,7 +257,12 @@ export default function CollectionSubcategories2({
               }}
             >
               <span>View All Categories</span>
-              <svg className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                className="w-5 h-5 transform group-hover:translate-x-1 transition-transform"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"

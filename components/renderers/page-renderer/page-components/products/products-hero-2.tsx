@@ -128,7 +128,7 @@ export default function ProductsHero2({
         {/* Breadcrumb at top */}
         {showBreadcrumb && (
           <div className="pt-4">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="container">
               <nav aria-label="Breadcrumb">
                 <ol className="flex items-center space-x-2 text-sm">
                   {breadcrumbs.map((crumb, index) => (
@@ -172,7 +172,7 @@ export default function ProductsHero2({
 
         {/* Title Content - centered vertically in remaining space */}
         <div className="flex-1 flex flex-col justify-center">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 w-full">
+          <div className="container w-full">
             <div className={getTextAlignClass()}>
               <h1
                 className={`text-3xl md:text-5xl lg:text-6xl ${titleFontWeight} mb-4`}

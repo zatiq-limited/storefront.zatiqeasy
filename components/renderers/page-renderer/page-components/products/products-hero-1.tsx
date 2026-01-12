@@ -97,7 +97,7 @@ export default function ProductsHero1({
 
   return (
     <section style={gradientStyle}>
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container">
         {/* Breadcrumb */}
         {showBreadcrumb && (
           <nav className="mb-4 pt-4" aria-label="Breadcrumb">
@@ -154,7 +154,10 @@ export default function ProductsHero1({
             {description}
           </p>
           {showProductCount && productCount > 0 && (
-            <p className={`mt-4 ${productCountFontSize}`} style={productCountStyle}>
+            <p
+              className={`mt-4 ${productCountFontSize}`}
+              style={productCountStyle}
+            >
               Showing {productCount} products
             </p>
           )}

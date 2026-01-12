@@ -16,27 +16,26 @@ interface ContactMap2Props {
 }
 
 export default function ContactMap2({ settings = {} }: ContactMap2Props) {
-  const s = convertSettingsKeys(settings as Record<string, unknown>) as ContactMap2Settings;
+  const s = convertSettingsKeys(
+    settings as Record<string, unknown>
+  ) as ContactMap2Settings;
 
-  const containerClass = s.contained ? 'container mx-auto px-4 sm:px-6 lg:px-8' : '';
+  const containerClass = s.contained ? "container" : "";
   const mapClasses = [
-    'w-full overflow-hidden',
-    s.rounded ? 'rounded-lg' : '',
-    s.shadow ? 'shadow-lg' : '',
+    "w-full overflow-hidden",
+    s.rounded ? "rounded-lg" : "",
+    s.shadow ? "shadow-lg" : "",
   ]
     .filter(Boolean)
-    .join(' ');
+    .join(" ");
 
   return (
     <section
       className="py-12 md:py-16 lg:py-20"
-      style={{ backgroundColor: s.backgroundColor || '#F9FAFB' }}
+      style={{ backgroundColor: s.backgroundColor || "#F9FAFB" }}
     >
       <div className={containerClass}>
-        <div
-          className={mapClasses}
-          style={{ height: s.height || '500px' }}
-        >
+        <div className={mapClasses} style={{ height: s.height || "500px" }}>
           {s.mapUrl && (
             <iframe
               src={s.mapUrl}

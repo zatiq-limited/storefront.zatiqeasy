@@ -44,18 +44,22 @@ export default function CollectionBreadcrumb2({
           ? `${s.backgroundColor}F8`
           : "#ffffffF8",
         borderColor: `${s.textColor || "#e5e7eb"}20`,
-        boxShadow: s.shadowSize === "none"
-          ? "none"
-          : s.shadowSize === "sm"
-          ? "0 1px 3px rgba(0,0,0,0.05)"
-          : s.shadowSize === "lg"
-          ? "0 8px 32px rgba(0,0,0,0.1)"
-          : "0 4px 16px rgba(0,0,0,0.08)",
+        boxShadow:
+          s.shadowSize === "none"
+            ? "none"
+            : s.shadowSize === "sm"
+            ? "0 1px 3px rgba(0,0,0,0.05)"
+            : s.shadowSize === "lg"
+            ? "0 8px 32px rgba(0,0,0,0.1)"
+            : "0 4px 16px rgba(0,0,0,0.08)",
       }}
     >
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container">
         {/* Top Bar */}
-        <div className="flex items-center justify-between py-3 border-b" style={{ borderColor: `${s.textColor || "#e5e7eb"}10` }}>
+        <div
+          className="flex items-center justify-between py-3 border-b"
+          style={{ borderColor: `${s.textColor || "#e5e7eb"}10` }}
+        >
           <ol className="flex items-center space-x-1 sm:space-x-3">
             {s.showHome && (
               <>
@@ -66,7 +70,9 @@ export default function CollectionBreadcrumb2({
                     style={{ color: s.textColor || "#6b7280" }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.color = s.activeColor || "#111827";
-                      e.currentTarget.style.backgroundColor = `${s.activeColor || "#111827"}08`;
+                      e.currentTarget.style.backgroundColor = `${
+                        s.activeColor || "#111827"
+                      }08`;
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.color = s.textColor || "#6b7280";
@@ -119,7 +125,9 @@ export default function CollectionBreadcrumb2({
                     style={{ color: s.textColor || "#6b7280" }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.color = s.activeColor || "#111827";
-                      e.currentTarget.style.backgroundColor = `${s.activeColor || "#111827"}08`;
+                      e.currentTarget.style.backgroundColor = `${
+                        s.activeColor || "#111827"
+                      }08`;
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.color = s.textColor || "#6b7280";
@@ -139,7 +147,9 @@ export default function CollectionBreadcrumb2({
                         d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
                       />
                     </svg>
-                    <span className="font-medium hidden sm:inline">Collections</span>
+                    <span className="font-medium hidden sm:inline">
+                      Collections
+                    </span>
                   </Link>
                 </li>
                 <li
@@ -233,14 +243,23 @@ export default function CollectionBreadcrumb2({
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.color = s.activeColor || "#111827";
-                  e.currentTarget.style.backgroundColor = `${s.activeColor || "#111827"}10`;
+                  e.currentTarget.style.backgroundColor = `${
+                    s.activeColor || "#111827"
+                  }10`;
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.color = s.textColor || "#6b7280";
-                  e.currentTarget.style.backgroundColor = `${s.textColor || "#6b7280"}08`;
+                  e.currentTarget.style.backgroundColor = `${
+                    s.textColor || "#6b7280"
+                  }08`;
                 }}
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -261,14 +280,23 @@ export default function CollectionBreadcrumb2({
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.color = s.activeColor || "#111827";
-                  e.currentTarget.style.backgroundColor = `${s.activeColor || "#111827"}10`;
+                  e.currentTarget.style.backgroundColor = `${
+                    s.activeColor || "#111827"
+                  }10`;
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.color = s.textColor || "#6b7280";
-                  e.currentTarget.style.backgroundColor = `${s.textColor || "#6b7280"}08`;
+                  e.currentTarget.style.backgroundColor = `${
+                    s.textColor || "#6b7280"
+                  }08`;
                 }}
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -289,14 +317,23 @@ export default function CollectionBreadcrumb2({
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.color = s.activeColor || "#111827";
-                  e.currentTarget.style.backgroundColor = `${s.activeColor || "#111827"}10`;
+                  e.currentTarget.style.backgroundColor = `${
+                    s.activeColor || "#111827"
+                  }10`;
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.color = s.textColor || "#6b7280";
-                  e.currentTarget.style.backgroundColor = `${s.textColor || "#6b7280"}08`;
+                  e.currentTarget.style.backgroundColor = `${
+                    s.textColor || "#6b7280"
+                  }08`;
                 }}
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -309,17 +346,29 @@ export default function CollectionBreadcrumb2({
           </div>
 
           {/* Quick Stats */}
-          <div className="hidden sm:flex items-center space-x-4 text-xs" style={{ color: s.textColor || "#6b7280" }}>
+          <div
+            className="hidden sm:flex items-center space-x-4 text-xs"
+            style={{ color: s.textColor || "#6b7280" }}
+          >
             <div className="flex items-center space-x-1">
-              <div className="w-2 h-2 rounded-full" style={{ backgroundColor: s.accentColor || "#3b82f6" }}></div>
+              <div
+                className="w-2 h-2 rounded-full"
+                style={{ backgroundColor: s.accentColor || "#3b82f6" }}
+              ></div>
               <span>In Stock</span>
             </div>
             <div className="flex items-center space-x-1">
-              <div className="w-2 h-2 rounded-full" style={{ backgroundColor: s.accentColor || "#3b82f6" }}></div>
+              <div
+                className="w-2 h-2 rounded-full"
+                style={{ backgroundColor: s.accentColor || "#3b82f6" }}
+              ></div>
               <span>New Arrivals</span>
             </div>
             <div className="flex items-center space-x-1">
-              <div className="w-2 h-2 rounded-full" style={{ backgroundColor: s.accentColor || "#3b82f6" }}></div>
+              <div
+                className="w-2 h-2 rounded-full"
+                style={{ backgroundColor: s.accentColor || "#3b82f6" }}
+              ></div>
               <span>On Sale</span>
             </div>
           </div>

@@ -66,7 +66,10 @@ async function fetchCollectionProducts(
   limit: number = 12,
   sort: string = "newest",
   search?: string
-): Promise<{ products: Product[]; pagination: { total: number; total_pages: number; current_page: number } }> {
+): Promise<{
+  products: Product[];
+  pagination: { total: number; total_pages: number; current_page: number };
+}> {
   const response = await fetch("/api/storefront/v1/products", {
     method: "POST",
     headers: {
@@ -89,7 +92,11 @@ async function fetchCollectionProducts(
   const data = await response.json();
   return {
     products: data.data?.products || [],
-    pagination: data.data?.pagination || { total: 0, total_pages: 0, current_page: 1 },
+    pagination: data.data?.pagination || {
+      total: 0,
+      total_pages: 0,
+      current_page: 1,
+    },
   };
 }
 
@@ -115,7 +122,15 @@ export default function CollectionProducts1({
     isLoading: isProductsLoading,
     error,
   } = useQuery({
-    queryKey: ["collection-products", collection.id, shopUuid, currentPage, productsPerPage, sortBy, searchQuery],
+    queryKey: [
+      "collection-products",
+      collection.id,
+      shopUuid,
+      currentPage,
+      productsPerPage,
+      sortBy,
+      searchQuery,
+    ],
     queryFn: () =>
       fetchCollectionProducts(
         shopUuid!,
@@ -131,7 +146,11 @@ export default function CollectionProducts1({
   });
 
   const products = productsData?.products || [];
-  const pagination = productsData?.pagination || { total: 0, total_pages: 0, current_page: 1 };
+  const pagination = productsData?.pagination || {
+    total: 0,
+    total_pages: 0,
+    current_page: 1,
+  };
   const isLoading = pageLoading || isProductsLoading;
 
   // Reset to page 1 when sort or search changes
@@ -148,9 +167,13 @@ export default function CollectionProducts1({
     6: "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6",
   };
 
-  const gridClass = viewMode === "grid"
-    ? `grid ${columnClasses[Number(s.columns) as keyof typeof columnClasses] || columnClasses[3]} gap-6`
-    : "space-y-4";
+  const gridClass =
+    viewMode === "grid"
+      ? `grid ${
+          columnClasses[Number(s.columns) as keyof typeof columnClasses] ||
+          columnClasses[3]
+        } gap-6`
+      : "space-y-4";
 
   return (
     <section
@@ -167,15 +190,22 @@ export default function CollectionProducts1({
         }}
       />
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="container relative z-10">
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
           <div>
-            <h2 className="text-2xl sm:text-3xl font-bold mb-2" style={{ color: s.textColor || "#111827" }}>
+            <h2
+              className="text-2xl sm:text-3xl font-bold mb-2"
+              style={{ color: s.textColor || "#111827" }}
+            >
               Products
             </h2>
-            <p className="text-sm sm:text-base opacity-70" style={{ color: s.textColor || "#6b7280" }}>
-              {pagination.total || collection.product_count} products in {collection.name}
+            <p
+              className="text-sm sm:text-base opacity-70"
+              style={{ color: s.textColor || "#6b7280" }}
+            >
+              {pagination.total || collection.product_count} products in{" "}
+              {collection.name}
             </p>
           </div>
 
@@ -194,7 +224,13 @@ export default function CollectionProducts1({
                     borderColor: `${s.accentColor || "#7c3aed"}30`,
                   }}
                 />
-                <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4" style={{ color: s.textColor || "#9ca3af" }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg
+                  className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4"
+                  style={{ color: s.textColor || "#9ca3af" }}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -207,18 +243,34 @@ export default function CollectionProducts1({
 
             {/* View Toggle */}
             {s.showViewToggle && (
-              <div className="flex items-center gap-1 p-1 rounded-xl" style={{ backgroundColor: `${s.accentColor || "#7c3aed"}10` }}>
+              <div
+                className="flex items-center gap-1 p-1 rounded-xl"
+                style={{ backgroundColor: `${s.accentColor || "#7c3aed"}10` }}
+              >
                 <button
                   onClick={() => setViewMode("grid")}
                   className={`p-2 rounded-lg transition-all ${
                     viewMode === "grid" ? "bg-white shadow-sm" : ""
                   }`}
                   style={{
-                    color: viewMode === "grid" ? s.accentColor || "#7c3aed" : s.textColor || "#6b7280",
+                    color:
+                      viewMode === "grid"
+                        ? s.accentColor || "#7c3aed"
+                        : s.textColor || "#6b7280",
                   }}
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+                      strokeWidth={2}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                 </button>
                 <button
@@ -227,11 +279,24 @@ export default function CollectionProducts1({
                     viewMode === "list" ? "bg-white shadow-sm" : ""
                   }`}
                   style={{
-                    color: viewMode === "list" ? s.accentColor || "#7c3aed" : s.textColor || "#6b7280",
+                    color:
+                      viewMode === "list"
+                        ? s.accentColor || "#7c3aed"
+                        : s.textColor || "#6b7280",
                   }}
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path d="M4 6h16M4 10h16M4 14h16M4 18h16" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M4 6h16M4 10h16M4 14h16M4 18h16"
+                      strokeWidth={2}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                 </button>
               </div>
@@ -264,7 +329,10 @@ export default function CollectionProducts1({
           {isLoading ? (
             <div className={gridClass}>
               {Array.from({ length: 6 }, (_, i) => (
-                <div key={i} className="bg-white rounded-2xl shadow-lg overflow-hidden animate-pulse">
+                <div
+                  key={i}
+                  className="bg-white rounded-2xl shadow-lg overflow-hidden animate-pulse"
+                >
                   <div className="aspect-square bg-gray-200"></div>
                   <div className="p-4 space-y-3">
                     <div className="h-4 bg-gray-200 rounded w-3/4"></div>
@@ -284,7 +352,10 @@ export default function CollectionProducts1({
                   {/* Product Image */}
                   <div className="relative aspect-square overflow-hidden bg-gray-100">
                     {(() => {
-                      const productImage = product.images?.[0] || product.image_url || product.image;
+                      const productImage =
+                        product.images?.[0] ||
+                        product.image_url ||
+                        product.image;
                       return productImage ? (
                         <img
                           src={productImage}
@@ -294,24 +365,41 @@ export default function CollectionProducts1({
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
-                          <svg className="w-16 h-16 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          <svg
+                            className="w-16 h-16 text-gray-300"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={1.5}
+                              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                            />
                           </svg>
                         </div>
                       );
                     })()}
                     {/* Out of Stock Badge */}
-                    {product.quantity !== undefined && product.quantity <= 0 && (
-                      <div className="absolute top-2 left-2 bg-red-500 text-white text-xs font-medium px-2 py-1 rounded">
-                        Out of Stock
-                      </div>
-                    )}
+                    {product.quantity !== undefined &&
+                      product.quantity <= 0 && (
+                        <div className="absolute top-2 left-2 bg-red-500 text-white text-xs font-medium px-2 py-1 rounded">
+                          Out of Stock
+                        </div>
+                      )}
                     {/* Discount Badge */}
-                    {product.regular_price && product.regular_price > product.price && (
-                      <div className="absolute top-2 right-2 bg-green-500 text-white text-xs font-medium px-2 py-1 rounded">
-                        {Math.round(((product.regular_price - product.price) / product.regular_price) * 100)}% OFF
-                      </div>
-                    )}
+                    {product.regular_price &&
+                      product.regular_price > product.price && (
+                        <div className="absolute top-2 right-2 bg-green-500 text-white text-xs font-medium px-2 py-1 rounded">
+                          {Math.round(
+                            ((product.regular_price - product.price) /
+                              product.regular_price) *
+                              100
+                          )}
+                          % OFF
+                        </div>
+                      )}
                   </div>
 
                   {/* Product Info */}
@@ -329,11 +417,12 @@ export default function CollectionProducts1({
                       >
                         ৳{product.price.toLocaleString()}
                       </span>
-                      {product.regular_price && product.regular_price > product.price && (
-                        <span className="text-sm text-gray-400 line-through">
-                          ৳{product.regular_price.toLocaleString()}
-                        </span>
-                      )}
+                      {product.regular_price &&
+                        product.regular_price > product.price && (
+                          <span className="text-sm text-gray-400 line-through">
+                            ৳{product.regular_price.toLocaleString()}
+                          </span>
+                        )}
                     </div>
                   </div>
                 </Link>
@@ -341,7 +430,13 @@ export default function CollectionProducts1({
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center py-20 text-center">
-              <svg className="w-24 h-24 mx-auto mb-4 opacity-20" style={{ color: s.accentColor || "#7c3aed" }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                className="w-24 h-24 mx-auto mb-4 opacity-20"
+                style={{ color: s.accentColor || "#7c3aed" }}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -349,11 +444,19 @@ export default function CollectionProducts1({
                   d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
                 />
               </svg>
-              <h3 className="text-xl font-semibold mb-2" style={{ color: s.textColor || "#374151" }}>
+              <h3
+                className="text-xl font-semibold mb-2"
+                style={{ color: s.textColor || "#374151" }}
+              >
                 No products found
               </h3>
-              <p className="text-sm opacity-70" style={{ color: s.textColor || "#6b7280" }}>
-                {searchQuery ? "Try adjusting your search terms" : "No products in this collection yet"}
+              <p
+                className="text-sm opacity-70"
+                style={{ color: s.textColor || "#6b7280" }}
+              >
+                {searchQuery
+                  ? "Try adjusting your search terms"
+                  : "No products in this collection yet"}
               </p>
             </div>
           )}
@@ -369,11 +472,16 @@ export default function CollectionProducts1({
               >
                 Previous
               </button>
-              <span className="px-4 py-2" style={{ color: s.textColor || "#374151" }}>
+              <span
+                className="px-4 py-2"
+                style={{ color: s.textColor || "#374151" }}
+              >
                 Page {currentPage} of {pagination.total_pages}
               </span>
               <button
-                onClick={() => setCurrentPage((p) => Math.min(pagination.total_pages, p + 1))}
+                onClick={() =>
+                  setCurrentPage((p) => Math.min(pagination.total_pages, p + 1))
+                }
                 disabled={currentPage === pagination.total_pages}
                 className="px-4 py-2 rounded-lg border disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
                 style={{ borderColor: `${s.accentColor || "#7c3aed"}30` }}

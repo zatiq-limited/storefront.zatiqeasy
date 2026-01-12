@@ -55,7 +55,7 @@ export default function CollectionBanner2({
         }}
       />
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container">
         <div
           className={`grid lg:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center ${
             s.imagePosition === "left" ? "lg:grid-flow-col-dense" : ""
