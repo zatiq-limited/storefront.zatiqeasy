@@ -55,7 +55,7 @@ export function BasicHomePage() {
 
   // Fetch products and categories to populate the store
   // sortByStock: false to preserve original API order
-  useShopInventories(
+  const { isLoading: isInventoriesLoading } = useShopInventories(
     { shopUuid: shopDetails?.shop_uuid ?? "" },
     { enabled: !!shopDetails?.shop_uuid, sortByStock: false }
   );
@@ -96,7 +96,7 @@ export function BasicHomePage() {
 
         {/* Main Content - Products */}
         <div className="xl:col-span-4">
-          <InventoryProducts />
+          <InventoryProducts isInventoriesLoading={isInventoriesLoading} />
         </div>
       </div>
 

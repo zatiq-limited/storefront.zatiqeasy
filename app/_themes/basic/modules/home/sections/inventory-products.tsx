@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import type { Product } from "@/stores/productsStore";
 import { useProductsStore } from "@/stores/productsStore";
 import { useShopStore } from "@/stores/shopStore";
@@ -13,6 +13,7 @@ import { AlertCircle } from "lucide-react";
 import { AnimatePresence } from "framer-motion";
 import { ROUTES } from "@/lib/constants";
 import { useTranslation } from "react-i18next";
+import { useShallowSearchParams } from "@/lib/utils/shallow-routing";
 
 // Constants
 const MAX_PRODUCTS_PER_PAGE = 12;
@@ -21,10 +22,14 @@ const MAX_PRODUCTS_PER_PAGE = 12;
  * Inventory Products Component
  * Displays product grid with sorting and pagination
  */
-export function InventoryProducts() {
+interface InventoryProductsProps {
+  isInventoriesLoading?: boolean;
+}
+
+export function InventoryProducts({ isInventoriesLoading }: InventoryProductsProps = {}) {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const router = useRouter();
-  const searchParams = useSearchParams();
+  const searchParams = useShallowSearchParams(); // Use shallow params for instant updates
   const { t } = useTranslation();
 
   // Get inventory state using direct selectors (avoiding getter issues)
@@ -33,6 +38,10 @@ export function InventoryProducts() {
   const isLoading = useProductsStore((state) => state.isLoading);
   const setFilters = useProductsStore((state) => state.setFilters);
   const categories = useProductsStore((state) => state.categories);
+
+  // Consider loading if: store says loading, OR parent says inventories are loading, OR no data yet
+  const hasData = products.length > 0 || categories.length > 0;
+  const isActuallyLoading = isLoading || isInventoriesLoading || !hasData;
 
   // Sync URL params with store filters
   const selectedCategory = searchParams.get("selected_category");
@@ -194,7 +203,7 @@ export function InventoryProducts() {
           </div>
         ) : (
           <div>
-            {isLoading ? (
+            {isActuallyLoading ? (
               <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4">
                 {[...Array(12)].map((_, index) => (
                   <ProductSkeleton key={index} />

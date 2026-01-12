@@ -1,11 +1,15 @@
 "use client";
 
-import { useMemo, useCallback, useState } from "react";
-import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { useMemo, useCallback } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import { useProductsStore, Category } from "@/stores/productsStore";
 import { useShopStore } from "@/stores";
 import { useShopCategories } from "@/hooks";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  useShallowSearchParams,
+  shallowReplace,
+} from "@/lib/utils/shallow-routing";
 
 interface SidebarCategoryProps {
   setShowMobileNav?: (value: boolean) => void;
@@ -14,9 +18,9 @@ interface SidebarCategoryProps {
 
 /**
  * SidebarCategory Component
- * Matches old project's implementation from sidebar-category.tsx
- * Uses local state for drilling down into subcategories (no URL change)
- * Only navigates when selecting a category to filter products
+ * Uses URL params as single source of truth (matching category-horizontal-list.tsx):
+ * - category_id: tracks which parent's subcategories we're viewing (navigation)
+ * - selected_category: tracks the selected category for filtering products
  */
 export function SidebarCategory({
   setShowMobileNav,
@@ -24,12 +28,9 @@ export function SidebarCategory({
 }: SidebarCategoryProps) {
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const searchParams = useShallowSearchParams(); // Use custom hook for instant updates
   const storeCategories = useProductsStore((state) => state.categories);
   const { shopDetails } = useShopStore();
-
-  // Local state for drilling down into subcategories (no URL change)
-  const [drillDownCategoryId, setDrillDownCategoryId] = useState<string | null>(null);
 
   // Fetch categories if store is empty (handles page reload scenario)
   const { data: fetchedCategories, isLoading } = useShopCategories(
@@ -48,18 +49,19 @@ export function SidebarCategory({
 
   const baseUrl = shopDetails?.baseUrl || "";
 
-  // URL params for selected category (filtering)
+  // URL params - matching category-horizontal-list.tsx
+  const categoryIdParam = searchParams.get("category_id");
   const selectedCategory =
     searchParams.get("selected_category") || searchParams.get("category");
 
   // Page detection
   const isProductsPage = pathname.endsWith("products");
 
-  // Get current drill-down category from local state
+  // Get current root category from URL (derived from category_id param)
   const currentRootCategory = useMemo(() => {
-    if (!drillDownCategoryId) return null;
-    return categories.find((cat) => String(cat.id) === drillDownCategoryId) || null;
-  }, [drillDownCategoryId, categories]);
+    if (!categoryIdParam) return null;
+    return categories.find((cat) => String(cat.id) === categoryIdParam) || null;
+  }, [categoryIdParam, categories]);
 
   // Get the visible category list based on current drill-down
   const categoryList = useMemo(() => {
@@ -73,7 +75,7 @@ export function SidebarCategory({
     return categories.filter((cat) => !cat.parent_id);
   }, [currentRootCategory, categories]);
 
-  // Handle category click
+  // Handle category click - matching category-horizontal-list.tsx logic
   const handleCategoryClick = useCallback(
     (category: Category) => {
       const hasSubcategories = categories.some(
@@ -81,20 +83,28 @@ export function SidebarCategory({
       );
 
       if (hasSubcategories) {
-        // Drill down to show subcategories (local state only, no navigation)
-        setDrillDownCategoryId(String(category.id));
+        // Category has subcategories - drill down using URL params
+        // Use shallow update for instant category switching
+        const params = new URLSearchParams(searchParams.toString());
+        params.set("category_id", String(category.id));
+        params.set("selected_category", String(category.id));
+        shallowReplace(`${pathname}?${params.toString()}`);
       } else {
-        // Leaf category - apply filter and navigate
+        // Leaf category - apply filter
         if (isBasic) {
           // Basic theme: stay on current page and update params
           const params = new URLSearchParams(searchParams.toString());
           params.set("selected_category", String(category.id));
+          // Keep category_id if we're inside a parent category
           if (currentRootCategory?.id) {
             params.set("category_id", String(currentRootCategory.id));
           } else if (category.parent_id) {
             params.set("category_id", String(category.parent_id));
+          } else {
+            // Root level leaf category: only selected_category
+            params.delete("category_id");
           }
-          router.replace(`${pathname}?${params.toString()}`);
+          shallowReplace(`${pathname}?${params.toString()}`);
         } else {
           // Luxura/other themes: navigate to category page with filtering
           const parentId = currentRootCategory?.id || category.parent_id;
@@ -108,16 +118,24 @@ export function SidebarCategory({
     [categories, currentRootCategory, baseUrl, router, setShowMobileNav, searchParams, pathname, isBasic]
   );
 
-  // Handle back button - go up one level in local state
+  // Handle back button - go up one level using URL params
   const handleBackBtn = useCallback(() => {
+    // Use shallow update to avoid RSC refetch
+    const params = new URLSearchParams(searchParams.toString());
+
     if (currentRootCategory?.parent_id) {
       // Go to parent category
-      setDrillDownCategoryId(String(currentRootCategory.parent_id));
+      params.set("category_id", String(currentRootCategory.parent_id));
+      params.set("selected_category", String(currentRootCategory.parent_id));
+      shallowReplace(`${pathname}?${params.toString()}`);
     } else {
-      // Go back to root
-      setDrillDownCategoryId(null);
+      // Go back to root - clear category params
+      params.delete("category_id");
+      params.delete("selected_category");
+      const queryString = params.toString();
+      shallowReplace(queryString ? `${pathname}?${queryString}` : pathname);
     }
-  }, [currentRootCategory]);
+  }, [currentRootCategory, searchParams, pathname]);
 
   // Handle "All [Category]" click - filter by parent category
   const handleAllCategoryClick = useCallback(
@@ -125,10 +143,11 @@ export function SidebarCategory({
       if (category) {
         if (isBasic) {
           // Basic theme: stay on current page and update params
+          // Use shallow update to avoid RSC refetch
           const params = new URLSearchParams(searchParams.toString());
           params.set("selected_category", String(category.id));
           params.set("category_id", String(category.id));
-          router.replace(`${pathname}?${params.toString()}`);
+          shallowReplace(`${pathname}?${params.toString()}`);
         } else {
           // Other themes: navigate to category page with filtering
           router.push(
@@ -144,11 +163,22 @@ export function SidebarCategory({
     [baseUrl, router, setShowMobileNav, isBasic, searchParams, pathname]
   );
 
-  // Handle "All products" click
+  // Handle "All products" click - clear category filters
   const handleAllProductsClick = useCallback(() => {
+    if (isBasic) {
+      // Basic theme: stay on current page and clear category params
+      // Use shallow update to avoid RSC refetch
+      const params = new URLSearchParams(searchParams.toString());
+      params.delete("category_id");
+      params.delete("selected_category");
+      const queryString = params.toString();
+      shallowReplace(queryString ? `${pathname}?${queryString}` : pathname);
+    } else {
+      // Other themes: navigate to products page
+      router.push(`${baseUrl}/products`);
+    }
     setShowMobileNav?.(false);
-    router.push(`${baseUrl}/products`);
-  }, [baseUrl, router, setShowMobileNav]);
+  }, [baseUrl, router, setShowMobileNav, isBasic, searchParams, pathname]);
 
   // Show skeleton while loading
   if (isLoading && storeCategories.length === 0) {
