@@ -16,6 +16,7 @@ import { VariantSelectorModal } from "@/components/products/variant-selector-mod
 import { CategoryHorizontalList } from "@/components/features/category/category-horizontal-list";
 import { SelloraProductCard } from "../../components/cards";
 import { GridContainer, Pagination } from "../../components/core";
+import { SelloraThemeWrapper } from "../../components/sellora-theme-wrapper";
 
 const PRODUCTS_PER_PAGE = 12;
 
@@ -62,7 +63,7 @@ export function SelloraCategoryPage() {
   );
 
   return (
-    <>
+    <SelloraThemeWrapper>
       <div className="container pt-16 pb-10">
         {/* Variant Selector Modal */}
         <VariantSelectorModal
@@ -138,7 +139,7 @@ export function SelloraCategoryPage() {
           theme="Sellora"
         />
       </div>
-    </>
+    </SelloraThemeWrapper>
   );
 }
 

@@ -15,6 +15,7 @@ import { CartFloatingBtn } from "@/components/features/cart/cart-floating-btn";
 import { ImageLightbox } from "@/components/products/image-lightbox";
 import { cn, titleCase, getDetailPageImageUrl } from "@/lib/utils";
 import { useProductDetails } from "@/hooks";
+import { SelloraThemeWrapper } from "../../components/sellora-theme-wrapper";
 import {
   ProductPricing,
   ProductVariants,
@@ -334,7 +335,7 @@ export function SelloraProductDetailPage({
   }
 
   return (
-    <>
+    <SelloraThemeWrapper>
       {/* Image Lightbox */}
       <ImageLightbox
         product={{
@@ -595,7 +596,7 @@ export function SelloraProductDetailPage({
         onClick={() => router.push(`${baseUrl}/checkout`)}
         theme="Sellora"
       />
-    </>
+    </SelloraThemeWrapper>
   );
 }
 

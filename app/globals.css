@@ -4,12 +4,76 @@
 /* Load Tailwind config with safelist */
 @config "../tailwind.config.ts";
 
+/* ========================================
+   PREMIUM FONTS - Self-hosted
+   These fonts are loaded from /public/fonts/
+   ======================================== */
+
+/* Fivo Sans Modern */
+@font-face {
+  font-family: 'Fivo Sans Modern';
+  src: url('/fonts/FivoSansModern/FivoSansModern-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Fivo Sans Modern';
+  src: url('/fonts/FivoSansModern/FivoSansModern-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Fivo Sans Modern';
+  src: url('/fonts/FivoSansModern/FivoSansModern-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Helvetica Now Text */
+@font-face {
+  font-family: 'Helvetica Now Text';
+  src: url('/fonts/HelveticaNow/HelveticaNowText-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Helvetica Now Text';
+  src: url('/fonts/HelveticaNow/HelveticaNowText-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Helvetica Now Text';
+  src: url('/fonts/HelveticaNow/HelveticaNowText-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Prata (self-hosted backup for Google Fonts) */
+@font-face {
+  font-family: 'Prata';
+  src: url('/fonts/Prata/Prata-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-inter);
+  --font-sans: var(--font-dm-sans);
   --font-mono: var(--font-geist-mono);
 
   /* Google Fonts variables */
@@ -32,6 +96,10 @@
   --font-manrope: var(--font-manrope);
   --font-space-grotesk: var(--font-space-grotesk);
   --font-lora: var(--font-lora);
+  --font-prata: var(--font-prata);
+  --font-outfit: var(--font-outfit);
+  --font-unbounded: var(--font-unbounded);
+  --font-special-gothic: var(--font-special-gothic);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -253,6 +321,18 @@
   }
   .font-volkhov {
     font-family: "Volkhov", serif;
+  }
+  .font-prata {
+    font-family: "Prata", serif;
+  }
+  .font-outfit {
+    font-family: "Outfit", sans-serif;
+  }
+  .font-unbounded {
+    font-family: "Unbounded", sans-serif;
+  }
+  .font-special-gothic {
+    font-family: "Special Gothic", sans-serif;
   }
 }
 

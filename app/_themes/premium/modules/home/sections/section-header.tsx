@@ -21,7 +21,7 @@ export function SectionHeader({ title, buttonLink }: SectionHeaderProps) {
     <div className="flex justify-between items-center lg:justify-center">
       <h2
         className="text-center text-black dark:text-blue-zatiq text-[20px] md:text-[36px] xl:text-[46px] font-bold leading-snug lg:leading-[57.50px]"
-        style={{ fontFamily: themeData.secondaryFont || themeData.fontFamily }}
+        style={{ fontFamily: themeData.secondaryFontCss || themeData.primaryFontCss }}
       >
         {title}
       </h2>

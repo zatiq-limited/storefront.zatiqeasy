@@ -13,6 +13,7 @@ import { ThemeRouter } from "@/components/theme-router";
 import ThemeLayout from "@/app/_layouts/theme/layout";
 import { useShopStore } from "@/stores";
 import { getShopFaviconUrl } from "@/lib/utils/shop-helpers";
+import { ThemeFontProvider } from "@/components/providers/theme-font-provider";
 
 interface AppWrapperProps {
   children: React.ReactNode;
@@ -54,6 +55,7 @@ export function AppWrapper({ children }: AppWrapperProps) {
   // For root route and other routes, use ThemeRouter and ThemeLayout
   return (
     <ThemeRouter>
+      <ThemeFontProvider />
       <ThemeLayout>{children}</ThemeLayout>
     </ThemeRouter>
   );

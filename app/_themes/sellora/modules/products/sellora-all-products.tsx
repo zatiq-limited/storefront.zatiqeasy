@@ -18,6 +18,7 @@ import { FallbackImage } from "@/components/ui/fallback-image";
 import { SelloraProductCard } from "../../components/cards";
 import { GridContainer, Pagination } from "../../components/core";
 import { FeaturedCollections } from "../../components/featured-collections";
+import { SelloraThemeWrapper } from "../../components/sellora-theme-wrapper";
 import {
   PriceFilterSection,
   SortBySection,
@@ -153,7 +154,7 @@ export function SelloraAllProducts() {
   }
 
   return (
-    <>
+    <SelloraThemeWrapper>
       {/* Variant Selector Modal */}
       <VariantSelectorModal
         product={selectedProduct}
@@ -300,7 +301,7 @@ export function SelloraAllProducts() {
         onClick={() => router.push(`${baseUrl}/checkout`)}
         theme="Sellora"
       />
-    </>
+    </SelloraThemeWrapper>
   );
 }
 
