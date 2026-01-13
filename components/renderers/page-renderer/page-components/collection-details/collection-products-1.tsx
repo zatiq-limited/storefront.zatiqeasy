@@ -6,12 +6,13 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { convertSettingsKeys } from "@/lib/settings-utils";
 import { useShopStore } from "@/stores";
 import type { CollectionDetails as Collection } from "@/hooks/useCollectionDetails";
 import Link from "next/link";
+import { FallbackImage } from "@/components/ui/fallback-image";
 
 interface Product {
   id: number;
@@ -109,8 +110,32 @@ export default function CollectionProducts1({
   const [viewMode, setViewMode] = useState(s.defaultView || "grid");
   const [sortBy, setSortBy] = useState("newest");
   const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = parseInt(s.productsPerPage || "12", 10);
+
+  // Derived state pattern: track page with the sort/search values it was set with
+  const [pageState, setPageState] = useState<{
+    sortBy: string;
+    searchQuery: string;
+    page: number;
+  }>({
+    sortBy: "newest",
+    searchQuery: "",
+    page: 1,
+  });
+
+  // Derive currentPage: reset to 1 if sort/search changed, otherwise use stored page
+  const currentPage =
+    pageState.sortBy === sortBy && pageState.searchQuery === searchQuery
+      ? pageState.page
+      : 1;
+
+  // Stable setCurrentPage that captures current sort/search
+  const setCurrentPage = useCallback(
+    (page: number) => {
+      setPageState({ sortBy, searchQuery, page });
+    },
+    [sortBy, searchQuery]
+  );
 
   // Get shop_uuid from store
   const shopDetails = useShopStore((state) => state.shopDetails);
@@ -120,7 +145,6 @@ export default function CollectionProducts1({
   const {
     data: productsData,
     isLoading: isProductsLoading,
-    error,
   } = useQuery({
     queryKey: [
       "collection-products",
@@ -152,11 +176,6 @@ export default function CollectionProducts1({
     current_page: 1,
   };
   const isLoading = pageLoading || isProductsLoading;
-
-  // Reset to page 1 when sort or search changes
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [sortBy, searchQuery]);
 
   // Responsive column classes
   const columnClasses = {
@@ -346,41 +365,18 @@ export default function CollectionProducts1({
               {products.map((product) => (
                 <Link
                   key={product.id}
-                  href={`/products/${product.slug || product.id}`}
+                  href={`/products/${product.id}`}
                   className="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300"
                 >
                   {/* Product Image */}
                   <div className="relative aspect-square overflow-hidden bg-gray-100">
-                    {(() => {
-                      const productImage =
-                        product.images?.[0] ||
-                        product.image_url ||
-                        product.image;
-                      return productImage ? (
-                        <img
-                          src={productImage}
-                          alt={product.name}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                          loading="lazy"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center">
-                          <svg
-                            className="w-16 h-16 text-gray-300"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={1.5}
-                              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                            />
-                          </svg>
-                        </div>
-                      );
-                    })()}
+                    <FallbackImage
+                      src={product.images?.[0] || product.image_url || product.image || ""}
+                      alt={product.name}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    />
                     {/* Out of Stock Badge */}
                     {product.quantity !== undefined &&
                       product.quantity <= 0 && (
@@ -465,7 +461,7 @@ export default function CollectionProducts1({
           {s.showPagination && pagination.total_pages > 1 && (
             <div className="mt-12 flex justify-center items-center gap-2">
               <button
-                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                 disabled={currentPage === 1}
                 className="px-4 py-2 rounded-lg border disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
                 style={{ borderColor: `${s.accentColor || "#7c3aed"}30` }}
@@ -480,7 +476,7 @@ export default function CollectionProducts1({
               </span>
               <button
                 onClick={() =>
-                  setCurrentPage((p) => Math.min(pagination.total_pages, p + 1))
+                  setCurrentPage(Math.min(pagination.total_pages, currentPage + 1))
                 }
                 disabled={currentPage === pagination.total_pages}
                 className="px-4 py-2 rounded-lg border disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"

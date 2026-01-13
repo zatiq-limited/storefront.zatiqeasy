@@ -38,12 +38,28 @@ interface Collection {
   created_at: string;
 }
 
+/**
+ * Generate URL-friendly slug from name
+ * Removes special characters, replaces spaces with hyphens
+ * Example: "Men's Fashion" → "mens-fashion"
+ */
+function slugify(name: string): string {
+  if (!name) return "";
+  return name
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, "") // Remove special characters (apostrophes, etc.)
+    .replace(/\s+/g, "-") // Replace spaces with hyphens
+    .replace(/-+/g, "-") // Replace multiple hyphens with single
+    .replace(/^-|-$/g, ""); // Remove leading/trailing hyphens
+}
+
 // Transform category to collection format
 function transformCategoryToCollection(category: Category): Collection {
   return {
     id: category.id,
     name: category.name,
-    slug: category.slug || category.name.toLowerCase().replace(/\s+/g, "-"),
+    slug: category.slug || slugify(category.name),
     description: category.description || "",
     image_url: category.image_url || "/placeholder.jpg",
     banner_url: category.banner_url || category.image_url || "/placeholder.jpg",
@@ -52,7 +68,7 @@ function transformCategoryToCollection(category: Category): Collection {
     children: (category.sub_categories || []).map((child) => ({
       id: child.id,
       name: child.name,
-      slug: child.slug || child.name.toLowerCase().replace(/\s+/g, "-"),
+      slug: child.slug || slugify(child.name),
       image_url: child.image_url || "/placeholder.jpg",
       product_count: child.total_inventories || 0,
     })),
@@ -63,7 +79,7 @@ function transformCategoryToCollection(category: Category): Collection {
 // Find category by slug in nested structure
 function findCategoryBySlug(categories: Category[], slug: string): Category | null {
   for (const category of categories) {
-    const categorySlug = category.slug || category.name.toLowerCase().replace(/\s+/g, "-");
+    const categorySlug = category.slug || slugify(category.name);
     if (categorySlug === slug) {
       return category;
     }

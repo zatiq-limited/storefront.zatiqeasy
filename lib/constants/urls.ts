@@ -40,10 +40,10 @@ export const API_ROUTES = {
  * Placeholder images
  */
 export const PLACEHOLDER_IMAGES = {
-  PRODUCT: "/placeholder-product.png",
+  PRODUCT: "/placeholder-product.svg",
   PRODUCT_SVG: "/placeholder-product.svg",
-  AVATAR: "/placeholder-avatar.png",
-  BANNER: "/placeholder-banner.png",
+  AVATAR: "/placeholder.jpg",
+  BANNER: "/placeholder.jpg",
 } as const;
 
 /**

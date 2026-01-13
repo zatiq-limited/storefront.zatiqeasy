@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { ZoomIn, Download, Play } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { PLACEHOLDER_IMAGES } from "@/lib/constants/urls";
 import { ProductPricing } from "@/components/products/product-pricing";
 import { ProductDescription } from "@/components/products/product-description";
 import { ProductVariants } from "@/components/products/product-variants";
@@ -128,9 +129,9 @@ export const BasicProductDetailPage = ({
   // Selected image URL
   const selectedImageUrl = useMemo(() => {
     if (product?.images && product.images.length !== 0) {
-      return product.images[selectedImageIdx] || product.image_url || "";
+      return product.images[selectedImageIdx] || product.image_url || PLACEHOLDER_IMAGES.PRODUCT;
     }
-    return product?.image_url || "";
+    return product?.image_url || PLACEHOLDER_IMAGES.PRODUCT;
   }, [product, selectedImageIdx]);
 
   // Product pricing
