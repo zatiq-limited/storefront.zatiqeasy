@@ -3,9 +3,8 @@
  * Track analytics events (Facebook Pixel, GTM, TikTok, etc.)
  */
 
+import { apiClient } from "../client";
 import type { AnalyticsEvent, AnalyticsResponse } from "../types";
-
-const ANALYTICS_API_BASE = process.env.NEXT_PUBLIC_API_URL || "/api/analytics";
 
 export const analyticsService = {
   /**
@@ -14,20 +13,10 @@ export const analyticsService = {
   async trackEvent(event: AnalyticsEvent): Promise<AnalyticsResponse> {
     try {
       // In production, send to analytics API
-      const response = await fetch(`${ANALYTICS_API_BASE}/track`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...event,
-          timestamp: event.timestamp || Date.now(),
-        }),
+      await apiClient.post("/api/analytics/track", {
+        ...event,
+        timestamp: event.timestamp || Date.now(),
       });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
 
       return {
         success: true,

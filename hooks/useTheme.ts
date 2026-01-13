@@ -18,15 +18,20 @@ async function fetchTheme(shopId?: string | number) {
 }
 
 export function useTheme() {
-  const { setTheme } = useThemeStore();
+  const { theme: storeTheme, setTheme } = useThemeStore();
   const shopDetails = useShopStore((state) => state.shopDetails);
 
   // Get shop_id from store
   const shopId = shopDetails?.id;
 
+  // Check if we have theme data in store for initialData
+  const hasStoreTheme = storeTheme && Object.keys(storeTheme).length > 0;
+
   const query = useQuery({
     queryKey: ["theme", shopId],
     queryFn: () => fetchTheme(shopId),
+    // Use store data as initialData for instant page transitions
+    initialData: hasStoreTheme ? storeTheme : undefined,
     ...CACHE_TIMES.STATIC,
     ...DEFAULT_QUERY_OPTIONS,
     // Only fetch when we have a shop ID

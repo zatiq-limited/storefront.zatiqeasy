@@ -26,10 +26,13 @@ export function useShopCategories(
   options: UseShopCategoriesOptions = {}
 ) {
   const { enabled = true, syncToStore = true } = options;
-  const { setCategories } = useProductsStore();
+  const { setCategories, categories: storeCategories } = useProductsStore();
 
   // Build query key
   const queryKey = ["shop-categories", params.shopUuid, params.ids];
+
+  // Use store categories as initial data to prevent unnecessary fetches
+  const hasStoreData = storeCategories && storeCategories.length > 0;
 
   const query = useQuery({
     queryKey,
@@ -60,6 +63,8 @@ export function useShopCategories(
       return categories;
     },
     enabled: enabled && !!params.shopUuid,
+    // Use store data as initial data to prevent loading state on navigation
+    initialData: hasStoreData ? storeCategories : undefined,
     ...CACHE_TIMES.SHOP_CATEGORIES,
     ...DEFAULT_QUERY_OPTIONS,
   });

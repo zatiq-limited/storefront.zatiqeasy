@@ -61,6 +61,9 @@ async function fetchProductsPageConfig(): Promise<ProductsPageConfigResponse> {
 export function useProducts() {
   const {
     filters,
+    products: storeProducts,
+    pagination: storePagination,
+    productsPageConfig: storePageConfig,
     setProducts,
     setPagination,
     setFilters,
@@ -69,10 +72,18 @@ export function useProducts() {
     setError,
   } = useProductsStore();
 
+  // Check if we have store data for initialData
+  const hasStoreProducts = storeProducts && storeProducts.length > 0;
+  const hasStorePageConfig = storePageConfig && Object.keys(storePageConfig).length > 0;
+
   // Products query with shallow comparison for filters
   const productsQuery = useQuery({
     queryKey: ["products", filters],
     queryFn: () => fetchProducts(filters),
+    // Use store data as initialData for instant page transitions
+    initialData: hasStoreProducts && storePagination
+      ? { success: true, data: { products: storeProducts, pagination: storePagination } }
+      : undefined,
     ...CACHE_TIMES.PRODUCTS,
     ...DEFAULT_QUERY_OPTIONS,
     placeholderData: (previousData) => previousData, // Keep previous data while fetching
@@ -82,6 +93,9 @@ export function useProducts() {
   const pageConfigQuery = useQuery({
     queryKey: ["products-page-config"],
     queryFn: fetchProductsPageConfig,
+    initialData: hasStorePageConfig
+      ? { success: true, data: storePageConfig as ProductsPageConfigResponse["data"] }
+      : undefined,
     ...CACHE_TIMES.PAGE_CONFIG,
     ...DEFAULT_QUERY_OPTIONS,
   });

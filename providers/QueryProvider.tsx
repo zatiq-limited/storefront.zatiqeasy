@@ -10,10 +10,13 @@ export function QueryProvider({ children }: { children: React.ReactNode }) {
       new QueryClient({
         defaultOptions: {
           queries: {
-            staleTime: 60 * 1000, // 1 minute
+            // Don't set global staleTime - let each query use CACHE_TIMES config
+            // This allows longer cache times for stable data (profile, categories)
             refetchOnWindowFocus: false,
             // Prevent refetching on component remount if data is already cached
             refetchOnMount: false,
+            // Prevent refetching on reconnect
+            refetchOnReconnect: false,
           },
         },
       })

@@ -92,18 +92,16 @@ export function useCollections() {
       return response.json();
     },
     enabled: !!shopUuid,
-    staleTime: 1000 * 60 * 2, // 2 minutes
-    gcTime: 1000 * 60 * 10, // 10 minutes
-    refetchOnWindowFocus: false,
+    ...CACHE_TIMES.COLLECTIONS,
+    ...DEFAULT_QUERY_OPTIONS,
   });
 
   // Collections page config query - fetched once and cached longer
   const pageConfigQuery = useQuery({
     queryKey: ["collections-page-config"],
     queryFn: fetchCollectionsPageConfig,
-    staleTime: 1000 * 60 * 5, // 5 minutes
-    gcTime: 1000 * 60 * 30, // 30 minutes
-    refetchOnWindowFocus: false,
+    ...CACHE_TIMES.PAGE_CONFIG,
+    ...DEFAULT_QUERY_OPTIONS,
   });
 
   return {
