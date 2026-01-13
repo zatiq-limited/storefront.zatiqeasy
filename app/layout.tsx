@@ -32,7 +32,7 @@ import { QueryProvider } from "@/providers/QueryProvider";
 import I18nProvider from "@/providers/I18nProvider";
 import { Toaster } from "react-hot-toast";
 import { getShopIdentifier } from "@/lib/utils/shop-identifier";
-import { shopService } from "@/lib/api/services/shop.service";
+import { getShopProfileCached } from "@/lib/api/services/shop.service";
 import { ShopProvider } from "@/app/providers/shop-provider";
 import { AppWrapper } from "@/components/app-wrapper";
 import {
@@ -232,7 +232,7 @@ export async function generateMetadata(): Promise<Metadata> {
   // Get shop identifier
   const shopIdentifier = await getShopIdentifier();
 
-  // Try to fetch shop profile for metadata
+  // Try to fetch shop profile for metadata (uses React cache for deduplication)
   let shopProfile = null;
   if (
     shopIdentifier.shop_id ||
@@ -240,7 +240,7 @@ export async function generateMetadata(): Promise<Metadata> {
     shopIdentifier.subdomain
   ) {
     try {
-      shopProfile = await shopService.getProfile(shopIdentifier);
+      shopProfile = await getShopProfileCached(shopIdentifier);
     } catch {
       // Fallback to default metadata
     }
@@ -298,6 +298,7 @@ export default async function RootLayout({
   const shopIdentifier = await getShopIdentifier();
 
   // Fetch shop profile if shop_id, domain, or subdomain is detected
+  // Uses React cache for deduplication with generateMetadata
   let shopProfile = null;
   if (
     shopIdentifier.shop_id ||
@@ -305,7 +306,7 @@ export default async function RootLayout({
     shopIdentifier.subdomain
   ) {
     try {
-      const profile = await shopService.getProfile(shopIdentifier);
+      const profile = await getShopProfileCached(shopIdentifier);
       if (profile) {
         // Set baseUrl: empty for domain/subdomain access (production)
         // This ensures links like /products work correctly
