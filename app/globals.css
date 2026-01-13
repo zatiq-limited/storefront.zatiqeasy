@@ -4,7 +4,7 @@
    ======================================== */
 
 /* Special Gothic (Sellora Theme) */
-@import url('https://fonts.googleapis.com/css2?family=Special+Gothic:wght@400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Special+Gothic:wght@400;500;600;700&display=swap");
 
 @import "tailwindcss";
 @import "tw-animate-css";
@@ -19,24 +19,25 @@
 
 /* Fivo Sans Modern */
 @font-face {
-  font-family: 'Fivo Sans Modern';
-  src: url('/fonts/FivoSansModern/FivoSansModern-Regular.otf') format('opentype');
+  font-family: "Fivo Sans Modern";
+  src: url("/fonts/FivoSansModern/FivoSansModern-Regular.otf")
+    format("opentype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Fivo Sans Modern';
-  src: url('/fonts/FivoSansModern/FivoSansModern-Medium.otf') format('opentype');
+  font-family: "Fivo Sans Modern";
+  src: url("/fonts/FivoSansModern/FivoSansModern-Medium.otf") format("opentype");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Fivo Sans Modern';
-  src: url('/fonts/FivoSansModern/FivoSansModern-Bold.otf') format('opentype');
+  font-family: "Fivo Sans Modern";
+  src: url("/fonts/FivoSansModern/FivoSansModern-Bold.otf") format("opentype");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -44,24 +45,25 @@
 
 /* Helvetica Now Text */
 @font-face {
-  font-family: 'Helvetica Now Text';
-  src: url('/fonts/HelveticaNow/HelveticaNowText-Regular.ttf') format('truetype');
+  font-family: "Helvetica Now Text";
+  src: url("/fonts/HelveticaNow/HelveticaNowText-Regular.ttf")
+    format("truetype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Helvetica Now Text';
-  src: url('/fonts/HelveticaNow/HelveticaNowText-Medium.woff2') format('woff2');
+  font-family: "Helvetica Now Text";
+  src: url("/fonts/HelveticaNow/HelveticaNowText-Medium.woff2") format("woff2");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Helvetica Now Text';
-  src: url('/fonts/HelveticaNow/HelveticaNowText-Bold.woff2') format('woff2');
+  font-family: "Helvetica Now Text";
+  src: url("/fonts/HelveticaNow/HelveticaNowText-Bold.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -69,8 +71,8 @@
 
 /* Prata (self-hosted backup for Google Fonts) */
 @font-face {
-  font-family: 'Prata';
-  src: url('/fonts/Prata/Prata-Regular.ttf') format('truetype');
+  font-family: "Prata";
+  src: url("/fonts/Prata/Prata-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -394,7 +396,9 @@ section[id^="hero-1"] .swiper-pagination-progressbar {
   }
 }
 
-section[id^="hero-1"] .swiper-pagination-progressbar .swiper-pagination-progressbar-fill {
+section[id^="hero-1"]
+  .swiper-pagination-progressbar
+  .swiper-pagination-progressbar-fill {
   background: rgba(255, 255, 255, 0.6) !important;
   border-radius: 9999px !important;
   transition: width 0.7s ease-out !important;

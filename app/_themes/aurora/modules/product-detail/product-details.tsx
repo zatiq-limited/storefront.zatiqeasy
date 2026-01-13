@@ -112,7 +112,8 @@ const extractVideoId = (url: string): string => {
   if (match && match[1]) return match[1];
 
   // Fallback pattern for other YouTube URL formats
-  const fallbackPattern = /(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([^&?]+)/;
+  const fallbackPattern =
+    /(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([^&?]+)/;
   match = url.match(fallbackPattern);
   return match ? match[1] : "";
 };
@@ -159,7 +160,8 @@ export function ProductDetails({ product }: ProductDetailsProps) {
   const [selectedImageIdx, setSelectedImageIdx] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [quantity, setQuantity] = useState(1);
-  const [selectedRelatedProduct, setSelectedRelatedProduct] = useState<Product | null>(null);
+  const [selectedRelatedProduct, setSelectedRelatedProduct] =
+    useState<Product | null>(null);
 
   // Initialize selected variants - prioritize cart variants, then defaults
   const [selectedVariants, setSelectedVariants] = useState<

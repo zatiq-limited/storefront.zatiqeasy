@@ -29,16 +29,16 @@ import { GridContainer } from "../../components/core";
 import { LuxuraProductCard } from "../../components/cards";
 import { SectionHeader } from "../home/sections/section-header";
 import { formatPrice, titleCase } from "@/lib/utils/formatting";
-import { cn, getDetailPageImageUrl, getInventoryThumbImageUrl } from "@/lib/utils";
+import {
+  cn,
+  getDetailPageImageUrl,
+  getInventoryThumbImageUrl,
+} from "@/lib/utils";
 import { getThemeData } from "@/lib/utils/theme-constants";
 import { FallbackImage } from "@/components/ui/fallback-image";
 import type { VariantsState } from "@/types/cart.types";
 import { useProductDetails, useShopInventories } from "@/hooks";
 import type { Product } from "@/stores/productsStore";
-
-interface LuxuraProductDetailPageProps {
-  handle?: string;
-}
 
 // Extract YouTube video ID from URL (supports regular, shorts, and embed URLs)
 function extractVideoId(url: string): string | null {
@@ -65,7 +65,8 @@ function extractVideoId(url: string): string | null {
   if (match && match[1]) return match[1];
 
   // Fallback pattern for other YouTube URL formats
-  const fallbackPattern = /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/;
+  const fallbackPattern =
+    /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/;
   match = url.match(fallbackPattern);
   return match ? match[1] : null;
 }
@@ -86,7 +87,10 @@ export function LuxuraProductDetailPage() {
   // sortByStock: false to preserve original API order
   const { data: fetchedProducts } = useShopInventories(
     { shopUuid: shopDetails?.shop_uuid || "" },
-    { enabled: storeProducts.length === 0 && !!shopDetails?.shop_uuid, sortByStock: false }
+    {
+      enabled: storeProducts.length === 0 && !!shopDetails?.shop_uuid,
+      sortByStock: false,
+    }
   );
 
   // Use store products if available, otherwise use fetched products
@@ -190,39 +194,41 @@ export function LuxuraProductDetailPage() {
     if (!product) return;
 
     // Facebook Pixel tracking
-    if (typeof window !== 'undefined' && (window as any).fbq) {
-      (window as any).fbq('track', 'ViewContent', {
+    if (typeof window !== "undefined" && (window as any).fbq) {
+      (window as any).fbq("track", "ViewContent", {
         content_name: product.name,
         content_ids: [product.id?.toString()],
-        content_type: 'product',
+        content_type: "product",
         value: product.price,
-        currency: shopDetails?.country_currency || 'USD',
+        currency: shopDetails?.country_currency || "USD",
       });
     }
 
     // Google Tag Manager tracking
-    if (typeof window !== 'undefined' && (window as any).dataLayer) {
+    if (typeof window !== "undefined" && (window as any).dataLayer) {
       (window as any).dataLayer.push({
-        event: 'view_item',
+        event: "view_item",
         ecommerce: {
-          items: [{
-            item_id: product.id?.toString(),
-            item_name: product.name,
-            price: product.price,
-            currency: shopDetails?.country_currency || 'USD',
-          }]
-        }
+          items: [
+            {
+              item_id: product.id?.toString(),
+              item_name: product.name,
+              price: product.price,
+              currency: shopDetails?.country_currency || "USD",
+            },
+          ],
+        },
       });
     }
 
     // TikTok Pixel tracking
-    if (typeof window !== 'undefined' && (window as any).ttq) {
-      (window as any).ttq.track('ViewContent', {
+    if (typeof window !== "undefined" && (window as any).ttq) {
+      (window as any).ttq.track("ViewContent", {
         content_id: product.id?.toString(),
         content_name: product.name,
-        content_type: 'product',
+        content_type: "product",
         price: product.price,
-        currency: shopDetails?.country_currency || 'USD',
+        currency: shopDetails?.country_currency || "USD",
       });
     }
   }, [product, shopDetails?.country_currency]);
@@ -565,7 +571,10 @@ export function LuxuraProductDetailPage() {
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        handleDownloadImage(images[selectedImageIndex], selectedImageIndex);
+                        handleDownloadImage(
+                          images[selectedImageIndex],
+                          selectedImageIndex
+                        );
                       }}
                       className="bg-blue-zatiq/15 backdrop-blur-sm p-3 rounded-full cursor-pointer hover:bg-blue-zatiq/25 transition-all duration-200 shadow-lg"
                       aria-label="Download image"
@@ -626,7 +635,10 @@ export function LuxuraProductDetailPage() {
                         height={200}
                         className="w-full h-full object-cover rounded-lg md:rounded-xl"
                       />
-                      <Play size={16} className="absolute top-1/2 left-1/2 text-white translate-x-[-50%] translate-y-[-50%]" />
+                      <Play
+                        size={16}
+                        className="absolute top-1/2 left-1/2 text-white translate-x-[-50%] translate-y-[-50%]"
+                      />
                     </div>
                   )}
 
@@ -669,7 +681,11 @@ export function LuxuraProductDetailPage() {
                             {key}
                           </div>
                           <div className="col-span-3 text-right text-[#374151] dark:text-gray-100">
-                            {(product.custom_fields as Record<string, string>)[key]}
+                            {
+                              (product.custom_fields as Record<string, string>)[
+                                key
+                              ]
+                            }
                           </div>
                         </li>
                       ))}
@@ -704,9 +720,8 @@ export function LuxuraProductDetailPage() {
             <h1
               className="text-[20px] md:text-4xl text-blue-zatiq"
               style={{
-                fontFamily: getThemeData(
-                  shopDetails?.shop_theme?.theme_name
-                ).secondaryFont,
+                fontFamily: getThemeData(shopDetails?.shop_theme?.theme_name)
+                  .secondaryFont,
               }}
             >
               {titleCase(product.name)}
@@ -842,7 +857,11 @@ export function LuxuraProductDetailPage() {
                             {key}
                           </div>
                           <div className="col-span-3 text-right text-[#374151] dark:text-gray-100">
-                            {(product.custom_fields as Record<string, string>)[key]}
+                            {
+                              (product.custom_fields as Record<string, string>)[
+                                key
+                              ]
+                            }
                           </div>
                         </li>
                       ))}

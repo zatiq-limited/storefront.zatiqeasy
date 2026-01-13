@@ -54,7 +54,8 @@ function extractVideoId(url: string): string | null {
   if (match && match[1]) return match[1];
 
   // Fallback pattern for other YouTube URL formats
-  const fallbackPattern = /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/;
+  const fallbackPattern =
+    /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/;
   match = url.match(fallbackPattern);
   return match ? match[1] : null;
 }
@@ -217,14 +218,22 @@ export function SelloraProductDetailPage({
   // Auto-select variants when product loads
   // Priority: 1. From cart (if product is in cart), 2. First variant of each mandatory type
   useEffect(() => {
-    if (!product || !variant_types || variant_types.length === 0 || hasInitializedVariants.current) {
+    if (
+      !product ||
+      !variant_types ||
+      variant_types.length === 0 ||
+      hasInitializedVariants.current
+    ) {
       return;
     }
 
     // Find the first cart item for this product
     const firstCartItem = cartProducts[0];
 
-    if (firstCartItem?.selectedVariants && Object.keys(firstCartItem.selectedVariants).length > 0) {
+    if (
+      firstCartItem?.selectedVariants &&
+      Object.keys(firstCartItem.selectedVariants).length > 0
+    ) {
       // Restore variants from cart
       hasInitializedVariants.current = true;
       Object.entries(firstCartItem.selectedVariants).forEach(
@@ -235,7 +244,9 @@ export function SelloraProductDetailPage({
           // Find the variant in the product's variant types
           const variantType = variant_types.find((vt) => vt.id === typeId);
           if (variantType?.variants) {
-            const variant = variantType.variants.find((v) => v.id === variantId);
+            const variant = variantType.variants.find(
+              (v) => v.id === variantId
+            );
             if (variant) {
               handleVariantSelect(typeId, {
                 variant_type_id: variantState.variant_type_id,

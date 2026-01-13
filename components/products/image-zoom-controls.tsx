@@ -1,7 +1,6 @@
 "use client";
 
-import React from "react";
-import { ZoomIn, ZoomOut } from "lucide-react";
+import { ZoomIn } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface ImageZoomControlsProps {

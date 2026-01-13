@@ -60,7 +60,9 @@ const extractVideoId = (url: string) => {
   const regExp =
     /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
   const fallbackMatch = url.match(regExp);
-  return fallbackMatch && fallbackMatch[7].length === 11 ? fallbackMatch[7] : null;
+  return fallbackMatch && fallbackMatch[7].length === 11
+    ? fallbackMatch[7]
+    : null;
 };
 
 // Title case helper
@@ -160,7 +162,8 @@ export const BasicProductDetailPage = ({
   // stockQuantity is already from hook
   // isInStock is already from hook
   const isStockOut = isStockMaintain && !isInStock;
-  const isStockNotAvailable = isStockMaintain && (!isInStock || quantity >= stockQuantity);
+  const isStockNotAvailable =
+    isStockMaintain && (!isInStock || quantity >= stockQuantity);
 
   // Helper to check if two variant selections match (same as premium theme)
   const isSameVariantsCombination = useCallback(

@@ -53,7 +53,8 @@ function extractVideoId(url: string): string | null {
   if (match && match[1]) return match[1];
 
   // Fallback pattern for other YouTube URL formats
-  const fallbackPattern = /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/;
+  const fallbackPattern =
+    /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/;
   match = url.match(fallbackPattern);
   return match ? match[1] : null;
 }
@@ -223,7 +224,8 @@ export function PremiumProductDetailPage({
   const isStockMaintain = shopDetails?.isStockMaintain !== false;
   // Check stock status - only if stock maintenance is enabled
   const isStockOut = isStockMaintain && product.quantity === 0;
-  const isStockNotAvailable = isStockMaintain && (isStockOut || quantity >= (product.quantity || 0));
+  const isStockNotAvailable =
+    isStockMaintain && (isStockOut || quantity >= (product.quantity || 0));
 
   // Calculate pricing
   const currentPrice = price || 0;
