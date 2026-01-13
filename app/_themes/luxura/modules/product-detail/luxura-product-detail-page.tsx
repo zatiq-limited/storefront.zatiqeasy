@@ -10,9 +10,12 @@ import {
   ShoppingCart,
   ChevronLeft,
   ChevronRight,
+  Download,
+  ZoomIn,
 } from "lucide-react";
 import { useShopStore } from "@/stores/shopStore";
 import { useProductsStore } from "@/stores/productsStore";
+import { ImageLightbox } from "@/components/products/image-lightbox";
 import {
   useCartStore,
   selectTotalItems,
@@ -27,6 +30,40 @@ import { cn } from "@/lib/utils";
 import type { VariantsState } from "@/types/cart.types";
 import { useProductDetails, useShopInventories } from "@/hooks";
 import type { Product } from "@/stores/productsStore";
+
+interface LuxuraProductDetailPageProps {
+  handle?: string;
+}
+
+// Extract YouTube video ID from URL (supports regular, shorts, and embed URLs)
+function extractVideoId(url: string): string | null {
+  if (!url) return null;
+
+  // Handle YouTube Shorts URLs: youtube.com/shorts/VIDEO_ID
+  const shortsPattern = /youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/;
+  let match = url.match(shortsPattern);
+  if (match && match[1]) return match[1];
+
+  // Handle short URLs: youtu.be/VIDEO_ID
+  const shortUrlPattern = /youtu\.be\/([a-zA-Z0-9_-]{11})/;
+  match = url.match(shortUrlPattern);
+  if (match && match[1]) return match[1];
+
+  // Handle regular URLs: youtube.com/watch?v=VIDEO_ID
+  const longUrlPattern = /youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/;
+  match = url.match(longUrlPattern);
+  if (match && match[1]) return match[1];
+
+  // Handle embed URLs: youtube.com/embed/VIDEO_ID
+  const embedPattern = /youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/;
+  match = url.match(embedPattern);
+  if (match && match[1]) return match[1];
+
+  // Fallback pattern for other YouTube URL formats
+  const fallbackPattern = /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/;
+  match = url.match(fallbackPattern);
+  return match ? match[1] : null;
+}
 
 export function LuxuraProductDetailPage() {
   const params = useParams();
@@ -59,9 +96,17 @@ export function LuxuraProductDetailPage() {
   const { addProduct, removeProduct } = useCartStore();
 
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
 
   const baseUrl = shopDetails?.baseUrl || "";
   const currency = shopDetails?.country_currency || "BDT";
+  const allowDownload = Boolean(
+    (
+      shopDetails?.metadata?.settings?.shop_settings as
+        | { enable_product_image_download?: boolean }
+        | undefined
+    )?.enable_product_image_download
+  );
   const hasItems = totalCartProducts > 0;
 
   // Use product details hook for state management (same as Basic/Premium themes)
@@ -99,6 +144,10 @@ export function LuxuraProductDetailPage() {
     }
     return product.image_url ? [product.image_url] : [];
   }, [product]);
+
+  // Video link for product
+  const video_link = useMemo(() => product?.video_link, [product?.video_link]);
+  const videoId = useMemo(() => extractVideoId(video_link || ""), [video_link]);
 
   // Get cart products for this product - subscribe to products state to track cart changes
   // Then filter to get only this product's cart items (same as Basic/Premium themes)
@@ -362,6 +411,35 @@ export function LuxuraProductDetailPage() {
     [router, baseUrl]
   );
 
+  // Handle download image
+  const handleDownloadImage = useCallback(
+    async (imageUrl: string, index: number) => {
+      if (!allowDownload || !imageUrl || !product) return;
+
+      try {
+        const proxyUrl = `/api/download-image?url=${encodeURIComponent(
+          imageUrl
+        )}`;
+        const response = await fetch(proxyUrl);
+
+        if (!response.ok) throw new Error("Download failed");
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `${product.name}-image-${index + 1}.jpg`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      } catch (error) {
+        console.error("Download failed:", error);
+      }
+    },
+    [allowDownload, product]
+  );
+
   if (!product) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -372,13 +450,27 @@ export function LuxuraProductDetailPage() {
 
   return (
     <>
+      {/* Image Lightbox */}
+      <ImageLightbox
+        product={{
+          images: images,
+          name: product.name || "",
+        }}
+        open={lightboxOpen}
+        setOpen={setLightboxOpen}
+        selectedImageIdx={selectedImageIndex}
+      />
+
       <div className="container pb-20 py-8">
         {/* Product Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
           {/* Image Gallery */}
           <div className="space-y-4">
             {/* Main Image */}
-            <div className="relative aspect-square rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800">
+            <div
+              className="relative aspect-square rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 cursor-pointer"
+              onClick={() => setLightboxOpen(true)}
+            >
               {images[selectedImageIndex] && (
                 <Image
                   src={images[selectedImageIndex]}
@@ -387,6 +479,39 @@ export function LuxuraProductDetailPage() {
                   className="object-contain"
                   priority
                 />
+              )}
+
+              {/* Zoom & Download Buttons */}
+              {images[selectedImageIndex] && (
+                <div className="absolute top-4 right-4 z-10 flex items-center gap-2">
+                  {/* Zoom Button */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setLightboxOpen(true);
+                    }}
+                    className="p-2.5 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white dark:hover:bg-gray-700 transition-all duration-200"
+                    aria-label="Zoom image"
+                    type="button"
+                  >
+                    <ZoomIn className="w-5 h-5 text-gray-900 dark:text-gray-100" />
+                  </button>
+
+                  {/* Download Button */}
+                  {allowDownload && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDownloadImage(images[selectedImageIndex], selectedImageIndex);
+                      }}
+                      className="p-2.5 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white dark:hover:bg-gray-700 transition-all duration-200"
+                      aria-label="Download image"
+                      type="button"
+                    >
+                      <Download className="w-5 h-5 text-gray-900 dark:text-gray-100" />
+                    </button>
+                  )}
+                </div>
               )}
 
               {/* Navigation Arrows */}
@@ -582,6 +707,36 @@ export function LuxuraProductDetailPage() {
             )}
           </div>
         </div>
+
+        {/* Product Video Section */}
+        {video_link && (
+          <div className="mt-12">
+            <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white mb-6">
+              {t("product_video") || "Product Video"}
+            </h2>
+            <div className="relative w-full aspect-video bg-black rounded-xl overflow-hidden shadow-lg">
+              {videoId ? (
+                <iframe
+                  width="100%"
+                  height="100%"
+                  src={`https://www.youtube.com/embed/${videoId}?rel=0&autoplay=1`}
+                  title={product.name || "Product video"}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allowFullScreen
+                  className="absolute inset-0"
+                />
+              ) : (
+                <video
+                  src={video_link}
+                  controls
+                  autoPlay
+                  className="w-full h-full object-contain"
+                />
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Related Products */}
         {relatedProducts.length > 0 && (
