@@ -439,9 +439,9 @@ section[id^="hero-1"] .swiper-pagination-progressbar .swiper-pagination-progress
 
 /* Reset container padding for hero sections to prevent global container conflicts */
 .hero-wrapper .hero-container {
-  padding-left: 0 !important;
+  /* padding-left: 0 !important;
   padding-right: 0 !important;
-  max-width: 1320px;
+  max-width: 1320px; */
 }
 
 /* Ensure hero container has proper positioning context */

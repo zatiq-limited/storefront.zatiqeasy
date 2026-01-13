@@ -16,6 +16,7 @@
 "use client";
 
 import { CartSidebar } from "@/components/features/cart";
+import { ThemeBuilderSearchModal } from "@/components/features/search";
 import BlockRenderer, {
   type Block,
 } from "@/components/renderers/block-renderer";
@@ -25,7 +26,7 @@ import {
 } from "@/components/shared/skeletons/page-skeletons";
 import { useTheme } from "@/hooks";
 import { useCartStore, useLandingStore, useShopStore } from "@/stores";
-import { selectTotalItems } from "@/stores/cartStore";
+import { selectTotalItems, selectSubtotal } from "@/stores/cartStore";
 import { useThemeStore } from "@/stores/themeStore";
 import { useCallback, useMemo, useState } from "react";
 
@@ -65,7 +66,12 @@ export default function ThemeLayout({ children }: ThemeLayoutProps) {
 
   // Cart state
   const cartCount = useCartStore(selectTotalItems);
+  const cartSubtotal = useCartStore(selectSubtotal);
   const [isCartOpen, setIsCartOpen] = useState(false);
+
+  // Search state
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [initialSearchQuery, setInitialSearchQuery] = useState("");
 
   // Check if using legacy theme (static themes)
   const isLegacyTheme = shopDetails?.legacy_theme ?? true;
@@ -81,8 +87,15 @@ export default function ThemeLayout({ children }: ThemeLayoutProps) {
 
   // Event handlers for BlockRenderer
   const handleToggleDrawer = useCallback((target: string) => {
-    if (target === "cart_drawer") {
+    const targetLower = target.toLowerCase();
+    if (targetLower === "cart_drawer" || targetLower === "cart") {
       setIsCartOpen((prev) => !prev);
+    } else if (
+      targetLower === "search_drawer" ||
+      targetLower === "search_modal" ||
+      targetLower === "search"
+    ) {
+      setIsSearchOpen((prev) => !prev);
     }
   }, []);
 
@@ -103,21 +116,39 @@ export default function ThemeLayout({ children }: ThemeLayoutProps) {
   const announcementAfterHeaderBlock = announcementAfterHeader?.blocks?.[0];
   const footerBlock = footer?.blocks?.[0];
 
-  // Merge cart count into header data for dynamic display
+  // Get currency from shop details
+  const currency = shopDetails?.country_currency || "BDT";
+
+  // Format cart total with currency
+  const formattedCartTotal = useMemo(() => {
+    return `${cartSubtotal.toLocaleString()} ${currency}`;
+  }, [cartSubtotal, currency]);
+
+  // Merge cart count and total into header data for dynamic display
   const headerData = useMemo(() => {
     const baseData = (headerBlock?.data as Record<string, unknown>) || {};
     return {
       ...baseData,
       cart_count: cartCount,
+      cart_total: formattedCartTotal,
     };
-  }, [headerBlock?.data, cartCount]);
+  }, [headerBlock?.data, cartCount, formattedCartTotal]);
+
+  // Handler for search action - receives query from BlockRenderer input
+  const handleSearch = useCallback((query?: string) => {
+    if (query) {
+      setInitialSearchQuery(query);
+    }
+    setIsSearchOpen(true);
+  }, []);
 
   // Event handlers for BlockRenderer
   const eventHandlers = useMemo(
     () => ({
       toggleDrawer: handleToggleDrawer,
+      search: handleSearch,
     }),
-    [handleToggleDrawer]
+    [handleToggleDrawer, handleSearch]
   );
 
   // Show skeleton loading state for theme builder mode
@@ -202,6 +233,18 @@ export default function ThemeLayout({ children }: ThemeLayoutProps) {
       {/* Cart Sidebar - rendered for theme builder mode */}
       {shouldRenderThemeBuilderHeader && (
         <CartSidebar isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+      )}
+
+      {/* Search Modal - rendered for theme builder mode */}
+      {shouldRenderThemeBuilderHeader && (
+        <ThemeBuilderSearchModal
+          isOpen={isSearchOpen}
+          onClose={() => {
+            setIsSearchOpen(false);
+            setInitialSearchQuery("");
+          }}
+          initialQuery={initialSearchQuery}
+        />
       )}
     </>
   );
