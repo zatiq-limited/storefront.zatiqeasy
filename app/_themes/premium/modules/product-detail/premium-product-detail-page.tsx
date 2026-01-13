@@ -3,7 +3,7 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
-import { Minus, Plus, Play, Download, ChevronLeft } from "lucide-react";
+import { Minus, Plus, Play, Download, ChevronLeft, ZoomIn } from "lucide-react";
 import { useShopStore } from "@/stores/shopStore";
 import {
   useCartStore,
@@ -12,6 +12,7 @@ import {
 } from "@/stores/cartStore";
 import { FallbackImage } from "@/components/ui/fallback-image";
 import { CartFloatingBtn } from "@/components/features/cart/cart-floating-btn";
+import { ImageLightbox } from "@/components/products/image-lightbox";
 import { VariantSelectorModal } from "@/components/products/variant-selector-modal";
 import {
   cn,
@@ -27,12 +28,33 @@ interface PremiumProductDetailPageProps {
   product: Product;
 }
 
-// Extract YouTube video ID from URL
+// Extract YouTube video ID from URL (supports regular, shorts, and embed URLs)
 function extractVideoId(url: string): string | null {
   if (!url) return null;
-  const match = url.match(
-    /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/
-  );
+
+  // Handle YouTube Shorts URLs: youtube.com/shorts/VIDEO_ID
+  const shortsPattern = /youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/;
+  let match = url.match(shortsPattern);
+  if (match && match[1]) return match[1];
+
+  // Handle short URLs: youtu.be/VIDEO_ID
+  const shortUrlPattern = /youtu\.be\/([a-zA-Z0-9_-]{11})/;
+  match = url.match(shortUrlPattern);
+  if (match && match[1]) return match[1];
+
+  // Handle regular URLs: youtube.com/watch?v=VIDEO_ID
+  const longUrlPattern = /youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/;
+  match = url.match(longUrlPattern);
+  if (match && match[1]) return match[1];
+
+  // Handle embed URLs: youtube.com/embed/VIDEO_ID
+  const embedPattern = /youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/;
+  match = url.match(embedPattern);
+  if (match && match[1]) return match[1];
+
+  // Fallback pattern for other YouTube URL formats
+  const fallbackPattern = /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/;
+  match = url.match(fallbackPattern);
   return match ? match[1] : null;
 }
 
@@ -48,6 +70,7 @@ export function PremiumProductDetailPage({
   const totalPrice = useCartStore(selectSubtotal);
 
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
   const [isShowVideo, setIsShowVideo] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [selectedRelatedProduct, setSelectedRelatedProduct] =
@@ -322,6 +345,17 @@ export function PremiumProductDetailPage({
         onClose={() => setSelectedRelatedProduct(null)}
       />
 
+      {/* Image Lightbox */}
+      <ImageLightbox
+        product={{
+          images: allImages.map((img) => getDetailPageImageUrl(img)),
+          name: name || "",
+        }}
+        open={lightboxOpen}
+        setOpen={setLightboxOpen}
+        selectedImageIdx={selectedImageIndex}
+      />
+
       <div className="container py-6 md:py-10">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 mb-6">
@@ -417,24 +451,38 @@ export function PremiumProductDetailPage({
                   ) : (
                     /* Main Image */
                     selectedImageUrl && (
-                      <FallbackImage
-                        src={getDetailPageImageUrl(selectedImageUrl)}
-                        width={512}
-                        height={512}
-                        priority={true}
-                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 70vw, 50vw"
-                        className="w-full max-h-225 object-contain transition ease-in duration-500"
-                        alt={name || "Product"}
-                      />
+                      <div
+                        className="cursor-pointer"
+                        onClick={() => setLightboxOpen(true)}
+                      >
+                        <FallbackImage
+                          src={getDetailPageImageUrl(selectedImageUrl)}
+                          width={512}
+                          height={512}
+                          priority={true}
+                          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 70vw, 50vw"
+                          className="w-full max-h-225 object-contain transition ease-in duration-500"
+                          alt={name || "Product"}
+                        />
+                      </div>
                     )
                   )}
 
                   {/* Image Action Buttons */}
-                  {allImages.length > 0 &&
-                    !isShowVideo &&
-                    allowDownload &&
-                    selectedImageUrl && (
-                      <div className="absolute top-2 right-2 z-10 flex gap-2">
+                  {allImages.length > 0 && !isShowVideo && selectedImageUrl && (
+                    <div className="absolute top-2 right-2 z-10 flex items-center gap-2">
+                      {/* Zoom Button */}
+                      <button
+                        onClick={() => setLightboxOpen(true)}
+                        className="bg-blue-zatiq/15 backdrop-blur-sm p-3 rounded-full cursor-pointer hover:bg-blue-zatiq/25 transition-all duration-200 shadow-lg"
+                        aria-label="Zoom image"
+                        type="button"
+                      >
+                        <ZoomIn className="text-white dark:text-gray-700 w-5 h-5 md:w-7 md:h-7" />
+                      </button>
+
+                      {/* Download Button */}
+                      {allowDownload && (
                         <button
                           onClick={handleDownloadImage}
                           className="bg-blue-zatiq/15 backdrop-blur-sm p-3 rounded-full cursor-pointer hover:bg-blue-zatiq/25 transition-all duration-200 shadow-lg"
@@ -443,8 +491,9 @@ export function PremiumProductDetailPage({
                         >
                           <Download className="text-white dark:text-gray-700 w-5 h-5 md:w-7 md:h-7" />
                         </button>
-                      </div>
-                    )}
+                      )}
+                    </div>
+                  )}
 
                   {/* Mobile Thumbnail Strip */}
                   <div className="xl:hidden flex px-1">
