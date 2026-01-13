@@ -5,6 +5,7 @@ import { useEffect, useCallback, useRef } from "react";
 import { useProductDetailsStore } from "@/stores/productDetailsStore";
 import { useCartStore } from "@/stores/cartStore";
 import type { Product } from "@/stores/productsStore";
+import { CACHE_TIMES, DEFAULT_QUERY_OPTIONS } from "@/lib/constants";
 
 interface ProductResponse {
   success: boolean;
@@ -68,6 +69,10 @@ export function useProductDetails(handle: string) {
   // Track if we've already synced variants from cart (to avoid infinite loops)
   const hasInitializedFromCart = useRef(false);
 
+  // Get existing product from store for initialData (prevents loading state on navigation)
+  const storeProduct = useProductDetailsStore((state) => state.product);
+  const hasStoreProduct = storeProduct && storeProduct.slug === handle;
+
   // Product query
   const productQuery = useQuery({
     queryKey: ["product", handle],
@@ -75,18 +80,30 @@ export function useProductDetails(handle: string) {
       return fetchProduct(handle);
     },
     enabled: !!handle,
-    staleTime: 1000 * 60 * 2, // 2 minutes - product data changes less frequently
-    gcTime: 1000 * 60 * 10, // 10 minutes
-    refetchOnWindowFocus: false,
+    // Use store product as initial data if it matches current handle
+    initialData: hasStoreProduct
+      ? { success: true, data: { product: storeProduct } }
+      : undefined,
+    ...CACHE_TIMES.PRODUCT_DETAIL,
+    ...DEFAULT_QUERY_OPTIONS,
   });
+
+  // Get existing page config from store
+  const storePageConfig = useProductDetailsStore(
+    (state) => state.productDetailsPageConfig
+  );
+  const hasStorePageConfig =
+    storePageConfig && Object.keys(storePageConfig).length > 0;
 
   // Product details page config query
   const pageConfigQuery = useQuery({
     queryKey: ["product-details-page-config"],
     queryFn: fetchProductDetailsPageConfig,
-    staleTime: 1000 * 60 * 5, // 5 minutes
-    gcTime: 1000 * 60 * 30, // 30 minutes
-    refetchOnWindowFocus: false,
+    initialData: hasStorePageConfig
+      ? { success: true, data: storePageConfig as ProductDetailsPageConfigResponse["data"] }
+      : undefined,
+    ...CACHE_TIMES.PAGE_CONFIG,
+    ...DEFAULT_QUERY_OPTIONS,
   });
 
   // Sync product to store

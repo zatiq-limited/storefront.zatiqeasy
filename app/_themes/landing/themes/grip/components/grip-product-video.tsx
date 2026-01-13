@@ -47,7 +47,7 @@ export function GripProductVideo({ content }: GripProductVideoProps) {
 
   return (
     <section className="py-10 md:py-16 lg:py-24 xl:py-28 bg-gradient-to-b from-[#f8f8f8] to-[#ffffff] dark:bg-gradient-to-b dark:from-[#181818] dark:via-[#000000] dark:to-[#111111]">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container">
         {/* Video Title */}
         {productVideo.title && <VideoTitle title={productVideo.title} />}
 

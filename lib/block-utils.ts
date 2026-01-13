@@ -509,10 +509,10 @@ export function createEventHandler(
 ): (() => void) | undefined {
   const { action, target, value } = event;
 
+  // Resolve target if it's a binding path (contains a dot indicating a nested path)
+  // Common iterator prefixes: item., product., slide., category., etc.
   const resolvedTarget =
-    target?.startsWith?.("item.") ||
-    target?.startsWith?.("product.") ||
-    target?.startsWith?.("slide.")
+    target?.includes?.(".")
       ? String(resolveBinding(target, data, context) || target)
       : target;
 

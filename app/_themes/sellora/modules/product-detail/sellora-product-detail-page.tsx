@@ -29,12 +29,34 @@ interface SelloraProductDetailPageProps {
   handle: string;
 }
 
-// Extract YouTube video ID from URL
+// Extract YouTube video ID from URL (supports regular, shorts, and embed URLs)
 function extractVideoId(url: string): string | null {
   if (!url) return null;
-  const match = url.match(
-    /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/
-  );
+
+  // Handle YouTube Shorts URLs: youtube.com/shorts/VIDEO_ID
+  const shortsPattern = /youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/;
+  let match = url.match(shortsPattern);
+  if (match && match[1]) return match[1];
+
+  // Handle short URLs: youtu.be/VIDEO_ID
+  const shortUrlPattern = /youtu\.be\/([a-zA-Z0-9_-]{11})/;
+  match = url.match(shortUrlPattern);
+  if (match && match[1]) return match[1];
+
+  // Handle regular URLs: youtube.com/watch?v=VIDEO_ID
+  const longUrlPattern = /youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/;
+  match = url.match(longUrlPattern);
+  if (match && match[1]) return match[1];
+
+  // Handle embed URLs: youtube.com/embed/VIDEO_ID
+  const embedPattern = /youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/;
+  match = url.match(embedPattern);
+  if (match && match[1]) return match[1];
+
+  // Fallback pattern for other YouTube URL formats
+  const fallbackPattern =
+    /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/;
+  match = url.match(fallbackPattern);
   return match ? match[1] : null;
 }
 
@@ -196,14 +218,22 @@ export function SelloraProductDetailPage({
   // Auto-select variants when product loads
   // Priority: 1. From cart (if product is in cart), 2. First variant of each mandatory type
   useEffect(() => {
-    if (!product || !variant_types || variant_types.length === 0 || hasInitializedVariants.current) {
+    if (
+      !product ||
+      !variant_types ||
+      variant_types.length === 0 ||
+      hasInitializedVariants.current
+    ) {
       return;
     }
 
     // Find the first cart item for this product
     const firstCartItem = cartProducts[0];
 
-    if (firstCartItem?.selectedVariants && Object.keys(firstCartItem.selectedVariants).length > 0) {
+    if (
+      firstCartItem?.selectedVariants &&
+      Object.keys(firstCartItem.selectedVariants).length > 0
+    ) {
       // Restore variants from cart
       hasInitializedVariants.current = true;
       Object.entries(firstCartItem.selectedVariants).forEach(
@@ -214,7 +244,9 @@ export function SelloraProductDetailPage({
           // Find the variant in the product's variant types
           const variantType = variant_types.find((vt) => vt.id === typeId);
           if (variantType?.variants) {
-            const variant = variantType.variants.find((v) => v.id === variantId);
+            const variant = variantType.variants.find(
+              (v) => v.id === variantId
+            );
             if (variant) {
               handleVariantSelect(typeId, {
                 variant_type_id: variantState.variant_type_id,
@@ -399,34 +431,9 @@ export function SelloraProductDetailPage({
                     alt={`${name} - Image ${idx + 1}`}
                   />
 
-                  {/* Zoom icon on hover */}
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
-                    <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-                      <div className="bg-white/90 dark:bg-gray-800/90 p-2.5 rounded-full">
-                        <ZoomIn className="w-5 h-5 text-foreground" />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Download button */}
-                  {allowDownload && (
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        handleDownloadImage(img, idx);
-                      }}
-                      className="cursor-pointer absolute bottom-2 right-2 bg-white/90 dark:bg-gray-800/90 p-2.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-10 hover:bg-white dark:hover:bg-gray-700"
-                      aria-label="Download image"
-                      type="button"
-                    >
-                      <Download className="w-5 h-5 text-foreground" />
-                    </button>
-                  )}
-
-                  {/* Selected indicator */}
+                  {/* Selected indicator (top-left) */}
                   {selectedImageIndex === idx && (
-                    <div className="absolute top-2 right-2 bg-blue-500 text-white rounded-full p-1.5 shadow-lg">
+                    <div className="absolute top-2 left-2 bg-blue-500 text-white rounded-full p-1.5 shadow-lg z-20">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         className="h-4 w-4"
@@ -441,6 +448,34 @@ export function SelloraProductDetailPage({
                       </svg>
                     </div>
                   )}
+
+                  {/* Action Buttons (top-right, always visible) */}
+                  <div className="absolute top-2 right-2 z-10 flex items-center gap-2">
+                    {/* Download Button */}
+                    {allowDownload && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          e.preventDefault();
+                          handleDownloadImage(img, idx);
+                        }}
+                        className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm p-2.5 rounded-full shadow-lg hover:bg-white dark:hover:bg-gray-700 transition-all duration-200"
+                        aria-label="Download image"
+                        type="button"
+                      >
+                        <Download className="w-5 h-5 text-foreground" />
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Zoom icon on hover overlay (center) */}
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center pointer-events-none">
+                    <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="bg-white/90 dark:bg-gray-800/90 p-2.5 rounded-full">
+                        <ZoomIn className="w-5 h-5 text-foreground" />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
@@ -575,7 +610,7 @@ export function SelloraProductDetailPage({
               <iframe
                 width="100%"
                 height="100%"
-                src={`https://www.youtube.com/embed/${videoId}?rel=0`}
+                src={`https://www.youtube.com/embed/${videoId}?rel=0&autoplay=1`}
                 title={name || "Product video"}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 referrerPolicy="strict-origin-when-cross-origin"

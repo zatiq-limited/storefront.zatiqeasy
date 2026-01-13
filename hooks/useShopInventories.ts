@@ -27,10 +27,14 @@ export function useShopInventories(
   options: UseShopInventoriesOptions = {}
 ) {
   const { enabled = true, syncToStore = true, sortByStock = true } = options;
-  const { setProducts } = useProductsStore();
+  const { setProducts, products: storeProducts } = useProductsStore();
 
   // Build query key
   const queryKey = ["shop-inventories", params.shopUuid, params.ids];
+
+  // Use store products as initial data to prevent unnecessary fetches
+  // This helps when navigating between pages that already loaded products
+  const hasStoreData = storeProducts && storeProducts.length > 0;
 
   const query = useQuery({
     queryKey,
@@ -71,6 +75,8 @@ export function useShopInventories(
       return products;
     },
     enabled: enabled && !!params.shopUuid,
+    // Use store data as initial data to prevent loading state on navigation
+    initialData: hasStoreData ? storeProducts : undefined,
     ...CACHE_TIMES.SHOP_INVENTORIES,
     ...DEFAULT_QUERY_OPTIONS,
   });

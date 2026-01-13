@@ -1,7 +1,7 @@
 # API Architecture Guide & Best Practices
 
-> **Status**: ✅ Phase 1 & 2 Complete | 📋 Continuous Improvement Plan  
-> **Last Updated**: December 24, 2025
+> **Status**: ✅ Phase 1-4 Complete | ✅ Performance Optimization Complete | 📋 Continuous Improvement Plan
+> **Last Updated**: January 13, 2026
 
 ## 📋 Table of Contents
 
@@ -457,6 +457,46 @@ export const CACHE_TIMES = {
 ```
 
 **Good job!** Cache times are well-differentiated.
+
+#### 2. InitialData from Zustand Store (Implemented ✅)
+
+**Pattern:** Use Zustand store data as `initialData` for React Query to enable instant page transitions.
+
+```typescript
+// hooks/useShopInventories.ts - REFERENCE IMPLEMENTATION
+const { products: storeProducts } = useProductsStore();
+const hasStoreData = storeProducts && storeProducts.length > 0;
+
+const query = useQuery({
+  queryKey: ["shop-inventories", params.shopUuid, params.ids],
+  queryFn: async () => { /* fetch logic */ },
+  enabled: enabled && !!params.shopUuid,
+  // Use store data as initial data to prevent loading state on navigation
+  initialData: hasStoreData ? storeProducts : undefined,
+  ...CACHE_TIMES.SHOP_INVENTORIES,
+  ...DEFAULT_QUERY_OPTIONS,
+});
+
+// Sync to Zustand store when data changes
+useEffect(() => {
+  if (syncToStore && query.data && query.data.length > 0) {
+    setProducts(query.data as Product[]);
+  }
+}, [query.data, syncToStore, setProducts]);
+```
+
+**Hooks with initialData optimization:**
+- ✅ `useShopInventories` - Uses products from `useProductsStore`
+- ✅ `useShopCategories` - Uses categories from `useProductsStore`
+- ✅ `useProductDetails` - Uses product from `useProductDetailsStore`
+- ✅ `useProducts` - Uses products/pagination from `useProductsStore`
+- ✅ `useHomepage` - Uses homepage from `useHomepageStore`
+- ✅ `useTheme` - Uses theme from `useThemeStore`
+
+**Benefits:**
+1. Instant data display when navigating between pages
+2. No loading spinners for already-loaded data
+3. Data remains fresh via background refetch (staleTime)
 
 #### 2. ISR (Incremental Static Regeneration) ✅
 
@@ -1027,20 +1067,27 @@ export function useShopProfile(params: UseShopProfileParams) {
 
 ## Architecture Scorecard
 
-| Category                   | Current Score | Target | Status                 |
-| -------------------------- | ------------- | ------ | ---------------------- |
-| **Separation of Concerns** | 9/10          | 10/10  | ✅ Excellent           |
-| **Security**               | 7/10          | 9/10   | 🟡 Needs validation    |
-| **Performance**            | 8/10          | 9/10   | ✅ Very Good           |
-| **Error Handling**         | 7/10          | 9/10   | 🟡 Can improve         |
-| **Type Safety**            | 9/10          | 10/10  | ✅ Excellent           |
-| **Maintainability**        | 8/10          | 9/10   | ✅ Very Good           |
-| **Scalability**            | 7/10          | 9/10   | 🟡 Needs rate limiting |
-| **Observability**          | 5/10          | 8/10   | 🔴 Needs logging       |
-| **Testing**                | 4/10          | 8/10   | 🔴 Needs tests         |
-| **Documentation**          | 6/10          | 8/10   | 🟡 Can improve         |
+| Category                   | Current Score | Target | Status                         |
+| -------------------------- | ------------- | ------ | ------------------------------ |
+| **Separation of Concerns** | 9/10          | 10/10  | ✅ Excellent                   |
+| **Security**               | 7/10          | 9/10   | 🟡 Needs validation            |
+| **Performance**            | 9/10          | 9/10   | ✅ Excellent (initialData opt) |
+| **Error Handling**         | 7/10          | 9/10   | 🟡 Can improve                 |
+| **Type Safety**            | 9/10          | 10/10  | ✅ Excellent                   |
+| **Maintainability**        | 9/10          | 9/10   | ✅ Excellent (CACHE_TIMES)     |
+| **Scalability**            | 7/10          | 9/10   | 🟡 Needs rate limiting         |
+| **Observability**          | 5/10          | 8/10   | 🔴 Needs logging               |
+| **Testing**                | 4/10          | 8/10   | 🔴 Needs tests                 |
+| **Documentation**          | 7/10          | 8/10   | ✅ Good (updated)              |
 
-**Overall: 7.5/10** → **Target: 8.5/10**
+**Overall: 7.8/10** → **Target: 8.5/10**
+
+### Recent Improvements (January 2026)
+
+1. ✅ **InitialData Optimization**: Added `initialData` from Zustand stores to 6 hooks for instant page transitions
+2. ✅ **Centralized Cache Times**: Replaced hardcoded cache times with `CACHE_TIMES` constants in all hooks
+3. ✅ **Service Consistency**: Updated `contact.service.ts` and `analytics.service.ts` to use centralized `apiClient`
+4. ✅ **QueryProvider Optimization**: Removed global `staleTime` to let per-query `CACHE_TIMES` take effect
 
 ---
 
@@ -1051,10 +1098,11 @@ export function useShopProfile(params: UseShopProfileParams) {
 1. **Centralized API Client** - Single source of truth ⭐⭐⭐
 2. **Service Layer** - Clean, organized, reusable ⭐⭐⭐
 3. **BFF Pattern** - Next.js API routes properly used ⭐⭐
-4. **Cache Strategy** - Well-configured for different data types ⭐⭐
+4. **Cache Strategy** - Well-configured with CACHE_TIMES constants ⭐⭐⭐
 5. **Type Safety** - Comprehensive TypeScript interfaces ⭐⭐⭐
 6. **Encryption** - Automatic and transparent ⭐⭐
-7. **React Query** - Proper hooks with good defaults ⭐⭐
+7. **React Query** - Proper hooks with initialData optimization ⭐⭐⭐
+8. **Instant Navigation** - InitialData from Zustand prevents loading states ⭐⭐⭐
 
 ### ⚠️ Priority Improvements Needed
 
@@ -1084,6 +1132,6 @@ export function useShopProfile(params: UseShopProfileParams) {
 
 ---
 
-**Last Updated**: December 24, 2025  
-**Maintained By**: Development Team  
-**Version**: 2.0
+**Last Updated**: January 13, 2026
+**Maintained By**: Development Team
+**Version**: 2.1

@@ -6,7 +6,8 @@ import { useLandingStore } from "@/stores/landingStore";
 import { useShopStore } from "@/stores/shopStore";
 
 export function GripOrderStatus() {
-  const { orderPlaced, orderId, trackLink, clearOrderState } = useLandingStore();
+  const { orderPlaced, orderId, trackLink, clearOrderState } =
+    useLandingStore();
   const { shopDetails } = useShopStore();
 
   if (!orderPlaced || !orderId) {
@@ -16,7 +17,7 @@ export function GripOrderStatus() {
   const baseUrl = shopDetails?.baseUrl || "";
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div className="container py-10">
       <div className="max-w-2xl mx-auto bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-2xl p-6 md:p-8">
         <div className="flex flex-col items-center text-center">
           {/* Success Icon */}

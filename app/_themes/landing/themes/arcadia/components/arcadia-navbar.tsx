@@ -38,12 +38,15 @@ export function ArcadiaNavbar() {
           messageOnTop ? "top-0" : "top-0"
         } w-full bg-white/95 backdrop-blur-sm z-50 shadow-sm border-b border-gray-100`}
       >
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="container">
           <div className="flex items-center justify-between h-16 md:h-20">
             {/* Logo Section */}
             <div className="flex items-center gap-3">
               {shopDetails?.image_url ? (
-                <Link href={baseUrl || "/"} className="group flex items-center gap-3">
+                <Link
+                  href={baseUrl || "/"}
+                  className="group flex items-center gap-3"
+                >
                   <div className="z-50">
                     <Image
                       height={48}
@@ -63,7 +66,10 @@ export function ArcadiaNavbar() {
                   </div>
                 </Link>
               ) : (
-                <Link href={baseUrl || "/"} className="group flex items-center gap-3">
+                <Link
+                  href={baseUrl || "/"}
+                  className="group flex items-center gap-3"
+                >
                   <div className="flex flex-col">
                     <span className="font-inter font-bold text-xl text-landing-primary group-hover:text-landing-primary/80 transition-colors">
                       {shopDetails?.shop_name || "Shop"}

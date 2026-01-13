@@ -22,7 +22,7 @@ export function NirvanaStaticBanner({
   return (
     <div className="relative overflow-hidden group bg-landing-secondary/15">
       <div className="container mx-auto w-full py-20 md:py-24 lg:py-28 xl:py-32 2xl:py-44 transition-all duration-500">
-        <div className="w-[90%] xl:w-full mx-auto flex justify-center items-center">
+        <div className="flex justify-center items-center">
           <div className="mx-auto transform transition-transform duration-500 group-hover:scale-[1.02]">
             {/* Title */}
             {content.title && (

@@ -7,7 +7,7 @@ interface ContactForm2Settings {
   backgroundColor?: string;
   textColor?: string;
   title?: string;
-  titleStyle?: 'script' | 'normal';
+  titleStyle?: "script" | "normal";
   submitButtonText?: string;
   submitButtonColor?: string;
   successMessage?: string;
@@ -21,53 +21,60 @@ interface ContactForm2Props {
 }
 
 export default function ContactForm2({ settings = {} }: ContactForm2Props) {
-  const s = convertSettingsKeys(settings as Record<string, unknown>) as ContactForm2Settings;
+  const s = convertSettingsKeys(
+    settings as Record<string, unknown>
+  ) as ContactForm2Settings;
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: '',
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
     terms: false,
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [submitStatus, setSubmitStatus] = useState<
+    "idle" | "success" | "error"
+  >("idle");
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value, type } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value,
+      [name]:
+        type === "checkbox" ? (e.target as HTMLInputElement).checked : value,
     }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setSubmitStatus('idle');
+    setSubmitStatus("idle");
 
     try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
+      const response = await fetch("/api/contact", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
 
       if (response.ok) {
-        setSubmitStatus('success');
+        setSubmitStatus("success");
         setFormData({
-          name: '',
-          email: '',
-          subject: '',
-          message: '',
+          name: "",
+          email: "",
+          subject: "",
+          message: "",
           terms: false,
         });
       } else {
-        setSubmitStatus('error');
+        setSubmitStatus("error");
       }
     } catch (error) {
-      setSubmitStatus('error');
+      setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);
     }
@@ -76,18 +83,18 @@ export default function ContactForm2({ settings = {} }: ContactForm2Props) {
   return (
     <section
       className="py-12 md:py-16 lg:py-20"
-      style={{ backgroundColor: s.backgroundColor || '#F9FAFB' }}
+      style={{ backgroundColor: s.backgroundColor || "#F9FAFB" }}
     >
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container">
         {/* Section header */}
         <div className="text-center mb-12">
           <h2
             className={`text-3xl md:text-4xl font-bold mb-4 ${
-              s.titleStyle === 'script' ? 'font-serif italic' : ''
+              s.titleStyle === "script" ? "font-serif italic" : ""
             }`}
-            style={{ color: s.textColor || '#111827' }}
+            style={{ color: s.textColor || "#111827" }}
           >
-            {s.title || 'Keep in touch with us'}
+            {s.title || "Keep in touch with us"}
           </h2>
         </div>
 
@@ -184,7 +191,8 @@ export default function ContactForm2({ settings = {} }: ContactForm2Props) {
                   className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 mt-1"
                 />
                 <span className="ml-2 text-sm text-gray-600">
-                  {s.termsText || 'I accept the terms & conditions and I understand that my data will be hold securely in accordance with the privacy policy.'}
+                  {s.termsText ||
+                    "I accept the terms & conditions and I understand that my data will be hold securely in accordance with the privacy policy."}
                 </span>
               </label>
             </div>
@@ -196,23 +204,27 @@ export default function ContactForm2({ settings = {} }: ContactForm2Props) {
               type="submit"
               disabled={isSubmitting}
               className="px-8 py-3 text-white font-medium hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
-              style={{ backgroundColor: s.submitButtonColor || '#8B4513' }}
+              style={{ backgroundColor: s.submitButtonColor || "#8B4513" }}
             >
-              {isSubmitting ? 'SENDING...' : (s.submitButtonText || 'SEND MESSAGE')}
+              {isSubmitting
+                ? "SENDING..."
+                : s.submitButtonText || "SEND MESSAGE"}
             </button>
           </div>
 
           {/* Success message */}
-          {submitStatus === 'success' && (
+          {submitStatus === "success" && (
             <div className="mt-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
-              {s.successMessage || 'Thank you! Your message has been sent successfully.'}
+              {s.successMessage ||
+                "Thank you! Your message has been sent successfully."}
             </div>
           )}
 
           {/* Error message */}
-          {submitStatus === 'error' && (
+          {submitStatus === "error" && (
             <div className="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
-              {s.errorMessage || 'Oops! Something went wrong. Please try again.'}
+              {s.errorMessage ||
+                "Oops! Something went wrong. Please try again."}
             </div>
           )}
         </form>

@@ -38,13 +38,15 @@ export function GripStandalone({ content, onBuyNow }: GripStandaloneProps) {
       )}
 
       {/* Content */}
-      <div className="relative container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative container">
         <div className="max-w-3xl mx-auto text-center">
           {/* Tag */}
           {content.tag && (
             <span
               className={`inline-block text-sm font-semibold uppercase tracking-wider mb-4 ${
-                hasBackgroundImage ? "text-landing-primary" : "text-landing-primary"
+                hasBackgroundImage
+                  ? "text-landing-primary"
+                  : "text-landing-primary"
               }`}
             >
               {content.tag}

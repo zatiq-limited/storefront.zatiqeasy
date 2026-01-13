@@ -3,7 +3,6 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   // cacheComponents: true, // https://nextjs.org/docs/app/getting-started/cache-components#enabling-cache-components
   images: {
-    unoptimized: true,
     minimumCacheTTL: 604800, // Cache images for one week (in seconds)
     qualities: [100, 75], // Configured quality values for next/image
 

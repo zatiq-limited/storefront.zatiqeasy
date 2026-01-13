@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState, useMemo, useEffect, useCallback } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
-import { Minus, Plus, Download, Play } from "lucide-react";
+import { Minus, Plus, Download, Play, ZoomIn } from "lucide-react";
 import { useShopStore } from "@/stores/shopStore";
 import { useCartStore } from "@/stores/cartStore";
 import { FallbackImage } from "@/components/ui/fallback-image";
+import { ImageLightbox } from "@/components/products/image-lightbox";
 import {
   cn,
   getInventoryThumbImageUrl,
@@ -86,12 +87,34 @@ const PrivacyIcon = ({ className }: { className?: string }) => {
   );
 };
 
-// Extract video ID from YouTube URL
+// Extract video ID from YouTube URL (supports regular, shorts, and embed URLs)
 const extractVideoId = (url: string): string => {
   if (!url) return "";
-  const match = url.match(
-    /(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([^&?]+)/
-  );
+
+  // Handle YouTube Shorts URLs: youtube.com/shorts/VIDEO_ID
+  const shortsPattern = /youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/;
+  let match = url.match(shortsPattern);
+  if (match && match[1]) return match[1];
+
+  // Handle short URLs: youtu.be/VIDEO_ID
+  const shortUrlPattern = /youtu\.be\/([a-zA-Z0-9_-]{11})/;
+  match = url.match(shortUrlPattern);
+  if (match && match[1]) return match[1];
+
+  // Handle regular URLs: youtube.com/watch?v=VIDEO_ID
+  const longUrlPattern = /youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/;
+  match = url.match(longUrlPattern);
+  if (match && match[1]) return match[1];
+
+  // Handle embed URLs: youtube.com/embed/VIDEO_ID
+  const embedPattern = /youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/;
+  match = url.match(embedPattern);
+  if (match && match[1]) return match[1];
+
+  // Fallback pattern for other YouTube URL formats
+  const fallbackPattern =
+    /(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([^&?]+)/;
+  match = url.match(fallbackPattern);
   return match ? match[1] : "";
 };
 
@@ -135,8 +158,10 @@ export function ProductDetails({ product }: ProductDetailsProps) {
   };
 
   const [selectedImageIdx, setSelectedImageIdx] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
   const [quantity, setQuantity] = useState(1);
-  const [selectedRelatedProduct, setSelectedRelatedProduct] = useState<Product | null>(null);
+  const [selectedRelatedProduct, setSelectedRelatedProduct] =
+    useState<Product | null>(null);
 
   // Initialize selected variants - prioritize cart variants, then defaults
   const [selectedVariants, setSelectedVariants] = useState<
@@ -432,6 +457,17 @@ export function ProductDetails({ product }: ProductDetailsProps) {
 
   return (
     <>
+      {/* Image Lightbox */}
+      <ImageLightbox
+        product={{
+          images: allImages?.map((img) => getDetailPageImageUrl(img)) || [],
+          name: name || "",
+        }}
+        open={lightboxOpen}
+        setOpen={setLightboxOpen}
+        selectedImageIdx={selectedImageIdx}
+      />
+
       <div className="flex items-start xl:flex-row flex-col gap-6.5 pt-6 pb-12 md:pb-21">
         {/* Vertical Thumbnail Sidebar (Desktop only) */}
         <div className="overflow-auto xl:w-[10%] xl:h-[calc(100vh-120px)] xl:flex hidden xl:pl-1">
@@ -515,22 +551,40 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                   </div>
                 ) : (
                   selectedImageUrl && (
-                    <FallbackImage
-                      src={getDetailPageImageUrl(selectedImageUrl)}
-                      width={512}
-                      height={512}
-                      className="w-full max-h-225 object-contain transition ease-in duration-500"
-                      alt={name}
-                    />
+                    <div
+                      className="cursor-pointer"
+                      onClick={() => setLightboxOpen(true)}
+                    >
+                      <FallbackImage
+                        src={getDetailPageImageUrl(selectedImageUrl)}
+                        width={512}
+                        height={512}
+                        className="w-full max-h-225 object-contain transition ease-in duration-500"
+                        alt={name}
+                      />
+                    </div>
                   )
                 )}
 
-                {/* Download Button */}
-                {allImages &&
-                  !isShowVideo &&
-                  allowDownload &&
-                  selectedImageUrl && (
-                    <div className="absolute top-2 right-2 z-10">
+                {/* Zoom & Download Buttons */}
+                {allImages && !isShowVideo && selectedImageUrl && (
+                  <div className="absolute top-2 right-2 z-10 flex items-center gap-2">
+                    {/* Zoom Button */}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        setLightboxOpen(true);
+                      }}
+                      className="bg-blue-zatiq/15 backdrop-blur-sm p-3 rounded-full cursor-pointer hover:bg-blue-zatiq/25 transition-all duration-200 shadow-lg"
+                      aria-label="Zoom image"
+                      type="button"
+                    >
+                      <ZoomIn className="text-white dark:text-gray-700 w-5 h-5 md:w-7 md:h-7" />
+                    </button>
+
+                    {/* Download Button */}
+                    {allowDownload && (
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
@@ -546,8 +600,9 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                       >
                         <Download className="text-white dark:text-gray-700 w-5 h-5 md:w-7 md:h-7" />
                       </button>
-                    </div>
-                  )}
+                    )}
+                  </div>
+                )}
 
                 {/* Mobile Horizontal Thumbnails */}
                 <div className="xl:hidden flex px-1">

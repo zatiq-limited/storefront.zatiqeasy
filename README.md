@@ -2046,14 +2046,14 @@ export default function Grip({ pageData }: GripProps) {
       <GripNavbar />
       <GripTopCarousel content={topContent} />
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container">
         {imageBanners && <GripFeaturedImageBanner content={imageBanners} />}
         {featuredContent && <GripFeatured content={featuredContent} />}
       </div>
 
       <GripProductVideo content={productVideoContent} />
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container">
         <GripProductBuyNow content={showcaseContent} />
       </div>
 
@@ -2083,7 +2083,7 @@ export default function EmbeddedCheckout() {
   return (
     <div
       id="checkout-form-section"
-      className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 md:pt-16 lg:pt-24"
+      className="container py-10 md:pt-16 lg:pt-24"
     >
       <div className="border border-gray-200 dark:border-gray-700 rounded-2xl px-4 md:px-6 lg:px-10 py-4 md:py-6 lg:py-8">
         <h2 className="text-2xl lg:text-3xl max-w-2xl mx-auto dark:text-white font-bold text-center mb-6 lg:mb-8">

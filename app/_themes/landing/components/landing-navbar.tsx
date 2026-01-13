@@ -20,7 +20,7 @@ export function LandingNavbar({ className = "" }: LandingNavbarProps) {
     <nav
       className={`w-full bg-white dark:bg-black border-b border-gray-100 dark:border-gray-800 ${className}`}
     >
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container">
         <div className="flex items-center justify-center h-16 md:h-20">
           {/* Logo */}
           <Link href={baseUrl} className="flex items-center gap-2">

@@ -4,7 +4,10 @@ import React, { useEffect, useMemo, useCallback, useState } from "react";
 import { useLandingStore } from "@/stores/landingStore";
 import { useCartStore } from "@/stores/cartStore";
 import { useShopStore } from "@/stores/shopStore";
-import { LandingProductProvider, useLandingProduct } from "../../context/landing-product-context";
+import {
+  LandingProductProvider,
+  useLandingProduct,
+} from "../../context/landing-product-context";
 import { VariantSelectorModal } from "@/components/products/variant-selector-modal";
 import { getThemeColors } from "@/lib/utils";
 import type { SingleProductPage } from "@/types/landing-page.types";
@@ -29,7 +32,8 @@ interface ArcadiaLandingPageProps {
 
 // Inner component that uses the landing product context
 function ArcadiaLandingContent({ landingData }: ArcadiaLandingPageProps) {
-  const { product, defaultVariants, productActionController } = useLandingProduct();
+  const { product, defaultVariants, productActionController } =
+    useLandingProduct();
   const { products: cartProducts, addProduct } = useCartStore();
   const { shopDetails } = useShopStore();
   const { primaryColor } = useLandingStore();
@@ -75,7 +79,8 @@ function ArcadiaLandingContent({ landingData }: ArcadiaLandingPageProps) {
 
         if (
           mandatoryTypes.length > 1 ||
-          (mandatoryTypes.length === 1 && (mandatoryTypes[0].variants?.length || 0) > 1)
+          (mandatoryTypes.length === 1 &&
+            (mandatoryTypes[0].variants?.length || 0) > 1)
         ) {
           // Open variant modal for selection
           setIsVariantModalOpen(true);
@@ -144,31 +149,40 @@ function ArcadiaLandingContent({ landingData }: ArcadiaLandingPageProps) {
 
         {/* Featured Sections */}
         {featuredBanners.length > 0 && (
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <ArcadiaFeatured content={featuredBanners} onBuyNow={handleBuyNow} />
+          <div className="container">
+            <ArcadiaFeatured
+              content={featuredBanners}
+              onBuyNow={handleBuyNow}
+            />
           </div>
         )}
 
         {/* Product Video */}
         {productVideos.length > 0 && (
-          <ArcadiaProductVideo content={productVideos} onBuyNow={handleBuyNow} />
+          <ArcadiaProductVideo
+            content={productVideos}
+            onBuyNow={handleBuyNow}
+          />
         )}
 
         {/* Showcase/Buy Now Section */}
         {showcaseBanners.length > 0 && (
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="container">
             <ArcadiaBuyNow content={showcaseBanners} onBuyNow={handleBuyNow} />
           </div>
         )}
 
         {/* Standalone Section */}
         {standaloneBanner && (
-          <ArcadiaStandalone content={standaloneBanner} onBuyNow={handleBuyNow} />
+          <ArcadiaStandalone
+            content={standaloneBanner}
+            onBuyNow={handleBuyNow}
+          />
         )}
 
         {/* Product Images */}
         {themeData?.product_image && (
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="container">
             <ArcadiaProductImages content={themeData.product_image} />
           </div>
         )}
@@ -188,7 +202,11 @@ function ArcadiaLandingContent({ landingData }: ArcadiaLandingPageProps) {
         <VariantSelectorModal
           isOpen={isVariantModalOpen}
           onClose={() => setIsVariantModalOpen(false)}
-          product={product as unknown as Parameters<typeof VariantSelectorModal>[0]["product"]}
+          product={
+            product as unknown as Parameters<
+              typeof VariantSelectorModal
+            >[0]["product"]
+          }
           onAddToCart={handleVariantSelect}
         />
       )}

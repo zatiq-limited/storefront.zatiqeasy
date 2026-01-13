@@ -32,13 +32,37 @@ interface BasicProductDetailPageProps {
   handle: string;
 }
 
-// Extract YouTube video ID from URL
+// Extract YouTube video ID from URL (supports regular, shorts, and embed URLs)
 const extractVideoId = (url: string) => {
   if (!url) return null;
+
+  // Handle YouTube Shorts URLs: youtube.com/shorts/VIDEO_ID
+  const shortsPattern = /youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/;
+  let match = url.match(shortsPattern);
+  if (match && match[1]) return match[1];
+
+  // Handle short URLs: youtu.be/VIDEO_ID
+  const shortUrlPattern = /youtu\.be\/([a-zA-Z0-9_-]{11})/;
+  match = url.match(shortUrlPattern);
+  if (match && match[1]) return match[1];
+
+  // Handle regular URLs: youtube.com/watch?v=VIDEO_ID
+  const longUrlPattern = /youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/;
+  match = url.match(longUrlPattern);
+  if (match && match[1]) return match[1];
+
+  // Handle embed URLs: youtube.com/embed/VIDEO_ID
+  const embedPattern = /youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/;
+  match = url.match(embedPattern);
+  if (match && match[1]) return match[1];
+
+  // Fallback pattern for other YouTube URL formats
   const regExp =
     /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
-  const match = url.match(regExp);
-  return match && match[7].length === 11 ? match[7] : null;
+  const fallbackMatch = url.match(regExp);
+  return fallbackMatch && fallbackMatch[7].length === 11
+    ? fallbackMatch[7]
+    : null;
 };
 
 // Title case helper
@@ -93,7 +117,13 @@ export const BasicProductDetailPage = ({
   const [isShowVideo, setIsShowVideo] = useState(false);
 
   const currency = shopDetails?.country_currency || "BDT";
-  const allowDownload = false; // Feature not yet implemented
+  const allowDownload = Boolean(
+    (
+      shopDetails?.metadata?.settings?.shop_settings as
+        | { enable_product_image_download?: boolean }
+        | undefined
+    )?.enable_product_image_download
+  );
 
   // Selected image URL
   const selectedImageUrl = useMemo(() => {
@@ -132,7 +162,8 @@ export const BasicProductDetailPage = ({
   // stockQuantity is already from hook
   // isInStock is already from hook
   const isStockOut = isStockMaintain && !isInStock;
-  const isStockNotAvailable = isStockMaintain && (!isInStock || quantity >= stockQuantity);
+  const isStockNotAvailable =
+    isStockMaintain && (!isInStock || quantity >= stockQuantity);
 
   // Helper to check if two variant selections match (same as premium theme)
   const isSameVariantsCombination = useCallback(
@@ -483,15 +514,18 @@ export const BasicProductDetailPage = ({
                   )}
 
                   {product?.images && !isShowVideo && (
-                    <>
-                      <div
-                        onClick={() => {
-                          setOpen(true);
-                        }}
-                        className="absolute bg-blue-zatiq/15 p-3 rounded-full top-2 right-2 z-10 cursor-pointer"
+                    <div className="absolute top-2 right-2 z-10 flex items-center gap-2">
+                      {/* Zoom Button */}
+                      <button
+                        type="button"
+                        onClick={() => setOpen(true)}
+                        className="bg-blue-zatiq/15 backdrop-blur-sm p-3 rounded-full cursor-pointer hover:bg-blue-zatiq/25 transition-all duration-200 shadow-lg"
+                        aria-label="Zoom image"
                       >
                         <ZoomIn className="text-white dark:text-black-full w-5 h-5 md:w-7 md:h-7" />
-                      </div>
+                      </button>
+
+                      {/* Download Button */}
                       {allowDownload && selectedImageUrl && (
                         <button
                           type="button"
@@ -499,13 +533,13 @@ export const BasicProductDetailPage = ({
                             e.stopPropagation();
                             handleDownload(selectedImageUrl, selectedImageIdx);
                           }}
-                          className="absolute bg-blue-zatiq/15 p-3 rounded-full bottom-2 right-2 z-10 cursor-pointer hover:bg-blue-zatiq/25 transition-colors"
+                          className="bg-blue-zatiq/15 backdrop-blur-sm p-3 rounded-full cursor-pointer hover:bg-blue-zatiq/25 transition-all duration-200 shadow-lg"
                           aria-label="Download image"
                         >
                           <Download className="text-white dark:text-black-full w-5 h-5 md:w-7 md:h-7" />
                         </button>
                       )}
-                    </>
+                    </div>
                   )}
                 </div>
 

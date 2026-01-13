@@ -101,7 +101,7 @@ export default function CollectionBreadcrumb1({
             : "0 2px 8px rgba(0,0,0,0.06)",
       }}
     >
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container">
         <div className="flex items-center justify-between py-4">
           <ol className="flex items-center space-x-1 sm:space-x-2 text-sm sm:text-base">
             {breadcrumbItems.map((item, index) => (

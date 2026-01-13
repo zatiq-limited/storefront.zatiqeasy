@@ -94,7 +94,7 @@ const config = {
     "max-w-24", "max-w-28", "max-w-32", "max-w-36", "max-w-40", "max-w-44", "max-w-48",
     "max-w-md", "max-w-lg", "max-w-xl", "max-w-2xl", "max-w-3xl", "max-w-4xl", "max-w-5xl", "max-w-6xl", "max-w-7xl",
     "max-w-[55%]", "max-w-[90%]", "max-w-[280px]", "max-w-[362px]", "max-w-[384px]", "max-w-[400px]", "max-w-[500px]", "max-w-[550px]", "max-w-[580px]", "max-w-[600px]", "max-w-[640px]", "max-w-[700px]", "max-w-[800px]", "max-w-[900px]", "max-w-[1000px]", "max-w-[1100px]", "max-w-[1440px]",
-    "sm:max-w-28", "sm:max-w-32", "sm:max-w-36", "sm:max-w-[85%]", "sm:max-w-[500px]",
+    "sm:max-w-2xl", "sm:max-w-28", "sm:max-w-32", "sm:max-w-36", "sm:max-w-[85%]", "sm:max-w-[500px]",
     "md:max-w-36", "md:max-w-40", "md:max-w-44", "md:max-w-[400px]", "md:max-w-[550px]", "md:max-w-[600px]", "md:max-w-[900px]",
     "lg:max-w-[500px]", "lg:max-w-[600px]", "lg:max-w-[640px]", "lg:max-w-[1000px]",
     "xl:max-w-[1100px]",

@@ -16,6 +16,8 @@ import React, {
   useCallback,
   createContext,
   useContext,
+  useRef,
+  useEffect,
 } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -62,6 +64,23 @@ function useDrawerContext() {
   return useContext(DrawerContext);
 }
 
+// Context for managing search input state with debounce
+interface SearchContextType {
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
+  setSearchQueryWithDebounce: (
+    query: string,
+    onSearch: (q: string) => void
+  ) => void;
+  clearDebounceTimer: () => void;
+}
+
+const SearchContext = createContext<SearchContextType | null>(null);
+
+function useSearchContext() {
+  return useContext(SearchContext);
+}
+
 // Block type definition
 export interface Block {
   wrapper?: string;
@@ -94,6 +113,7 @@ export interface Block {
   bind_placeholder?: string;
   bind_class?: string;
   bind_style?: Record<string, unknown>;
+  bind_id?: string;
 
   // Direct attributes
   src?: string;
@@ -162,16 +182,29 @@ function BlockRendererInternal({
   className = "",
 }: BlockRendererProps) {
   const drawerContext = useDrawerContext();
+  const searchContext = useSearchContext();
   const router = useRouter();
 
-  const blockId = block.id || block.wrapper?.match(/#([^.#\s]+)/)?.[1];
+  // Resolve block id - can be from block.id, wrapper, or bind_id
+  let blockId = block.id || block.wrapper?.match(/#([^.#\s]+)/)?.[1];
+
+  // If bind_id is present, resolve it from data/context
+  if (block.bind_id) {
+    const earlyMergedData = { ...data, ...(block.data || {}) };
+    const boundId = resolveBinding(block.bind_id, earlyMergedData, context);
+    if (boundId !== undefined) {
+      blockId = String(boundId);
+    }
+  }
+
   const isVisible =
     blockId && drawerContext?.drawerStates[blockId] !== undefined
       ? drawerContext.drawerStates[blockId]
       : block.state?.visible ?? true;
 
   // Merge block data with parent data
-  // Preserve special keys like cart_count from parent (don't let block data overwrite)
+  // Preserve special keys like cart_count, cart_total from parent (don't let block data overwrite)
+  // Also inject drawer states for conditional rendering based on drawer visibility
   const mergedData = useMemo(() => {
     const blockData = block.data || {};
     const merged = { ...data, ...blockData };
@@ -179,14 +212,27 @@ function BlockRendererInternal({
     if (data.cart_count !== undefined) {
       merged.cart_count = data.cart_count;
     }
+    // Always preserve cart_total from parent data if it exists
+    if (data.cart_total !== undefined) {
+      merged.cart_total = data.cart_total;
+    }
+    // Inject drawer states for condition checking (e.g., _drawer.mobile_menu)
+    if (drawerContext) {
+      merged._drawer = drawerContext.drawerStates;
+    }
     return merged;
-  }, [data, block.data]);
+  }, [data, block.data, drawerContext]);
 
   // Extended event handlers with local state management
   const extendedHandlers = useMemo(
     () => ({
       ...eventHandlers,
       navigate: (url: string) => {
+        // Close mobile menu when navigating (common UX pattern)
+        if (drawerContext?.drawerStates?.mobile_menu) {
+          drawerContext.toggleDrawer("mobile_menu");
+        }
+
         if (eventHandlers.navigate) {
           eventHandlers.navigate(url);
         } else if (url === "#") {
@@ -210,7 +256,12 @@ function BlockRendererInternal({
         }
       },
       toggleAccordion: (target: string) => {
-        eventHandlers.toggleAccordion?.(target);
+        // Use DrawerContext to toggle accordion visibility (same as drawer)
+        if (drawerContext) {
+          drawerContext.toggleDrawer(target);
+        } else {
+          eventHandlers.toggleAccordion?.(target);
+        }
       },
     }),
     [eventHandlers, drawerContext, router]
@@ -316,9 +367,16 @@ function BlockRendererInternal({
     style: Object.keys(style).length > 0 ? style : undefined,
   };
 
-  // Add id if present
-  if (wrapperId || block.id) {
-    props.id = wrapperId || block.id;
+  // Add id if present (supports bind_id for dynamic ids)
+  let elementId = wrapperId || block.id;
+  if (block.bind_id) {
+    const boundId = resolveBinding(block.bind_id, mergedData, context);
+    if (boundId !== undefined) {
+      elementId = String(boundId);
+    }
+  }
+  if (elementId) {
+    props.id = elementId;
   }
 
   // Handle visibility state
@@ -424,6 +482,50 @@ function BlockRendererInternal({
       : block.placeholder || "";
     props.placeholder = placeholder;
     props.type = (block.type === "text_input" ? "text" : block.type) || "text";
+
+    // Check if this is a search input
+    // Method 1: Has on_submit with search action
+    const submitEvent = block.events?.on_submit;
+    const hasSearchSubmitEvent = submitEvent?.action === "search";
+
+    // Method 2: Placeholder contains "search" (common pattern for search inputs)
+    const placeholderLower = placeholder.toLowerCase();
+    const hasSearchPlaceholder =
+      placeholderLower.includes("search") ||
+      placeholderLower.includes("find") ||
+      placeholderLower.includes("discover");
+
+    // Method 3: Input has search-related id, class, or bind_placeholder
+    const hasSearchIdentifier =
+      block.id?.toLowerCase().includes("search") ||
+      block.class?.toLowerCase().includes("search") ||
+      block.bind_placeholder?.toLowerCase().includes("search");
+
+    const isSearchInput =
+      hasSearchSubmitEvent || hasSearchPlaceholder || hasSearchIdentifier;
+
+    if (isSearchInput && searchContext) {
+      // Make search input controlled with debounce
+      props.value = searchContext.searchQuery;
+      props.onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const query = e.target.value;
+        // Use debounced search - will trigger after 2 seconds of inactivity
+        searchContext.setSearchQueryWithDebounce(query, (q) => {
+          eventHandlers.search?.(q);
+        });
+      };
+      // Handle Enter key to trigger search immediately
+      props.onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          // Clear debounce timer to prevent double triggering
+          searchContext.clearDebounceTimer();
+          if (searchContext.searchQuery.trim()) {
+            eventHandlers.search?.(searchContext.searchQuery);
+          }
+        }
+      };
+    }
   }
 
   // aria-label
@@ -454,10 +556,20 @@ function BlockRendererInternal({
             props.onMouseLeave = handler;
             break;
           case "on_submit":
-            props.onSubmit = (e: React.FormEvent) => {
-              e.preventDefault();
-              handler();
-            };
+            // Special handling for search submit - pass the actual query
+            if (eventConfig.action === "search" && searchContext) {
+              props.onSubmit = (e: React.FormEvent) => {
+                e.preventDefault();
+                if (searchContext.searchQuery.trim()) {
+                  eventHandlers.search?.(searchContext.searchQuery);
+                }
+              };
+            } else {
+              props.onSubmit = (e: React.FormEvent) => {
+                e.preventDefault();
+                handler();
+              };
+            }
             break;
         }
       }
@@ -510,11 +622,18 @@ function BlockRendererInternal({
 
   // Use Next.js Link for internal anchor tags to enable client-side navigation
   if (tag === "a" && props.href && isInternalUrl(String(props.href))) {
-    // Remove onClick since Link handles navigation - prevents double navigation
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { href, onClick, ...restProps } = props as Record<string, unknown>;
+
+    // Create click handler to close mobile menu before navigation
+    const handleLinkClick = () => {
+      if (drawerContext?.drawerStates?.mobile_menu) {
+        drawerContext.toggleDrawer("mobile_menu");
+      }
+    };
+
     return (
-      <Link href={String(href)} {...restProps}>
+      <Link href={String(href)} {...restProps} onClick={handleLinkClick}>
         {children}
       </Link>
     );
@@ -554,48 +673,114 @@ function BlockRendererInternal({
     }
 
     if (elementUrl && isInternalUrl(elementUrl)) {
-      // Remove onClick since Link handles navigation
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { onClick, ...restProps } = props as Record<string, unknown>;
+
+      // Create click handler to close mobile menu before navigation
+      const handleLinkClick = () => {
+        if (drawerContext?.drawerStates?.mobile_menu) {
+          drawerContext.toggleDrawer("mobile_menu");
+        }
+      };
+
       return (
-        <Link href={elementUrl} {...restProps}>
-          {createElement(tag, { className: props.className, style: props.style }, children)}
+        <Link href={elementUrl} {...restProps} onClick={handleLinkClick}>
+          {createElement(
+            tag,
+            { className: props.className, style: props.style },
+            children
+          )}
         </Link>
       );
     }
   }
 
-  // Special handling for cart icon buttons - add badge with cart count
-  // Check both "click" and "on_click" event names, and be flexible with detection
+  // Check both "click" and "on_click" event names for button detection
   const clickEvent = block.events?.on_click || block.events?.click;
 
-  const isCartToggle =
-    clickEvent?.action === "toggle_drawer" &&
-    (clickEvent?.target === "cart_drawer" ||
-      clickEvent?.target === "cart" ||
-      String(clickEvent?.target || "").toLowerCase().includes("cart"));
+  // Special handling for search icon buttons - open search modal
+  // Check if this is a search-related button by icon, id, or class
+  const hasSearchIcon = block.icon?.toLowerCase() === "search";
+  const hasSearchIdentifier =
+    block.id?.toLowerCase().includes("search") ||
+    block.class?.toLowerCase().includes("search") ||
+    blockId?.toLowerCase().includes("search");
 
-  // Also check if this is a cart-related icon button by ID or class
-  const hasCartIdentifier =
-    block.id?.toLowerCase().includes("cart") ||
-    block.class?.toLowerCase().includes("cart") ||
-    blockId?.toLowerCase().includes("cart");
+  // Check if any child block has a search icon (recursively checks nested blocks)
+  const checkForSearchIcon = (blocks: Block[] | undefined): boolean => {
+    if (!blocks) return false;
+    return blocks.some((child) => {
+      // Check if this child has a search icon
+      const childHasSearchIcon =
+        child.icon?.toLowerCase() === "search" ||
+        (child.type === "icon" && child.icon?.toLowerCase() === "search");
+      if (childHasSearchIcon) return true;
+      // Recursively check nested blocks
+      return checkForSearchIcon(child.blocks);
+    });
+  };
+  const hasChildSearchIcon = checkForSearchIcon(block.blocks);
 
-  // Check if block contains a cart-related icon (shopping-cart, shopping-bag, etc.)
+  const isSearchButton =
+    (hasSearchIcon || hasSearchIdentifier || hasChildSearchIcon) &&
+    clickEvent &&
+    !block.placeholder;
+
+  // If this is a search button, override the click handler to open search modal
+  if (isSearchButton) {
+    const searchClickHandler = () => {
+      eventHandlers.search?.("");
+    };
+    props.onClick = searchClickHandler;
+
+    return createElement(tag, props, children);
+  }
+
+  // Special handling for cart icon buttons - add badge with cart count
+  // Only add badge to elements that actually have a cart icon (not to text labels)
+
+  // Check if block directly has a cart-related icon
   const hasCartIcon =
     block.icon?.toLowerCase().includes("cart") ||
     block.icon?.toLowerCase().includes("shopping") ||
     block.icon?.toLowerCase().includes("bag") ||
     block.icon?.toLowerCase().includes("basket");
 
-  const isCartButton = isCartToggle || (hasCartIdentifier && clickEvent) || (hasCartIcon && clickEvent);
+  // Check if any child block has a cart icon (for wrapper buttons containing icon)
+  const hasChildCartIcon = block.blocks?.some(
+    (child) =>
+      child.type === "icon" &&
+      (child.icon?.toLowerCase().includes("cart") ||
+        child.icon?.toLowerCase().includes("shopping") ||
+        child.icon?.toLowerCase().includes("bag") ||
+        child.icon?.toLowerCase().includes("basket"))
+  );
+
+  // Only consider it a cart button if it has a cart icon (directly or in children)
+  // AND has a click event to toggle the cart drawer
+  const isCartToggle =
+    clickEvent?.action === "toggle_drawer" &&
+    (clickEvent?.target === "cart_drawer" ||
+      clickEvent?.target === "cart" ||
+      String(clickEvent?.target || "")
+        .toLowerCase()
+        .includes("cart"));
+
+  const isCartButton = (hasCartIcon || hasChildCartIcon) && isCartToggle;
 
   if (isCartButton) {
     const cartCount = mergedData.cart_count as number | undefined;
 
     return createElement(
       tag,
-      { ...props, className: `${finalClassName} relative overflow-visible`, style: { ...((props.style as React.CSSProperties) || {}), overflow: 'visible' } },
+      {
+        ...props,
+        className: `${finalClassName} relative overflow-visible`,
+        style: {
+          ...((props.style as React.CSSProperties) || {}),
+          overflow: "visible",
+        },
+      },
       <>
         {children}
         {cartCount !== undefined && cartCount > 0 && (
@@ -620,7 +805,8 @@ export default function BlockRenderer({
   eventHandlers = {},
   className = "",
 }: BlockRendererProps) {
-  const existingContext = useDrawerContext();
+  const existingDrawerContext = useDrawerContext();
+  const existingSearchContext = useSearchContext();
 
   const initialDrawerStates = useMemo(() => {
     return collectDrawerStates(block);
@@ -628,6 +814,47 @@ export default function BlockRenderer({
 
   const [drawerStates, setDrawerStates] =
     useState<Record<string, boolean>>(initialDrawerStates);
+
+  // Search input state with debounce
+  const [searchQuery, setSearchQuery] = useState("");
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Clear debounce timer on unmount
+  useEffect(() => {
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+    };
+  }, []);
+
+  // Debounced search function - triggers search after 2 seconds of inactivity
+  const setSearchQueryWithDebounce = useCallback(
+    (query: string, onSearch: (q: string) => void) => {
+      setSearchQuery(query);
+
+      // Clear existing timer
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+
+      // Set new timer - trigger search after 2 seconds if query is not empty
+      if (query.trim()) {
+        debounceTimerRef.current = setTimeout(() => {
+          onSearch(query);
+        }, 300);
+      }
+    },
+    []
+  );
+
+  // Clear the debounce timer (e.g., when Enter is pressed)
+  const clearDebounceTimer = useCallback(() => {
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+      debounceTimerRef.current = null;
+    }
+  }, []);
 
   const toggleDrawer = useCallback(
     (id: string) => {
@@ -645,7 +872,18 @@ export default function BlockRenderer({
     [drawerStates, toggleDrawer]
   );
 
-  if (existingContext) {
+  const searchContextValue = useMemo(
+    () => ({
+      searchQuery,
+      setSearchQuery,
+      setSearchQueryWithDebounce,
+      clearDebounceTimer,
+    }),
+    [searchQuery, setSearchQueryWithDebounce, clearDebounceTimer]
+  );
+
+  // If already in existing contexts, just render internal
+  if (existingDrawerContext && existingSearchContext) {
     return (
       <BlockRendererInternal
         block={block}
@@ -658,14 +896,18 @@ export default function BlockRenderer({
   }
 
   return (
-    <DrawerContext.Provider value={drawerContextValue}>
-      <BlockRendererInternal
-        block={block}
-        data={data}
-        context={context}
-        eventHandlers={eventHandlers}
-        className={className}
-      />
+    <DrawerContext.Provider value={existingDrawerContext || drawerContextValue}>
+      <SearchContext.Provider
+        value={existingSearchContext || searchContextValue}
+      >
+        <BlockRendererInternal
+          block={block}
+          data={data}
+          context={context}
+          eventHandlers={eventHandlers}
+          className={className}
+        />
+      </SearchContext.Provider>
     </DrawerContext.Provider>
   );
 }

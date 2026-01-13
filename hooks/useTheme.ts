@@ -18,19 +18,29 @@ async function fetchTheme(shopId?: string | number) {
 }
 
 export function useTheme() {
-  const { setTheme } = useThemeStore();
+  const { theme: storeTheme, setTheme } = useThemeStore();
   const shopDetails = useShopStore((state) => state.shopDetails);
 
-  // Get shop_id from store
+  // Get shop_id and legacy_theme flag from store
   const shopId = shopDetails?.id;
+  // Only theme builder mode (legacy_theme === false) needs to fetch theme config
+  // Legacy/static themes have hardcoded layouts and don't need this API call
+  const isLegacyTheme = shopDetails?.legacy_theme ?? true;
+
+  // Check if we have theme data in store for initialData
+  const hasStoreTheme = storeTheme && Object.keys(storeTheme).length > 0;
 
   const query = useQuery({
     queryKey: ["theme", shopId],
     queryFn: () => fetchTheme(shopId),
+    // Use store data as initialData for instant page transitions
+    initialData: hasStoreTheme ? storeTheme : undefined,
     ...CACHE_TIMES.STATIC,
     ...DEFAULT_QUERY_OPTIONS,
-    // Only fetch when we have a shop ID
-    enabled: !!shopId,
+    // Only fetch when:
+    // 1. We have a shop ID
+    // 2. We're NOT using legacy theme (static themes don't need theme API)
+    enabled: !!shopId && !isLegacyTheme,
   });
 
   // Sync to Zustand when data changes

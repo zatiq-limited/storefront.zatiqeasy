@@ -18,15 +18,20 @@ async function fetchHomepage(shopId?: string | number) {
 }
 
 export function useHomepage() {
-  const { setHomepage } = useHomepageStore();
+  const { homepage: storeHomepage, setHomepage } = useHomepageStore();
   const shopDetails = useShopStore((state) => state.shopDetails);
 
   // Get shop_id from store
   const shopId = shopDetails?.id;
 
+  // Check if we have homepage data in store for initialData
+  const hasStoreHomepage = storeHomepage && Object.keys(storeHomepage).length > 0;
+
   const query = useQuery({
     queryKey: ["homepage", shopId],
     queryFn: () => fetchHomepage(shopId),
+    // Use store data as initialData for instant page transitions
+    initialData: hasStoreHomepage ? storeHomepage : undefined,
     ...CACHE_TIMES.STATIC,
     ...DEFAULT_QUERY_OPTIONS,
     // Only fetch when we have a shop ID

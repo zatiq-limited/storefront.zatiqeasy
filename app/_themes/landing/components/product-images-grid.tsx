@@ -19,7 +19,7 @@ export function ProductImagesGrid({
 
   return (
     <div className={`w-full ${className}`}>
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16 lg:py-24">
+      <div className="container py-10 md:py-16 lg:py-24">
         {/* Title */}
         {productImages.title && (
           <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-foreground text-center font-bold leading-snug mb-8 md:mb-12">
