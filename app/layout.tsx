@@ -25,7 +25,6 @@ import {
   Prata,
   Outfit,
   Unbounded,
-  Special_Gothic,
 } from "next/font/google";
 import "./globals.css";
 import { QueryProvider } from "@/providers/QueryProvider";
@@ -211,13 +210,8 @@ const unbounded = Unbounded({
   display: "swap",
 });
 
-// Special Gothic for Sellora theme
-const specialGothic = Special_Gothic({
-  weight: ["400", "500", "600", "700"],
-  subsets: ["latin"],
-  variable: "--font-special-gothic",
-  display: "swap",
-});
+// Special Gothic is loaded via Google Fonts CDN in globals.css
+// No need for next/font definition as it's imported via @import
 
 // Viewport configuration - prevents zoom on mobile inputs
 export const viewport: Viewport = {
@@ -320,7 +314,7 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang="en" className={`${inter.variable} ${roboto.variable} ${openSans.variable} ${lato.variable} ${poppins.variable} ${montserrat.variable} ${sourceSans.variable} ${nunito.variable} ${raleway.variable} ${workSans.variable} ${playfairDisplay.variable} ${merriweather.variable} ${oswald.variable} ${ptSans.variable} ${ubuntu.variable} ${quicksand.variable} ${dmSans.variable} ${manrope.variable} ${spaceGrotesk.variable} ${lora.variable} ${prata.variable} ${outfit.variable} ${unbounded.variable} ${specialGothic.variable}`}>
+    <html lang="en" className={`${inter.variable} ${roboto.variable} ${openSans.variable} ${lato.variable} ${poppins.variable} ${montserrat.variable} ${sourceSans.variable} ${nunito.variable} ${raleway.variable} ${workSans.variable} ${playfairDisplay.variable} ${merriweather.variable} ${oswald.variable} ${ptSans.variable} ${ubuntu.variable} ${quicksand.variable} ${dmSans.variable} ${manrope.variable} ${spaceGrotesk.variable} ${lora.variable} ${prata.variable} ${outfit.variable} ${unbounded.variable}`}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
