@@ -2,16 +2,15 @@
 
 import { useState, useMemo, useCallback, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import {
   Minus,
   Plus,
-  ShoppingCart,
   ChevronLeft,
   ChevronRight,
   Download,
   ZoomIn,
+  Play,
 } from "lucide-react";
 import { useShopStore } from "@/stores/shopStore";
 import { useProductsStore } from "@/stores/productsStore";
@@ -22,11 +21,17 @@ import {
   selectSubtotal,
 } from "@/stores/cartStore";
 import { CartFloatingBtn } from "@/components/features/cart/cart-floating-btn";
+import { SoldUnits } from "@/components/products/sold-units";
+import { CustomerReviews } from "@/components/products/customer-reviews";
+import TrustCard from "../../components/trust-card";
+import CartQtyControl from "@/components/features/cart/shared/cart-qty-control";
 import { GridContainer } from "../../components/core";
 import { LuxuraProductCard } from "../../components/cards";
 import { SectionHeader } from "../home/sections/section-header";
-import { formatPrice } from "@/lib/utils/formatting";
-import { cn } from "@/lib/utils";
+import { formatPrice, titleCase } from "@/lib/utils/formatting";
+import { cn, getDetailPageImageUrl, getInventoryThumbImageUrl } from "@/lib/utils";
+import { getThemeData } from "@/lib/utils/theme-constants";
+import { FallbackImage } from "@/components/ui/fallback-image";
 import type { VariantsState } from "@/types/cart.types";
 import { useProductDetails, useShopInventories } from "@/hooks";
 import type { Product } from "@/stores/productsStore";
@@ -97,6 +102,7 @@ export function LuxuraProductDetailPage() {
 
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [isShowVideo, setIsShowVideo] = useState(false);
 
   const baseUrl = shopDetails?.baseUrl || "";
   const currency = shopDetails?.country_currency || "BDT";
@@ -178,6 +184,48 @@ export function LuxuraProductDetailPage() {
     },
     []
   );
+
+  // Pixel tracking for product view (matching reference implementation)
+  useEffect(() => {
+    if (!product) return;
+
+    // Facebook Pixel tracking
+    if (typeof window !== 'undefined' && (window as any).fbq) {
+      (window as any).fbq('track', 'ViewContent', {
+        content_name: product.name,
+        content_ids: [product.id?.toString()],
+        content_type: 'product',
+        value: product.price,
+        currency: shopDetails?.country_currency || 'USD',
+      });
+    }
+
+    // Google Tag Manager tracking
+    if (typeof window !== 'undefined' && (window as any).dataLayer) {
+      (window as any).dataLayer.push({
+        event: 'view_item',
+        ecommerce: {
+          items: [{
+            item_id: product.id?.toString(),
+            item_name: product.name,
+            price: product.price,
+            currency: shopDetails?.country_currency || 'USD',
+          }]
+        }
+      });
+    }
+
+    // TikTok Pixel tracking
+    if (typeof window !== 'undefined' && (window as any).ttq) {
+      (window as any).ttq.track('ViewContent', {
+        content_id: product.id?.toString(),
+        content_name: product.name,
+        content_type: 'product',
+        price: product.price,
+        currency: shopDetails?.country_currency || 'USD',
+      });
+    }
+  }, [product, shopDetails?.country_currency]);
 
   // Transform selectedVariants to VariantsState format for comparison (same as Basic theme)
   const selectedVariantsAsState = useMemo(() => {
@@ -467,34 +515,49 @@ export function LuxuraProductDetailPage() {
           {/* Image Gallery */}
           <div className="space-y-4">
             {/* Main Image */}
-            <div
-              className="relative aspect-square rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 cursor-pointer"
-              onClick={() => setLightboxOpen(true)}
-            >
-              {images[selectedImageIndex] && (
-                <Image
-                  src={images[selectedImageIndex]}
-                  alt={product.name}
-                  fill
-                  className="object-contain"
-                  priority
-                />
+            <div className="relative">
+              {isShowVideo && video_link ? (
+                <div className="w-full h-full bg-black z-50 flex items-center justify-center border rounded-xl md:rounded-3xl">
+                  {video_link && (
+                    <iframe
+                      width="1280"
+                      height="720"
+                      src={`https://www.youtube.com/embed/${videoId}?rel=0&autoplay=1`}
+                      title={product.name}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      referrerPolicy="strict-origin-when-cross-origin"
+                      allowFullScreen
+                      className="w-full max-h-75 md:max-h-125 object-contain transition ease-in duration-500 rounded-xl md:rounded-3xl"
+                    />
+                  )}
+                </div>
+              ) : (
+                images[selectedImageIndex] && (
+                  <FallbackImage
+                    src={getDetailPageImageUrl(images[selectedImageIndex])}
+                    width={512}
+                    height={512}
+                    className="w-full max-h-225 object-contain transition ease-in duration-500 rounded-xl md:rounded-3xl"
+                    alt={product.name}
+                    onClick={() => setLightboxOpen(true)}
+                  />
+                )
               )}
 
-              {/* Zoom & Download Buttons */}
-              {images[selectedImageIndex] && (
-                <div className="absolute top-4 right-4 z-10 flex items-center gap-2">
+              {/* Zoom & Download Buttons - Only show when NOT showing video */}
+              {!isShowVideo && images[selectedImageIndex] && (
+                <div className="absolute top-2 right-2 z-10 flex items-center gap-2">
                   {/* Zoom Button */}
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       setLightboxOpen(true);
                     }}
-                    className="p-2.5 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white dark:hover:bg-gray-700 transition-all duration-200"
+                    className="bg-blue-zatiq/15 backdrop-blur-sm p-3 rounded-full cursor-pointer hover:bg-blue-zatiq/25 transition-all duration-200 shadow-lg"
                     aria-label="Zoom image"
                     type="button"
                   >
-                    <ZoomIn className="w-5 h-5 text-gray-900 dark:text-gray-100" />
+                    <ZoomIn className="text-white dark:text-gray-700 w-5 h-5 md:w-7 md:h-7" />
                   </button>
 
                   {/* Download Button */}
@@ -504,11 +567,11 @@ export function LuxuraProductDetailPage() {
                         e.stopPropagation();
                         handleDownloadImage(images[selectedImageIndex], selectedImageIndex);
                       }}
-                      className="p-2.5 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white dark:hover:bg-gray-700 transition-all duration-200"
+                      className="bg-blue-zatiq/15 backdrop-blur-sm p-3 rounded-full cursor-pointer hover:bg-blue-zatiq/25 transition-all duration-200 shadow-lg"
                       aria-label="Download image"
                       type="button"
                     >
-                      <Download className="w-5 h-5 text-gray-900 dark:text-gray-100" />
+                      <Download className="text-white dark:text-gray-700 w-5 h-5 md:w-7 md:h-7" />
                     </button>
                   )}
                 </div>
@@ -542,41 +605,115 @@ export function LuxuraProductDetailPage() {
             </div>
 
             {/* Thumbnail Gallery */}
-            {images.length > 1 && (
-              <div className="flex gap-2 overflow-x-auto pb-2">
-                {images.map((img, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setSelectedImageIndex(index)}
-                    className={cn(
-                      "w-20 h-20 rounded-lg overflow-hidden shrink-0 border-2 transition-colors",
-                      selectedImageIndex === index
-                        ? "border-blue-zatiq"
-                        : "border-transparent"
+            <div className="flex px-1 mt-2 md:mt-3">
+              {images.length > 0 && (
+                <ul className="flex gap-2 flex-wrap mt-2">
+                  {/* Video Thumbnail */}
+                  {video_link && videoId && (
+                    <div
+                      onClick={() => {
+                        setIsShowVideo(true);
+                      }}
+                      className={cn(
+                        "w-[50px] min-w-[50px] h-[50px] sm:min-w-[75px] sm:h-[75px] sm:w-[75px] relative overflow-hidden ring ring-transparent p-1 cursor-pointer",
+                        isShowVideo ? "ring-blue-zatiq!" : ""
+                      )}
+                    >
+                      <FallbackImage
+                        src={`https://img.youtube.com/vi/${videoId}/0.jpg`}
+                        alt="Product video"
+                        width={200}
+                        height={200}
+                        className="w-full h-full object-cover rounded-lg md:rounded-xl"
+                      />
+                      <Play size={16} className="absolute top-1/2 left-1/2 text-white translate-x-[-50%] translate-y-[-50%]" />
+                    </div>
+                  )}
+
+                  {/* Image Thumbnails */}
+                  {images.map((img, key) => (
+                    <li
+                      role="button"
+                      onClick={() => {
+                        setIsShowVideo(false);
+                        setSelectedImageIndex(key);
+                      }}
+                      key={key}
+                      className="w-[50px] min-w-[50px] h-[50px] sm:min-w-[75px] sm:h-[75px] sm:w-[75px] relative overflow-hidden ring-3 ring-transparent p-1 cursor-pointer"
+                    >
+                      <FallbackImage
+                        alt={`${product.name}_img_${key}`}
+                        src={getInventoryThumbImageUrl(img)}
+                        width={200}
+                        height={200}
+                        className="w-full h-full object-cover rounded-lg md:rounded-xl"
+                      />
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+
+            {/* Details Section (Desktop) - INSIDE image column */}
+            <div className="text-sm mt-[40px] hidden xl:block">
+              {(product.custom_fields || product.warranty) && (
+                <div className="bg-blue-zatiq/10 dark:bg-black-18 border border-blue-zatiq/50 dark:border-gray-700 px-5 py-5 text-black-1.2 dark:text-white mb-4 rounded-xl md:rounded-3xl">
+                  <h4 className="font-medium text-sm text-[#4B5563] dark:text-gray-300">
+                    Details:
+                  </h4>
+                  <ul className="mt-3 tracking-[-0.24px] capitalize">
+                    {product.custom_fields &&
+                      Object.keys(product.custom_fields).map((key, idx) => (
+                        <li key={idx} className="grid grid-cols-5 gap-6">
+                          <div className="col-span-2 text-[#6B7280] dark:text-gray-100">
+                            {key}
+                          </div>
+                          <div className="col-span-3 text-right text-[#374151] dark:text-gray-100">
+                            {(product.custom_fields as Record<string, string>)[key]}
+                          </div>
+                        </li>
+                      ))}
+                    {product.warranty && (
+                      <li className="grid grid-cols-5 gap-6">
+                        <div className="col-span-2 text-[#6B7280] dark:text-gray-400">
+                          Warranty
+                        </div>
+                        <div className="col-span-3 text-right text-[#374151] dark:text-gray-100">
+                          {product.warranty}
+                        </div>
+                      </li>
                     )}
-                  >
-                    <Image
-                      src={img}
-                      alt={`${product.name} ${index + 1}`}
-                      width={80}
-                      height={80}
-                      className="w-full h-full object-cover"
-                    />
-                  </button>
-                ))}
-              </div>
-            )}
+                  </ul>
+                </div>
+              )}
+
+              {product.description && (
+                <div className="ql-snow">
+                  <div
+                    className="ql-editor"
+                    dangerouslySetInnerHTML={{ __html: product.description }}
+                  />
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Product Info */}
           <div className="space-y-6">
             {/* Title */}
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white">
-              {product.name}
+            <h1
+              className="text-[20px] md:text-4xl text-blue-zatiq"
+              style={{
+                fontFamily: getThemeData(
+                  shopDetails?.shop_theme?.theme_name
+                ).secondaryFont,
+              }}
+            >
+              {titleCase(product.name)}
             </h1>
 
             {/* Price */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-end gap-2">
               <span className="text-2xl md:text-3xl font-bold text-blue-600">
                 {formatPrice(currentPrice, currency)}
               </span>
@@ -597,12 +734,19 @@ export function LuxuraProductDetailPage() {
               )}
             </div>
 
+            {/* Sold Units */}
+            <SoldUnits
+              showSoldCount={shopDetails?.show_product_sold_count ?? false}
+              initialSold={(product as any).initial_product_sold ?? 0}
+              totalSold={(product as any).total_inventory_sold ?? 0}
+            />
+
             {/* Stock Status */}
-            {isOutOfStock ? (
+            {/* {isOutOfStock ? (
               <p className="text-red-500 font-medium">{t("out_of_stock")}</p>
             ) : (
               <p className="text-green-600 font-medium">{t("in_stock")}</p>
-            )}
+            )} */}
 
             {/* Already in Cart Message */}
             {isInCartDirect && (
@@ -640,103 +784,96 @@ export function LuxuraProductDetailPage() {
               </div>
             ))}
 
-            {/* Quantity */}
-            <div className="space-y-3">
-              <h3 className="font-medium text-gray-900 dark:text-white">
-                {t("quantity")}
-              </h3>
-              <div className="flex items-center gap-4">
-                <button
-                  onClick={decrementQuantity}
-                  className="w-10 h-10 flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-                >
-                  <Minus size={18} />
-                </button>
-                <span className="text-xl font-medium w-12 text-center">
-                  {quantity}
-                </span>
-                <button
-                  onClick={incrementQuantity}
-                  className="w-10 h-10 flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-                >
-                  <Plus size={18} />
-                </button>
-              </div>
+            {/* Trust Card */}
+            <div>
+              <TrustCard />
             </div>
 
-            {/* Action Buttons */}
-            <div className="flex gap-4 pt-4">
+            {/* Quantity & Actions */}
+            <div className="w-full my-6 mt-12">
+              <div className="flex flex-col md:flex-row md:items-center items-start gap-4 w-full pb-2">
+                <CartQtyControl
+                  qty={quantity}
+                  subQty={decrementQuantity}
+                  sumQty={incrementQuantity}
+                  disableSubBtn={quantity <= 1}
+                  disableSumBtn={isOutOfStock}
+                  maxStock={product.quantity}
+                  onQtyChange={setQuantity}
+                  className="px-3 py-1.5 md:w-1/2 border-[1.2px] border-blue-zatiq w-full bg-transparent rounded-lg md:rounded-xl"
+                />
+
+                <button
+                  disabled={isOutOfStock}
+                  onClick={handleAddToCart}
+                  className="md:w-1/2 text-center p-3 text-sm md:text-base font-medium capitalize disabled:bg-black-disabled w-full border-[1.2px] border-blue-zatiq text-blue-zatiq disabled:text-white disabled:border-black-disabled rounded-lg md:rounded-xl cursor-pointer"
+                >
+                  {isInCartDirect ? t("update_cart") : t("add_to_cart")}
+                </button>
+              </div>
+
               <button
-                onClick={handleAddToCart}
                 disabled={isOutOfStock}
-                className={cn(
-                  "flex-1 flex items-center justify-center gap-2 py-4 rounded-xl font-medium transition-colors",
-                  isOutOfStock
-                    ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                    : "bg-blue-zatiq text-white hover:bg-blue-600"
-                )}
-              >
-                <ShoppingCart size={20} />
-                {isInCartDirect ? t("update_cart") : t("add_to_cart")}
-              </button>
-              <button
                 onClick={handleBuyNow}
-                disabled={isOutOfStock}
-                className={cn(
-                  "flex-1 py-4 rounded-xl font-medium border-2 transition-colors",
-                  isOutOfStock
-                    ? "border-gray-200 text-gray-400 cursor-not-allowed"
-                    : "border-blue-zatiq text-blue-zatiq hover:bg-blue-50 dark:hover:bg-blue-900/20"
-                )}
+                className="p-3 mt-2 text-center text-sm md:text-base font-medium disabled:bg-black-disabled capitalize transition-colors duration-150 w-full bg-blue-zatiq border-[1.2px] border-blue-zatiq text-white dark:text-black-full disabled:text-white disabled:border-black-disabled rounded-lg md:rounded-xl cursor-pointer"
               >
                 {t("buy_now")}
               </button>
+
+              {isOutOfStock && (
+                <p className="text-sm font-medium text-red-500 mt-3">
+                  No more items remaining!
+                </p>
+              )}
             </div>
 
-            {/* Description */}
-            {product.description && (
-              <div className="pt-6 border-t">
-                <h3 className="font-medium text-gray-900 dark:text-white mb-3">
-                  {t("description")}
-                </h3>
-                <div
-                  className="prose dark:prose-invert max-w-none text-gray-600 dark:text-gray-400"
-                  dangerouslySetInnerHTML={{ __html: product.description }}
-                />
-              </div>
-            )}
-          </div>
-        </div>
+            {/* Mobile Details Section */}
+            <div className="w-full text-sm xl:hidden block">
+              {(product.custom_fields || product.warranty) && (
+                <div className="bg-[#F4F4F5] dark:bg-gray-800 border border-black-4 dark:border-gray-700 px-5 py-5 text-black-1.2 dark:text-white mb-4">
+                  <h4 className="font-medium text-sm text-[#4B5563] dark:text-gray-300">
+                    Details:
+                  </h4>
+                  <ul className="mt-3 tracking-[-0.24px] capitalize">
+                    {product.custom_fields &&
+                      Object.keys(product.custom_fields).map((key, idx) => (
+                        <li key={idx} className="grid grid-cols-5 gap-6">
+                          <div className="col-span-2 text-[#6B7280] dark:text-gray-400">
+                            {key}
+                          </div>
+                          <div className="col-span-3 text-right text-[#374151] dark:text-gray-100">
+                            {(product.custom_fields as Record<string, string>)[key]}
+                          </div>
+                        </li>
+                      ))}
+                    {product.warranty && (
+                      <li className="grid grid-cols-5 gap-6">
+                        <div className="col-span-2 text-[#6B7280] dark:text-gray-400">
+                          Warranty
+                        </div>
+                        <div className="col-span-3 text-right text-[#374151] dark:text-gray-100">
+                          {product.warranty}
+                        </div>
+                      </li>
+                    )}
+                  </ul>
+                </div>
+              )}
 
-        {/* Product Video Section */}
-        {video_link && (
-          <div className="mt-12">
-            <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white mb-6">
-              {t("product_video") || "Product Video"}
-            </h2>
-            <div className="relative w-full aspect-video bg-black rounded-xl overflow-hidden shadow-lg">
-              {videoId ? (
-                <iframe
-                  width="100%"
-                  height="100%"
-                  src={`https://www.youtube.com/embed/${videoId}?rel=0&autoplay=1`}
-                  title={product.name || "Product video"}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  referrerPolicy="strict-origin-when-cross-origin"
-                  allowFullScreen
-                  className="absolute inset-0"
-                />
-              ) : (
-                <video
-                  src={video_link}
-                  controls
-                  autoPlay
-                  className="w-full h-full object-contain"
-                />
+              {product.description && (
+                <div className="ql-snow">
+                  <div
+                    className="ql-editor"
+                    dangerouslySetInnerHTML={{ __html: product.description }}
+                  />
+                </div>
               )}
             </div>
           </div>
-        )}
+        </div>
+
+        {/* Customer Reviews */}
+        <CustomerReviews reviews={product?.reviews ?? []} />
 
         {/* Related Products */}
         {relatedProducts.length > 0 && (
