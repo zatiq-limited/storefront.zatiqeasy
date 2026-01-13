@@ -11,6 +11,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { convertSettingsKeys } from "@/lib/settings-utils";
+import { PLACEHOLDER_IMAGES } from "@/lib/constants/urls";
 import type { Product, Variant } from "@/stores/productsStore";
 import { useAddToCart } from "@/hooks/useAddToCart";
 import { useCartStore } from "@/stores/cartStore";
@@ -360,7 +361,7 @@ export default function ProductDetail1({
     ) {
       return selectedVariants[product.image_variant_type_id].image_url!;
     }
-    return images[selectedImageIndex] || "";
+    return images[selectedImageIndex] || PLACEHOLDER_IMAGES.PRODUCT;
   };
 
   // Thumbnail size classes

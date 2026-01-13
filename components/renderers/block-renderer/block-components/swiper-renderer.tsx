@@ -281,8 +281,8 @@ export default function SwiperRenderer({
       // Handle both array format (from backend) and object format (correct format)
       if (Array.isArray(config.breakpoints)) {
         // Backend sends array: [{ slidesPerView: 2 }, { slidesPerView: 4 }, { slidesPerView: 5 }]
-        // Map to standard breakpoint widths: 640 (mobile), 768 (tablet), 1024 (desktop)
-        const standardBreakpoints = [640, 768, 1024];
+        // Map to standard breakpoint widths: 640 (mobile), 768 (tablet), 1280 (desktop)
+        const standardBreakpoints = [640, 768, 1280];
         config.breakpoints.forEach((value, index) => {
           const breakpointConfig: Record<string, unknown> = {};
           

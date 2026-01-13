@@ -33,6 +33,7 @@ import {
   type BlockEvent,
   type BlockStyle,
 } from "@/lib/block-utils";
+import { PLACEHOLDER_IMAGES } from "@/lib/constants/urls";
 import IconRenderer from "./block-components/icon-renderer";
 import RepeaterRenderer from "./block-components/repeater-renderer";
 import MarqueeRenderer from "./block-components/marquee-renderer";
@@ -398,20 +399,16 @@ function BlockRendererInternal({
     content = boundContent !== undefined ? String(boundContent) : block.content;
   }
 
-  // src for images - skip rendering if no src
+  // src for images - use placeholder if no src
   if (tag === "img") {
-    const src = block.bind_src
+    const resolvedSrc = block.bind_src
       ? String(
           resolveBinding(block.bind_src, mergedData, context) || block.src || ""
         )
       : block.src || "";
 
-    // Don't render img with empty src (causes browser to re-fetch page)
-    if (!src) {
-      return null;
-    }
-
-    props.src = src;
+    // Use placeholder image if src is empty
+    props.src = resolvedSrc || PLACEHOLDER_IMAGES.PRODUCT;
 
     const alt = block.bind_alt
       ? String(
