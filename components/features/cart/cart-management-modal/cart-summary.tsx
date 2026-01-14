@@ -1,6 +1,5 @@
 "use client";
 
-import { useCartStore } from "@/stores";
 import { useCartTotals } from "@/hooks";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
