@@ -190,11 +190,14 @@ export const BasicProductDetailPage = ({
         variant_id: variant.id,
         price: variant.price || 0,
         variant_name: variant.name,
+        variant_type_name:
+          product?.variant_types?.find((vt) => vt.id === Number(key))?.title ||
+          "",
         image_url: variant.image_url,
       };
     });
     return state;
-  }, [selectedVariants]);
+  }, [selectedVariants, product?.variant_types]);
 
   // Find matching cart item based on variants
   const matchingCartItem = useMemo(() => {
@@ -262,6 +265,9 @@ export const BasicProductDetailPage = ({
         variant_id: variant.id,
         price: variant.price || 0,
         variant_name: variant.name,
+        variant_type_name:
+          product.variant_types?.find((vt) => vt.id === Number(key))?.title ||
+          "",
         image_url: variant.image_url,
       };
     });
@@ -313,6 +319,9 @@ export const BasicProductDetailPage = ({
           variant_id: variant.id,
           price: variant.price || 0,
           variant_name: variant.name,
+          variant_type_name:
+            product.variant_types?.find((vt) => vt.id === Number(key))?.title ||
+            "",
           image_url: variant.image_url,
         };
       });

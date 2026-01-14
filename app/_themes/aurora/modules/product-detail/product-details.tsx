@@ -305,11 +305,19 @@ export function ProductDetails({ product }: ProductDetailsProps) {
   const isStockOut = isStockMaintain && (product.quantity ?? 0) <= 0;
   const isStockNotAvailable = isStockOut;
 
-  // Calculate pricing
+  // Calculate variant price total
+  const variantPriceTotal = useMemo(() => {
+    return Object.values(selectedVariants).reduce(
+      (sum, v) => sum + (v.price || 0),
+      0
+    );
+  }, [selectedVariants]);
+
+  // Calculate pricing including variant prices
+  const currentPrice = (price ?? 0) + variantPriceTotal;
+  const regularPrice = (old_price ?? price ?? 0) + variantPriceTotal;
   const hasDiscount = (old_price ?? 0) > (price ?? 0);
   const savePrice = hasDiscount ? old_price! - price! : 0;
-  const currentPrice = price ?? 0;
-  const regularPrice = old_price ?? 0;
 
   // Handle variant selection
   const handleVariantSelect = (

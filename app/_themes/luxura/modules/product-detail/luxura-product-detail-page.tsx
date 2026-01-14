@@ -4,8 +4,6 @@ import { useState, useMemo, useCallback, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import {
-  Minus,
-  Plus,
   ChevronLeft,
   ChevronRight,
   Download,
@@ -256,11 +254,14 @@ export function LuxuraProductDetailPage() {
         variant_id: variant.id,
         price: variant.price || 0,
         variant_name: variant.name,
+        variant_type_name:
+          product?.variant_types?.find((vt) => vt.id === Number(key))?.title ||
+          "",
         image_url: variant.image_url,
       };
     });
     return state;
-  }, [selectedVariants]);
+  }, [selectedVariants, product?.variant_types]);
 
   // Find matching cart item based on variants (same as Basic theme)
   const matchingCartItem = useMemo(() => {
@@ -379,6 +380,9 @@ export function LuxuraProductDetailPage() {
         variant_id: variant.id,
         price: variant.price || 0,
         variant_name: variant.name,
+        variant_type_name:
+          product.variant_types?.find((vt) => vt.id === Number(key))?.title ||
+          "",
         image_url: variant.image_url,
       };
     });
@@ -437,6 +441,9 @@ export function LuxuraProductDetailPage() {
           variant_id: variant.id,
           price: variant.price || 0,
           variant_name: variant.name,
+          variant_type_name:
+            product.variant_types?.find((vt) => vt.id === Number(key))?.title ||
+            "",
           image_url: variant.image_url,
         };
       });

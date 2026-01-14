@@ -227,9 +227,16 @@ export function PremiumProductDetailPage({
   const isStockNotAvailable =
     isStockMaintain && (isStockOut || quantity >= (product.quantity || 0));
 
-  // Calculate pricing
-  const currentPrice = price || 0;
-  const regularPrice = old_price || price || 0;
+  // Calculate pricing including variant prices
+  const variantPriceTotal = useMemo(() => {
+    return Object.values(selectedVariants).reduce(
+      (sum, v) => sum + (v.price || 0),
+      0
+    );
+  }, [selectedVariants]);
+
+  const currentPrice = (price || 0) + variantPriceTotal;
+  const regularPrice = (old_price || price || 0) + variantPriceTotal;
   const hasSavePrice = (old_price ?? 0) > (price ?? 0);
   const savePrice = hasSavePrice ? old_price! - price! : 0;
 
