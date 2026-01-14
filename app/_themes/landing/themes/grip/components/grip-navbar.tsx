@@ -33,7 +33,7 @@ export function GripNavbar() {
       )}
 
       {/* Navbar */}
-      <nav className="sticky top-0 w-full bg-white/95 backdrop-blur-sm z-50 shadow-sm border-b border-gray-100 dark:bg-gray-900/95 dark:border-gray-800">
+      <nav className="sticky top-0 w-full backdrop-blur-xs z-50 shadow-luxura-header border-b border-gray-100 dark:bg-gray-900/95 dark:border-gray-800">
         <div className="container">
           <div className="flex items-center justify-between h-16 md:h-20">
             {/* Logo Section */}
@@ -49,16 +49,8 @@ export function GripNavbar() {
                       width={48}
                       alt={shopDetails?.shop_name || "Shop"}
                       src={shopDetails.image_url}
-                      className="h-10 md:h-12 w-auto max-w-[180px] object-contain cursor-pointer transition-all duration-300 hover:scale-105 rounded-sm shadow-lg dark:shadow-black/20"
+                      className="h-10 md:h-12 w-auto max-w-[180px] object-contain cursor-pointer transition-all duration-300 hover:scale-105 rounded-sm"
                     />
-                  </div>
-                  <div className="hidden sm:flex flex-col">
-                    <span className="font-bold text-lg text-blue-zatiq group-hover:text-blue-zatiq/80 transition-colors dark:text-white">
-                      {shopDetails?.shop_name}
-                    </span>
-                    <span className="text-xs text-gray-500 dark:text-gray-400">
-                      Premium Shopping Experience
-                    </span>
                   </div>
                 </Link>
               ) : (
@@ -83,28 +75,28 @@ export function GripNavbar() {
               <div className="flex items-center gap-8 font-medium">
                 <Link
                   href={`${baseUrl}/products`}
-                  className="text-gray-600 hover:text-blue-zatiq transition-colors dark:text-gray-300 dark:hover:text-white"
+                  className="text-gray-600 hover:text-landing-primary transition-colors dark:text-gray-300 dark:hover:text-white"
                 >
                   Products
                 </Link>
                 <Link
                   href={`${baseUrl}/categories`}
-                  className="text-gray-600 hover:text-blue-zatiq transition-colors dark:text-gray-300 dark:hover:text-white"
+                  className="text-gray-600 hover:text-landing-primary transition-colors dark:text-gray-300 dark:hover:text-white"
                 >
                   Categories
                 </Link>
                 <Link
                   href={`${baseUrl}/about-us`}
-                  className="text-gray-600 hover:text-blue-zatiq transition-colors dark:text-gray-300 dark:hover:text-white"
+                  className="text-gray-600 hover:text-landing-primary transition-colors dark:text-gray-300 dark:hover:text-white"
                 >
                   About Us
                 </Link>
 
                 <Link
                   href={`${baseUrl}/checkout`}
-                  className="relative p-2.5 rounded-full bg-gradient-to-r from-blue-600 to-landing-primary text-white hover:shadow-lg hover:scale-110 transition-all duration-300"
+                  className="relative p-2.5 rounded-full bg-blue-zatiq/25 text-white hover:shadow-lg hover:scale-110 transition-all duration-300"
                 >
-                  <ShoppingCart size={20} className="text-white" />
+                  <ShoppingCart size={20} className="text-blue-zatiq dark:text-white" />
                   {cartCount > 0 && (
                     <span className="absolute -top-2 -right-2 bg-red-500 font-bold text-[10px] rounded-full p-2 text-white w-5 h-5 flex items-center justify-center leading-none">
                       {cartCount > 9 ? "9+" : cartCount}
@@ -157,7 +149,7 @@ export function GripNavbar() {
 
             <Link
               href={`${baseUrl}/checkout`}
-              className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-landing-primary hover:opacity-90 text-white px-6 py-3 rounded-full transition-colors"
+              className="w-full flex items-center justify-center gap-2 bg-landing-primary hover:bg-landing-primary/90 hover:opacity-90 text-white px-6 py-3 rounded-full transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >
               <ShoppingBag className="h-5 w-5" />
