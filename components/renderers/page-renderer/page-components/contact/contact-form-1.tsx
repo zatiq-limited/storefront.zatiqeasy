@@ -102,7 +102,7 @@ export default function ContactForm1({ settings = {} }: ContactForm1Props) {
       className="py-12 md:py-16 lg:py-20"
       style={{ backgroundColor: s.backgroundColor || "#FFFFFF" }}
     >
-      <div className="container px-4 2xl:px-0">
+      <div className="container">
         {/* Header */}
         {(s.title || s.subtitle) && (
           <div className="text-center mb-10 md:mb-12">

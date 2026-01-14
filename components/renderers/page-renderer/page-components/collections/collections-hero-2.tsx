@@ -103,7 +103,7 @@ export default function CollectionsHero2({
 
   return (
     <section className="relative overflow-hidden" style={{ backgroundColor }}>
-      <div className="container px-4 2xl:px-0">
+      <div className="container">
         <div
           className={`grid lg:grid-cols-2 gap-0 min-h-[500px] lg:min-h-[600px] ${
             isImageLeft ? "lg:flex-row-reverse" : ""

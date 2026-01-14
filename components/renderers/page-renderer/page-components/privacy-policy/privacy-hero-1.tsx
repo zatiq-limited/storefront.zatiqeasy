@@ -31,7 +31,7 @@ export default function PrivacyHero1({ settings = {} }: PrivacyHero1Props) {
   return (
     <section className="relative w-full overflow-hidden">
       {/* Background Image */}
-      <div className="relative w-full h-[20vh] sm:h-[35vh]">
+      <div className="relative w-full h-[35vh]">
         {s.image && (
           <Image
             src={s.image}
@@ -54,7 +54,7 @@ export default function PrivacyHero1({ settings = {} }: PrivacyHero1Props) {
         {/* Breadcrumb - Upper Left */}
         {s.showBreadcrumb && (
           <div className="absolute top-4 md:top-6 left-0 right-0 z-10">
-            <nav className="container px-4 2xl:px-0">
+            <nav className="container">
               <ol className="flex items-center gap-1 text-sm text-white/80">
                 <li>
                   <Link

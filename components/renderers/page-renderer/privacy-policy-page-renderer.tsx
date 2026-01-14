@@ -6,13 +6,15 @@ import {
   PrivacyHero2,
   PrivacyContent1,
   PrivacyContent2,
-} from "@/components/renderers/block-renderer/block-components/privacy";
+} from "@/components/renderers/page-renderer/page-components/privacy-policy";
 
 interface PrivacyPageRendererProps {
   sections: Section[];
 }
 
-export default function PrivacyPageRenderer({ sections }: PrivacyPageRendererProps) {
+export default function PrivacyPolicyPageRenderer({
+  sections,
+}: PrivacyPageRendererProps) {
   const renderSection = (section: Section) => {
     if (!section.enabled) return null;
 

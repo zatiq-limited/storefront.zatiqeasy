@@ -6,6 +6,7 @@ import { useShopStore } from "@/stores";
 import BlockRenderer from "@/components/renderers/block-renderer";
 import { usePathname } from "next/navigation";
 import { PageLoader } from "@/components/shared/skeletons/page-skeletons";
+import Heading1 from "@/components/renderers/page-renderer/page-components/headings/heading-1";
 
 /**
  * HomePage Component
@@ -62,13 +63,36 @@ export default function HomePage() {
   return (
     <main className="zatiq-homepage">
       {(sections as Array<Record<string, unknown>>).map((section, index) => {
-        // Get the first block from each section
+        // Skip disabled sections
+        if (!section.enabled) return null;
+
+        const sectionType = section.type as string;
+        const sectionId = (section.id as string) || `section-${index}`;
+
+        // Handle heading sections that may have empty blocks but settings
+        if (sectionType === "heading-1") {
+          return (
+            <div
+              key={sectionId}
+              data-section-id={sectionId}
+              data-section-type={sectionType}
+            >
+              <Heading1
+                settings={
+                  (section.settings as Record<string, unknown>) || {}
+                }
+              />
+            </div>
+          );
+        }
+
+        // For other sections, get the first block
         const block = (section.blocks as Array<Record<string, unknown>>)?.[0];
-        if (!block || !section.enabled) return null;
+        if (!block) return null;
 
         return (
           <BlockRenderer
-            key={(section.id as string) || `section-${index}`}
+            key={sectionId}
             block={
               block as import("@/components/renderers/block-renderer").Block
             }
