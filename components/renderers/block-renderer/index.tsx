@@ -670,9 +670,6 @@ function BlockRendererInternal({
     }
 
     if (elementUrl && isInternalUrl(elementUrl)) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { onClick, ...restProps } = props as Record<string, unknown>;
-
       // Create click handler to close mobile menu before navigation
       const handleLinkClick = () => {
         if (drawerContext?.drawerStates?.mobile_menu) {
@@ -680,8 +677,9 @@ function BlockRendererInternal({
         }
       };
 
+      // Link is just a navigation wrapper - styles go on the inner element only
       return (
-        <Link href={elementUrl} {...restProps} onClick={handleLinkClick}>
+        <Link href={elementUrl} onClick={handleLinkClick}>
           {createElement(
             tag,
             { className: props.className, style: props.style },
