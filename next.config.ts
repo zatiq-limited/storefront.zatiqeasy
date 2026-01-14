@@ -64,6 +64,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "img.youtube.com",
       },
+      {
+        protocol: "https",
+        hostname: "**.s3.ap-south-1.amazonaws.com", // AWS S3 buckets (ap-south-1 region)
+      },
     ],
   },
 

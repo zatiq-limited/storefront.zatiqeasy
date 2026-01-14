@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 
-interface ReturnPolicyHero1Settings {
+interface TermsHero1Settings {
   backgroundColor?: string;
   textColor?: string;
   headline?: string;
@@ -16,14 +16,14 @@ interface ReturnPolicyHero1Settings {
   showBreadcrumb?: boolean;
 }
 
-interface ReturnPolicyHero1Props {
-  settings?: ReturnPolicyHero1Settings;
+interface TermsHero1Props {
+  settings?: TermsHero1Settings;
 }
 
-export default function ReturnPolicyHero1({ settings = {} }: ReturnPolicyHero1Props) {
+export default function TermsHero1({ settings = {} }: TermsHero1Props) {
   const s = convertSettingsKeys(
     settings as Record<string, unknown>
-  ) as ReturnPolicyHero1Settings;
+  ) as TermsHero1Settings;
 
   // If no headline provided, don't render
   if (!s.headline) return null;
@@ -31,11 +31,11 @@ export default function ReturnPolicyHero1({ settings = {} }: ReturnPolicyHero1Pr
   return (
     <section className="relative w-full overflow-hidden">
       {/* Background Image */}
-      <div className="relative w-full h-[20vh] sm:h-[35vh]">
+      <div className="relative w-full h-[35vh]">
         {s.image && (
           <Image
             src={s.image}
-            alt={s.headline || "Return and Cancellation Policy"}
+            alt={s.headline || "Terms and Conditions"}
             fill
             className="object-cover"
             priority
@@ -54,7 +54,7 @@ export default function ReturnPolicyHero1({ settings = {} }: ReturnPolicyHero1Pr
         {/* Breadcrumb - Upper Left */}
         {s.showBreadcrumb && (
           <div className="absolute top-4 md:top-6 left-0 right-0 z-10">
-            <nav className="container px-4 2xl:px-0">
+            <nav className="container">
               <ol className="flex items-center gap-1 text-sm text-white/80">
                 <li>
                   <Link
@@ -69,7 +69,7 @@ export default function ReturnPolicyHero1({ settings = {} }: ReturnPolicyHero1Pr
                 </li>
                 <li>
                   <span className="uppercase tracking-wider text-xs font-medium text-white">
-                    Return Policy
+                    Terms and Conditions
                   </span>
                 </li>
               </ol>

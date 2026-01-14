@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { convertSettingsKeys } from "@/lib/settings-utils";
 
 interface ContentSection {
@@ -8,44 +8,41 @@ interface ContentSection {
   content: string;
 }
 
-interface ReturnPolicyContent1Settings {
+interface PrivacyContent1Settings {
   backgroundColor?: string;
   textColor?: string;
   accentColor?: string;
   contentSections?: string; // JSON string of content sections
 }
 
-interface ReturnPolicyContent1Props {
-  settings?: ReturnPolicyContent1Settings;
+interface PrivacyContent1Props {
+  settings?: PrivacyContent1Settings;
 }
 
-export default function ReturnPolicyContent1({
+export default function PrivacyContent1({
   settings = {},
-}: ReturnPolicyContent1Props) {
+}: PrivacyContent1Props) {
   const s = convertSettingsKeys(
     settings as Record<string, unknown>
-  ) as ReturnPolicyContent1Settings;
-  const [activeSection, setActiveSection] = useState<string>("");
-  const [contentSections, setContentSections] = useState<ContentSection[]>([]);
+  ) as PrivacyContent1Settings;
 
-  useEffect(() => {
+  // Parse content sections using useMemo (derived state from props)
+  const contentSections = useMemo<ContentSection[]>(() => {
     try {
       const sections = s.contentSections ? JSON.parse(s.contentSections) : [];
-      setContentSections(
-        sections.filter(
-          (section: ContentSection) => section.title && section.title.trim()
-        )
+      return sections.filter(
+        (section: ContentSection) => section.title && section.title.trim()
       );
-
-      // Set first section as active
-      if (sections.length > 0 && sections[0].title) {
-        setActiveSection(sections[0].title);
-      }
     } catch (error) {
       console.error("Error parsing content sections:", error);
-      setContentSections([]);
+      return [];
     }
   }, [s.contentSections]);
+
+  // Initialize active section with first section title
+  const [activeSection, setActiveSection] = useState<string>(
+    () => contentSections[0]?.title || ""
+  );
 
   const handleSectionClick = (title: string) => {
     setActiveSection(title);
@@ -66,7 +63,7 @@ export default function ReturnPolicyContent1({
       className="py-12 md:py-16 lg:py-20"
       style={{ backgroundColor: s.backgroundColor || "#FFFFFF" }}
     >
-      <div className="container px-4 2xl:px-0">
+      <div className="container">
         <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-8 lg:gap-12">
           {/* Table of Contents - Sidebar */}
           <div className="lg:sticky lg:top-8 lg:h-fit">

@@ -6,13 +6,15 @@ import {
   TermsHero2,
   TermsContent1,
   TermsContent2,
-} from "@/components/renderers/block-renderer/block-components/terms";
+} from "@/components/renderers/page-renderer/page-components/terms-and-policy";
 
 interface TermsPageRendererProps {
   sections: Section[];
 }
 
-export default function TermsPageRenderer({ sections }: TermsPageRendererProps) {
+export default function TermsAndConditionsPageRenderer({
+  sections,
+}: TermsPageRendererProps) {
   const renderSection = (section: Section) => {
     if (!section.enabled) return null;
 

@@ -14,6 +14,7 @@ const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || "https://easybill.zatiq.tech";
 
 async function fetchCustomPages(shopId: string | number): Promise<CustomPages> {
+  console.log("Fetching custom pages for shopId:", shopId, "with full api url:", `${API_BASE_URL}/api/v1/live/shop_custom_pages/${shopId}`);
   try {
     const res = await fetch(
       `${API_BASE_URL}/api/v1/live/shop_custom_pages/${shopId}`,

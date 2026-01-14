@@ -22,12 +22,14 @@ const DEFAULT_SHOP_ID = process.env.NEXT_PUBLIC_DEV_SHOP_ID || "2";
 export type ThemePageName =
   | "home"
   | "products"
-  | "productDetails"
+  | "product-details"
   | "collections"
-  | "collectionDetails"
+  | "collection-details"
   | "about"
   | "contact"
-  | "privacyPolicy"
+  | "privacy-policy"
+  | "return-policy"
+  | "terms-and-conditions"
   | "checkout";
 
 export interface BlockData {
@@ -211,6 +213,7 @@ async function getPageData(
   const id = shopId || DEFAULT_SHOP_ID;
   const apiEndpoint = `/api/v1/live/theme/page/${pageName}`;
 
+  console.log("Here the api endpoint:", apiEndpoint, "with shop id:", id);
   try {
     const { data } = await apiClient.post<
       | { data: ThemeApiResponse<PageData> }
@@ -276,7 +279,7 @@ export async function getProductsPage(
 export async function getProductDetailsPage(
   shopId?: string
 ): Promise<PageDataResponse | null> {
-  return getPageData("productDetails", shopId);
+  return getPageData("product-details", shopId);
 }
 
 /** Get collections page data */
@@ -290,7 +293,7 @@ export async function getCollectionsPage(
 export async function getCollectionDetailsPage(
   shopId?: string
 ): Promise<PageDataResponse | null> {
-  return getPageData("collectionDetails", shopId);
+  return getPageData("collection-details", shopId);
 }
 
 /** Get about page data */
@@ -305,6 +308,27 @@ export async function getContactPage(
   shopId?: string
 ): Promise<PageDataResponse | null> {
   return getPageData("contact", shopId);
+}
+
+/** Get privacy policy page data */
+export async function getPrivacyPolicyPage(
+  shopId?: string
+): Promise<PageDataResponse | null> {
+  return getPageData("privacy-policy", shopId);
+}
+
+/** Get return policy page data */
+export async function getReturnPolicyPage(
+  shopId?: string
+): Promise<PageDataResponse | null> {
+  return getPageData("return-policy", shopId);
+}
+
+/** Get terms and conditions page data */
+export async function getTermsAndConditionsPage(
+  shopId?: string
+): Promise<PageDataResponse | null> {
+  return getPageData("terms-and-conditions", shopId);
 }
 
 // ============================================

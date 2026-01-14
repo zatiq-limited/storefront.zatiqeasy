@@ -1,16 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { convertSettingsKeys } from "@/lib/settings-utils";
 import {
-  Archive,
-  ClipboardCheck,
-  Share2,
-  Lock,
-  Globe,
-  ShieldCheck,
-  Users,
-  RefreshCw,
+  RotateCcw,
+  Package,
+  CreditCard,
+  XCircle,
+  Ban,
+  AlertTriangle,
   Mail,
   FileText,
   ChevronDown,
@@ -22,7 +20,7 @@ interface ContentSection {
   content: string;
 }
 
-interface PrivacyContent2Settings {
+interface ReturnPolicyContent2Settings {
   backgroundColor?: string;
   textColor?: string;
   accentColor?: string;
@@ -30,8 +28,8 @@ interface PrivacyContent2Settings {
   contentSections?: string; // JSON string of content sections
 }
 
-interface PrivacyContent2Props {
-  settings?: PrivacyContent2Settings;
+interface ReturnPolicyContent2Props {
+  settings?: ReturnPolicyContent2Settings;
 }
 
 // Get icon based on section title
@@ -39,60 +37,49 @@ const getIconForSection = (title: string) => {
   const lowerTitle = title.toLowerCase();
   const iconClass = "w-5 h-5";
 
-  if (lowerTitle.includes("collect")) return <Archive className={iconClass} />;
-  if (lowerTitle.includes("use") || lowerTitle.includes("how"))
-    return <ClipboardCheck className={iconClass} />;
-  if (lowerTitle.includes("shar") || lowerTitle.includes("disclos"))
-    return <Share2 className={iconClass} />;
-  if (lowerTitle.includes("secur")) return <Lock className={iconClass} />;
-  if (lowerTitle.includes("cookie") || lowerTitle.includes("track"))
-    return <Globe className={iconClass} />;
-  if (lowerTitle.includes("right") || lowerTitle.includes("choice"))
-    return <ShieldCheck className={iconClass} />;
-  if (lowerTitle.includes("child")) return <Users className={iconClass} />;
-  if (lowerTitle.includes("change") || lowerTitle.includes("update"))
-    return <RefreshCw className={iconClass} />;
+  if (lowerTitle.includes("return") && lowerTitle.includes("overview"))
+    return <FileText className={iconClass} />;
+  if (lowerTitle.includes("initiate") || lowerTitle.includes("how"))
+    return <Package className={iconClass} />;
+  if (lowerTitle.includes("refund")) return <CreditCard className={iconClass} />;
+  if (lowerTitle.includes("cancel")) return <XCircle className={iconClass} />;
+  if (lowerTitle.includes("non-return") || lowerTitle.includes("non return"))
+    return <Ban className={iconClass} />;
+  if (lowerTitle.includes("damage") || lowerTitle.includes("defect"))
+    return <AlertTriangle className={iconClass} />;
   if (lowerTitle.includes("contact")) return <Mail className={iconClass} />;
-  return <FileText className={iconClass} />;
+  return <RotateCcw className={iconClass} />;
 };
 
-export default function PrivacyContent2({
+export default function ReturnPolicyContent2({
   settings = {},
-}: PrivacyContent2Props) {
+}: ReturnPolicyContent2Props) {
   const s = convertSettingsKeys(
     settings as Record<string, unknown>
-  ) as PrivacyContent2Settings;
-  const [expandedSections, setExpandedSections] = useState<Set<string>>(
-    new Set()
-  );
-  const [contentSections, setContentSections] = useState<ContentSection[]>([]);
+  ) as ReturnPolicyContent2Settings;
 
-  useEffect(() => {
+  // Parse content sections using useMemo (derived state from props)
+  const contentSections = useMemo<ContentSection[]>(() => {
     try {
       const sections = s.contentSections ? JSON.parse(s.contentSections) : [];
-      const filteredSections = sections.filter(
+      return sections.filter(
         (section: ContentSection) => section.title && section.title.trim()
       );
-      setContentSections(filteredSections);
-
-      // Expand sections based on default setting
-      if (s.expandAllByDefault) {
-        setExpandedSections(
-          new Set(
-            filteredSections.map((section: ContentSection) => section.title)
-          )
-        );
-      } else {
-        // Expand first section by default
-        if (filteredSections.length > 0 && filteredSections[0].title) {
-          setExpandedSections(new Set([filteredSections[0].title]));
-        }
-      }
     } catch (error) {
       console.error("Error parsing content sections:", error);
-      setContentSections([]);
+      return [];
     }
-  }, [s.contentSections, s.expandAllByDefault]);
+  }, [s.contentSections]);
+
+  // Initialize expanded sections based on settings
+  const [expandedSections, setExpandedSections] = useState<Set<string>>(() => {
+    if (s.expandAllByDefault) {
+      return new Set(contentSections.map((section) => section.title));
+    }
+    return contentSections.length > 0
+      ? new Set([contentSections[0].title])
+      : new Set();
+  });
 
   const toggleSection = (title: string) => {
     const newExpanded = new Set(expandedSections);
@@ -123,14 +110,14 @@ export default function PrivacyContent2({
       className="py-12 md:py-16 lg:py-20"
       style={{ backgroundColor: s.backgroundColor || "#F9FAFB" }}
     >
-      <div className="container px-4 2xl:px-0">
+      <div className="container">
         {/* Header with Toggle All Button */}
         <div className="flex justify-between items-center mb-8">
           <h2
             className="text-2xl md:text-3xl font-bold"
             style={{ color: s.textColor || "#111827" }}
           >
-            Privacy Policy Details
+            Return Policy Details
           </h2>
           <button
             onClick={toggleAllSections}
@@ -152,12 +139,12 @@ export default function PrivacyContent2({
             {expandedSections.size === contentSections.length ? (
               <>
                 <ArrowUp className="w-4 h-4" />
-                Collapse All
+                <span className="whitespace-nowrap">Collapse All</span>
               </>
             ) : (
               <>
                 <ChevronDown className="w-4 h-4" />
-                Expand All
+                <span className="whitespace-nowrap">Expand All</span>
               </>
             )}
           </button>
