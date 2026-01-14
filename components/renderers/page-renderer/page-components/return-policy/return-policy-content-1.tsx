@@ -8,23 +8,23 @@ interface ContentSection {
   content: string;
 }
 
-interface TermsContent1Settings {
+interface ReturnPolicyContent1Settings {
   backgroundColor?: string;
   textColor?: string;
   accentColor?: string;
   contentSections?: string; // JSON string of content sections
 }
 
-interface TermsContent1Props {
-  settings?: TermsContent1Settings;
+interface ReturnPolicyContent1Props {
+  settings?: ReturnPolicyContent1Settings;
 }
 
-export default function TermsContent1({
+export default function ReturnPolicyContent1({
   settings = {},
-}: TermsContent1Props) {
+}: ReturnPolicyContent1Props) {
   const s = convertSettingsKeys(
     settings as Record<string, unknown>
-  ) as TermsContent1Settings;
+  ) as ReturnPolicyContent1Settings;
   const [activeSection, setActiveSection] = useState<string>("");
   const [contentSections, setContentSections] = useState<ContentSection[]>([]);
 
@@ -66,7 +66,7 @@ export default function TermsContent1({
       className="py-12 md:py-16 lg:py-20"
       style={{ backgroundColor: s.backgroundColor || "#FFFFFF" }}
     >
-      <div className="container px-4 2xl:px-0">
+      <div className="container">
         <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-8 lg:gap-12">
           {/* Table of Contents - Sidebar */}
           <div className="lg:sticky lg:top-8 lg:h-fit">

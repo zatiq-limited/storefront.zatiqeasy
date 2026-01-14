@@ -174,6 +174,11 @@ export function LuxuraProductDetailPage() {
   const isInCartDirect = cartProducts.length > 0;
   const cartQty = cartProducts.reduce((acc, p) => acc + (p.qty || 0), 0);
 
+  // Type-safe access to product extended properties
+  const productRecord = product as unknown as Record<string, unknown>;
+  const totalInventorySold = (productRecord.total_inventory_sold as number) ?? 0;
+  const initialProductSold = (productRecord.initial_product_sold as number) ?? 0;
+
   // Helper to check if two variant selections match (same as Basic/Premium themes)
   const isSameVariantsCombination = useCallback(
     (variants1: VariantsState, variants2: VariantsState): boolean => {
@@ -194,42 +199,51 @@ export function LuxuraProductDetailPage() {
     if (!product) return;
 
     // Facebook Pixel tracking
-    if (typeof window !== "undefined" && (window as any).fbq) {
-      (window as any).fbq("track", "ViewContent", {
-        content_name: product.name,
-        content_ids: [product.id?.toString()],
-        content_type: "product",
-        value: product.price,
-        currency: shopDetails?.country_currency || "USD",
-      });
+    if (typeof window !== "undefined") {
+      const win = window as unknown as { fbq?: (command: string, eventName: string, data?: Record<string, unknown>) => void };
+      if (win.fbq) {
+        win.fbq("track", "ViewContent", {
+          content_name: product.name,
+          content_ids: [product.id?.toString()],
+          content_type: "product",
+          value: product.price,
+          currency: shopDetails?.country_currency || "USD",
+        });
+      }
     }
 
     // Google Tag Manager tracking
-    if (typeof window !== "undefined" && (window as any).dataLayer) {
-      (window as any).dataLayer.push({
-        event: "view_item",
-        ecommerce: {
-          items: [
-            {
-              item_id: product.id?.toString(),
-              item_name: product.name,
-              price: product.price,
-              currency: shopDetails?.country_currency || "USD",
-            },
-          ],
-        },
-      });
+    if (typeof window !== "undefined") {
+      const win = window as unknown as { dataLayer?: unknown[] };
+      if (win.dataLayer) {
+        win.dataLayer.push({
+          event: "view_item",
+          ecommerce: {
+            items: [
+              {
+                item_id: product.id?.toString(),
+                item_name: product.name,
+                price: product.price,
+                currency: shopDetails?.country_currency || "USD",
+              },
+            ],
+          },
+        });
+      }
     }
 
     // TikTok Pixel tracking
-    if (typeof window !== "undefined" && (window as any).ttq) {
-      (window as any).ttq.track("ViewContent", {
-        content_id: product.id?.toString(),
-        content_name: product.name,
-        content_type: "product",
-        price: product.price,
-        currency: shopDetails?.country_currency || "USD",
-      });
+    if (typeof window !== "undefined") {
+      const win = window as unknown as { ttq?: { track: (event: string, data: Record<string, unknown>) => void } };
+      if (win.ttq) {
+        win.ttq.track("ViewContent", {
+          content_id: product.id?.toString(),
+          content_name: product.name,
+          content_type: "product",
+          price: product.price,
+          currency: shopDetails?.country_currency || "USD",
+        });
+      }
     }
   }, [product, shopDetails?.country_currency]);
 
@@ -675,7 +689,7 @@ export function LuxuraProductDetailPage() {
                   </h4>
                   <ul className="mt-3 tracking-[-0.24px] capitalize">
                     {product.custom_fields &&
-                      Object.keys(product.custom_fields).map((key, idx) => (
+                      Object.keys(product.custom_fields).map((key: string, idx: number) => (
                         <li key={idx} className="grid grid-cols-5 gap-6">
                           <div className="col-span-2 text-[#6B7280] dark:text-gray-100">
                             {key}
@@ -721,7 +735,7 @@ export function LuxuraProductDetailPage() {
               className="text-[20px] md:text-4xl text-blue-zatiq"
               style={{
                 fontFamily: getThemeData(shopDetails?.shop_theme?.theme_name)
-                  .secondaryFont,
+                  ?.secondaryFont,
               }}
             >
               {titleCase(product.name)}
@@ -752,8 +766,8 @@ export function LuxuraProductDetailPage() {
             {/* Sold Units */}
             <SoldUnits
               showSoldCount={shopDetails?.show_product_sold_count ?? false}
-              initialSold={(product as any).initial_product_sold ?? 0}
-              totalSold={(product as any).total_inventory_sold ?? 0}
+              initialSold={initialProductSold}
+              totalSold={totalInventorySold}
             />
 
             {/* Stock Status */}
@@ -851,7 +865,7 @@ export function LuxuraProductDetailPage() {
                   </h4>
                   <ul className="mt-3 tracking-[-0.24px] capitalize">
                     {product.custom_fields &&
-                      Object.keys(product.custom_fields).map((key, idx) => (
+                      Object.keys(product.custom_fields).map((key: string, idx: number) => (
                         <li key={idx} className="grid grid-cols-5 gap-6">
                           <div className="col-span-2 text-[#6B7280] dark:text-gray-400">
                             {key}

@@ -9,23 +9,21 @@ interface ContentSection {
   content: string;
 }
 
-interface ReturnPolicyContent2Settings {
+interface TermsContent2Settings {
   backgroundColor?: string;
   textColor?: string;
   accentColor?: string;
   contentSections?: string; // JSON string of content sections
 }
 
-interface ReturnPolicyContent2Props {
-  settings?: ReturnPolicyContent2Settings;
+interface TermsContent2Props {
+  settings?: TermsContent2Settings;
 }
 
-export default function ReturnPolicyContent2({
-  settings = {},
-}: ReturnPolicyContent2Props) {
+export default function TermsContent2({ settings = {} }: TermsContent2Props) {
   const s = convertSettingsKeys(
     settings as Record<string, unknown>
-  ) as ReturnPolicyContent2Settings;
+  ) as TermsContent2Settings;
   const [contentSections, setContentSections] = useState<ContentSection[]>([]);
   const [expandedSections, setExpandedSections] = useState<Set<number>>(
     new Set([0])
@@ -66,7 +64,7 @@ export default function ReturnPolicyContent2({
       className="py-12 md:py-16 lg:py-20"
       style={{ backgroundColor: s.backgroundColor || "#FFFFFF" }}
     >
-      <div className="container px-4 2xl:px-0">
+      <div className="container">
         <div className="max-w-4xl mx-auto">
           <div className="space-y-4">
             {contentSections.map((section, index) => {
@@ -135,7 +133,9 @@ export default function ReturnPolicyContent2({
                   {/* Accordion Content */}
                   <div
                     className={`transition-all duration-300 ease-in-out overflow-hidden ${
-                      isExpanded ? "max-h-[2000px] opacity-100" : "max-h-0 opacity-0"
+                      isExpanded
+                        ? "max-h-[2000px] opacity-100"
+                        : "max-h-0 opacity-0"
                     }`}
                   >
                     <div

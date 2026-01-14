@@ -72,7 +72,7 @@ export default function CollectionsGrid1({
   if (isLoading) {
     return (
       <section className="py-16 md:py-24" style={{ backgroundColor }}>
-        <div className="container px-4 2xl:px-0">
+        <div className="container">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {[...Array(6)].map((_, i) => (
               <div
@@ -93,7 +93,7 @@ export default function CollectionsGrid1({
   if (!collections || collections.length === 0) {
     return (
       <section className="py-16 md:py-24" style={{ backgroundColor }}>
-        <div className="container px-4 2xl:px-0">
+        <div className="container">
           <div className="text-center py-12">
             <svg
               className="w-16 h-16 mx-auto text-gray-300 mb-4"
@@ -122,7 +122,7 @@ export default function CollectionsGrid1({
 
   return (
     <section className="py-16 md:py-24" style={{ backgroundColor }}>
-      <div className="container px-4 2xl:px-0">
+      <div className="container">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {collections.map((collection, index) => {
             const isFirstCard = index === 0;
@@ -154,13 +154,19 @@ export default function CollectionsGrid1({
                     }`}
                   >
                     <Image
-                      src={collection.banner_url || collection.image_url || "/placeholder.jpg"}
+                      src={
+                        collection.banner_url ||
+                        collection.image_url ||
+                        "/placeholder.jpg"
+                      }
                       alt={collection.name}
                       fill
                       className="object-cover transition-transform duration-700 group-hover:scale-105"
-                      unoptimized={
-                        (collection.banner_url || collection.image_url || "").startsWith("http")
-                      }
+                      unoptimized={(
+                        collection.banner_url ||
+                        collection.image_url ||
+                        ""
+                      ).startsWith("http")}
                     />
 
                     {/* Dark Overlay */}

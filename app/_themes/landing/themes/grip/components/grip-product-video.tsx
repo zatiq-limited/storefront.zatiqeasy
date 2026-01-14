@@ -120,23 +120,23 @@ function VideoPlayer({ video }: VideoPlayerProps) {
 function VideoThumbnail({ video, onPlay }: VideoThumbnailProps) {
   const videoId = extractVideoId(video?.video_url ?? "");
 
-  if (!videoId) return null;
-
   return (
     <div
       className="relative aspect-video cursor-pointer group"
       onClick={onPlay}
     >
-      {/* YouTube Thumbnail */}
-      <Image
-        src={`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`}
-        alt={video?.title || "Video thumbnail"}
-        fill
-        className="object-cover"
-        unoptimized
-      />
+      {/* YouTube Thumbnail - only show if videoId exists */}
+      {videoId && (
+        <Image
+          src={`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`}
+          alt={video?.title || "Video thumbnail"}
+          fill
+          className="object-cover"
+          unoptimized
+        />
+      )}
 
-      {/* Gradient Overlay */}
+      {/* Gradient Overlay - always show */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
 
       {/* Play Button */}

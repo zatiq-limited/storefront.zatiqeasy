@@ -18,7 +18,9 @@ interface ReturnPolicyHero2Props {
   settings?: ReturnPolicyHero2Settings;
 }
 
-export default function ReturnPolicyHero2({ settings = {} }: ReturnPolicyHero2Props) {
+export default function ReturnPolicyHero2({
+  settings = {},
+}: ReturnPolicyHero2Props) {
   const s = convertSettingsKeys(
     settings as Record<string, unknown>
   ) as ReturnPolicyHero2Settings;
@@ -31,7 +33,7 @@ export default function ReturnPolicyHero2({ settings = {} }: ReturnPolicyHero2Pr
       className="relative py-16 md:py-20"
       style={{ backgroundColor: s.backgroundColor || "#f8fafc" }}
     >
-      <div className="container px-4 2xl:px-0">
+      <div className="container">
         {/* Breadcrumb */}
         {s.showBreadcrumb && (
           <nav className="mb-8">
@@ -75,7 +77,7 @@ export default function ReturnPolicyHero2({ settings = {} }: ReturnPolicyHero2Pr
           {s.subheadline && (
             <p
               className="text-sm font-medium tracking-wider uppercase mb-3"
-              style={{ color: (s.textColor || "#2563EB") }}
+              style={{ color: s.textColor || "#2563EB" }}
             >
               {s.subheadline}
             </p>

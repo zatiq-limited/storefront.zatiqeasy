@@ -116,7 +116,7 @@ export default function ContactInfo1({ settings = {} }: ContactInfo1Props) {
       className="py-12 md:py-16 lg:py-20"
       style={{ backgroundColor: s.backgroundColor || "#FFFFFF" }}
     >
-      <div className="container px-4 2xl:px-0">
+      <div className="container">
         {/* Title */}
         {s.title && (
           <h2

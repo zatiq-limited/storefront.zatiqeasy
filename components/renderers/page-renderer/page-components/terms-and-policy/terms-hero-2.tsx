@@ -31,7 +31,7 @@ export default function TermsHero2({ settings = {} }: TermsHero2Props) {
       className="relative py-16 md:py-20"
       style={{ backgroundColor: s.backgroundColor || "#f8fafc" }}
     >
-      <div className="container px-4 2xl:px-0">
+      <div className="container">
         {/* Breadcrumb */}
         {s.showBreadcrumb && (
           <nav className="mb-8">
@@ -75,7 +75,7 @@ export default function TermsHero2({ settings = {} }: TermsHero2Props) {
           {s.subheadline && (
             <p
               className="text-sm font-medium tracking-wider uppercase mb-3"
-              style={{ color: (s.textColor || "#2563EB") }}
+              style={{ color: s.textColor || "#2563EB" }}
             >
               {s.subheadline}
             </p>

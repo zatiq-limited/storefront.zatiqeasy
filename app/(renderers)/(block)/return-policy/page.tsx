@@ -1,15 +1,15 @@
 "use client";
 
-import React from "react";
 import { useShopStore } from "@/stores/shopStore";
 import { useShopCustomPages } from "@/hooks/useShopCustomPages";
+import { useReturnPolicyPage } from "@/hooks/usePolicyPages";
 import ReturnPolicyPageRenderer from "@/components/renderers/page-renderer/return-policy-page-renderer";
 import { PageLoading } from "@/components/shared/page-loading";
 import type { Section } from "@/lib/types";
 import "react-quill/dist/quill.snow.css";
 
-// Default return policy sections
-const sections: Section[] = [
+// Default return policy sections (fallback if API returns no sections)
+const defaultSections: Section[] = [
   {
     id: "return-policy-hero-1",
     type: "return-policy-hero-1",
@@ -118,8 +118,14 @@ export default function ReturnPolicyPage() {
   const shopId = shopDetails?.id?.toString();
 
   // Fetch custom pages for legacy themes
-  const { data: customPages, isLoading } = useShopCustomPages(shopId || "", {
-    enabled: !!shopId && isLegacyTheme,
+  const { data: customPages, isLoading: isLoadingCustomPages } =
+    useShopCustomPages(shopId || "", {
+      enabled: !!shopId && isLegacyTheme,
+    });
+
+  // Fetch page data from Theme API for theme builder mode
+  const { data: pageData, isLoading: isLoadingPageData } = useReturnPolicyPage({
+    enabled: !isLegacyTheme,
   });
 
   // ========================================
@@ -127,7 +133,7 @@ export default function ReturnPolicyPage() {
   // ========================================
   if (isLegacyTheme) {
     // Loading state
-    if (!shopDetails || isLoading) {
+    if (!shopDetails || isLoadingCustomPages) {
       return <PageLoading />;
     }
 
@@ -160,6 +166,19 @@ export default function ReturnPolicyPage() {
   // ========================================
   // THEME BUILDER MODE (legacy_theme = false)
   // ========================================
+
+  // Loading state for theme builder
+  if (isLoadingPageData) {
+    return <PageLoading />;
+  }
+
+  // Extract sections from API response or use defaults
+  const apiData = pageData?.data || pageData;
+  const sections =
+    (apiData as { sections?: Section[] })?.sections || defaultSections;
+  
+  console.log("Return Policy Page Sections:", sections);
+
   return (
     <main className="zatiq-return-policy-page">
       <ReturnPolicyPageRenderer sections={sections} />

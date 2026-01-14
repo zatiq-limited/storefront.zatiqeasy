@@ -11,13 +11,15 @@ import {
   ContactMap2,
   ContactForm1,
   ContactForm2,
-} from "@/components/renderers/block-renderer/block-components/contact";
+} from "@/components/renderers/page-renderer/page-components/contact";
 
 interface ContactPageRendererProps {
   sections: Section[];
 }
 
-export default function ContactPageRenderer({ sections }: ContactPageRendererProps) {
+export default function ContactPageRenderer({
+  sections,
+}: ContactPageRendererProps) {
   const renderSection = (section: Section) => {
     if (!section.enabled) return null;
 
@@ -54,9 +56,5 @@ export default function ContactPageRenderer({ sections }: ContactPageRendererPro
     }
   };
 
-  return (
-    <>
-      {sections.map((section) => renderSection(section))}
-    </>
-  );
+  return <>{sections.map((section) => renderSection(section))}</>;
 }

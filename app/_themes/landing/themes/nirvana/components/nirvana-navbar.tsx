@@ -49,7 +49,7 @@ export function NirvanaNavbar() {
                       width={48}
                       alt={shopDetails?.shop_name || "Shop"}
                       src={shopDetails.image_url}
-                      className="h-10 md:h-12 w-auto max-w-[180px] object-contain cursor-pointer transition-all duration-300 hover:scale-105 rounded-sm shadow-lg"
+                      className="h-10 md:h-12 w-auto max-w-[180px] object-contain cursor-pointer transition-all duration-300 hover:scale-105 rounded-sm"
                     />
                   </div>
                   <div className="hidden sm:flex flex-col">

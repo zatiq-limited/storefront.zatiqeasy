@@ -30,7 +30,7 @@ export default function PrivacyHero2({ settings = {} }: PrivacyHero2Props) {
       className="py-16 md:py-20 lg:py-24"
       style={{ backgroundColor: s.backgroundColor || "#FFFFFF" }}
     >
-      <div className="container px-4 2xl:px-0">
+      <div className="container">
         {/* Breadcrumb */}
         {s.showBreadcrumb && (
           <nav className="mb-8">
