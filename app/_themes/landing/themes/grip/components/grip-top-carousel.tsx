@@ -107,7 +107,7 @@ export function GripTopCarousel({ content, onBuyNow }: GripTopCarouselProps) {
               alt={currentSlide?.title || "Carousel Image"}
               width={1920}
               height={717}
-              className="h-full w-full object-contain"
+              className="h-full w-full object-cover"
               priority
             />
           )}
