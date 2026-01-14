@@ -1,11 +1,9 @@
 "use client";
 
-import { useState, useMemo, useEffect, useCallback } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Minus, Plus, Download, Play, ZoomIn } from "lucide-react";
 import { useShopStore } from "@/stores/shopStore";
-import { useCartStore } from "@/stores/cartStore";
 import { FallbackImage } from "@/components/ui/fallback-image";
 import { ImageLightbox } from "@/components/products/image-lightbox";
 import {
@@ -14,14 +12,14 @@ import {
   getDetailPageImageUrl,
 } from "@/lib/utils";
 import type { Product } from "@/stores/productsStore";
-import type { VariantState } from "@/types/cart.types";
 import { CustomerReviews } from "@/components/products/customer-reviews";
 import { VariantSelectorModal } from "@/components/products/variant-selector-modal";
 import AuroraRelatedProducts from "@/app/_themes/aurora/components/product-details/aurora-related-products";
 import { ProductVariants } from "@/components/products/product-variants";
+import { useProductDetails } from "@/hooks";
 
 interface ProductDetailsProps {
-  product: Product;
+  handle: string;
 }
 
 // Trust Card Icons
@@ -87,388 +85,168 @@ const PrivacyIcon = ({ className }: { className?: string }) => {
   );
 };
 
-// Extract video ID from YouTube URL (supports regular, shorts, and embed URLs)
+// Extract video ID from YouTube URL
 const extractVideoId = (url: string): string => {
   if (!url) return "";
-
-  // Handle YouTube Shorts URLs: youtube.com/shorts/VIDEO_ID
   const shortsPattern = /youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/;
   let match = url.match(shortsPattern);
   if (match && match[1]) return match[1];
-
-  // Handle short URLs: youtu.be/VIDEO_ID
   const shortUrlPattern = /youtu\.be\/([a-zA-Z0-9_-]{11})/;
   match = url.match(shortUrlPattern);
   if (match && match[1]) return match[1];
-
-  // Handle regular URLs: youtube.com/watch?v=VIDEO_ID
   const longUrlPattern = /youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/;
   match = url.match(longUrlPattern);
   if (match && match[1]) return match[1];
-
-  // Handle embed URLs: youtube.com/embed/VIDEO_ID
   const embedPattern = /youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/;
   match = url.match(embedPattern);
   if (match && match[1]) return match[1];
-
-  // Fallback pattern for other YouTube URL formats
   const fallbackPattern =
     /(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([^&?]+)/;
   match = url.match(fallbackPattern);
   return match ? match[1] : "";
 };
 
-export function ProductDetails({ product }: ProductDetailsProps) {
-  const router = useRouter();
+export function ProductDetails({ handle }: ProductDetailsProps) {
   const { t } = useTranslation();
   const { shopDetails } = useShopStore();
-  const { addProduct, removeProduct } = useCartStore();
 
-  // Extract id and variant_types early for lazy initialization
-  const { id: productId, variant_types: variantTypes = [] } = product;
+  // ============================================
+  // Use centralized hook - all common logic is here
+  // ============================================
+  const {
+    product,
+    selectedVariants,
+    quantity,
+    selectVariant,
+    setQuantity,
+    incrementQuantity,
+    decrementQuantity,
+    // Centralized handlers
+    handleAddToCart,
+    handleBuyNow,
+    // Centralized objects
+    pricing,
+    cartInfo,
+    stockInfo,
+    // Images
+    productImages,
+    // Shop settings
+    currency,
+  } = useProductDetails(handle);
 
-  // Get cart store state for lazy initialization
-  const cartStoreState = useCartStore.getState();
-
-  // Helper to compute default variants (first variant of each type)
-  const computeDefaultVariants = (
-    types: typeof variantTypes
-  ): Record<
-    number,
-    { id: number; name: string; price?: number; image_url?: string | null }
-  > => {
-    const defaults: Record<
-      number,
-      { id: number; name: string; price?: number; image_url?: string | null }
-    > = {};
-    if (types && types.length > 0) {
-      types.forEach((variantType) => {
-        if (variantType.variants && variantType.variants.length > 0) {
-          const firstVariant = variantType.variants[0];
-          defaults[variantType.id] = {
-            id: firstVariant.id,
-            name: firstVariant.name,
-            price: firstVariant.price,
-            image_url: firstVariant.image_url,
-          };
-        }
-      });
-    }
-    return defaults;
-  };
-
+  // Local UI state only
   const [selectedImageIdx, setSelectedImageIdx] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
-  const [quantity, setQuantity] = useState(1);
+  const [isShowVideo, setIsShowVideo] = useState(false);
   const [selectedRelatedProduct, setSelectedRelatedProduct] =
     useState<Product | null>(null);
 
-  // Initialize selected variants - prioritize cart variants, then defaults
-  const [selectedVariants, setSelectedVariants] = useState<
-    Record<
-      number,
-      { id: number; name: string; price?: number; image_url?: string | null }
-    >
-  >(() => {
-    // Check if product has variants in cart
-    const allProducts = cartStoreState.products;
-    const productCartItems = Object.values(allProducts).filter(
-      (p) => p.id === Number(productId)
-    );
-    if (productCartItems.length > 0) {
-      const firstCartItem = productCartItems[0];
-      const cartVariants = firstCartItem.selectedVariants;
-      if (cartVariants && Object.keys(cartVariants).length > 0) {
-        // Transform from VariantsState to Aurora format
-        const auroraVariants: Record<
-          number,
-          {
-            id: number;
-            name: string;
-            price?: number;
-            image_url?: string | null;
-          }
-        > = {};
-        Object.entries(cartVariants).forEach(
-          ([variantTypeId, variantState]) => {
-            auroraVariants[Number(variantTypeId)] = {
-              id: variantState.variant_id,
-              name: variantState.variant_name,
-              price: variantState.price,
-              image_url: variantState.image_url,
-            };
-          }
-        );
-        return auroraVariants;
-      }
-    }
-    return computeDefaultVariants(variantTypes);
-  });
-
-  const [isShowVideo, setIsShowVideo] = useState(false);
-
-  const {
-    id,
-    name,
-    price,
-    old_price,
-    images = [],
-    image_url,
-    description,
-    custom_fields,
-    warranty,
-    video_link,
-  } = product;
-
-  const countryCurrency = shopDetails?.country_currency || "BDT";
-  const baseUrl = shopDetails?.baseUrl || "";
   const allowDownload =
     shopDetails?.metadata?.settings?.shop_settings
       ?.enable_product_image_download ?? false;
   const showProductSoldCount = shopDetails?.show_product_sold_count ?? false;
 
+  // Product extended properties
   const productRecord = product as unknown as Record<string, unknown>;
   const totalInventorySold =
-    (productRecord.total_inventory_sold as number) ?? 0;
+    (productRecord?.total_inventory_sold as number) ?? 0;
   const initialProductSold =
-    (productRecord.initial_product_sold as number) ?? 0;
-
-  // All product images
-  const allImages = useMemo(() => {
-    const imgs = [...(images || [])];
-    if (image_url && !imgs.includes(image_url)) {
-      imgs.unshift(image_url);
-    }
-    return imgs.filter(Boolean);
-  }, [images, image_url]);
+    (productRecord?.initial_product_sold as number) ?? 0;
 
   // Get selected image URL
   const selectedImageUrl = useMemo(() => {
-    return allImages[selectedImageIdx] || image_url || "";
-  }, [allImages, selectedImageIdx, image_url]);
+    return productImages[selectedImageIdx] || product?.image_url || "";
+  }, [productImages, selectedImageIdx, product?.image_url]);
 
-  // Get cart products for this product - subscribe to products state to track cart changes
-  // Then filter to get only this product's cart items (reactive approach like basic/premium themes)
-  const allProducts = useCartStore((state) => state.products);
-  const cartProducts = useMemo(
-    () =>
-      id ? Object.values(allProducts).filter((p) => p.id === Number(id)) : [],
-    [id, allProducts]
-  );
-  const isInCart = cartProducts.length > 0;
-  const cartQty = cartProducts.reduce((acc, p) => acc + (p.qty || 0), 0);
-
-  // For non-variant products, find the cart item directly
-  // For variant products, find the matching variant combination
-  const matchingCartItem = useMemo(() => {
-    if (cartProducts.length === 0) return null;
-    // For non-variant products, return first cart item
-    if (!variantTypes || variantTypes.length === 0) {
-      return cartProducts[0];
-    }
-    // For variant products, find matching selected variants
-    return (
-      cartProducts.find((item) => {
-        const itemVariants = item.selectedVariants || {};
-        const itemValues = Object.values(itemVariants);
-        // Use Object.entries to get both variantTypeId (key) and variant (value)
-        const selectedEntries = Object.entries(selectedVariants);
-        if (selectedEntries.length !== itemValues.length) return false;
-        return selectedEntries.every(([variantTypeId, variant]) => {
-          return itemValues.some(
-            (itemVariant) =>
-              itemVariant.variant_type_id === Number(variantTypeId) &&
-              itemVariant.variant_id === variant.id
-          );
-        });
-      }) || null
-    );
-  }, [cartProducts, selectedVariants, variantTypes]);
-
-  // Check if the specific variant combination is in cart (for button label)
-  const isVariantInCart = matchingCartItem !== null;
-
-  // Sync quantity with matching cart item
-  // Use matchingCartItem?.qty in dependency to detect actual value changes
-  const matchingCartQty = matchingCartItem?.qty ?? 0;
-  useEffect(() => {
-    if (matchingCartQty > 0) {
-      setQuantity(matchingCartQty);
-    } else {
-      setQuantity(1);
-    }
-  }, [matchingCartQty]);
-
-  // Check if stock maintenance is enabled (default to true if undefined)
-  const isStockMaintain = shopDetails?.isStockMaintain !== false;
-  // Check stock status - only if stock maintenance is enabled
-  const isStockOut = isStockMaintain && (product.quantity ?? 0) <= 0;
-  const isStockNotAvailable = isStockOut;
-
-  // Calculate variant price total
-  const variantPriceTotal = useMemo(() => {
-    return Object.values(selectedVariants).reduce(
-      (sum, v) => sum + (v.price || 0),
-      0
-    );
-  }, [selectedVariants]);
-
-  // Calculate pricing including variant prices
-  const currentPrice = (price ?? 0) + variantPriceTotal;
-  const regularPrice = (old_price ?? price ?? 0) + variantPriceTotal;
-  const hasDiscount = (old_price ?? 0) > (price ?? 0);
-  const savePrice = hasDiscount ? old_price! - price! : 0;
-
-  // Handle variant selection
-  const handleVariantSelect = (
-    variantTypeId: number,
-    variant: {
-      id: number;
-      name: string;
-      price?: number;
-      image_url?: string | null;
-    },
-    canToggle: boolean
-  ) => {
-    setSelectedVariants((prev) => {
-      const isSelected = prev[variantTypeId]?.id === variant.id;
+  // Handle variant selection (with toggle support for Aurora)
+  const handleVariantSelect = useCallback(
+    (
+      variantTypeId: number,
+      variant: {
+        id: number;
+        name: string;
+        price?: number;
+        image_url?: string | null;
+      },
+      canToggle: boolean
+    ) => {
+      const isSelected = selectedVariants[variantTypeId]?.id === variant.id;
       if (canToggle && isSelected) {
-        // Remove variant if already selected and can toggle
-        const newVariants = { ...prev };
-        delete newVariants[variantTypeId];
-        return newVariants;
+        // For Aurora, we don't deselect - just keep as is
+        return;
       }
-      // Add or update variant
-      return {
-        ...prev,
-        [variantTypeId]: variant,
-      };
-    });
-  };
+      selectVariant(variantTypeId, variant);
+    },
+    [selectedVariants, selectVariant]
+  );
 
   // Handle image update from variant selection
-  const handleImageUpdate = (imageUrl: string) => {
-    const indx = allImages.findIndex((img) => img === imageUrl);
-    if (indx !== -1) {
-      setSelectedImageIdx(indx);
-      setIsShowVideo(false);
-    }
-  };
+  const handleImageUpdate = useCallback(
+    (imageUrl: string) => {
+      const indx = productImages.findIndex((img) => img === imageUrl);
+      if (indx !== -1) {
+        setSelectedImageIdx(indx);
+        setIsShowVideo(false);
+      }
+    },
+    [productImages]
+  );
 
   // Handle quantity change
-  const handleQuantityChange = (newQuantity: number) => {
-    if (newQuantity < 1) return;
-    if (product.quantity && newQuantity > product.quantity) return;
-    setQuantity(newQuantity);
-  };
-
-  const sumQty = () => {
-    handleQuantityChange(quantity + 1);
-  };
-
-  const subQty = () => {
-    handleQuantityChange(quantity - 1);
-  };
+  const handleQuantityChange = useCallback(
+    (newQuantity: number) => {
+      if (newQuantity < 1) return;
+      if (product?.quantity && newQuantity > product.quantity) return;
+      setQuantity(newQuantity);
+    },
+    [product?.quantity, setQuantity]
+  );
 
   const disableSub = quantity <= 1;
   const disableSum =
-    product.quantity !== undefined && quantity >= product.quantity;
+    product?.quantity !== undefined && quantity >= product.quantity;
 
   // Handle download
-  const handleDownload = async (imageUrl: string, index: number) => {
-    if (!allowDownload) return;
-    try {
-      const proxyUrl = `/api/download-image?url=${encodeURIComponent(
-        imageUrl
-      )}`;
-      const response = await fetch(proxyUrl);
-      if (!response.ok)
-        throw new Error(`HTTP error! status: ${response.status}`);
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `${product.name}-image-${index + 1}.jpg`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error("Download failed:", error);
-      alert("Failed to download image. Please try again.");
-    }
-  };
+  const handleDownload = useCallback(
+    async (imageUrl: string, index: number) => {
+      if (!allowDownload || !product) return;
+      try {
+        const proxyUrl = `/api/download-image?url=${encodeURIComponent(
+          imageUrl
+        )}`;
+        const response = await fetch(proxyUrl);
+        if (!response.ok)
+          throw new Error(`HTTP error! status: ${response.status}`);
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `${product.name}-image-${index + 1}.jpg`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      } catch (error) {
+        console.error("Download failed:", error);
+        alert("Failed to download image. Please try again.");
+      }
+    },
+    [allowDownload, product]
+  );
 
-  // Handle add to cart
-  const handleAddToCart = useCallback(() => {
-    if (isStockOut) return;
+  if (!product) {
+    return null;
+  }
 
-    // For products already in cart (matching selected variants), remove old cart item first
-    // Same logic as premium theme
-    if (matchingCartItem) {
-      removeProduct(matchingCartItem.cartId);
-    }
-
-    // Transform selectedVariants to match VariantState structure
-    const transformedVariants: Record<number, VariantState> = {};
-    Object.entries(selectedVariants).forEach(([key, variant]) => {
-      transformedVariants[Number(key)] = {
-        variant_type_id: Number(key),
-        variant_id: variant.id,
-        price: variant.price ?? 0,
-        variant_name: variant.name,
-        variant_type_name:
-          variantTypes.find((vt) => vt.id === Number(key))?.title || "",
-        image_url: variant.image_url ?? undefined,
-      };
-    });
-
-    addProduct({
-      ...product,
-      id: Number(id),
-      image_url: selectedImageUrl || allImages[0] || image_url,
-      qty: quantity,
-      selectedVariants: transformedVariants,
-      total_inventory_sold: totalInventorySold,
-      categories: product.categories ?? [],
-      variant_types: product.variant_types ?? [],
-      stocks: product.stocks ?? [],
-      reviews: (productRecord.reviews as Array<unknown>) ?? [],
-    } as Parameters<typeof addProduct>[0]);
-  }, [
-    isStockOut,
-    product,
-    id,
-    selectedImageUrl,
-    allImages,
-    image_url,
-    quantity,
-    selectedVariants,
-    variantTypes,
-    totalInventorySold,
-    productRecord,
-    matchingCartItem,
-    removeProduct,
-    addProduct,
-  ]);
-
-  // Handle buy now
-  const handleBuyNow = useCallback(() => {
-    if (isStockOut) return;
-
-    if (!isInCart) {
-      handleAddToCart();
-    }
-
-    router.push(`${baseUrl}/checkout`);
-  }, [isStockOut, isInCart, handleAddToCart, router, baseUrl]);
+  const { name, description, custom_fields, warranty, video_link } = product;
 
   return (
     <>
       {/* Image Lightbox */}
       <ImageLightbox
         product={{
-          images: allImages?.map((img) => getDetailPageImageUrl(img)) || [],
+          images:
+            productImages?.map((img) => getDetailPageImageUrl(img)) || [],
           name: name || "",
         }}
         open={lightboxOpen}
@@ -479,15 +257,13 @@ export function ProductDetails({ product }: ProductDetailsProps) {
       <div className="flex items-start xl:flex-row flex-col gap-6.5 pt-6 pb-12 md:pb-21">
         {/* Vertical Thumbnail Sidebar (Desktop only) */}
         <div className="overflow-auto xl:w-[10%] xl:h-[calc(100vh-120px)] xl:flex hidden xl:pl-1">
-          {allImages && allImages.length > 0 && (
+          {productImages && productImages.length > 0 && (
             <ul className="flex flex-col gap-2 mt-2 w-full pb-1">
               {video_link && (
                 <div
                   className={cn(
                     "relative w-22.5 h-29 p-1 ring-[1px] ring-transparent bg-[#E4E4E7] dark:bg-transparent cursor-pointer",
-                    {
-                      "ring-blue-zatiq": isShowVideo,
-                    }
+                    { "ring-blue-zatiq": isShowVideo }
                   )}
                   onClick={() => setIsShowVideo(true)}
                 >
@@ -506,7 +282,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                   />
                 </div>
               )}
-              {allImages.map((img, key) => (
+              {productImages.map((img, key) => (
                 <li
                   role="button"
                   onClick={() => {
@@ -538,7 +314,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
         {/* Main Content Area */}
         <div className="xl:w-[90%] w-full pt-1">
           <div className="w-full flex xl:flex-row flex-col items-start gap-5 xl:gap-7.5 h-full rounded-xl">
-            {/* Left Side: Image Gallery (639px on desktop) */}
+            {/* Left Side: Image Gallery */}
             <div className="w-full xl:w-160">
               <div className="relative">
                 {/* Main Image or Video */}
@@ -575,9 +351,8 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                 )}
 
                 {/* Zoom & Download Buttons */}
-                {allImages && !isShowVideo && selectedImageUrl && (
+                {productImages && !isShowVideo && selectedImageUrl && (
                   <div className="absolute top-2 right-2 z-10 flex items-center gap-2">
-                    {/* Zoom Button */}
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
@@ -591,7 +366,6 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                       <ZoomIn className="text-white dark:text-gray-700 w-5 h-5 md:w-7 md:h-7" />
                     </button>
 
-                    {/* Download Button */}
                     {allowDownload && (
                       <button
                         onClick={(e) => {
@@ -614,15 +388,13 @@ export function ProductDetails({ product }: ProductDetailsProps) {
 
                 {/* Mobile Horizontal Thumbnails */}
                 <div className="xl:hidden flex px-1">
-                  {allImages && allImages.length > 0 && (
+                  {productImages && productImages.length > 0 && (
                     <ul className="flex gap-2 flex-wrap mt-2">
                       {video_link && (
                         <div
                           className={cn(
                             "w-12.5 min-w-12.5 h-12.5 sm:min-w-18.75 sm:h-18.75 sm:w-18.75 relative overflow-hidden ring ring-transparent p-1 cursor-pointer",
-                            {
-                              "ring-blue-zatiq": isShowVideo,
-                            }
+                            { "ring-blue-zatiq": isShowVideo }
                           )}
                           onClick={() => setIsShowVideo(true)}
                         >
@@ -641,7 +413,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                           />
                         </div>
                       )}
-                      {allImages.map((img, key) => (
+                      {productImages.map((img, key) => (
                         <li
                           role="button"
                           onClick={() => {
@@ -724,7 +496,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                 </h1>
 
                 {/* Out of Stock Warning */}
-                {isStockOut && (
+                {stockInfo.isStockOut && (
                   <span className="-mt-4 text-sm font-medium text-red-500">
                     Out of stock
                   </span>
@@ -739,17 +511,17 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                       </p>
                       <div className="flex items-center gap-1 xl:gap-3 leading-normal">
                         <span className="text-[16px] text-[#4B5563] dark:text-gray-200 lg:text-2xl font-bold min-w-fit">
-                          {currentPrice.toLocaleString() || "0.00"}{" "}
-                          {countryCurrency}
+                          {pricing.currentPrice.toLocaleString() || "0.00"}{" "}
+                          {currency}
                         </span>
-                        {hasDiscount && (
+                        {pricing.hasDiscount && (
                           <>
                             <span className="text-sm text-[#8E8E8E] dark:text-gray-300 min-w-fit line-through">
-                              {regularPrice.toLocaleString()} {countryCurrency}
+                              {pricing.regularPrice.toLocaleString()} {currency}
                             </span>
                             <span className="px-2.5 pb-2 pt-2.25 bg-blue-zatiq rounded-full text-white dark:text-black-18 text-center text-xs md:text-[16px]">
-                              Save {savePrice.toLocaleString()}{" "}
-                              {countryCurrency}
+                              Save {pricing.savePrice.toLocaleString()}{" "}
+                              {currency}
                             </span>
                           </>
                         )}
@@ -770,26 +542,27 @@ export function ProductDetails({ product }: ProductDetailsProps) {
 
                   {/* Already in Cart Message */}
                   <div className="flex flex-col gap-4.5">
-                    {isInCart && (
+                    {cartInfo.isInCart && (
                       <div>
                         <p className="text-sm text-blue-zatiq font-medium">
-                          Already in your cart ({cartQty})
+                          Already in your cart ({cartInfo.cartQty})
                         </p>
                       </div>
                     )}
 
                     {/* Product Variants */}
-                    {variantTypes && variantTypes.length > 0 && (
-                      <ProductVariants
-                        variantTypes={variantTypes}
-                        selectedVariants={selectedVariants}
-                        onSelectVariant={handleVariantSelect}
-                        onImageUpdate={handleImageUpdate}
-                        imageVariantTypeId={
-                          product.image_variant_type_id ?? undefined
-                        }
-                      />
-                    )}
+                    {product.variant_types &&
+                      product.variant_types.length > 0 && (
+                        <ProductVariants
+                          variantTypes={product.variant_types}
+                          selectedVariants={selectedVariants}
+                          onSelectVariant={handleVariantSelect}
+                          onImageUpdate={handleImageUpdate}
+                          imageVariantTypeId={
+                            product.image_variant_type_id ?? undefined
+                          }
+                        />
+                      )}
                   </div>
                 </div>
 
@@ -829,7 +602,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                     <button
                       type="button"
                       className="cursor-pointer disabled:opacity-50"
-                      onClick={subQty}
+                      onClick={decrementQuantity}
                       disabled={disableSub}
                     >
                       <Minus className="h-5 w-5 md:h-6 md:w-6" />
@@ -848,8 +621,8 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                     <button
                       type="button"
                       className="cursor-pointer disabled:opacity-50"
-                      onClick={sumQty}
-                      disabled={disableSum || isStockNotAvailable}
+                      onClick={incrementQuantity}
+                      disabled={disableSum || stockInfo.isStockNotAvailable}
                     >
                       <Plus className="h-5 w-5 md:h-6 md:w-6" />
                     </button>
@@ -857,24 +630,26 @@ export function ProductDetails({ product }: ProductDetailsProps) {
 
                   {/* Add to Cart Button */}
                   <button
-                    disabled={isStockNotAvailable}
+                    disabled={stockInfo.isStockNotAvailable}
                     onClick={handleAddToCart}
                     className="md:w-1/2 text-center p-3 text-sm md:text-base font-medium capitalize disabled:bg-black-disabled w-full border-[1.2px] border-blue-zatiq text-blue-zatiq disabled:text-white disabled:border-black-disabled cursor-pointer"
                   >
-                    {isVariantInCart ? t("update_cart") : t("add_to_cart")}
+                    {cartInfo.matchingCartItem
+                      ? t("update_cart")
+                      : t("add_to_cart")}
                   </button>
                 </div>
 
                 {/* Buy Now Button */}
                 <button
-                  disabled={isStockNotAvailable}
+                  disabled={stockInfo.isStockNotAvailable}
                   onClick={handleBuyNow}
                   className="p-3 mt-2 text-center text-sm md:text-base font-medium disabled:bg-black-disabled capitalize transition-colors duration-150 w-full bg-blue-zatiq border-[1.2px] border-blue-zatiq text-white dark:text-black-full disabled:text-white disabled:border-black-disabled cursor-pointer"
                 >
                   {t("buy_now")}
                 </button>
 
-                {isStockNotAvailable && (
+                {stockInfo.isStockNotAvailable && (
                   <p className="text-sm font-medium text-red-500 mt-3">
                     No more items remaining!
                   </p>
@@ -942,7 +717,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
 
       {/* Related Products */}
       <AuroraRelatedProducts
-        ignoreProductId={id}
+        ignoreProductId={product.id}
         currentProduct={product}
         onSelectProduct={setSelectedRelatedProduct}
       />

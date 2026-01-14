@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback, useEffect, useRef } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { Minus, Plus, ZoomIn, Download } from "lucide-react";
@@ -23,7 +23,6 @@ import {
   CustomerReviews,
   RelatedProducts,
 } from "./sections";
-import type { VariantsState, VariantState } from "@/types/cart.types";
 
 interface SelloraProductDetailPageProps {
   handle: string;
@@ -73,44 +72,33 @@ export function SelloraProductDetailPage({
   const router = useRouter();
   const { t } = useTranslation();
   const { shopDetails } = useShopStore();
-  const { addProduct, removeProduct } = useCartStore();
   const totalCartItems = useCartStore(selectTotalItems);
   const totalPrice = useCartStore(selectSubtotal);
 
-  // Fetch product details using hook
-  const { product, isLoading, error } = useProductDetails(handle);
+  // Use centralized product details hook
+  const {
+    product,
+    isLoading,
+    error,
+    selectedVariantsAsState,
+    quantity,
+    pricing,
+    cartInfo,
+    stockInfo,
+    productImages,
+    baseUrl,
+    selectVariant,
+    setQuantity,
+    incrementQuantity,
+    decrementQuantity,
+    handleAddToCart: addToCart,
+    handleBuyNow: buyNow,
+  } = useProductDetails(handle);
 
+  // Local UI state only
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
-  const [quantity, setQuantity] = useState(1);
 
-  // Track if we've already initialized variants (to avoid re-running)
-  const hasInitializedVariants = useRef(false);
-  const [selectedVariants, setSelectedVariants] = useState<VariantsState>({});
-
-  // Extract product properties with defaults - wrap in useMemo for performance
-  const id = useMemo(() => product?.id, [product?.id]);
-  const name = useMemo(() => product?.name || "", [product?.name]);
-  const price = useMemo(() => product?.price ?? 0, [product?.price]);
-  const old_price = useMemo(() => product?.old_price, [product?.old_price]);
-  const images = useMemo(() => product?.images ?? [], [product?.images]);
-  const image_url = useMemo(() => product?.image_url, [product?.image_url]);
-  const variant_types = useMemo(
-    () => product?.variant_types ?? [],
-    [product?.variant_types]
-  );
-  const video_link = useMemo(() => product?.video_link, [product?.video_link]);
-  const reviews = useMemo(() => product?.reviews, [product?.reviews]);
-  const categories = useMemo(
-    () => product?.categories ?? [],
-    [product?.categories]
-  );
-  const image_variant_type_id = useMemo(
-    () => product?.image_variant_type_id,
-    [product?.image_variant_type_id]
-  );
-
-  const baseUrl = shopDetails?.baseUrl || "";
   const hasItems = totalCartItems > 0;
 
   // Check if download is allowed
@@ -122,230 +110,29 @@ export function SelloraProductDetailPage({
     )?.enable_product_image_download
   );
 
-  // All product images
-  const allImages = useMemo(() => {
-    const imgs = [...(images || [])];
-    if (image_url && !imgs.includes(image_url)) {
-      imgs.unshift(image_url);
-    }
-    return imgs.filter(Boolean);
-  }, [images, image_url]);
-
-  // Selected image URL
-  const selectedImageUrl = useMemo(() => {
-    return allImages[selectedImageIndex] || image_url || "";
-  }, [allImages, selectedImageIndex, image_url]);
-
   // Video ID for YouTube
-  const videoId = useMemo(() => extractVideoId(video_link || ""), [video_link]);
-
-  // Get cart products for this product - subscribe to products state to track cart changes
-  // Then filter to get only this product's cart items (reactive approach like basic/premium themes)
-  const allCartProducts = useCartStore((state) => state.products);
-  const cartProducts = useMemo(
-    () =>
-      id
-        ? Object.values(allCartProducts).filter((p) => p.id === Number(id))
-        : [],
-    [id, allCartProducts]
+  const videoId = useMemo(
+    () => extractVideoId(product?.video_link || ""),
+    [product?.video_link]
   );
-  const isInCart = cartProducts.length > 0;
-
-  // For non-variant products, find the cart item directly
-  // For variant products, find the matching variant combination
-  const matchingCartItem = useMemo(() => {
-    if (cartProducts.length === 0) return null;
-    // For non-variant products, return first cart item
-    if (!variant_types || variant_types.length === 0) {
-      return cartProducts[0];
-    }
-    // For variant products, find matching selected variants
-    return (
-      cartProducts.find((item) => {
-        const itemVariants = item.selectedVariants || {};
-        const selectedKeys = Object.keys(selectedVariants);
-        const itemKeys = Object.keys(itemVariants);
-        if (selectedKeys.length !== itemKeys.length) return false;
-        return selectedKeys.every((key) => {
-          const numKey = Number(key);
-          return (
-            selectedVariants[numKey]?.variant_id ===
-            itemVariants[numKey]?.variant_id
-          );
-        });
-      }) || null
-    );
-  }, [cartProducts, selectedVariants, variant_types]);
-
-  // Sync quantity with matching cart item
-  // Use matchingCartItem?.qty in dependency to detect actual value changes
-  const matchingCartQty = matchingCartItem?.qty ?? 0;
-  useEffect(() => {
-    if (matchingCartQty > 0) {
-      setQuantity(matchingCartQty);
-    } else {
-      setQuantity(1);
-    }
-  }, [matchingCartQty]);
-
-  // Check if stock maintenance is enabled (default to true if undefined)
-  const isStockMaintain = shopDetails?.isStockMaintain !== false;
-  // Check stock status - only if stock maintenance is enabled
-  const isStockOut = isStockMaintain && product?.quantity === 0;
-  const isStockNotAvailable =
-    isStockMaintain && (isStockOut || quantity >= (product?.quantity || 0));
-
-  // Calculate pricing including variant prices
-  const variantPriceTotal = useMemo(() => {
-    return Object.values(selectedVariants).reduce(
-      (sum, v) => sum + (v.price || 0),
-      0
-    );
-  }, [selectedVariants]);
-
-  const currentPrice = (price || 0) + variantPriceTotal;
-  const regularPrice = (old_price || price || 0) + variantPriceTotal;
-  const hasSavePrice = (old_price ?? 0) > (price ?? 0);
-  const savePrice = hasSavePrice ? old_price! - price! : 0;
 
   // Category IDs for related products
-  const categoryIds = useMemo(() => categories.map((c) => c.id), [categories]);
-
-  // Handle variant selection
-  const handleVariantSelect = useCallback(
-    (variantTypeId: number | string, variantState: VariantState) => {
-      setSelectedVariants((prev) => ({
-        ...prev,
-        [variantTypeId]: variantState,
-      }));
-    },
-    []
-  );
-
-  // Auto-select variants when product loads
-  // Priority: 1. From cart (if product is in cart), 2. First variant of each mandatory type
-  useEffect(() => {
-    if (
-      !product ||
-      !variant_types ||
-      variant_types.length === 0 ||
-      hasInitializedVariants.current
-    ) {
-      return;
-    }
-
-    // Find the first cart item for this product
-    const firstCartItem = cartProducts[0];
-
-    if (
-      firstCartItem?.selectedVariants &&
-      Object.keys(firstCartItem.selectedVariants).length > 0
-    ) {
-      // Restore variants from cart
-      hasInitializedVariants.current = true;
-      Object.entries(firstCartItem.selectedVariants).forEach(
-        ([variantTypeId, variantState]) => {
-          const typeId = Number(variantTypeId);
-          const variantId = variantState.variant_id;
-
-          // Find the variant in the product's variant types
-          const variantType = variant_types.find((vt) => vt.id === typeId);
-          if (variantType?.variants) {
-            const variant = variantType.variants.find(
-              (v) => v.id === variantId
-            );
-            if (variant) {
-              handleVariantSelect(typeId, {
-                variant_type_id: variantState.variant_type_id,
-                variant_id: variantId,
-                price: variantState.price || 0,
-                variant_name: variantState.variant_name || variant.name || "",
-                image_url: variant.image_url || undefined,
-              });
-            }
-          }
-        }
-      );
-    } else {
-      // Auto-select first variant of each mandatory type (like Basic theme)
-      hasInitializedVariants.current = true;
-      variant_types.forEach((variantType) => {
-        if (variantType.is_mandatory && variantType.variants?.length > 0) {
-          const firstVariant = variantType.variants[0];
-          handleVariantSelect(variantType.id, {
-            variant_type_id: variantType.id,
-            variant_id: firstVariant.id,
-            price: firstVariant.price || 0,
-            variant_name: firstVariant.name || "",
-            image_url: firstVariant.image_url || undefined,
-          });
-        }
-      });
-    }
-  }, [product, cartProducts, variant_types, handleVariantSelect]);
-
-  // Reset initialization flag when handle/product changes
-  useEffect(() => {
-    hasInitializedVariants.current = false;
-  }, [handle]);
-
-  // Handle quantity change
-  const handleQuantityChange = useCallback(
-    (delta: number) => {
-      const newQty = quantity + delta;
-      if (newQty >= 1 && newQty <= (product?.quantity || 999)) {
-        setQuantity(newQty);
-      }
-    },
-    [quantity, product?.quantity]
+  const categoryIds = useMemo(
+    () => (product?.categories || []).map((c) => c.id),
+    [product?.categories]
   );
 
   // Handle add to cart
   const handleAddToCart = useCallback(() => {
-    if (isStockOut || !product) return;
-
-    // For products already in cart (matching selected variants), remove old cart item first
-    // Same logic as premium theme
-    if (matchingCartItem) {
-      removeProduct(matchingCartItem.cartId);
-    }
-
-    const productRecord = product as unknown as Record<string, unknown>;
-    addProduct({
-      ...product,
-      id: Number(id),
-      image_url: selectedImageUrl || image_url,
-      qty: quantity,
-      selectedVariants,
-      total_inventory_sold: (productRecord.total_inventory_sold as number) ?? 0,
-      categories: product.categories ?? [],
-      variant_types: product.variant_types ?? [],
-      stocks: product.stocks ?? [],
-      reviews: (productRecord.reviews as Array<unknown>) ?? [],
-    } as Parameters<typeof addProduct>[0]);
-  }, [
-    isStockOut,
-    product,
-    id,
-    selectedImageUrl,
-    image_url,
-    quantity,
-    selectedVariants,
-    matchingCartItem,
-    removeProduct,
-    addProduct,
-  ]);
+    if (stockInfo.isStockOut) return;
+    addToCart();
+  }, [stockInfo.isStockOut, addToCart]);
 
   // Handle buy now
   const handleBuyNow = useCallback(() => {
-    if (isStockOut) return;
-
-    if (!isInCart) {
-      handleAddToCart();
-    }
-
-    router.push(`${baseUrl}/checkout`);
-  }, [isStockOut, isInCart, handleAddToCart, router, baseUrl]);
+    if (stockInfo.isStockOut) return;
+    buyNow();
+  }, [stockInfo.isStockOut, buyNow]);
 
   // Handle download image
   const handleDownloadImage = useCallback(
@@ -364,7 +151,7 @@ export function SelloraProductDetailPage({
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
-        link.download = `${name}-image-${index + 1}.jpg`;
+        link.download = `${product?.name}-image-${index + 1}.jpg`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -373,13 +160,15 @@ export function SelloraProductDetailPage({
         console.error("Download failed:", error);
       }
     },
-    [allowDownload, name]
+    [allowDownload, product?.name]
   );
 
   // Action button label
-  const actionButtonLabel = isInCart ? t("update_cart") : t("add_to_cart");
+  const actionButtonLabel = cartInfo.isInCart
+    ? t("update_cart")
+    : t("add_to_cart");
 
-  // Show loading state - AFTER all hooks
+  // Show loading state
   if (isLoading || !product) {
     return <LoadingFallback />;
   }
@@ -398,12 +187,23 @@ export function SelloraProductDetailPage({
     );
   }
 
+  const {
+    id,
+    name = "",
+    variant_types = [],
+    video_link,
+    reviews,
+    categories = [],
+    image_variant_type_id,
+    unit_name,
+  } = product;
+
   return (
     <SelloraThemeWrapper>
       {/* Image Lightbox */}
       <ImageLightbox
         product={{
-          images: allImages.map((img) => getDetailPageImageUrl(img)),
+          images: productImages.map((img) => getDetailPageImageUrl(img)),
           name: name || "",
         }}
         open={lightboxOpen}
@@ -415,9 +215,9 @@ export function SelloraProductDetailPage({
       <div className="container grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-8 pt-10 sm:pt-20 lg:items-start">
         {/* Left Side - Images Grid */}
         <div className="lg:col-span-3 flex flex-col lg:flex-row gap-3 sm:gap-4 py-6 sm:py-8 lg:py-10">
-          {allImages.length > 0 && (
+          {productImages.length > 0 && (
             <div className="grid grid-cols-2 gap-3 sm:gap-5">
-              {allImages.map((img, idx) => (
+              {productImages.map((img, idx) => (
                 <div
                   key={idx}
                   className={cn(
@@ -505,7 +305,7 @@ export function SelloraProductDetailPage({
             </h1>
 
             {/* Stock Out Badge */}
-            {isStockOut && (
+            {stockInfo.isStockOut && (
               <span className="inline-block text-xs sm:text-sm font-medium text-red-500 bg-red-50 dark:bg-red-900/20 px-2.5 sm:px-3 py-1 rounded">
                 {t("out_of_stock") || "Out of stock"}
               </span>
@@ -515,12 +315,12 @@ export function SelloraProductDetailPage({
           {/* Pricing */}
           <div className="mb-4 sm:mb-5 md:mb-8">
             <ProductPricing
-              currentPrice={currentPrice}
-              regularPrice={regularPrice}
-              hasSavePrice={hasSavePrice}
-              savePrice={savePrice}
+              currentPrice={pricing.currentPrice}
+              regularPrice={pricing.regularPrice}
+              hasSavePrice={pricing.hasDiscount}
+              savePrice={pricing.savePrice}
               showOldPrice={true}
-              unitName={product.unit_name}
+              unitName={unit_name}
             />
           </div>
 
@@ -529,10 +329,17 @@ export function SelloraProductDetailPage({
             <div className="mb-6 sm:mb-7 md:mb-8">
               <ProductVariants
                 variantTypes={variant_types}
-                selectedVariants={selectedVariants}
-                onSelectVariant={handleVariantSelect}
+                selectedVariants={selectedVariantsAsState}
+                onSelectVariant={(variantTypeId, variantState) => {
+                  selectVariant(Number(variantTypeId), {
+                    id: variantState.variant_id,
+                    name: variantState.variant_name,
+                    price: variantState.price || 0,
+                    image_url: variantState.image_url,
+                  });
+                }}
                 onImageChange={setSelectedImageIndex}
-                images={allImages}
+                images={productImages}
                 imageVariantTypeId={image_variant_type_id ?? undefined}
               />
             </div>
@@ -544,7 +351,7 @@ export function SelloraProductDetailPage({
               {/* Quantity Control */}
               <div className="flex-1 flex items-center justify-between min-h-12 sm:min-h-14 px-4 bg-transparent border-2 border-gray-300 dark:border-gray-700 rounded-md">
                 <button
-                  onClick={() => handleQuantityChange(-1)}
+                  onClick={decrementQuantity}
                   disabled={quantity <= 1}
                   className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-50 rounded"
                 >
@@ -555,17 +362,17 @@ export function SelloraProductDetailPage({
                   value={quantity}
                   onChange={(e) => {
                     const val = parseInt(e.target.value) || 1;
-                    if (val >= 1 && val <= (product.quantity || 999)) {
+                    if (val >= 1 && val <= (stockInfo.stockQuantity || 999)) {
                       setQuantity(val);
                     }
                   }}
                   className="w-12 text-center bg-transparent outline-none text-foreground font-medium"
                   min={1}
-                  max={product.quantity || 999}
+                  max={stockInfo.stockQuantity || 999}
                 />
                 <button
-                  onClick={() => handleQuantityChange(1)}
-                  disabled={isStockNotAvailable}
+                  onClick={incrementQuantity}
+                  disabled={stockInfo.isStockNotAvailable}
                   className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-50 rounded"
                 >
                   <Plus size={16} />
@@ -574,7 +381,7 @@ export function SelloraProductDetailPage({
 
               {/* Add to Cart Button */}
               <button
-                disabled={isStockNotAvailable}
+                disabled={stockInfo.isStockNotAvailable}
                 onClick={handleAddToCart}
                 className="flex-1 min-h-12 sm:min-h-14 p-2 sm:p-2.5 md:p-3 cursor-pointer text-base text-foreground font-medium capitalize rounded-md disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed border-2 border-gray-300 dark:border-gray-700 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors"
               >
@@ -584,7 +391,7 @@ export function SelloraProductDetailPage({
 
             {/* Buy Now Button */}
             <button
-              disabled={isStockNotAvailable}
+              disabled={stockInfo.isStockNotAvailable}
               onClick={handleBuyNow}
               className="w-full min-h-12 sm:min-h-14 p-2 sm:p-2.5 md:p-3 cursor-pointer text-base font-medium capitalize rounded-md disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed bg-foreground text-background hover:bg-foreground/90 transition-colors border-2 border-foreground"
             >
@@ -592,7 +399,7 @@ export function SelloraProductDetailPage({
             </button>
 
             {/* Stock Warning */}
-            {isStockNotAvailable && !isStockOut && (
+            {stockInfo.isStockNotAvailable && !stockInfo.isStockOut && (
               <p className="text-xs sm:text-sm font-medium text-red-500 mt-2">
                 {t("no_more_items_remaining") || "No more items remaining!"}
               </p>

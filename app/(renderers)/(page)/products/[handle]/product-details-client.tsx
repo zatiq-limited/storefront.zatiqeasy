@@ -113,11 +113,11 @@ export default function ProductDetailsClient({
   // ========================================
   if (isLegacyTheme) {
     // Render component based on theme's prop requirements
-    // Note: Each theme component has different prop requirements:
+    // Note: All theme components now use handle prop and centralized useProductDetails hook
     // - Basic: handle (uses useProductDetails internally)
-    // - Aurora: handle? (optional, uses useProductDetails internally)
-    // - Luxura: no props (uses useParams internally)
-    // - Premium: product (receives pre-fetched product)
+    // - Aurora: handle (uses useProductDetails internally)
+    // - Luxura: handle (uses useProductDetails internally)
+    // - Premium: handle (uses useProductDetails internally)
     // - Sellora: handle (uses useProductDetails internally)
     switch (themeName) {
       case "Basic":
@@ -127,11 +127,10 @@ export default function ProductDetailsClient({
         return <AuroraProductDetailPage handle={handle} />;
 
       case "Luxura":
-        // Luxura uses useParams internally and reads from URL
-        return <LuxuraProductDetailPage />;
+        return <LuxuraProductDetailPage handle={handle} />;
 
       case "Premium":
-        return <PremiumProductDetailPage product={product} />;
+        return <PremiumProductDetailPage handle={handle} />;
 
       case "Sellora":
         return <SelloraProductDetailPage handle={handle} />;

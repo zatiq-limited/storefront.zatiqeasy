@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback, useEffect } from "react";
+import { useState, useMemo, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -16,8 +16,6 @@ import { AnimateChangeInHeight } from "@/components/ui/animate-change-height";
 import { RelatedProducts } from "@/components/products/related-products";
 import { CustomerReviews } from "@/components/products/customer-reviews";
 import { useProductDetails, useCartTotals } from "@/hooks";
-import { useCartStore } from "@/stores/cartStore";
-import type { VariantsState } from "@/types/cart.types";
 import { useShopStore } from "@/stores/shopStore";
 import { CartFloatingBtn } from "@/features/cart/cart-floating-btn";
 import { InventorySearch } from "@/app/_themes/basic/modules/home/sections/inventory-search";
@@ -81,11 +79,11 @@ export const BasicProductDetailPage = ({
 }: BasicProductDetailPageProps) => {
   const router = useRouter();
   const { shopDetails } = useShopStore();
-  const { addProduct, removeProduct } = useCartStore();
   const { totalPrice, totalProducts, hasItems } = useCartTotals();
 
-  const baseUrl = shopDetails?.baseUrl || "";
-
+  // ============================================
+  // Use centralized hook - all common logic is here
+  // ============================================
   const {
     product,
     productQuery,
@@ -96,28 +94,23 @@ export const BasicProductDetailPage = ({
     setQuantity,
     incrementQuantity,
     decrementQuantity,
-    isInStock,
-    stockQuantity,
+    // Centralized handlers
+    handleAddToCart,
+    handleBuyNow,
+    // Centralized objects
+    pricing,
+    cartInfo,
+    stockInfo,
+    // Shop settings
+    baseUrl,
+    currency,
   } = useProductDetails(handle);
 
-  // Get cart products for this product - subscribe to products state to track cart changes
-  // Then filter to get only this product's cart items
-  const allProducts = useCartStore((state) => state.products);
-  const cartProducts = useMemo(
-    () =>
-      product?.id
-        ? Object.values(allProducts).filter((p) => p.id === Number(product.id))
-        : [],
-    [product?.id, allProducts]
-  );
-  const isInCartDirect = cartProducts.length > 0;
-  const cartQty = cartProducts.reduce((acc, p) => acc + (p.qty || 0), 0);
-
+  // Local UI state only
   const [open, setOpen] = useState(false);
   const [selectedImageIdx, setSelectedImageIdx] = useState(0);
   const [isShowVideo, setIsShowVideo] = useState(false);
 
-  const currency = shopDetails?.country_currency || "BDT";
   const allowDownload = Boolean(
     (
       shopDetails?.metadata?.settings?.shop_settings as
@@ -129,228 +122,28 @@ export const BasicProductDetailPage = ({
   // Selected image URL
   const selectedImageUrl = useMemo(() => {
     if (product?.images && product.images.length !== 0) {
-      return product.images[selectedImageIdx] || product.image_url || PLACEHOLDER_IMAGES.PRODUCT;
+      return (
+        product.images[selectedImageIdx] ||
+        product.image_url ||
+        PLACEHOLDER_IMAGES.PRODUCT
+      );
     }
     return product?.image_url || PLACEHOLDER_IMAGES.PRODUCT;
   }, [product, selectedImageIdx]);
 
-  // Product pricing
-  const productPricing = useMemo(() => {
-    const basePrice = product?.price || 0;
-    const oldPrice = product?.old_price || 0;
-    const variantPrice =
-      Object.values(selectedVariants).reduce(
-        (sum, v) => sum + (v.price || 0),
-        0
-      ) || 0;
-
-    const currentPrice = basePrice + variantPrice;
-    const regularPrice = oldPrice ? oldPrice + variantPrice : currentPrice;
-    const savePrice = regularPrice - currentPrice;
-    const hasSavePrice = savePrice > 0 && oldPrice > 0;
-
-    return {
-      currentPrice,
-      regularPrice,
-      savePrice,
-      hasSavePrice,
-    };
-  }, [product, selectedVariants]);
-
-  // Check if stock maintenance is enabled (default to true if undefined)
-  const isStockMaintain = shopDetails?.isStockMaintain !== false;
-  // Stock status - only check if stock maintenance is enabled
-  // stockQuantity is already from hook
-  // isInStock is already from hook
-  const isStockOut = isStockMaintain && !isInStock;
-  const isStockNotAvailable =
-    isStockMaintain && (!isInStock || quantity >= stockQuantity);
-
-  // Helper to check if two variant selections match (same as premium theme)
-  const isSameVariantsCombination = useCallback(
-    (variants1: VariantsState, variants2: VariantsState): boolean => {
-      const keys1 = Object.keys(variants1);
-      const keys2 = Object.keys(variants2);
-      if (keys1.length !== keys2.length) return false;
-      return keys1.every((key) => {
-        const v1 = variants1[key];
-        const v2 = variants2[key];
-        return v1?.variant_id === v2?.variant_id;
-      });
-    },
-    []
+  // Map pricing to ProductPricing component props
+  const productPricing = useMemo(
+    () => ({
+      currentPrice: pricing.currentPrice,
+      regularPrice: pricing.regularPrice,
+      savePrice: pricing.savePrice,
+      hasSavePrice: pricing.hasDiscount,
+    }),
+    [pricing]
   );
 
-  // Transform selectedVariants to VariantsState format for comparison
-  const selectedVariantsAsState = useMemo(() => {
-    const state: VariantsState = {};
-    Object.entries(selectedVariants).forEach(([key, variant]) => {
-      state[Number(key)] = {
-        variant_type_id: Number(key),
-        variant_id: variant.id,
-        price: variant.price || 0,
-        variant_name: variant.name,
-        variant_type_name:
-          product?.variant_types?.find((vt) => vt.id === Number(key))?.title ||
-          "",
-        image_url: variant.image_url,
-      };
-    });
-    return state;
-  }, [selectedVariants, product?.variant_types]);
-
-  // Find matching cart item based on variants
-  const matchingCartItem = useMemo(() => {
-    if (cartProducts.length === 0) return null;
-    // For non-variant products, return first cart item
-    if (!product?.variant_types || product.variant_types.length === 0) {
-      return cartProducts[0];
-    }
-    // For variant products, find matching selected variants
-    return (
-      cartProducts.find((item) =>
-        isSameVariantsCombination(
-          item.selectedVariants || {},
-          selectedVariantsAsState
-        )
-      ) || null
-    );
-  }, [
-    cartProducts,
-    product,
-    isSameVariantsCombination,
-    selectedVariantsAsState,
-  ]);
-
-  // Sync quantity with matching cart item (same as premium theme)
-  const matchingCartQty = matchingCartItem?.qty ?? 0;
-  useEffect(() => {
-    if (matchingCartQty > 0) {
-      setQuantity(matchingCartQty);
-    } else {
-      setQuantity(1);
-    }
-  }, [matchingCartQty, setQuantity]);
-
-  // Add to cart action
-  const handleAddToCart = useCallback(() => {
-    if (!product || !isInStock) return;
-
-    // Check if all mandatory variants are selected
-    if (product.variant_types && product.variant_types.length > 0) {
-      const mandatoryVariants = product.variant_types.filter(
-        (vt) => vt.is_mandatory
-      );
-      const allMandatorySelected = mandatoryVariants.every(
-        (vt) => selectedVariants[vt.id]
-      );
-
-      if (!allMandatorySelected) {
-        alert("Please select all required variants");
-        return;
-      }
-    }
-
-    // For products already in cart (matching selected variants), remove old cart item first
-    // Same logic as premium theme
-    if (matchingCartItem) {
-      removeProduct(matchingCartItem.cartId);
-    }
-
-    // Transform selectedVariants to match VariantState structure
-    const transformedVariants: VariantsState = {};
-    Object.entries(selectedVariants).forEach(([key, variant]) => {
-      transformedVariants[Number(key)] = {
-        variant_type_id: Number(key),
-        variant_id: variant.id,
-        price: variant.price || 0,
-        variant_name: variant.name,
-        variant_type_name:
-          product.variant_types?.find((vt) => vt.id === Number(key))?.title ||
-          "",
-        image_url: variant.image_url,
-      };
-    });
-
-    // Add product to cart with current quantity
-    addProduct({
-      ...product,
-      qty: quantity,
-      selectedVariants: transformedVariants,
-      image_url: selectedImageUrl,
-    } as unknown as Parameters<typeof addProduct>[0]);
-  }, [
-    product,
-    quantity,
-    selectedVariants,
-    selectedImageUrl,
-    addProduct,
-    isInStock,
-    matchingCartItem,
-    removeProduct,
-  ]);
-
-  // Buy Now action - same logic as premium theme
-  const handleBuyNow = useCallback(() => {
-    if (!product || !isInStock) return;
-
-    // If not in cart, add it first
-    if (!matchingCartItem) {
-      // Check if all mandatory variants are selected
-      if (product.variant_types && product.variant_types.length > 0) {
-        const mandatoryVariants = product.variant_types.filter(
-          (vt) => vt.is_mandatory
-        );
-        const allMandatorySelected = mandatoryVariants.every(
-          (vt) => selectedVariants[vt.id]
-        );
-
-        if (!allMandatorySelected) {
-          alert("Please select all required variants");
-          return;
-        }
-      }
-
-      // Transform selectedVariants to match VariantState structure
-      const transformedVariants: VariantsState = {};
-      Object.entries(selectedVariants).forEach(([key, variant]) => {
-        transformedVariants[Number(key)] = {
-          variant_type_id: Number(key),
-          variant_id: variant.id,
-          price: variant.price || 0,
-          variant_name: variant.name,
-          variant_type_name:
-            product.variant_types?.find((vt) => vt.id === Number(key))?.title ||
-            "",
-          image_url: variant.image_url,
-        };
-      });
-
-      // Add product to cart
-      addProduct({
-        ...product,
-        qty: quantity,
-        selectedVariants: transformedVariants,
-        image_url: selectedImageUrl,
-      } as unknown as Parameters<typeof addProduct>[0]);
-    }
-
-    // Navigate to checkout
-    router.push(`${baseUrl}/checkout`);
-  }, [
-    product,
-    quantity,
-    selectedVariants,
-    selectedImageUrl,
-    addProduct,
-    isInStock,
-    matchingCartItem,
-    router,
-    baseUrl,
-  ]);
-
-  // Action button label - directly check if product is in cart (like premium theme)
-  const actionButtonLabel = isInCartDirect ? "Update Cart" : "Add to Cart";
+  // Action button label
+  const actionButtonLabel = cartInfo.isInCart ? "Update Cart" : "Add to Cart";
 
   // Handle download
   const handleDownload = async (imageUrl: string, index: number) => {
@@ -382,34 +175,34 @@ export const BasicProductDetailPage = ({
   };
 
   // Handle variant selection
-  const handleSelectVariant = (
-    variantTypeId: number,
-    variant: {
-      id: number;
-      name: string;
-      price?: number;
-      image_url?: string | null;
-    }
-  ) => {
-    const variantType = product?.variant_types?.find(
-      (vt) => vt.id === variantTypeId
-    );
-    const foundVariant = variantType?.variants.find((v) => v.id === variant.id);
-    if (!foundVariant) return;
-
-    selectVariant(variantTypeId, foundVariant);
-    setIsShowVideo(false);
-  };
+  const handleSelectVariant = useCallback(
+    (
+      variantTypeId: number,
+      variant: {
+        id: number;
+        name: string;
+        price?: number;
+        image_url?: string | null;
+      }
+    ) => {
+      selectVariant(variantTypeId, variant);
+      setIsShowVideo(false);
+    },
+    [selectVariant]
+  );
 
   // Handle image update from variant selection
-  const handleImageUpdate = (imageUrl: string) => {
-    if (product?.images) {
-      const index = product.images.findIndex((img) => img === imageUrl);
-      if (index !== -1) {
-        setSelectedImageIdx(index);
+  const handleImageUpdate = useCallback(
+    (imageUrl: string) => {
+      if (product?.images) {
+        const index = product.images.findIndex((img) => img === imageUrl);
+        if (index !== -1) {
+          setSelectedImageIdx(index);
+        }
       }
-    }
-  };
+    },
+    [product?.images]
+  );
 
   if (productQuery.isLoading) {
     return (
@@ -442,7 +235,6 @@ export const BasicProductDetailPage = ({
     );
   }
 
-  // add an skeleton
   if (!product) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -622,7 +414,7 @@ export const BasicProductDetailPage = ({
                     {titleCase(product?.name)}
                   </h1>
 
-                  {isStockOut && (
+                  {stockInfo.isStockOut && (
                     <span className="-mt-4 text-sm font-medium text-red-500">
                       Out of stock
                     </span>
@@ -634,9 +426,9 @@ export const BasicProductDetailPage = ({
 
                   <div>
                     <AnimateChangeInHeight>
-                      {isInCartDirect && (
+                      {cartInfo.isInCart && (
                         <p className="text-sm text-blue-zatiq font-medium">
-                          Already in your cart ({cartQty})
+                          Already in your cart ({cartInfo.cartQty})
                         </p>
                       )}
                     </AnimateChangeInHeight>
@@ -673,14 +465,14 @@ export const BasicProductDetailPage = ({
                 <div className="w-full my-6">
                   <div className="flex flex-col items-start gap-4">
                     <CartQtyControl
-                      disableSumBtn={isStockNotAvailable}
+                      disableSumBtn={stockInfo.isStockNotAvailable}
                       disableSubBtn={quantity <= 1}
                       qty={quantity}
                       subQty={decrementQuantity}
                       sumQty={incrementQuantity}
                       maxStock={
                         product?.is_stock_manage_by_variant
-                          ? stockQuantity
+                          ? stockInfo.stockQuantity
                           : product?.quantity
                       }
                       onQtyChange={(value: number) => {
@@ -688,7 +480,7 @@ export const BasicProductDetailPage = ({
                       }}
                       className="border border-blue-zatiq rounded-lg px-2.5 py-1"
                     />
-                    {isStockNotAvailable && (
+                    {stockInfo.isStockNotAvailable && (
                       <span className="text-sm font-medium text-red-500">
                         No more items remaining!
                       </span>
@@ -696,14 +488,14 @@ export const BasicProductDetailPage = ({
 
                     {/* Add/Update Cart Button && Buy Now Button */}
                     <button
-                      disabled={isStockNotAvailable}
+                      disabled={stockInfo.isStockNotAvailable}
                       onClick={handleAddToCart}
                       className="flex-1 p-4 bg-white dark:bg-transparent rounded-lg text-sm font-medium disabled:bg-black-disabled transition-colors duration-150 w-full border-2 border-blue-zatiq text-blue-zatiq disabled:text-white disabled:border-black-disabled cursor-pointer"
                     >
                       {actionButtonLabel}
                     </button>
                     <button
-                      disabled={isStockNotAvailable}
+                      disabled={stockInfo.isStockNotAvailable}
                       onClick={handleBuyNow}
                       className="flex-1 p-4 bg-blue-zatiq rounded-lg text-sm text-white font-medium disabled:bg-black-disabled transition-colors duration-150 w-full cursor-pointer"
                     >

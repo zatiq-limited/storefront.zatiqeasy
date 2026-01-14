@@ -1,7 +1,7 @@
 "use client";
 
-import { UseFormRegister, FieldErrors, UseFormWatch } from "react-hook-form";
-import { CountryCode } from "libphonenumber-js";
+import { UseFormRegister, FieldErrors, UseFormWatch, UseFormSetValue } from "react-hook-form";
+import { CountryCode, parsePhoneNumber } from "libphonenumber-js";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { PhoneInput } from "@/components/ui/phone-input";
@@ -24,6 +24,7 @@ type ContactSectionProps = {
   register: UseFormRegister<CheckoutFormData>;
   errors: FieldErrors;
   watch: UseFormWatch<CheckoutFormData>;
+  setValue: UseFormSetValue<CheckoutFormData>;
   validPhoneNumber: (
     value: string,
     countryCode: CountryCode
@@ -49,6 +50,7 @@ export const ContactSection = ({
   register,
   errors,
   watch,
+  setValue,
   validPhoneNumber,
   needPhoneVerification = false,
   onCountryCodeChange,
@@ -66,7 +68,8 @@ export const ContactSection = ({
 
   // OTP verification states
   const formPhoneNumber = watch("customer_phone") || "";
-  const [phoneNumber, setPhoneNumber] = useState(formPhoneNumber);
+  // Initialize phoneNumber as empty - useEffect will construct E.164 from persisted data
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [showOtpField, setShowOtpField] = useState(false);
   const [otpCode, setOtpCode] = useState("");
   const [isOtpSent, setIsOtpSent] = useState(false);
@@ -80,12 +83,20 @@ export const ContactSection = ({
   // Country selection state - default to Bangladesh
   const [selectedCountry, setSelectedCountry] = useState<Country>("BD");
 
-  // Sync phoneNumber state with form value
+  // Initialize phoneNumber from form's default value (for persisted data)
+  // Runs when formPhoneNumber becomes available, but only sets once when phoneNumber is empty
   useEffect(() => {
-    if (formPhoneNumber) {
-      setPhoneNumber(formPhoneNumber);
+    if (formPhoneNumber && !phoneNumber) {
+      // If form has a persisted national number, construct E.164 for PhoneInput
+      if (!formPhoneNumber.startsWith("+")) {
+        const countryCallingCode = `+${getCountryCallingCode(selectedCountry)}`;
+        setPhoneNumber(countryCallingCode + formPhoneNumber);
+      } else {
+        setPhoneNumber(formPhoneNumber);
+      }
     }
-  }, [formPhoneNumber]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formPhoneNumber]); // Run when formPhoneNumber changes (but only sets once due to !phoneNumber check)
 
   // Initialize default country code
   useEffect(() => {
@@ -358,7 +369,41 @@ export const ContactSection = ({
   // Handle phone number change from PhoneInput component
   const handlePhoneInputChange = (value: string | undefined) => {
     const newValue = value || "";
+
+    // Keep E.164 format for PhoneInput display
     setPhoneNumber(newValue);
+
+    // Extract national number for form storage
+    // PhoneInput returns E.164 format (e.g., +8801533785541)
+    // We need to store just the national number (e.g., 1533785541)
+    let nationalNumber = newValue;
+
+    if (newValue.startsWith("+")) {
+      try {
+        const parsed = parsePhoneNumber(newValue);
+        if (parsed) {
+          // Get national number without leading zero
+          nationalNumber = parsed.nationalNumber;
+        }
+      } catch {
+        // If parsing fails, try to extract manually
+        const countryCallingCode = `+${getCountryCallingCode(selectedCountry)}`;
+        if (newValue.startsWith(countryCallingCode)) {
+          nationalNumber = newValue.replace(countryCallingCode, "");
+        }
+      }
+    }
+
+    // Remove leading zero if present
+    if (nationalNumber.startsWith("0")) {
+      nationalNumber = nationalNumber.substring(1);
+    }
+
+    // Update react-hook-form value with just the national number
+    setValue("customer_phone", nationalNumber, {
+      shouldValidate: nationalNumber.length > 0,
+      shouldDirty: true
+    });
 
     // Only reset verification states if phone verification is needed
     if (needPhoneVerification) {
@@ -429,7 +474,6 @@ export const ContactSection = ({
                       validate: (value: string) =>
                         validPhoneNumber(value, selectedCountry as CountryCode),
                     })}
-                    value={phoneNumber}
                   />
                 </div>
                 {needPhoneVerification &&
