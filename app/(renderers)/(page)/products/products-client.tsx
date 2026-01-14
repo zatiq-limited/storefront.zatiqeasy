@@ -67,13 +67,6 @@ export default function ProductsClient() {
   const isLoading = isInventoriesLoading || productsStoreIsLoading;
   const pageSections = productsPageData?.sections || [];
 
-  console.log(
-    "products-client.tsx - isLegacyTheme:",
-    isLegacyTheme,
-    "themeName:",
-    themeName
-  );
-
   // Legacy mode: Render static theme products page
   if (isLegacyTheme) {
     const StaticProductsComponent =

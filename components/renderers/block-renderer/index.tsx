@@ -40,6 +40,13 @@ import MarqueeRenderer from "./block-components/marquee-renderer";
 import SwiperRenderer from "./block-components/swiper-renderer";
 import ProgressBarRenderer from "./block-components/progress-bar-renderer";
 import { AboutTeam1Renderer } from "./block-components/about";
+import { AddToCartButtonRenderer } from "./block-components/add-to-cart-button-renderer";
+import { useProductsStore, Product } from "@/stores/productsStore";
+import { useCartStore } from "@/stores/cartStore";
+import { useShopStore } from "@/stores/shopStore";
+import { useShopInventories } from "@/hooks";
+import { VariantSelectorModal } from "@/components/products/variant-selector-modal";
+import toast from "react-hot-toast";
 
 /**
  * Check if a URL is internal (should use Next.js Link for client-side navigation)
@@ -81,6 +88,21 @@ const SearchContext = createContext<SearchContextType | null>(null);
 function useSearchContext() {
   return useContext(SearchContext);
 }
+
+// Context for managing add-to-cart functionality with variant modal
+interface AddToCartContextType {
+  addToCart: (productId: string, productData?: Record<string, unknown>) => void;
+  openVariantModal: (product: Product) => void;
+}
+
+const AddToCartContext = createContext<AddToCartContextType | null>(null);
+
+function useAddToCartContext() {
+  return useContext(AddToCartContext);
+}
+
+// Export for use in child components
+export { useAddToCartContext };
 
 // Block type definition
 export interface Block {
@@ -149,6 +171,10 @@ export interface BlockRendererProps {
     toggleAccordion?: (target: string) => void;
     toggleDropdown?: (target: string) => void;
     setStyle?: (target: string, value: unknown) => void;
+    addToCart?: (
+      productId: string,
+      productData?: Record<string, unknown>
+    ) => void;
   };
   className?: string;
 }
@@ -184,6 +210,7 @@ function BlockRendererInternal({
 }: BlockRendererProps) {
   const drawerContext = useDrawerContext();
   const searchContext = useSearchContext();
+  const addToCartContext = useAddToCartContext();
   const router = useRouter();
 
   // Resolve block id - can be from block.id, wrapper, or bind_id
@@ -344,6 +371,33 @@ function BlockRendererInternal({
       break;
   }
 
+  // Special handling for add-to-cart buttons - render interactive cart button with quantity controls
+  const addToCartClickEvent = block.events?.on_click || block.events?.click;
+  if (addToCartClickEvent?.action === "add_to_cart" && addToCartContext) {
+    // Resolve product ID from event target
+    const productId = addToCartClickEvent.target?.includes?.(".")
+      ? String(
+          resolveBinding(addToCartClickEvent.target, mergedData, context) || ""
+        )
+      : String(addToCartClickEvent.target || "");
+
+    // Get product data from context (e.g., from repeater)
+    const productData = mergedData.product as
+      | Record<string, unknown>
+      | undefined;
+
+    return (
+      <AddToCartButtonRenderer
+        block={block}
+        productId={productId}
+        productData={productData}
+        data={mergedData}
+        context={context}
+        onOpenVariantModal={addToCartContext.openVariantModal}
+      />
+    );
+  }
+
   // Default element rendering
   const { tag, id: wrapperId, classes } = parseWrapper(block.wrapper || "div");
 
@@ -399,7 +453,7 @@ function BlockRendererInternal({
     content = boundContent !== undefined ? String(boundContent) : block.content;
   }
 
-  // src for images - use placeholder if no src
+  // src for images - use placeholder if no src or if image fails to load
   if (tag === "img") {
     const resolvedSrc = block.bind_src
       ? String(
@@ -416,6 +470,18 @@ function BlockRendererInternal({
         )
       : block.alt || "";
     props.alt = alt;
+
+    // Add onError handler to fallback to placeholder if image fails to load
+    props.onError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+      const target = e.currentTarget;
+      // Only replace if not already the placeholder (prevent infinite loop)
+      if (
+        target.src !== PLACEHOLDER_IMAGES.PRODUCT &&
+        !target.src.endsWith(PLACEHOLDER_IMAGES.PRODUCT)
+      ) {
+        target.src = PLACEHOLDER_IMAGES.PRODUCT;
+      }
+    };
   }
 
   // href for links - check href, bind_href, url, bind_url, and navigate event target
@@ -543,7 +609,16 @@ function BlockRendererInternal({
         switch (eventType) {
           case "click":
           case "on_click":
-            props.onClick = handler;
+            // For add_to_cart action, stop propagation to prevent parent link navigation
+            if (eventConfig.action === "add_to_cart") {
+              props.onClick = (e: React.MouseEvent) => {
+                e.preventDefault();
+                e.stopPropagation();
+                handler();
+              };
+            } else {
+              props.onClick = handler;
+            }
             break;
           case "on_hover":
           case "on_mouse_enter":
@@ -802,6 +877,7 @@ export default function BlockRenderer({
 }: BlockRendererProps) {
   const existingDrawerContext = useDrawerContext();
   const existingSearchContext = useSearchContext();
+  const existingAddToCartContext = useAddToCartContext();
 
   const initialDrawerStates = useMemo(() => {
     return collectDrawerStates(block);
@@ -813,6 +889,25 @@ export default function BlockRenderer({
   // Search input state with debounce
   const [searchQuery, setSearchQuery] = useState("");
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Add-to-cart state
+  const [isVariantModalOpen, setIsVariantModalOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+
+  // Store access for add-to-cart
+  const { getProductById, products: storeProducts } = useProductsStore();
+  const { addProduct } = useCartStore();
+  const { shopDetails } = useShopStore();
+
+  // Fetch inventories if not already loaded - needed for add-to-cart functionality
+  // This ensures products are available when user clicks "Add to cart" on custom sections
+  useShopInventories(
+    { shopUuid: shopDetails?.shop_uuid || "" },
+    {
+      enabled: !!shopDetails?.shop_uuid && storeProducts.length === 0,
+      syncToStore: true,
+    }
+  );
 
   // Clear debounce timer on unmount
   useEffect(() => {
@@ -862,6 +957,98 @@ export default function BlockRenderer({
     [eventHandlers]
   );
 
+  // Add to cart handler - handles products with and without variants
+  const handleAddToCart = useCallback(
+    (productId: string, productData?: Record<string, unknown>) => {
+      // Try to get the full product from store first
+      let product = getProductById(productId);
+
+      // If not in store, try to construct a basic product from the provided data
+      if (!product && productData) {
+        product = {
+          id: Number(productId),
+          shop_id: shopDetails?.id || 0,
+          name: (productData.name as string) || "",
+          slug: productId,
+          image_url: (productData.image as string) || "",
+          images: productData.image ? [productData.image as string] : [],
+          price: (productData.price as number) || 0,
+          old_price: (productData.original_price as number) || null,
+          quantity: 999,
+          is_active: true,
+          has_variant: false,
+          categories: [],
+          variant_types: [],
+          stocks: [],
+          is_stock_manage_by_variant: false,
+          reviews: [],
+        } as Product;
+      }
+
+      if (!product) {
+        toast.error("Product not found");
+        return;
+      }
+
+      // Check if product has variants
+      const hasVariants =
+        product.has_variant &&
+        product.variant_types &&
+        product.variant_types.length > 0;
+
+      if (hasVariants) {
+        // Open variant selector modal
+        setSelectedProduct(product);
+        setIsVariantModalOpen(true);
+      } else {
+        // Add directly to cart without variants
+        const cartProduct = {
+          id: Number(product.id),
+          shop_id: product.shop_id || 0,
+          name: product.name,
+          handle: product.slug,
+          image_url: product.image_url || product.images?.[0] || "",
+          images: product.images || [],
+          price: product.price,
+          quantity: product.quantity || 999,
+          old_price: product.old_price || 0,
+          is_active: product.is_active ?? true,
+          has_variant: false,
+          categories: product.categories || [],
+          variant_types: [],
+          stocks: [],
+          is_stock_manage_by_variant: false,
+          reviews: [],
+          total_inventory_sold: 0,
+          description: product.description,
+          short_description: product.short_description,
+          video_link: product.video_link,
+          qty: 1,
+          selectedVariants: {},
+        };
+
+        addProduct(cartProduct as Parameters<typeof addProduct>[0]);
+        toast.success("Added to cart!");
+      }
+    },
+    [getProductById, addProduct, shopDetails?.id]
+  );
+
+  const handleVariantModalClose = useCallback(() => {
+    setIsVariantModalOpen(false);
+    setSelectedProduct(null);
+  }, []);
+
+  const handleVariantAddToCartSuccess = useCallback(() => {
+    toast.success("Added to cart!");
+  }, []);
+
+  // Open variant modal directly (for use by AddToCartButtonRenderer)
+  const handleOpenVariantModal = useCallback((product: Product) => {
+    setSelectedProduct(product);
+    setIsVariantModalOpen(true);
+  }, []);
+
   const drawerContextValue = useMemo(
     () => ({ drawerStates, toggleDrawer }),
     [drawerStates, toggleDrawer]
@@ -877,14 +1064,35 @@ export default function BlockRenderer({
     [searchQuery, setSearchQueryWithDebounce, clearDebounceTimer]
   );
 
+  const addToCartContextValue = useMemo(
+    () => ({
+      addToCart: handleAddToCart,
+      openVariantModal: handleOpenVariantModal,
+    }),
+    [handleAddToCart, handleOpenVariantModal]
+  );
+
+  // Merge external eventHandlers with internal addToCart handler
+  const mergedEventHandlers = useMemo(
+    () => ({
+      ...eventHandlers,
+      addToCart: existingAddToCartContext?.addToCart || handleAddToCart,
+    }),
+    [eventHandlers, existingAddToCartContext, handleAddToCart]
+  );
+
   // If already in existing contexts, just render internal
-  if (existingDrawerContext && existingSearchContext) {
+  if (
+    existingDrawerContext &&
+    existingSearchContext &&
+    existingAddToCartContext
+  ) {
     return (
       <BlockRendererInternal
         block={block}
         data={data}
         context={context}
-        eventHandlers={eventHandlers}
+        eventHandlers={mergedEventHandlers}
         className={className}
       />
     );
@@ -895,13 +1103,26 @@ export default function BlockRenderer({
       <SearchContext.Provider
         value={existingSearchContext || searchContextValue}
       >
-        <BlockRendererInternal
-          block={block}
-          data={data}
-          context={context}
-          eventHandlers={eventHandlers}
-          className={className}
-        />
+        <AddToCartContext.Provider
+          value={existingAddToCartContext || addToCartContextValue}
+        >
+          <BlockRendererInternal
+            block={block}
+            data={data}
+            context={context}
+            eventHandlers={mergedEventHandlers}
+            className={className}
+          />
+          {/* Variant Selector Modal - only render if we're the provider */}
+          {!existingAddToCartContext && (
+            <VariantSelectorModal
+              isOpen={isVariantModalOpen}
+              onClose={handleVariantModalClose}
+              product={selectedProduct}
+              onAddToCart={handleVariantAddToCartSuccess}
+            />
+          )}
+        </AddToCartContext.Provider>
       </SearchContext.Provider>
     </DrawerContext.Provider>
   );
