@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useCallback, useState } from "react";
+import { useEffect, useMemo, useCallback, useState } from "react";
 import { useLandingStore } from "@/stores/landingStore";
 import { useCartStore } from "@/stores/cartStore";
 import { useShopStore } from "@/stores/shopStore";
@@ -10,7 +10,6 @@ import {
 } from "../../context/landing-product-context";
 import { VariantSelectorModal } from "@/components/products/variant-selector-modal";
 import { getThemeColors } from "@/lib/utils";
-import { CustomerReviews } from "@/components/products/customer-reviews";
 import type { SingleProductPage } from "@/types/landing-page.types";
 import type { Product, Review } from "@/stores/productsStore";
 
@@ -26,6 +25,7 @@ import {
   NirvanaProductPricing,
   NirvanaFooter,
 } from "./components";
+import { NirvanaCustomerReviews } from "./components/nirvana-customer-reviews";
 
 interface NirvanaLandingPageProps {
   landingData: SingleProductPage;
@@ -209,7 +209,7 @@ function NirvanaLandingContent({ landingData }: NirvanaLandingPageProps) {
             <h2 className="text-4xl md:text-6xl font-extrabold text-center bg-linear-to-r from-landing-primary to-landing-secondary bg-clip-text text-transparent mb-12">
               Customer Reviews
             </h2>
-            <CustomerReviews reviews={productReviews} />
+            <NirvanaCustomerReviews reviews={productReviews} />
           </div>
         )}
       </main>

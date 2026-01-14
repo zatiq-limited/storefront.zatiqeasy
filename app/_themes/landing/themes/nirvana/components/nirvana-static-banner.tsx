@@ -35,7 +35,7 @@ export function NirvanaStaticBanner({
             <div className="flex items-center my-6 md:my-14 w-full">
               <div className="grow border-t border-landing-primary" />
               {shopDetails?.shop_name && (
-                <span className="mx-4 text-landing-primary font-thin text-xs tracking-[0.2em]">
+                <span className="mx-4 text-landing-primary text-xs tracking-[0.2em]">
                   {shopDetails.shop_name}
                 </span>
               )}
