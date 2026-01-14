@@ -118,10 +118,10 @@ export function GripTopCarousel({ content, onBuyNow }: GripTopCarouselProps) {
         {/* Content Overlay */}
         <div className="absolute inset-0 flex items-center z-10">
           <div className="container w-full">
-            <div className="max-w-lg xl:max-w-xl 2xl:max-w-2xl">
+            <div className="max-w-xs xl:max-w-xl 2xl:max-w-2xl">
               {/* Title */}
               {currentSlide?.title && (
-                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-[120px] font-bold text-blue-zatiq leading-tight mb-6">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-[120px] font-bold text-blue-zatiq leading-tight mb-6 line-clamp-2">
                   {currentSlide.title}
                 </h1>
               )}
@@ -137,11 +137,11 @@ export function GripTopCarousel({ content, onBuyNow }: GripTopCarouselProps) {
               {currentSlide?.button_text && (
                 <button
                   onClick={() => handleButtonAction(currentSlide.link)}
-                  className="inline-flex items-center bg-white text-grip-black px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold hover:bg-gray-100 hover:scale-105 transition-all duration-200 border border-gray-200 cursor-pointer text-sm md:text-base"
+                  className="inline-flex items-center bg-white text-grip-black px-2.5 md:px-6 py-1.5 md:py-3 rounded-lg font-medium sm:font-semibold hover:bg-gray-100 hover:scale-105 transition-all duration-200 border border-gray-200 cursor-pointer text-sm md:text-base"
                 >
                   {currentSlide.button_text}
                   <svg
-                    className="ml-2 w-4 h-4"
+                    className="ml-1 sm:ml-2 w-3 sm:w-4 h-3 sm:h-4"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
