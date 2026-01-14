@@ -116,15 +116,6 @@ export default function CategoryPage({ params }: CategoryPageProps) {
     });
   }, [searchParams, setFilters, slug, isLegacyTheme]);
 
-  console.log(
-    "categories/[slug]/page.tsx - isLegacyTheme:",
-    isLegacyTheme,
-    "themeName:",
-    themeName,
-    "slug:",
-    slug
-  );
-
   // ========================================
   // STATIC THEME MODE (legacy_theme = true)
   // ========================================
