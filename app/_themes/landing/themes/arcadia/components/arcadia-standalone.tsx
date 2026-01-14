@@ -72,7 +72,7 @@ export function ArcadiaStandalone({
             <div className="flex items-center my-6 md:my-14 w-full">
               <div className="grow border-t border-landing-primary" />
               {shopDetails?.shop_name && (
-                <span className="mx-4 text-landing-primary font-thin text-xs tracking-[0.2em]">
+                <span className="mx-4 text-landing-primary text-xs tracking-[0.2em]">
                   {shopDetails.shop_name}
                 </span>
               )}
@@ -99,14 +99,6 @@ export function ArcadiaStandalone({
             )}
           </div>
         </div>
-      </div>
-
-      {/* Decorative Stars */}
-      <div className="absolute left-0 bottom-0">
-        <StarLeft />
-      </div>
-      <div className="absolute right-0 top-0">
-        <StarRight />
       </div>
     </div>
   );

@@ -34,7 +34,7 @@ export function ArcadiaTopCarousel({ content, onBuyNow }: ArcadiaTopCarouselProp
 
   return (
     <div className="relative overflow-hidden">
-      <div className="relative h-[160px] sm:h-[240px] md:h-[287px] lg:h-[385px] xl:h-[500px] 2xl:h-[580px]">
+      <div className="relative h-[160px] sm:h-[240px] md:h-[287px] lg:h-[385px] xl:h-[500px] 2xl:h-[580px] 3xl:h-[648px]">
         {/* Current Image */}
         <div
           className="absolute inset-0 transition-opacity duration-700 ease-in-out"
@@ -45,7 +45,7 @@ export function ArcadiaTopCarousel({ content, onBuyNow }: ArcadiaTopCarouselProp
               src={currentBanner.image_url}
               alt={currentBanner.title || "Carousel Image"}
               fill
-              className="object-contain"
+              className="object-cover w-full h-full"
               priority={currentIndex === 0}
             />
           )}
