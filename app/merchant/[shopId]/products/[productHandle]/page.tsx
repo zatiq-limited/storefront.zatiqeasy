@@ -10,7 +10,6 @@ import { AuroraProductDetailPage } from "@/app/_themes/aurora/modules/product-de
 import { LuxuraProductDetailPage } from "@/app/_themes/luxura/modules/product-detail/luxura-product-detail-page";
 import { PremiumProductDetailPage } from "@/app/_themes/premium/modules/product-detail/premium-product-detail-page";
 import { SelloraProductDetailPage } from "@/app/_themes/sellora/modules/product-detail/sellora-product-detail-page";
-import { useProductsStore, type Product } from "@/stores/productsStore";
 
 // Loading component
 const LoadingFallback = () => (
@@ -50,7 +49,6 @@ const ErrorComponent = ({
 export default function MerchantProductDetailPage() {
   const params = useParams();
   const { shopDetails, setShopDetails } = useShopStore();
-  const products = useProductsStore((state) => state.products);
 
   const shopId = params?.shopId as string;
   const productHandle = params?.productHandle as string;
@@ -140,23 +138,15 @@ export default function MerchantProductDetailPage() {
   // Get the theme name from shop details
   const themeName = activeShopData?.shop_theme?.theme_name || "Basic";
 
-  // Find product from store for Premium/Sellora themes
-  const product = products.find(
-    (p: Product) => String(p.id) === productHandle
-  );
-
   // Render the appropriate theme product detail page
+  // All themes now use handle prop and centralized useProductDetails hook
   switch (themeName) {
     case "Aurora":
       return <AuroraProductDetailPage handle={productHandle} />;
     case "Luxura":
-      return <LuxuraProductDetailPage />;
+      return <LuxuraProductDetailPage handle={productHandle} />;
     case "Premium":
-      return product ? (
-        <PremiumProductDetailPage product={product} />
-      ) : (
-        <LoadingFallback />
-      );
+      return <PremiumProductDetailPage handle={productHandle} />;
     case "Sellora":
       return <SelloraProductDetailPage handle={productHandle} />;
     case "Basic":
