@@ -208,7 +208,6 @@ export function AddToCartButtonRenderer({
           className="flex items-center justify-center h-full w-full"
           style={{
             ...style,
-            borderRadius: style.borderRadius || "24px",
           }}
         >
           {totalInCart > 0 ? (
