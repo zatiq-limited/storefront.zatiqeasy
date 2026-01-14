@@ -174,6 +174,11 @@ export function LuxuraProductDetailPage() {
   const isInCartDirect = cartProducts.length > 0;
   const cartQty = cartProducts.reduce((acc, p) => acc + (p.qty || 0), 0);
 
+  // Type-safe access to product extended properties
+  const productRecord = product as unknown as Record<string, unknown>;
+  const totalInventorySold = (productRecord.total_inventory_sold as number) ?? 0;
+  const initialProductSold = (productRecord.initial_product_sold as number) ?? 0;
+
   // Helper to check if two variant selections match (same as Basic/Premium themes)
   const isSameVariantsCombination = useCallback(
     (variants1: VariantsState, variants2: VariantsState): boolean => {
@@ -761,8 +766,8 @@ export function LuxuraProductDetailPage() {
             {/* Sold Units */}
             <SoldUnits
               showSoldCount={shopDetails?.show_product_sold_count ?? false}
-              initialSold={(product as any).initial_product_sold ?? 0}
-              totalSold={(product as any).total_inventory_sold ?? 0}
+              initialSold={initialProductSold}
+              totalSold={totalInventorySold}
             />
 
             {/* Stock Status */}
