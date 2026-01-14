@@ -272,19 +272,24 @@ export function CategoryHorizontalList({
       {/* Show category name when in fromCategory mode (shows selected subcategory name if one is selected) */}
       {fromCategory && displayCategory && (
         <div className="flex items-center gap-2 mb-3">
-          {/* Back button - shown when a subcategory is selected */}
-          {selectedCategoryObject &&
-            categoryIdFromPath !== selectedCategory && (
+          {/* Back button - shown when a subcategory is selected OR when viewing a subcategory page */}
+          {((selectedCategoryObject && categoryIdFromPath !== selectedCategory) ||
+            currentRootCategory?.parent_id) && (
               <button
                 onClick={() => {
-                  // Clear selected_category param to go back to parent category view
-                  // Use shallow update to avoid RSC refetch
-                  const params = new URLSearchParams(searchParams.toString());
-                  params.delete("selected_category");
-                  const queryString = params.toString();
-                  shallowReplace(
-                    queryString ? `${pathname}?${queryString}` : pathname
-                  );
+                  // If a leaf subcategory is selected, clear selected_category param
+                  if (selectedCategoryObject && categoryIdFromPath !== selectedCategory) {
+                    const params = new URLSearchParams(searchParams.toString());
+                    params.delete("selected_category");
+                    const queryString = params.toString();
+                    shallowReplace(
+                      queryString ? `${pathname}?${queryString}` : pathname
+                    );
+                  } else if (currentRootCategory?.parent_id) {
+                    // Navigate to parent category page
+                    const categoriesPath = `${baseUrl}/categories`;
+                    router.push(`${categoriesPath}/${currentRootCategory.parent_id}`);
+                  }
                 }}
                 className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                 aria-label="Back to parent category"

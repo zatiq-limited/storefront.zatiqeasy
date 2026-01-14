@@ -17,17 +17,36 @@ export interface ParsedWrapper {
 
 export interface Condition {
   field: string;
-  op:
+  op?:
     | "equals"
+    | "equal"
+    | "eq"
     | "not_equals"
+    | "not_equal"
+    | "neq"
     | "not_empty"
+    | "notEmpty"
+    | "exists"
     | "empty"
+    | "isEmpty"
+    | "not_exists"
     | "gt"
+    | "greater_than"
+    | "greaterThan"
     | "lt"
+    | "less_than"
+    | "lessThan"
     | "gte"
+    | "greater_than_or_equal"
+    | "greaterThanOrEqual"
     | "lte"
-    | "contains";
-  value: unknown;
+    | "less_than_or_equal"
+    | "lessThanOrEqual"
+    | "contains"
+    | "includes"
+    | "truthy"
+    | "falsy";
+  value?: unknown;
 }
 
 export interface BlockEvent {
@@ -422,26 +441,46 @@ export function evaluateCondition(
   context: Record<string, unknown> = {}
 ): boolean {
   const { field, op, value: expectedValue } = condition;
+
+  // Handle undefined or missing operator - default to truthy check
+  if (!op) {
+    const actualValue = resolveBinding(field, data, context);
+    // If no operator, treat as truthy check
+    if (Array.isArray(actualValue)) return actualValue.length > 0;
+    if (typeof actualValue === "string") return actualValue.trim() !== "";
+    return actualValue !== null && actualValue !== undefined && actualValue !== false && actualValue !== 0;
+  }
+
   const actualValue = resolveBinding(field, data, context);
 
   switch (op) {
     case "equals":
+    case "equal":
+    case "eq":
       return actualValue === expectedValue;
 
     case "not_equals":
+    case "not_equal":
+    case "neq":
       return actualValue !== expectedValue;
 
     case "not_empty":
+    case "notEmpty":
+    case "exists":
       if (Array.isArray(actualValue)) return actualValue.length > 0;
       if (typeof actualValue === "string") return actualValue.trim() !== "";
       return actualValue !== null && actualValue !== undefined;
 
     case "empty":
+    case "isEmpty":
+    case "not_exists":
       if (Array.isArray(actualValue)) return actualValue.length === 0;
       if (typeof actualValue === "string") return actualValue.trim() === "";
       return actualValue === null || actualValue === undefined;
 
     case "gt":
+    case "greater_than":
+    case "greaterThan":
       return (
         typeof actualValue === "number" &&
         typeof expectedValue === "number" &&
@@ -449,6 +488,8 @@ export function evaluateCondition(
       );
 
     case "lt":
+    case "less_than":
+    case "lessThan":
       return (
         typeof actualValue === "number" &&
         typeof expectedValue === "number" &&
@@ -456,6 +497,8 @@ export function evaluateCondition(
       );
 
     case "gte":
+    case "greater_than_or_equal":
+    case "greaterThanOrEqual":
       return (
         typeof actualValue === "number" &&
         typeof expectedValue === "number" &&
@@ -463,6 +506,8 @@ export function evaluateCondition(
       );
 
     case "lte":
+    case "less_than_or_equal":
+    case "lessThanOrEqual":
       return (
         typeof actualValue === "number" &&
         typeof expectedValue === "number" &&
@@ -470,6 +515,7 @@ export function evaluateCondition(
       );
 
     case "contains":
+    case "includes":
       if (
         typeof actualValue === "string" &&
         typeof expectedValue === "string"
@@ -481,8 +527,16 @@ export function evaluateCondition(
       }
       return false;
 
+    case "truthy":
+      if (Array.isArray(actualValue)) return actualValue.length > 0;
+      return !!actualValue;
+
+    case "falsy":
+      if (Array.isArray(actualValue)) return actualValue.length === 0;
+      return !actualValue;
+
     default:
-      console.warn(`Unknown condition operator: ${op}`);
+      // Don't warn for common no-op cases, just return true
       return true;
   }
 }
@@ -505,6 +559,7 @@ export function createEventHandler(
     toggleAccordion?: (target: string) => void;
     toggleDropdown?: (target: string) => void;
     setStyle?: (target: string, value: unknown) => void;
+    addToCart?: (productId: string, productData?: Record<string, unknown>) => void;
   }
 ): (() => void) | undefined {
   const { action, target, value } = event;
@@ -597,6 +652,14 @@ export function createEventHandler(
 
     case "set_style":
       return () => handlers.setStyle?.(resolvedTarget, value);
+
+    case "add_to_cart":
+      return () => {
+        // Get the product data from the current context (e.g., product from repeater)
+        // The target is typically "product.id" which resolves to the product ID
+        const productData = data.product as Record<string, unknown> | undefined;
+        handlers.addToCart?.(resolvedTarget, productData);
+      };
 
     default:
       console.warn(`Unknown event action: ${action}`);
