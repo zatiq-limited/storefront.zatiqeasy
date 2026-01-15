@@ -24,12 +24,17 @@ interface CollectionResponse {
 }
 
 interface CollectionDetailsPageConfigResponse {
-  sections: Array<{
-    id: string;
-    type: string;
-    enabled: boolean;
-    settings: Record<string, unknown>;
-  }>;
+  success: boolean;
+  data: {
+    id: number;
+    sections: Array<{
+      id: string;
+      type: string;
+      enabled: boolean;
+      settings: Record<string, unknown>;
+      blocks?: unknown[];
+    }>;
+  };
 }
 
 // Fetch single collection by slug
@@ -114,7 +119,7 @@ export function useCollectionDetails(slug: string, options: UseCollectionDetails
 
   return {
     collection: collectionQuery.data?.data?.collection,
-    sections: pageConfigQuery.data?.sections || [],
+    sections: pageConfigQuery.data?.data?.sections || [],
     isLoading: shopUuid ? collectionQuery.isLoading : false,
     isPageConfigLoading: pageConfigQuery.isLoading,
     error,

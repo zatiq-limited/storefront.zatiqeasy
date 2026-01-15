@@ -445,6 +445,7 @@ const SingleCartItem: React.FC<SingleCartItemProps> = ({
             <button
               onClick={() => removeProduct(cartProduct?.cartId)}
               className="text-zinc-600 cursor-pointer"
+              aria-label="Remove item from cart"
             >
               <Trash2 className="w-5 h-5 text-red-500 dark:text-gray-200" />
             </button>

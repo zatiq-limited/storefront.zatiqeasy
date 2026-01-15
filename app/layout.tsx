@@ -213,12 +213,10 @@ const unbounded = Unbounded({
 // Special Gothic is loaded via Google Fonts CDN in globals.css
 // No need for next/font definition as it's imported via @import
 
-// Viewport configuration - prevents zoom on mobile inputs
+// Viewport configuration - allows zooming for accessibility
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
 };
 
 // Generate dynamic metadata based on shop profile

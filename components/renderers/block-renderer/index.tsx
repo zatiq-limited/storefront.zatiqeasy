@@ -20,6 +20,7 @@ import React, {
   useEffect,
 } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
   parseWrapper,
@@ -141,6 +142,7 @@ export interface Block {
   // Direct attributes
   src?: string;
   alt?: string;
+  priority?: boolean; // For LCP/hero images to load eagerly
   href?: string;
   icon?: string;
   placeholder?: string;
@@ -450,7 +452,11 @@ function BlockRendererInternal({
       mergedData,
       context
     );
-    content = boundContent !== undefined ? String(boundContent) : block.content;
+    // Check for both undefined and null to avoid showing "null" as text
+    content =
+      boundContent !== undefined && boundContent !== null
+        ? String(boundContent)
+        : block.content;
   }
 
   // src for images - use placeholder if no src or if image fails to load
@@ -591,9 +597,32 @@ function BlockRendererInternal({
     }
   }
 
-  // aria-label
+  // aria-label - explicit or auto-generated for accessibility
   if (block.aria_label) {
     props["aria-label"] = block.aria_label;
+  } else if (tag === "button" && !block.content) {
+    // Auto-generate aria-label for buttons without text content
+    const classStr = finalClassName || "";
+    let autoLabel = "Button";
+
+    // Detect button purpose from class names
+    if (classStr.includes("left") || classStr.includes("prev")) {
+      autoLabel = "Previous";
+    } else if (classStr.includes("right") || classStr.includes("next")) {
+      autoLabel = "Next";
+    } else if (classStr.includes("close") || classStr.includes("dismiss")) {
+      autoLabel = "Close";
+    } else if (classStr.includes("menu") || classStr.includes("hamburger")) {
+      autoLabel = "Menu";
+    } else if (classStr.includes("search")) {
+      autoLabel = "Search";
+    } else if (classStr.includes("cart")) {
+      autoLabel = "Cart";
+    } else if (classStr.includes("slider") || classStr.includes("swiper")) {
+      autoLabel = "Slide navigation";
+    }
+
+    props["aria-label"] = autoLabel;
   }
 
   // Handle events
@@ -671,8 +700,94 @@ function BlockRendererInternal({
     ));
   }
 
-  // Special handling for self-closing tags
-  const selfClosingTags = ["img", "input", "br", "hr", "meta", "link"];
+  // Special handling for images - use Next.js Image for optimization
+  if (tag === "img") {
+    const src = props.src as string;
+    const alt = (props.alt as string) || "";
+
+    // Check if this is an image that can be optimized by Next.js
+    // Only includes domains configured in next.config.ts remotePatterns
+    const isOptimizable =
+      src &&
+      (src.includes("cloudfront.net") ||
+        src.includes("zatiq") || // cspell:disable-line
+        src.includes("s3.") ||
+        src.includes("s3.amazonaws.com") ||
+        src.includes("ibb.co") ||
+        src.includes("shopify.com") ||
+        src.includes("cloudinary.com") ||
+        src.includes("unsplash.com") ||
+        src.includes("ufileos.com") ||
+        src.includes("easykoro.com") ||
+        src.includes("youtube.com") ||
+        src.startsWith("/"));
+
+    // Check if the image should use fill (full-size images in relative containers)
+    // vs fixed dimensions (small icons, logos, inline images)
+    const classStr = finalClassName || "";
+    const shouldUseFill =
+      (classStr.includes("w-full") && classStr.includes("h-full")) ||
+      (classStr.includes("absolute") && classStr.includes("inset-0"));
+
+    // Small/inline images should NOT use fill - they break layout
+    const isSmallInlineImage =
+      classStr.match(/\bh-\d+\b/) || // h-8, h-10, etc.
+      classStr.match(/\bw-\d+\b/) || // w-8, w-10, etc.
+      classStr.includes("object-contain") ||
+      classStr.includes("max-h-") ||
+      classStr.includes("max-w-");
+
+    // Detect hero/LCP images that should load with priority (no lazy loading)
+    // These are typically above-the-fold banner/hero images
+    // Priority removes loading="lazy" and adds preload link
+    const isHeroImage =
+      block.priority === true ||
+      block.data?.priority === true ||
+      classStr.includes("hero") ||
+      classStr.includes("banner") ||
+      classStr.includes("swiper-slide") ||
+      block.id?.includes("hero") ||
+      block.id?.includes("banner") ||
+      // Full-viewport images are typically hero images (above the fold)
+      (classStr.includes("absolute") &&
+        classStr.includes("inset-0") &&
+        classStr.includes("object-cover"));
+
+    if (isOptimizable && shouldUseFill && !isSmallInlineImage) {
+      // Use Next.js Image with fill for responsive images
+      // Hero images get priority loading, others get lazy loading
+      // Next.js Image provides automatic WebP/AVIF conversion and compression
+      return (
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          priority={isHeroImage}
+          fetchPriority={isHeroImage ? "high" : "auto"}
+          loading={isHeroImage ? "eager" : "lazy"}
+          sizes={
+            isHeroImage
+              ? "100vw"
+              : "(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+          }
+          className={finalClassName}
+          style={{
+            ...style,
+            objectFit:
+              (style?.objectFit as React.CSSProperties["objectFit"]) || "cover",
+          }}
+          quality={75}
+        />
+      );
+    }
+
+    // For small/inline images or non-fill images, use native img
+    // This preserves layout for icons, logos, payment badges, etc.
+    return createElement(tag, props);
+  }
+
+  // Special handling for other self-closing tags
+  const selfClosingTags = ["input", "br", "hr", "meta", "link"];
   if (selfClosingTags.includes(tag)) {
     return createElement(tag, props);
   }

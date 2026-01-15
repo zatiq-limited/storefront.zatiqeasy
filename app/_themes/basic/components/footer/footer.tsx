@@ -62,7 +62,7 @@ export function BasicFooter() {
               </Link>
             )}
 
-            <div className="flex flex-wrap gap-4">{socialLinks}</div>
+            <div className="flex flex-wrap gap-4 pt-10">{socialLinks}</div>
           </div>
 
           {/* Policies */}

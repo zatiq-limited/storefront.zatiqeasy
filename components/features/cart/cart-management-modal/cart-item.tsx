@@ -122,6 +122,7 @@ export function CartItem({
               size="sm"
               onClick={handleRemove}
               className="h-6 w-6 p-0 text-muted-foreground hover:text-destructive"
+              aria-label="Remove item from cart"
             >
               <Trash2 className="h-3 w-3" />
             </Button>
@@ -138,6 +139,7 @@ export function CartItem({
                 onClick={() => handleQuantityChange(product.qty - 1)}
                 className="h-7 w-7 p-0"
                 disabled={product.qty <= 1}
+                aria-label="Decrease quantity"
               >
                 <Minus className="h-3 w-3" />
               </Button>
@@ -149,6 +151,7 @@ export function CartItem({
                 size="sm"
                 onClick={() => handleQuantityChange(product.qty + 1)}
                 className="h-7 w-7 p-0"
+                aria-label="Increase quantity"
               >
                 <Plus className="h-3 w-3" />
               </Button>

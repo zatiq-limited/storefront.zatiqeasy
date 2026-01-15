@@ -104,7 +104,10 @@ export function BasicProductCard({
   const maxStock = getMaxStock();
   // Only check stock limits if stock maintenance is enabled
   const isCartIncrementDisabled =
-    isStockOut || (isStockMaintain && typeof maxStock === "number" && quantityInCart >= maxStock);
+    isStockOut ||
+    (isStockMaintain &&
+      typeof maxStock === "number" &&
+      quantityInCart >= maxStock);
 
   // Add to cart handler
   const handleAddToCart = (e: React.MouseEvent) => {
@@ -251,7 +254,8 @@ export function BasicProductCard({
           {!isStockOut && discount > 0 && (
             <div className="absolute bottom-3 right-2 md:top-3 md:right-3">
               <span className="bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded-md">
-                {t("save_amount")} {Number(discount.toFixed(2)).toLocaleString()} {currency}
+                {t("save_amount")}{" "}
+                {Number(discount.toFixed(2)).toLocaleString()} {currency}
               </span>
             </div>
           )}
