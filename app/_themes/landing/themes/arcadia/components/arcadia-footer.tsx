@@ -43,7 +43,7 @@ export function ArcadiaFooter() {
                   width={200}
                   alt={shopDetails.shop_name || "Shop"}
                   src={shopDetails.image_url}
-                  className="h-10 md:h-12.5 w-auto max-w-50 object-contain cursor-pointer transition-all duration-300 hover:scale-110 rounded-xs shadow-lg"
+                  className="h-10 md:h-12.5 w-auto max-w-50 object-contain cursor-pointer transition-all duration-300 hover:scale-110 rounded-xs"
                 />
               ) : (
                 <div className="flex flex-col">

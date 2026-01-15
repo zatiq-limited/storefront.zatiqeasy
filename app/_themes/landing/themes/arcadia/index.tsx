@@ -11,7 +11,7 @@ import {
 import { VariantSelectorModal } from "@/components/products/variant-selector-modal";
 import { getThemeColors } from "@/lib/utils";
 import type { SingleProductPage } from "@/types/landing-page.types";
-import type { Product } from "@/stores/productsStore";
+import type { Product, Review } from "@/stores/productsStore";
 
 import {
   ArcadiaNavbar,
@@ -25,6 +25,7 @@ import {
   ArcadiaCheckoutRedirect,
   ArcadiaFooter,
 } from "./components";
+import { ArcadiaCustomerReviews } from "./components/arcadia-customer-reviews";
 
 interface ArcadiaLandingPageProps {
   landingData: SingleProductPage;
@@ -64,6 +65,8 @@ function ArcadiaLandingContent({ landingData }: ArcadiaLandingPageProps) {
   const productVideos = useMemo(() => {
     return themeData?.product_videos || [];
   }, [themeData?.product_videos]);
+
+  const productReviews = (landingData.inventory?.reviews || []) as Review[];
 
   // Get cart products list
   const cartProductsList = Object.values(cartProducts);
@@ -152,7 +155,6 @@ function ArcadiaLandingContent({ landingData }: ArcadiaLandingPageProps) {
           <div className="container">
             <ArcadiaFeatured
               content={featuredBanners}
-              onBuyNow={handleBuyNow}
             />
           </div>
         )}
@@ -190,8 +192,15 @@ function ArcadiaLandingContent({ landingData }: ArcadiaLandingPageProps) {
         {/* Product Pricing (Flash Sale) */}
         <ArcadiaProductPricing onBuyNow={handleBuyNow} />
 
-        {/* Checkout Redirect CTA */}
-        <ArcadiaCheckoutRedirect />
+          {/* Customer Reviews */}
+          {productReviews.length > 0 && (
+            <div className="container mx-auto px-4 py-16">
+              <h2 className="text-4xl md:text-6xl font-extrabold text-center bg-linear-to-r from-landing-primary to-landing-secondary bg-clip-text text-transparent mb-12">
+                Customer Reviews
+              </h2>
+              <ArcadiaCustomerReviews reviews={productReviews} />
+            </div>
+          )}
       </main>
 
       {/* Footer */}
