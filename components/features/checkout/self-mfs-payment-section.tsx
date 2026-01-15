@@ -81,10 +81,40 @@ export const SelfMfsPaymentSection: React.FC<SelfMfsPaymentSectionProps> = ({
             <div className="grid grid-cols-1 md:grid-cols-2">
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-red-500 mb-4 flex items-center gap-2">
-                  <SquareCheckBig size={18} className="text-blue-500" />
-                  <span className="whitespace-nowrap">
-                    {selfMfsData.mfs_provider === "bkash" ? t("bkash") : t("nagad")}{" "}
-                    {t("payment_instruction")}
+                  <SquareCheckBig size={18} className="text-blue-500 min-w-[18px] min-h-[18px]" />
+                  <span className="whitespace-nowrap flex items-center gap-1">
+                    {selfMfsData.mfs_provider === "bkash"
+                      ? t("bkash")
+                      : t("nagad")}{" "}
+                    {t("payment_instruction")} (
+                    {selfMfsData.mfs_type === "personal" ? (
+                      <>
+                        {t("send_money")}
+                        {selfMfsData.mfs_provider === "bkash" && (
+                          <Image
+                            src="/assets/icons/payment-gateway/bkash_send_money.svg"
+                            alt="BKash Send Money"
+                            width={14}
+                            height={14}
+                            className="w-5 h-5 inline-block"
+                          />
+                        )}
+                      </>
+                    ) : (
+                      <>
+                        {t("payment")}
+                        {selfMfsData.mfs_provider === "bkash" && (
+                          <Image
+                            src="/assets/icons/payment-gateway/bkash_payment.svg"
+                            alt="BKash Payment"
+                            width={14}
+                            height={14}
+                            className="w-5 h-5 inline-block"
+                          />
+                        )}
+                      </>
+                    )}
+                    )
                   </span>
                 </h3>
 
@@ -97,9 +127,7 @@ export const SelfMfsPaymentSection: React.FC<SelfMfsPaymentSectionProps> = ({
                 ) : (
                   <div className="text-sm text-gray-700 dark:text-gray-300 space-y-2">
                     <p className="font-medium">{t("dear_customer")},</p>
-                    <p>
-                      {t("order_thanks")}
-                    </p>
+                    <p>{t("order_thanks")}</p>
 
                     <div className="mt-4">
                       <p className="font-semibold text-red-500">
@@ -121,9 +149,7 @@ export const SelfMfsPaymentSection: React.FC<SelfMfsPaymentSectionProps> = ({
                           </span>
                         </li>
                         <li>{t("type_amount")}</li>
-                        <li>
-                          {t("reference_instruction")}
-                        </li>
+                        <li>{t("reference_instruction")}</li>
                       </ul>
                     </div>
 
@@ -132,9 +158,7 @@ export const SelfMfsPaymentSection: React.FC<SelfMfsPaymentSectionProps> = ({
                         {t("payment_info_heading")}
                       </p>
                       <ul className="list-disc ml-6 space-y-1 mt-2">
-                        <li>
-                          {t("your_mobile_number")}
-                        </li>
+                        <li>{t("your_mobile_number")}</li>
                         <li>{t("trxid_label")}</li>
                       </ul>
                     </div>
@@ -163,7 +187,9 @@ export const SelfMfsPaymentSection: React.FC<SelfMfsPaymentSectionProps> = ({
                 <div className="flex-1 flex flex-col items-center justify-center">
                   <p className="text-sm text-gray-600 dark:text-gray-400 text-center mb-2">
                     {t("scan_qr_with")}{" "}
-                    {selfMfsData.mfs_provider === "bkash" ? t("bkash") : t("nagad")}{" "}
+                    {selfMfsData.mfs_provider === "bkash"
+                      ? t("bkash")
+                      : t("nagad")}{" "}
                     {t("app_to_pay")}
                   </p>
                   {selfMfsData.mfs_provider === "bkash" ? (
@@ -193,9 +219,7 @@ export const SelfMfsPaymentSection: React.FC<SelfMfsPaymentSectionProps> = ({
                   className={inputClassName}
                   placeholder={t("payment_phone_placeholder")}
                   {...register("mfs_phone", {
-                    required: isSelfMfs
-                      ? t("payment_phone_required")
-                      : false,
+                    required: isSelfMfs ? t("payment_phone_required") : false,
                   })}
                 />
                 {errors && (errors as any).mfs_phone && (

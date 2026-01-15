@@ -87,6 +87,7 @@ export const CartQtyControl = ({
           subQty();
         }}
         disabled={disableSubBtn}
+        aria-label="Decrease quantity"
       >
         <Minus className="h-5 w-5 md:h-6 md:w-6" />
       </button>
@@ -109,6 +110,7 @@ export const CartQtyControl = ({
           sumQty();
         }}
         disabled={disableSumBtn}
+        aria-label="Increase quantity"
       >
         <Plus className="h-5 w-5 md:h-6 md:w-6" />
       </button>

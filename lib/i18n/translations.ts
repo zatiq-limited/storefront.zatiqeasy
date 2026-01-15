@@ -151,6 +151,8 @@ export const translations = {
       note_will_contact: "Note: We'll contact you once the order is confirmed",
       no_mfs_enabled: "** Please contact with the seller. No mobile financial services (MFS) is enabled for this shop. **",
       payment_instruction: "Payment Instruction",
+      payment: "Payment",
+      send_money: "Send money",
       dear_customer: "Dear Customer,",
       order_thanks: "Thank you for ordering from our shop! Follow the steps below to confirm your order",
       pay_with: "Pay with",
@@ -173,7 +175,6 @@ export const translations = {
       scan_qr_with: "Scan QR code with",
       app_to_pay: "app to pay",
       your_mobile_number: "Your mobile number (from which you made the payment)",
-      payment: "Payment",
       new_arrivals: "New Arrivals",
       // Basic Theme Translations
       search_items_placeholder: "Search items...",
@@ -344,6 +345,8 @@ export const translations = {
       note_will_contact: "নোট: অর্ডার নিশ্চিত হলে আমরা আপনার সাথে যোগাযোগ করব",
       no_mfs_enabled: "** অনুগ্রহ করে বিক্রেতার সাথে যোগাযোগ করুন। এই দোকানের জন্য কোন মোবাইল আর্থিক সেবা (এমএফএস) সক্ষম নেই। **",
       payment_instruction: "পেমেন্ট নির্দেশনা",
+      payment: "পেমেন্ট",
+      send_money: "টাকা পাঠান",
       dear_customer: "প্রিয় গ্রাহক,",
       order_thanks: "আমাদের দোকান থেকে অর্ডার করার জন্য ধন্যবাদ! আপনার অর্ডার কনফার্ম করতে নিচের ধাপগুলো অনুসরণ করুন",
       pay_with: "এর মাধ্যমে পেমেন্ট করুন",
@@ -366,7 +369,6 @@ export const translations = {
       scan_qr_with: "পেমেন্ট করতে",
       app_to_pay: "অ্যাপ দিয়ে QR কোডটি স্ক্যান করুন",
       your_mobile_number: "আপনার মোবাইল নাম্বার (যে নাম্বার থেকে আপনি পেমেন্ট করেছেন)",
-      payment: "পেমেন্ট",
       new_arrivals: "নতুন পণ্যসমূহ",
       // Basic Theme Translations
       search_items_placeholder: "আইটেম খুঁজুন...",

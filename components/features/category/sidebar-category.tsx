@@ -66,9 +66,7 @@ export function SidebarCategory({
   // localCategoryId is the single source of truth for sidebar navigation
   const currentRootCategory = useMemo(() => {
     if (!localCategoryId) return null;
-    return (
-      categories.find((cat) => String(cat.id) === localCategoryId) || null
-    );
+    return categories.find((cat) => String(cat.id) === localCategoryId) || null;
   }, [localCategoryId, categories]);
 
   // Get the visible category list based on current drill-down
@@ -191,23 +189,12 @@ export function SidebarCategory({
     [baseUrl, router, setShowMobileNav, isBasic, searchParams, pathname]
   );
 
-  // Handle "All products" click - clear category filters
+  // Handle "All products" click - navigate to products page
   const handleAllProductsClick = useCallback(() => {
-    if (isBasic) {
-      // Basic theme: stay on current page and clear category params
-      // Use shallow update to avoid RSC refetch
-      const params = new URLSearchParams(searchParams.toString());
-      params.delete("category_id");
-      params.delete("selected_category");
-      const queryString = params.toString();
-      shallowReplace(queryString ? `${pathname}?${queryString}` : pathname);
-    } else {
-      // Other themes: navigate to products page
-      router.push(`${baseUrl}/products`);
-    }
+    router.push(`${baseUrl}/products`);
     setLocalCategoryId(null);
     setShowMobileNav?.(false);
-  }, [baseUrl, router, setShowMobileNav, isBasic, searchParams, pathname]);
+  }, [baseUrl, router, setShowMobileNav]);
 
   // Show skeleton while loading
   if (isLoading && storeCategories.length === 0) {
@@ -240,17 +227,15 @@ export function SidebarCategory({
     );
   }
 
-  if (!categories.length) {
-    return null;
-  }
-
   return (
     <div>
       {/* Header when no root category selected */}
       {!currentRootCategory?.id && (
         <div>
           <div className="px-5 py-4 bg-gray-100 dark:bg-white flex items-center">
-            <span className="w-full font-bold text-lg text-black">{`Category List`}</span>
+            <span className="w-full font-bold text-lg text-black">
+              {categories.length > 0 ? "Category List" : "Products"}
+            </span>
           </div>
           <div
             onClick={handleAllProductsClick}
@@ -258,33 +243,41 @@ export function SidebarCategory({
               isProductsPage ? "bg-gray-200 dark:bg-gray-200" : ""
             }`}
           >
-            <p className={`text-sm font-semibold ${
-              isProductsPage ? "text-black" : "text-foreground"
-            }`}>
+            <p
+              className={`text-sm font-semibold ${
+                isProductsPage ? "text-black" : "text-foreground"
+              }`}
+            >
               All products
             </p>
           </div>
-          {/* All Category - only shown for non-Basic themes (Luxura etc.) */}
-          {!isBasic && (() => {
-            const isAllCategoryPage = pathname.includes("/categories") && !pathname.match(/\/categories\/\d+/);
-            return (
-              <div
-                onClick={() => {
-                  router.push(`${baseUrl}/categories`);
-                  setShowMobileNav?.(false);
-                }}
-                className={`pl-7 py-4 pr-5 border-t dark:border-gray-600 flex justify-between items-center cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-200 [&:hover_p]:text-black ${
-                  isAllCategoryPage ? "bg-gray-200 dark:bg-gray-200" : ""
-                }`}
-              >
-                <p className={`text-sm font-semibold ${
-                  isAllCategoryPage ? "text-black" : "text-foreground"
-                }`}>
-                  All Category
-                </p>
-              </div>
-            );
-          })()}
+          {/* All Category - only shown for non-Basic themes (Luxura etc.) when categories exist */}
+          {!isBasic &&
+            categories.length > 0 &&
+            (() => {
+              const isAllCategoryPage =
+                pathname.includes("/categories") &&
+                !pathname.match(/\/categories\/\d+/);
+              return (
+                <div
+                  onClick={() => {
+                    router.push(`${baseUrl}/categories`);
+                    setShowMobileNav?.(false);
+                  }}
+                  className={`pl-7 py-4 pr-5 border-t dark:border-gray-600 flex justify-between items-center cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-200 [&:hover_p]:text-black ${
+                    isAllCategoryPage ? "bg-gray-200 dark:bg-gray-200" : ""
+                  }`}
+                >
+                  <p
+                    className={`text-sm font-semibold ${
+                      isAllCategoryPage ? "text-black" : "text-foreground"
+                    }`}
+                  >
+                    All Category
+                  </p>
+                </div>
+              );
+            })()}
         </div>
       )}
 
@@ -304,23 +297,28 @@ export function SidebarCategory({
       )}
 
       {/* All [Category] link - shown when inside a category with subcategories */}
-      {currentRootCategory?.id && categoryList.length > 0 && (() => {
-        const isAllSelected = selectedCategory === String(currentRootCategory.id);
-        return (
-          <div
-            className={`pl-7 py-4 pr-5 border-t dark:border-gray-600 last:border-b flex justify-between items-center cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-200 [&:hover_p]:text-black ${
-              isAllSelected ? "bg-gray-200 dark:bg-gray-200" : ""
-            }`}
-            onClick={() => handleAllCategoryClick(currentRootCategory)}
-          >
-            <p className={`text-sm font-semibold ${
-              isAllSelected ? "text-black" : "text-foreground"
-            }`}>
-              All {currentRootCategory.name}
-            </p>
-          </div>
-        );
-      })()}
+      {currentRootCategory?.id &&
+        categoryList.length > 0 &&
+        (() => {
+          const isAllSelected =
+            selectedCategory === String(currentRootCategory.id);
+          return (
+            <div
+              className={`pl-7 py-4 pr-5 border-t dark:border-gray-600 last:border-b flex justify-between items-center cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-200 [&:hover_p]:text-black ${
+                isAllSelected ? "bg-gray-200 dark:bg-gray-200" : ""
+              }`}
+              onClick={() => handleAllCategoryClick(currentRootCategory)}
+            >
+              <p
+                className={`text-sm font-semibold ${
+                  isAllSelected ? "text-black" : "text-foreground"
+                }`}
+              >
+                All {currentRootCategory.name}
+              </p>
+            </div>
+          );
+        })()}
 
       {/* Category list */}
       {categoryList.map((item: Category, index: number) => {

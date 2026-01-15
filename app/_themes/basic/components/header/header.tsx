@@ -103,24 +103,26 @@ export function BasicHeader() {
       <div className="w-full bg-white dark:bg-gray-900 py-2 md:py-3">
         <div className="container flex items-center justify-between gap-4 md:gap-6">
           {/* Logo */}
-          {shopDetails?.shop_name && shopDetails?.image_url && (
-            <div
-              onClick={handleLogoClick}
-              className="cursor-pointer flex items-center gap-0 sm:gap-4 shrink-0"
-            >
-              {shopDetails?.image_url && (
-                <Image
-                  height={60}
-                  width={60}
-                  alt={shopDetails.shop_name}
-                  src={shopDetails.image_url}
-                  priority={true}
-                  className="max-h-10 md:max-h-12.5 object-left object-contain transition-all duration-300 hover:opacity-80 hover:scale-105 cursor-pointer"
-                  style={{ width: "auto", height: "auto" }}
-                />
-              )}
-            </div>
-          )}
+          <div
+            onClick={handleLogoClick}
+            className="cursor-pointer flex items-center gap-0 sm:gap-4 shrink-0"
+          >
+            <Image
+              height={60}
+              width={60}
+              alt={shopDetails?.shop_name || "Shop logo"}
+              src={shopDetails?.image_url || "/placeholder.jpg"}
+              priority={true}
+              className="max-h-10 md:max-h-12.5 object-left object-contain transition-all duration-300 hover:opacity-80 hover:scale-105 cursor-pointer"
+              style={{ width: "auto", height: "auto" }}
+            />
+
+            {shopDetails?.shop_name && (
+              <span className="hidden sm:inline-block font-bold text-lg md:text-xl text-gray-800 dark:text-gray-200">
+                {shopDetails.shop_name}
+              </span>
+            )}
+          </div>
 
           {/* Search Button (centered, only on md+) */}
           <div className="hidden md:flex flex-1 justify-center w-full max-w-2xl px-4">

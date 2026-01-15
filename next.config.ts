@@ -68,6 +68,14 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "**.s3.ap-south-1.amazonaws.com", // AWS S3 buckets (ap-south-1 region)
       },
+      {
+        protocol: "https",
+        hostname: "**.shopify.com", // Shopify CDN
+      },
+      {
+        protocol: "https",
+        hostname: "cdn.shopify.com",
+      },
     ],
   },
 
