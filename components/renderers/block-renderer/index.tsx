@@ -450,7 +450,11 @@ function BlockRendererInternal({
       mergedData,
       context
     );
-    content = boundContent !== undefined ? String(boundContent) : block.content;
+    // Check for both undefined and null to avoid showing "null" as text
+    content =
+      boundContent !== undefined && boundContent !== null
+        ? String(boundContent)
+        : block.content;
   }
 
   // src for images - use placeholder if no src or if image fails to load
