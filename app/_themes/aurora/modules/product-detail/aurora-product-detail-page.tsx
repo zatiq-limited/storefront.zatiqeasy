@@ -26,7 +26,7 @@ export function AuroraProductDetailPage({
   const params = useParams();
   const { shopDetails } = useShopStore();
 
-  // Get product handle from props first, then params (can be productHandle, handle, or product_id)
+  // Get product handle from props first, then params
   const handle =
     propHandle ||
     ((params?.productHandle ||
@@ -34,7 +34,7 @@ export function AuroraProductDetailPage({
       params?.product_id ||
       "") as string);
 
-  const { product, isLoading, error } = useProductDetails(handle);
+  const { isLoading, error } = useProductDetails(handle);
   const totalProducts = useCartStore(selectTotalItems);
   const totalPrice = useCartStore(selectSubtotal);
 
@@ -51,7 +51,7 @@ export function AuroraProductDetailPage({
   }
 
   // Error state
-  if (error || !product) {
+  if (error) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
         <div className="text-center">
@@ -70,7 +70,7 @@ export function AuroraProductDetailPage({
     <>
       <div className="container xl:grid xl:grid-cols-5 gap-5">
         <div className="xl:col-span-5">
-          <ProductDetails product={product} />
+          <ProductDetails handle={handle} />
         </div>
       </div>
 

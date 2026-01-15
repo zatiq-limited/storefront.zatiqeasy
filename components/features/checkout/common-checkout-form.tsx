@@ -15,7 +15,7 @@ import type { ShopProfile } from "@/types/shop.types";
 import type { Division, District, Upazila } from "@/types/shop.types";
 import { PaymentType, OrderStatus } from "@/lib/payments/types";
 import { validatePhoneNumberWithCountry } from "@/lib/utils/validation";
-import { parsePhoneNumber, CountryCode } from "libphonenumber-js";
+import { CountryCode } from "libphonenumber-js";
 import { convertBanglaToLatin } from "@/lib/utils/bangla-to-latin";
 import { toast } from "react-hot-toast";
 
@@ -394,26 +394,18 @@ export function CommonCheckoutForm({
   }, [selectedSpecificDeliveryZone]);
 
   // Watch customer_phone and auto-validate to set fullPhoneNumber
+  // customer_phone now always contains just the national number (e.g., 1533785541)
   const customerPhone = watch("customer_phone");
   useEffect(() => {
-    if (customerPhone && customerPhone.length >= 10) {
-      try {
-        const countryCode = selectedCountryCode.replace("+", "");
-        const normalizedPhone = convertBanglaToLatin(customerPhone);
-        const parsedNumber = parsePhoneNumber(
-          normalizedPhone,
-          (countryCode.length === 2 ? countryCode : "BD") as CountryCode
-        );
-        if (parsedNumber && parsedNumber.isValid()) {
-          setFullPhoneNumber(parsedNumber.number);
-        }
-      } catch {
-        // Phone parsing failed - ignore
-      }
+    if (customerPhone && customerPhone.length >= 6) {
+      const normalizedPhone = convertBanglaToLatin(customerPhone);
+      // Simply prepend country code to national number
+      setFullPhoneNumber(selectedCountryCode + normalizedPhone);
     }
   }, [customerPhone, selectedCountryCode]);
 
   // Create a wrapper for phone validation that also sets fullPhoneNumber
+  // phone parameter now always contains just the national number (e.g., 1533785541)
   const validPhoneNumberWrapper = (
     phone: string,
     country: CountryCode
@@ -422,19 +414,9 @@ export function CommonCheckoutForm({
 
     // If validation passes, also update fullPhoneNumber
     if (result === true) {
-      try {
-        const countryCode = country.length > 2 ? country.slice(1, 3) : country;
-        const normalizedPhoneNumber = convertBanglaToLatin(phone);
-        const parsedNumber = parsePhoneNumber(
-          normalizedPhoneNumber,
-          countryCode as CountryCode
-        );
-        if (parsedNumber) {
-          setFullPhoneNumber(parsedNumber.number);
-        }
-      } catch (error) {
-        console.error("Error parsing phone number:", error);
-      }
+      const normalizedPhoneNumber = convertBanglaToLatin(phone);
+      // Simply prepend country code to national number
+      setFullPhoneNumber(selectedCountryCode + normalizedPhoneNumber);
     }
 
     return result;
@@ -668,14 +650,17 @@ export function CommonCheckoutForm({
           register={register}
           errors={errors}
           watch={watch}
+          setValue={setValue}
           validPhoneNumber={validPhoneNumberWrapper}
           selectedCountryCode={selectedCountryCode}
           needPhoneVerification={order_verification_enabled || false}
           onCountryCodeChange={(code) => {
             setSelectedCountryCode(code);
             // Update full phone number when country code changes
+            // customer_phone now always contains just the national number (e.g., 1533785541)
             const phoneNumber = watch("customer_phone") || "";
             if (phoneNumber) {
+              // Simply prepend country code to national number
               setFullPhoneNumber(code + phoneNumber);
             }
           }}

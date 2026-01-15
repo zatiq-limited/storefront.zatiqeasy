@@ -1,10 +1,12 @@
 "use client";
 
-import { UseFormRegister, FieldErrors, UseFormWatch } from "react-hook-form";
-import { CountryCode } from "libphonenumber-js";
+import { UseFormRegister, FieldErrors, UseFormWatch, UseFormSetValue } from "react-hook-form";
+import { CountryCode, parsePhoneNumber } from "libphonenumber-js";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { CountryDropdown, Country } from "@/components/ui/country-dropdown";
+import { PhoneInput } from "@/components/ui/phone-input";
+import type { Country } from "react-phone-number-input";
+import { getCountryCallingCode } from "react-phone-number-input";
 import {
   InputOTP,
   InputOTPGroup,
@@ -22,6 +24,7 @@ type ContactSectionProps = {
   register: UseFormRegister<CheckoutFormData>;
   errors: FieldErrors;
   watch: UseFormWatch<CheckoutFormData>;
+  setValue: UseFormSetValue<CheckoutFormData>;
   validPhoneNumber: (
     value: string,
     countryCode: CountryCode
@@ -47,6 +50,7 @@ export const ContactSection = ({
   register,
   errors,
   watch,
+  setValue,
   validPhoneNumber,
   needPhoneVerification = false,
   onCountryCodeChange,
@@ -64,7 +68,8 @@ export const ContactSection = ({
 
   // OTP verification states
   const formPhoneNumber = watch("customer_phone") || "";
-  const [phoneNumber, setPhoneNumber] = useState(formPhoneNumber);
+  // Initialize phoneNumber as empty - useEffect will construct E.164 from persisted data
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [showOtpField, setShowOtpField] = useState(false);
   const [otpCode, setOtpCode] = useState("");
   const [isOtpSent, setIsOtpSent] = useState(false);
@@ -76,35 +81,28 @@ export const ContactSection = ({
   const [isPhoneVerified, setIsPhoneVerified] = useState(false);
 
   // Country selection state - default to Bangladesh
-  const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
+  const [selectedCountry, setSelectedCountry] = useState<Country>("BD");
 
-  // Sync phoneNumber state with form value
+  // Initialize phoneNumber from form's default value (for persisted data)
+  // Runs when formPhoneNumber becomes available, but only sets once when phoneNumber is empty
   useEffect(() => {
-    if (formPhoneNumber) {
-      setPhoneNumber(formPhoneNumber);
-    }
-  }, [formPhoneNumber]);
-
-  // Initialize with Bangladesh as default country
-  useEffect(() => {
-    // Set Bangladesh as default if no country is selected
-    if (!selectedCountry) {
-      const defaultCountry: Country = {
-        alpha2: "BD",
-        alpha3: "BGD",
-        countryCallingCodes: ["+880"],
-        currencies: ["BDT"],
-        name: "Bangladesh",
-        status: "assigned",
-        ioc: "BAN",
-        languages: ["bn"],
-      };
-      setSelectedCountry(defaultCountry);
-
-      // Notify parent component about default country code
-      if (onCountryCodeChange) {
-        onCountryCodeChange("+880");
+    if (formPhoneNumber && !phoneNumber) {
+      // If form has a persisted national number, construct E.164 for PhoneInput
+      if (!formPhoneNumber.startsWith("+")) {
+        const countryCallingCode = `+${getCountryCallingCode(selectedCountry)}`;
+        setPhoneNumber(countryCallingCode + formPhoneNumber);
+      } else {
+        setPhoneNumber(formPhoneNumber);
       }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formPhoneNumber]); // Run when formPhoneNumber changes (but only sets once due to !phoneNumber check)
+
+  // Initialize default country code
+  useEffect(() => {
+    if (onCountryCodeChange) {
+      const callingCode = `+${getCountryCallingCode(selectedCountry)}`;
+      onCountryCodeChange(callingCode);
     }
   }, [selectedCountry, onCountryCodeChange]);
 
@@ -114,8 +112,7 @@ export const ContactSection = ({
       if (phoneNumber && shopId && needPhoneVerification) {
         try {
           // Normalize phone number: remove country code and leading zero
-          const countryCallingCode =
-            selectedCountry?.countryCallingCodes?.[0] || "+880";
+          const countryCallingCode = `+${getCountryCallingCode(selectedCountry)}`;
           let normalizedPhone = fullPhoneNumber || phoneNumber;
 
           // Remove country code if present
@@ -187,7 +184,7 @@ export const ContactSection = ({
   const handlePhoneValidation = () => {
     const phoneValidationResult = validPhoneNumber(
       phoneNumber,
-      (selectedCountry?.alpha2 as CountryCode) || "BD"
+      selectedCountry as CountryCode
     );
 
     if (phoneValidationResult === true) {
@@ -207,8 +204,7 @@ export const ContactSection = ({
     setOtpError("");
     try {
       // Extract phone number without country code
-      const countryCallingCode =
-        selectedCountry?.countryCallingCodes?.[0] || "";
+      const countryCallingCode = `+${getCountryCallingCode(selectedCountry)}`;
       let phoneWithoutCountryCode = fullPhoneNumber || phoneNumber;
 
       if (
@@ -281,8 +277,7 @@ export const ContactSection = ({
     setOtpError("");
     try {
       // Extract phone number without country code
-      const countryCallingCode =
-        selectedCountry?.countryCallingCodes?.[0] || "";
+      const countryCallingCode = `+${getCountryCallingCode(selectedCountry)}`;
       let phoneWithoutCountryCode = fullPhoneNumber || phoneNumber;
 
       if (
@@ -371,10 +366,44 @@ export const ContactSection = ({
     sendOtp();
   };
 
-  // Handle phone number input change
-  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setPhoneNumber(value);
+  // Handle phone number change from PhoneInput component
+  const handlePhoneInputChange = (value: string | undefined) => {
+    const newValue = value || "";
+
+    // Keep E.164 format for PhoneInput display
+    setPhoneNumber(newValue);
+
+    // Extract national number for form storage
+    // PhoneInput returns E.164 format (e.g., +8801533785541)
+    // We need to store just the national number (e.g., 1533785541)
+    let nationalNumber = newValue;
+
+    if (newValue.startsWith("+")) {
+      try {
+        const parsed = parsePhoneNumber(newValue);
+        if (parsed) {
+          // Get national number without leading zero
+          nationalNumber = parsed.nationalNumber;
+        }
+      } catch {
+        // If parsing fails, try to extract manually
+        const countryCallingCode = `+${getCountryCallingCode(selectedCountry)}`;
+        if (newValue.startsWith(countryCallingCode)) {
+          nationalNumber = newValue.replace(countryCallingCode, "");
+        }
+      }
+    }
+
+    // Remove leading zero if present
+    if (nationalNumber.startsWith("0")) {
+      nationalNumber = nationalNumber.substring(1);
+    }
+
+    // Update react-hook-form value with just the national number
+    setValue("customer_phone", nationalNumber, {
+      shouldValidate: nationalNumber.length > 0,
+      shouldDirty: true
+    });
 
     // Only reset verification states if phone verification is needed
     if (needPhoneVerification) {
@@ -391,8 +420,9 @@ export const ContactSection = ({
     setSelectedCountry(country);
 
     // Notify parent component about country code change
-    if (onCountryCodeChange && country.countryCallingCodes?.[0]) {
-      onCountryCodeChange(country.countryCallingCodes[0]);
+    if (onCountryCodeChange) {
+      const callingCode = `+${getCountryCallingCode(country)}`;
+      onCountryCodeChange(callingCode);
     }
 
     // Reset verification states when country changes if phone verification is needed
@@ -424,65 +454,57 @@ export const ContactSection = ({
                 {t("phone_number")} <span className="text-red-500">*</span>
               </label>
               <div className="flex gap-2">
-                <div className="w-28 sm:w-32.5">
-                  <CountryDropdown
-                    defaultValue={selectedCountry?.alpha3}
-                    onChange={handleCountryChange}
-                    placeholder="Country"
-                  />
-                </div>
-                <div className="flex flex-auto gap-2">
-                  <input
-                    id="customer_phone"
-                    type="text"
-                    maxLength={14}
-                    placeholder={t("phone_number")}
+                <div className="flex-1">
+                  <PhoneInput
+                    defaultCountry="BD"
                     value={phoneNumber}
-                    className={`flex-1 grow px-4 py-3 text-base border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-transparent dark:text-gray-200 ${
+                    onChange={handlePhoneInputChange}
+                    onCountryChange={handleCountryChange}
+                    placeholder={t("phone_number")}
+                    className={
                       needPhoneVerification && isPhoneVerified
-                        ? "border-green-300 dark:border-green-600 bg-green-50 dark:bg-green-900/20"
-                        : "border-gray-300 dark:border-gray-600"
-                    }`}
+                        ? "[&_input]:border-green-300 [&_input]:dark:border-green-600 [&_input]:bg-green-50 [&_input]:dark:bg-green-900/20"
+                        : ""
+                    }
+                  />
+                  <input
+                    type="hidden"
                     {...register("customer_phone", {
                       required: "Phone number is required",
                       validate: (value: string) =>
-                        validPhoneNumber(
-                          value,
-                          (selectedCountry?.alpha2 as CountryCode) || "BD"
-                        ),
-                      onChange: handlePhoneChange,
+                        validPhoneNumber(value, selectedCountry as CountryCode),
                     })}
                   />
-                  {needPhoneVerification &&
-                    !isPhoneVerified &&
-                    !showOtpField && (
-                      <button
-                        type="button"
-                        onClick={handlePhoneValidation}
-                        disabled={!phoneNumber || isSendingOtp}
-                        className="px-4 py-3 bg-blue-zatiq dark:bg-white text-white dark:text-black rounded-lg text-sm font-medium disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors duration-200 min-w-20 cursor-pointer"
-                      >
-                        {isSendingOtp ? "..." : t("verify")}
-                      </button>
-                    )}
-
-                  {needPhoneVerification && isPhoneVerified && (
-                    <div className="flex items-center px-4 py-3 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-lg text-sm font-medium">
-                      <svg
-                        className="w-4 h-4 mr-2"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      {t("verified")}
-                    </div>
-                  )}
                 </div>
+                {needPhoneVerification &&
+                  !isPhoneVerified &&
+                  !showOtpField && (
+                    <button
+                      type="button"
+                      onClick={handlePhoneValidation}
+                      disabled={!phoneNumber || isSendingOtp}
+                      className="px-4 py-3 bg-blue-zatiq dark:bg-white text-white dark:text-black rounded-lg text-sm font-medium disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors duration-200 min-w-20 cursor-pointer h-12"
+                    >
+                      {isSendingOtp ? "..." : t("verify")}
+                    </button>
+                  )}
+
+                {needPhoneVerification && isPhoneVerified && (
+                  <div className="flex items-center px-4 py-3 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-lg text-sm font-medium h-12">
+                    <svg
+                      className="w-4 h-4 mr-2"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    {t("verified")}
+                  </div>
+                )}
               </div>
               {errors && errors.customer_phone && (
                 <span className="block text-sm text-red-500">

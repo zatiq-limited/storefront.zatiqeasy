@@ -4,8 +4,6 @@ import { useState, useMemo, useCallback, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import {
-  Minus,
-  Plus,
   ChevronLeft,
   ChevronRight,
   Download,
@@ -36,7 +34,6 @@ import {
 } from "@/lib/utils";
 import { getThemeData } from "@/lib/utils/theme-constants";
 import { FallbackImage } from "@/components/ui/fallback-image";
-import type { VariantsState } from "@/types/cart.types";
 import { useProductDetails, useShopInventories } from "@/hooks";
 import type { Product } from "@/stores/productsStore";
 
@@ -71,20 +68,28 @@ function extractVideoId(url: string): string | null {
   return match ? match[1] : null;
 }
 
-export function LuxuraProductDetailPage() {
+interface LuxuraProductDetailPageProps {
+  handle?: string;
+}
+
+export function LuxuraProductDetailPage({
+  handle: propHandle,
+}: LuxuraProductDetailPageProps = {}) {
   const params = useParams();
   const router = useRouter();
   const { t } = useTranslation();
 
-  // Support both 'productHandle' (merchant routes) and 'handle' (main routes)
-  const productHandle = (params?.productHandle || params?.handle) as string;
+  // Get product handle from props first, then params
+  const productHandle =
+    propHandle ||
+    ((params?.productHandle || params?.handle || "") as string);
 
   const { shopDetails } = useShopStore();
   const storeProducts = useProductsStore((state) => state.products);
   const totalCartProducts = useCartStore(selectTotalItems);
+  const totalPrice = useCartStore(selectSubtotal);
 
   // Fetch products if store is empty (handles page reload scenario)
-  // sortByStock: false to preserve original API order
   const { data: fetchedProducts } = useShopInventories(
     { shopUuid: shopDetails?.shop_uuid || "" },
     {
@@ -101,25 +106,10 @@ export function LuxuraProductDetailPage() {
         : (fetchedProducts as Product[]) || [],
     [storeProducts, fetchedProducts]
   );
-  const totalPrice = useCartStore(selectSubtotal);
-  const { addProduct, removeProduct } = useCartStore();
 
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-  const [lightboxOpen, setLightboxOpen] = useState(false);
-  const [isShowVideo, setIsShowVideo] = useState(false);
-
-  const baseUrl = shopDetails?.baseUrl || "";
-  const currency = shopDetails?.country_currency || "BDT";
-  const allowDownload = Boolean(
-    (
-      shopDetails?.metadata?.settings?.shop_settings as
-        | { enable_product_image_download?: boolean }
-        | undefined
-    )?.enable_product_image_download
-  );
-  const hasItems = totalCartProducts > 0;
-
-  // Use product details hook for state management (same as Basic/Premium themes)
+  // ============================================
+  // Use centralized hook - all common logic is here
+  // ============================================
   const {
     product,
     selectedVariants,
@@ -128,8 +118,33 @@ export function LuxuraProductDetailPage() {
     setQuantity,
     incrementQuantity,
     decrementQuantity,
-    isInStock,
+    // Centralized handlers
+    handleAddToCart,
+    handleBuyNow,
+    // Centralized objects
+    pricing,
+    cartInfo,
+    stockInfo,
+    // Images
+    productImages,
+    // Shop settings
+    baseUrl,
+    currency,
   } = useProductDetails(productHandle);
+
+  // Local UI state only
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [isShowVideo, setIsShowVideo] = useState(false);
+
+  const allowDownload = Boolean(
+    (
+      shopDetails?.metadata?.settings?.shop_settings as
+        | { enable_product_image_download?: boolean }
+        | undefined
+    )?.enable_product_image_download
+  );
+  const hasItems = totalCartProducts > 0;
 
   // Get related products (same category, excluding current)
   const relatedProducts = useMemo(() => {
@@ -146,61 +161,33 @@ export function LuxuraProductDetailPage() {
       .slice(0, 4);
   }, [products, product]);
 
-  // Product images
-  const images = useMemo((): string[] => {
-    if (!product) return [];
-    if (product.images?.length) {
-      return product.images.filter((img): img is string => !!img);
-    }
-    return product.image_url ? [product.image_url] : [];
-  }, [product]);
-
   // Video link for product
   const video_link = useMemo(() => product?.video_link, [product?.video_link]);
-  const videoId = useMemo(() => extractVideoId(video_link || ""), [video_link]);
-
-  // Get cart products for this product - subscribe to products state to track cart changes
-  // Then filter to get only this product's cart items (same as Basic/Premium themes)
-  const allCartProducts = useCartStore((state) => state.products);
-  const cartProducts = useMemo(
-    () =>
-      product?.id
-        ? Object.values(allCartProducts).filter(
-            (p) => p.id === Number(product.id)
-          )
-        : [],
-    [product, allCartProducts]
+  const videoId = useMemo(
+    () => extractVideoId(video_link || ""),
+    [video_link]
   );
-  const isInCartDirect = cartProducts.length > 0;
-  const cartQty = cartProducts.reduce((acc, p) => acc + (p.qty || 0), 0);
 
   // Type-safe access to product extended properties
   const productRecord = product as unknown as Record<string, unknown>;
-  const totalInventorySold = (productRecord.total_inventory_sold as number) ?? 0;
-  const initialProductSold = (productRecord.initial_product_sold as number) ?? 0;
+  const totalInventorySold =
+    (productRecord?.total_inventory_sold as number) ?? 0;
+  const initialProductSold =
+    (productRecord?.initial_product_sold as number) ?? 0;
 
-  // Helper to check if two variant selections match (same as Basic/Premium themes)
-  const isSameVariantsCombination = useCallback(
-    (variants1: VariantsState, variants2: VariantsState): boolean => {
-      const keys1 = Object.keys(variants1);
-      const keys2 = Object.keys(variants2);
-      if (keys1.length !== keys2.length) return false;
-      return keys1.every((key) => {
-        const v1 = variants1[key];
-        const v2 = variants2[key];
-        return v1?.variant_id === v2?.variant_id;
-      });
-    },
-    []
-  );
-
-  // Pixel tracking for product view (matching reference implementation)
+  // Pixel tracking for product view
   useEffect(() => {
     if (!product) return;
 
     // Facebook Pixel tracking
     if (typeof window !== "undefined") {
-      const win = window as unknown as { fbq?: (command: string, eventName: string, data?: Record<string, unknown>) => void };
+      const win = window as unknown as {
+        fbq?: (
+          command: string,
+          eventName: string,
+          data?: Record<string, unknown>
+        ) => void;
+      };
       if (win.fbq) {
         win.fbq("track", "ViewContent", {
           content_name: product.name,
@@ -234,7 +221,9 @@ export function LuxuraProductDetailPage() {
 
     // TikTok Pixel tracking
     if (typeof window !== "undefined") {
-      const win = window as unknown as { ttq?: { track: (event: string, data: Record<string, unknown>) => void } };
+      const win = window as unknown as {
+        ttq?: { track: (event: string, data: Record<string, unknown>) => void };
+      };
       if (win.ttq) {
         win.ttq.track("ViewContent", {
           content_id: product.id?.toString(),
@@ -246,230 +235,6 @@ export function LuxuraProductDetailPage() {
       }
     }
   }, [product, shopDetails?.country_currency]);
-
-  // Transform selectedVariants to VariantsState format for comparison (same as Basic theme)
-  const selectedVariantsAsState = useMemo(() => {
-    const state: VariantsState = {};
-    Object.entries(selectedVariants).forEach(([key, variant]) => {
-      state[Number(key)] = {
-        variant_type_id: Number(key),
-        variant_id: variant.id,
-        price: variant.price || 0,
-        variant_name: variant.name,
-        image_url: variant.image_url,
-      };
-    });
-    return state;
-  }, [selectedVariants]);
-
-  // Find matching cart item based on variants (same as Basic theme)
-  const matchingCartItem = useMemo(() => {
-    if (cartProducts.length === 0) return null;
-    // For non-variant products, return first cart item
-    if (!product?.variant_types || product.variant_types.length === 0) {
-      return cartProducts[0];
-    }
-    // For variant products, find matching selected variants
-    return (
-      cartProducts.find((item) =>
-        isSameVariantsCombination(
-          item.selectedVariants || {},
-          selectedVariantsAsState
-        )
-      ) || null
-    );
-  }, [
-    cartProducts,
-    product,
-    isSameVariantsCombination,
-    selectedVariantsAsState,
-  ]);
-
-  // Sync quantity with matching cart item (same as Basic theme)
-  const matchingCartQty = matchingCartItem?.qty ?? 0;
-  useEffect(() => {
-    if (matchingCartQty > 0) {
-      setQuantity(matchingCartQty);
-    } else {
-      setQuantity(1);
-    }
-  }, [matchingCartQty, setQuantity]);
-
-  // Restore selected variants from cart (when product page loads)
-  // This ensures the variants that were added to cart are pre-selected
-  useEffect(() => {
-    if (
-      !product ||
-      !product.variant_types ||
-      product.variant_types.length === 0
-    ) {
-      return;
-    }
-
-    // Find the first cart item for this product
-    const firstCartItem = cartProducts[0];
-    if (!firstCartItem?.selectedVariants) {
-      return;
-    }
-
-    // Restore each variant from the cart
-    Object.entries(firstCartItem.selectedVariants).forEach(
-      ([variantTypeId, variantState]) => {
-        const typeId = Number(variantTypeId);
-        const variantId = variantState.variant_id;
-
-        // Find the variant in the product's variant types
-        const variantType = product.variant_types?.find(
-          (vt) => vt.id === typeId
-        );
-        if (variantType?.variants) {
-          const variant = variantType.variants.find((v) => v.id === variantId);
-          if (variant) {
-            selectVariant(typeId, variant);
-          }
-        }
-      }
-    );
-  }, [product, cartProducts, selectVariant]);
-
-  // Check if stock maintenance is enabled (default to true if undefined)
-  const isStockMaintain = shopDetails?.isStockMaintain !== false;
-  // Check stock (use hook's isInStock) - only if stock maintenance is enabled
-  const isOutOfStock = isStockMaintain && !isInStock;
-
-  // Calculate price with variants (same as Basic theme)
-  const currentPrice = useMemo(() => {
-    const basePrice = product?.price || 0;
-    const variantPrice = Object.values(selectedVariants).reduce(
-      (sum, v) => sum + (v.price || 0),
-      0
-    );
-    return basePrice + variantPrice;
-  }, [product, selectedVariants]);
-
-  // Handle add to cart (same as Basic/Premium themes)
-  const handleAddToCart = useCallback(() => {
-    if (!product || !isInStock) return;
-
-    // Check if all mandatory variants are selected
-    if (product.variant_types && product.variant_types.length > 0) {
-      const mandatoryVariants = product.variant_types.filter(
-        (vt) => vt.is_mandatory
-      );
-      const allMandatorySelected = mandatoryVariants.every(
-        (vt) => selectedVariants[vt.id]
-      );
-
-      if (!allMandatorySelected) {
-        alert("Please select all required variants");
-        return;
-      }
-    }
-
-    // For products already in cart (matching selected variants), remove old cart item first
-    if (matchingCartItem) {
-      removeProduct(matchingCartItem.cartId);
-    }
-
-    // Transform selectedVariants to match VariantState structure
-    const transformedVariants: VariantsState = {};
-    Object.entries(selectedVariants).forEach(([key, variant]) => {
-      transformedVariants[Number(key)] = {
-        variant_type_id: Number(key),
-        variant_id: variant.id,
-        price: variant.price || 0,
-        variant_name: variant.name,
-        image_url: variant.image_url,
-      };
-    });
-
-    addProduct({
-      ...product,
-      id: Number(product.id),
-      price: currentPrice,
-      image_url: images[0] || "",
-      qty: quantity,
-      selectedVariants: transformedVariants,
-      total_inventory_sold: 0,
-      categories: product.categories ?? [],
-      variant_types: product.variant_types ?? [],
-      stocks: product.stocks ?? [],
-      reviews: [],
-    } as unknown as Parameters<typeof addProduct>[0]);
-  }, [
-    product,
-    isInStock,
-    matchingCartItem,
-    removeProduct,
-    addProduct,
-    currentPrice,
-    images,
-    quantity,
-    selectedVariants,
-  ]);
-
-  // Handle buy now (same as Basic theme)
-  const handleBuyNow = useCallback(() => {
-    if (!product || !isInStock) return;
-
-    // If not in cart, add it first
-    if (!matchingCartItem) {
-      // Check if all mandatory variants are selected
-      if (product.variant_types && product.variant_types.length > 0) {
-        const mandatoryVariants = product.variant_types.filter(
-          (vt) => vt.is_mandatory
-        );
-        const allMandatorySelected = mandatoryVariants.every(
-          (vt) => selectedVariants[vt.id]
-        );
-
-        if (!allMandatorySelected) {
-          alert("Please select all required variants");
-          return;
-        }
-      }
-
-      // Transform selectedVariants to match VariantState structure
-      const transformedVariants: VariantsState = {};
-      Object.entries(selectedVariants).forEach(([key, variant]) => {
-        transformedVariants[Number(key)] = {
-          variant_type_id: Number(key),
-          variant_id: variant.id,
-          price: variant.price || 0,
-          variant_name: variant.name,
-          image_url: variant.image_url,
-        };
-      });
-
-      // Add product to cart
-      addProduct({
-        ...product,
-        id: Number(product.id),
-        price: currentPrice,
-        image_url: images[0] || "",
-        qty: quantity,
-        selectedVariants: transformedVariants,
-        total_inventory_sold: 0,
-        categories: product.categories ?? [],
-        variant_types: product.variant_types ?? [],
-        stocks: product.stocks ?? [],
-        reviews: [],
-      } as unknown as Parameters<typeof addProduct>[0]);
-    }
-
-    router.push(`${baseUrl}/checkout`);
-  }, [
-    product,
-    isInStock,
-    matchingCartItem,
-    router,
-    baseUrl,
-    selectedVariants,
-    currentPrice,
-    images,
-    quantity,
-    addProduct,
-  ]);
 
   // Navigate to product
   const navigateProductDetails = useCallback(
@@ -521,7 +286,7 @@ export function LuxuraProductDetailPage() {
       {/* Image Lightbox */}
       <ImageLightbox
         product={{
-          images: images,
+          images: productImages,
           name: product.name || "",
         }}
         open={lightboxOpen}
@@ -552,9 +317,9 @@ export function LuxuraProductDetailPage() {
                   )}
                 </div>
               ) : (
-                images[selectedImageIndex] && (
+                productImages[selectedImageIndex] && (
                   <FallbackImage
-                    src={getDetailPageImageUrl(images[selectedImageIndex])}
+                    src={getDetailPageImageUrl(productImages[selectedImageIndex])}
                     width={512}
                     height={512}
                     className="w-full max-h-225 object-contain transition ease-in duration-500 rounded-xl md:rounded-3xl"
@@ -565,7 +330,7 @@ export function LuxuraProductDetailPage() {
               )}
 
               {/* Zoom & Download Buttons - Only show when NOT showing video */}
-              {!isShowVideo && images[selectedImageIndex] && (
+              {!isShowVideo && productImages[selectedImageIndex] && (
                 <div className="absolute top-2 right-2 z-10 flex items-center gap-2">
                   {/* Zoom Button */}
                   <button
@@ -586,7 +351,7 @@ export function LuxuraProductDetailPage() {
                       onClick={(e) => {
                         e.stopPropagation();
                         handleDownloadImage(
-                          images[selectedImageIndex],
+                          productImages[selectedImageIndex],
                           selectedImageIndex
                         );
                       }}
@@ -601,12 +366,12 @@ export function LuxuraProductDetailPage() {
               )}
 
               {/* Navigation Arrows */}
-              {images.length > 1 && (
+              {productImages.length > 1 && (
                 <>
                   <button
                     onClick={() =>
                       setSelectedImageIndex((prev) =>
-                        prev === 0 ? images.length - 1 : prev - 1
+                        prev === 0 ? productImages.length - 1 : prev - 1
                       )
                     }
                     className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 rounded-full flex items-center justify-center shadow-lg hover:bg-white transition-colors"
@@ -616,7 +381,7 @@ export function LuxuraProductDetailPage() {
                   <button
                     onClick={() =>
                       setSelectedImageIndex((prev) =>
-                        prev === images.length - 1 ? 0 : prev + 1
+                        prev === productImages.length - 1 ? 0 : prev + 1
                       )
                     }
                     className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 rounded-full flex items-center justify-center shadow-lg hover:bg-white transition-colors"
@@ -629,7 +394,7 @@ export function LuxuraProductDetailPage() {
 
             {/* Thumbnail Gallery */}
             <div className="flex px-1 mt-2 md:mt-3">
-              {images.length > 0 && (
+              {productImages.length > 0 && (
                 <ul className="flex gap-2 flex-wrap mt-2">
                   {/* Video Thumbnail */}
                   {video_link && videoId && (
@@ -657,7 +422,7 @@ export function LuxuraProductDetailPage() {
                   )}
 
                   {/* Image Thumbnails */}
-                  {images.map((img, key) => (
+                  {productImages.map((img, key) => (
                     <li
                       role="button"
                       onClick={() => {
@@ -689,20 +454,25 @@ export function LuxuraProductDetailPage() {
                   </h4>
                   <ul className="mt-3 tracking-[-0.24px] capitalize">
                     {product.custom_fields &&
-                      Object.keys(product.custom_fields).map((key: string, idx: number) => (
-                        <li key={idx} className="grid grid-cols-5 gap-6">
-                          <div className="col-span-2 text-[#6B7280] dark:text-gray-100">
-                            {key}
-                          </div>
-                          <div className="col-span-3 text-right text-[#374151] dark:text-gray-100">
-                            {
-                              (product.custom_fields as Record<string, string>)[
-                                key
-                              ]
-                            }
-                          </div>
-                        </li>
-                      ))}
+                      Object.keys(product.custom_fields).map(
+                        (key: string, idx: number) => (
+                          <li key={idx} className="grid grid-cols-5 gap-6">
+                            <div className="col-span-2 text-[#6B7280] dark:text-gray-100">
+                              {key}
+                            </div>
+                            <div className="col-span-3 text-right text-[#374151] dark:text-gray-100">
+                              {
+                                (
+                                  product.custom_fields as Record<
+                                    string,
+                                    string
+                                  >
+                                )[key]
+                              }
+                            </div>
+                          </li>
+                        )
+                      )}
                     {product.warranty && (
                       <li className="grid grid-cols-5 gap-6">
                         <div className="col-span-2 text-[#6B7280] dark:text-gray-400">
@@ -744,20 +514,15 @@ export function LuxuraProductDetailPage() {
             {/* Price */}
             <div className="flex items-end gap-2">
               <span className="text-2xl md:text-3xl font-bold text-blue-600">
-                {formatPrice(currentPrice, currency)}
+                {formatPrice(pricing.currentPrice, currency)}
               </span>
-              {product.old_price && product.old_price > product.price && (
+              {pricing.hasDiscount && (
                 <>
                   <span className="text-xl text-gray-400 line-through">
-                    {formatPrice(product.old_price, currency)}
+                    {formatPrice(pricing.regularPrice, currency)}
                   </span>
                   <span className="bg-red-100 text-red-600 text-sm font-medium px-2 py-1 rounded">
-                    {Math.round(
-                      ((product.old_price - product.price) /
-                        product.old_price) *
-                        100
-                    )}
-                    % OFF
+                    {pricing.discountPercentage}% OFF
                   </span>
                 </>
               )}
@@ -770,17 +535,10 @@ export function LuxuraProductDetailPage() {
               totalSold={totalInventorySold}
             />
 
-            {/* Stock Status */}
-            {/* {isOutOfStock ? (
-              <p className="text-red-500 font-medium">{t("out_of_stock")}</p>
-            ) : (
-              <p className="text-green-600 font-medium">{t("in_stock")}</p>
-            )} */}
-
             {/* Already in Cart Message */}
-            {isInCartDirect && (
+            {cartInfo.isInCart && (
               <p className="text-sm text-blue-600 font-medium">
-                Already in your cart ({cartQty})
+                Already in your cart ({cartInfo.cartQty})
               </p>
             )}
 
@@ -826,30 +584,30 @@ export function LuxuraProductDetailPage() {
                   subQty={decrementQuantity}
                   sumQty={incrementQuantity}
                   disableSubBtn={quantity <= 1}
-                  disableSumBtn={isOutOfStock}
+                  disableSumBtn={stockInfo.isStockOut}
                   maxStock={product.quantity}
                   onQtyChange={setQuantity}
                   className="px-3 py-1.5 md:w-1/2 border-[1.2px] border-blue-zatiq w-full bg-transparent rounded-lg md:rounded-xl"
                 />
 
                 <button
-                  disabled={isOutOfStock}
+                  disabled={stockInfo.isStockOut}
                   onClick={handleAddToCart}
                   className="md:w-1/2 text-center p-3 text-sm md:text-base font-medium capitalize disabled:bg-black-disabled w-full border-[1.2px] border-blue-zatiq text-blue-zatiq disabled:text-white disabled:border-black-disabled rounded-lg md:rounded-xl cursor-pointer"
                 >
-                  {isInCartDirect ? t("update_cart") : t("add_to_cart")}
+                  {cartInfo.isInCart ? t("update_cart") : t("add_to_cart")}
                 </button>
               </div>
 
               <button
-                disabled={isOutOfStock}
+                disabled={stockInfo.isStockOut}
                 onClick={handleBuyNow}
                 className="p-3 mt-2 text-center text-sm md:text-base font-medium disabled:bg-black-disabled capitalize transition-colors duration-150 w-full bg-blue-zatiq border-[1.2px] border-blue-zatiq text-white dark:text-black-full disabled:text-white disabled:border-black-disabled rounded-lg md:rounded-xl cursor-pointer"
               >
                 {t("buy_now")}
               </button>
 
-              {isOutOfStock && (
+              {stockInfo.isStockOut && (
                 <p className="text-sm font-medium text-red-500 mt-3">
                   No more items remaining!
                 </p>
@@ -865,20 +623,25 @@ export function LuxuraProductDetailPage() {
                   </h4>
                   <ul className="mt-3 tracking-[-0.24px] capitalize">
                     {product.custom_fields &&
-                      Object.keys(product.custom_fields).map((key: string, idx: number) => (
-                        <li key={idx} className="grid grid-cols-5 gap-6">
-                          <div className="col-span-2 text-[#6B7280] dark:text-gray-400">
-                            {key}
-                          </div>
-                          <div className="col-span-3 text-right text-[#374151] dark:text-gray-100">
-                            {
-                              (product.custom_fields as Record<string, string>)[
-                                key
-                              ]
-                            }
-                          </div>
-                        </li>
-                      ))}
+                      Object.keys(product.custom_fields).map(
+                        (key: string, idx: number) => (
+                          <li key={idx} className="grid grid-cols-5 gap-6">
+                            <div className="col-span-2 text-[#6B7280] dark:text-gray-400">
+                              {key}
+                            </div>
+                            <div className="col-span-3 text-right text-[#374151] dark:text-gray-100">
+                              {
+                                (
+                                  product.custom_fields as Record<
+                                    string,
+                                    string
+                                  >
+                                )[key]
+                              }
+                            </div>
+                          </li>
+                        )
+                      )}
                     {product.warranty && (
                       <li className="grid grid-cols-5 gap-6">
                         <div className="col-span-2 text-[#6B7280] dark:text-gray-400">
