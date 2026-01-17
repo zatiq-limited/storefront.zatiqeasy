@@ -169,7 +169,7 @@ export default function ProductCard5({
                 className="w-full h-11 lg:h-12 rounded bg-red-500 flex items-center justify-center cursor-pointer text-sm font-medium text-white transition-all duration-300 leading-5 hover:bg-red-600"
                 onClick={(e) => {
                   e.preventDefault();
-                  onBuyNow?.();
+                  onAddToCart?.();
                 }}
               >
                 Buy Now
@@ -271,7 +271,7 @@ export default function ProductCard5({
                   className="w-8 h-8 rounded-lg bg-red-500/90 flex items-center justify-center cursor-pointer transition-all duration-200 active:scale-95"
                   onClick={(e) => {
                     e.preventDefault();
-                    onBuyNow?.();
+                    onAddToCart?.();
                   }}
                 >
                   <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none">

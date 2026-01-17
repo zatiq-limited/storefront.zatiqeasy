@@ -175,7 +175,7 @@ export default function ProductCard13({
                   className="flex-1 h-7 sm:h-8 lg:h-9 text-[10px] sm:text-xs lg:text-sm rounded font-medium bg-white/20 border border-white/50 text-white backdrop-blur-sm transition-all hover:bg-white/30"
                   onClick={(e) => {
                     e.preventDefault();
-                    onBuyNow?.();
+                    onAddToCart?.();
                   }}
                 >
                   Buy Now

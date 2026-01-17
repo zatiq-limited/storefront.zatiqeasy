@@ -373,9 +373,9 @@ function BlockRendererInternal({
       break;
   }
 
-  // Special handling for add-to-cart buttons - render interactive cart button with quantity controls
+  // Special handling for add-to-cart and buy-now buttons - render interactive cart button with quantity controls
   const addToCartClickEvent = block.events?.on_click || block.events?.click;
-  if (addToCartClickEvent?.action === "add_to_cart" && addToCartContext) {
+  if ((addToCartClickEvent?.action === "add_to_cart" || addToCartClickEvent?.action === "buy_now") && addToCartContext) {
     // Resolve product ID from event target
     const productId = addToCartClickEvent.target?.includes?.(".")
       ? String(
@@ -388,6 +388,9 @@ function BlockRendererInternal({
       | Record<string, unknown>
       | undefined;
 
+    // Determine if this is a buy_now button (outlined style)
+    const isBuyNowButton = addToCartClickEvent.action === "buy_now";
+
     return (
       <AddToCartButtonRenderer
         block={block}
@@ -396,6 +399,7 @@ function BlockRendererInternal({
         data={mergedData}
         context={context}
         onOpenVariantModal={addToCartContext.openVariantModal}
+        isBuyNowButton={isBuyNowButton}
       />
     );
   }
@@ -638,8 +642,8 @@ function BlockRendererInternal({
         switch (eventType) {
           case "click":
           case "on_click":
-            // For add_to_cart action, stop propagation to prevent parent link navigation
-            if (eventConfig.action === "add_to_cart") {
+            // For add_to_cart and buy_now actions, stop propagation to prevent parent link navigation
+            if (eventConfig.action === "add_to_cart" || eventConfig.action === "buy_now") {
               props.onClick = (e: React.MouseEvent) => {
                 e.preventDefault();
                 e.stopPropagation();

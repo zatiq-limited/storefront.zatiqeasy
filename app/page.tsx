@@ -25,6 +25,8 @@ export default async function HomePage() {
     return null;
   }
 
+  console.log("Rendering Theme Builder homepage with SSR data:", homepage);
+
   // Render Theme Builder homepage with SSR data
   return <HomepageClient homepage={homepage} />;
 }

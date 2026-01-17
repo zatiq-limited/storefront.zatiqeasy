@@ -182,7 +182,7 @@ export default function ProductCard4({
                 className="w-full h-11 lg:h-14 border border-blue-600 rounded bg-white flex items-center justify-center cursor-pointer text-sm lg:text-base font-medium text-blue-600 transition-all duration-300 leading-6 hover:bg-gray-50"
                 onClick={(e) => {
                   e.preventDefault();
-                  onBuyNow?.();
+                  onAddToCart?.();
                 }}
               >
                 Buy Now
@@ -291,7 +291,7 @@ export default function ProductCard4({
               className="w-7 h-7 rounded-full bg-white border border-blue-600 flex items-center justify-center cursor-pointer transition-all duration-300 active:scale-95 shadow-lg"
               onClick={(e) => {
                 e.preventDefault();
-                onBuyNow?.();
+                onAddToCart?.();
               }}
             >
               <svg
