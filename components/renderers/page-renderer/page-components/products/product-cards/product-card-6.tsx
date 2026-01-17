@@ -202,7 +202,7 @@ export default function ProductCard6({
                   className="flex-1 h-9 rounded border border-[#3B82F6] bg-white flex items-center justify-center cursor-pointer text-xs font-medium text-[#3B82F6] transition-all duration-300 active:scale-95"
                   onClick={(e) => {
                     e.preventDefault();
-                    onBuyNow?.();
+                    onAddToCart?.();
                   }}
                 >
                   Buy Now
@@ -281,7 +281,7 @@ export default function ProductCard6({
               className="w-full h-11 lg:h-14 rounded bg-white flex items-center justify-center cursor-pointer text-sm font-medium text-[#3B82F6] transition-all duration-300 leading-5 hover:bg-gray-50"
               onClick={(e) => {
                 e.preventDefault();
-                onBuyNow?.();
+                onAddToCart?.();
               }}
             >
               Buy Now

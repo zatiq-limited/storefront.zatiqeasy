@@ -29,6 +29,7 @@ interface AddToCartButtonRendererProps {
   data: Record<string, unknown>;
   context: Record<string, unknown>;
   onOpenVariantModal?: (product: Product) => void;
+  isBuyNowButton?: boolean;
 }
 
 export function AddToCartButtonRenderer({
@@ -38,6 +39,7 @@ export function AddToCartButtonRenderer({
   data,
   context,
   onOpenVariantModal,
+  isBuyNowButton = false,
 }: AddToCartButtonRendererProps) {
   const { getProductById } = useProductsStore();
   const {
@@ -190,7 +192,26 @@ export function AddToCartButtonRenderer({
   };
 
   // Get text color from style
-  const textColor = style.color || "#FFFFFF";
+  // For Buy Now button (outlined style), use background color as text color
+  // For Add to Cart button (filled style), use the text color from style
+  const textColor = isBuyNowButton
+    ? String(style.backgroundColor || style.background || "#3B82F6")
+    : String(style.color || "#FFFFFF");
+
+  // Build button style based on button type
+  const buttonStyle: React.CSSProperties = isBuyNowButton
+    ? {
+        // Outlined style for Buy Now button
+        backgroundColor: "white",
+        borderWidth: "1px",
+        borderStyle: "solid",
+        borderColor: textColor,
+        borderRadius: style.borderRadius || "0.25rem",
+      }
+    : {
+        // Filled style for Add to Cart button
+        ...style,
+      };
 
   return (
     <div
@@ -206,9 +227,7 @@ export function AddToCartButtonRenderer({
           transition={{ duration: 0.2 }}
           variants={cartAnimateVariants}
           className="flex items-center justify-center h-full w-full"
-          style={{
-            ...style,
-          }}
+          style={buttonStyle}
         >
           {totalInCart > 0 ? (
             // Quantity Controls

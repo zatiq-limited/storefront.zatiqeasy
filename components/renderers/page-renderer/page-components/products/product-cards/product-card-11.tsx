@@ -119,7 +119,7 @@ export default function ProductCard11({
                 style={{ backgroundColor: buttonBgColor, color: buttonTextColor }}
                 onClick={(e) => {
                   e.preventDefault();
-                  onBuyNow?.();
+                  onAddToCart?.();
                 }}
               >
                 <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -242,7 +242,7 @@ export default function ProductCard11({
                 style={{ borderColor: buttonBgColor, color: buttonBgColor }}
                 onClick={(e) => {
                   e.preventDefault();
-                  onBuyNow?.();
+                  onAddToCart?.();
                 }}
               >
                 Buy Now

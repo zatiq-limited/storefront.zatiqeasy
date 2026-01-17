@@ -654,9 +654,11 @@ export function createEventHandler(
       return () => handlers.setStyle?.(resolvedTarget, value);
 
     case "add_to_cart":
+    case "buy_now":
       return () => {
         // Get the product data from the current context (e.g., product from repeater)
         // The target is typically "product.id" which resolves to the product ID
+        // buy_now action behaves exactly like add_to_cart
         const productData = data.product as Record<string, unknown> | undefined;
         handlers.addToCart?.(resolvedTarget, productData);
       };
